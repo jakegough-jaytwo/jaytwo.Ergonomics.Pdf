@@ -97,7 +97,7 @@ public class SignatureTests
         byte[] token = DerCodec.Sequence(DerCodec.Integer(7));
         byte[] body = DerCodec.Sequence(DerCodec.Sequence(negativeStatus), token);
 
-        AssertTimestampResponseDoesNotExtend(body);
+        AssertTimestampResponseDoesNotExtend(body, "rejected the request with status");
     }
 
     [Fact]
@@ -105,7 +105,7 @@ public class SignatureTests
     {
         byte[] body = new byte[] { 0x30, 0x84, 0x7F, 0xFF, 0xFF, 0xFF };
 
-        AssertTimestampResponseDoesNotExtend(body);
+        AssertTimestampResponseDoesNotExtend(body, "exceeds its buffer");
     }
 
     [Fact]
@@ -757,7 +757,7 @@ public class SignatureTests
         }
     }
 
-    private static void AssertTimestampResponseDoesNotExtend(byte[] response)
+    private static void AssertTimestampResponseDoesNotExtend(byte[] response, string phrase)
     {
         byte[] pdf = TextField();
         using var stream = new MemoryStream();
@@ -765,11 +765,12 @@ public class SignatureTests
         using var document = PdfDocument.Open(stream, leaveOpen: true);
         var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(response)), new Uri("https://tsa.example/stamp"));
 
-        Assert.Throws<PdfTimestampException>(() => document.Sign(
+        PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(
             stream,
             new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
             new DocTimeStampSignatureProvider(authority)));
 
+        Assert.Contains(phrase, rejected.Message, StringComparison.Ordinal);
         Assert.Equal(pdf, stream.ToArray());
     }
 

@@ -302,12 +302,23 @@ internal sealed class PdfParser
             throw new PdfParseException(0, "Xref stream /Index must contain pairs of integers.");
         }
 
+        int entryWidth = widths[0] + widths[1] + widths[2];
         var entries = new Dictionary<int, XrefEntry>();
         int cursor = 0;
         for (int pair = 0; pair < index.Count; pair += 2)
         {
             int start = index[pair];
             int count = index[pair + 1];
+            if ((long)start + count > (long)int.MaxValue + 1)
+            {
+                throw new PdfParseException(0, "Xref stream /Index subsection exceeds the object number range.");
+            }
+
+            if (count > 0 && (entryWidth == 0 || count > (decoded.Length - cursor) / entryWidth))
+            {
+                throw new PdfParseException(0, "Xref stream /Index count exceeds the decoded entries.");
+            }
+
             for (int i = 0; i < count; i++)
             {
                 long typeRaw = ReadField(decoded, ref cursor, widths[0]);
@@ -424,7 +435,7 @@ internal sealed class PdfParser
                     throw new PdfParseException(0, "Xref stream /Index entry is not a number.");
                 }
 
-                index.Add(number.IsInteger ? (int)number.LongValue : (int)number.DoubleValue);
+                index.Add(XrefIndexValue(number, "/Index"));
             }
 
             return index;
@@ -433,12 +444,22 @@ internal sealed class PdfParser
         int size = 0;
         if (dict.Get("Size") is PdfObject.Num sizeNumber)
         {
-            size = sizeNumber.IsInteger ? (int)sizeNumber.LongValue : (int)sizeNumber.DoubleValue;
+            size = XrefIndexValue(sizeNumber, "/Size");
         }
 
         index.Add(0);
         index.Add(size);
         return index;
+    }
+
+    private static int XrefIndexValue(PdfObject.Num number, string key)
+    {
+        if (!number.IsInteger || number.LongValue < 0 || number.LongValue > int.MaxValue)
+        {
+            throw new PdfParseException(0, "Xref stream " + key + " entry is not a non-negative 32-bit integer.");
+        }
+
+        return (int)number.LongValue;
     }
 
     private static long ReadField(byte[] data, ref int cursor, int width)

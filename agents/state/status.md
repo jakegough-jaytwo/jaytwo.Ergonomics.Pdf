@@ -6,9 +6,9 @@ This file is state. It is true as of the date on each section and goes stale. Wh
 
 Owner: Technical Lead. As of 2026-10-18.
 
-- Branch `wip`. `HEAD` is `11da851`, "genesis". `git ls-tree HEAD` lists `src/`, `test/`, and `agents/`.
-- The coordinated implementation, test, documentation, state, and report changes for B-04 through B-29 are committed on `wip` as one checkpoint after `11da851`. That commit is mixed. It includes unaccepted B-25, B-28, and B-29 work, as `state/board.md` records. The repository wins over older report descriptions.
-- At the checkpoint the full suite passed 174/174 on `net8.0` and 174/174 on `net6.0`. `InteropTests.qpdf_checks_built_incremental_filled_and_signed_pdfs` finds qpdf on `PATH` only and ignores `JAYTWO_QPDF`, so qpdf must also be on `PATH` for a full run. That inconsistency has no backlog item yet.
+- Branch `wip`. `11da851` "genesis" is followed by checkpoint `ee10c84`, which holds the mixed B-04 through B-29 work. A second checkpoint after it holds the B-28 rework, the B-29 test tightening, and the B-25, B-28, and B-29 review and acceptance records. `git ls-tree HEAD` lists `src/`, `test/`, and `agents/`.
+- B-25, B-28, and B-29 are accepted, so the tree no longer holds unaccepted work. No task is active. B-30 and B-31 are logged and not boarded. See `state/board.md`, "Resume point".
+- At the second checkpoint the full suite passed 190/190 on `net8.0` and 190/190 on `net6.0`. The library built in Release for all four targets with warnings as errors, with 0 warnings. `InteropTests.qpdf_checks_built_incremental_filled_and_signed_pdfs` finds qpdf on `PATH` only and ignores `JAYTWO_QPDF`, so qpdf must also be on `PATH` for a full run. That inconsistency has no backlog item yet.
 - `main` and `develop` remain `b832f22` and contain only `LICENSE`.
 - B-01 acceptance passes on `wip`.
 

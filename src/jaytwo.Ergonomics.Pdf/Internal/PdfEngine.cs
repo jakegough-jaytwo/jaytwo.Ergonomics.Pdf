@@ -1436,8 +1436,8 @@ internal sealed class PdfEngine : IDisposable
             }
 
             byte[] data = ReadDecoded(dict, PdfStreamDecoder.StructuralCap);
-            int count = IntOf(dict.Get("N"));
-            int first = IntOf(dict.Get("First"));
+            int count = ObjectStreamInteger(dict, "N");
+            int first = ObjectStreamInteger(dict, "First");
             if (count < 0 || count > int.MaxValue / 2)
             {
                 throw new PdfParseException(0, "Object stream /N is outside the supported range.");
@@ -3315,6 +3315,16 @@ internal sealed class PdfEngine : IDisposable
         }
 
         return options;
+    }
+
+    private static int ObjectStreamInteger(PdfObject.Dict dict, string key)
+    {
+        if (dict.Get(key) is not PdfObject.Num number || !number.IsInteger || number.LongValue < 0 || number.LongValue > int.MaxValue)
+        {
+            throw new PdfParseException(0, "Object stream /" + key + " is not a non-negative 32-bit integer.");
+        }
+
+        return (int)number.LongValue;
     }
 
     private static int IntOf(PdfObject? value)
