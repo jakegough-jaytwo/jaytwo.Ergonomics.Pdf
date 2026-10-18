@@ -1,0 +1,72 @@
+# Acceptance criteria
+
+These are the checks the test suite builds from. A change that breaks one of them is a regression.
+
+## Opening
+
+- A stream that cannot seek is rejected with `ArgumentException` before any read.
+- `Open` reads the header from the first 1024 bytes and the last `startxref` from the tail. An earlier `startxref` is ignored. A missing `startxref`, a `startxref` past EOF, a cyclic `/Prev`, and an object number that does not match its xref entry throw `PdfParseException`.
+- A standard-security revision 2 (40-bit RC4), revision 3 (RC4, 40 to 128 bits), revision 4 (AES-128 or RC4), revision 5 (AES-256), or revision 6 (AES-256) file opens with its user or owner password. Strings and streams come back decrypted, including a string stored inside an encrypted object stream. A cross-reference stream stays plaintext, so an encrypted xref stream is rejected with `PdfParseException`, and `/Encrypt` is resolved from that map as an uncompressed object without scanning the file. Revision 4 follows each crypt filter, so strings and streams can use different ciphers. A revision 5 password is UTF-8 truncated to 127 bytes. A revision 6 password is prepared before that truncation, so a decomposed password matches its composed form. A file whose user password is empty opens when no password is passed, and the permission bits still apply. The wrong password, a missing password on a file that requires one, and a non-standard handler throw `PdfEncryptedException`.
+- An incremental save or signature of an encrypted file keeps the original bytes as a prefix and repeats `/Encrypt` and `/ID`. New strings and streams are encrypted. Signature-dictionary strings and `/Contents` stay plaintext. Reopening with the same password reads the update.
+- A user password that only allows form fill can fill a field. Metadata, attachments, and signing throw `PdfEncryptionRestrictedException`. The owner password can modify the document. `/EncryptMetadata false` leaves XMP in the clear. `/EFF /Identity` leaves embedded-file streams in the clear.
+- `Permissions` reports the user-access bits for the user password and the owner password. An unencrypted file allows every operation. Revision 2 reports print, modify, copy, and annotate, and high-quality print, form fill, assembly, and accessibility follow those four; the reserved higher bits are ignored. Revision 3 and later report high-quality print only when print is also allowed, form fill when annotate or the fill-in bit is set, assembly from the assemble bit alone, and accessibility when copy or the accessibility bit is set. A revision 2 user password with the fill-in bit set and annotate clear cannot fill a field.
+- Headers `%PDF-1.0` through `%PDF-1.7` open. An incremental save keeps that header. A page content stream is not decoded, including when its filter is `LZWDecode`.
+- Classic xref entries of 20 bytes ending in CRLF, 20 bytes ending in SP LF, 20 bytes ending in SP CR, and 19 bytes ending in LF all open.
+- Xref streams using Flate and PNG predictor 12 open, including an object stored in an object stream. A classic xref with `/XRefStm` overrides the stream for objects it lists.
+- A trailer `/Size` of 2,000,000,000 does not allocate a dense xref. A preamble before `%PDF-` is preserved, and offsets include it.
+- Dispose does not write pending edits. `leaveOpen: false` disposes the stream.
+
+## Scale
+
+- A 3 GiB sparse file can be opened, its info read, saved on the same stream, and signed, without a read that starts in the unread middle. Bytes read stay under 2 MiB. The metadata appendix is under 8 KiB. The signature `/ByteRange` uses the real long offsets. The signer is not required to read the file.
+- A cross-stream save of a file larger than 1 MiB requests reads of at most 1 MiB and reads the source less than twice plus 1 MiB. The source bytes do not change. A non-empty destination throws and is left untouched.
+- A 1,000-page file reports page 1000 for a field on the last page, including an inherited media box and `/Rotate 90`. `Pages` reports the same count, rotation, and media box, and an omitted crop box equals that media box. Content streams that live in an unread hole are not read.
+- A file whose length is past 9,999,999,999 throws `PdfTooLargeForClassicXrefException` on save and writes nothing.
+
+## Metadata
+
+- Title, author, subject, keywords, creator, and producer round-trip. Non-ASCII values are written as UTF-16BE. PDFDoc bytes `0x80` and `0xA0` decode to U+2022 and U+20AC. A custom info key survives an edit and can be read back. The information dictionary can be read and written by key. Creator and producer change only when set. `Trapped` is the name `True`, `False`, or `Unknown`.
+- `D:YYYYMMDDHHmmSSZ` and `D:YYYYMMDDHHmmSS±HH'mm'` parse, including when written back through the information-dictionary key. Setting `ModificationDate` keeps a later edit from replacing it. Other info edits refresh `ModDate` in UTC.
+- With no XMP, an info edit creates a packet and updates the matching `dc` / `pdf` / `xmp` field. Well-formed XMP is updated in place, including `xmp:ModifyDate`. Malformed XMP does not fail `Open`; `OpenXmp` throws `PdfXmpException`; an info edit leaves the metadata stream bytes unchanged. `SetXmp` stores the given bytes.
+
+## Attachments
+
+- Added bytes round-trip, including `0x00` and bytes above `0x7F`. `/Params` `/Size` is the byte length. Names are stored in `EmbeddedFiles` and `/AF` and come back sorted. An attachment can be retrieved by name. A missing name throws `PdfAttachmentNotFoundException`. `Remove` drops the name from both.
+- An existing FlateDecode embedded file is inflated on `Open`. DCTDecode throws `PdfUnsupportedFilterException` and does not return the compressed bytes. Copying a new attachment requests reads of at most 64 KiB. The content stream must be seekable.
+- `LZWDecode` is inflated, including `EarlyChange` 0 and 1, a clear code, and the code that is not in the table yet. `/Filter [/ASCII85Decode /LZWDecode]` decodes ASCII85 first. The abbreviations `LZW`, `AHx`, `A85`, and `Fl` are accepted. A decoded stream above the caller cap throws `PdfObjectTooLargeException`.
+- `RunLengthDecode` copies a length of 0–127 and repeats a length of 129–255. A length of 128 ends the stream, and bytes after it are ignored. The abbreviation `RL` is accepted. A truncated run throws `PdfParseException`.
+
+## AcroForm
+
+- No AcroForm means no fields. Widgets report the dotted full name, partial name, widget index, rectangle in bottom-left user space, 1-based page, rotation, and media box. `GetFields` returns every widget with that full name.
+- A parent with kids is not a row. Kids inherit `/FT`, `/V`, `/Ff`, and `/DA`. A widget with no `/P` is found through the page `/Annots`. Radio widgets that share a name are separate rows. The on-state is whichever `/AP` `/N` key is not `Off`. A check box is checked when its value is a name other than `Off`. A radio widget is checked when the group value equals its on-state. `Pages` reports number, media box, crop box, and rotation. An omitted crop box is the inherited crop box, or the media box when none is inherited.
+- A simple WinAnsi text field, including multiline and quadding, gets a Helvetica appearance and `/NeedAppearances false`. A right-aligned or wrapped Helvetica appearance uses a wider advance for `W` than for `i`. `/MaxLen` overflow throws `PdfFieldValueException` and does not dirty the document. Non-WinAnsi text and comb set `/NeedAppearances`. A WinAnsi choice value gets a Helvetica appearance of the display text. A check box with no appearance gets a generated `Yes`/`Off` appearance. A radio mark is drawn with cubic Bezier curves; `arc` is not a PDF content operator. Password and signature fields throw `PdfFieldValueException`. Filling a field with the wrong setter throws `PdfFieldValueException` and does not dirty the document. Read-only throws `PdfFieldReadOnlyException`. An unknown name throws `PdfFieldNotFoundException`.
+- Choice fields expose `/Opt`, including export/display pairs. A value that is not listed throws `PdfFieldValueException` and does not dirty the document, unless the Edit flag is set. Several values on a single-select field throw. A multi-select value is written as a PDF array. The Required flag is reported.
+- Fields stored in several object streams return the same values on a second read. A later edit of one field still round-trips, and the fields that were not edited keep their values.
+- A DocMDP certification that does not resolve blocks fills and signing. Field reads still work. DocMDP `P` 2 allows a fill and `Sign`, and blocks a metadata write. FieldMDP `All` blocks a fill and still allows a read.
+
+## Sealing
+
+- `/ByteRange` is four 10-digit integers. The gap is `<` plus the reserved hex plus `>`. The SHA-256 of the two ranges ignores the gap, so changing `/Contents` does not change the digest. The original bytes stay a prefix. A second save's `/Prev` points at the previous xref. A fill and a metadata edit in one save are one revision. Xref lines are 20 bytes and end in CRLF. `SaveIncremental()` and `Sign(options, provider)` append to the opened stream. A read-only opened stream is rejected. `SaveIncremental(Stream)` and `Sign(Stream, ...)` copy into an empty destination and leave the opened stream's bytes unchanged.
+- A token larger than `ReservedContentsBytes` throws `PdfSignatureTooLargeException` and does not extend the file. Signing while `/NeedAppearances` is true throws `PdfSignException` and does not extend the file. A provider whose kind differs from `PdfSignatureOptions.Kind` throws `PdfSignException` and does not extend the file. A generated text appearance can be signed in the same revision.
+- A `FieldName` that matches an empty signature field reuses that widget and does not add another. `/V` points at the new signature dictionary, the existing rectangle and page stay, and `/SigFlags` still includes signatures-exist and append-only. Signing that field again throws `PdfSignException` and does not grow the file. A text-field name throws `PdfSignException` and does not extend the file, as does any field that is not a signature. A read-only field throws `PdfFieldReadOnlyException`.
+- An existing `/ID` is copied. A missing `/ID` is created on sign and not on a metadata-only save. `SigningTime` is written to `/M` and to the CMS signing-time attribute.
+- `CmsDetachedSignatureProvider` verifies with `SignedCms.CheckSignature(verifySignatureOnly: true)`, and the signed `messageDigest` is the SHA-256 of the byte ranges. Additional certificates are embedded beside the leaf. An `ITimestampAuthority` passed to the provider receives a request whose imprint is the SHA-256 of the RSA signature value, and the token is the unsigned attribute `1.2.840.113549.1.9.16.2.14`.
+- `Rfc3161TimeStampRequest.Create` of SHA-256("abc") is the 56-byte vector in the tests. `HttpTimestampAuthority` POSTs `application/timestamp-query`, accepts status 0, rejects status 2, and returns the time-stamp token. `DocTimeStampSignatureProvider` sends the request for the signed-range hash and embeds the returned token.
+
+## Foreign files
+
+These fixtures are written by pypdf, qpdf, and pyHanko, then committed. The library does not create them. `qpdf --check` and pyHanko must be available; the tests fail when they are not.
+
+- A qpdf file with an xref stream and an object stream opens, reports the title `Foreign base` and the author `pypdf`, and an incremental title change keeps the original bytes. `qpdf --check` accepts the revision.
+- A qpdf revision 6 file with user password `user-secret` rejects a wrong password with `PdfEncryptedException`. A title change plus a CMS signature keeps the original bytes. Reopening with the user password reads the new title. `qpdf --check --password=user-secret` accepts the file, and pyHanko reports the signature intact, trusted, and covering the entire file.
+- A qpdf attachment named `note.txt` returns the bytes `foreign-attachment` after an incremental title change. `qpdf --check` accepts the revision.
+- A pypdf text field `Name` and check box `Agree`, neither of which has an appearance, generate appearances. The text value `Ada` and the checked state round-trip, and `/NeedAppearances` stays false. `qpdf --check` accepts the revision.
+- A pyHanko signature appended to a pypdf file keeps that file as a prefix. A later title change keeps the signed bytes as a prefix. pyHanko reports the original signature intact, trusted, and covering the signed revision.
+- An empty signature field named `ExistingSig`, created by pyHanko, is signed in place. The original bytes stay a prefix. pyHanko reports the new signature intact, trusted, and covering the entire file.
+- A CMS signature that embeds an intermediate and a root is trusted by pyHanko when only the root is supplied as a trust anchor. The signature stays intact and cryptographically valid.
+- `HttpTimestampAuthority` posts the RFC 3161 request to a timestamp server. pyHanko reports the embedded time-stamp token intact, valid, and trusted against the timestamp authority.
+- A SoftHSM 2 key signs through `IPdfExternalSigner`. `RSA.VerifyHash` accepts that PKCS#1 signature, and pyHanko trusts the chain built from the token leaf plus the embedded intermediate and root.
+- Byte-range integrity and the modification policy are separate results. Changing one byte inside a signed revision makes pyHanko report the signature not intact. A metadata append after an approval signature stays intact and valid; pyHanko reports the change as `LTA_UPDATES` and allows it. A pyHanko certification with `P` 1 blocks a fill and a metadata write. A certification with `P` 2 allows a fill, blocks metadata, and pyHanko then reports the signature intact with modification level `FORM_FILLING` and an accepting DocMDP result.
+- Poppler extracts `Ada` and `Blue` from a pypdf form after those appearances are generated, and its 72 dpi raster of the text, choice, check box, and radio rectangles changes. The unfilled file does not contain those words.
+- Opening a dense file larger than 32 MiB, including one qpdf rewrote with an object stream, and saving a metadata change allocates under 8 MiB. The allocation for a 32 MiB file stays within 3 MiB of the allocation for an 8 MiB file of the same shape. The sampled managed-heap peak stays under 8 MiB.

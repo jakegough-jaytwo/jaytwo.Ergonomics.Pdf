@@ -1,0 +1,108 @@
+%PDF-1.3
+%‚„œ”
+1 0 obj
+<<
+/Producer (pypdf)
+>>
+endobj
+2 0 obj
+<<
+/Type /Pages
+/Count 1
+/Kids [ 4 0 R ]
+>>
+endobj
+3 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+/AcroForm 9 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/Resources <<
+>>
+/MediaBox [ 0.0 0.0 612 792 ]
+/Parent 2 0 R
+/Annots [ 5 0 R 6 0 R 7 0 R 8 0 R ]
+>>
+endobj
+5 0 obj
+<<
+/Type /Annot
+/Subtype /Widget
+/FT /Tx
+/T (Name)
+/Rect [ 72 700 300 724 ]
+/DA (\057Helv 12 Tf 0 g)
+/F 4
+/P 4 0 R
+>>
+endobj
+6 0 obj
+<<
+/Type /Annot
+/Subtype /Widget
+/FT /Btn
+/T (Agree)
+/V /Off
+/AS /Off
+/Rect [ 72 660 90 678 ]
+/F 4
+/P 4 0 R
+>>
+endobj
+7 0 obj
+<<
+/Type /Annot
+/Subtype /Widget
+/FT /Ch
+/T (Color)
+/Opt [ (Red) (Blue) ]
+/Rect [ 72 620 220 644 ]
+/DA (\057Helv 12 Tf 0 g)
+/F 4
+/P 4 0 R
+>>
+endobj
+8 0 obj
+<<
+/Type /Annot
+/Subtype /Widget
+/FT /Btn
+/Ff 32768
+/T (Station)
+/Rect [ 72 580 98 598 ]
+/F 4
+/P 4 0 R
+>>
+endobj
+9 0 obj
+<<
+/Fields [ 5 0 R 6 0 R 7 0 R 8 0 R ]
+/NeedAppearances false
+>>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000015 00000 n 
+0000000054 00000 n 
+0000000113 00000 n 
+0000000178 00000 n 
+0000000308 00000 n 
+0000000441 00000 n 
+0000000567 00000 n 
+0000000723 00000 n 
+0000000844 00000 n 
+trailer
+<<
+/Size 10
+/Root 3 0 R
+/Info 1 0 R
+>>
+startxref
+924
+%%EOF

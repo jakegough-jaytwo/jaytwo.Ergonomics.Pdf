@@ -1,0 +1,459 @@
+using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using Xunit;
+
+namespace jaytwo.Ergonomics.Pdf.Tests;
+
+public class AcroFormTests
+{
+    [Fact]
+    public void empty_form_has_no_fields()
+    {
+        byte[] pdf = PdfBuilder.Basic().Finish();
+
+        using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+
+        Assert.False(document.AcroForm.HasFields);
+        Assert.Empty(document.AcroForm.Fields);
+        Assert.Equal(1, document.PageCount);
+    }
+
+    [Fact]
+    public void merged_split_radio_and_inherited_fields_report_geometry()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 6 0 R 8 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] /MediaBox [0 0 500 600] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /Rotate 90 /CropBox [5 6 105 206] /Annots [5 0 R 7 0 R 9 0 R 10 0 R] >>");
+        builder.Indirect(4, "<< /FT /Tx /T (Person) /V (Ada) /Ff 4096 /DA (/Helv 12 Tf 0 0 1 rg) /Kids [5 0 R] >>");
+        builder.Indirect(5, "<< /Subtype /Widget /Rect [10 20 110 40] >>");
+        builder.Indirect(6, "<< /T (Address) /Kids [7 0 R] >>");
+        builder.Indirect(7, "<< /Subtype /Widget /FT /Tx /T (City) /Rect [1 2 3 4] /P 3 0 R >>");
+        builder.Indirect(8, "<< /FT /Btn /Ff 32768 /T (Color) /V /Red /Kids [9 0 R 10 0 R] >>");
+        builder.Indirect(9, "<< /Subtype /Widget /Rect [0 0 12 12] /AP << /N << /Off null /Red null >> >> >>");
+        builder.Indirect(10, "<< /Subtype /Widget /Rect [0 20 12 32] /AP << /N << /Off null /Blue null >> >> >>");
+        byte[] pdf = builder.Finish();
+
+        using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        PdfField person = Assert.Single(document.AcroForm.Fields, field => field.FullName == "Person");
+        PdfField city = Assert.Single(document.AcroForm.Fields, field => field.FullName == "Address.City");
+        Assert.DoesNotContain(document.AcroForm.Fields, field => field.FullName == "Address");
+        PdfField red = document.AcroForm.Fields[IndexOf(document, "Color", 0)];
+        PdfField blue = document.AcroForm.Fields[IndexOf(document, "Color", 1)];
+
+        Assert.Equal("Ada", person.Value);
+        Assert.True(person.Multiline);
+        Assert.Equal(1, person.PageNumber);
+        Assert.Equal(90, person.PageRotation);
+        Assert.Equal(500, person.MediaBox.Width);
+        Assert.Equal(100, person.Rect.Width);
+        Assert.Equal("City", city.PartialName);
+        Assert.Equal(1, city.Rect.Llx);
+        Assert.Equal("Red", red.ExportValue);
+        Assert.Equal("Blue", blue.ExportValue);
+        Assert.True(red.IsChecked);
+        Assert.False(blue.IsChecked);
+        Assert.Equal(PdfButtonKind.Radio, red.ButtonKind);
+        Assert.Equal(0, red.WidgetIndex);
+        Assert.Equal(1, blue.WidgetIndex);
+        Assert.Equal(4, document.AcroForm.Fields.Count);
+        Assert.Equal("Red", document.AcroForm.GetFields("Color")[0].ExportValue);
+        PdfPage page = Assert.Single(document.Pages);
+        Assert.Equal(1, page.Number);
+        Assert.Equal(90, page.Rotation);
+        Assert.Equal(500, page.MediaBox.Width);
+        Assert.Equal(600, page.MediaBox.Height);
+        Assert.Equal(new PdfRect(5, 6, 105, 206), page.CropBox);
+        Assert.Equal(page.MediaBox, person.MediaBox);
+    }
+
+    [Fact]
+    public void simple_text_generates_helvetica_and_other_values_request_appearances()
+    {
+        byte[] pdf = Form(
+            "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [72 700 300 724] /DA (/Helv 0 Tf 0 g) /MaxLen 8 /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Tx /T (Notes) /Rect [72 640 300 700] /Ff 4096 /Q 1 /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Tx /T (Secret) /Rect [72 600 300 620] /Ff 8192 /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Tx /T (Locked) /Rect [72 560 300 580] /Ff 1 /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Tx /T (Comb) /Rect [72 520 300 540] /Ff 16777216 /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Sig /T (Sig) /Rect [72 480 300 500] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Btn /T (Agree) /Rect [72 440 90 458] /AP << /N << /Off null /Checked null >> >> /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Btn /T (Bare) /Rect [72 400 90 418] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Ch /T (Choice) /Rect [72 360 200 380] /P 3 0 R >>");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        long length = stream.Length;
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.False(Field(document, "Agree").IsChecked);
+            Assert.False(Field(document, "Bare").IsChecked);
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.False(document.AcroForm.NeedAppearances);
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Notes", "one\ntwo"));
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Name", "too-long!"));
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Secret", "nope"));
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Sig", "nope"));
+            Assert.Throws<PdfFieldReadOnlyException>(() => document.AcroForm.SetText("Locked", "nope"));
+            Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.SetText("Missing", "nope"));
+            Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.GetFields("Missing"));
+            Assert.Equal("Name", document.AcroForm.GetFields("Name")[0].PartialName);
+            Assert.Equal(PdfAppearanceDisposition.NeedAppearances, document.AcroForm.SetText("Comb", "AB"));
+            Assert.Equal(PdfAppearanceDisposition.NeedAppearances, document.AcroForm.SetText("Name", "日本語"));
+            Assert.True(document.AcroForm.NeedAppearances);
+            Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, document.AcroForm.SetCheckBox("Agree", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetCheckBox("Bare", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Choice", "Yes"));
+            document.SaveIncremental(stream);
+        }
+
+        Assert.True(stream.Length > length);
+        byte[] saved = stream.ToArray();
+        string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
+        Assert.Contains("/Helv", appendix, StringComparison.Ordinal);
+        Assert.Contains("/Helvetica", appendix, StringComparison.Ordinal);
+        using var again = PdfDocument.Open(new MemoryStream(saved), leaveOpen: true);
+        Assert.Equal("日本語", Field(again, "Name").Value);
+        Assert.Equal("Checked", Field(again, "Agree").Value);
+        Assert.True(Field(again, "Agree").IsChecked);
+        Assert.True(Field(again, "Bare").IsChecked);
+        Assert.True(again.AcroForm.NeedAppearances);
+    }
+
+    [Fact]
+    public void maxlen_overflow_does_not_dirty_the_document()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 10 10] /MaxLen 3 /P 3 0 R >>");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Name", "abcd"));
+        document.SaveIncremental(stream);
+
+        Assert.Equal(pdf.Length, stream.Length);
+    }
+
+    [Fact]
+    public void docmdp_blocks_writes_and_still_allows_reads()
+    {
+        byte[] pdf = Build(
+            new[] { "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 10 10] /P 3 0 R >>" },
+            " /Perms << /DocMDP 9 0 R >>");
+        using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+
+        Assert.Equal("Name", document.AcroForm.Fields[0].FullName);
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => document.Sign(new MemoryStream(), new PdfSignatureOptions(), new FixedProvider()));
+    }
+
+    [Fact]
+    public void docmdp_form_fill_permission_allows_fill_and_signing_but_not_metadata()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Perms << /DocMDP 9 0 R >> /AcroForm << /Fields [4 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 20] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
+        builder.Indirect(10, "<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>");
+        byte[] pdf = builder.Finish();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Nope");
+        document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+    }
+
+    [Fact]
+    public void fieldmdp_all_blocks_a_fill_and_still_allows_a_read()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 20] /P 3 0 R >>");
+        builder.Indirect(5, "<< /Subtype /Widget /FT /Sig /T (Sig) /V 9 0 R /Rect [0 0 10 10] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
+        builder.Indirect(10, "<< /TransformMethod /FieldMDP /TransformParams << /Action /All /V /1.2 >> >>");
+        using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+
+        Assert.Equal("Name", document.AcroForm.GetFields("Name")[0].FullName);
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Name", "Ada"));
+    }
+
+    [Fact]
+    public void thousand_page_form_does_not_read_content_holes()
+    {
+        var builder = new PdfBuilder();
+        var kids = new StringBuilder();
+        for (int page = 0; page < 1000; page++)
+        {
+            if (page > 0)
+            {
+                kids.Append(' ');
+            }
+
+            kids.Append(page + 3).Append(" 0 R");
+        }
+
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [1003 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1000 /Kids [" + kids.ToString() + "] /MediaBox [0 0 500 600] >>");
+        for (int page = 0; page < 1000; page++)
+        {
+            int id = page + 3;
+            int contents = page + 1004;
+            string rotate = page == 999 ? " /Rotate 90" : string.Empty;
+            string annots = page == 999 ? " /Annots [1003 0 R]" : string.Empty;
+            builder.Indirect(id, "<< /Type /Page /Parent 2 0 R /Contents " + contents.ToString() + " 0 R" + rotate + annots + " >>");
+        }
+
+        builder.Indirect(1003, "<< /Subtype /Widget /FT /Tx /T (Late) /Rect [10 20 30 40] /P 1002 0 R >>");
+        long hole = builder.Length + 100;
+        for (int page = 0; page < 1000; page++)
+        {
+            builder.Hole(page + 1004, hole);
+        }
+
+        (byte[] head, byte[] tail) = builder.Split(builder.Length + 2000000, string.Empty);
+        var sparse = new SparsePdfStream(head, tail, head.Length + 2000000);
+        using var document = PdfDocument.Open(sparse, leaveOpen: true);
+
+        Assert.Equal(1000, document.PageCount);
+        Assert.Equal(1000, document.Pages.Count);
+        Assert.Equal(90, document.Pages[999].Rotation);
+        Assert.Equal(500, document.Pages[999].MediaBox.Width);
+        Assert.Equal(document.Pages[999].MediaBox, document.Pages[999].CropBox);
+        PdfField field = Assert.Single(document.AcroForm.Fields);
+        Assert.Equal("Late", field.FullName);
+        Assert.Equal(1000, field.PageNumber);
+        Assert.Equal(90, field.PageRotation);
+        Assert.Equal(500, field.MediaBox.Width);
+        Assert.Equal(600, field.MediaBox.Height);
+        Assert.Equal(20, field.Rect.Width);
+        Assert.False(sparse.TouchedHole);
+    }
+
+    [Fact]
+    public void fills_reject_the_wrong_field_type_without_writing()
+    {
+        byte[] pdf = Form(
+            "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Btn /T (Agree) /AP << /N << /Off null /Yes null >> >> /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Btn /Ff 32768 /T (Color) /V /Red /AP << /N << /Off null /Red null >> >> /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Ch /T (Choice) /Opt [(Red)] /Rect [0 0 10 10] /P 3 0 R >>");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Agree", "x"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Color", "Red"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetText("Choice", "Red"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetCheckBox("Name", true));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetCheckBox("Color", true));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetRadio("Agree", "Yes"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetRadio("Name", "Yes"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetChoice("Name", "Yes"));
+        document.SaveIncremental();
+
+        Assert.Equal(pdf.Length, stream.Length);
+    }
+
+    [Fact]
+    public void choice_options_reject_unknown_values_and_multi_select_is_an_array()
+    {
+        byte[] pdf = Form(
+            "<< /Subtype /Widget /FT /Ch /T (Choice) /Ff 2 /Opt [(Red) (Blue)] /V (Red) /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Ch /T (Pair) /Opt [[(a) (Alpha)] [(b) (Beta)]] /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Ch /T (Editable) /Ff 262144 /Opt [(A)] /Rect [0 0 10 10] /P 3 0 R >>",
+            "<< /Subtype /Widget /FT /Ch /T (Multi) /Ff 2097152 /Opt [(A) (B) (C)] /V [(A) (C)] /Rect [0 0 10 10] /P 3 0 R >>");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            PdfField choice = Field(document, "Choice");
+            Assert.True(choice.Required);
+            Assert.False(choice.Editable);
+            Assert.Equal(new PdfChoiceOption("Red", "Red"), choice.Options[0]);
+            Assert.Equal(new PdfChoiceOption("Blue", "Blue"), choice.Options[1]);
+            Assert.Equal("Red", choice.Value);
+            PdfField pair = Field(document, "Pair");
+            Assert.Equal("a", pair.Options[0].Value);
+            Assert.Equal("Alpha", pair.Options[0].Display);
+            Assert.True(Field(document, "Editable").Editable);
+            PdfField multi = Field(document, "Multi");
+            Assert.True(multi.MultiSelect);
+            Assert.Equal(new[] { "A", "C" }, multi.SelectedValues);
+
+            long length = stream.Length;
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetChoice("Choice", "No"));
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetChoice("Pair", "Alpha"));
+            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetChoice("Choice", "Red", "Blue"));
+            document.SaveIncremental();
+            Assert.Equal(length, stream.Length);
+
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Choice", "Blue"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Pair", "b"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Editable", "custom"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Multi", "B"));
+            document.SaveIncremental();
+        }
+
+        byte[] saved = stream.ToArray();
+        string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
+        Assert.Contains("[(B)]", appendix, StringComparison.Ordinal);
+        Assert.Contains("(Beta)", appendix, StringComparison.Ordinal);
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("Blue", Field(again, "Choice").Value);
+        Assert.Equal("b", Field(again, "Pair").Value);
+        Assert.Equal("custom", Field(again, "Editable").Value);
+        Assert.Equal(new[] { "B" }, Field(again, "Multi").SelectedValues);
+    }
+
+    [Fact]
+    public void crop_box_inherits_and_defaults_to_the_media_box()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 3 /Kids [3 0 R 4 0 R 5 0 R] /MediaBox [0 0 500 600] /CropBox [1 2 301 402] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R >>");
+        builder.Indirect(4, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 200 200] /CropBox [9 9 19 29] >>");
+        builder.Indirect(5, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 50 60] >>");
+        byte[] pdf = builder.Finish();
+
+        using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+
+        Assert.Equal(new PdfRect(0, 0, 500, 600), document.Pages[0].MediaBox);
+        Assert.Equal(new PdfRect(1, 2, 301, 402), document.Pages[0].CropBox);
+        Assert.Equal(new PdfRect(0, 0, 200, 200), document.Pages[1].MediaBox);
+        Assert.Equal(new PdfRect(9, 9, 19, 29), document.Pages[1].CropBox);
+        Assert.Equal(new PdfRect(0, 0, 50, 60), document.Pages[2].MediaBox);
+        Assert.Equal(new PdfRect(1, 2, 301, 402), document.Pages[2].CropBox);
+    }
+
+    [Fact]
+    public void right_aligned_w_starts_left_of_i()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 200 24] /Q 2 /DA (/Helv 12 Tf 0 g) /P 3 0 R >>");
+
+        double wide = TmX(AppendixAfterFill(pdf, "Name", "W"));
+        double narrow = TmX(AppendixAfterFill(pdf, "Name", "i"));
+
+        Assert.True(wide < narrow);
+    }
+
+    [Fact]
+    public void multiline_www_wraps_sooner_than_iii()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Notes) /Rect [0 0 24 80] /Ff 4096 /DA (/Helv 12 Tf 0 g) /P 3 0 R >>");
+
+        int wide = LineCount(AppendixAfterFill(pdf, "Notes", "WWW"));
+        int narrow = LineCount(AppendixAfterFill(pdf, "Notes", "iii"));
+
+        Assert.Equal(1, narrow);
+        Assert.True(wide > narrow);
+    }
+
+    private static byte[] Form(params string[] widgets)
+    {
+        return Build(widgets, string.Empty);
+    }
+
+    private static byte[] Build(string[] widgets, string catalogPerms)
+    {
+        var fields = new StringBuilder();
+        var annots = new StringBuilder();
+        for (int i = 0; i < widgets.Length; i++)
+        {
+            if (i > 0)
+            {
+                fields.Append(' ');
+                annots.Append(' ');
+            }
+
+            int id = i + 4;
+            fields.Append(id).Append(" 0 R");
+            annots.Append(id).Append(" 0 R");
+        }
+
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R" + catalogPerms + " /AcroForm << /Fields [" + fields.ToString() + "] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [" + annots.ToString() + "] >>");
+        for (int i = 0; i < widgets.Length; i++)
+        {
+            builder.Indirect(i + 4, widgets[i]);
+        }
+
+        return builder.Finish();
+    }
+
+    private static PdfField Field(PdfDocument document, string name)
+    {
+        return Assert.Single(document.AcroForm.GetFields(name));
+    }
+
+    private static int IndexOf(PdfDocument document, string name, int widget)
+    {
+        for (int i = 0; i < document.AcroForm.Fields.Count; i++)
+        {
+            PdfField field = document.AcroForm.Fields[i];
+            if (field.FullName == name && field.WidgetIndex == widget)
+            {
+                return i;
+            }
+        }
+
+        throw new InvalidOperationException(name);
+    }
+
+    private static string AppendixAfterFill(byte[] pdf, string name, string value)
+    {
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText(name, value));
+            document.SaveIncremental(stream);
+        }
+
+        byte[] saved = stream.ToArray();
+        return Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
+    }
+
+    private static double TmX(string appendix)
+    {
+        const string marker = "1 0 0 1 ";
+        int start = appendix.IndexOf(marker, StringComparison.Ordinal);
+        Assert.True(start >= 0);
+        start += marker.Length;
+        int end = appendix.IndexOf(' ', start);
+        return double.Parse(appendix.Substring(start, end - start), CultureInfo.InvariantCulture);
+    }
+
+    private static int LineCount(string appendix)
+    {
+        int count = 0;
+        int index = 0;
+        while ((index = appendix.IndexOf(" Tj", index, StringComparison.Ordinal)) >= 0)
+        {
+            count++;
+            index += 3;
+        }
+
+        return count;
+    }
+
+    private sealed class FixedProvider : IPdfSignatureProvider
+    {
+        public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
+
+        public byte[] CreateContents(PdfSignatureContext context)
+        {
+            return new byte[] { 1, 2, 3, 4 };
+        }
+    }
+}

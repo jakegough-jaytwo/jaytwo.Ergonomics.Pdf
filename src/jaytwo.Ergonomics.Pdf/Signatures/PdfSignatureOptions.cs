@@ -1,0 +1,59 @@
+namespace jaytwo.Ergonomics.Pdf.Signatures;
+
+/// <summary>
+/// Options for an incremental PDF signature.
+/// </summary>
+public sealed class PdfSignatureOptions
+{
+    /// <summary>
+    /// Gets the signature field name. When null, the next SignatureN name is used.
+    /// An existing empty signature field with this name is reused, and its rectangle is kept.
+    /// </summary>
+    public string? FieldName { get; init; }
+
+    /// <summary>
+    /// Gets the 1-based page that receives a new signature widget. Ignored when an existing field is reused.
+    /// </summary>
+    public int PageNumber { get; init; } = 1;
+
+    /// <summary>
+    /// Gets the widget rectangle for a new signature field. The default is an invisible zero-area box.
+    /// An existing signature field keeps its rectangle.
+    /// </summary>
+    public PdfRect Rect { get; init; }
+
+    /// <summary>
+    /// Gets the signature dictionary kind.
+    /// </summary>
+    public PdfSignatureKind Kind { get; init; } = PdfSignatureKind.CmsDetached;
+
+    /// <summary>
+    /// Gets the number of bytes reserved for the hexadecimal /Contents value.
+    /// </summary>
+    public int ReservedContentsBytes { get; init; } = 16384;
+
+    /// <summary>
+    /// Gets the signature reason.
+    /// </summary>
+    public string? Reason { get; init; }
+
+    /// <summary>
+    /// Gets the signature location.
+    /// </summary>
+    public string? Location { get; init; }
+
+    /// <summary>
+    /// Gets the signer contact information.
+    /// </summary>
+    public string? ContactInfo { get; init; }
+
+    /// <summary>
+    /// Gets the signer name stored in the signature dictionary.
+    /// </summary>
+    public string? SignerName { get; init; }
+
+    /// <summary>
+    /// Gets the signing time stored in /M and in the CMS signing-time attribute. When null, UTC now is used for CMS signatures.
+    /// </summary>
+    public System.DateTimeOffset? SigningTime { get; init; }
+}
