@@ -8,6 +8,8 @@ namespace jaytwo.Ergonomics.Pdf.Internal;
 
 internal sealed class PdfParser
 {
+    private const int MaxCommentDepth = 256;
+
     private readonly PdfCursor _cursor;
     private readonly Func<int, PdfObject>? _resolve;
     private readonly long _baseOffset;
@@ -295,6 +297,11 @@ internal sealed class PdfParser
     {
         int[] widths = ReadWidths(dict);
         var index = ReadIndex(dict);
+        if ((index.Count & 1) != 0)
+        {
+            throw new PdfParseException(0, "Xref stream /Index must contain pairs of integers.");
+        }
+
         var entries = new Dictionary<int, XrefEntry>();
         int cursor = 0;
         for (int pair = 0; pair < index.Count; pair += 2)
@@ -393,7 +400,13 @@ internal sealed class PdfParser
                 throw new PdfParseException(0, "Xref stream /W entry is not a number.");
             }
 
-            widths[i] = number.IsInteger ? (int)number.LongValue : (int)number.DoubleValue;
+            long width = number.IsInteger ? number.LongValue : (long)number.DoubleValue;
+            if (width < 0 || width > sizeof(long))
+            {
+                throw new PdfParseException(0, "Xref stream /W entry is outside the supported range.");
+            }
+
+            widths[i] = (int)width;
         }
 
         return widths;
@@ -435,7 +448,7 @@ internal sealed class PdfParser
             return 0;
         }
 
-        if (cursor < 0 || cursor + width > data.Length)
+        if (width < 0 || cursor < 0 || cursor > data.Length || width > data.Length - cursor)
         {
             throw new PdfParseException(0, "Xref stream entry is truncated.");
         }
@@ -582,25 +595,34 @@ internal sealed class PdfParser
 
     private Token ReadToken()
     {
-        SkipWhitespace();
-        int b = _cursor.ReadByte();
+        int commentDepth = 0;
+        int b;
+        while (true)
+        {
+            SkipWhitespace();
+            b = _cursor.ReadByte();
+            if (b != '%')
+            {
+                break;
+            }
+
+            commentDepth++;
+            if (commentDepth > MaxCommentDepth)
+            {
+                throw Error("Too many consecutive PDF comments.");
+            }
+
+            int c;
+            do
+            {
+                c = _cursor.ReadByte();
+            }
+            while (c >= 0 && c != '\n' && c != '\r');
+        }
+
         if (b < 0)
         {
             return new Token(TokenKind.End, string.Empty, Array.Empty<byte>(), 0, 0);
-        }
-
-        if (b == '%')
-        {
-            while (true)
-            {
-                int c = _cursor.ReadByte();
-                if (c < 0 || c == '\n' || c == '\r')
-                {
-                    break;
-                }
-            }
-
-            return ReadToken();
         }
 
         if (b == '[')

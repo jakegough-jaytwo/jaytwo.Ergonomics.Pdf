@@ -76,6 +76,7 @@ public class EncryptionTests
         Assert.True(saved.AsSpan(0, pdf.Length).SequenceEqual(pdf));
         string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
         Assert.Contains("/Encrypt 20 0 R", appendix, StringComparison.Ordinal);
+        Assert.Contains("0102030405060708090A0B0C0D0E0F10", appendix, StringComparison.Ordinal);
         Assert.DoesNotContain("(Updated)", appendix, StringComparison.Ordinal);
 
         using var again = PdfDocument.Open(new MemoryStream(saved), "caf\u00e9", leaveOpen: true);
@@ -384,6 +385,22 @@ public class EncryptionTests
         Assert.False(sparse.TouchedHole);
     }
 
+    [Fact]
+    public void revision2_fill_in_without_annotate_cannot_fill_a_field()
+    {
+        byte[] pdf = Rc4Document(StandardEncryptor.Kind.Revision2, 40, textField: true, StandardEncryptor.FillOnly());
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, "user", leaveOpen: true);
+
+        Assert.False(document.Permissions.CanAnnotate);
+        Assert.False(document.Permissions.CanFillForms);
+        long length = stream.Length;
+        Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.SetText("Name", "Ada"));
+        document.SaveIncremental();
+        Assert.Equal(length, stream.Length);
+    }
+
     [Theory]
     [InlineData(2, 40)]
     [InlineData(3, 40)]
@@ -417,6 +434,7 @@ public class EncryptionTests
         Assert.True(saved.AsSpan(0, pdf.Length).SequenceEqual(pdf));
         string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
         Assert.Contains("/Encrypt 20 0 R", appendix, StringComparison.Ordinal);
+        Assert.Contains("0102030405060708090A0B0C0D0E0F10", appendix, StringComparison.Ordinal);
         Assert.DoesNotContain("(Updated)", appendix, StringComparison.Ordinal);
         Assert.DoesNotContain("(Ada)", appendix, StringComparison.Ordinal);
 
@@ -446,6 +464,38 @@ public class EncryptionTests
         Assert.Equal("Secret", document.Metadata.Title);
     }
 
+    [Fact]
+    public void revision4_rc4_stream_decrypts_beside_an_aes_string()
+    {
+        var aes = new StandardEncryptor(StandardEncryptor.Kind.Revision4Aes, "user", "owner", -4, encryptMetadata: true);
+        var plain = new byte[40];
+        for (int i = 0; i < plain.Length; i++)
+        {
+            plain[i] = (byte)((i * 7) + 1);
+        }
+
+        byte[] streamCipher = aes.EncryptRc4(plain, 5, 0);
+        Assert.NotEqual(aes.Encrypt(plain, 5, 0, new byte[16]), streamCipher);
+
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Names << /EmbeddedFiles << /Names [" + aes.Text("notes.bin", 1) + " 6 0 R] >> >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(4, "<< /Title " + aes.Text("Secret", 4) + " >>");
+        builder.StreamObject(5, "/Type /EmbeddedFile /Params << /Size 40 >>", streamCipher);
+        builder.Indirect(6, "<< /Type /Filespec /F " + aes.Text("notes.bin", 6) + " /UF " + aes.Text("notes.bin", 6) + " /EF << /F 5 0 R /UF 5 0 R >> >>");
+        builder.Indirect(20, "<< /Filter /Standard /V 4 /R 4 /Length 128 /CF << /Aes << /CFM /AESV2 /Length 16 >> /Rc4 << /CFM /V2 /Length 16 >> >> /StrF /Aes /StmF /Rc4 " + aes.Values() + " >>");
+        builder.AppendXrefStream(21, "/Encrypt 20 0 R /Info 4 0 R /ID [" + aes.IdLiteral() + "]");
+
+        using var document = PdfDocument.Open(new MemoryStream(builder.Snapshot()), "user", leaveOpen: true);
+
+        Assert.Equal("Secret", document.Metadata.Title);
+        using Stream notes = document.Attachments["notes.bin"].Open();
+        using var body = new MemoryStream();
+        notes.CopyTo(body);
+        Assert.Equal(plain, body.ToArray());
+    }
+
     [Theory]
     [InlineData("/Filter /Adobe.PubSec /V 4 /R 4")]
     [InlineData("/Filter /Standard /V 1 /R 3 /O <00> /U <00> /P -4")]
@@ -458,6 +508,78 @@ public class EncryptionTests
         byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [<0102030405060708090A0B0C0D0E0F10> <0102030405060708090A0B0C0D0E0F10>]");
 
         Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
+    }
+
+    [Fact]
+    public void failed_open_diagnostic_omits_the_password_and_file_key()
+    {
+        const string user = "user-secret-q7m";
+        const string owner = "owner-secret-q7m";
+        const string rejected = "rejected-secret-q7m";
+        byte[] fileKey = new byte[32];
+        for (int i = 0; i < fileKey.Length; i++)
+        {
+            fileKey[i] = (byte)(i + 1);
+        }
+
+        byte[] pdf = Document(revision6: true, user, owner, -4, textField: false);
+        PdfEncryptedException exception = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), rejected, leaveOpen: true));
+        AssertDiagnosticOmits(exception, rejected, "password");
+        AssertDiagnosticOmits(exception, user, "password");
+        AssertDiagnosticOmits(exception, owner, "password");
+        AssertDiagnosticOmitsKey(exception, fileKey);
+    }
+
+    private static void AssertDiagnosticOmits(Exception exception, string secret, string kind)
+    {
+        Assert.False(string.IsNullOrEmpty(secret));
+        string diagnostic = PublicDiagnostic(exception);
+        Assert.True(exception.Message.IndexOf(secret, StringComparison.Ordinal) < 0, "The exception message contains the " + kind + ".");
+        Assert.True(diagnostic.IndexOf(secret, StringComparison.Ordinal) < 0, "A public diagnostic contains the " + kind + ".");
+    }
+
+    private static void AssertDiagnosticOmitsKey(Exception exception, byte[] key)
+    {
+        Assert.True(key.Length >= 16);
+        string hex = Convert.ToHexString(key);
+        string diagnostic = PublicDiagnostic(exception);
+        Assert.True(exception.Message.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "The exception message contains the key.");
+        Assert.True(diagnostic.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "A public diagnostic contains the key.");
+        AssertDiagnosticOmits(exception, Convert.ToBase64String(key), "key");
+        AssertDiagnosticOmits(exception, Encoding.GetEncoding(28591).GetString(key), "key");
+    }
+
+    private static string PublicDiagnostic(Exception exception)
+    {
+        var text = new StringBuilder();
+        for (Exception? current = exception; current != null; current = current.InnerException)
+        {
+            text.Append(current.Message);
+            text.Append('\n');
+            text.Append(current.ToString());
+            text.Append('\n');
+            if (current.Source != null)
+            {
+                text.Append(current.Source);
+                text.Append('\n');
+            }
+
+            if (current.HelpLink != null)
+            {
+                text.Append(current.HelpLink);
+                text.Append('\n');
+            }
+
+            foreach (object key in current.Data.Keys)
+            {
+                text.Append(key);
+                text.Append('=');
+                text.Append(current.Data[key]);
+                text.Append('\n');
+            }
+        }
+
+        return text.ToString();
     }
 
     private static void AssertPermissions(
@@ -567,9 +689,9 @@ public class EncryptionTests
         return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
     }
 
-    private static byte[] Rc4Document(StandardEncryptor.Kind kind, int keyBits, bool textField)
+    private static byte[] Rc4Document(StandardEncryptor.Kind kind, int keyBits, bool textField, int permissions = -4)
     {
-        var crypt = new StandardEncryptor(kind, "user", "owner", -4, encryptMetadata: true, keyBits);
+        var crypt = new StandardEncryptor(kind, "user", "owner", permissions, encryptMetadata: true, keyBits);
         var builder = new PdfBuilder();
         string form = textField ? " /AcroForm << /Fields [5 0 R] >>" : string.Empty;
         string annots = textField ? " /Annots [5 0 R]" : string.Empty;

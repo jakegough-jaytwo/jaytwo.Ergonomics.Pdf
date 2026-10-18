@@ -210,6 +210,34 @@ public class MetadataTests
         Assert.Equal("D:20200102030405-05'00'", again.Metadata["ModDate"]);
     }
 
+    [Fact]
+    public void info_edit_refreshes_moddate_in_utc()
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        builder.Indirect(4, "<< /Title (Old) /ModDate (D:20200101120000-05'00') >>");
+        byte[] pdf = builder.Finish("/Info 4 0 R");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        DateTimeOffset before = DateTimeOffset.UtcNow.AddSeconds(-1);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            document.Metadata.Title = "New";
+            document.SaveIncremental();
+        }
+
+        DateTimeOffset after = DateTimeOffset.UtcNow.AddSeconds(1);
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("New", again.Metadata.Title);
+        DateTimeOffset? read = again.Metadata.ModificationDate;
+        Assert.True(read.HasValue);
+        DateTimeOffset modified = read.GetValueOrDefault();
+        Assert.Equal(TimeSpan.Zero, modified.Offset);
+        Assert.InRange(modified, before, after);
+        string text = again.Metadata["ModDate"] ?? string.Empty;
+        Assert.StartsWith("D:", text, StringComparison.Ordinal);
+        Assert.EndsWith("Z", text, StringComparison.Ordinal);
+    }
+
     private static byte[] Titled(string title)
     {
         PdfBuilder builder = PdfBuilder.Basic();

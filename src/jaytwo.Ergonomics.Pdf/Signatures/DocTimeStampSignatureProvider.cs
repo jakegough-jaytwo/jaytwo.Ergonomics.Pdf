@@ -44,7 +44,10 @@ public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider
             digest = sha.ComputeHash(signed);
         }
 
-        byte[] request = Rfc3161TimeStampRequest.Create(digest);
-        return _authority.GetTimeStampToken(request);
+        byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
+        byte[] request = Rfc3161TimeStampRequest.Create(digest, nonce);
+        byte[] token = _authority.GetTimeStampToken(request);
+        Rfc3161TimeStampToken.RequireMatch(token, digest, nonce);
+        return token;
     }
 }

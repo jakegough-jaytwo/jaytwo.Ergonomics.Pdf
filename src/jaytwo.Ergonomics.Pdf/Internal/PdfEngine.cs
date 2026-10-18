@@ -18,6 +18,7 @@ internal sealed class PdfEngine : IDisposable
 {
     internal const long MaxClassicOffset = 9999999999L;
 
+    private const int MaxTraversalDepth = 256;
     private const int FlagReadOnly = 1;
     private const int FlagRequired = 1 << 1;
     private const int FlagMultiline = 1 << 12;
@@ -35,6 +36,7 @@ internal sealed class PdfEngine : IDisposable
     private readonly Dictionary<int, Dictionary<int, PdfObject>> _objectStreams = new Dictionary<int, Dictionary<int, PdfObject>>();
     private readonly HashSet<int> _dirty = new HashSet<int>();
     private readonly HashSet<long> _loadedXrefs = new HashSet<long>();
+    private readonly HashSet<int> _loadingObjects = new HashSet<int>();
     private readonly List<Stream> _ownedStreams = new List<Stream>();
     private Stream _stream;
     private PdfCursor _cursor;
@@ -697,7 +699,7 @@ internal sealed class PdfEngine : IDisposable
 
     private static void RequireOption(FieldSlot slot, string value)
     {
-        if (slot.Editable || slot.Options.Count == 0)
+        if (slot.Editable)
         {
             return;
         }
@@ -1086,6 +1088,11 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(offset, "Cyclic /Prev chain.");
         }
 
+        if (stack.Count > MaxTraversalDepth)
+        {
+            throw new PdfParseException(offset, "The cross-reference chain is too deep.");
+        }
+
         if (_loadedXrefs.Contains(offset))
         {
             stack.Remove(offset);
@@ -1341,35 +1348,53 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(0, "Object " + id.ToString(CultureInfo.InvariantCulture) + " is not in use.");
         }
 
-        PdfObject obj;
-        if (entry.Type == 1)
+        if (_loadingObjects.Contains(id))
         {
-            _cursor.Seek(entry.Field1);
-            var parser = new PdfParser(_cursor, Load, 0);
-            obj = parser.ParseIndirect(id);
-        }
-        else if (entry.Type == 2)
-        {
-            obj = LoadFromObjectStream((int)entry.Field1, entry.Field2, id);
-        }
-        else
-        {
-            throw new PdfParseException(entry.Field1, "Unknown xref entry type.");
+            throw new PdfParseException(0, "Cyclic indirect object dependency.");
         }
 
-        obj.ObjectNumber = id;
-        if (entry.Type == 2)
+        if (_loadingObjects.Count >= MaxTraversalDepth)
         {
-            obj.Generation = 0;
+            throw new PdfParseException(0, "Indirect object dependency is too deep.");
         }
 
-        if (_security != null && entry.Type != 2)
+        _loadingObjects.Add(id);
+        try
         {
-            _security.DecryptStrings(obj);
-        }
+            PdfObject obj;
+            if (entry.Type == 1)
+            {
+                _cursor.Seek(entry.Field1);
+                var parser = new PdfParser(_cursor, Load, 0);
+                obj = parser.ParseIndirect(id);
+            }
+            else if (entry.Type == 2)
+            {
+                obj = LoadFromObjectStream((int)entry.Field1, entry.Field2, id);
+            }
+            else
+            {
+                throw new PdfParseException(entry.Field1, "Unknown xref entry type.");
+            }
 
-        _cache[id] = obj;
-        return obj;
+            obj.ObjectNumber = id;
+            if (entry.Type == 2)
+            {
+                obj.Generation = 0;
+            }
+
+            if (_security != null && entry.Type != 2)
+            {
+                _security.DecryptStrings(obj);
+            }
+
+            _cache[id] = obj;
+            return obj;
+        }
+        finally
+        {
+            _loadingObjects.Remove(id);
+        }
     }
 
     private PdfObject LoadFromObjectStream(int streamId, int index, int expectedId)
@@ -1413,13 +1438,19 @@ internal sealed class PdfEngine : IDisposable
             byte[] data = ReadDecoded(dict, PdfStreamDecoder.StructuralCap);
             int count = IntOf(dict.Get("N"));
             int first = IntOf(dict.Get("First"));
+            if (count < 0 || count > int.MaxValue / 2)
+            {
+                throw new PdfParseException(0, "Object stream /N is outside the supported range.");
+            }
+
             if (first < 0 || first > data.Length)
             {
                 throw new PdfParseException(0, "Object stream /First is outside the stream.");
             }
 
             List<string> parts = SplitTokens(Encoding.ASCII.GetString(data, 0, first));
-            if (parts.Count < count * 2)
+            int headerParts = count * 2;
+            if (parts.Count < headerParts)
             {
                 throw new PdfParseException(0, "Object stream header is truncated.");
             }
@@ -1428,8 +1459,15 @@ internal sealed class PdfEngine : IDisposable
             var cursor = PdfCursor.FromBytes(data);
             for (int i = 0; i < count; i++)
             {
-                int id = int.Parse(parts[i * 2], CultureInfo.InvariantCulture);
-                int offset = int.Parse(parts[(i * 2) + 1], CultureInfo.InvariantCulture);
+                if (!int.TryParse(parts[i * 2], NumberStyles.None, CultureInfo.InvariantCulture, out int id)
+                    || !int.TryParse(parts[(i * 2) + 1], NumberStyles.None, CultureInfo.InvariantCulture, out int offset)
+                    || id < 0
+                    || offset < 0
+                    || offset > data.Length - first)
+                {
+                    throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
+                }
+
                 cursor.Seek(first + offset);
                 var parser = new PdfParser(cursor, null, 0);
                 PdfObject value = parser.ParseValue();
@@ -1537,8 +1575,19 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject Resolve(PdfObject value)
     {
+        var seen = new HashSet<int>();
         while (value is PdfObject.Ref reference)
         {
+            if (!seen.Add(reference.ObjectId))
+            {
+                throw new PdfParseException(0, "Cyclic indirect object reference.");
+            }
+
+            if (seen.Count > MaxTraversalDepth)
+            {
+                throw new PdfParseException(0, "Indirect object reference chain is too deep.");
+            }
+
             value = Load(reference.ObjectId);
         }
 
@@ -1850,11 +1899,12 @@ internal sealed class PdfEngine : IDisposable
         }
 
         var inherited = new Inherited(null, null, 0, null, 0, null, 0, null);
+        var seenFields = new HashSet<int>();
         foreach (PdfObject field in fields.Items)
         {
             if (field is PdfObject.Ref reference && Resolve(reference) is PdfObject.Dict dict)
             {
-                WalkField(dict, reference.ObjectId, string.Empty, inherited, slots, pages, pageIndex, annotPages);
+                WalkField(dict, reference.ObjectId, string.Empty, inherited, slots, pages, pageIndex, annotPages, seenFields, 0);
             }
         }
 
@@ -1877,8 +1927,20 @@ internal sealed class PdfEngine : IDisposable
         List<FieldSlot> slots,
         List<PageInfo> pages,
         Dictionary<int, int> pageIndex,
-        Dictionary<int, int> annotPages)
+        Dictionary<int, int> annotPages,
+        HashSet<int> seen,
+        int depth)
     {
+        if (!seen.Add(fieldId))
+        {
+            throw new PdfParseException(0, "The field tree contains a cycle.");
+        }
+
+        if (depth > MaxTraversalDepth)
+        {
+            throw new PdfParseException(0, "The field tree is too deep.");
+        }
+
         string? ft = NameOf(field.Get("FT")) ?? inherited.Ft;
         PdfObject? value = field.Get("V") ?? inherited.Value;
         int flags = field.Get("Ff") != null ? IntOf(field.Get("Ff")) : inherited.Flags;
@@ -1902,7 +1964,7 @@ internal sealed class PdfEngine : IDisposable
             {
                 if (kid is PdfObject.Ref reference && Resolve(reference) is PdfObject.Dict child)
                 {
-                    WalkField(child, reference.ObjectId, full, next, slots, pages, pageIndex, annotPages);
+                    WalkField(child, reference.ObjectId, full, next, slots, pages, pageIndex, annotPages, seen, depth + 1);
                 }
             }
 
@@ -2496,9 +2558,14 @@ internal sealed class PdfEngine : IDisposable
         var list = new List<AttachmentSlot>();
         var seen = new HashSet<int>();
         PdfObject.Dict catalog = CatalogDict();
-        if (ResolveMaybe(catalog.Get("Names")) is PdfObject.Dict names && ResolveMaybe(names.Get("EmbeddedFiles")) is PdfObject.Dict tree)
+        if (ResolveMaybe(catalog.Get("Names")) is PdfObject.Dict names)
         {
-            WalkNames(tree, list, seen);
+            PdfObject? embeddedFiles = names.Get("EmbeddedFiles");
+            if (ResolveMaybe(embeddedFiles) is PdfObject.Dict tree)
+            {
+                int treeId = embeddedFiles is PdfObject.Ref reference ? reference.ObjectId : tree.ObjectNumber;
+                WalkNames(tree, treeId, list, seen, new HashSet<int>(), 0);
+            }
         }
 
         if (ResolveMaybe(catalog.Get("AF")) is PdfObject.Arr af)
@@ -2515,8 +2582,18 @@ internal sealed class PdfEngine : IDisposable
         return list;
     }
 
-    private void WalkNames(PdfObject.Dict node, List<AttachmentSlot> list, HashSet<int> seen)
+    private void WalkNames(PdfObject.Dict node, int nodeId, List<AttachmentSlot> list, HashSet<int> seen, HashSet<int> seenNodes, int depth)
     {
+        if (nodeId != 0 && !seenNodes.Add(nodeId))
+        {
+            throw new PdfParseException(0, "The embedded-file name tree contains a cycle.");
+        }
+
+        if (depth > MaxTraversalDepth)
+        {
+            throw new PdfParseException(0, "The embedded-file name tree is too deep.");
+        }
+
         if (ResolveMaybe(node.Get("Names")) is PdfObject.Arr names)
         {
             for (int i = 0; i + 1 < names.Items.Count; i += 2)
@@ -2545,7 +2622,8 @@ internal sealed class PdfEngine : IDisposable
             {
                 if (ResolveMaybe(kid) is PdfObject.Dict child)
                 {
-                    WalkNames(child, list, seen);
+                    int childId = kid is PdfObject.Ref reference ? reference.ObjectId : child.ObjectNumber;
+                    WalkNames(child, childId, list, seen, seenNodes, depth + 1);
                 }
             }
         }

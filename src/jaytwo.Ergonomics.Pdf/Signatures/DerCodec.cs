@@ -68,6 +68,30 @@ internal static class DerCodec
         return Tlv(0x02, bytes.ToArray());
     }
 
+    public static byte[] Integer(ReadOnlySpan<byte> unsigned)
+    {
+        if (unsigned.Length == 0)
+        {
+            throw new ArgumentException("The integer must not be empty.", nameof(unsigned));
+        }
+
+        int start = 0;
+        while (start < unsigned.Length - 1 && unsigned[start] == 0)
+        {
+            start++;
+        }
+
+        bool pad = (unsigned[start] & 0x80) != 0;
+        int length = unsigned.Length - start;
+        var content = new byte[length + (pad ? 1 : 0)];
+        for (int i = 0; i < length; i++)
+        {
+            content[i + (pad ? 1 : 0)] = unsigned[start + i];
+        }
+
+        return Tlv(0x02, content);
+    }
+
     public static byte[] OctetString(byte[] data)
     {
         return Tlv(0x04, data);
@@ -129,7 +153,7 @@ internal static class DerCodec
             }
         }
 
-        if (length < 0 || index + length > data.Length)
+        if (length < 0 || length > data.Length - index)
         {
             throw new PdfTimestampException("DER value exceeds its buffer.");
         }

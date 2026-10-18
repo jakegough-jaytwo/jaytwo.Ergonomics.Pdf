@@ -1,11 +1,19 @@
 using System;
 using System.IO;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
 
 public class ScaleTests
 {
+    private readonly ITestOutputHelper _output;
+
+    public ScaleTests(ITestOutputHelper output)
+    {
+        _output = output;
+    }
+
     [Fact]
     public void cross_stream_save_copies_in_one_megabyte_reads()
     {
@@ -44,7 +52,11 @@ public class ScaleTests
             Assert.Equal("Huge", document.Metadata.Title);
             Assert.Equal(1, document.PageCount);
             document.Metadata.Title = "Changed";
+            long beforeMetadata = sparse.Length;
             document.SaveIncremental(sparse);
+            long metadataAppendix = sparse.Length - beforeMetadata;
+            _output.WriteLine("metadata appendix " + metadataAppendix.ToString());
+            Assert.True(metadataAppendix < (8 * 1024));
             document.Sign(sparse, new PdfSignatureOptions { ReservedContentsBytes = 64 }, provider);
         }
 

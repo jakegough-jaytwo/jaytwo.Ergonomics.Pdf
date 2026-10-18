@@ -78,6 +78,12 @@ On adoption, five passages were reworded so the standard agrees with `AGENTS.md`
 
 The thresholds in the standard are proposals: the fixture count, producer count, memory budgets, and fuzzing hours. The Technical Lead and QA Engineer record the approved fixture-specific memory budgets under gate G7 in `state/status.md`.
 
+### D-17. Password and signature fills throw
+
+Decided 2026-10-18 by the owner, closing D-O5. Option 2. Password and signature fills throw `PdfFieldValueException` and do not dirty the document. Comb, rich text, and non-WinAnsi values still set `/NeedAppearances`.
+
+The owner rejected option 1. A signature field's value is a signature dictionary, written by `Sign` with `FieldName`, not by a text fill. The password flag means the value is not stored in the file. `SetText` already throws for a password field and for a field that is not text, and `ACCEPTANCE.md` already requires that throw. `AGENTS.md` is updated to match. The README appearances bullet gets the same sentence when B-04 releases its claim on `README.md`.
+
 ### D-16. `System.Memory` is settled
 
 Decided 2026-10-18 by the owner. `System.Memory` on `netstandard2.0` is an accepted runtime dependency, not an exception under review. Every review round raised it, because `AGENTS.md` said "zero runtime dependencies" and the README said "no runtime dependencies" while the project file references a package. Both now describe a closed, settled set. Agents do not flag the package, propose removing it, or cite it as precedent for another one. A different runtime package is still an owner decision under `team.md` section 9.

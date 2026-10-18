@@ -72,7 +72,15 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         byte[] signature;
         using (SHA256 sha256 = SHA256.Create())
         {
-            signature = _signer.SignHash(sha256.ComputeHash(signedAttrs));
+            byte[] hash = sha256.ComputeHash(signedAttrs);
+            try
+            {
+                signature = _signer.SignHash(hash);
+            }
+            catch (Exception)
+            {
+                throw new CryptographicException("The external signer failed.");
+            }
         }
 
         byte[]? unsignedAttrs = null;
@@ -84,11 +92,9 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
                 imprint = sha256.ComputeHash(signature);
             }
 
-            byte[] token = _timestampAuthority.GetTimeStampToken(Rfc3161TimeStampRequest.Create(imprint));
-            if (token == null || token.Length == 0)
-            {
-                throw new PdfTimestampException("The timestamp authority returned an empty token.");
-            }
+            byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
+            byte[] token = _timestampAuthority.GetTimeStampToken(Rfc3161TimeStampRequest.Create(imprint, nonce));
+            Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
 
             byte[] attribute = DerCodec.Sequence(
                 DerCodec.Oid("1.2.840.113549.1.9.16.2.14"),

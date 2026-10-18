@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace jaytwo.Ergonomics.Pdf.Signatures;
 
@@ -21,6 +22,7 @@ public interface IPdfExternalSigner
 
     /// <summary>
     /// Signs a SHA-256 digest with RSA PKCS#1 v1.5, matching <c>RSA.SignHash(hash, SHA256, Pkcs1)</c>.
+    /// Exceptions thrown by the implementation are replaced with a generic <see cref="CryptographicException"/>.
     /// </summary>
     /// <param name="hash">The 32-byte SHA-256 digest. Do not hash it again.</param>
     /// <returns>The RSA signature bytes.</returns>

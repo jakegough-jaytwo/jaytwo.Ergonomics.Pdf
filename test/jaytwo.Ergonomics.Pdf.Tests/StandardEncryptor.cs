@@ -196,6 +196,16 @@ internal sealed class StandardEncryptor
         return cipher;
     }
 
+    public byte[] EncryptRc4(byte[] plain, int objectNumber, int generation)
+    {
+        if (_kind != Kind.Revision4Aes && _kind != Kind.Revision4Rc4)
+        {
+            throw new InvalidOperationException("An RC4 object key requires a revision 4 file key.");
+        }
+
+        return Rc4(Rc4ObjectKey(objectNumber, generation), plain);
+    }
+
     private byte[] ObjectKey(int objectNumber, int generation)
     {
         if (_kind == Kind.Revision5 || _kind == Kind.Revision6)
@@ -220,6 +230,21 @@ internal sealed class StandardEncryptor
 
         byte[] hash = Md5(_fileKey, extra);
         int length = aes ? 16 : Math.Min(_keyBytes + 5, 16);
+        var key = new byte[length];
+        Buffer.BlockCopy(hash, 0, key, 0, key.Length);
+        return key;
+    }
+
+    private byte[] Rc4ObjectKey(int objectNumber, int generation)
+    {
+        var extra = new byte[5];
+        extra[0] = (byte)objectNumber;
+        extra[1] = (byte)(objectNumber >> 8);
+        extra[2] = (byte)(objectNumber >> 16);
+        extra[3] = (byte)generation;
+        extra[4] = (byte)(generation >> 8);
+        byte[] hash = Md5(_fileKey, extra);
+        int length = Math.Min(_fileKey.Length + 5, 16);
         var key = new byte[length];
         Buffer.BlockCopy(hash, 0, key, 0, key.Length);
         return key;

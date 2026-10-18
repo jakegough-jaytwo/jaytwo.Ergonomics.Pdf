@@ -20,6 +20,15 @@ public class SignatureTests
 {
     private const string KnownRequest = "30360201013031300d060960864801650304020105000420ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
 
+    private enum TimestampFault
+    {
+        None,
+        Imprint,
+        Algorithm,
+        MissingNonce,
+        MismatchedNonce,
+    }
+
     [Fact]
     public void rfc3161_request_matches_the_sha256_abc_vector()
     {
@@ -27,6 +36,24 @@ public class SignatureTests
         string actual = Convert.ToHexString(Rfc3161TimeStampRequest.Create(digest)).ToLowerInvariant();
 
         Assert.Equal(KnownRequest, actual);
+    }
+
+    [Fact]
+    public void rfc3161_request_with_a_nonce_appends_the_integer_and_omits_cert_req()
+    {
+        byte[] digest = SHA256.HashData(Encoding.ASCII.GetBytes("abc"));
+        byte[] nonce = new byte[] { 0x80 };
+        byte[] actual = Rfc3161TimeStampRequest.Create(digest, nonce);
+
+        Assert.Equal(
+            DerCodec.Sequence(
+                DerCodec.Integer(1),
+                DerCodec.Sequence(DerCodec.AlgorithmSha256(), DerCodec.OctetString(digest)),
+                DerCodec.Integer(nonce)),
+            actual);
+        Assert.NotEqual(Rfc3161TimeStampRequest.Create(digest), actual);
+        Assert.Contains("02020080", Convert.ToHexString(actual), StringComparison.Ordinal);
+        Assert.Throws<ArgumentException>(() => Rfc3161TimeStampRequest.Create(digest, ReadOnlySpan<byte>.Empty));
     }
 
     [Fact]
@@ -61,6 +88,24 @@ public class SignatureTests
         var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(body)), new Uri("https://tsa.example/stamp"));
 
         Assert.Throws<PdfTimestampException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+    }
+
+    [Fact]
+    public void negative_timestamp_status_does_not_extend_the_file()
+    {
+        byte[] negativeStatus = new byte[] { 0x02, 0x04, 0x80, 0x00, 0x00, 0x00 };
+        byte[] token = DerCodec.Sequence(DerCodec.Integer(7));
+        byte[] body = DerCodec.Sequence(DerCodec.Sequence(negativeStatus), token);
+
+        AssertTimestampResponseDoesNotExtend(body);
+    }
+
+    [Fact]
+    public void overflowing_der_length_does_not_extend_the_file()
+    {
+        byte[] body = new byte[] { 0x30, 0x84, 0x7F, 0xFF, 0xFF, 0xFF };
+
+        AssertTimestampResponseDoesNotExtend(body);
     }
 
     [Fact]
@@ -203,7 +248,7 @@ public class SignatureTests
         {
             document.Sign(
                 stream,
-                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 },
+                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
                 new DocTimeStampSignatureProvider(authority));
         }
 
@@ -215,7 +260,10 @@ public class SignatureTests
             long.Parse(range.Groups[2].Value),
             long.Parse(range.Groups[3].Value),
             long.Parse(range.Groups[4].Value));
-        Assert.Equal(Rfc3161TimeStampRequest.Create(digest), authority.Request);
+        (byte[] hashed, byte[] nonce) = ReadTimestampRequest(authority.Request);
+        Assert.Equal(digest, hashed);
+        Assert.NotEqual(Rfc3161TimeStampRequest.Create(digest), authority.Request);
+        AssertNonceWidth(nonce);
         Assert.Contains("01020304", Encoding.ASCII.GetString(saved), StringComparison.Ordinal);
         Assert.Contains("/DocTimeStamp", Encoding.ASCII.GetString(saved), StringComparison.Ordinal);
     }
@@ -247,6 +295,30 @@ public class SignatureTests
         using var locked = PdfDocument.Open(readOnly, leaveOpen: true);
         Assert.Throws<ArgumentException>(() => locked.SaveIncremental());
         Assert.Throws<ArgumentException>(() => locked.Sign(new PdfSignatureOptions(), new FixedProvider()));
+    }
+
+    [Fact]
+    public void sign_to_another_stream_leaves_the_opened_stream_unchanged()
+    {
+        byte[] pdf = TextField();
+        var source = new MemoryStream();
+        source.Write(pdf, 0, pdf.Length);
+        var destination = new MemoryStream();
+        using (var document = PdfDocument.Open(source, leaveOpen: true))
+        {
+            document.Sign(
+                destination,
+                new PdfSignatureOptions { ReservedContentsBytes = 32 },
+                new FixedProvider(),
+                leaveOpen: true);
+        }
+
+        Assert.Equal(pdf, source.ToArray());
+        byte[] signed = destination.ToArray();
+        Assert.True(signed.Length > pdf.Length);
+        var prefix = new byte[pdf.Length];
+        Buffer.BlockCopy(signed, 0, prefix, 0, pdf.Length);
+        Assert.Equal(pdf, prefix);
     }
 
     [Fact]
@@ -301,7 +373,7 @@ public class SignatureTests
         var intermediateRequest = new CertificateRequest("CN=Pdf Intermediate", intermediateRsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var intermediate = intermediateRequest.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
         var signer = new RsaSigner(rsa, certificate.RawData, new[] { intermediate.RawData });
-        var authority = new TokenAuthority(DerCodec.Sequence(DerCodec.Integer(1)));
+        var authority = new TokenAuthority();
         byte[] pdf = TextField();
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
@@ -320,8 +392,9 @@ public class SignatureTests
         Assert.Contains(Convert.ToHexString(certificate.RawData), cmsHex, StringComparison.Ordinal);
         Assert.Contains(Convert.ToHexString(intermediate.RawData), cmsHex, StringComparison.Ordinal);
         Assert.Contains("2A864886F70D010910020E", cmsHex, StringComparison.Ordinal);
-        byte[] imprint = SHA256.HashData(signer.LastSignature);
-        Assert.Contains(Convert.ToHexString(imprint), Convert.ToHexString(authority.Request), StringComparison.Ordinal);
+        (byte[] hashed, byte[] nonce) = ReadTimestampRequest(authority.Request);
+        Assert.Equal(SHA256.HashData(signer.LastSignature), hashed);
+        AssertNonceWidth(nonce);
 #if NET8_0_OR_GREATER
         Match range = Regex.Match(Encoding.ASCII.GetString(saved), @"/ByteRange\s*\[\s*(\d{10})\s+(\d{10})\s+(\d{10})\s+(\d{10})\s*\]");
         long offset0 = long.Parse(range.Groups[1].Value);
@@ -493,7 +566,7 @@ public class SignatureTests
             document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
             document.Sign(
                 stream,
-                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 },
+                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
                 new DocTimeStampSignatureProvider(new RecordingAuthority()));
         }
 
@@ -502,6 +575,123 @@ public class SignatureTests
         Assert.Contains("/Type /DocTimeStamp", text, StringComparison.Ordinal);
         Assert.Contains("/SubFilter /ETSI.RFC3161", text, StringComparison.Ordinal);
         Assert.Equal(3, StartXrefs(saved).Count);
+    }
+
+    [Fact]
+    public void mismatched_timestamp_imprint_does_not_extend_the_file()
+    {
+        AssertTimestampRejected(TimestampFault.Imprint, "message imprint");
+    }
+
+    [Fact]
+    public void mismatched_timestamp_digest_algorithm_does_not_extend_the_file()
+    {
+        AssertTimestampRejected(TimestampFault.Algorithm, "digest algorithm");
+    }
+
+    [Fact]
+    public void missing_or_mismatched_timestamp_nonce_does_not_extend_the_file()
+    {
+        AssertTimestampRejected(TimestampFault.MissingNonce, "nonce");
+        AssertTimestampRejected(TimestampFault.MismatchedNonce, "nonce");
+    }
+
+    [Fact]
+    public void external_signer_failure_does_not_extend_the_file()
+    {
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        long length = stream.Length;
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Throws<CryptographicException>(() => document.Sign(
+            stream,
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
+
+        Assert.Equal(length, stream.Length);
+        Assert.Equal(pdf, stream.ToArray());
+    }
+
+    [Fact]
+    public void failed_sign_diagnostic_omits_the_password_and_file_key()
+    {
+        const string password = "user-secret-k2p";
+        const string owner = "owner-secret-k2p";
+        byte[] fileKey = new byte[32];
+        for (int i = 0; i < fileKey.Length; i++)
+        {
+            fileKey[i] = (byte)(i + 1);
+        }
+
+        byte[] pdf = EncryptedPage(password, owner);
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, password, leaveOpen: true);
+        CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
+            stream,
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
+
+        AssertDiagnosticOmits(exception, password, "password");
+        AssertDiagnosticOmits(exception, owner, "password");
+        AssertDiagnosticOmitsKey(exception, fileKey);
+    }
+
+    [Fact]
+    public void external_signer_diagnostic_is_sanitized_and_does_not_extend_the_file()
+    {
+        const string sentinel = "sentinel-pin-value";
+        byte[] sentinelKey = Encoding.ASCII.GetBytes("sentinel-key-material-32-bytes!!");
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
+            stream,
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new CmsDetachedSignatureProvider(new LeakySigner(certificate.RawData, sentinel, sentinelKey))));
+
+        Assert.Equal("The external signer failed.", exception.Message);
+        Assert.Null(exception.InnerException);
+        Assert.Empty(exception.Data);
+        AssertDiagnosticOmits(exception, sentinel, "PIN sentinel");
+        AssertDiagnosticOmitsKey(exception, sentinelKey);
+        Assert.Equal(pdf, stream.ToArray());
+    }
+
+    [Fact]
+    public void timestamp_authority_failure_does_not_leave_a_timestamped_signature()
+    {
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        long length = stream.Length;
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Throws<PdfTimestampException>(() => document.Sign(
+            stream,
+            new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = DateTimeOffset.UnixEpoch },
+            new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new ThrowingAuthority())));
+
+        Assert.Equal(length, stream.Length);
+        Assert.Equal(pdf, stream.ToArray());
+        using var again = PdfDocument.Open(new MemoryStream(stream.ToArray()), leaveOpen: true);
+        Assert.DoesNotContain(again.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature);
     }
 
 #if NET8_0_OR_GREATER
@@ -518,6 +708,151 @@ public class SignatureTests
         throw new InvalidOperationException("messageDigest was not found.");
     }
 #endif
+
+    private static void AssertTimestampRejected(TimestampFault fault, string phrase)
+    {
+        byte[] pdf = TextField();
+        RejectTimestamp(pdf, fault, phrase, documentTimestamp: true);
+        RejectTimestamp(pdf, fault, phrase, documentTimestamp: false);
+    }
+
+    private static void RejectTimestamp(byte[] pdf, TimestampFault fault, string phrase, bool documentTimestamp)
+    {
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        long length = stream.Length;
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        PdfSignatureOptions options;
+        IPdfSignatureProvider provider;
+        if (documentTimestamp)
+        {
+            options = new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 };
+            provider = new DocTimeStampSignatureProvider(new FaultAuthority(fault));
+            PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
+            Assert.Contains(phrase, rejected.Message, StringComparison.Ordinal);
+            Assert.Equal(length, stream.Length);
+            return;
+        }
+
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        options = new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch };
+        provider = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new FaultAuthority(fault));
+        PdfTimestampException exception = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
+        Assert.Contains(phrase, exception.Message, StringComparison.Ordinal);
+        Assert.Equal(length, stream.Length);
+    }
+
+    private static void AssertNonceWidth(byte[] nonce)
+    {
+        Assert.InRange(nonce.Length, 1, 9);
+        if (nonce[0] == 0)
+        {
+            Assert.True(nonce.Length == 1 || (nonce[1] & 0x80) != 0);
+        }
+        else
+        {
+            Assert.Equal(0, nonce[0] & 0x80);
+        }
+    }
+
+    private static void AssertTimestampResponseDoesNotExtend(byte[] response)
+    {
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(response)), new Uri("https://tsa.example/stamp"));
+
+        Assert.Throws<PdfTimestampException>(() => document.Sign(
+            stream,
+            new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
+            new DocTimeStampSignatureProvider(authority)));
+
+        Assert.Equal(pdf, stream.ToArray());
+    }
+
+    private static (byte[] Imprint, byte[] Nonce) ReadTimestampRequest(byte[] request)
+    {
+        DerCodec.DerTlv sequence = DerCodec.ReadTlv(request);
+        int pos = 0;
+        Take(sequence.Content, ref pos);
+        DerCodec.DerTlv messageImprint = Take(sequence.Content, ref pos);
+        int imprintPos = 0;
+        Take(messageImprint.Content, ref imprintPos);
+        DerCodec.DerTlv hashed = Take(messageImprint.Content, ref imprintPos);
+        DerCodec.DerTlv nonce = Take(sequence.Content, ref pos);
+        Assert.Equal(sequence.Content.Length, pos);
+        Assert.Equal(0x04, hashed.Tag);
+        Assert.Equal(0x02, nonce.Tag);
+        return (hashed.Content, nonce.Content);
+    }
+
+    private static DerCodec.DerTlv Take(ReadOnlySpan<byte> data, ref int offset)
+    {
+        DerCodec.DerTlv tlv = DerCodec.ReadTlv(data, offset);
+        offset += tlv.Full.Length;
+        return tlv;
+    }
+
+    private static byte[] BuildTimestampToken(byte[] imprint, byte[] nonce, TimestampFault fault)
+    {
+        byte[] hashed = imprint;
+        if (fault == TimestampFault.Imprint)
+        {
+            hashed = new byte[imprint.Length];
+            for (int i = 0; i < hashed.Length; i++)
+            {
+                hashed[i] = 0x11;
+            }
+        }
+
+        byte[] algorithm = fault == TimestampFault.Algorithm
+            ? DerCodec.Sequence(DerCodec.Oid("1.3.14.3.2.26"), DerCodec.Null())
+            : DerCodec.AlgorithmSha256();
+        byte[] echoed = nonce;
+        if (fault == TimestampFault.MismatchedNonce)
+        {
+            echoed = (byte[])nonce.Clone();
+            echoed[echoed.Length - 1] ^= 0xFF;
+        }
+
+        var parts = new List<byte[]>
+        {
+            DerCodec.Integer(1),
+            DerCodec.Oid("1.2.3.4"),
+            DerCodec.Sequence(algorithm, DerCodec.OctetString(hashed)),
+            DerCodec.Integer(0x01020304),
+            GeneralizedTime(),
+        };
+        if (fault != TimestampFault.MissingNonce)
+        {
+            parts.Add(DerCodec.Integer(echoed));
+        }
+
+        byte[] tstInfo = DerCodec.Sequence(parts.ToArray());
+        byte[] encapsulated = DerCodec.Sequence(
+            DerCodec.Oid("1.2.840.113549.1.9.16.1.4"),
+            DerCodec.ExplicitContext(0, DerCodec.OctetString(tstInfo)));
+        byte[] signedData = DerCodec.Sequence(
+            DerCodec.Integer(3),
+            DerCodec.Set(DerCodec.AlgorithmSha256()),
+            encapsulated);
+        return DerCodec.Sequence(
+            DerCodec.Oid("1.2.840.113549.1.7.2"),
+            DerCodec.ExplicitContext(0, signedData));
+    }
+
+    private static byte[] GeneralizedTime()
+    {
+        byte[] text = Encoding.ASCII.GetBytes("20261018120000Z");
+        var tlv = new byte[2 + text.Length];
+        tlv[0] = 0x18;
+        tlv[1] = (byte)text.Length;
+        Buffer.BlockCopy(text, 0, tlv, 2, text.Length);
+        return tlv;
+    }
 
     private static byte[] HashRanges(byte[] file, long offset0, long length0, long offset1, long length1)
     {
@@ -577,6 +912,67 @@ public class SignatureTests
         return builder.Finish();
     }
 
+    private static byte[] EncryptedPage(string user, string owner)
+    {
+        var crypt = new StandardEncryptor(revision6: true, user, owner, permissions: -4, encryptMetadata: true);
+        PdfBuilder builder = PdfBuilder.Basic();
+        builder.Indirect(4, "<< /Title " + crypt.Text("Secret", 4) + " >>");
+        builder.Indirect(20, crypt.Dictionary(null));
+        return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+    }
+
+    private static void AssertDiagnosticOmits(Exception exception, string secret, string kind)
+    {
+        Assert.False(string.IsNullOrEmpty(secret));
+        string diagnostic = PublicDiagnostic(exception);
+        Assert.True(exception.Message.IndexOf(secret, StringComparison.Ordinal) < 0, "The exception message contains the " + kind + ".");
+        Assert.True(diagnostic.IndexOf(secret, StringComparison.Ordinal) < 0, "A public diagnostic contains the " + kind + ".");
+    }
+
+    private static void AssertDiagnosticOmitsKey(Exception exception, byte[] key)
+    {
+        Assert.True(key.Length >= 16);
+        string hex = Convert.ToHexString(key);
+        string diagnostic = PublicDiagnostic(exception);
+        Assert.True(exception.Message.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "The exception message contains the key.");
+        Assert.True(diagnostic.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "A public diagnostic contains the key.");
+        AssertDiagnosticOmits(exception, Convert.ToBase64String(key), "key");
+        AssertDiagnosticOmits(exception, Encoding.GetEncoding(28591).GetString(key), "key");
+    }
+
+    private static string PublicDiagnostic(Exception exception)
+    {
+        var text = new StringBuilder();
+        for (Exception? current = exception; current != null; current = current.InnerException)
+        {
+            text.Append(current.Message);
+            text.Append('\n');
+            text.Append(current.ToString());
+            text.Append('\n');
+            if (current.Source != null)
+            {
+                text.Append(current.Source);
+                text.Append('\n');
+            }
+
+            if (current.HelpLink != null)
+            {
+                text.Append(current.HelpLink);
+                text.Append('\n');
+            }
+
+            foreach (object key in current.Data.Keys)
+            {
+                text.Append(key);
+                text.Append('=');
+                text.Append(current.Data[key]);
+                text.Append('\n');
+            }
+        }
+
+        return text.ToString();
+    }
+
     private sealed class FixedProvider : IPdfSignatureProvider
     {
         public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
@@ -611,7 +1007,8 @@ public class SignatureTests
         public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
         {
             Request = timeStampReqDer.ToArray();
-            return new byte[] { 1, 2, 3, 4 };
+            (byte[] imprint, byte[] nonce) = ReadTimestampRequest(Request);
+            return BuildTimestampToken(imprint, nonce, TimestampFault.None);
         }
     }
 
@@ -644,21 +1041,82 @@ public class SignatureTests
         }
     }
 
-    private sealed class TokenAuthority : ITimestampAuthority
+    private sealed class ThrowingSigner : IPdfExternalSigner
     {
-        private readonly byte[] _token;
-
-        public TokenAuthority(byte[] token)
+        public ThrowingSigner(byte[] certificate)
         {
-            _token = token;
+            CertificateDer = certificate;
         }
 
+        public byte[] CertificateDer { get; }
+
+        public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
+
+        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        {
+            throw new CryptographicException("The external signer failed.");
+        }
+    }
+
+    private sealed class LeakySigner : IPdfExternalSigner
+    {
+        private readonly string _sentinel;
+        private readonly byte[] _sentinelKey;
+
+        public LeakySigner(byte[] certificate, string sentinel, byte[] sentinelKey)
+        {
+            CertificateDer = certificate;
+            _sentinel = sentinel;
+            _sentinelKey = sentinelKey;
+        }
+
+        public byte[] CertificateDer { get; }
+
+        public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
+
+        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        {
+            var inner = new InvalidOperationException(Convert.ToBase64String(_sentinelKey));
+            var exception = new InvalidOperationException(_sentinel, inner);
+            exception.Data[_sentinel] = Convert.ToHexString(_sentinelKey);
+            exception.Data["raw"] = Encoding.GetEncoding(28591).GetString(_sentinelKey);
+            throw exception;
+        }
+    }
+
+    private sealed class ThrowingAuthority : ITimestampAuthority
+    {
+        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        {
+            throw new PdfTimestampException("The timestamp authority failed.");
+        }
+    }
+
+    private sealed class TokenAuthority : ITimestampAuthority
+    {
         public byte[] Request { get; private set; } = Array.Empty<byte>();
 
         public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
         {
             Request = timeStampReqDer.ToArray();
-            return _token;
+            (byte[] imprint, byte[] nonce) = ReadTimestampRequest(Request);
+            return BuildTimestampToken(imprint, nonce, TimestampFault.None);
+        }
+    }
+
+    private sealed class FaultAuthority : ITimestampAuthority
+    {
+        private readonly TimestampFault _fault;
+
+        public FaultAuthority(TimestampFault fault)
+        {
+            _fault = fault;
+        }
+
+        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        {
+            (byte[] imprint, byte[] nonce) = ReadTimestampRequest(timeStampReqDer.ToArray());
+            return BuildTimestampToken(imprint, nonce, _fault);
         }
     }
 

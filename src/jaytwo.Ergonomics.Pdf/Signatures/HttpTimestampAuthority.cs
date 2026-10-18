@@ -62,7 +62,7 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
         DerCodec.DerTlv statusInfo = DerCodec.ReadTlv(response.Content);
         DerCodec.DerTlv status = DerCodec.ReadTlv(statusInfo.Content);
         int code = DerCodec.ReadInteger(status);
-        if (code > 1)
+        if (code < 0 || code > 1)
         {
             throw new PdfTimestampException("The timestamp authority rejected the request with status " + code.ToString(System.Globalization.CultureInfo.InvariantCulture) + ".");
         }
