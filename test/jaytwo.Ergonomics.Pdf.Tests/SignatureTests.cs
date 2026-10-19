@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -106,6 +107,84 @@ public class SignatureTests
         byte[] body = new byte[] { 0x30, 0x84, 0x7F, 0xFF, 0xFF, 0xFF };
 
         AssertTimestampResponseDoesNotExtend(body, "exceeds its buffer");
+    }
+
+    [Fact]
+    public void oversized_timestamp_response_is_refused_after_a_bounded_read()
+    {
+        var body = new GeneratedStream(Array.Empty<byte>(), 16777216);
+        var authority = new HttpTimestampAuthority(new HttpClient(new StreamHandler(body)), new Uri("https://tsa.example/stamp"));
+
+        Exception? thrown = Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 }));
+
+        Assert.InRange(body.BytesRead, 0, 2179072);
+        PdfTimestampException rejected = Assert.IsType<PdfTimestampException>(thrown);
+        Assert.Contains("larger than", rejected.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void oversized_timestamp_response_does_not_extend_the_file()
+    {
+        var body = new GeneratedStream(Array.Empty<byte>(), 16777216);
+
+        AssertTimestampResponseDoesNotExtend(new StreamHandler(body), "larger than");
+        Assert.InRange(body.BytesRead, 0, 2179072);
+    }
+
+    [Fact]
+    public void declared_oversized_timestamp_response_is_refused_before_reading()
+    {
+        var body = new GeneratedStream(Array.Empty<byte>(), 16777216);
+        var authority = new HttpTimestampAuthority(new HttpClient(new StreamHandler(body, 16777216)), new Uri("https://tsa.example/stamp"));
+
+        Exception? thrown = Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 }));
+
+        Assert.Equal(0, body.BytesRead);
+        PdfTimestampException rejected = Assert.IsType<PdfTimestampException>(thrown);
+        Assert.Contains("larger than", rejected.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void timestamp_response_at_the_cap_returns_its_token_and_one_byte_more_is_refused()
+    {
+        (byte[] atCap, byte[] token) = PaddedTimestampResponse(2097152);
+        var atCapBody = new GeneratedStream(atCap, atCap.Length);
+        var accepted = new HttpTimestampAuthority(new HttpClient(new StreamHandler(atCapBody)), new Uri("https://tsa.example/stamp"));
+
+        Assert.Equal(token, accepted.GetTimeStampToken(new byte[] { 1 }));
+        Assert.Equal(2097152, atCapBody.BytesRead);
+
+        (byte[] overCap, _) = PaddedTimestampResponse(2097153);
+        var overCapBody = new GeneratedStream(overCap, overCap.Length);
+        var refused = new HttpTimestampAuthority(new HttpClient(new StreamHandler(overCapBody)), new Uri("https://tsa.example/stamp"));
+
+        PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => refused.GetTimeStampToken(new byte[] { 1 }));
+        Assert.Contains("larger than", rejected.Message, StringComparison.Ordinal);
+        Assert.InRange(overCapBody.BytesRead, 0, 2179072);
+    }
+
+    [Fact]
+    public void stalled_timestamp_response_body_still_times_out()
+    {
+        var client = new HttpClient(new StreamHandler(new StallingStream())) { Timeout = TimeSpan.FromMilliseconds(500) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        var watch = Stopwatch.StartNew();
+
+        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        Assert.IsType<TimeoutException>(canceled.InnerException);
+        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    [Fact]
+    public void stalled_timestamp_response_headers_still_time_out()
+    {
+        var client = new HttpClient(new StallingHandler()) { Timeout = TimeSpan.FromMilliseconds(500) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        var watch = Stopwatch.StartNew();
+
+        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        Assert.IsType<TimeoutException>(canceled.InnerException);
+        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
     [Fact]
@@ -759,11 +838,16 @@ public class SignatureTests
 
     private static void AssertTimestampResponseDoesNotExtend(byte[] response, string phrase)
     {
+        AssertTimestampResponseDoesNotExtend(new RecordingHandler(response), phrase);
+    }
+
+    private static void AssertTimestampResponseDoesNotExtend(HttpMessageHandler handler, string phrase)
+    {
         byte[] pdf = TextField();
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(response)), new Uri("https://tsa.example/stamp"));
+        var authority = new HttpTimestampAuthority(new HttpClient(handler), new Uri("https://tsa.example/stamp"));
 
         PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(
             stream,
@@ -772,6 +856,21 @@ public class SignatureTests
 
         Assert.Contains(phrase, rejected.Message, StringComparison.Ordinal);
         Assert.Equal(pdf, stream.ToArray());
+    }
+
+    private static (byte[] Response, byte[] Token) PaddedTimestampResponse(int length)
+    {
+        int padding = length - 64;
+        (byte[] response, byte[] token) = BuildPaddedTimestampResponse(padding);
+        (response, token) = BuildPaddedTimestampResponse(padding + length - response.Length);
+        Assert.Equal(length, response.Length);
+        return (response, token);
+    }
+
+    private static (byte[] Response, byte[] Token) BuildPaddedTimestampResponse(int padding)
+    {
+        byte[] token = DerCodec.Sequence(DerCodec.Integer(7), DerCodec.OctetString(new byte[padding]));
+        return (DerCodec.Sequence(DerCodec.Sequence(DerCodec.Integer(0)), token), token);
     }
 
     private static (byte[] Imprint, byte[] Nonce) ReadTimestampRequest(byte[] request)
@@ -1150,5 +1249,140 @@ public class SignatureTests
                 Content = new ByteArrayContent(_response),
             };
         }
+    }
+
+    private sealed class StreamHandler : HttpMessageHandler
+    {
+        private readonly Stream _body;
+        private readonly long? _declaredLength;
+
+        public StreamHandler(Stream body, long? declaredLength = null)
+        {
+            _body = body;
+            _declaredLength = declaredLength;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            var content = new StreamContent(_body);
+            if (_declaredLength.HasValue)
+            {
+                content.Headers.ContentLength = _declaredLength;
+            }
+
+            return Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = content });
+        }
+    }
+
+    private sealed class StallingHandler : HttpMessageHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
+            throw new IOException("The stalled headers were not cancelled.");
+        }
+    }
+
+    private sealed class GeneratedStream : Stream
+    {
+        private readonly byte[] _prefix;
+        private readonly long _length;
+
+        public GeneratedStream(byte[] prefix, long length)
+        {
+            _prefix = prefix;
+            _length = length;
+        }
+
+        public long BytesRead { get; private set; }
+
+        public override bool CanRead => true;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            int read = (int)Math.Min(count, _length - BytesRead);
+            int fromPrefix = (int)Math.Max(0, Math.Min(read, _prefix.Length - BytesRead));
+            if (fromPrefix > 0)
+            {
+                Buffer.BlockCopy(_prefix, (int)BytesRead, buffer, offset, fromPrefix);
+            }
+
+            Array.Clear(buffer, offset + fromPrefix, read - fromPrefix);
+            BytesRead += read;
+            return read;
+        }
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return Task.FromResult(Read(buffer, offset, count));
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
+    private sealed class StallingStream : Stream
+    {
+        public override bool CanRead => true;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            Thread.Sleep(TimeSpan.FromSeconds(30));
+            throw new IOException("The stalled body was read synchronously.");
+        }
+
+        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
+            throw new IOException("The stalled body was not cancelled.");
+        }
+
+        public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
+            throw new IOException("The stalled body was not cancelled.");
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
     }
 }

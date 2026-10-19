@@ -317,7 +317,14 @@ internal static class PdfStreamDecoder
             bpc = 8;
         }
 
-        int rowBytes = ((columns * colors * bpc) + 7) / 8;
+        long samples = (long)columns * colors;
+        long rowBytesLong = samples > int.MaxValue ? long.MaxValue : ((samples * bpc) + 7) / 8;
+        if (rowBytesLong >= int.MaxValue)
+        {
+            throw new PdfParseException(0, "Predictor row width is too large.");
+        }
+
+        int rowBytes = (int)rowBytesLong;
         if (predictor == 2)
         {
             return UnpredictTiff(data, rowBytes);
@@ -366,6 +373,11 @@ internal static class PdfStreamDecoder
         }
 
         int rows = data.Length / stride;
+        if (rows == 0)
+        {
+            return Array.Empty<byte>();
+        }
+
         var output = new byte[rows * rowBytes];
         var previous = new byte[rowBytes];
         for (int row = 0; row < rows; row++)

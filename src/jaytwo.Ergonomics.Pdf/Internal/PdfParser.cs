@@ -334,18 +334,8 @@ internal sealed class PdfParser
 
     internal static void EnsureXrefColumns(PdfObject.Dict dict, List<PdfObject.Dict?> parms)
     {
-        int width = 0;
-        if (dict.Get("W") is PdfObject.Arr w)
-        {
-            foreach (PdfObject item in w.Items)
-            {
-                if (item is PdfObject.Num number)
-                {
-                    width += number.IsInteger ? (int)number.LongValue : (int)number.DoubleValue;
-                }
-            }
-        }
-
+        int[] widths = ReadWidths(dict);
+        int width = widths[0] + widths[1] + widths[2];
         if (width <= 0)
         {
             return;

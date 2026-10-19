@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
@@ -44,7 +43,8 @@ public class InteropTests
     [Fact]
     public void qpdf_checks_built_incremental_filled_and_signed_pdfs()
     {
-        Assert.True(TryLocateQpdf(out string skip), skip);
+        string qpdf = ExternalTool.Locate("JAYTWO_QPDF", "qpdf.exe");
+        _output.WriteLine("qpdf " + qpdf);
 
         string builtPath = TempPdf();
         string incrementalPath = TempPdf();
@@ -54,7 +54,7 @@ public class InteropTests
         {
             byte[] built = BasicPdf();
             File.WriteAllBytes(builtPath, built);
-            Check(builtPath);
+            Check(qpdf, builtPath);
 
             byte[] incremental = SaveWithTitle(built, "Checked");
             Assert.True(incremental.Length > built.Length);
@@ -62,15 +62,15 @@ public class InteropTests
                 incremental.AsSpan(0, built.Length).SequenceEqual(built),
                 "Incremental save did not keep the original bytes as a prefix.");
             File.WriteAllBytes(incrementalPath, incremental);
-            Check(incrementalPath);
+            Check(qpdf, incrementalPath);
 
             byte[] filled = FillName("Ada");
             File.WriteAllBytes(filledPath, filled);
-            Check(filledPath);
+            Check(qpdf, filledPath);
 
             byte[] signed = SignBasic();
             File.WriteAllBytes(signedPath, signed);
-            Check(signedPath);
+            Check(qpdf, signedPath);
         }
         finally
         {
@@ -193,61 +193,15 @@ public class InteropTests
         }
     }
 
-    private static bool TryLocateQpdf(out string reason)
+    private static void Check(string qpdf, string path)
     {
-        try
-        {
-            using Process where = Start("where.exe", "qpdf");
-            string stdout = where.StandardOutput.ReadToEnd();
-            string stderr = where.StandardError.ReadToEnd();
-            where.WaitForExit();
-            if (where.ExitCode == 0 && stdout.Trim().Length > 0)
-            {
-                reason = string.Empty;
-                return true;
-            }
-
-            reason = "qpdf is not on PATH. where.exe qpdf exited " + where.ExitCode.ToString() + ".";
-            if (stderr.Trim().Length > 0)
-            {
-                reason += " " + stderr.Trim();
-            }
-
-            return false;
-        }
-        catch (Win32Exception)
-        {
-            return ProbeQpdf(out reason);
-        }
-    }
-
-    private static bool ProbeQpdf(out string reason)
-    {
-        try
-        {
-            using Process process = Start("qpdf", "--version");
-            process.StandardOutput.ReadToEnd();
-            process.StandardError.ReadToEnd();
-            process.WaitForExit();
-            reason = string.Empty;
-            return true;
-        }
-        catch (Win32Exception ex)
-        {
-            reason = "qpdf is not on PATH. " + ex.Message;
-            return false;
-        }
-    }
-
-    private static void Check(string path)
-    {
-        using Process process = Start("qpdf", "--check", path);
+        using Process process = ExternalTool.Start(qpdf, "--check", path);
         string stdout = process.StandardOutput.ReadToEnd();
         string stderr = process.StandardError.ReadToEnd();
         process.WaitForExit();
         Assert.True(
             process.ExitCode == 0,
-            "qpdf --check exited " + process.ExitCode.ToString() + " for " + path + Environment.NewLine + stderr + stdout);
+            qpdf + " --check exited " + process.ExitCode.ToString() + " for " + path + Environment.NewLine + stderr + stdout);
     }
 
     private static byte[] BasicPdf()
@@ -302,30 +256,6 @@ public class InteropTests
         }
 
         return stream.ToArray();
-    }
-
-    private static Process Start(string fileName, params string[] args)
-    {
-        var info = new ProcessStartInfo
-        {
-            FileName = fileName,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        for (int i = 0; i < args.Length; i++)
-        {
-            info.ArgumentList.Add(args[i]);
-        }
-
-        Process? process = Process.Start(info);
-        if (process == null)
-        {
-            throw new InvalidOperationException(fileName + " did not start.");
-        }
-
-        return process;
     }
 
     private static string TempPdf()
