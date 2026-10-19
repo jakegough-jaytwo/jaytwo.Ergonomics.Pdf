@@ -1,6 +1,6 @@
 # Backlog
 
-Owner: Product Manager. Ordered by priority. Each item follows the template in `roles/product-manager.md`. Seeded on 2026-10-18 from the review round in `agents/reviews/`. The 2026-10-18 planning report confirmed this order. B-04, B-21, B-24, B-25, B-26, B-27, B-28, B-29, B-30, B-31, B-32, B-15, B-33, and B-17 are closed. B-13, B-14, B-18, and B-34 stay open and are not on the board.
+Owner: Product Manager. Ordered by priority. Each item follows the template in `roles/product-manager.md`. Seeded on 2026-10-18 from the review round in `agents/reviews/`. The 2026-10-18 planning report confirmed this order. B-04, B-21, B-24, B-25, B-26, B-27, B-28, B-29, B-30, B-31, B-32, B-15, B-33, and B-17 are closed. B-13, B-14, B-18, B-34, and B-35 are boarded for the 2026-10-18 round under D-21, D-22, and D-23.
 
 ## B-01. Closed
 
@@ -60,9 +60,9 @@ Accepted as the support-matrix document. G1 is not passed. The matrix is the **S
 - **Kind:** missing evidence.
 - **Problem:** The QA report counted six committed foreign PDFs from three producers (pypdf, qpdf, pyHanko). Gate G2 asks for at least 50 fixtures from four producers, including a real-world file not built for this library.
 - **Why now:** G2 is release-blocking. The current corpus is the starting point, not the gate.
-- **Scope and exclusions:** Add distinct, meaningful fixtures until those counts are met, including classic xref, xref streams, object streams, hybrid references, incremental revisions, nested page trees, encrypted files, forms, signature fields, metadata, and embedded files. Do not pad the corpus with trivial variations. Not on the board.
-- **Acceptance criteria:** At least 50 fixtures from at least four producers, including one real-world file. Supported fixtures pass their applicable checks. Deliberately unsupported cases fail predictably. Modified output passes `qpdf --check`. `QUALIFICATION.md` section 4.
-- **Evidence required:** Independently validated. Name the tool, version, and property. Not on the board.
+- **Scope and exclusions:** Add distinct, meaningful fixtures until those counts are met, including classic xref, xref streams, object streams, hybrid references, incremental revisions, nested page trees, encrypted files, forms, signature fields, metadata, and embedded files. Do not pad the corpus with trivial variations. Under D-22, QA obtains independently produced fixtures, preferably from LibreOffice and/or PDFBox, without owner documents unless a specific real-world gap calls for one. Count a tool as an independent producer only if it authors documents. Tools that only transform or sign existing PDFs (qpdf rewrites, pyHanko signing) are recorded separately.
+- **Acceptance criteria:** At least 50 fixtures from at least four independent producers, including one real-world file. Supported fixtures pass their applicable checks. Deliberately unsupported cases fail predictably. Modified output passes `qpdf --check`. `QUALIFICATION.md` section 4.
+- **Evidence required:** Independently validated. Name the tool, version, and property.
 - **Dependencies:** None. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
 
 ## B-14. Second PDF-aware signature verifier
@@ -70,10 +70,10 @@ Accepted as the support-matrix document. G1 is not passed. The matrix is the **S
 - **Kind:** missing evidence.
 - **Problem:** pyHanko 0.38.0 is one PDF-aware verifier. `SignedCms.CheckSignature` ran on `net8.0` only, on CMS bytes the test assembled. That pair is not two PDF verifiers. pdfsig was not run.
 - **Why now:** Gate G4 requires two independent verifiers, one of which understands PDF signature semantics.
-- **Scope and exclusions:** Run pdfsig, or another PDF-aware verifier that is not pyHanko. Do not count `SignedCms` as that verifier. Do not add signature validation to the library. Not on the board.
+- **Scope and exclusions:** Run pdfsig, or another PDF-aware verifier that is not pyHanko. Do not count `SignedCms` as that verifier. Do not add signature validation to the library. Under D-22, QA obtains Poppler `pdfsig`, through WSL or a container if needed. PDFBox is an acceptable additional verifier when its validation limits are recorded.
 - **Acceptance criteria:** The second verifier checks the supported signed output, and the record names the tool, its version, and the property it established. `QUALIFICATION.md` section 6.
-- **Evidence required:** Independently validated. Not on the board.
-- **Dependencies:** None. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
+- **Evidence required:** Independently validated.
+- **Dependencies:** None.
 
 ## B-15. Closed
 
@@ -83,15 +83,42 @@ Accepted at the independently validated level for the document timestamp. G5 is 
 
 Accepted as the `net48` test target under D-19, at the internally tested level. G10 is not passed. The test project now targets `net8.0`, `net6.0`, and `net48`. On `net48` it runs against the library's `netstandard2.0` build. The library targets did not change. No test is excluded on `net48`: every external-tool test ran there. `TestCompat.cs` supplies the APIs that .NET Framework lacks, and forwards to the original APIs on `net6.0` and `net8.0`. Two test-only additions apply to `net48`: a `System.Net.Http` reference, and `System.Runtime.CompilerServices.Unsafe` 6.0.0 for the test host's binding redirect. The new `stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response` covers the B-31 abort-by-dispose path. With the dispose registration removed, it fails on all three frameworks. QA reported in `agents/reports/2026-10-18-qa-engineer-B-33.md`. The task was returned once for that missing test. The Technical Lead approved in `agents/reports/2026-10-18-tech-lead-B-33-review.md` after re-running `SignatureTests` on `net48`: 37 of 38 passed. The one failure is B-34, a library defect. It is recorded and left failing. `netstandard2.1` still has no test run.
 
-## B-34. Header-phase timestamp timeout lacks `TimeoutException` on .NET Framework
+## B-36. Parser and decoder hardening (audit SA-01, SA-02, SA-03, SA-04, SA-09, SA-11)
 
-- **Kind:** defect.
-- **Problem:** On `net48`, `SignatureTests.stalled_timestamp_response_headers_still_time_out` fails. The `TaskCanceledException` has no `TimeoutException` inner exception (`SignatureTests.cs:186`). `HttpTimestampAuthority` leaves the header phase to `HttpClient`'s own timeout exception, and only .NET 5+ adds the inner exception. B-31 claimed the same exception shape for both phases. The timeout itself works.
-- **Why now:** The regression test already exists and fails on `net48`, so the full suite is red on .NET Framework.
-- **Scope and exclusions:** Make the header-phase timeout produce `TaskCanceledException` with a `TimeoutException` inner exception on every framework. Change only `HttpTimestampAuthority`. No public API change.
-- **Acceptance criteria:** `stalled_timestamp_response_headers_still_time_out` passes on `net48`, `net6.0`, and `net8.0`, and the other stall tests still pass.
-- **Evidence required:** Internally tested. Not on the board.
-- **Dependencies:** None. Owner: Signing Engineer.
+- **Kind:** defect. SA-01 to SA-04 are High release blockers. SA-09 and SA-11 are Medium.
+- **Problem:** From `agents/reports/2026-10-18-security-auditor-B-18.md`, with the disposition in `2026-10-18-tech-lead-B-18-audit-review.md`. SA-01: the literal-string escape and nesting branches, numbers, keywords, names, and hex skip the token cap. SA-02: `ParseDictionary` work is unbounded and quadratic. SA-03: xref-stream entry and object-stream header amplification. SA-04: `WalkPages` has no depth bound, so the stack overflows. SA-09: revision 4 substitutes `StdCF` for an omitted `StrF` or `StmF` instead of `Identity`. SA-11: `FiltersOf` and `ParmsOf` misalign on malformed filter arrays.
+- **Scope and exclusions:** Bounded limits that fail with a document exception before the destination grows. No parser redesign. Each trigger becomes a regression test that runs bounded, without destabilizing the test process.
+- **Acceptance criteria:** Each trigger is refused or handled within a stated bound. Every supported fixture still passes. Limits are documented.
+- **Evidence required:** Internally tested. **Owner:** Core Engineer.
+
+## B-37. Exact signature-appendix size guard (audit SA-07)
+
+- **Kind:** defect, High release blocker.
+- **Problem:** The 8 MiB estimate runs before `BuildSignature` dirties a reused field, and `WriteAppendix` has no guard on the actual serialized length.
+- **Acceptance criteria:** The appendix that is actually serialized is measured or bounded, and an oversize appendix throws without extending the destination.
+- **Evidence required:** Internally tested. **Owner:** Core Engineer, with the Signing Engineer consulted.
+
+## B-38. Signing input bounds and diagnostics (audit SA-05, SA-06)
+
+- **Kind:** defect, High release blockers.
+- **Problem:** SA-05: certificate, chain, signature, and timestamp callback bytes are copied repeatedly before the `ReservedContentsBytes` check, and `AdditionalCertificates` enumeration is unbounded. SA-06: exceptions from the host's `CertificateDer` and `AdditionalCertificates` escape without sanitizing.
+- **Acceptance criteria:** Bounded work before the size check. Exceptions from both certificate properties are sanitized like `SignHash` exceptions, and the destination is unchanged.
+- **Evidence required:** Internally tested. **Owner:** Signing Engineer.
+
+## B-39. FieldMDP `Include` and `Exclude` are reversed (audit SA-08)
+
+- **Kind:** defect in a documented certification guarantee, Medium. Owner confirmation is needed under `team.md` section 9, because it changes documented certification behavior.
+- **Problem:** The code and `README.md` treat `Include` as allowing the named fields and `Exclude` as blocking them. ISO 32000 FieldMDP is the reverse: `Include` locks the named fields, and `Exclude` locks every field except them.
+- **Acceptance criteria:** The behavior follows ISO 32000. `README.md` and `ACCEPTANCE.md` are corrected. Both outcomes are independently verified by a PDF-aware tool.
+- **Evidence required:** Independently validated. **Owner:** Signing Engineer, with the AcroForm and Core Engineers consulted.
+
+## B-35. Closed
+
+Accepted under D-21. It is independently validated for the OpenSSL document timestamp and internally tested for the negative ESS and DER matrix. Requests set `certReq` TRUE, and the no-nonce vector is now 59 bytes. Both providers reject a token that lacks the certificate its single ESS signing-certificate attribute identifies, and the file is not extended. The token parser requires strict DER and full consumption, which closes audit finding SA-10. pyHanko 0.38.0 validates the OpenSSL 3.2.4 token with only the trust root, and the out-of-band workaround is gone. Inclusion is not trust, and the library validates no chain. Reports: `agents/reports/2026-10-18-signing-engineer-B-35.md`, `2026-10-18-qa-engineer-B-35.md`, and `2026-10-18-tech-lead-B-34-B-35-review.md`.
+
+## B-34. Closed
+
+Accepted at the internally tested level. `HttpTimestampAuthority` owns one deadline for the header and body phases. On `net48`, `net6.0`, and `net8.0`, a timeout in either phase is `TaskCanceledException` with a `TimeoutException` inner exception, and unrelated cancellation is not reclassified. `stalled_timestamp_response_headers_still_time_out` now passes on `net48`. Reports: `agents/reports/2026-10-18-signing-engineer-B-34.md`, `2026-10-18-qa-engineer-B-34.md`, and `2026-10-18-tech-lead-B-34-B-35-review.md`.
 
 ## B-16. Closed
 
@@ -106,9 +133,9 @@ Accepted at the internally tested level, against the D-20 working budget. G7 is 
 - **Kind:** missing evidence.
 - **Problem:** No fuzz harness and no independent security review exist. Some malformed-input tests exist, so gate G8 is not empty.
 - **Why now:** G8 is release-blocking.
-- **Scope and exclusions:** A fixed-seed fuzz suite aimed at the standard's 24 CPU-hour target, then a smaller continuous suite. An independent review of the parser and the signer by someone who did not implement that code. Confirmed defects become regression tests. Do not log secrets. Not on the board.
+- **Scope and exclusions:** A fixed-seed fuzz suite aimed at the standard's 24 CPU-hour target, then a smaller continuous suite. An independent review of the parser and the signer by someone who did not implement that code. Confirmed defects become regression tests. Do not log secrets. Under D-23: at most 24 aggregate CPU-hours on this machine, test-only fuzzing dependencies only, and no paid compute. The review is done by a Security Auditor agent (`roles/security-auditor.md`) that did not implement the code, covering the parser, stream decoders, encryption, CMS and DER, signature construction, and failure paths.
 - **Acceptance criteria:** The fuzz run records seed, entry points, and duration. The review records the reviewer and the findings. `QUALIFICATION.md` section 10.
-- **Evidence required:** Internally tested fuzz regressions, and an independent review. Not on the board.
+- **Evidence required:** Internally tested fuzz regressions, and an independent review.
 - **Dependencies:** None. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
 
 ## B-19. Closed

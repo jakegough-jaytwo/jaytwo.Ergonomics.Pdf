@@ -100,17 +100,21 @@ Decided 2026-10-18 by the owner. The test project gains a `net48` target. The li
 
 Decided 2026-10-18 by the owner. The starting budget in `QUALIFICATION.md` section 9 is the working budget: at most 256 MiB of peak managed-heap growth for inspect, edit, and sign, and at most 512 MiB for complex structural traversals. B-17 may be boarded against it. This approves the working budget only. It does not by itself meet G7: every G7 acceptance criterion still needs its own evidence.
 
+### D-21. Timestamp requests set certReq (revises D-14, closes D-O6)
+
+Decided 2026-10-18 by the owner. Each RFC 3161 request sets `certReq` true by default. Under RFC 3161, as updated by RFC 5816, the TSA must then include the signing certificate that `ESSCertID` or `ESSCertIDv2` identifies. This makes the token self-contained for independent verifiers. It is an RFC-supported behavior, not a pyHanko workaround. The nonce rule in D-14 stands. No public option to omit the certificate unless a use case is demonstrated. Required: the request sets the flag explicitly, the library checks that the response includes the expected TSA signing certificate, a regression test has pyHanko validate the token with only the trust anchor configured, and the signature placeholder sizing fits the larger token. Certificate inclusion, cryptographic validity, and trust stay distinct. Including the certificate does not establish trust, and the chain is not guaranteed.
+
+### D-22. Test infrastructure and small fixes do not need the owner
+
+Decided 2026-10-18 by the owner. Installing test-only tools, generating or obtaining fixtures, and small in-charter bug fixes are coordinated by the Product Manager and the Technical Lead. They are not owner decisions. This round, that covers B-34, B-13 (independent PDF producers, preferably LibreOffice and/or PDFBox; separate independent producers from tools that only transform or sign), and B-14 (Poppler `pdfsig`, through a separate test environment or container if needed; PDFBox is an acceptable additional verifier when its limits are recorded). Escalate only genuine product decisions, material architectural changes, substantial runtime dependencies, significant cost, and changes to security guarantees.
+
+### D-23. Fuzzing budget and an independent security audit
+
+Decided 2026-10-18 by the owner, for B-18. Up to 24 aggregate CPU-hours of fuzzing on existing development or CI machines. Test-only fuzzing dependencies are allowed. No new paid cloud resources or uncontrolled compute spending. A separate Security Auditor agent, which has not implemented the affected code, reviews the parser, stream decoders, PDF encryption, CMS and DER encoding, signature construction, and the related failure paths. It reports to the Technical Lead and the Product Manager. An independent agent review is enough to begin G8 qualification work. A human review may be considered before final production deployment.
+
 ## Open
 
 Each item needs an owner decision. The Product Manager keeps the recommendation current.
-
-### D-O6. Should timestamp requests set certReq?
-
-Raised 2026-10-18 from B-15. D-14 keeps `certReq` omitted "until a verifier needs the TSA certificate in the token." Under RFC 3161, a TSA answering a request without `certReq` leaves the token's certificates empty. OpenSSL 3.2.4 does this. pyHanko 0.38.0 then rejects the token with "signer certificate not included in signature", and it has no way to take the certificate from elsewhere. So a timestamp from a compliant TSA, as the library requests it, cannot be validated by pyHanko unless the TSA certificate is supplied out of band. This affects signature timestamps and document timestamps. The existing pyHanko-TSA test hides it, because pyHanko's dummy TSA includes its certificate anyway. Other validators were not checked.
-
-Options: (1) keep D-14 as is, and document that verifiers need the TSA certificate separately; (2) set `certReq` true in `Rfc3161TimeStampRequest`. The token grows by the TSA certificate, well under the 1 MiB embedding ceiling. B-15's out-of-band workaround and its `embedded_certs=0` assertion then change.
-
-Recommendation: option 2. The condition D-14 named has been met, and output a mainstream validator rejects is a usability defect for signers. This changes a timestamp guarantee, so it needs the owner (`team.md` section 9).
 
 ### D-O4. Caller-facing coordinates
 

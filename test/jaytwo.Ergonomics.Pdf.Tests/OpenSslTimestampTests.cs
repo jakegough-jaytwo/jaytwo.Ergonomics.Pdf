@@ -21,12 +21,12 @@ public class OpenSslTimestampTests
             byte[] stamped = Stamp(authority);
 
             string request = Checked(openssl, "ts", "-query", "-in", authority.RequestPath, "-text");
-            Assert.Contains("Certificate required: no", request, StringComparison.Ordinal);
+            Assert.Contains("Certificate required: yes", request, StringComparison.Ordinal);
             Assert.Contains("Nonce: 0x", request, StringComparison.Ordinal);
 
             string report = PyHanko(directory, stamped, "root.pem");
             Assert.Contains("type=/DocTimeStamp", report, StringComparison.Ordinal);
-            Assert.Contains("embedded_certs=0", report, StringComparison.Ordinal);
+            Assert.Contains("embedded_certs=1", report, StringComparison.Ordinal);
             Assert.Contains("intact=true", report, StringComparison.Ordinal);
             Assert.Contains("valid=true", report, StringComparison.Ordinal);
             Assert.Contains("trusted=true", report, StringComparison.Ordinal);
@@ -166,8 +166,7 @@ public class OpenSslTimestampTests
             "python",
             ExternalTool.Fixture("validate_doc_timestamp.py"),
             pdfPath,
-            Path.Combine(directory, root),
-            Path.Combine(directory, "tsa.pem"));
+            Path.Combine(directory, root));
         return ExternalTool.Output(process);
     }
 
@@ -187,9 +186,7 @@ public class OpenSslTimestampTests
             tokenPath,
             "-token_in",
             "-CAfile",
-            Path.Combine(directory, root),
-            "-untrusted",
-            Path.Combine(directory, "tsa.pem"));
+            Path.Combine(directory, root));
         (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
         return (exitCode, stdout + stderr);
     }

@@ -43,15 +43,19 @@ public class SigningInteropTests
     {
         using var signerKey = RSA.Create(2048);
         using X509Certificate2 signer = CreateLeaf("Interop Signer", signerKey, null);
+        using var tsaRootKey = RSA.Create(2048);
         using var tsaKey = RSA.Create(2048);
-        using X509Certificate2 tsa = CreateTimestampAuthority(tsaKey);
+        using X509Certificate2 tsaRoot = CreateAuthority("Interop TSA Root", tsaRootKey, null);
+        using X509Certificate2 tsa = CreateTimestampAuthority(tsaKey, tsaRoot);
         string directory = ExternalTool.TempDirectory();
         try
         {
             string certPath = Path.Combine(directory, "tsa.pem");
             string keyPath = Path.Combine(directory, "tsa.key");
+            string rootPath = Path.Combine(directory, "tsa-root.pem");
             File.WriteAllText(certPath, ExternalTool.Pem(tsa.RawData));
             File.WriteAllText(keyPath, PemKey(tsaKey));
+            File.WriteAllText(rootPath, ExternalTool.Pem(tsaRoot.RawData));
             using Process server = StartPython(ExternalTool.Fixture("tsa_server.py"), certPath, keyPath);
             try
             {
@@ -64,7 +68,7 @@ public class SigningInteropTests
                     signerKey,
                     Array.Empty<byte[]>(),
                     authority);
-                string report = Validate(signed, signer.RawData, null, "entire", "timestamp,tsa=" + certPath);
+                string report = Validate(signed, signer.RawData, null, "entire", "timestamp,tsa=" + rootPath);
                 Assert.Contains("timestamp_intact=true", report, StringComparison.Ordinal);
                 Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
             }
@@ -371,13 +375,13 @@ public class SigningInteropTests
         return request.Create(issuer, notBefore, issuer.NotAfter.AddMinutes(-1), Serial());
     }
 
-    private static X509Certificate2 CreateTimestampAuthority(RSA key)
+    private static X509Certificate2 CreateTimestampAuthority(RSA key, X509Certificate2 issuer)
     {
         var request = new CertificateRequest("CN=Interop TSA", key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         request.CertificateExtensions.Add(new X509BasicConstraintsExtension(false, false, 0, true));
         request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature, true));
         request.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(new OidCollection { new Oid("1.3.6.1.5.5.7.3.8") }, false));
-        return request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        return request.Create(issuer, DateTimeOffset.UtcNow.AddDays(-1), issuer.NotAfter.AddMinutes(-1), Serial());
     }
 
     private static byte[] Serial()

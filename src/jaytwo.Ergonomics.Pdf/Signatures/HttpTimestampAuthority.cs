@@ -35,6 +35,7 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
     /// <param name="timeStampReqDer">A DER-encoded TimeStampReq.</param>
     /// <returns>The TimeStampToken ContentInfo.</returns>
     /// <exception cref="PdfTimestampException">The response is not HTTP success, is larger than 2 MiB, or does not carry a granted token.</exception>
+    /// <exception cref="TaskCanceledException"><see cref="HttpClient.Timeout"/> elapsed while waiting for the response headers or reading the body. The inner exception is a <see cref="TimeoutException"/> on every framework.</exception>
     public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
     {
         byte[] body = ExchangeAsync(timeStampReqDer.ToArray()).ConfigureAwait(false).GetAwaiter().GetResult();
@@ -108,31 +109,52 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
 
     private async Task<byte[]> ExchangeAsync(byte[] timeStampReqDer)
     {
-        // HttpClient times the header phase itself and throws its own timeout exception.
-        // ResponseHeadersRead keeps it from buffering the body, so this token, started
-        // before the send, keeps the body read under the same Timeout. Infinite stays infinite.
-        using var timeout = new CancellationTokenSource(_httpClient.Timeout);
+        // This token owns the deadline for both response headers and the body. It is armed just
+        // ahead of HttpClient's framework-specific timer so .NET Framework cannot win the timer
+        // race with an unidentifiable bare cancellation. CancelPendingRequests does not set it.
+        using CancellationTokenSource timeout = CreateDeadline();
+        try
+        {
+            return await SendAndReadAsync(timeStampReqDer, timeout.Token).ConfigureAwait(false);
+        }
+        catch (Exception exception) when (!(exception is PdfTimestampException) && timeout.IsCancellationRequested)
+        {
+            // HttpClient's timeout exception differs by framework. Normalize only cancellation
+            // caused by our deadline; unrelated cancellation keeps its original exception.
+            string message = "The timestamp request was canceled because the configured HttpClient.Timeout of "
+                + _httpClient.Timeout.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                + " seconds elapsed.";
+            throw new TaskCanceledException(message, new TimeoutException(message, exception));
+        }
+    }
+
+    private async Task<byte[]> SendAndReadAsync(byte[] timeStampReqDer, CancellationToken timeout)
+    {
+        // ResponseHeadersRead keeps HttpClient from buffering the body. The same deadline token
+        // covers the header wait, body reads, and the response-disposal abort path.
         using var content = new ByteArrayContent(timeStampReqDer);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/timestamp-query");
         using var request = new HttpRequestMessage(HttpMethod.Post, _endpoint) { Content = content };
-        using HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
+        using HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, timeout).ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
             throw new PdfTimestampException("The timestamp authority returned HTTP " + ((int)response.StatusCode).ToString(System.Globalization.CultureInfo.InvariantCulture) + ".");
         }
 
         // Disposing the response aborts a body stream that ignores the token.
-        using CancellationTokenRegistration abort = timeout.Token.Register(response.Dispose);
-        try
+        using CancellationTokenRegistration abort = timeout.Register(response.Dispose);
+        return await ReadCappedAsync(response.Content, timeout).ConfigureAwait(false);
+    }
+
+    private CancellationTokenSource CreateDeadline()
+    {
+        if (_httpClient.Timeout == Timeout.InfiniteTimeSpan)
         {
-            return await ReadCappedAsync(response.Content, timeout.Token).ConfigureAwait(false);
+            return new CancellationTokenSource();
         }
-        catch (Exception exception) when (timeout.IsCancellationRequested && !(exception is PdfTimestampException))
-        {
-            string message = "The timestamp response was canceled because the configured HttpClient.Timeout of "
-                + _httpClient.Timeout.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture)
-                + " seconds elapsed.";
-            throw new TaskCanceledException(message, new TimeoutException(message, exception));
-        }
+
+        double leadMilliseconds = Math.Min(50, _httpClient.Timeout.TotalMilliseconds / 10);
+        TimeSpan deadline = _httpClient.Timeout - TimeSpan.FromMilliseconds(leadMilliseconds);
+        return new CancellationTokenSource(deadline);
     }
 }

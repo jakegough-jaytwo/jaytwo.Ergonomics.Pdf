@@ -9,7 +9,7 @@ namespace jaytwo.Ergonomics.Pdf.Signatures;
 public static class Rfc3161TimeStampRequest
 {
     /// <summary>
-    /// Creates a version-1 request with no nonce and certReq omitted.
+    /// Creates a version-1 request with no nonce and certReq set to TRUE.
     /// </summary>
     /// <param name="messageImprint">The 32-byte SHA-256 digest of the signed bytes.</param>
     /// <returns>The DER-encoded TimeStampReq.</returns>
@@ -22,11 +22,12 @@ public static class Rfc3161TimeStampRequest
 
         return DerCodec.Sequence(
             DerCodec.Integer(1),
-            DerCodec.Sequence(DerCodec.AlgorithmSha256(), DerCodec.OctetString(messageImprint.ToArray())));
+            DerCodec.Sequence(DerCodec.AlgorithmSha256(), DerCodec.OctetString(messageImprint.ToArray())),
+            CertReqTrue());
     }
 
     /// <summary>
-    /// Creates a version-1 request with a nonce and certReq omitted.
+    /// Creates a version-1 request with a nonce and certReq set to TRUE.
     /// </summary>
     /// <param name="messageImprint">The 32-byte SHA-256 digest of the signed bytes.</param>
     /// <param name="nonce">The unsigned nonce, as big-endian bytes. Leading zeros are not significant. Empty is rejected.</param>
@@ -46,7 +47,8 @@ public static class Rfc3161TimeStampRequest
         return DerCodec.Sequence(
             DerCodec.Integer(1),
             DerCodec.Sequence(DerCodec.AlgorithmSha256(), DerCodec.OctetString(messageImprint.ToArray())),
-            DerCodec.Integer(nonce));
+            DerCodec.Integer(nonce),
+            CertReqTrue());
     }
 
     internal static byte[] NewNonce()
@@ -58,5 +60,13 @@ public static class Rfc3161TimeStampRequest
         }
 
         return nonce;
+    }
+
+    // certReq is BOOLEAN DEFAULT FALSE, and DER omits a default, so it is written only as TRUE.
+    // RFC 3161, as updated by RFC 5816, then requires the TSA to include the certificate
+    // that its ESS signing-certificate attribute identifies.
+    private static byte[] CertReqTrue()
+    {
+        return new byte[] { 0x01, 0x01, 0xFF };
     }
 }

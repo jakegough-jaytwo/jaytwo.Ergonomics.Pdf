@@ -6,7 +6,8 @@ Owner: Technical Lead. One row per active task. A task may change only the files
 
 | Task | Implementer | May change | Branch or worktree | Waits on | Verifier |
 |---|---|---|---|---|---|
-No task is active. B-15, B-33, and B-17 were accepted by the Product Manager on 2026-10-18 and are committed on `wip` in the checkpoint that follows `46d64a6`.
+
+B-34 and B-35 were accepted on 2026-10-18. The Security Auditor review is complete (`agents/reports/2026-10-18-security-auditor-B-18.md`), and the Technical Lead disposition is in `agents/reports/2026-10-18-tech-lead-B-18-audit-review.md`. Queued, in order, one at a time on `wip`: B-18 fuzz harness and run (QA; new test-only fuzz project under `test/`), B-14 `pdfsig` (QA), B-13 corpus (QA). The Security Auditor runs in parallel because it is read-only. The 24 CPU-hour fuzz run (D-23) runs in the background at below-normal priority while B-14 and B-13 proceed. Defects that the fuzzing or the audit confirms go to the owning engineer if small. Otherwise they are recorded as blockers.
 
 ## Resume point
 
@@ -39,5 +40,19 @@ Under decision D-11:
 
 | Claim | Task |
 |---|---|
+| `agents/reports/2026-10-18-security-auditor-B-18.md` | B-18 review |
+| `src/jaytwo.Ergonomics.Pdf/Signatures/HttpTimestampAuthority.cs` | B-34, B-35 |
+| `src/jaytwo.Ergonomics.Pdf/Signatures/Rfc3161TimeStampRequest.cs` | B-34, B-35 |
+| `src/jaytwo.Ergonomics.Pdf/Signatures/Rfc3161TimeStampToken.cs` | B-34, B-35 |
+| `src/jaytwo.Ergonomics.Pdf/Signatures/CmsDetachedSignatureProvider.cs` | B-34, B-35 |
+| `src/jaytwo.Ergonomics.Pdf/Signatures/DocTimeStampSignatureProvider.cs` | B-34, B-35 |
+| `test/jaytwo.Ergonomics.Pdf.Tests/SignatureTests.cs` | B-34, B-35 |
+| `test/jaytwo.Ergonomics.Pdf.Tests/SigningInteropTests.cs` | B-34, B-35 |
+| `test/jaytwo.Ergonomics.Pdf.Tests/OpenSslTimestampTests.cs` | B-34, B-35 |
+| `test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/validate_doc_timestamp.py` | B-34, B-35 |
+| `test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/tsa_server.py` | B-34, B-35 |
+| `README.md` | B-34, B-35 |
+| `ACCEPTANCE.md` timestamp rows only | B-34, B-35 |
+| Signing Engineer task reports for B-34 and B-35 | B-34, B-35 |
 
-No file is claimed. The B-15, B-33, and B-17 claims are released.
+The B-15, B-33, and B-17 claims remain released. The Security Auditor has no source-file claim and reviews the committed `d4b84dd` tree, not the B-34/B-35 WIP.

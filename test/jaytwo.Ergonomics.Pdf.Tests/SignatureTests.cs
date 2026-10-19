@@ -19,7 +19,7 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 
 public class SignatureTests
 {
-    private const string KnownRequest = "30360201013031300d060960864801650304020105000420ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad";
+    private const string KnownRequest = "30390201013031300d060960864801650304020105000420ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad0101ff";
 
     private enum TimestampFault
     {
@@ -28,19 +28,41 @@ public class SignatureTests
         Algorithm,
         MissingNonce,
         MismatchedNonce,
+        MissingCertificate,
+        OtherCertificate,
+        IssuerSerialMismatch,
+        MissingSigningCertificateAttribute,
+        MultipleSignerInfos,
+        MultipleSigningCertificateAttributes,
+        FirstCertificateIdentifierMismatch,
+        MalformedIssuerSerial,
+        UnsupportedEssHash,
+        TrailingTokenData,
+        NonMinimalDerLength,
+    }
+
+    private enum EssForm
+    {
+        V2DefaultHashWithIssuerSerial,
+        V2Sha512WithoutIssuerSerial,
+        V1Sha1WithIssuerSerial,
+        V1AndV2,
     }
 
     [Fact]
     public void rfc3161_request_matches_the_sha256_abc_vector()
     {
         byte[] digest = TestCompat.Sha256(Encoding.ASCII.GetBytes("abc"));
-        string actual = TestCompat.ToHexString(Rfc3161TimeStampRequest.Create(digest)).ToLowerInvariant();
+        byte[] request = Rfc3161TimeStampRequest.Create(digest);
+        string actual = TestCompat.ToHexString(request).ToLowerInvariant();
 
         Assert.Equal(KnownRequest, actual);
+        Assert.Equal(59, request.Length);
+        Assert.EndsWith("0101ff", actual, StringComparison.Ordinal);
     }
 
     [Fact]
-    public void rfc3161_request_with_a_nonce_appends_the_integer_and_omits_cert_req()
+    public void rfc3161_request_with_a_nonce_appends_the_integer_and_sets_cert_req()
     {
         byte[] digest = TestCompat.Sha256(Encoding.ASCII.GetBytes("abc"));
         byte[] nonce = new byte[] { 0x80 };
@@ -50,10 +72,11 @@ public class SignatureTests
             DerCodec.Sequence(
                 DerCodec.Integer(1),
                 DerCodec.Sequence(DerCodec.AlgorithmSha256(), DerCodec.OctetString(digest)),
-                DerCodec.Integer(nonce)),
+                DerCodec.Integer(nonce),
+                new byte[] { 0x01, 0x01, 0xFF }),
             actual);
         Assert.NotEqual(Rfc3161TimeStampRequest.Create(digest), actual);
-        Assert.Contains("02020080", TestCompat.ToHexString(actual), StringComparison.Ordinal);
+        Assert.EndsWith("020200800101FF", TestCompat.ToHexString(actual), StringComparison.Ordinal);
         Assert.Throws<ArgumentException>(() => Rfc3161TimeStampRequest.Create(digest, ReadOnlySpan<byte>.Empty));
     }
 
@@ -185,6 +208,21 @@ public class SignatureTests
         TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
         Assert.IsType<TimeoutException>(canceled.InnerException);
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    [Fact]
+    public void cancel_pending_timestamp_requests_is_not_reported_as_a_timeout()
+    {
+        var handler = new ObservableStallingHandler();
+        var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        Task<Exception> pending = Task.Run(() => Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 })));
+        Assert.True(handler.Started.Wait(TimeSpan.FromSeconds(10)));
+
+        client.CancelPendingRequests();
+
+        Exception canceled = Assert.IsAssignableFrom<OperationCanceledException>(pending.GetAwaiter().GetResult());
+        Assert.False(canceled.InnerException is TimeoutException);
     }
 
     [Fact]
@@ -342,7 +380,7 @@ public class SignatureTests
         {
             document.Sign(
                 stream,
-                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
+                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 },
                 new DocTimeStampSignatureProvider(authority));
         }
 
@@ -660,7 +698,7 @@ public class SignatureTests
             document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
             document.Sign(
                 stream,
-                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
+                new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 },
                 new DocTimeStampSignatureProvider(new RecordingAuthority()));
         }
 
@@ -688,6 +726,88 @@ public class SignatureTests
     {
         AssertTimestampRejected(TimestampFault.MissingNonce, "nonce");
         AssertTimestampRejected(TimestampFault.MismatchedNonce, "nonce");
+    }
+
+    [Fact]
+    public void timestamp_token_without_its_signing_certificate_does_not_extend_the_file()
+    {
+        AssertTimestampRejected(TimestampFault.MissingCertificate, "does not include the signing certificate");
+        AssertTimestampRejected(TimestampFault.OtherCertificate, "does not include the signing certificate");
+        AssertTimestampRejected(TimestampFault.IssuerSerialMismatch, "does not include the signing certificate");
+        AssertTimestampRejected(TimestampFault.MissingSigningCertificateAttribute, "no ESS signing-certificate attribute");
+    }
+
+    [Fact]
+    public void timestamp_token_with_its_signing_certificate_is_embedded_by_both_providers()
+    {
+        byte[] pdf = TextField();
+        foreach (EssForm form in new[] { EssForm.V2DefaultHashWithIssuerSerial, EssForm.V2Sha512WithoutIssuerSerial, EssForm.V1Sha1WithIssuerSerial })
+        {
+            var documentAuthority = new ChainAuthority(form, TimestampCertificates.Tsa, Array.Empty<byte[]>());
+            byte[] stamped = SignWithTimestamp(pdf, documentAuthority, true, new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 }, null);
+            Assert.Contains(TestCompat.ToHexString(documentAuthority.Token), Encoding.ASCII.GetString(stamped), StringComparison.Ordinal);
+            Assert.Contains(TestCompat.ToHexString(TimestampCertificates.Tsa), TestCompat.ToHexString(documentAuthority.Token), StringComparison.Ordinal);
+
+            var signatureAuthority = new ChainAuthority(form, TimestampCertificates.Tsa, Array.Empty<byte[]>());
+            byte[] signed = SignWithTimestamp(pdf, signatureAuthority, false, new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch }, null);
+            Assert.Contains(TestCompat.ToHexString(signatureAuthority.Token), Encoding.ASCII.GetString(signed), StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    public void ambiguous_or_malformed_ess_identifiers_do_not_extend_the_file()
+    {
+        AssertTimestampRejected(TimestampFault.MultipleSignerInfos, "not a time-stamp token");
+        AssertTimestampRejected(TimestampFault.MultipleSigningCertificateAttributes, "multiple ESS signing-certificate attributes");
+        AssertTimestampRejected(TimestampFault.FirstCertificateIdentifierMismatch, "does not include the signing certificate");
+        AssertTimestampRejected(TimestampFault.MalformedIssuerSerial, "not a time-stamp token");
+        AssertTimestampRejected(TimestampFault.UnsupportedEssHash, "unsupported hash algorithm");
+        AssertTimestampRejected(TimestampFault.TrailingTokenData, "not a time-stamp token");
+        AssertTimestampRejected(TimestampFault.NonMinimalDerLength, "not a time-stamp token");
+    }
+
+    [Fact]
+    public void default_reservation_fits_a_timestamp_token_that_carries_a_certificate_chain()
+    {
+        byte[] pdf = TextField();
+        int reserved = new PdfSignatureOptions().ReservedContentsBytes;
+        TimestampChain chain = TimestampCertificates.Chain;
+        byte[][] tsaChain = new[] { chain.Intermediate, chain.Root };
+        Assert.InRange(chain.Tsa.Length + chain.Intermediate.Length + chain.Root.Length, 3072, 6144);
+
+        var documentAuthority = new ChainAuthority(EssForm.V2DefaultHashWithIssuerSerial, chain.Tsa, tsaChain);
+        byte[] stamped = SignWithTimestamp(pdf, documentAuthority, true, new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp }, null);
+        Assert.Contains(TestCompat.ToHexString(documentAuthority.Token), Encoding.ASCII.GetString(stamped), StringComparison.Ordinal);
+        Assert.InRange(documentAuthority.Token.Length, 3072, reserved / 2);
+
+        var signatureAuthority = new ChainAuthority(EssForm.V2DefaultHashWithIssuerSerial, chain.Tsa, tsaChain);
+        byte[] signed = SignWithTimestamp(pdf, signatureAuthority, false, new PdfSignatureOptions { SigningTime = TestCompat.UnixEpoch }, chain);
+        Match contents = Regex.Match(Encoding.ASCII.GetString(signed), @"/Contents\s*<([0-9A-Fa-f]+)>");
+        int cmsLength = DerCodec.ReadTlv(TestCompat.FromHexString(contents.Groups[1].Value)).Full.Length;
+        Assert.InRange(cmsLength, 6144, reserved * 3 / 4);
+    }
+
+    [Fact]
+    public void undersized_reservation_for_a_certificate_bearing_timestamp_fails_without_extending_the_file()
+    {
+        byte[] pdf = TextField();
+        foreach (bool documentTimestamp in new[] { true, false })
+        {
+            using var stream = new MemoryStream();
+            stream.Write(pdf, 0, pdf.Length);
+            using var document = PdfDocument.Open(stream, leaveOpen: true);
+            var authority = new ChainAuthority(EssForm.V2DefaultHashWithIssuerSerial, TimestampCertificates.Tsa, Array.Empty<byte[]>());
+            PdfSignatureOptions options = documentTimestamp
+                ? new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 }
+                : new PdfSignatureOptions { ReservedContentsBytes = 1024, SigningTime = TestCompat.UnixEpoch };
+
+            PdfSignatureTooLargeException tooLarge = Assert.Throws<PdfSignatureTooLargeException>(() => document.Sign(stream, options, TimestampProvider(authority, documentTimestamp, null)));
+
+            Assert.Equal(1024, tooLarge.ReservedBytes);
+            Assert.True(tooLarge.ActualBytes > 1024);
+            Assert.True(authority.Token.Length > 0);
+            Assert.Equal(pdf, stream.ToArray());
+        }
     }
 
     [Fact]
@@ -838,6 +958,30 @@ public class SignatureTests
         Assert.Equal(length, stream.Length);
     }
 
+    private static byte[] SignWithTimestamp(byte[] pdf, ITimestampAuthority authority, bool documentTimestamp, PdfSignatureOptions options, TimestampChain? signerChain)
+    {
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            document.Sign(stream, options, TimestampProvider(authority, documentTimestamp, signerChain));
+        }
+
+        return stream.ToArray();
+    }
+
+    private static IPdfSignatureProvider TimestampProvider(ITimestampAuthority authority, bool documentTimestamp, TimestampChain? signerChain)
+    {
+        if (documentTimestamp)
+        {
+            return new DocTimeStampSignatureProvider(authority);
+        }
+
+        TimestampChain chain = signerChain ?? TimestampCertificates.Signer;
+        IReadOnlyList<byte[]> additional = signerChain == null ? Array.Empty<byte[]>() : new[] { chain.Intermediate, chain.Root };
+        return new CmsDetachedSignatureProvider(new RsaSigner(chain.SignerKey, chain.Signer, additional), authority);
+    }
+
     private static void AssertNonceWidth(byte[] nonce)
     {
         Assert.InRange(nonce.Length, 1, 9);
@@ -898,9 +1042,11 @@ public class SignatureTests
         Take(messageImprint.Content, ref imprintPos);
         DerCodec.DerTlv hashed = Take(messageImprint.Content, ref imprintPos);
         DerCodec.DerTlv nonce = Take(sequence.Content, ref pos);
+        DerCodec.DerTlv certReq = Take(sequence.Content, ref pos);
         Assert.Equal(sequence.Content.Length, pos);
         Assert.Equal(0x04, hashed.Tag);
         Assert.Equal(0x02, nonce.Tag);
+        Assert.Equal(new byte[] { 0x01, 0x01, 0xFF }, certReq.Full);
         return (hashed.Content, nonce.Content);
     }
 
@@ -912,6 +1058,11 @@ public class SignatureTests
     }
 
     private static byte[] BuildTimestampToken(byte[] imprint, byte[] nonce, TimestampFault fault)
+    {
+        return BuildTimestampToken(imprint, nonce, fault, EssForm.V2DefaultHashWithIssuerSerial, TimestampCertificates.Tsa, Array.Empty<byte[]>());
+    }
+
+    private static byte[] BuildTimestampToken(byte[] imprint, byte[] nonce, TimestampFault fault, EssForm form, byte[] tsa, IReadOnlyList<byte[]> chain)
     {
         byte[] hashed = imprint;
         if (fault == TimestampFault.Imprint)
@@ -950,13 +1101,112 @@ public class SignatureTests
         byte[] encapsulated = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.9.16.1.4"),
             DerCodec.ExplicitContext(0, DerCodec.OctetString(tstInfo)));
-        byte[] signedData = DerCodec.Sequence(
+        var certificates = new List<byte[]>();
+        if (fault == TimestampFault.OtherCertificate)
+        {
+            certificates.Add(TimestampCertificates.Other);
+        }
+        else if (fault != TimestampFault.MissingCertificate)
+        {
+            certificates.Add(tsa);
+        }
+
+        certificates.AddRange(chain);
+        var signedDataParts = new List<byte[]>
+        {
             DerCodec.Integer(3),
             DerCodec.Set(DerCodec.AlgorithmSha256()),
-            encapsulated);
-        return DerCodec.Sequence(
+            encapsulated,
+        };
+        if (certificates.Count > 0)
+        {
+            signedDataParts.Add(DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0));
+        }
+
+        byte[] signerInfo = TimestampSignerInfo(tstInfo, tsa, fault, form);
+        signedDataParts.Add(fault == TimestampFault.MultipleSignerInfos
+            ? DerCodec.Set(signerInfo, signerInfo)
+            : DerCodec.Set(signerInfo));
+        byte[] token = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.7.2"),
-            DerCodec.ExplicitContext(0, signedData));
+            DerCodec.ExplicitContext(0, DerCodec.Sequence(signedDataParts.ToArray())));
+        if (fault != TimestampFault.TrailingTokenData && fault != TimestampFault.NonMinimalDerLength)
+        {
+            return token;
+        }
+
+        if (fault == TimestampFault.NonMinimalDerLength)
+        {
+            Assert.True((token[1] & 0x80) != 0);
+            var nonMinimal = new byte[token.Length + 1];
+            nonMinimal[0] = token[0];
+            nonMinimal[1] = (byte)(token[1] + 1);
+            Buffer.BlockCopy(token, 2, nonMinimal, 3, token.Length - 2);
+            return nonMinimal;
+        }
+
+        var trailing = new byte[token.Length + 1];
+        Buffer.BlockCopy(token, 0, trailing, 0, token.Length);
+        return trailing;
+    }
+
+    // The SignerInfo is shaped like a TSA's, but its signature is not real: the library does not verify it.
+    private static byte[] TimestampSignerInfo(byte[] tstInfo, byte[] tsa, TimestampFault fault, EssForm form)
+    {
+        (byte[] issuer, byte[] serial) = DerCodec.ReadCertificateIdentity(tsa);
+        var attributes = new List<byte[]>
+        {
+            DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.9.3"), DerCodec.Set(DerCodec.Oid("1.2.840.113549.1.9.16.1.4"))),
+            DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.9.4"), DerCodec.Set(DerCodec.OctetString(TestCompat.Sha256(tstInfo)))),
+        };
+        if (fault != TimestampFault.MissingSigningCertificateAttribute)
+        {
+            byte[] essSerial = fault == TimestampFault.IssuerSerialMismatch ? DerCodec.Integer(0x7FFFFFFF) : serial;
+            byte[] issuerSerial = fault == TimestampFault.MalformedIssuerSerial
+                ? DerCodec.Sequence(DerCodec.Sequence(DerCodec.ExplicitContext(4, issuer)), essSerial, DerCodec.Null())
+                : DerCodec.Sequence(DerCodec.Sequence(DerCodec.ExplicitContext(4, issuer)), essSerial);
+            if (form != EssForm.V1Sha1WithIssuerSerial)
+            {
+                byte[] certId;
+                if (fault == TimestampFault.UnsupportedEssHash)
+                {
+                    certId = DerCodec.Sequence(DerCodec.Sequence(DerCodec.Oid("1.2.3")), DerCodec.OctetString(new byte[32]));
+                }
+                else if (form == EssForm.V2Sha512WithoutIssuerSerial)
+                {
+                    certId = DerCodec.Sequence(DerCodec.Sequence(DerCodec.Oid("2.16.840.1.101.3.4.2.3")), DerCodec.OctetString(Digest(SHA512.Create(), tsa)));
+                }
+                else
+                {
+                    certId = DerCodec.Sequence(DerCodec.OctetString(TestCompat.Sha256(tsa)), issuerSerial);
+                }
+
+                byte[] certIds = fault == TimestampFault.FirstCertificateIdentifierMismatch
+                    ? DerCodec.Sequence(DerCodec.Sequence(DerCodec.OctetString(new byte[32])), certId)
+                    : DerCodec.Sequence(certId);
+                attributes.Add(DerCodec.Sequence(
+                    DerCodec.Oid("1.2.840.113549.1.9.16.2.47"),
+                    DerCodec.Set(DerCodec.Sequence(certIds))));
+            }
+
+            if (form == EssForm.V1Sha1WithIssuerSerial
+                || form == EssForm.V1AndV2
+                || fault == TimestampFault.MultipleSigningCertificateAttributes)
+            {
+                byte[] certId = DerCodec.Sequence(DerCodec.OctetString(Digest(SHA1.Create(), tsa)), issuerSerial);
+                attributes.Add(DerCodec.Sequence(
+                    DerCodec.Oid("1.2.840.113549.1.9.16.2.12"),
+                    DerCodec.Set(DerCodec.Sequence(DerCodec.Sequence(certId)))));
+            }
+        }
+
+        return DerCodec.Sequence(
+            DerCodec.Integer(1),
+            DerCodec.Sequence(issuer, serial),
+            DerCodec.AlgorithmSha256(),
+            DerCodec.ReplaceTag(DerCodec.Set(attributes.ToArray()), 0xA0),
+            DerCodec.AlgorithmSha256WithRsa(),
+            DerCodec.OctetString(new byte[256]));
     }
 
     private static byte[] GeneralizedTime()
@@ -967,6 +1217,14 @@ public class SignatureTests
         tlv[1] = (byte)text.Length;
         Buffer.BlockCopy(text, 0, tlv, 2, text.Length);
         return tlv;
+    }
+
+    private static byte[] Digest(HashAlgorithm algorithm, byte[] data)
+    {
+        using (algorithm)
+        {
+            return algorithm.ComputeHash(data);
+        }
     }
 
     private static byte[] HashRanges(byte[] file, long offset0, long length0, long offset1, long length1)
@@ -1086,6 +1344,58 @@ public class SignatureTests
         }
 
         return text.ToString();
+    }
+
+    // Generated once per test run. The signer keys live as long as the process.
+    private static class TimestampCertificates
+    {
+        private static readonly Lazy<TimestampChain> SmallChain = new Lazy<TimestampChain>(() => CreateChain(2048));
+        private static readonly Lazy<TimestampChain> RealisticChain = new Lazy<TimestampChain>(() => CreateChain(4096));
+        private static readonly Lazy<byte[]> OtherCertificate = new Lazy<byte[]>(() => SelfSigned("CN=Other TSA,O=jaytwo,C=US"));
+
+        // A 2048-bit chain, for tests that only need the TSA certificate.
+        public static TimestampChain Signer => SmallChain.Value;
+
+        public static byte[] Tsa => SmallChain.Value.Tsa;
+
+        public static byte[] Other => OtherCertificate.Value;
+
+        // A 4096-bit root and intermediate over a 2048-bit TSA, as public TSAs issue. About 4 KB in all.
+        public static TimestampChain Chain => RealisticChain.Value;
+
+        private static TimestampChain CreateChain(int authorityBits)
+        {
+            using RSA rootKey = RSA.Create(authorityBits);
+            using RSA intermediateKey = RSA.Create(authorityBits);
+            using RSA tsaKey = RSA.Create(2048);
+            RSA signerKey = RSA.Create(2048);
+            DateTimeOffset notBefore = DateTimeOffset.UtcNow.AddDays(-1);
+            DateTimeOffset notAfter = DateTimeOffset.UtcNow.AddYears(1);
+            using X509Certificate2 root = Request("CN=Timestamp Test Root,O=jaytwo,C=US", rootKey, true).CreateSelfSigned(notBefore, notAfter);
+            using X509Certificate2 issued = Request("CN=Timestamp Test Intermediate CA,O=jaytwo,C=US", intermediateKey, true).Create(root, notBefore, notAfter.AddDays(-1), new byte[] { 0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF });
+            using X509Certificate2 intermediate = issued.CopyWithPrivateKey(intermediateKey);
+            CertificateRequest tsaRequest = Request("CN=Timestamp Test TSA,O=jaytwo,C=US", tsaKey, false);
+            tsaRequest.CertificateExtensions.Add(new X509EnhancedKeyUsageExtension(new OidCollection { new Oid("1.3.6.1.5.5.7.3.8") }, true));
+            using X509Certificate2 tsa = tsaRequest.Create(intermediate, notBefore, notAfter.AddDays(-2), new byte[] { 0x00, 0x9A, 0xBC, 0xDE, 0xF0 });
+            using X509Certificate2 signer = Request("CN=Timestamp Test Signer,O=jaytwo,C=US", signerKey, false).Create(intermediate, notBefore, notAfter.AddDays(-2), new byte[] { 0x11, 0x22, 0x33 });
+            return new TimestampChain(root.RawData, intermediate.RawData, tsa.RawData, signer.RawData, signerKey);
+        }
+
+        private static CertificateRequest Request(string subject, RSA key, bool authority)
+        {
+            var request = new CertificateRequest(subject, key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            request.CertificateExtensions.Add(new X509BasicConstraintsExtension(authority, false, 0, true));
+            request.CertificateExtensions.Add(new X509KeyUsageExtension(authority ? X509KeyUsageFlags.KeyCertSign | X509KeyUsageFlags.CrlSign : X509KeyUsageFlags.DigitalSignature, true));
+            request.CertificateExtensions.Add(new X509SubjectKeyIdentifierExtension(request.PublicKey, false));
+            return request;
+        }
+
+        private static byte[] SelfSigned(string subject)
+        {
+            using RSA key = RSA.Create(2048);
+            using X509Certificate2 certificate = Request(subject, key, false).CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+            return certificate.RawData;
+        }
     }
 
     private sealed class FixedProvider : IPdfSignatureProvider
@@ -1235,6 +1545,51 @@ public class SignatureTests
         }
     }
 
+    private sealed class ChainAuthority : ITimestampAuthority
+    {
+        private readonly EssForm _form;
+        private readonly byte[] _tsa;
+        private readonly IReadOnlyList<byte[]> _chain;
+
+        public ChainAuthority(EssForm form, byte[] tsa, IReadOnlyList<byte[]> chain)
+        {
+            _form = form;
+            _tsa = tsa;
+            _chain = chain;
+        }
+
+        public byte[] Token { get; private set; } = Array.Empty<byte>();
+
+        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        {
+            (byte[] imprint, byte[] nonce) = ReadTimestampRequest(timeStampReqDer.ToArray());
+            Token = BuildTimestampToken(imprint, nonce, TimestampFault.None, _form, _tsa, _chain);
+            return Token;
+        }
+    }
+
+    private sealed class TimestampChain
+    {
+        public TimestampChain(byte[] root, byte[] intermediate, byte[] tsa, byte[] signer, RSA signerKey)
+        {
+            Root = root;
+            Intermediate = intermediate;
+            Tsa = tsa;
+            Signer = signer;
+            SignerKey = signerKey;
+        }
+
+        public byte[] Root { get; }
+
+        public byte[] Intermediate { get; }
+
+        public byte[] Tsa { get; }
+
+        public byte[] Signer { get; }
+
+        public RSA SignerKey { get; }
+    }
+
     private sealed class RecordingHandler : HttpMessageHandler
     {
         private readonly byte[] _response;
@@ -1299,6 +1654,18 @@ public class SignatureTests
         {
             await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
             throw new IOException("The stalled headers were not cancelled.");
+        }
+    }
+
+    private sealed class ObservableStallingHandler : HttpMessageHandler
+    {
+        public ManualResetEventSlim Started { get; } = new ManualResetEventSlim();
+
+        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Started.Set();
+            await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
+            throw new IOException("The canceled headers resumed without cancellation.");
         }
     }
 

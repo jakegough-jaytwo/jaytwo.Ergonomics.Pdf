@@ -30,6 +30,7 @@ public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider
     /// </summary>
     /// <param name="context">The signed ranges.</param>
     /// <returns>The TimeStampToken bytes returned by the authority.</returns>
+    /// <exception cref="PdfTimestampException">The time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
     public byte[] CreateContents(PdfSignatureContext context)
     {
         if (context == null)
