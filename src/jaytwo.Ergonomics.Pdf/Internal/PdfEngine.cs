@@ -2349,12 +2349,13 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
+        // ISO 32000-1 12.8.2.4: Include locks only the named fields; Exclude locks every field except them.
         if (action == "Include")
         {
-            return !names.Contains(fullName);
+            return names.Contains(fullName);
         }
 
-        return action == "Exclude" && names.Contains(fullName);
+        return action == "Exclude" && !names.Contains(fullName);
     }
 
     private bool TryWriteCheckBoxAppearances(List<FieldSlot> matches)

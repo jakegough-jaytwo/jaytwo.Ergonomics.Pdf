@@ -187,6 +187,26 @@ public class AcroFormTests
     }
 
     [Fact]
+    public void fieldmdp_include_locks_only_the_named_fields()
+    {
+        using var document = PdfDocument.Open(new MemoryStream(FieldMdpForm("/Include /Fields [(Locked)]")), leaveOpen: true);
+
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Locked", "Ada"));
+        document.AcroForm.SetText("Open", "Ada");
+        Assert.Equal("Ada", document.AcroForm.GetFields("Open")[0].Value);
+    }
+
+    [Fact]
+    public void fieldmdp_exclude_locks_every_field_except_the_named_fields()
+    {
+        using var document = PdfDocument.Open(new MemoryStream(FieldMdpForm("/Exclude /Fields [(Open)]")), leaveOpen: true);
+
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Locked", "Ada"));
+        document.AcroForm.SetText("Open", "Ada");
+        Assert.Equal("Ada", document.AcroForm.GetFields("Open")[0].Value);
+    }
+
+    [Fact]
     public void thousand_page_form_does_not_read_content_holes()
     {
         var builder = new PdfBuilder();
@@ -428,6 +448,20 @@ public class AcroFormTests
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)(stream.Length - pdf.Length));
         Assert.Contains(" c\n", appendix, StringComparison.Ordinal);
         Assert.DoesNotContain("arc", appendix, StringComparison.Ordinal);
+    }
+
+    private static byte[] FieldMdpForm(string actionAndFields)
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 6 0 R 5 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 6 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Locked) /Rect [0 0 100 20] /P 3 0 R >>");
+        builder.Indirect(6, "<< /Subtype /Widget /FT /Tx /T (Open) /Rect [0 30 100 50] /P 3 0 R >>");
+        builder.Indirect(5, "<< /Subtype /Widget /FT /Sig /T (Sig) /V 9 0 R /Rect [0 0 10 10] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
+        builder.Indirect(10, "<< /TransformMethod /FieldMDP /TransformParams << /Action " + actionAndFields + " /V /1.2 >> >>");
+        return builder.Finish();
     }
 
     private static byte[] Form(params string[] widgets)

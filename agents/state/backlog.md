@@ -103,7 +103,8 @@ Accepted at the internally tested level. It closes audit findings SA-01, SA-02, 
 
 ## B-39. FieldMDP `Include` and `Exclude` are reversed (audit SA-08)
 
-- **Kind:** defect in a documented certification guarantee, Medium. Owner confirmation is needed under `team.md` section 9, because it changes documented certification behavior.
+- **Kind:** defect in a documented certification guarantee, Medium. The owner approved the fix (D-24).
+- **Status 2026-10-19:** Implemented and internally tested by the Technical Lead (see the board). It is not accepted yet: QA sign-off and the independent pyHanko check of both outcomes are outstanding.
 - **Problem:** The code and `README.md` treat `Include` as allowing the named fields and `Exclude` as blocking them. ISO 32000 FieldMDP is the reverse: `Include` locks the named fields, and `Exclude` locks every field except them.
 - **Acceptance criteria:** The behavior follows ISO 32000. `README.md` and `ACCEPTANCE.md` are corrected. Both outcomes are independently verified by a PDF-aware tool.
 - **Evidence required:** Independently validated. **Owner:** Signing Engineer, with the AcroForm and Core Engineers consulted.

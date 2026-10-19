@@ -112,6 +112,10 @@ Decided 2026-10-18 by the owner. Installing test-only tools, generating or obtai
 
 Decided 2026-10-18 by the owner, for B-18. Up to 24 aggregate CPU-hours of fuzzing on existing development or CI machines. Test-only fuzzing dependencies are allowed. No new paid cloud resources or uncontrolled compute spending. A separate Security Auditor agent, which has not implemented the affected code, reviews the parser, stream decoders, PDF encryption, CMS and DER encoding, signature construction, and the related failure paths. It reports to the Technical Lead and the Product Manager. An independent agent review is enough to begin G8 qualification work. A human review may be considered before final production deployment.
 
+### D-24. FieldMDP follows ISO 32000 (B-39)
+
+Decided 2026-10-19 by the owner. The README had FieldMDP `Include` and `Exclude` reversed from the genesis commit, and the code followed it (audit SA-08). Fix the code and `README.md` to ISO 32000: `Include` locks the named fields, and `Exclude` locks every field except the named ones. `All` stays unchanged.
+
 ## Open
 
 Each item needs an owner decision. The Product Manager keeps the recommendation current.

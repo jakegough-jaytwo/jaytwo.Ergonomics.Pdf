@@ -58,6 +58,7 @@ Each limit fails before any destination grows, and a file inside every limit ope
 - Choice fields expose `/Opt`, including export/display pairs. A value that is not listed throws `PdfFieldValueException` and does not dirty the document, unless the Edit flag is set. Several values on a single-select field throw. A multi-select value is written as a PDF array. The Required flag is reported.
 - Fields stored in several object streams return the same values on a second read. A later edit of one field still round-trips, and the fields that were not edited keep their values.
 - A DocMDP certification that does not resolve blocks fills and signing. Field reads still work. DocMDP `P` 2 allows a fill and `Sign`, and blocks a metadata write. FieldMDP `All` blocks a fill and still allows a read.
+- FieldMDP follows ISO 32000-1 12.8.2.4. `Include` locks only the named fields, and a fill of another field succeeds. `Exclude` locks every field except the named ones, and a fill of a named field succeeds. A locked fill throws `PdfCertificationLockedException`.
 
 ## Sealing
 
