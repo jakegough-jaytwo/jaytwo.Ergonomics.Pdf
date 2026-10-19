@@ -168,7 +168,7 @@ public class ForeignPdfTests
             {
                 FieldName = fieldName,
                 ReservedContentsBytes = 16384,
-                SigningTime = DateTimeOffset.UnixEpoch,
+                SigningTime = TestCompat.UnixEpoch,
             },
             new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)),
             leaveOpen: true);
@@ -314,7 +314,7 @@ public class ForeignPdfTests
         };
         for (int i = 0; i < args.Length; i++)
         {
-            info.ArgumentList.Add(args[i]);
+            TestCompat.AddArgument(info, args[i]);
         }
 
         Process? process = Process.Start(info);

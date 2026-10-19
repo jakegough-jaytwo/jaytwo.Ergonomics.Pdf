@@ -55,7 +55,7 @@ public class DenseMemoryTests
         GC.WaitForPendingFinalizers();
         GC.Collect();
         long heapBefore = GC.GetTotalMemory(true);
-        long allocatedBefore = GC.GetTotalAllocatedBytes(true);
+        long allocatedBefore = TestCompat.TotalAllocatedBytes();
         long peak = heapBefore;
         using var done = new ManualResetEventSlim(false);
         var sampler = new Thread(() =>
@@ -98,7 +98,7 @@ public class DenseMemoryTests
             Assert.Equal("Touched", document.Metadata.Title);
         }
 
-        return new MemorySample(GC.GetTotalAllocatedBytes(true) - allocatedBefore, Math.Max(0, peak - heapBefore));
+        return new MemorySample(TestCompat.TotalAllocatedBytes() - allocatedBefore, Math.Max(0, peak - heapBefore));
     }
 
     private static string ReadHead(string path)

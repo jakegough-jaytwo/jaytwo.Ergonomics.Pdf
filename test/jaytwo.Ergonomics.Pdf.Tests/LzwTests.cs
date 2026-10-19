@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
 using jaytwo.Ergonomics.Pdf.Internal;
@@ -351,13 +350,7 @@ public class LzwTests
 
     private static byte[] Zlib(byte[] data)
     {
-        using var output = new MemoryStream();
-        using (var zlib = new ZLibStream(output, CompressionLevel.SmallestSize, leaveOpen: true))
-        {
-            zlib.Write(data, 0, data.Length);
-        }
-
-        return output.ToArray();
+        return TestCompat.Zlib(data);
     }
 
     private static byte[] ReadAll(Stream stream)
@@ -380,6 +373,6 @@ public class LzwTests
 
     private static string Sha256(byte[] data)
     {
-        return Convert.ToHexString(SHA256.HashData(data)).ToLowerInvariant();
+        return TestCompat.ToHexString(TestCompat.Sha256(data)).ToLowerInvariant();
     }
 }

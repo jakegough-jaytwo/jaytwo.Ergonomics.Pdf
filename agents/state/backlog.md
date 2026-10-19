@@ -1,6 +1,6 @@
 # Backlog
 
-Owner: Product Manager. Ordered by priority. Each item follows the template in `roles/product-manager.md`. Seeded on 2026-10-18 from the review round in `agents/reviews/`. The 2026-10-18 planning report confirmed this order. B-04, B-21, B-24, B-25, B-26, B-27, B-28, B-29, B-30, B-31, and B-32 are closed. B-13, B-14, B-15, B-17, and B-18 stay open and are not on the board.
+Owner: Product Manager. Ordered by priority. Each item follows the template in `roles/product-manager.md`. Seeded on 2026-10-18 from the review round in `agents/reviews/`. The 2026-10-18 planning report confirmed this order. B-04, B-21, B-24, B-25, B-26, B-27, B-28, B-29, B-30, B-31, B-32, B-15, B-33, and B-17 are closed. B-13, B-14, B-18, and B-34 stay open and are not on the board.
 
 ## B-01. Closed
 
@@ -75,29 +75,31 @@ Accepted as the support-matrix document. G1 is not passed. The matrix is the **S
 - **Evidence required:** Independently validated. Not on the board.
 - **Dependencies:** None. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
 
-## B-15. Timestamp authority outside pyHanko
+## B-15. Closed
 
-- **Kind:** missing evidence.
-- **Problem:** `Fixtures/tsa_server.py` uses pyHanko's `DummyTimeStamper`, and the pyHanko 0.38.0 check is the same toolchain. No independent verifier has checked a document timestamp from a different authority.
-- **Why now:** Gate G5 requires an independently implemented RFC 3161 authority, and a document timestamp is a separate capability.
-- **Scope and exclusions:** Use a timestamp authority that is not pyHanko. Have a verifier that is not that authority check a document timestamp. The library-side imprint, digest algorithm, and nonce checks stay in B-04. Do not add TSA trust validation to the library. Not on the board.
-- **Acceptance criteria:** A token from the non-pyHanko authority is embedded, and an independent verifier accepts the document timestamp under an explicit test trust configuration. The record names the authority, the verifier, their versions, and the properties established. `QUALIFICATION.md` section 7.
-- **Evidence required:** Independently validated. Not on the board.
-- **Dependencies:** B-04 for the nonce-bearing request the authority must answer. This item does not repeat that work. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
+Accepted at the independently validated level for the document timestamp. G5 is not passed. OpenSSL 3.2.4 `openssl ts -reply` (D-18) answered the library's own nonce-bearing request, and `DocTimeStampSignatureProvider` embedded the token through `PdfDocument.Sign`. pyHanko 0.38.0 `validate_pdf_timestamp` reported the document timestamp intact, valid, trusted, and `ENTIRE_FILE`, with the test root as the only trust anchor. `openssl ts -verify` returned `Verification: OK` over the `/ByteRange` bytes, which is corroboration from the authority's own toolchain. A different root gives `trusted=false`, and a flipped byte gives `intact=false`. The Signing Engineer reported in `agents/reports/2026-10-18-signing-engineer-B-15.md`. QA signed off in `agents/reports/2026-10-18-qa-engineer-B-15.md`: `OpenSslTimestampTests` 2/2 and `SigningInteropTests` 4/4 on `net8.0` and `net6.0`. Both tests fail when OpenSSL is missing. A mutation that reissues the TSA certificate fails the ESS signing-certificate check. QA fixed a stderr pipe deadlock in `ExternalTool`. The Technical Lead approved in `agents/reports/2026-10-18-tech-lead-B-15-review.md`. Limitations: the token has no certificates because the request omits certReq (D-14). pyHanko accepts it only when the test supplies the TSA certificate out of band. That certificate is added to the parsed token in memory, not to the PDF. This is open decision D-O6. No CMS signature timestamp from an authority other than pyHanko is tested yet.
+
+## B-33. Closed
+
+Accepted as the `net48` test target under D-19, at the internally tested level. G10 is not passed. The test project now targets `net8.0`, `net6.0`, and `net48`. On `net48` it runs against the library's `netstandard2.0` build. The library targets did not change. No test is excluded on `net48`: every external-tool test ran there. `TestCompat.cs` supplies the APIs that .NET Framework lacks, and forwards to the original APIs on `net6.0` and `net8.0`. Two test-only additions apply to `net48`: a `System.Net.Http` reference, and `System.Runtime.CompilerServices.Unsafe` 6.0.0 for the test host's binding redirect. The new `stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response` covers the B-31 abort-by-dispose path. With the dispose registration removed, it fails on all three frameworks. QA reported in `agents/reports/2026-10-18-qa-engineer-B-33.md`. The task was returned once for that missing test. The Technical Lead approved in `agents/reports/2026-10-18-tech-lead-B-33-review.md` after re-running `SignatureTests` on `net48`: 37 of 38 passed. The one failure is B-34, a library defect. It is recorded and left failing. `netstandard2.1` still has no test run.
+
+## B-34. Header-phase timestamp timeout lacks `TimeoutException` on .NET Framework
+
+- **Kind:** defect.
+- **Problem:** On `net48`, `SignatureTests.stalled_timestamp_response_headers_still_time_out` fails. The `TaskCanceledException` has no `TimeoutException` inner exception (`SignatureTests.cs:186`). `HttpTimestampAuthority` leaves the header phase to `HttpClient`'s own timeout exception, and only .NET 5+ adds the inner exception. B-31 claimed the same exception shape for both phases. The timeout itself works.
+- **Why now:** The regression test already exists and fails on `net48`, so the full suite is red on .NET Framework.
+- **Scope and exclusions:** Make the header-phase timeout produce `TaskCanceledException` with a `TimeoutException` inner exception on every framework. Change only `HttpTimestampAuthority`. No public API change.
+- **Acceptance criteria:** `stalled_timestamp_response_headers_still_time_out` passes on `net48`, `net6.0`, and `net8.0`, and the other stall tests still pass.
+- **Evidence required:** Internally tested. Not on the board.
+- **Dependencies:** None. Owner: Signing Engineer.
 
 ## B-16. Closed
 
 Accepted as the Poppler checks that were added. G6 is not passed. There is no second renderer, and the gate's acceptance is wider than this set. The first version was not signed off: `agents/reports/2026-10-18-qa-engineer-B-16.md` records that the center check was only an 80-point gap. The corrected test requires the center `Align` word in x 174–180. QA signed that off in `agents/reports/2026-10-18-qa-engineer-B-16-alignment.md`: `AppearanceRenderTests` passed 2/2 on `net8.0` and on `net6.0`. Poppler 26.09.0. The Technical Lead approved the corrected test in `agents/reports/2026-10-18-tech-lead-B-16-review.md`.
 
-## B-17. G7 large-file workloads
+## B-17. Closed
 
-- **Kind:** missing evidence.
-- **Problem:** The dense test is 8 MiB and 32 MiB. The attachment test copies 200 KiB. The 1,000-page test is a sparse read and does not extract, edit metadata, and sign. The 3 GiB case is sparse, and its metadata-appendix measurement is B-10.
-- **Why now:** Gate G7 is release-blocking. Sparse files do not meet the file-backed workloads.
-- **Scope and exclusions:** File-backed 1 GiB dense PDF, a 250 MiB attachment added and extracted, and a 500-page extract, metadata edit, and sign. Record timing. The Technical Lead and QA approve fixture-specific memory budgets before G7 is called met. Do not treat the proposed 256 MiB and 512 MiB figures as already approved. Not on the board.
-- **Acceptance criteria:** Those three workloads complete correctly on real file-backed inputs. Peak memory and timing are recorded. G7 stays unmet until the fixture-specific budgets are approved. `QUALIFICATION.md` section 9.
-- **Evidence required:** Internally tested measurements. Not on the board.
-- **Dependencies:** B-10 remains the 3 GiB metadata-appendix assertion. An `ACCEPTANCE.md` edit waits while B-04 claims that file.
+Accepted at the internally tested level, against the D-20 working budget. G7 is not passed. `LargeWorkloadTests` runs three file-backed workloads on `net8.0`, `net6.0`, and `net48`. The first is a 1,073,915,943-byte dense PDF: inspect, metadata edit, and sign, with peak heap growth of at most 3.06 MiB. Inspecting it reads 8.6 MB of the file. The second is a 268,439,553-byte attachment, added and extracted through file streams, at most 0.30 MiB, and its hashes match. The third is a 500-page form with 1,000 fields and object streams: extraction, edit, and sign, at most 10.31 MiB. All 1,000 fields match, and `qpdf --check` passes. QA reported in `agents/reports/2026-10-18-qa-engineer-B-17.md`. The Technical Lead re-ran `net8.0` with matching numbers and approved in `agents/reports/2026-10-18-tech-lead-B-17-review.md`. The approved fixture-specific budgets are in `state/status.md`. Limitations: the suite asserts the D-20 ceilings, not the tighter budgets, because the heap counter is process-wide. Timing is from one machine in Debug with coverage on. The object-stream file allocates 90–175 MiB per operation through repeated decoding (O1). These G7 criteria are not covered: repeated use and dispose, encrypted xref-stream discovery, output and decompression limits, and a timing baseline.
 
 ## B-18. Fuzz suite and independent security review
 

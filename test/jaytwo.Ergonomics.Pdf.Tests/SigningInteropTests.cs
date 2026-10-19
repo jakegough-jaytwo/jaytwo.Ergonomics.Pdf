@@ -133,7 +133,7 @@ public class SigningInteropTests
             byte[] modulus = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_MODULUS })[0].GetValueAsByteArray();
             byte[] exponent = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_PUBLIC_EXPONENT })[0].GetValueAsByteArray();
             var signer = new Pkcs11Signer(session, privateKey, modulus, exponent);
-            byte[] probe = SHA256.HashData(Encoding.ASCII.GetBytes("pkcs11-probe"));
+            byte[] probe = TestCompat.Sha256(Encoding.ASCII.GetBytes("pkcs11-probe"));
             using (var verifier = RSA.Create())
             {
                 verifier.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
@@ -220,7 +220,7 @@ public class SigningInteropTests
         var destination = new MemoryStream();
         document.Sign(
             destination,
-            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = DateTimeOffset.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = TestCompat.UnixEpoch },
             authority == null
                 ? new CmsDetachedSignatureProvider(signer)
                 : new CmsDetachedSignatureProvider(signer, authority),
@@ -383,7 +383,7 @@ public class SigningInteropTests
     private static byte[] Serial()
     {
         byte[] serial = new byte[8];
-        RandomNumberGenerator.Fill(serial);
+        TestCompat.FillRandom(serial);
         serial[0] &= 0x7F;
         if (serial[0] == 0)
         {
@@ -395,7 +395,7 @@ public class SigningInteropTests
 
     private static string PemKey(RSA key)
     {
-        return new string(PemEncoding.Write("PRIVATE KEY", key.ExportPkcs8PrivateKey()));
+        return TestCompat.Pkcs8PrivateKeyPem(key);
     }
 
     private static byte[] TrimInteger(byte[] value)

@@ -239,7 +239,7 @@ public class AppearanceRenderTests
         info.Environment["PATH"] = poppler + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
         for (int i = 0; i < args.Length; i++)
         {
-            info.ArgumentList.Add(args[i]);
+            TestCompat.AddArgument(info, args[i]);
         }
 
         return ExternalTool.Start(info);

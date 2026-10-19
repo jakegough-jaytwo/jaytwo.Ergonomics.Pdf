@@ -2,12 +2,15 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
 
 internal static class ExternalTool
 {
+    private const int TimeoutMilliseconds = 600000;
+
     public static string Fixture(string name)
     {
         string path = Path.Combine(AppContext.BaseDirectory, "Fixtures", name);
@@ -34,11 +37,9 @@ internal static class ExternalTool
         }
 
         using Process where = Start("where.exe", fileName);
-        string stdout = where.StandardOutput.ReadToEnd();
-        where.StandardError.ReadToEnd();
-        where.WaitForExit();
+        (int exitCode, string stdout, _) = Run(where);
         string[] lines = stdout.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        Assert.True(where.ExitCode == 0 && lines.Length > 0, fileName + " was not found. Set " + variable + " or put it on PATH.");
+        Assert.True(exitCode == 0 && lines.Length > 0, fileName + " was not found. Set " + variable + " or put it on PATH.");
         return lines[0];
     }
 
@@ -54,7 +55,7 @@ internal static class ExternalTool
         };
         for (int i = 0; i < args.Length; i++)
         {
-            info.ArgumentList.Add(args[i]);
+            TestCompat.AddArgument(info, args[i]);
         }
 
         return Start(info);
@@ -73,11 +74,25 @@ internal static class ExternalTool
 
     public static string Output(Process process)
     {
-        string stdout = process.StandardOutput.ReadToEnd();
-        string stderr = process.StandardError.ReadToEnd();
-        process.WaitForExit();
-        Assert.True(process.ExitCode == 0, process.StartInfo.FileName + " exited " + process.ExitCode.ToString() + Environment.NewLine + stderr + stdout);
+        (int exitCode, string stdout, string stderr) = Run(process);
+        Assert.True(exitCode == 0, process.StartInfo.FileName + " exited " + exitCode.ToString() + Environment.NewLine + stderr + stdout);
         return stdout;
+    }
+
+    public static (int ExitCode, string Stdout, string Stderr) Run(Process process)
+    {
+        // Drain both pipes at once. Reading stdout to the end first deadlocks when the tool fills the stderr pipe,
+        // and openssl key generation writes up to about 4 KB of progress dots to stderr.
+        Task<string> stdout = process.StandardOutput.ReadToEndAsync();
+        Task<string> stderr = process.StandardError.ReadToEndAsync();
+        if (!process.WaitForExit(TimeoutMilliseconds))
+        {
+            process.Kill(entireProcessTree: true);
+            process.WaitForExit();
+            throw new TimeoutException(process.StartInfo.FileName + " did not exit within " + (TimeoutMilliseconds / 1000).ToString() + " seconds.");
+        }
+
+        return (process.ExitCode, stdout.GetAwaiter().GetResult(), stderr.GetAwaiter().GetResult());
     }
 
     public static string Pem(byte[] der)

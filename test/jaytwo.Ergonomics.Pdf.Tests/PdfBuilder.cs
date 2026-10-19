@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.IO.Compression;
 using System.Text;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -259,13 +258,7 @@ internal sealed class PdfBuilder
 
     private static byte[] Zlib(byte[] data)
     {
-        using var output = new MemoryStream();
-        using (var zlib = new ZLibStream(output, CompressionLevel.SmallestSize, leaveOpen: true))
-        {
-            zlib.Write(data, 0, data.Length);
-        }
-
-        return output.ToArray();
+        return TestCompat.Zlib(data);
     }
 
     private readonly struct Entry

@@ -6,9 +6,9 @@ This file is state. It is true as of the date on each section and goes stale. Wh
 
 Owner: Technical Lead. As of 2026-10-18.
 
-- Branch `wip`. `11da851` "genesis" is followed by checkpoint `ee10c84`, which holds the mixed B-04 through B-29 work. `f0da4e9` holds the B-28 rework, the B-29 test tightening, and the B-25, B-28, and B-29 records. A third checkpoint after it holds B-30, B-31, and B-32 and their records. `git ls-tree HEAD` lists `src/`, `test/`, and `agents/`.
-- B-30, B-31, and B-32 are accepted, so the tree holds no unaccepted work. No task is active. See `state/board.md`, "Resume point".
-- At the third checkpoint the full suite passed 200/200 on `net8.0` and 200/200 on `net6.0`. The library built in Release for all four targets with warnings as errors, with 0 warnings. Every qpdf test now honors `JAYTWO_QPDF` (B-32), so qpdf no longer has to be on `PATH`.
+- Branch `wip`. `11da851` "genesis" is followed by checkpoint `ee10c84` (B-04 through B-29), `f0da4e9` (B-25, B-28, B-29), `46d64a6` (B-30, B-31, B-32), and a fourth checkpoint holding B-15, B-33, and B-17 and their records. `git ls-tree HEAD` lists `src/`, `test/`, and `agents/`.
+- B-15, B-33, and B-17 are accepted. No task is active. See `state/board.md`, "Resume point".
+- The test project targets `net8.0`, `net6.0`, and `net48` (D-19). The library targets are unchanged (D-13). At the fourth checkpoint the full suite passed 206/206 on `net8.0` and 206/206 on `net6.0`. On `net48` it ran 205 passed and 1 failed: `stalled_timestamp_response_headers_still_time_out`, library defect B-34. The library built in Release for all four targets with warnings as errors, with 0 warnings. The required test tools now include OpenSSL 3 (`JAYTWO_OPENSSL`, D-18).
 - `main` and `develop` remain `b832f22` and contain only `LICENSE`.
 - B-01 acceptance passes on `wip`.
 
@@ -112,12 +112,12 @@ Refreshed under B-22, 2026-10-18. No gate is passed. No capability below is Prod
 | G2 | Six committed foreign PDFs, from pypdf, qpdf, and pyHanko (`test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/`). qpdf 12.4.2 `--check` accepted the revisions in rows 35–40. | Fewer than 50 fixtures and fewer than four producers. No real-world file that was not built for this library. qpdf `--check` is not a semantic check. |
 | G3 | Acceptance rows 16–32 and 35–45 cover extraction, fill, metadata, attachments, and incremental writes. B-23: pypdf 6.21.1 read Info title `InfoEdited`, XMP `dc:title` `x-default` `XmpEdited`, and `notes.bin` bytes `00 01 02 7F 80 FE FF` followed by ASCII `B-23`. Passed on `net8.0` and `net6.0`. | G3 is not passed. Not every operation has a positive, a negative, and an interoperability test. |
 | G4 | pyHanko 0.38.0 checked PDF signature semantics on rows 36 and 39–44. `SignedCms.CheckSignature(verifySignatureOnly: true)` ran on `net8.0` only. SoftHSM 2.5.0 signed row 43. B-19: `external_signer_failure_does_not_extend_the_file` passed on `net8.0` and `net6.0`. A throwing signer throws `CryptographicException` and the opened stream bytes stay unchanged. | pdfsig was not run. That is not a pass. `SignedCms` does not open the PDF, so pyHanko plus `SignedCms` is not two PDF verifiers. |
-| G5 | Row 42: pyHanko 0.38.0 reported the embedded token intact, valid, and trusted. B-04 re-ran that test on `net8.0`. Row 34: both providers reject a mismatched imprint, a mismatched digest algorithm, and a missing or mismatched nonce with `PdfTimestampException`, and the file is not extended. B-19: `timestamp_authority_failure_does_not_leave_a_timestamped_signature` passed on `net8.0` and `net6.0`. | No timestamp authority besides pyHanko. The stamper and the verifier are both pyHanko. A document timestamp has no independent verifier. |
+| G5 | Row 42: pyHanko 0.38.0 reported the embedded token intact, valid, and trusted. B-04 re-ran that test on `net8.0`. Row 34: both providers reject a mismatched imprint, a mismatched digest algorithm, and a missing or mismatched nonce with `PdfTimestampException`, and the file is not extended. B-19: `timestamp_authority_failure_does_not_leave_a_timestamped_signature` passed on `net8.0` and `net6.0`. B-15: an OpenSSL 3.2.4 `openssl ts` token in a document timestamp was accepted by pyHanko 0.38.0 (intact, valid, trusted, `ENTIRE_FILE`) under the test root only, and by `openssl ts -verify`. | G5 is not passed. No CMS signature timestamp from an authority other than pyHanko. pyHanko needs the TSA certificate supplied out of band because the request omits certReq (D-O6). |
 | G6 | Poppler 26.09.0 `pdftotext` and `pdftoppm`. Row 45 still checks `Ada`, `Blue`, and the four rectangles. B-16, re-checked after the alignment fix: visibility (`Seen`), WinAnsi `Café` and `A•B`, alignment with center XMin 174–180 (left 30–60, right 280–340), the long value, clipping, rotation 792 by 612, CropBox 400 by 540, and the 18-point box more than 1.5 times the 8-point box. `AppearanceRenderTests` passed 2 on `net8.0` and 2 on `net6.0`. | G6 is not passed. No second renderer. `pdftocairo` was not used. |
-| G7 | Row 12: sparse 3 GiB open, save, and sign. B-10: the metadata appendix is 886 bytes, under 8 KiB. Row 14: 1,000-page sparse read. Row 46: dense 8 MiB and 32 MiB. Row 19: a 200 KiB attachment. | No approved memory budget. Not a 1 GiB dense file. Not a 250 MiB attachment. The 1,000-page read does not extract, edit metadata, and sign. Sparse input alone does not qualify the gate. |
+| G7 | Row 12: sparse 3 GiB open, save, and sign. B-10: the metadata appendix is 886 bytes, under 8 KiB. Row 14: 1,000-page sparse read. Row 46: dense 8 MiB and 32 MiB. Row 19: a 200 KiB attachment. B-17: a file-backed 1 GiB dense PDF, a 250 MiB attachment, and a 500-page form extraction, edit, and sign, all within the approved budgets on `net8.0`, `net6.0`, and `net48`. | G7 is not passed. Not covered: repeated object-stream access and retained-memory growth, repeated use and dispose, encrypted xref-stream discovery, output and decompression limits as G7 evidence, and a timing baseline. |
 | G8 | Internal negative tests include a cyclic `/Prev`, truncated filters, the decompression cap, unsupported encryption, an oversized signature, and TSA status 2. | No fuzz harness and no 24 CPU-hour run. No independent security review of the parser or the signer. |
 | G9 | Rows 1, 11, 13, 15, 30, and 31, plus the B-19 throwing signer and throwing timestamp authority. Neither failure extends the file, and the timestamp failure does not leave a signature field. | No recorded check that diagnostics omit secrets. |
-| G10 | B-20: `netstandard2.0` and `netstandard2.1` Debug builds succeeded, and `dotnet pack` produced `jaytwo.Ergonomics.Pdf` 0.1.0 with `net8.0`, `net6.0`, `netstandard2.1`, and `netstandard2.0`. The only package dependency is `System.Memory` 4.5.5 on `netstandard2.0`. The nupkg does not depend on qpdf, pyHanko, Poppler, SoftHSM, or Pkcs11Interop. | G10 is not passed. The test suite was not run on `netstandard2.0` or `netstandard2.1`. That is not a pass. |
+| G10 | B-20: `netstandard2.0` and `netstandard2.1` Debug builds succeeded, and `dotnet pack` produced `jaytwo.Ergonomics.Pdf` 0.1.0 with `net8.0`, `net6.0`, `netstandard2.1`, and `netstandard2.0`. The only package dependency is `System.Memory` 4.5.5 on `netstandard2.0`. The nupkg does not depend on qpdf, pyHanko, Poppler, SoftHSM, or Pkcs11Interop. B-33: the suite runs on `net48` against the `netstandard2.0` build, with 205 of 206 passing. | G10 is not passed. One `net48` failure (B-34). The test suite has not run on the `netstandard2.1` build. |
 
 | Capability | Evidence | Missing |
 |---|---|---|
@@ -127,12 +127,18 @@ Refreshed under B-22, 2026-10-18. No gate is passed. No capability below is Prod
 | Attachments | Rows 19–22. Row 37: qpdf 12.4.2 `--check`, and the test itself compared `foreign-attachment`. B-23: pypdf 6.21.1 read `notes.bin` as `00 01 02 7F 80 FE FF` followed by ASCII `B-23`. | G3 is not passed. |
 | Incremental writing | Prefix checks and qpdf 12.4.2 `--check` on rows 35–40. `InteropTests.qpdf_checks_built_incremental_filled_and_signed_pdfs` passed in B-02. | Fewer than 50 fixtures and fewer than four producers. |
 | PDF signing | pyHanko 0.38.0 on rows 36 and 39–44. SoftHSM 2.5.0 on row 43. B-19 throwing signer. B-21 cross-stream `Sign`. | No pdfsig. That is not a pass. |
-| Timestamping | Row 34 imprint, digest-algorithm, and nonce checks. Row 42: pyHanko 0.38.0 trusted the token. B-19 throwing timestamp authority. | No timestamp authority besides pyHanko. |
-| Large-file support | Rows 12, 14, 19, 27, and 46. B-10 measured the 886-byte metadata appendix. | No approved memory budget. |
+| Timestamping | Row 34 imprint, digest-algorithm, and nonce checks. Row 42: pyHanko 0.38.0 trusted the token. B-19 throwing timestamp authority. B-15: OpenSSL 3.2.4 document timestamp, independently validated by pyHanko 0.38.0. | No signature timestamp from a non-pyHanko authority. D-O6 open. |
+| Large-file support | Rows 12, 14, 19, 27, and 46. B-10 measured the 886-byte metadata appendix. B-17 large workloads within the approved budgets. | G7 criteria listed above are not covered. |
 
 ## Approved memory budgets
 
-Owners: Technical Lead and QA Engineer, under `QUALIFICATION.md` gate G7. None approved yet. The standard's proposed starting budgets apply until fixture-specific ones are measured.
+Owners: Technical Lead and QA Engineer, under `QUALIFICATION.md` gate G7. The owner approved the working budget on 2026-10-18 (D-20): 256 MiB of peak managed-heap growth for inspect, edit, and sign, and 512 MiB for complex traversals. The suite asserts those ceilings. The fixture-specific budgets below were approved on 2026-10-18 under B-17. They come from isolated runs, because the heap counter is process-wide.
+
+| Workload (`LargeWorkloadTests`) | Approved budget | Max measured, `net8.0`/`net6.0`/`net48` |
+|---|---|---|
+| Dense 1 GiB PDF: inspect, metadata edit, sign | 16 MiB each | 3.06 MiB |
+| 250 MiB attachment: add, extract | 8 MiB each | 0.30 MiB |
+| 500-page form: extraction, metadata edit, sign | 32 MiB each | 10.31 MiB |
 
 ## Release readiness
 

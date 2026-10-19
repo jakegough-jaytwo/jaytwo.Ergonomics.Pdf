@@ -109,8 +109,8 @@ public class InteropTests
                 xmp == "XmpEdited",
                 "pypdf " + version + " did not confirm the XMP dc:title edit. Expected XmpEdited. Actual " + xmp + ".");
             Assert.True(
-                string.Equals(bytesHex, Convert.ToHexString(attachment), StringComparison.OrdinalIgnoreCase),
-                "pypdf " + version + " attachment bytes differ. Expected " + Convert.ToHexString(attachment) + ". Actual " + bytesHex + ".");
+                string.Equals(bytesHex, TestCompat.ToHexString(attachment), StringComparison.OrdinalIgnoreCase),
+                "pypdf " + version + " attachment bytes differ. Expected " + TestCompat.ToHexString(attachment) + ". Actual " + bytesHex + ".");
         }
         finally
         {
@@ -166,7 +166,7 @@ public class InteropTests
         };
         for (int i = 0; i < args.Length; i++)
         {
-            info.ArgumentList.Add(args[i]);
+            TestCompat.AddArgument(info, args[i]);
         }
 
         Process? process = Process.Start(info);

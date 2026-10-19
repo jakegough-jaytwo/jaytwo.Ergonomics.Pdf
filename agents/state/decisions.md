@@ -88,9 +88,29 @@ The owner rejected option 1. A signature field's value is a signature dictionary
 
 Decided 2026-10-18 by the owner. `System.Memory` on `netstandard2.0` is an accepted runtime dependency, not an exception under review. Every review round raised it, because `AGENTS.md` said "zero runtime dependencies" and the README said "no runtime dependencies" while the project file references a package. Both now describe a closed, settled set. Agents do not flag the package, propose removing it, or cite it as precedent for another one. A different runtime package is still an owner decision under `team.md` section 9.
 
+### D-18. OpenSSL is a test-only timestamp authority and verifier
+
+Decided 2026-10-18 by the owner, for B-15. OpenSSL is approved as a test-only external tool. Git for Windows ships OpenSSL 3.2.4 at `/mingw64/bin/openssl`. Tests use `openssl ts` as a local RFC 3161 authority, and `openssl ts -verify` as a verifier where it applies. They find it through `JAYTWO_OPENSSL` or `PATH`, and fail when it is missing, like the other required tools. It is never a runtime dependency. The Technical Lead drafts the one-line addition to the tool list in `AGENTS.md`, and that edit is approved.
+
+### D-19. A `net48` test target is approved
+
+Decided 2026-10-18 by the owner. The test project gains a `net48` target. The library targets do not change (D-13). The purpose is to cover the B-31 .NET Framework abort-by-dispose path and the G10 gap: no test runs the `netstandard2.0` build on .NET Framework. Tests that need a tool or an API the target lacks may be excluded on `net48`. Each exclusion is listed in the task report.
+
+### D-20. G7 working memory budget
+
+Decided 2026-10-18 by the owner. The starting budget in `QUALIFICATION.md` section 9 is the working budget: at most 256 MiB of peak managed-heap growth for inspect, edit, and sign, and at most 512 MiB for complex structural traversals. B-17 may be boarded against it. This approves the working budget only. It does not by itself meet G7: every G7 acceptance criterion still needs its own evidence.
+
 ## Open
 
 Each item needs an owner decision. The Product Manager keeps the recommendation current.
+
+### D-O6. Should timestamp requests set certReq?
+
+Raised 2026-10-18 from B-15. D-14 keeps `certReq` omitted "until a verifier needs the TSA certificate in the token." Under RFC 3161, a TSA answering a request without `certReq` leaves the token's certificates empty. OpenSSL 3.2.4 does this. pyHanko 0.38.0 then rejects the token with "signer certificate not included in signature", and it has no way to take the certificate from elsewhere. So a timestamp from a compliant TSA, as the library requests it, cannot be validated by pyHanko unless the TSA certificate is supplied out of band. This affects signature timestamps and document timestamps. The existing pyHanko-TSA test hides it, because pyHanko's dummy TSA includes its certificate anyway. Other validators were not checked.
+
+Options: (1) keep D-14 as is, and document that verifiers need the TSA certificate separately; (2) set `certReq` true in `Rfc3161TimeStampRequest`. The token grows by the TSA certificate, well under the 1 MiB embedding ceiling. B-15's out-of-band workaround and its `embedded_certs=0` assertion then change.
+
+Recommendation: option 2. The condition D-14 named has been met, and output a mainstream validator rejects is a usability defect for signers. This changes a timestamp guarantee, so it needs the owner (`team.md` section 9).
 
 ### D-O4. Caller-facing coordinates
 

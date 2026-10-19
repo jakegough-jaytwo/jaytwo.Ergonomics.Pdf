@@ -256,7 +256,7 @@ public class EncryptionTests
                 {
                     ReservedContentsBytes = 32,
                     Reason = "Because",
-                    SigningTime = DateTimeOffset.UnixEpoch,
+                    SigningTime = TestCompat.UnixEpoch,
                 },
                 new FixedProvider());
         }
@@ -541,7 +541,7 @@ public class EncryptionTests
     private static void AssertDiagnosticOmitsKey(Exception exception, byte[] key)
     {
         Assert.True(key.Length >= 16);
-        string hex = Convert.ToHexString(key);
+        string hex = TestCompat.ToHexString(key);
         string diagnostic = PublicDiagnostic(exception);
         Assert.True(exception.Message.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "The exception message contains the key.");
         Assert.True(diagnostic.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "A public diagnostic contains the key.");

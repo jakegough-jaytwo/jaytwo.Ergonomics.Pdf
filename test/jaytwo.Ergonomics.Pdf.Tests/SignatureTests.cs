@@ -33,8 +33,8 @@ public class SignatureTests
     [Fact]
     public void rfc3161_request_matches_the_sha256_abc_vector()
     {
-        byte[] digest = SHA256.HashData(Encoding.ASCII.GetBytes("abc"));
-        string actual = Convert.ToHexString(Rfc3161TimeStampRequest.Create(digest)).ToLowerInvariant();
+        byte[] digest = TestCompat.Sha256(Encoding.ASCII.GetBytes("abc"));
+        string actual = TestCompat.ToHexString(Rfc3161TimeStampRequest.Create(digest)).ToLowerInvariant();
 
         Assert.Equal(KnownRequest, actual);
     }
@@ -42,7 +42,7 @@ public class SignatureTests
     [Fact]
     public void rfc3161_request_with_a_nonce_appends_the_integer_and_omits_cert_req()
     {
-        byte[] digest = SHA256.HashData(Encoding.ASCII.GetBytes("abc"));
+        byte[] digest = TestCompat.Sha256(Encoding.ASCII.GetBytes("abc"));
         byte[] nonce = new byte[] { 0x80 };
         byte[] actual = Rfc3161TimeStampRequest.Create(digest, nonce);
 
@@ -53,7 +53,7 @@ public class SignatureTests
                 DerCodec.Integer(nonce)),
             actual);
         Assert.NotEqual(Rfc3161TimeStampRequest.Create(digest), actual);
-        Assert.Contains("02020080", Convert.ToHexString(actual), StringComparison.Ordinal);
+        Assert.Contains("02020080", TestCompat.ToHexString(actual), StringComparison.Ordinal);
         Assert.Throws<ArgumentException>(() => Rfc3161TimeStampRequest.Create(digest, ReadOnlySpan<byte>.Empty));
     }
 
@@ -188,6 +188,21 @@ public class SignatureTests
     }
 
     [Fact]
+    public void stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response()
+    {
+        var body = new TokenIgnoringStream();
+        var client = new HttpClient(new StreamHandler(body)) { Timeout = TimeSpan.FromMilliseconds(500) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        var watch = Stopwatch.StartNew();
+
+        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        TimeoutException timeout = Assert.IsType<TimeoutException>(canceled.InnerException);
+        Assert.IsType<ObjectDisposedException>(timeout.InnerException);
+        Assert.True(body.Disposed);
+        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    [Fact]
     public void incremental_revision_appends_a_classic_xref()
     {
         byte[] pdf = Titled("Old");
@@ -225,7 +240,7 @@ public class SignatureTests
         {
             document.Metadata.Title = "Signed";
             Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 128, SigningTime = DateTimeOffset.UnixEpoch }, new FixedProvider());
+            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 128, SigningTime = TestCompat.UnixEpoch }, new FixedProvider());
         }
 
         Assert.Equal(2, StartXrefs(stream.ToArray()).Count);
@@ -413,7 +428,7 @@ public class SignatureTests
         {
             document.Sign(
                 stream,
-                new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+                new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
                 new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)));
         }
 
@@ -425,11 +440,11 @@ public class SignatureTests
         long length1 = long.Parse(range.Groups[4].Value);
         byte[] digest = HashRanges(saved, offset0, length0, offset1, length1);
         Match contents = Regex.Match(Encoding.ASCII.GetString(saved), @"/Contents\s*<([0-9A-Fa-f]+)>");
-        byte[] padded = Convert.FromHexString(contents.Groups[1].Value);
+        byte[] padded = TestCompat.FromHexString(contents.Groups[1].Value);
         byte[] cmsBytes = DerCodec.ReadTlv(padded).Full;
-        Assert.Contains(Convert.ToHexString(digest), Convert.ToHexString(cmsBytes), StringComparison.Ordinal);
+        Assert.Contains(TestCompat.ToHexString(digest), TestCompat.ToHexString(cmsBytes), StringComparison.Ordinal);
         Assert.Contains("D:19700101000000Z", Encoding.ASCII.GetString(saved), StringComparison.Ordinal);
-        Assert.Contains(Convert.ToHexString(Encoding.ASCII.GetBytes("700101000000Z")), Convert.ToHexString(cmsBytes), StringComparison.Ordinal);
+        Assert.Contains(TestCompat.ToHexString(Encoding.ASCII.GetBytes("700101000000Z")), TestCompat.ToHexString(cmsBytes), StringComparison.Ordinal);
 #if NET8_0_OR_GREATER
         var content = new byte[length0 + length1];
         Buffer.BlockCopy(saved, (int)offset0, content, 0, (int)length0);
@@ -460,19 +475,19 @@ public class SignatureTests
         {
             document.Sign(
                 stream,
-                new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = DateTimeOffset.UnixEpoch },
+                new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = TestCompat.UnixEpoch },
                 new CmsDetachedSignatureProvider(signer, authority));
         }
 
         byte[] saved = stream.ToArray();
         Match contents = Regex.Match(Encoding.ASCII.GetString(saved), @"/Contents\s*<([0-9A-Fa-f]+)>");
-        byte[] cmsBytes = DerCodec.ReadTlv(Convert.FromHexString(contents.Groups[1].Value)).Full;
-        string cmsHex = Convert.ToHexString(cmsBytes);
-        Assert.Contains(Convert.ToHexString(certificate.RawData), cmsHex, StringComparison.Ordinal);
-        Assert.Contains(Convert.ToHexString(intermediate.RawData), cmsHex, StringComparison.Ordinal);
+        byte[] cmsBytes = DerCodec.ReadTlv(TestCompat.FromHexString(contents.Groups[1].Value)).Full;
+        string cmsHex = TestCompat.ToHexString(cmsBytes);
+        Assert.Contains(TestCompat.ToHexString(certificate.RawData), cmsHex, StringComparison.Ordinal);
+        Assert.Contains(TestCompat.ToHexString(intermediate.RawData), cmsHex, StringComparison.Ordinal);
         Assert.Contains("2A864886F70D010910020E", cmsHex, StringComparison.Ordinal);
         (byte[] hashed, byte[] nonce) = ReadTimestampRequest(authority.Request);
-        Assert.Equal(SHA256.HashData(signer.LastSignature), hashed);
+        Assert.Equal(TestCompat.Sha256(signer.LastSignature), hashed);
         AssertNonceWidth(nonce);
 #if NET8_0_OR_GREATER
         Match range = Regex.Match(Encoding.ASCII.GetString(saved), @"/ByteRange\s*\[\s*(\d{10})\s+(\d{10})\s+(\d{10})\s+(\d{10})\s*\]");
@@ -689,7 +704,7 @@ public class SignatureTests
 
         Assert.Throws<CryptographicException>(() => document.Sign(
             stream,
-            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
 
         Assert.Equal(length, stream.Length);
@@ -716,7 +731,7 @@ public class SignatureTests
         using var document = PdfDocument.Open(stream, password, leaveOpen: true);
         CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
             stream,
-            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
 
         AssertDiagnosticOmits(exception, password, "password");
@@ -739,7 +754,7 @@ public class SignatureTests
 
         CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
             stream,
-            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new LeakySigner(certificate.RawData, sentinel, sentinelKey))));
 
         Assert.Equal("The external signer failed.", exception.Message);
@@ -764,7 +779,7 @@ public class SignatureTests
 
         Assert.Throws<PdfTimestampException>(() => document.Sign(
             stream,
-            new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = DateTimeOffset.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new ThrowingAuthority())));
 
         Assert.Equal(length, stream.Length);
@@ -816,7 +831,7 @@ public class SignatureTests
         using var rsa = RSA.Create(2048);
         var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
-        options = new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = DateTimeOffset.UnixEpoch };
+        options = new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch };
         provider = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new FaultAuthority(fault));
         PdfTimestampException exception = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
         Assert.Contains(phrase, exception.Message, StringComparison.Ordinal);
@@ -1032,7 +1047,7 @@ public class SignatureTests
     private static void AssertDiagnosticOmitsKey(Exception exception, byte[] key)
     {
         Assert.True(key.Length >= 16);
-        string hex = Convert.ToHexString(key);
+        string hex = TestCompat.ToHexString(key);
         string diagnostic = PublicDiagnostic(exception);
         Assert.True(exception.Message.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "The exception message contains the key.");
         Assert.True(diagnostic.IndexOf(hex, StringComparison.OrdinalIgnoreCase) < 0, "A public diagnostic contains the key.");
@@ -1178,7 +1193,7 @@ public class SignatureTests
         {
             var inner = new InvalidOperationException(Convert.ToBase64String(_sentinelKey));
             var exception = new InvalidOperationException(_sentinel, inner);
-            exception.Data[_sentinel] = Convert.ToHexString(_sentinelKey);
+            exception.Data[_sentinel] = TestCompat.ToHexString(_sentinelKey);
             exception.Data["raw"] = Encoding.GetEncoding(28591).GetString(_sentinelKey);
             throw exception;
         }
@@ -1238,7 +1253,11 @@ public class SignatureTests
             return Task.FromResult(Send(request, cancellationToken));
         }
 
+#if NETFRAMEWORK
+        private HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+#else
         protected override HttpResponseMessage Send(HttpRequestMessage request, CancellationToken cancellationToken)
+#endif
         {
             ContentType = request.Content?.Headers.ContentType?.MediaType;
             Body = request.Content == null
@@ -1369,10 +1388,57 @@ public class SignatureTests
             throw new IOException("The stalled body was not cancelled.");
         }
 
+#if !NETFRAMEWORK
         public override async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         {
             await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken).ConfigureAwait(false);
             throw new IOException("The stalled body was not cancelled.");
+        }
+#endif
+
+        public override void Flush()
+        {
+        }
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+    }
+
+    // Models a network stream that ignores the read token. Only Dispose ends a pending read early.
+    private sealed class TokenIgnoringStream : Stream
+    {
+        private readonly TaskCompletionSource<int> _pending = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public bool Disposed { get; private set; }
+
+        public override bool CanRead => true;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => false;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return ReadAsync(buffer, offset, count, CancellationToken.None).GetAwaiter().GetResult();
+        }
+
+        public override Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            Task.Delay(TimeSpan.FromSeconds(30)).ContinueWith(
+                delay => _pending.TrySetException(new IOException("The stalled body was not disposed.")),
+                TaskScheduler.Default);
+            return _pending.Task;
         }
 
         public override void Flush()
@@ -1384,5 +1450,12 @@ public class SignatureTests
         public override void SetLength(long value) => throw new NotSupportedException();
 
         public override void Write(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        protected override void Dispose(bool disposing)
+        {
+            Disposed = true;
+            _pending.TrySetException(new ObjectDisposedException(nameof(TokenIgnoringStream)));
+            base.Dispose(disposing);
+        }
     }
 }
