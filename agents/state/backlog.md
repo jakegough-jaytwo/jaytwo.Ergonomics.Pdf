@@ -101,13 +101,9 @@ Accepted at the internally tested level. It closes audit findings SA-01, SA-02, 
 - **Acceptance criteria:** Bounded work before the size check. Exceptions from both certificate properties are sanitized like `SignHash` exceptions, and the destination is unchanged.
 - **Evidence required:** Internally tested. **Owner:** Signing Engineer.
 
-## B-39. FieldMDP `Include` and `Exclude` are reversed (audit SA-08)
+## B-39. Closed
 
-- **Kind:** defect in a documented certification guarantee, Medium. The owner approved the fix (D-24).
-- **Status 2026-10-19:** Implemented and internally tested by the Technical Lead (see the board). It is not accepted yet: QA sign-off and the independent pyHanko check of both outcomes are outstanding.
-- **Problem:** The code and `README.md` treat `Include` as allowing the named fields and `Exclude` as blocking them. ISO 32000 FieldMDP is the reverse: `Include` locks the named fields, and `Exclude` locks every field except them.
-- **Acceptance criteria:** The behavior follows ISO 32000. `README.md` and `ACCEPTANCE.md` are corrected. Both outcomes are independently verified by a PDF-aware tool.
-- **Evidence required:** Independently validated. **Owner:** Signing Engineer, with the AcroForm and Core Engineers consulted.
+Accepted under D-24 at the independently validated level. FieldMDP follows ISO 32000-1 12.8.2.4. `Include` locks the named fields, and `Exclude` locks every field except them. A named field covers its descendants, as pyHanko applies it. An unknown `/Action` locks every field. The README had the rule reversed since genesis, and the code followed it (SA-08). Both are corrected, along with `ACCEPTANCE.md`. QA-B39-01 (a parent name did not lock its children) was folded in and fixed. pyHanko 0.38.0 confirms that the library locks the same fields under five lock specifications, and that each fill it allows keeps the original signature intact with `docmdp_ok` and `FORM_FILLING`. Reports: `agents/reports/2026-10-19-qa-engineer-B-39.md` and `2026-10-19-tech-lead-B-39-review.md`. Limitation (Low): `Include` with no `/Fields` locks nothing.
 
 ## B-40. Indirect `/Filter` and `/DecodeParms`
 

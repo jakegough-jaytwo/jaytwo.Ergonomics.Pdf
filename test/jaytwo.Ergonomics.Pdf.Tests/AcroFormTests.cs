@@ -206,6 +206,40 @@ public class AcroFormTests
         Assert.Equal("Ada", document.AcroForm.GetFields("Open")[0].Value);
     }
 
+    [Theory]
+    [InlineData("/Include /Fields [(Group.Child)]", false, false, true)]
+    [InlineData("/Exclude /Fields [(Group.Child)]", true, true, false)]
+    [InlineData("/Include /Fields [(Child) (Gro) (Group.Chil) (group.child)]", false, false, false)]
+    [InlineData("/Exclude /Fields [(Child) (Gro) (Group.Chil) (group.child)]", true, true, true)]
+    [InlineData("/Include /Fields []", false, false, false)]
+    [InlineData("/Exclude /Fields []", true, true, true)]
+    [InlineData("/Include /Fields [(Group)]", false, false, true)]
+    [InlineData("/Exclude /Fields [(Group)]", true, true, false)]
+    [InlineData("/Unknown /Fields [(Open)]", true, true, true)]
+    public void fieldmdp_matches_fully_qualified_field_names_only(string actionAndFields, bool lockedLocked, bool openLocked, bool childLocked)
+    {
+        using var document = PdfDocument.Open(new MemoryStream(NestedFieldMdpForm(actionAndFields, certified: false)), leaveOpen: true);
+
+        AssertFill(document, "Locked", lockedLocked);
+        AssertFill(document, "Open", openLocked);
+        AssertFill(document, "Group.Child", childLocked);
+    }
+
+    [Theory]
+    [InlineData("/Include /Fields [(Locked)]", true, false, false)]
+    [InlineData("/Exclude /Fields [(Open) (Group.Child)]", true, false, false)]
+    [InlineData("/All", true, true, true)]
+    public void docmdp_form_fill_permission_with_fieldmdp_applies_both(string actionAndFields, bool lockedLocked, bool openLocked, bool childLocked)
+    {
+        using var document = PdfDocument.Open(new MemoryStream(NestedFieldMdpForm(actionAndFields, certified: true)), leaveOpen: true);
+
+        AssertFill(document, "Locked", lockedLocked);
+        AssertFill(document, "Open", openLocked);
+        AssertFill(document, "Group.Child", childLocked);
+        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Nope");
+        document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+    }
+
     [Fact]
     public void thousand_page_form_does_not_read_content_holes()
     {
@@ -462,6 +496,43 @@ public class AcroFormTests
         builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
         builder.Indirect(10, "<< /TransformMethod /FieldMDP /TransformParams << /Action " + actionAndFields + " /V /1.2 >> >>");
         return builder.Finish();
+    }
+
+    private static byte[] NestedFieldMdpForm(string actionAndFields, bool certified)
+    {
+        var builder = new PdfBuilder();
+        string perms = certified ? " /Perms << /DocMDP 9 0 R >>" : string.Empty;
+        string docMdp = certified ? " 11 0 R" : string.Empty;
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R" + perms + " /AcroForm << /Fields [4 0 R 6 0 R 7 0 R 5 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 6 0 R 8 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Locked) /Rect [0 0 100 20] /P 3 0 R >>");
+        builder.Indirect(6, "<< /Subtype /Widget /FT /Tx /T (Open) /Rect [0 30 100 50] /P 3 0 R >>");
+        builder.Indirect(7, "<< /T (Group) /Kids [8 0 R] >>");
+        builder.Indirect(8, "<< /Subtype /Widget /FT /Tx /T (Child) /Parent 7 0 R /Rect [0 60 100 80] /P 3 0 R >>");
+        builder.Indirect(5, "<< /Subtype /Widget /FT /Sig /T (Sig) /V 9 0 R /Rect [0 0 10 10] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R" + docMdp + "] >>");
+        builder.Indirect(10, "<< /TransformMethod /FieldMDP /TransformParams << /Action " + actionAndFields + " /V /1.2 >> >>");
+        if (certified)
+        {
+            builder.Indirect(11, "<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>");
+        }
+
+        return builder.Finish();
+    }
+
+    private static void AssertFill(PdfDocument document, string fullName, bool locked)
+    {
+        if (locked)
+        {
+            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText(fullName, "Ada"));
+            Assert.Null(document.AcroForm.GetFields(fullName)[0].Value);
+        }
+        else
+        {
+            document.AcroForm.SetText(fullName, "Ada");
+            Assert.Equal("Ada", document.AcroForm.GetFields(fullName)[0].Value);
+        }
     }
 
     private static byte[] Form(params string[] widgets)

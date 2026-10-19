@@ -2350,12 +2350,32 @@ internal sealed class PdfEngine : IDisposable
         }
 
         // ISO 32000-1 12.8.2.4: Include locks only the named fields; Exclude locks every field except them.
+        // A named field covers its descendants, as pyHanko applies it. An unknown action locks, like an
+        // unresolved certification.
         if (action == "Include")
         {
-            return names.Contains(fullName);
+            return Names(names, fullName);
         }
 
-        return action == "Exclude" && !names.Contains(fullName);
+        return action != "Exclude" || !Names(names, fullName);
+    }
+
+    private static bool Names(HashSet<string> names, string fullName)
+    {
+        if (names.Contains(fullName))
+        {
+            return true;
+        }
+
+        for (int dot = fullName.LastIndexOf('.'); dot > 0; dot = fullName.LastIndexOf('.', dot - 1))
+        {
+            if (names.Contains(fullName.Substring(0, dot)))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private bool TryWriteCheckBoxAppearances(List<FieldSlot> matches)

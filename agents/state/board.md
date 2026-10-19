@@ -6,7 +6,6 @@ Owner: Technical Lead. One row per active task. A task may change only the files
 
 | Task | Implementer | May change | Branch or worktree | Waits on | Verifier |
 |---|---|---|---|---|---|
-| B-39 | Technical Lead (a two-line inversion, so a handoff cost more than the fix; the Signing Engineer is consulted through QA) | `Internal/PdfEngine.cs` FieldMDP gate; `AcroFormTests.cs`; `README.md`; `ACCEPTANCE.md` | `wip` | D-24 | QA Engineer: sign-off plus pyHanko certification with `Include` and `Exclude` locks, checking both outcomes |
 
 No task is active. B-36 was accepted on 2026-10-19 (returned once, for QA-B36-01).
 
@@ -14,14 +13,14 @@ No task is active. B-36 was accepted on 2026-10-19 (returned once, for QA-B36-01
 
 Checkpointed 2026-10-19. Since `d4b84dd`: the owner decided D-21 (certReq), D-22 (test infrastructure and small fixes need no owner), and D-23 (24 CPU-hours of fuzzing and a Security Auditor seat). Accepted: B-34 (consistent timestamp timeout on every framework), B-35 (certReq true and strict token parsing; pyHanko validates the OpenSSL token with only the root), and B-36 (parser hardening, which closes SA-01 to SA-04, SA-09, and SA-11). Jenkins now runs the Linux Docker image (`da08d21`). `make docker-builder docker-test` must pass before every checkpoint (`AGENTS.md`, CI).
 
-At the B-39 checkpoint the full suite passed 271/271 on Windows `net8.0`, `net6.0`, and `net48`, and on Linux `net8.0` and `net6.0` (Docker). The Release library builds for all four targets with 0 warnings. No qualification gate is passed.
+At the B-39 acceptance checkpoint the full suite passed 284/284 on Windows `net8.0`, `net6.0`, and `net48`, and on Linux `net8.0` and `net6.0` (Docker). The Release library builds for all four targets with 0 warnings. No qualification gate is passed.
 
 Next actions, in order, one at a time on `wip`. None needs the owner except item 4:
 
 1. B-38 (Signing Engineer): SA-05 and SA-06, both High.
 2. B-37 (Core Engineer, Signing Engineer consulted): SA-07, High, an exact appendix-size guard.
 3. B-18 fuzz harness and campaign (QA): seed the eleven audit triggers. Run up to 24 aggregate CPU-hours (D-23) at below-normal priority only after B-37 and B-38, so the campaign counts as evidence.
-4. B-39 (D-24): the code and README are corrected, and `fieldmdp_include_locks_only_the_named_fields` and `fieldmdp_exclude_locks_every_field_except_the_named_fields` failed against the old code. QA sign-off and the pyHanko check of both outcomes come first in the next session.
+4. B-39 is accepted (D-24): FieldMDP follows ISO 32000, and pyHanko independently validates it.
 5. B-14 (QA): `pdfsig`, which WSL Ubuntu 24.04 or Docker can provide. B-13 (QA): LibreOffice and/or PDFBox producers; Java is not installed yet.
 6. Backlog, not yet boarded: B-40 (indirect `/Filter`), B-41 (classic xref bounds plus QA-B36-02), B-42 (object-stream allocation churn).
 

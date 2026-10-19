@@ -213,6 +213,83 @@ public class SigningInteropTests
         }
     }
 
+    [Fact]
+    public void pyhanko_fieldmdp_include_and_exclude_lock_the_same_fields_and_allowed_fills_keep_the_signature()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
+            string[] names = { "Locked", "Open", "Group.Child" };
+            var samples = new Dictionary<string, string[]>
+            {
+                ["fieldmdp-include.pdf"] = new[] { "Locked" },
+                ["fieldmdp-exclude.pdf"] = new[] { "Locked" },
+                ["fieldmdp-certified.pdf"] = new[] { "Locked" },
+                ["fieldmdp-include-parent.pdf"] = new[] { "Group.Child" },
+                ["fieldmdp-exclude-parent.pdf"] = new[] { "Locked", "Open" },
+            };
+            foreach (KeyValuePair<string, string[]> entry in samples)
+            {
+                string sample = entry.Key;
+                byte[] pdf = File.ReadAllBytes(Path.Combine(directory, sample));
+                string report = Validate(pdf, null, null, "entire", "fieldmdp=" + string.Join("|", names));
+                var lines = new HashSet<string>(report.Replace("\r", string.Empty).Split('\n'), StringComparer.Ordinal);
+                foreach (string name in names)
+                {
+                    string verdict = Array.IndexOf(entry.Value, name) >= 0 ? "locked" : "open";
+                    Assert.True(lines.Contains("fieldmdp:" + name + "=" + verdict), sample + "\n" + report);
+                }
+
+                byte[] filled;
+                using (var source = new MemoryStream(pdf, writable: false))
+                using (var document = PdfDocument.Open(source, leaveOpen: true))
+                {
+                    foreach (string name in names)
+                    {
+                        if (lines.Contains("fieldmdp:" + name + "=locked"))
+                        {
+                            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText(name, "Ada"));
+                        }
+                        else
+                        {
+                            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText(name, "Ada"));
+                        }
+                    }
+
+                    if (sample == "fieldmdp-certified.pdf")
+                    {
+                        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Changed");
+                    }
+
+                    var destination = new MemoryStream();
+                    document.SaveIncremental(destination, leaveOpen: true);
+                    filled = destination.ToArray();
+                }
+
+                Assert.True(filled.AsSpan(0, pdf.Length).SequenceEqual(pdf), sample);
+                using (var stream = new MemoryStream(filled, writable: false))
+                using (var reopened = PdfDocument.Open(stream, leaveOpen: true))
+                {
+                    foreach (string name in names)
+                    {
+                        Assert.Equal(Array.IndexOf(entry.Value, name) >= 0 ? null : "Ada", reopened.AcroForm.GetFields(name)[0].Value);
+                    }
+
+                    Assert.Equal("FieldMDP", reopened.Metadata.Title);
+                }
+
+                string filledReport = Validate(filled, null, null, "revision", "docmdp-ok,modification=FORM_FILLING");
+                Assert.Contains("intact=true", filledReport, StringComparison.Ordinal);
+                Assert.Contains("valid=true", filledReport, StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static byte[] Sign(byte[] pdf, X509Certificate2 certificate, RSA key, IReadOnlyList<byte[]> chain, ITimestampAuthority? authority)
     {
         return Sign(pdf, new RsaSigner(key, certificate.RawData, chain), authority);
