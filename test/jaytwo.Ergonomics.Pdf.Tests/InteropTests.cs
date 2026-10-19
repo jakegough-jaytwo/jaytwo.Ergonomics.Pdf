@@ -9,8 +9,6 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 
 public class InteropTests
 {
-    private const string PythonExe = @"C:\Python313\python.exe";
-
     private const string XmpPacket =
         "<?xpacket begin=\"\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"
         + "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">"
@@ -43,7 +41,7 @@ public class InteropTests
     [Fact]
     public void qpdf_checks_built_incremental_filled_and_signed_pdfs()
     {
-        string qpdf = ExternalTool.Locate("JAYTWO_QPDF", "qpdf.exe");
+        string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
         _output.WriteLine("qpdf " + qpdf);
 
         string builtPath = TempPdf();
@@ -154,10 +152,10 @@ public class InteropTests
 
     private static string RunPython(string? input, params string[] args)
     {
-        Assert.True(File.Exists(PythonExe), "pypdf reader requires " + PythonExe + ".");
+        string python = ExternalTool.Locate("JAYTWO_PYTHON", ExternalTool.Executable("python"));
         var info = new ProcessStartInfo
         {
-            FileName = PythonExe,
+            FileName = python,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             RedirectStandardInput = input != null,
@@ -172,7 +170,7 @@ public class InteropTests
         Process? process = Process.Start(info);
         if (process == null)
         {
-            throw new InvalidOperationException(PythonExe + " did not start.");
+            throw new InvalidOperationException(python + " did not start.");
         }
 
         using (process)

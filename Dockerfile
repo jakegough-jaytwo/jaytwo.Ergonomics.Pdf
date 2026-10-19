@@ -22,6 +22,28 @@ RUN curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
 
 FROM dotnet-sdk AS base
 
+# External tools for the interop tests. They are test-only, not runtime dependencies.
+# Pkcs11Interop loads the unversioned "libdl", which glibc 2.34+ no longer ships, so link it to libdl.so.2.
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends \
+    openssl \
+    poppler-utils \
+    python-is-python3 \
+    python3 \
+    python3-pip \
+    qpdf \
+    softhsm2 \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/* \
+  && ln -sf libdl.so.2 "/usr/lib/$(uname -m)-linux-gnu/libdl.so"
+
+RUN pip install --no-cache-dir --break-system-packages \
+    pyHanko==0.38.0 \
+    pyhanko-certvalidator==0.33.0 \
+    pypdf==6.21.1
+
+ENV JAYTWO_PKCS11=/usr/lib/softhsm/libsofthsm2.so
+
 FROM base AS builder
 WORKDIR /build
 COPY . /build

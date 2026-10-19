@@ -244,21 +244,7 @@ public class ForeignPdfTests
 
     private static string LocateQpdf()
     {
-        string? configured = Environment.GetEnvironmentVariable("JAYTWO_QPDF");
-        if (!string.IsNullOrWhiteSpace(configured) && File.Exists(configured))
-        {
-            return configured;
-        }
-
-        using Process where = Start("where.exe", "qpdf");
-        string stdout = where.StandardOutput.ReadToEnd();
-        where.StandardError.ReadToEnd();
-        where.WaitForExit();
-        string found = stdout.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length == 0
-            ? string.Empty
-            : stdout.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)[0];
-        Assert.True(where.ExitCode == 0 && found.Length > 0, "qpdf was not found. Set JAYTWO_QPDF or put qpdf on PATH.");
-        return found;
+        return ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
     }
 
     private static X509Certificate2 CreateCertificate(RSA rsa)

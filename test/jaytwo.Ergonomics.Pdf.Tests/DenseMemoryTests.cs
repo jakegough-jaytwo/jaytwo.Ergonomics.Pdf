@@ -21,7 +21,7 @@ public class DenseMemoryTests
             string streamedPath = Path.Combine(directory, "streamed.pdf");
             WriteDense(smallPath, 8 * 1024 * 1024);
             WriteDense(largePath, 32 * 1024 * 1024);
-            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", "qpdf.exe");
+            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
             using (Process process = ExternalTool.Start(qpdf, "--object-streams=generate", "--stream-data=preserve", largePath, streamedPath))
             {
                 ExternalTool.Output(process);

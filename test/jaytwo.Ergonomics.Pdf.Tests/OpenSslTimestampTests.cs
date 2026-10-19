@@ -12,7 +12,7 @@ public class OpenSslTimestampTests
     [Fact]
     public void openssl_tsa_document_timestamp_is_accepted_by_pyhanko_and_openssl_verify()
     {
-        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", "openssl.exe");
+        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", ExternalTool.Executable("openssl"));
         string directory = ExternalTool.TempDirectory();
         try
         {
@@ -47,7 +47,7 @@ public class OpenSslTimestampTests
     [Fact]
     public void verifiers_reject_an_untrusted_root_and_a_tampered_byte()
     {
-        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", "openssl.exe");
+        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", ExternalTool.Executable("openssl"));
         string directory = ExternalTool.TempDirectory();
         try
         {

@@ -135,27 +135,27 @@ public class AppearanceRenderTests
         string? directory = Environment.GetEnvironmentVariable("JAYTWO_POPPLER");
         if (!string.IsNullOrWhiteSpace(directory))
         {
-            string candidate = Path.Combine(directory, "pdftotext.exe");
+            string candidate = Path.Combine(directory, ExternalTool.Executable("pdftotext"));
             if (File.Exists(candidate))
             {
                 return directory;
             }
         }
 
-        string located = ExternalTool.Locate("JAYTWO_PDFTOTEXT", "pdftotext.exe");
+        string located = ExternalTool.Locate("JAYTWO_PDFTOTEXT", ExternalTool.Executable("pdftotext"));
         return Path.GetDirectoryName(located) ?? located;
     }
 
     private static string PdfToText(string poppler, string pdf)
     {
-        using Process process = Start(poppler, Path.Combine(poppler, "pdftotext.exe"), "-layout", pdf, "-");
+        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftotext")), "-layout", pdf, "-");
         return ExternalTool.Output(process);
     }
 
     private static byte[] Raster(string poppler, string directory, string name, string pdf)
     {
         string prefix = Path.Combine(directory, name);
-        using Process process = Start(poppler, Path.Combine(poppler, "pdftoppm.exe"), "-r", "72", pdf, prefix);
+        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), "-r", "72", pdf, prefix);
         ExternalTool.Output(process);
         return File.ReadAllBytes(prefix + "-1.ppm");
     }
@@ -343,14 +343,14 @@ public class AppearanceRenderTests
 
     private static string PdfToBBox(string poppler, string pdf)
     {
-        using Process process = Start(poppler, Path.Combine(poppler, "pdftotext.exe"), "-bbox", pdf, "-");
+        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftotext")), "-bbox", pdf, "-");
         return ExternalTool.Output(process);
     }
 
     private static void RasterPages(string poppler, string directory, string name, string pdf)
     {
         string prefix = Path.Combine(directory, name);
-        using Process process = Start(poppler, Path.Combine(poppler, "pdftoppm.exe"), "-cropbox", "-r", "72", pdf, prefix);
+        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), "-cropbox", "-r", "72", pdf, prefix);
         ExternalTool.Output(process);
     }
 

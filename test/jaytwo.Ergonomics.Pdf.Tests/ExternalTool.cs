@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -10,6 +11,13 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 internal static class ExternalTool
 {
     private const int TimeoutMilliseconds = 600000;
+
+    public static bool IsWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+    public static string Executable(string name)
+    {
+        return IsWindows ? name + ".exe" : name;
+    }
 
     public static string Fixture(string name)
     {
@@ -36,11 +44,29 @@ internal static class ExternalTool
             }
         }
 
-        using Process where = Start("where.exe", fileName);
-        (int exitCode, string stdout, _) = Run(where);
-        string[] lines = stdout.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-        Assert.True(exitCode == 0 && lines.Length > 0, fileName + " was not found. Set " + variable + " or put it on PATH.");
-        return lines[0];
+        string? found = OnPath(fileName);
+        Assert.True(found != null, fileName + " was not found. Set " + variable + " or put it on PATH.");
+        return found!;
+    }
+
+    public static string? OnPath(string fileName)
+    {
+        string? path = Environment.GetEnvironmentVariable("PATH");
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return null;
+        }
+
+        foreach (string directory in path!.Split(new[] { Path.PathSeparator }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            string candidate = Path.Combine(directory.Trim().Trim('"'), fileName);
+            if (File.Exists(candidate))
+            {
+                return candidate;
+            }
+        }
+
+        return null;
     }
 
     public static Process Start(string fileName, params string[] args)

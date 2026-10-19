@@ -206,7 +206,7 @@ public class LargeWorkloadTests
             string editedPath = Path.Combine(directory, "form-edited.pdf");
             string signedPath = Path.Combine(directory, "form-signed.pdf");
             WriteForm(classicPath);
-            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", "qpdf.exe");
+            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
             using (Process process = ExternalTool.Start(qpdf, "--object-streams=generate", classicPath, sourcePath))
             {
                 ExternalTool.Output(process);

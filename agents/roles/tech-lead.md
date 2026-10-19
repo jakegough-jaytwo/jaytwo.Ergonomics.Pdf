@@ -43,6 +43,7 @@ Green tests are not approval. Check:
 - **Security.** Malformed input is bounded. Cryptographic assumptions are right.
 - **Simplicity.** The smallest change that meets the criterion. No duplicated logic, no speculative abstraction.
 - **Build.** Every target framework builds. StyleCop is clean. Public members have XML docs. One type per file.
+- **CI.** `make docker-builder docker-test` passes on the Linux image. Any new external tool is in the `Dockerfile`.
 - **Docs.** `README.md` and `ACCEPTANCE.md` match the behavior.
 - **Tests.** Every confirmed defect has a regression test.
 

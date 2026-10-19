@@ -6,7 +6,7 @@ Stream-native PDF operations. See `README.md` and `ACCEPTANCE.md`.
 
 The supported operations are AcroForm fill, AcroForm geometry, incremental PKCS#11 and RFC 3161 sealing, document info and XMP metadata, and embedded-file attachments. Text and image stamping are out of scope. There is no fluent API, renderer, or general PDF framework.
 
-The runtime dependency set is closed and settled: `System.Memory` on `netstandard2.0`, so public methods can take `ReadOnlySpan<byte>`. The owner accepted it. It is not a finding, a gap, or a precedent, so do not flag it, propose removing it, or cite it to justify another package. Any other runtime package is an owner decision. The parser, CMS encoder, and PDF encryption stay in this library. Tests may use external tools. `ForeignPdfTests` and `SigningInteropTests` require qpdf (`JAYTWO_QPDF` or `PATH`) and Python with pyHanko and pypdf. `AppearanceRenderTests` requires Poppler (`JAYTWO_POPPLER` or `pdftotext` on `PATH`). `SigningInteropTests` also requires SoftHSM 2 (`JAYTWO_PKCS11` pointing at `softhsm2-x64.dll`, with `softhsm2-util.exe` in the sibling `bin` directory). `OpenSslTimestampTests` requires OpenSSL 3 (`JAYTWO_OPENSSL` or `openssl` on `PATH`) as a local RFC 3161 authority and token verifier. Those tests fail when a tool is missing. Those tools are not runtime dependencies.
+The runtime dependency set is closed and settled: `System.Memory` on `netstandard2.0`, so public methods can take `ReadOnlySpan<byte>`. The owner accepted it. It is not a finding, a gap, or a precedent, so do not flag it, propose removing it, or cite it to justify another package. Any other runtime package is an owner decision. The parser, CMS encoder, and PDF encryption stay in this library. Tests may use external tools. `ForeignPdfTests` and `SigningInteropTests` require qpdf (`JAYTWO_QPDF` or `PATH`) and Python with pyHanko and pypdf. `AppearanceRenderTests` requires Poppler (`JAYTWO_POPPLER` or `pdftotext` on `PATH`). `SigningInteropTests` also requires SoftHSM 2 (`JAYTWO_PKCS11` pointing at `softhsm2-x64.dll` on Windows or `libsofthsm2.so` on Linux, with `softhsm2-util` in the sibling `bin` directory or on `PATH`). `OpenSslTimestampTests` requires OpenSSL 3 (`JAYTWO_OPENSSL` or `openssl` on `PATH`) as a local RFC 3161 authority and token verifier. Those tests fail when a tool is missing. Those tools are not runtime dependencies.
 
 Large-file behavior is part of the design. Memory follows the working set of the operation. Do not buffer a PDF because a streaming decoder is theoretically possible. The 32 MiB and 64 MiB caps are decompression limits. The 8 MiB signature appendix stays until a real revision needs more.
 
@@ -20,6 +20,12 @@ Large-file behavior is part of the design. Memory follows the working set of the
 - PKCS#11 is `IPdfExternalSigner` implemented by the host. `SignHash` receives a raw SHA-256 and must match `RSA.SignHash(hash, SHA256, Pkcs1)`. Do not P/Invoke PKCS#11 from this library. `AdditionalCertificates` carries intermediates and roots. `CmsDetachedSignatureProvider` can take an `ITimestampAuthority` and store the RFC 3161 token as a CMS unsigned attribute over the signature value. `DocTimeStampSignatureProvider` remains a separate document-timestamp revision. `FieldName` reuses an empty signature field.
 - No runtime NuGet dependencies beyond the settled set above. Tests may reference packages. StyleCop warnings are errors. XML docs on the public API. One top-level type per file. File-scoped namespaces. Private fields use an underscore prefix.
 - The type is not thread-safe. `Dispose` does not save.
+
+## CI
+
+- Jenkins builds the `builder` stage of the `Dockerfile` on Ubuntu and runs `make unit-test` there on net8.0 and net6.0. net48 tests run on Windows only. Before you commit a checkpoint, run `make docker-builder docker-test`. It reproduces the Jenkins run locally and must pass.
+- The Linux image installs every tool the tests require. A change that adds a test needing a new external tool also adds that tool to the `base` stage of the `Dockerfile`.
+- Tests find tools through `ExternalTool.Locate` and `ExternalTool.Executable`. Do not hard-code `.exe` names, `where.exe`, or absolute Windows paths. On Unix, `Environment.SetEnvironmentVariable` does not change the native environment that an in-process native library reads.
 
 ## Code style
 

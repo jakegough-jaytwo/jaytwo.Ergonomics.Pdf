@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -102,7 +103,7 @@ public class SigningInteropTests
                 "directories.tokendir = " + tokens.Replace('\\', '/') + Environment.NewLine
                 + "objectstore.backend = file" + Environment.NewLine
                 + "log.level = ERROR" + Environment.NewLine);
-            Environment.SetEnvironmentVariable("SOFTHSM2_CONF", config);
+            SetSoftHsmConfig(config);
             string libDir = Path.GetDirectoryName(libraryPath) ?? directory;
             Environment.SetEnvironmentVariable("PATH", libDir + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH"));
             RunChecked(LocateSoftHsmUtil(libraryPath), "--init-token", "--free", "--label", "pdf-test", "--so-pin", "12345678", "--pin", "12345678");
@@ -311,9 +312,23 @@ public class SigningInteropTests
         ExternalTool.Output(process);
     }
 
+    private static void SetSoftHsmConfig(string config)
+    {
+        Environment.SetEnvironmentVariable("SOFTHSM2_CONF", config);
+        if (!ExternalTool.IsWindows)
+        {
+            // On Unix, Environment.SetEnvironmentVariable changes only the managed copy.
+            // The in-process SoftHSM library reads SOFTHSM2_CONF with getenv, so set the native one as well.
+            Assert.Equal(0, SetNativeEnvironmentVariable("SOFTHSM2_CONF", config, 1));
+        }
+    }
+
+    [DllImport("libc", EntryPoint = "setenv")]
+    private static extern int SetNativeEnvironmentVariable(string name, string value, int overwrite);
+
     private static string LocatePkcs11()
     {
-        return ExternalTool.Locate("JAYTWO_PKCS11", "softhsm2-x64.dll");
+        return ExternalTool.Locate("JAYTWO_PKCS11", ExternalTool.IsWindows ? "softhsm2-x64.dll" : "libsofthsm2.so");
     }
 
     private static string LocateSoftHsmUtil(string libraryPath)
@@ -324,10 +339,17 @@ public class SigningInteropTests
             return configured;
         }
 
+        string util = ExternalTool.Executable("softhsm2-util");
         string? directory = Path.GetDirectoryName(libraryPath);
-        string sibling = Path.GetFullPath(Path.Combine(directory ?? ".", "..", "bin", "softhsm2-util.exe"));
-        Assert.True(File.Exists(sibling), "softhsm2-util.exe was not found beside " + libraryPath);
-        return sibling;
+        string sibling = Path.GetFullPath(Path.Combine(directory ?? ".", "..", "bin", util));
+        if (File.Exists(sibling))
+        {
+            return sibling;
+        }
+
+        string? found = ExternalTool.OnPath(util);
+        Assert.True(found != null, util + " was not found beside " + libraryPath + " or on PATH.");
+        return found!;
     }
 
     private static ISlot FindSlot(IPkcs11Library library, string label)
