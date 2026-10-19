@@ -8,18 +8,51 @@ namespace jaytwo.Ergonomics.Pdf.Internal;
 
 internal sealed class PdfParser
 {
+    // A name, number, or keyword token is at most this many bytes. Real tokens are a few dozen bytes.
+    internal const int MaxTokenBytes = 64 * 1024;
+
+    // An array or dictionary holds at most this many entries. Dictionary keys count even when repeated.
+    internal const int MaxContainerEntries = 1024 * 1024;
+
+    // Object numbers listed by one xref stream stay below this value, the PDF 1.7 Annex C indirect-object limit plus object 0.
+    internal const int MaxXrefStreamObjects = 8388608;
+
+    // The merged cross-reference map holds at most one entry per this many file bytes, never fewer than the floor and
+    // never more than the ceiling below. A real object needs more than 8 bytes of file, so the ratio binds only on entries
+    // the file cannot back. The ceiling keeps the map and its growth under about 180 MiB, inside the 256 MiB budget.
+    internal const int XrefFileBytesPerEntry = 8;
+
+    internal const int MinXrefEntryBudget = 65536;
+
+    internal const int MaxXrefEntries = 2097152;
+
+    // Parsing the objects of one object stream reads at most this multiple of its decoded length, plus the slack below.
+    internal const int ObjectStreamReadFactor = 4;
+
+    private const int ObjectStreamReadSlack = 64 * 1024;
+    private const int IndexedDictionaryThreshold = 16;
     private const int MaxCommentDepth = 256;
 
     private readonly PdfCursor _cursor;
     private readonly Func<int, PdfObject>? _resolve;
     private readonly long _baseOffset;
     private readonly Stack<Token> _pushback = new Stack<Token>();
+    private readonly int _stringCap;
+    private readonly int _containerCap;
 
     public PdfParser(PdfCursor cursor, Func<int, PdfObject>? resolve, long baseOffset)
+        : this(cursor, resolve, baseOffset, PdfStreamDecoder.StructuralCap, MaxContainerEntries)
+    {
+    }
+
+    // Tests pass smaller caps, the way the stream decoder takes a caller cap, so each branch is checked with a small input.
+    internal PdfParser(PdfCursor cursor, Func<int, PdfObject>? resolve, long baseOffset, int stringCap, int containerCap)
     {
         _cursor = cursor;
         _resolve = resolve;
         _baseOffset = baseOffset;
+        _stringCap = stringCap;
+        _containerCap = containerCap;
     }
 
     public PdfObject ParseValue(int depth = 0)
@@ -98,6 +131,11 @@ internal sealed class PdfParser
                 if (next.Kind == TokenKind.End)
                 {
                     throw Error("Array ended at EOF.");
+                }
+
+                if (array.Items.Count >= _containerCap)
+                {
+                    throw new PdfObjectTooLargeException("A PDF array has more than " + _containerCap.ToString(CultureInfo.InvariantCulture) + " entries.");
                 }
 
                 array.Items.Add(ParseValue(depth + 1));
@@ -290,10 +328,40 @@ internal sealed class PdfParser
         var parms = PdfStreamDecoder.ParmsOf(dict, filters.Count);
         EnsureXrefColumns(dict, parms);
         byte[] decoded = PdfStreamDecoder.Decode(raw, filters, parms, PdfStreamDecoder.XrefCap);
-        return ParseXrefEntries(dict, decoded);
+        var entries = new Dictionary<int, XrefEntry>();
+        ParseXrefEntries(dict, decoded, entries, overwrite: true, XrefEntryBudget(_cursor.Length));
+        return entries;
     }
 
-    internal Dictionary<int, XrefEntry> ParseXrefEntries(PdfObject.Dict dict, byte[] decoded)
+    internal static int XrefEntryBudget(long fileLength)
+    {
+        return (int)Math.Min(MaxXrefEntries, Math.Max(MinXrefEntryBudget, fileLength / XrefFileBytesPerEntry));
+    }
+
+    // Adds one entry to the merged map. An overwriting section replaces what is there; otherwise the newer entry stays.
+    // A new object number past the budget throws, so the map never grows beyond what the file can back.
+    internal static void MergeXrefEntry(Dictionary<int, XrefEntry> target, int id, XrefEntry entry, bool overwrite, int budget)
+    {
+        if (target.ContainsKey(id))
+        {
+            if (overwrite)
+            {
+                target[id] = entry;
+            }
+
+            return;
+        }
+
+        if (target.Count >= budget)
+        {
+            throw XrefBudgetExceeded(budget);
+        }
+
+        target.Add(id, entry);
+    }
+
+    // Reads the entries of one xref stream straight into the merged map, with no per-section copy.
+    internal void ParseXrefEntries(PdfObject.Dict dict, byte[] decoded, Dictionary<int, XrefEntry> target, bool overwrite, int budget)
     {
         int[] widths = ReadWidths(dict);
         var index = ReadIndex(dict);
@@ -303,33 +371,69 @@ internal sealed class PdfParser
         }
 
         int entryWidth = widths[0] + widths[1] + widths[2];
-        var entries = new Dictionary<int, XrefEntry>();
+        long available = entryWidth == 0 ? 0 : decoded.Length / entryWidth;
+        long? size = dict.Get("Size") is PdfObject.Num sizeNumber ? XrefIndexValue(sizeNumber, "/Size") : null;
+        long listed = 0;
+        long previousEnd = 0;
+        for (int pair = 0; pair < index.Count; pair += 2)
+        {
+            long end = (long)index[pair] + index[pair + 1];
+            if (end > (long)int.MaxValue + 1)
+            {
+                throw new PdfParseException(0, "Xref stream /Index subsection exceeds the object number range.");
+            }
+
+            if (index[pair + 1] > 0 && index[pair] < previousEnd)
+            {
+                throw new PdfParseException(0, "Xref stream /Index subsections overlap or are not in ascending order.");
+            }
+
+            listed += index[pair + 1];
+            if (index[pair + 1] > 0 && listed > available)
+            {
+                throw new PdfParseException(0, "Xref stream /Index count exceeds the decoded entries.");
+            }
+
+            if (index[pair + 1] > 0 && size != null && end > size.Value)
+            {
+                throw new PdfParseException(0, "Xref stream /Index subsection exceeds /Size.");
+            }
+
+            if (index[pair + 1] > 0 && end > MaxXrefStreamObjects)
+            {
+                throw new PdfObjectTooLargeException("Xref stream lists object numbers at or above " + MaxXrefStreamObjects.ToString(CultureInfo.InvariantCulture) + ".");
+            }
+
+            if (listed > budget)
+            {
+                throw XrefBudgetExceeded(budget);
+            }
+
+            if (index[pair + 1] > 0)
+            {
+                previousEnd = end;
+            }
+        }
+
         int cursor = 0;
         for (int pair = 0; pair < index.Count; pair += 2)
         {
             int start = index[pair];
             int count = index[pair + 1];
-            if ((long)start + count > (long)int.MaxValue + 1)
-            {
-                throw new PdfParseException(0, "Xref stream /Index subsection exceeds the object number range.");
-            }
-
-            if (count > 0 && (entryWidth == 0 || count > (decoded.Length - cursor) / entryWidth))
-            {
-                throw new PdfParseException(0, "Xref stream /Index count exceeds the decoded entries.");
-            }
-
             for (int i = 0; i < count; i++)
             {
                 long typeRaw = ReadField(decoded, ref cursor, widths[0]);
                 int type = widths[0] == 0 ? 1 : (int)typeRaw;
                 long field1 = ReadField(decoded, ref cursor, widths[1]);
                 int field2 = (int)ReadField(decoded, ref cursor, widths[2]);
-                entries[start + i] = new XrefEntry((byte)type, field1, field2);
+                MergeXrefEntry(target, start + i, new XrefEntry((byte)type, field1, field2), overwrite, budget);
             }
         }
+    }
 
-        return entries;
+    private static PdfObjectTooLargeException XrefBudgetExceeded(int budget)
+    {
+        return new PdfObjectTooLargeException("The cross-reference sections list more than " + budget.ToString(CultureInfo.InvariantCulture) + " distinct objects, the limit for a file of this length.");
     }
 
     internal static void EnsureXrefColumns(PdfObject.Dict dict, List<PdfObject.Dict?> parms)
@@ -474,9 +578,86 @@ internal sealed class PdfParser
         return value;
     }
 
+    internal static Dictionary<int, PdfObject> ParseObjectStream(byte[] data, int count, int first)
+    {
+        var map = new Dictionary<int, PdfObject>();
+        var cursor = PdfCursor.FromBytes(data);
+        long budget = ((long)data.Length * ObjectStreamReadFactor) + ObjectStreamReadSlack;
+        long consumed = 0;
+        int header = 0;
+        for (int i = 0; i < count; i++)
+        {
+            int id = ObjectStreamHeaderInteger(data, first, ref header);
+            int offset = ObjectStreamHeaderInteger(data, first, ref header);
+            if (offset > data.Length - first)
+            {
+                throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
+            }
+
+            int start = first + offset;
+            cursor.Seek(start);
+            var parser = new PdfParser(cursor, null, 0);
+            PdfObject value = parser.ParseValue();
+            if (parser.NextIsKeyword("stream"))
+            {
+                throw new PdfParseException(0, "Object streams cannot contain stream objects.");
+            }
+
+            consumed += cursor.Position - start;
+            if (consumed > budget)
+            {
+                throw new PdfObjectTooLargeException("Object stream objects overlap: parsing them read more than " + ObjectStreamReadFactor.ToString(CultureInfo.InvariantCulture) + " times the decoded stream.");
+            }
+
+            value.ObjectNumber = id;
+            value.Generation = 0;
+            map[id] = value;
+        }
+
+        return map;
+    }
+
+    private static int ObjectStreamHeaderInteger(byte[] data, int end, ref int position)
+    {
+        while (position < end && IsHeaderSeparator(data[position]))
+        {
+            position++;
+        }
+
+        if (position >= end)
+        {
+            throw new PdfParseException(0, "Object stream header is truncated.");
+        }
+
+        long value = 0;
+        while (position < end && !IsHeaderSeparator(data[position]))
+        {
+            byte digit = data[position++];
+            if (digit < (byte)'0' || digit > (byte)'9')
+            {
+                throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
+            }
+
+            value = (value * 10) + (digit - (byte)'0');
+            if (value > int.MaxValue)
+            {
+                throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
+            }
+        }
+
+        return (int)value;
+    }
+
+    private static bool IsHeaderSeparator(byte b)
+    {
+        return b == 11 || IsWhitespace(b);
+    }
+
     private PdfObject.Dict ParseDictionary(int depth)
     {
         var dict = new PdfObject.Dict();
+        Dictionary<string, int>? positions = null;
+        int entries = 0;
         while (true)
         {
             Token token = NextToken();
@@ -490,7 +671,36 @@ internal sealed class PdfParser
                 throw Error("Dictionary key was expected.");
             }
 
-            dict.Set(token.Text, ParseValue(depth + 1));
+            if (++entries > _containerCap)
+            {
+                throw new PdfObjectTooLargeException("A PDF dictionary has more than " + _containerCap.ToString(CultureInfo.InvariantCulture) + " entries.");
+            }
+
+            PdfObject value = ParseValue(depth + 1);
+            if (positions == null && dict.Items.Count < IndexedDictionaryThreshold)
+            {
+                dict.Set(token.Text, value);
+                continue;
+            }
+
+            if (positions == null)
+            {
+                positions = new Dictionary<string, int>(StringComparer.Ordinal);
+                for (int i = 0; i < dict.Items.Count; i++)
+                {
+                    positions[dict.Items[i].Key] = i;
+                }
+            }
+
+            if (positions.TryGetValue(token.Text, out int at))
+            {
+                dict.ReplaceAt(at, value);
+            }
+            else
+            {
+                positions.Add(token.Text, dict.Items.Count);
+                dict.Append(token.Text, value);
+            }
         }
 
         return dict;
@@ -695,16 +905,11 @@ internal sealed class PdfParser
         while (true)
         {
             int b = _cursor.PeekByte();
-            if (b == '.' && !real)
+            if ((b == '.' && !real) || (b >= '0' && b <= '9'))
             {
-                real = true;
-                text.Append((char)_cursor.ReadByte());
-                continue;
-            }
-
-            if (b >= '0' && b <= '9')
-            {
-                digits = true;
+                CheckTokenLength(text.Length, "number");
+                real |= b == '.';
+                digits |= b != '.';
                 text.Append((char)_cursor.ReadByte());
                 continue;
             }
@@ -748,6 +953,7 @@ internal sealed class PdfParser
                 break;
             }
 
+            CheckTokenLength(text.Length, "keyword");
             text.Append((char)_cursor.ReadByte());
         }
 
@@ -765,6 +971,7 @@ internal sealed class PdfParser
                 break;
             }
 
+            CheckTokenLength(raw.Count, "name");
             raw.Add((byte)_cursor.ReadByte());
         }
 
@@ -791,6 +998,11 @@ internal sealed class PdfParser
         int depth = 1;
         while (depth > 0)
         {
+            if (output.Count > _stringCap)
+            {
+                throw new PdfObjectTooLargeException("Literal string exceeded the structural cap.");
+            }
+
             int b = _cursor.ReadByte();
             if (b < 0)
             {
@@ -881,10 +1093,6 @@ internal sealed class PdfParser
             }
 
             output.Add((byte)b);
-            if (output.Count > PdfStreamDecoder.StructuralCap)
-            {
-                throw new PdfObjectTooLargeException("Literal string exceeded the structural cap.");
-            }
         }
 
         return output.ToArray();
@@ -919,6 +1127,11 @@ internal sealed class PdfParser
             }
             else
             {
+                if (output.Count >= _stringCap)
+                {
+                    throw new PdfObjectTooLargeException("Hex string exceeded the structural cap.");
+                }
+
                 output.Add((byte)((high << 4) | nibble));
                 high = -1;
             }
@@ -926,10 +1139,23 @@ internal sealed class PdfParser
 
         if (high >= 0)
         {
+            if (output.Count >= _stringCap)
+            {
+                throw new PdfObjectTooLargeException("Hex string exceeded the structural cap.");
+            }
+
             output.Add((byte)(high << 4));
         }
 
         return output.ToArray();
+    }
+
+    private static void CheckTokenLength(int length, string kind)
+    {
+        if (length >= MaxTokenBytes)
+        {
+            throw new PdfObjectTooLargeException("A PDF " + kind + " is longer than " + MaxTokenBytes.ToString(CultureInfo.InvariantCulture) + " bytes.");
+        }
     }
 
     private void SkipWhitespace()

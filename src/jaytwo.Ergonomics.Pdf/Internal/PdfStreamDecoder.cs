@@ -68,7 +68,7 @@ internal static class PdfStreamDecoder
     {
         var names = new List<string>();
         PdfObject? filter = dict.Get("Filter");
-        if (filter == null)
+        if (filter == null || filter is PdfObject.NullObj)
         {
             return names;
         }
@@ -79,15 +79,19 @@ internal static class PdfStreamDecoder
             return names;
         }
 
-        if (filter is PdfObject.Arr array)
+        if (filter is not PdfObject.Arr array)
         {
-            foreach (PdfObject item in array.Items)
+            throw new PdfParseException(0, "Stream /Filter is not a name or an array of names.");
+        }
+
+        foreach (PdfObject item in array.Items)
+        {
+            if (item is not PdfObject.Name itemName)
             {
-                if (item is PdfObject.Name itemName)
-                {
-                    names.Add(itemName.Value);
-                }
+                throw new PdfParseException(0, "Stream /Filter array has an entry that is not a name.");
             }
+
+            names.Add(itemName.Value);
         }
 
         return names;
@@ -97,25 +101,51 @@ internal static class PdfStreamDecoder
     {
         var list = new List<PdfObject.Dict?>();
         PdfObject? parms = dict.Get("DecodeParms");
-        if (parms is PdfObject.Dict one)
+        if (parms == null || parms is PdfObject.NullObj || filterCount == 0)
         {
-            list.Add(one);
-            return list;
-        }
-
-        if (parms is PdfObject.Arr array)
-        {
-            foreach (PdfObject item in array.Items)
+            for (int i = 0; i < filterCount; i++)
             {
-                list.Add(item as PdfObject.Dict);
+                list.Add(null);
             }
 
             return list;
         }
 
-        for (int i = 0; i < filterCount; i++)
+        if (parms is PdfObject.Dict one)
         {
-            list.Add(null);
+            if (filterCount != 1)
+            {
+                throw new PdfParseException(0, "Stream /DecodeParms is one dictionary for several filters.");
+            }
+
+            list.Add(one);
+            return list;
+        }
+
+        if (parms is not PdfObject.Arr array)
+        {
+            throw new PdfParseException(0, "Stream /DecodeParms is not a dictionary or an array.");
+        }
+
+        if (array.Items.Count != filterCount)
+        {
+            throw new PdfParseException(0, "Stream /DecodeParms does not have one entry for each filter.");
+        }
+
+        foreach (PdfObject item in array.Items)
+        {
+            if (item is PdfObject.Dict entry)
+            {
+                list.Add(entry);
+            }
+            else if (item is PdfObject.NullObj)
+            {
+                list.Add(null);
+            }
+            else
+            {
+                throw new PdfParseException(0, "Stream /DecodeParms array has an entry that is not a dictionary or null.");
+            }
         }
 
         return list;

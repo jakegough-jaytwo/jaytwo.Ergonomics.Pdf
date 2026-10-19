@@ -83,13 +83,9 @@ Accepted at the independently validated level for the document timestamp. G5 is 
 
 Accepted as the `net48` test target under D-19, at the internally tested level. G10 is not passed. The test project now targets `net8.0`, `net6.0`, and `net48`. On `net48` it runs against the library's `netstandard2.0` build. The library targets did not change. No test is excluded on `net48`: every external-tool test ran there. `TestCompat.cs` supplies the APIs that .NET Framework lacks, and forwards to the original APIs on `net6.0` and `net8.0`. Two test-only additions apply to `net48`: a `System.Net.Http` reference, and `System.Runtime.CompilerServices.Unsafe` 6.0.0 for the test host's binding redirect. The new `stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response` covers the B-31 abort-by-dispose path. With the dispose registration removed, it fails on all three frameworks. QA reported in `agents/reports/2026-10-18-qa-engineer-B-33.md`. The task was returned once for that missing test. The Technical Lead approved in `agents/reports/2026-10-18-tech-lead-B-33-review.md` after re-running `SignatureTests` on `net48`: 37 of 38 passed. The one failure is B-34, a library defect. It is recorded and left failing. `netstandard2.1` still has no test run.
 
-## B-36. Parser and decoder hardening (audit SA-01, SA-02, SA-03, SA-04, SA-09, SA-11)
+## B-36. Closed
 
-- **Kind:** defect. SA-01 to SA-04 are High release blockers. SA-09 and SA-11 are Medium.
-- **Problem:** From `agents/reports/2026-10-18-security-auditor-B-18.md`, with the disposition in `2026-10-18-tech-lead-B-18-audit-review.md`. SA-01: the literal-string escape and nesting branches, numbers, keywords, names, and hex skip the token cap. SA-02: `ParseDictionary` work is unbounded and quadratic. SA-03: xref-stream entry and object-stream header amplification. SA-04: `WalkPages` has no depth bound, so the stack overflows. SA-09: revision 4 substitutes `StdCF` for an omitted `StrF` or `StmF` instead of `Identity`. SA-11: `FiltersOf` and `ParmsOf` misalign on malformed filter arrays.
-- **Scope and exclusions:** Bounded limits that fail with a document exception before the destination grows. No parser redesign. Each trigger becomes a regression test that runs bounded, without destabilizing the test process.
-- **Acceptance criteria:** Each trigger is refused or handled within a stated bound. Every supported fixture still passes. Limits are documented.
-- **Evidence required:** Internally tested. **Owner:** Core Engineer.
+Accepted at the internally tested level. It closes audit findings SA-01, SA-02, SA-03, SA-04, SA-09, and SA-11. G8 is not passed: the fuzz run and the remaining High findings, SA-05, SA-06, and SA-07, are still open. New limits, documented in `README.md` and `ACCEPTANCE.md`: names, numbers, and keywords stop at 65,536 bytes; every string branch respects the 32 MiB cap; arrays and dictionaries hold at most 1,048,576 entries, and dictionary parsing is linear; xref streams list object numbers below 8,388,608, with `/Index` subsections ascending without overlap; a file lists at most `min(2,097,152, max(65,536, length/8))` distinct objects; object-stream `/N` and `/First` are validated first, and overlapping objects are refused past a work budget of 4 times the decoded length plus 64 KiB; the page tree nests at most 256 levels; an omitted `/StrF` or `/StmF` in revisions 4 to 6 is `Identity`; a malformed `/Filter` or `/DecodeParms` is refused. QA's 8 KB xref repro (QA-B36-01), which allocated 2.1 GB before the fix, is now refused after 25 MB under a 256 MiB heap limit. The task was returned once, for QA-B36-01. Reports: `agents/reports/2026-10-18-core-engineer-B-36.md` (with its Rework section), `2026-10-19-qa-engineer-B-36.md` (with its Re-verification section), and `2026-10-19-tech-lead-B-36-review.md`. The full suite passed 269/269 on Windows `net8.0`, `net6.0`, and `net48`, and on Linux `net8.0` and `net6.0` (`make docker-builder docker-test`). Limitations: an indirect `/Filter` is refused (B-40). A classic xref section is built before the budget applies (QA-B36-02, now in B-41).
 
 ## B-37. Exact signature-appendix size guard (audit SA-07)
 
@@ -111,6 +107,24 @@ Accepted as the `net48` test target under D-19, at the internally tested level. 
 - **Problem:** The code and `README.md` treat `Include` as allowing the named fields and `Exclude` as blocking them. ISO 32000 FieldMDP is the reverse: `Include` locks the named fields, and `Exclude` locks every field except them.
 - **Acceptance criteria:** The behavior follows ISO 32000. `README.md` and `ACCEPTANCE.md` are corrected. Both outcomes are independently verified by a PDF-aware tool.
 - **Evidence required:** Independently validated. **Owner:** Signing Engineer, with the AcroForm and Core Engineers consulted.
+
+## B-40. Indirect `/Filter` and `/DecodeParms`
+
+- **Kind:** limitation found in B-36, Low.
+- **Problem:** The stream decoder has no resolver. Since B-36, a `/Filter` or `/DecodeParms` given as an indirect reference is refused with `PdfParseException`. Before B-36 it was ignored, and the bytes came back undecoded. ISO 32000 permits indirect values there.
+- **Acceptance criteria:** An indirect filter name, array, or parameter dictionary resolves through the document, within the existing depth bound, and decodes. **Owner:** Core Engineer.
+
+## B-41. Classic xref subsection bounds
+
+- **Kind:** defect found in B-36, severity to be set by the Technical Lead.
+- **Problem:** `ParseClassicXref` casts a subsection's start and count from `long` without a range check. QA-B36-02 (Medium): a classic section is built in full before the entry budget applies, alongside the merged map. Under a 256 MiB heap, 2,000,000 entries (a 40 MB file) run out of memory instead of throwing a document exception.
+- **Acceptance criteria:** An out-of-range start or count throws `PdfParseException` before any entries are built. A classic section applies the entry budget while it is read, and stays within 256 MiB or fails with a document exception. **Owner:** Core Engineer.
+
+## B-42. Object-stream body allocation
+
+- **Kind:** performance risk found by QA in B-36, Medium. It predates B-36.
+- **Problem:** Parsing object-stream bodies allocates about 100 bytes per decoded byte. A 32 KB file that decodes to 31 MiB allocates 3.23 GB in about 6 s. It completes under a 1 GiB heap limit, so this is churn, not retention. Related to B-17 observation O1.
+- **Acceptance criteria:** Allocation is proportional to the decoded size, within a stated factor. **Owner:** Core Engineer.
 
 ## B-35. Closed
 

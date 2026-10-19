@@ -253,8 +253,9 @@ internal sealed class PdfSecurity
             throw Unsupported();
         }
 
-        CipherKind strings = ReadFilter(encrypt, ReadName(encrypt, "StrF") ?? "StdCF", 16, revision6: false);
-        CipherKind streams = ReadFilter(encrypt, ReadName(encrypt, "StmF") ?? "StdCF", 16, revision6: false);
+        // ISO 32000: an omitted /StrF or /StmF is Identity, so those strings or streams are not encrypted.
+        CipherKind strings = ReadFilter(encrypt, ReadName(encrypt, "StrF") ?? "Identity", 16, revision6: false);
+        CipherKind streams = ReadFilter(encrypt, ReadName(encrypt, "StmF") ?? "Identity", 16, revision6: false);
         string? embeddedName = ReadName(encrypt, "EFF");
         CipherKind embedded = embeddedName == null
             ? streams
@@ -269,8 +270,8 @@ internal sealed class PdfSecurity
             throw Unsupported();
         }
 
-        CipherKind strings = ReadFilter(encrypt, ReadName(encrypt, "StrF") ?? "StdCF", 32, revision6: true);
-        CipherKind streams = ReadFilter(encrypt, ReadName(encrypt, "StmF") ?? "StdCF", 32, revision6: true);
+        CipherKind strings = ReadFilter(encrypt, ReadName(encrypt, "StrF") ?? "Identity", 32, revision6: true);
+        CipherKind streams = ReadFilter(encrypt, ReadName(encrypt, "StmF") ?? "Identity", 32, revision6: true);
         string? embeddedName = ReadName(encrypt, "EFF");
         CipherKind embedded = embeddedName == null
             ? streams

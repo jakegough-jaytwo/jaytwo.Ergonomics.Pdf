@@ -112,6 +112,12 @@ internal sealed class StandardEncryptor
 
     public string Dictionary(string? extra)
     {
+        return Dictionary(extra, stringFilter: true, streamFilter: true);
+    }
+
+    // A false flag omits /StrF or /StmF, so a reader must apply the ISO 32000 default, Identity.
+    public string Dictionary(string? extra, bool stringFilter, bool streamFilter)
+    {
         var body = new StringBuilder();
         body.Append("<< /Filter /Standard ");
         if (_kind == Kind.Revision5 || _kind == Kind.Revision6)
@@ -141,7 +147,7 @@ internal sealed class StandardEncryptor
         body.Append(" /P ").Append(Permissions.ToString(System.Globalization.CultureInfo.InvariantCulture));
         if (_kind == Kind.Revision4Aes || _kind == Kind.Revision4Rc4 || _kind == Kind.Revision5 || _kind == Kind.Revision6)
         {
-            body.Append(" /StmF /StdCF /StrF /StdCF");
+            body.Append(streamFilter ? " /StmF /StdCF" : string.Empty).Append(stringFilter ? " /StrF /StdCF" : string.Empty);
         }
 
         if (!EncryptMetadata && (_kind == Kind.Revision4Aes || _kind == Kind.Revision4Rc4 || _kind == Kind.Revision5 || _kind == Kind.Revision6))

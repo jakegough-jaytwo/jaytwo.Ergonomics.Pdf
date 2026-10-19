@@ -54,6 +54,17 @@ internal abstract class PdfObject
             _items.Add((key, value));
         }
 
+        // The parser calls these once it tracks key positions itself, so a large dictionary is not scanned per key.
+        internal void Append(string key, PdfObject value)
+        {
+            _items.Add((key, value));
+        }
+
+        internal void ReplaceAt(int index, PdfObject value)
+        {
+            _items[index] = (_items[index].Key, value);
+        }
+
         public void Remove(string key)
         {
             for (int i = _items.Count - 1; i >= 0; i--)

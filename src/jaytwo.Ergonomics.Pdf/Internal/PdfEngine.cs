@@ -1102,7 +1102,8 @@ internal sealed class PdfEngine : IDisposable
         bool classic = IsClassicXref(offset);
         _cursor.Seek(offset);
         var parser = new PdfParser(_cursor, Load, 0);
-        Dictionary<int, XrefEntry> entries;
+        int budget = PdfParser.XrefEntryBudget(_length);
+        Dictionary<int, XrefEntry>? entries = null;
         PdfObject.Dict trailer;
         bool pendingEncrypt;
         if (classic)
@@ -1118,8 +1119,9 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(offset, "Xref stream object was expected.");
             }
 
-            entries = ReadXrefStream(parser, streamDict);
-            pendingEncrypt = !TryEnsureSecurity(streamDict, entries, password);
+            // A stream section is merged as it is read, so a /Prev chain never holds a second copy of the map.
+            ReadXrefStream(parser, streamDict, overwrite, budget);
+            pendingEncrypt = !TryEnsureSecurity(streamDict, _xref, password);
             trailer = streamDict;
         }
 
@@ -1138,12 +1140,15 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
-        foreach (KeyValuePair<int, XrefEntry> entry in entries)
+        if (entries != null)
         {
-            if (overwrite || !_xref.ContainsKey(entry.Key))
+            foreach (KeyValuePair<int, XrefEntry> entry in entries)
             {
-                _xref[entry.Key] = entry.Value;
+                PdfParser.MergeXrefEntry(_xref, entry.Key, entry.Value, overwrite, budget);
             }
+
+            // Drop the classic section before the /Prev chain continues, so sections are not all live at once.
+            entries = null;
         }
 
         _loadedXrefs.Add(offset);
@@ -1273,7 +1278,7 @@ internal sealed class PdfEngine : IDisposable
         return dict;
     }
 
-    private Dictionary<int, XrefEntry> ReadXrefStream(PdfParser parser, PdfObject.Dict dict)
+    private void ReadXrefStream(PdfParser parser, PdfObject.Dict dict, bool overwrite, int budget)
     {
         if (dict.Body is not PdfObject.FileBody body)
         {
@@ -1299,7 +1304,7 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(body.Offset, "The xref stream could not be decoded.");
         }
 
-        return parser.ParseXrefEntries(dict, decoded);
+        parser.ParseXrefEntries(dict, decoded, _xref, overwrite, budget);
     }
 
     private Stream OpenStored(PdfObject.Dict dict, PdfObject.FileBody file)
@@ -1435,7 +1440,6 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(0, "Object stream is not a dictionary.");
             }
 
-            byte[] data = ReadDecoded(dict, PdfStreamDecoder.StructuralCap);
             int count = ObjectStreamInteger(dict, "N");
             int first = ObjectStreamInteger(dict, "First");
             if (count < 0 || count > int.MaxValue / 2)
@@ -1443,45 +1447,19 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(0, "Object stream /N is outside the supported range.");
             }
 
+            // Each header pair needs at least "0 0" plus a separator, so /N pairs need 4N - 1 bytes before /First.
+            if (count > 0 && ((long)count * 4) - 1 > first)
+            {
+                throw new PdfParseException(0, "Object stream /N pairs do not fit before /First.");
+            }
+
+            byte[] data = ReadDecoded(dict, PdfStreamDecoder.StructuralCap);
             if (first < 0 || first > data.Length)
             {
                 throw new PdfParseException(0, "Object stream /First is outside the stream.");
             }
 
-            List<string> parts = SplitTokens(Encoding.ASCII.GetString(data, 0, first));
-            int headerParts = count * 2;
-            if (parts.Count < headerParts)
-            {
-                throw new PdfParseException(0, "Object stream header is truncated.");
-            }
-
-            var map = new Dictionary<int, PdfObject>();
-            var cursor = PdfCursor.FromBytes(data);
-            for (int i = 0; i < count; i++)
-            {
-                if (!int.TryParse(parts[i * 2], NumberStyles.None, CultureInfo.InvariantCulture, out int id)
-                    || !int.TryParse(parts[(i * 2) + 1], NumberStyles.None, CultureInfo.InvariantCulture, out int offset)
-                    || id < 0
-                    || offset < 0
-                    || offset > data.Length - first)
-                {
-                    throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
-                }
-
-                cursor.Seek(first + offset);
-                var parser = new PdfParser(cursor, null, 0);
-                PdfObject value = parser.ParseValue();
-                if (parser.NextIsKeyword("stream"))
-                {
-                    throw new PdfParseException(0, "Object streams cannot contain stream objects.");
-                }
-
-                value.ObjectNumber = id;
-                value.Generation = 0;
-                map[id] = value;
-            }
-
-            return map;
+            return PdfParser.ParseObjectStream(data, count, first);
         }
         finally
         {
@@ -1818,15 +1796,20 @@ internal sealed class PdfEngine : IDisposable
         }
 
         int rootId = catalog.Get("Pages") is PdfObject.Ref reference ? reference.ObjectId : root.ObjectNumber;
-        WalkPages(root, rootId, new PdfRect(0, 0, 0, 0), null, 0, pages, new HashSet<int>());
+        WalkPages(root, rootId, new PdfRect(0, 0, 0, 0), null, 0, pages, new HashSet<int>(), 0);
         return pages;
     }
 
-    private void WalkPages(PdfObject.Dict node, int id, PdfRect media, PdfRect? crop, int rotate, List<PageInfo> pages, HashSet<int> seen)
+    private void WalkPages(PdfObject.Dict node, int id, PdfRect media, PdfRect? crop, int rotate, List<PageInfo> pages, HashSet<int> seen, int depth)
     {
         if (!seen.Add(id))
         {
             throw new PdfParseException(0, "The page tree contains a cycle.");
+        }
+
+        if (depth > MaxTraversalDepth)
+        {
+            throw new PdfParseException(0, "The page tree is too deep.");
         }
 
         if (RectOf(node.Get("MediaBox")) is PdfRect box)
@@ -1861,7 +1844,7 @@ internal sealed class PdfEngine : IDisposable
         {
             if (kid is PdfObject.Ref reference && Resolve(reference) is PdfObject.Dict child)
             {
-                WalkPages(child, reference.ObjectId, media, crop, rotate, pages, seen);
+                WalkPages(child, reference.ObjectId, media, crop, rotate, pages, seen, depth + 1);
             }
         }
     }
@@ -3526,34 +3509,6 @@ internal sealed class PdfEngine : IDisposable
         }
 
         return true;
-    }
-
-    private static List<string> SplitTokens(string text)
-    {
-        var list = new List<string>();
-        int index = 0;
-        while (index < text.Length)
-        {
-            while (index < text.Length && char.IsWhiteSpace(text[index]))
-            {
-                index++;
-            }
-
-            if (index >= text.Length)
-            {
-                break;
-            }
-
-            int start = index;
-            while (index < text.Length && !char.IsWhiteSpace(text[index]))
-            {
-                index++;
-            }
-
-            list.Add(text.Substring(start, index - start));
-        }
-
-        return list;
     }
 
     private readonly struct ObjectStreamLease : IDisposable

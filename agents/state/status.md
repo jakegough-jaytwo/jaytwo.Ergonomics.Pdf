@@ -6,11 +6,10 @@ This file is state. It is true as of the date on each section and goes stale. Wh
 
 Owner: Technical Lead. As of 2026-10-18.
 
-- Branch `wip`. `11da851` "genesis" is followed by checkpoint `ee10c84` (B-04 through B-29), `f0da4e9` (B-25, B-28, B-29), `46d64a6` (B-30, B-31, B-32), and a fourth checkpoint holding B-15, B-33, and B-17 and their records. `git ls-tree HEAD` lists `src/`, `test/`, and `agents/`.
-- B-15, B-33, and B-17 are accepted. No task is active. See `state/board.md`, "Resume point".
-- The test project targets `net8.0`, `net6.0`, and `net48` (D-19). The library targets are unchanged (D-13). At the fourth checkpoint the full suite passed 206/206 on `net8.0` and 206/206 on `net6.0`. On `net48` it ran 205 passed and 1 failed: `stalled_timestamp_response_headers_still_time_out`, library defect B-34. The library built in Release for all four targets with warnings as errors, with 0 warnings. The required test tools now include OpenSSL 3 (`JAYTWO_OPENSSL`, D-18).
-- `main` and `develop` remain `b832f22` and contain only `LICENSE`.
-- B-01 acceptance passes on `wip`.
+- Branch `wip`. Checkpoints after `11da851` "genesis": `ee10c84`, `f0da4e9`, `46d64a6`, `d4b84dd` (B-15, B-33, B-17), `0e5c31a` (B-34, B-35, the audit), `da08d21` (owner: Linux CI and Jenkins), and a checkpoint for B-36. `main` and `develop` remain `b832f22`.
+- No task is active. See `state/board.md`, "Resume point".
+- The test project targets `net8.0` and `net6.0`, plus `net48` on Windows only. Jenkins runs the `builder` stage of the `Dockerfile` on Ubuntu (net8.0 and net6.0). At the B-36 checkpoint the full suite passed 269/269 on Windows `net8.0`, `net6.0`, and `net48`, and on Linux `net8.0` and `net6.0`. The Release library builds for all four targets with 0 warnings.
+- Audit findings still open: SA-05, SA-06, and SA-07 (High, B-37 and B-38) and SA-08 (Medium, B-39, which needs the owner).
 
 ## Code map
 

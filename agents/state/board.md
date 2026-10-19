@@ -7,25 +7,22 @@ Owner: Technical Lead. One row per active task. A task may change only the files
 | Task | Implementer | May change | Branch or worktree | Waits on | Verifier |
 |---|---|---|---|---|---|
 
-B-34 and B-35 were accepted on 2026-10-18. The Security Auditor review is complete (`agents/reports/2026-10-18-security-auditor-B-18.md`), and the Technical Lead disposition is in `agents/reports/2026-10-18-tech-lead-B-18-audit-review.md`. Queued, in order, one at a time on `wip`: B-18 fuzz harness and run (QA; new test-only fuzz project under `test/`), B-14 `pdfsig` (QA), B-13 corpus (QA). The Security Auditor runs in parallel because it is read-only. The 24 CPU-hour fuzz run (D-23) runs in the background at below-normal priority while B-14 and B-13 proceed. Defects that the fuzzing or the audit confirms go to the owning engineer if small. Otherwise they are recorded as blockers.
+No task is active. B-36 was accepted on 2026-10-19 (returned once, for QA-B36-01).
 
 ## Resume point
 
-Checkpointed 2026-10-18 after the bounded resume under owner decisions D-18 (OpenSSL as a test tool), D-19 (`net48` test target), and D-20 (G7 working budget). Tasks ran one at a time on `wip`, one agent at a time. All three were accepted after QA sign-off and Technical Lead review. One was returned once, and none was returned a second time:
+Checkpointed 2026-10-19. Since `d4b84dd`: the owner decided D-21 (certReq), D-22 (test infrastructure and small fixes need no owner), and D-23 (24 CPU-hours of fuzzing and a Security Auditor seat). Accepted: B-34 (consistent timestamp timeout on every framework), B-35 (certReq true and strict token parsing; pyHanko validates the OpenSSL token with only the root), and B-36 (parser hardening, which closes SA-01 to SA-04, SA-09, and SA-11). Jenkins now runs the Linux Docker image (`da08d21`). `make docker-builder docker-test` must pass before every checkpoint (`AGENTS.md`, CI).
 
-- B-15: an OpenSSL 3.2.4 `openssl ts` token in a library document timestamp is accepted by pyHanko 0.38.0 (intact, valid, trusted, `ENTIRE_FILE`) under the test root only, and by `openssl ts -verify`. pyHanko needs the TSA certificate supplied out of band, because the request omits certReq (D-14). That is open decision D-O6. QA fixed a stderr pipe deadlock in `ExternalTool`. `AGENTS.md` names `OpenSslTimestampTests` in the tool list.
-- B-33: the test project targets `net48` and runs the `netstandard2.0` build with no exclusions. It was returned once for a missing test of the B-31 abort-by-dispose path, which the rework added. On `net48`, `stalled_timestamp_response_headers_still_time_out` fails. This is library defect B-34, recorded and left failing.
-- B-17: a file-backed 1 GiB dense PDF, a 250 MiB attachment, and a 500-page form all stay within the D-20 ceilings on three frameworks, at a peak of at most 10.31 MiB. The fixture-specific budgets are approved in `state/status.md`.
+At this checkpoint the full suite passed 269/269 on Windows `net8.0`, `net6.0`, and `net48`, and on Linux `net8.0` and `net6.0` (Docker). The Release library builds for all four targets with 0 warnings. No qualification gate is passed.
 
-At this checkpoint the full suite passed 206/206 on `net8.0` and 206/206 on `net6.0`. On `net48` it ran 205 passed and 1 failed (B-34). Tools: qpdf 12.4.2, Poppler 26.09.0, SoftHSM 2, OpenSSL 3.2.4, pyHanko 0.38.0. The library built in Release for all four targets with warnings as errors: 0 warnings, 0 errors. No qualification gate is passed.
+Next actions, in order, one at a time on `wip`. None needs the owner except item 4:
 
-Next actions, in order:
-
-1. B-34 (Signing Engineer, `HttpTimestampAuthority` only) can be boarded without the owner. It is a defect inside the charter, and its regression test already fails on `net48`.
-2. D-O6 (set certReq in timestamp requests) needs the owner. If approved, the Signing Engineer changes `Rfc3161TimeStampRequest`, and QA drops the B-15 out-of-band certificate workaround.
-3. G5 still lacks a CMS signature timestamp from a non-pyHanko authority. OpenSSL can supply it under D-18. That is a new backlog item for the Product Manager.
-4. G7 remaining criteria: repeated object-stream access, repeated use and dispose, encrypted xref-stream discovery, limits, and a timing baseline.
-5. B-13 (a fourth producer), B-14 (a second PDF-aware verifier, since `pdfsig` is not installed), and B-18 (a long fuzz run) still need tools or time from the owner.
+1. B-38 (Signing Engineer): SA-05 and SA-06, both High.
+2. B-37 (Core Engineer, Signing Engineer consulted): SA-07, High, an exact appendix-size guard.
+3. B-18 fuzz harness and campaign (QA): seed the eleven audit triggers. Run up to 24 aggregate CPU-hours (D-23) at below-normal priority only after B-37 and B-38, so the campaign counts as evidence.
+4. B-39, the FieldMDP `Include`/`Exclude` reversal (SA-08), needs owner confirmation. It changes a documented certification guarantee (`team.md` section 9).
+5. B-14 (QA): `pdfsig`, which WSL Ubuntu 24.04 or Docker can provide. B-13 (QA): LibreOffice and/or PDFBox producers; Java is not installed yet.
+6. Backlog, not yet boarded: B-40 (indirect `/Filter`), B-41 (classic xref bounds plus QA-B36-02), B-42 (object-stream allocation churn).
 
 ## Kickoff plan
 
