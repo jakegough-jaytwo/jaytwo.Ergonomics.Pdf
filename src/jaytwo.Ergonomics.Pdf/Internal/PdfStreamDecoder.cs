@@ -644,7 +644,16 @@ internal static class PdfStreamDecoder
             }
 
             EnsureStarted();
-            int read = _deflate!.Read(buffer, offset, count);
+            int read;
+            try
+            {
+                read = _deflate!.Read(buffer, offset, count);
+            }
+            catch (InvalidDataException ex)
+            {
+                throw new PdfParseException(0, "The Flate data is invalid: " + ex.Message);
+            }
+
             for (int i = 0; i < read; i++)
             {
                 Add(buffer[offset + i]);
@@ -658,7 +667,7 @@ internal static class PdfStreamDecoder
                 uint actual = (_sum2 << 16) | _sum1;
                 if (expected != actual)
                 {
-                    throw new InvalidDataException("The zlib checksum does not match.");
+                    throw new PdfParseException(0, "The zlib checksum does not match.");
                 }
             }
 
@@ -718,18 +727,18 @@ internal static class PdfStreamDecoder
             int flg = source.ReadByte();
             if (cmf < 0 || flg < 0)
             {
-                throw new InvalidDataException("The zlib header is truncated.");
+                throw new PdfParseException(0, "The zlib header is truncated.");
             }
 
             int header = (cmf * 256) + flg;
             if ((cmf & 0x0F) != 8 || (cmf >> 4) > 7 || header % 31 != 0)
             {
-                throw new InvalidDataException("The zlib header is invalid.");
+                throw new PdfParseException(0, "The zlib header is invalid.");
             }
 
             if ((flg & 0x20) != 0)
             {
-                throw new InvalidDataException("A zlib preset dictionary is not supported.");
+                throw new PdfParseException(0, "A zlib preset dictionary is not supported.");
             }
         }
     }
@@ -796,7 +805,7 @@ internal static class PdfStreamDecoder
                     int header = _source.Read(_hold, filled, 4 - filled);
                     if (header == 0)
                     {
-                        throw new InvalidDataException("The zlib stream is truncated.");
+                        throw new PdfParseException(0, "The zlib stream is truncated.");
                     }
 
                     filled += header;

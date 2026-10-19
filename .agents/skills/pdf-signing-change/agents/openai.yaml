@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Signing Change"
+  short_description: "Change PDF signatures, timestamps, or certification"
+  default_prompt: "Use $pdf-signing-change for this signature, timestamp, or certification change."

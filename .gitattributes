@@ -1,0 +1,9 @@
+# PDF fixtures are byte-exact: xref offsets break if line endings are converted.
+*.pdf binary
+
+# Fuzz regression seeds are raw inputs, often extensionless; never convert them.
+tools/fuzz/regressions/** binary
+
+# Shell scripts run inside the Linux image, which copies the working tree.
+*.sh text eol=lf
+graphify-out/graph.json merge=graphify

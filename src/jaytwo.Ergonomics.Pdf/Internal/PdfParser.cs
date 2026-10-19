@@ -34,19 +34,19 @@ internal sealed class PdfParser
     private const int MaxCommentDepth = 256;
 
     private readonly PdfCursor _cursor;
-    private readonly Func<int, PdfObject>? _resolve;
+    private readonly Func<PdfObject.Ref, PdfObject>? _resolve;
     private readonly long _baseOffset;
     private readonly Stack<Token> _pushback = new Stack<Token>();
     private readonly int _stringCap;
     private readonly int _containerCap;
 
-    public PdfParser(PdfCursor cursor, Func<int, PdfObject>? resolve, long baseOffset)
+    public PdfParser(PdfCursor cursor, Func<PdfObject.Ref, PdfObject>? resolve, long baseOffset)
         : this(cursor, resolve, baseOffset, PdfStreamDecoder.StructuralCap, MaxContainerEntries)
     {
     }
 
     // Tests pass smaller caps, the way the stream decoder takes a caller cap, so each branch is checked with a small input.
-    internal PdfParser(PdfCursor cursor, Func<int, PdfObject>? resolve, long baseOffset, int stringCap, int containerCap)
+    internal PdfParser(PdfCursor cursor, Func<PdfObject.Ref, PdfObject>? resolve, long baseOffset, int stringCap, int containerCap)
     {
         _cursor = cursor;
         _resolve = resolve;
@@ -196,24 +196,9 @@ internal sealed class PdfParser
         return value;
     }
 
-    public (Dictionary<int, XrefEntry> Entries, PdfObject.Dict Trailer) ParseXrefSection()
-    {
-        Token first = PeekToken();
-        if (first.Kind == TokenKind.Keyword && first.Text == "xref")
-        {
-            return ParseClassicXref();
-        }
-
-        PdfObject obj = ParseIndirect(-1);
-        if (obj is not PdfObject.Dict dict || dict.Body == null)
-        {
-            throw Error("Xref stream object was expected.");
-        }
-
-        return (ParseXrefStream(dict), dict);
-    }
-
-    private (Dictionary<int, XrefEntry> Entries, PdfObject.Dict Trailer) ParseClassicXref()
+    // Reads a classic xref section straight into the merged map, with no per-section copy, the way an xref stream is read.
+    // Each subsection header is range-checked before its rows are read, and every new object counts against the budget.
+    public PdfObject.Dict ParseClassicXref(Dictionary<int, XrefEntry> target, bool overwrite, int budget)
     {
         Token keyword = NextToken();
         if (keyword.Kind != TokenKind.Keyword || keyword.Text != "xref")
@@ -221,7 +206,7 @@ internal sealed class PdfParser
             throw Error("xref keyword was expected.");
         }
 
-        var entries = new Dictionary<int, XrefEntry>();
+        var row = new byte[18];
         while (true)
         {
             Token token = PeekToken();
@@ -236,19 +221,23 @@ internal sealed class PdfParser
                 throw Error("Xref subsection or trailer was expected.");
             }
 
-            int start = (int)NextToken().Integer;
+            long start = NextToken().Integer;
             Token countToken = NextToken();
             if (countToken.Kind != TokenKind.Integer)
             {
                 throw Error("Xref subsection count was expected.");
             }
 
-            int count = (int)countToken.Integer;
+            long count = countToken.Integer;
+            if (start < 0 || count < 0 || start + count > (long)int.MaxValue + 1)
+            {
+                throw Error("Xref subsection exceeds the object number range.");
+            }
+
             SkipWhitespace();
             for (int i = 0; i < count; i++)
             {
-                XrefEntry entry = ReadClassicEntry();
-                entries[start + i] = entry;
+                MergeXrefEntry(target, (int)start + i, ReadClassicEntry(row), overwrite, budget);
             }
         }
 
@@ -258,12 +247,11 @@ internal sealed class PdfParser
             throw Error("Trailer dictionary was expected.");
         }
 
-        return (entries, trailerDict);
+        return trailerDict;
     }
 
-    private XrefEntry ReadClassicEntry()
+    private XrefEntry ReadClassicEntry(byte[] row)
     {
-        var chars = new char[18];
         for (int i = 0; i < 18; i++)
         {
             int b = _cursor.ReadByte();
@@ -272,7 +260,7 @@ internal sealed class PdfParser
                 throw Error("Truncated xref entry.");
             }
 
-            chars[i] = (char)b;
+            row[i] = (byte)b;
         }
 
         int eol = _cursor.ReadByte();
@@ -297,40 +285,41 @@ internal sealed class PdfParser
             throw Error("Xref entry must end in CRLF, LF, SP LF, or SP CR.");
         }
 
-        if (chars[17] != 'n' && chars[17] != 'f')
+        if (row[17] != 'n' && row[17] != 'f')
         {
             throw Error("Xref entry flag was expected.");
         }
 
-        if (!long.TryParse(new string(chars, 0, 10), NumberStyles.None, CultureInfo.InvariantCulture, out long offset))
+        if (!TryParseDigits(row, 0, 10, out long offset))
         {
             throw Error("Xref offset is not numeric.");
         }
 
-        if (!int.TryParse(new string(chars, 11, 5), NumberStyles.None, CultureInfo.InvariantCulture, out int generation))
+        if (!TryParseDigits(row, 11, 5, out long generation))
         {
             throw Error("Xref generation is not numeric.");
         }
 
-        byte type = chars[17] == 'n' ? (byte)1 : (byte)0;
-        return new XrefEntry(type, offset, generation);
+        byte type = row[17] == 'n' ? (byte)1 : (byte)0;
+        return new XrefEntry(type, offset, (int)generation);
     }
 
-    private Dictionary<int, XrefEntry> ParseXrefStream(PdfObject.Dict dict)
+    // Digits only, with no sign or space, as a fixed-width xref field is written. Ten digits always fit in a long.
+    private static bool TryParseDigits(byte[] row, int start, int length, out long value)
     {
-        if (dict.Body is not PdfObject.FileBody body)
+        value = 0;
+        for (int i = start; i < start + length; i++)
         {
-            throw Error("Xref stream has no data.");
+            int digit = row[i] - '0';
+            if (digit < 0 || digit > 9)
+            {
+                return false;
+            }
+
+            value = (value * 10) + digit;
         }
 
-        byte[] raw = ReadFile(body.Offset, body.Length);
-        var filters = PdfStreamDecoder.FiltersOf(dict);
-        var parms = PdfStreamDecoder.ParmsOf(dict, filters.Count);
-        EnsureXrefColumns(dict, parms);
-        byte[] decoded = PdfStreamDecoder.Decode(raw, filters, parms, PdfStreamDecoder.XrefCap);
-        var entries = new Dictionary<int, XrefEntry>();
-        ParseXrefEntries(dict, decoded, entries, overwrite: true, XrefEntryBudget(_cursor.Length));
-        return entries;
+        return true;
     }
 
     internal static int XrefEntryBudget(long fileLength)
@@ -458,36 +447,6 @@ internal sealed class PdfParser
                 parm.Set("Columns", PdfObject.Num.FromLong(width));
             }
         }
-    }
-
-    private byte[] ReadFile(long offset, long length)
-    {
-        if (length > int.MaxValue)
-        {
-            throw new PdfObjectTooLargeException("Stream is too large to decode.");
-        }
-
-        if (_cursor.Length < offset + length)
-        {
-            throw Error("Stream extends past EOF.");
-        }
-
-        long saved = _cursor.Position;
-        _cursor.Seek(offset - _baseOffset);
-        var data = new byte[(int)length];
-        for (int i = 0; i < data.Length; i++)
-        {
-            int b = _cursor.ReadByte();
-            if (b < 0)
-            {
-                throw Error("Stream ended early.");
-            }
-
-            data[i] = (byte)b;
-        }
-
-        _cursor.Seek(saved);
-        return data;
     }
 
     private static int[] ReadWidths(PdfObject.Dict dict)
@@ -719,7 +678,7 @@ internal sealed class PdfParser
             long saved = _cursor.Position;
             try
             {
-                length = _resolve(reference.ObjectId);
+                length = _resolve(reference);
             }
             finally
             {

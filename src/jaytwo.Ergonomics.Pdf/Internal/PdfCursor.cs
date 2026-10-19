@@ -116,7 +116,15 @@ internal sealed class PdfCursor
             return;
         }
 
-        _stream!.Seek(_next, SeekOrigin.Begin);
+        // Past the end reads as EOF, as in the buffer path. Some streams, such as MemoryStream, refuse such a seek.
+        if (_next >= _stream!.Length)
+        {
+            _windowLength = 0;
+            _windowIndex = 0;
+            return;
+        }
+
+        _stream.Seek(_next, SeekOrigin.Begin);
         _windowLength = _stream.Read(_window, 0, _window.Length);
         _windowIndex = 0;
     }

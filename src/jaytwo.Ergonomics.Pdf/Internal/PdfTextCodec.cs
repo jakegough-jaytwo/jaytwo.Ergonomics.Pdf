@@ -201,7 +201,14 @@ internal static class PdfTextCodec
             }
         }
 
-        return new DateTimeOffset(year, month, day, hour, minute, second, offset);
+        try
+        {
+            return new DateTimeOffset(year, month, day, hour, minute, second, offset);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            throw new PdfParseException(0, "PDF date is out of range.");
+        }
     }
 
     public static string FormatDate(DateTimeOffset value)

@@ -402,3 +402,6 @@ FodyWeavers.xsd
 out/
 .dotnet/
 .dotnet_cli/
+
+# Regenerated local repository visualization output.
+graphify-out/

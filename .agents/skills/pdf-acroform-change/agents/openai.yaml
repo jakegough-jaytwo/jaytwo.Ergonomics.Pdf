@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF AcroForm Change"
+  short_description: "Change form fields, appearances, or widget geometry"
+  default_prompt: "Use $pdf-acroform-change for this AcroForm behavior change."

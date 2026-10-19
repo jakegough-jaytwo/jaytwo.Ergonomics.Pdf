@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Core Change"
+  short_description: "Change parser, writer, encryption, or document features"
+  default_prompt: "Use $pdf-core-change for this parser, writer, encryption, metadata, or attachment change."

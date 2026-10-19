@@ -101,6 +101,34 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    public void pypdf_free_undefined_and_stale_generation_references_are_null()
+    {
+        // pypdf writes the deleted field as a free entry. qpdf and pypdf both read the free, undefined, and
+        // generation-1 references in /Fields as null and report only Name (ISO 32000-1 7.3.10).
+        byte[] original = ReadFixture("pypdf-dangling.pdf");
+        using var stream = new MemoryStream();
+        stream.Write(original, 0, original.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            PdfField field = Assert.Single(document.AcroForm.Fields);
+            Assert.Equal("Name", field.FullName);
+            Assert.Equal(1, field.PageNumber);
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            document.SaveIncremental(stream);
+        }
+
+        byte[] saved = stream.ToArray();
+        AssertPrefix(saved, original);
+        using (var again = new MemoryStream(saved, writable: false))
+        using (var document = PdfDocument.Open(again, leaveOpen: true))
+        {
+            Assert.Equal("Ada", Assert.Single(document.AcroForm.Fields).Value);
+        }
+
+        Check(saved, null);
+    }
+
+    [Fact]
     public void pyhanko_signature_stays_intact_after_an_incremental_append()
     {
         byte[] original = ReadFixture("pyhanko-signed.pdf");

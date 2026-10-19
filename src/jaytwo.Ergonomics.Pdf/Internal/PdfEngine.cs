@@ -513,7 +513,13 @@ internal sealed class PdfEngine : IDisposable
         {
             if (Load(slot.WidgetObjectId) is PdfObject.Dict widget)
             {
-                on ??= OnState(widget);
+                string? widgetOn = OnState(widget);
+                if (isChecked && on != null && widgetOn != null && widgetOn != on)
+                {
+                    throw new PdfFieldValueException("The check box widgets have different on-state names.");
+                }
+
+                on ??= widgetOn;
             }
         }
 
@@ -669,6 +675,7 @@ internal sealed class PdfEngine : IDisposable
         foreach (FieldSlot slot in matches)
         {
             PdfObject.Dict owner = (PdfObject.Dict)EditAny(slot.ValueObjectId);
+            owner.Remove("I");
             if (first.MultiSelect)
             {
                 var array = new PdfObject.Arr();
@@ -816,7 +823,7 @@ internal sealed class PdfEngine : IDisposable
         CheckDisposed();
         using var release = ReleaseAfter();
         AttachmentSlot slot = ReadAttachments().FirstOrDefault(item => item.Name == name) ?? throw new PdfAttachmentNotFoundException(name);
-        if (Load(slot.StreamId) is not PdfObject.Dict dict)
+        if (slot.StreamId == 0 || Load(slot.StreamId) is not PdfObject.Dict dict)
         {
             throw new PdfParseException(0, "Embedded file is not a stream.");
         }
@@ -914,7 +921,11 @@ internal sealed class PdfEngine : IDisposable
 
         EnsureSigningAllowed();
         RequireAnnotate();
-        long estimate = 8192 + (options.ReservedContentsBytes * 2L);
+
+        // A strict lower bound on the appendix, so it never refuses one that fits. The /Contents
+        // gap and every dirty stream body are written in full: plain, file-backed, and RC4 bodies
+        // keep their length, and AES adds an IV and padding. PdfAppendixBuffer is the exact check.
+        long estimate = 2L + (options.ReservedContentsBytes * 2L);
         foreach (int id in _dirty)
         {
             if (_cache.TryGetValue(id, out PdfObject? obj) && obj is PdfObject.Dict dict && dict.Body != null)
@@ -923,9 +934,9 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
-        if (estimate > (8 * 1024 * 1024))
+        if (estimate > PdfAppendixBuffer.MaxLength)
         {
-            throw new PdfSignException("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.");
+            throw new PdfSignException(PdfAppendixBuffer.TooLargeMessage);
         }
 
         int savedSize = _size;
@@ -947,7 +958,10 @@ internal sealed class PdfEngine : IDisposable
                 ? null
                 : options.SigningTime ?? DateTimeOffset.UtcNow;
             BuildSignature(options, signingTime);
-            var buffer = new MemoryStream();
+
+            // The estimate above runs before BuildSignature dirties a reused field. The bounded
+            // buffer is the exact guard: it throws before the destination is touched.
+            using var buffer = new PdfAppendixBuffer();
             if (NeedsLeadingLineFeed())
             {
                 buffer.WriteByte((byte)'\n');
@@ -990,8 +1004,7 @@ internal sealed class PdfEngine : IDisposable
                 destination.Seek(_length, SeekOrigin.Begin);
             }
 
-            byte[] appendix = buffer.ToArray();
-            destination.Write(appendix, 0, appendix.Length);
+            buffer.WriteTo(destination);
             FinishWrite(destination, leaveOpen, same, layout);
             _backup = null;
         }
@@ -1101,15 +1114,16 @@ internal sealed class PdfEngine : IDisposable
 
         bool classic = IsClassicXref(offset);
         _cursor.Seek(offset);
-        var parser = new PdfParser(_cursor, Load, 0);
+        var parser = new PdfParser(_cursor, Resolve, 0);
         int budget = PdfParser.XrefEntryBudget(_length);
-        Dictionary<int, XrefEntry>? entries = null;
         PdfObject.Dict trailer;
         bool pendingEncrypt;
         if (classic)
         {
-            (entries, trailer) = parser.ParseXrefSection();
-            pendingEncrypt = !TryEnsureSecurity(trailer, entries, password);
+            // The table is merged as it is read, before its /XRefStm stream and before /Prev, the search order of
+            // ISO 32000-1 7.5.8.4. A /Prev chain never holds a second copy of the map.
+            trailer = parser.ParseClassicXref(_xref, overwrite, budget);
+            pendingEncrypt = !TryEnsureSecurity(trailer, _xref, password);
         }
         else
         {
@@ -1138,17 +1152,6 @@ internal sealed class PdfEngine : IDisposable
             {
                 encryptedInline = _inlineInfo;
             }
-        }
-
-        if (entries != null)
-        {
-            foreach (KeyValuePair<int, XrefEntry> entry in entries)
-            {
-                PdfParser.MergeXrefEntry(_xref, entry.Key, entry.Value, overwrite, budget);
-            }
-
-            // Drop the classic section before the /Prev chain continues, so sections are not all live at once.
-            entries = null;
         }
 
         _loadedXrefs.Add(offset);
@@ -1221,7 +1224,7 @@ internal sealed class PdfEngine : IDisposable
             return true;
         }
 
-        if (!TryEncryptOffset(reference.ObjectId, entries, out long encryptOffset))
+        if (!TryEncryptOffset(reference, entries, out long encryptOffset))
         {
             return false;
         }
@@ -1239,19 +1242,20 @@ internal sealed class PdfEngine : IDisposable
         return true;
     }
 
-    private bool TryEncryptOffset(int id, Dictionary<int, XrefEntry> entries, out long offset)
+    private bool TryEncryptOffset(PdfObject.Ref reference, Dictionary<int, XrefEntry> entries, out long offset)
     {
-        if (TryUncompressedOffset(entries, id, out offset))
+        if (TryUncompressedOffset(entries, reference, out offset))
         {
             return true;
         }
 
-        return TryUncompressedOffset(_xref, id, out offset);
+        return TryUncompressedOffset(_xref, reference, out offset);
     }
 
-    private static bool TryUncompressedOffset(Dictionary<int, XrefEntry> entries, int id, out long offset)
+    // The encryption dictionary must resolve. Reading it as the null object would treat ciphertext as plaintext.
+    private static bool TryUncompressedOffset(Dictionary<int, XrefEntry> entries, PdfObject.Ref reference, out long offset)
     {
-        if (!entries.TryGetValue(id, out XrefEntry entry))
+        if (!entries.TryGetValue(reference.ObjectId, out XrefEntry entry))
         {
             offset = 0;
             return false;
@@ -1260,6 +1264,11 @@ internal sealed class PdfEngine : IDisposable
         if (entry.Type != 1)
         {
             throw new PdfParseException(entry.Field1, "The encryption dictionary is not an uncompressed object.");
+        }
+
+        if (entry.Field2 != reference.GenerationNumber)
+        {
+            throw new PdfParseException(entry.Field1, "The encryption dictionary reference does not match its cross-reference generation.");
         }
 
         offset = entry.Field1;
@@ -1299,9 +1308,9 @@ internal sealed class PdfEngine : IDisposable
         {
             decoded = PdfStreamDecoder.Decode(raw, filters, parms, PdfStreamDecoder.XrefCap);
         }
-        catch (InvalidDataException)
+        catch (PdfParseException ex)
         {
-            throw new PdfParseException(body.Offset, "The xref stream could not be decoded.");
+            throw new PdfParseException(body.Offset, "The xref stream could not be decoded. " + ex.Message);
         }
 
         parser.ParseXrefEntries(dict, decoded, _xref, overwrite, budget);
@@ -1370,7 +1379,7 @@ internal sealed class PdfEngine : IDisposable
             if (entry.Type == 1)
             {
                 _cursor.Seek(entry.Field1);
-                var parser = new PdfParser(_cursor, Load, 0);
+                var parser = new PdfParser(_cursor, Resolve, 0);
                 obj = parser.ParseIndirect(id);
             }
             else if (entry.Type == 2)
@@ -1566,10 +1575,37 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(0, "Indirect object reference chain is too deep.");
             }
 
+            if (!IsLive(reference))
+            {
+                return PdfObject.NullObj.Instance;
+            }
+
             value = Load(reference.ObjectId);
         }
 
         return value;
+    }
+
+    // ISO 32000-1 7.3.10 and 7.5.8.3: a reference to an undefined or free object, to an entry of an unknown type, or
+    // with a generation other than the entry's is a reference to the null object. An object-stream member has generation 0.
+    private bool IsLive(PdfObject.Ref reference)
+    {
+        if (!_xref.TryGetValue(reference.ObjectId, out XrefEntry entry))
+        {
+            return false;
+        }
+
+        return entry.Type switch
+        {
+            1 => entry.Field2 == reference.GenerationNumber,
+            2 => reference.GenerationNumber == 0,
+            _ => false,
+        };
+    }
+
+    private bool IsDangling(PdfObject? value)
+    {
+        return value is PdfObject.Ref reference && !IsLive(reference);
     }
 
     private PdfObject? ResolveMaybe(PdfObject? value)
@@ -1672,6 +1708,7 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject.Dict EditCatalog()
     {
+        CatalogDict();
         return (PdfObject.Dict)EditAny(_rootId);
     }
 
@@ -1692,6 +1729,11 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject.Dict EditInfo()
     {
+        if (_infoId != null && (!IsLive(new PdfObject.Ref(_infoId.Value, _infoGen)) || ReadInfo() == null))
+        {
+            _infoId = null;
+        }
+
         if (_infoId == null)
         {
             var created = _inlineInfo == null ? new PdfObject.Dict() : (PdfObject.Dict)_inlineInfo.DeepClone();
@@ -1747,7 +1789,16 @@ internal sealed class PdfEngine : IDisposable
             document = parsed!;
         }
 
-        XmpEditor.ApplyInfo(document, key, value);
+        // A packet that parses but is not XMP, such as one without rdf:RDF, is malformed XMP too: leave its bytes unchanged.
+        try
+        {
+            XmpEditor.ApplyInfo(document, key, value);
+        }
+        catch (PdfXmpException)
+        {
+            return;
+        }
+
         WriteXmp(XmpEditor.ToBytes(document));
     }
 
@@ -1873,7 +1924,7 @@ internal sealed class PdfEngine : IDisposable
             {
                 foreach (PdfObject annot in annots.Items)
                 {
-                    if (annot is PdfObject.Ref reference)
+                    if (annot is PdfObject.Ref reference && IsLive(reference))
                     {
                         annotPages[reference.ObjectId] = i + 1;
                     }
@@ -1960,7 +2011,7 @@ internal sealed class PdfEngine : IDisposable
         }
 
         int pageNumber = 0;
-        if (field.Get("P") is PdfObject.Ref pageRef && pageIndex.TryGetValue(pageRef.ObjectId, out int fromParent))
+        if (field.Get("P") is PdfObject.Ref pageRef && IsLive(pageRef) && pageIndex.TryGetValue(pageRef.ObjectId, out int fromParent))
         {
             pageNumber = fromParent;
         }
@@ -2070,7 +2121,7 @@ internal sealed class PdfEngine : IDisposable
     private PdfObject.Dict EnsureAcroForm()
     {
         PdfObject.Dict catalog = EditCatalog();
-        if (catalog.Get("AcroForm") is PdfObject.Ref reference)
+        if (catalog.Get("AcroForm") is PdfObject.Ref reference && IsLive(reference))
         {
             return (PdfObject.Dict)EditAny(reference.ObjectId);
         }
@@ -2097,7 +2148,8 @@ internal sealed class PdfEngine : IDisposable
         PdfObject.Dict acro = EnsureAcroForm();
         if (ResolveMaybe(acro.Get("DR")) is PdfObject.Dict dr
             && ResolveMaybe(dr.Get("Font")) is PdfObject.Dict fonts
-            && fonts.Get("Helv") is PdfObject.Ref existing)
+            && fonts.Get("Helv") is PdfObject.Ref existing
+            && IsLive(existing))
         {
             _helvId = existing.ObjectId;
             return _helvId;
@@ -2109,10 +2161,10 @@ internal sealed class PdfEngine : IDisposable
         font.Set("BaseFont", new PdfObject.Name("Helvetica"));
         font.Set("Encoding", new PdfObject.Name("WinAnsiEncoding"));
         _helvId = Allocate(font);
-        PdfObject.Dict drEdit = acro.Get("DR") is PdfObject.Ref drRef
+        PdfObject.Dict drEdit = acro.Get("DR") is PdfObject.Ref drRef && IsLive(drRef)
             ? (PdfObject.Dict)EditAny(drRef.ObjectId)
             : GetOrCreateDict(acro, "DR");
-        PdfObject.Dict fontEdit = drEdit.Get("Font") is PdfObject.Ref fontRef
+        PdfObject.Dict fontEdit = drEdit.Get("Font") is PdfObject.Ref fontRef && IsLive(fontRef)
             ? (PdfObject.Dict)EditAny(fontRef.ObjectId)
             : GetOrCreateDict(drEdit, "Font");
         fontEdit.Set("Helv", new PdfObject.Ref(_helvId, 0));
@@ -2190,7 +2242,12 @@ internal sealed class PdfEngine : IDisposable
     private int CertificationLevel()
     {
         int level = 0;
-        if (ResolveMaybe(CatalogDict().Get("Perms")) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
+        PdfObject? permsValue = CatalogDict().Get("Perms");
+        if (IsDangling(permsValue))
+        {
+            Restrict(ref level, 1);
+        }
+        else if (ResolveMaybe(permsValue) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
         {
             Restrict(ref level, PermissionOf(perms.Get("DocMDP")));
         }
@@ -2236,6 +2293,11 @@ internal sealed class PdfEngine : IDisposable
 
     private int PermissionOnSignature(PdfObject.Dict signature, string method)
     {
+        if (IsDangling(signature.Get("Reference")))
+        {
+            return 1;
+        }
+
         if (ResolveMaybe(signature.Get("Reference")) is not PdfObject.Arr references)
         {
             return 0;
@@ -2244,6 +2306,11 @@ internal sealed class PdfEngine : IDisposable
         int found = 0;
         foreach (PdfObject item in references.Items)
         {
+            if (IsDangling(item))
+            {
+                return 1;
+            }
+
             if (ResolveMaybe(item) is not PdfObject.Dict reference || NameOf(reference.Get("TransformMethod")) != method)
             {
                 continue;
@@ -2262,6 +2329,11 @@ internal sealed class PdfEngine : IDisposable
     private int ReadPermission(PdfObject.Dict reference)
     {
         PdfObject? parameters = reference.Get("TransformParams");
+        if (IsDangling(parameters))
+        {
+            return 1;
+        }
+
         PdfObject.Dict? dict = parameters as PdfObject.Dict ?? ResolveMaybe(parameters) as PdfObject.Dict;
         if (dict == null || dict.Get("P") == null)
         {
@@ -2304,6 +2376,11 @@ internal sealed class PdfEngine : IDisposable
                 continue;
             }
 
+            if (IsDangling(signature.Get("Reference")))
+            {
+                return true;
+            }
+
             if (ResolveMaybe(signature.Get("Reference")) is not PdfObject.Arr references)
             {
                 continue;
@@ -2311,6 +2388,11 @@ internal sealed class PdfEngine : IDisposable
 
             foreach (PdfObject item in references.Items)
             {
+                if (IsDangling(item))
+                {
+                    return true;
+                }
+
                 if (ResolveMaybe(item) is not PdfObject.Dict reference || NameOf(reference.Get("TransformMethod")) != "FieldMDP")
                 {
                     continue;
@@ -2329,6 +2411,11 @@ internal sealed class PdfEngine : IDisposable
     private bool FieldMdpBlocks(PdfObject.Dict reference, string fullName)
     {
         PdfObject? parameters = reference.Get("TransformParams");
+        if (IsDangling(parameters) || (ResolveMaybe(parameters) is PdfObject.Dict lockParameters && IsDangling(lockParameters.Get("Fields"))))
+        {
+            return true;
+        }
+
         PdfObject.Dict? dict = parameters as PdfObject.Dict ?? ResolveMaybe(parameters) as PdfObject.Dict;
         string action = dict == null ? "All" : NameOf(dict.Get("Action")) ?? "All";
         if (action == "All")
@@ -2341,6 +2428,11 @@ internal sealed class PdfEngine : IDisposable
         {
             foreach (PdfObject field in fields.Items)
             {
+                if (IsDangling(field))
+                {
+                    return true;
+                }
+
                 string? name = ValueText(field);
                 if (name != null)
                 {
@@ -2644,13 +2736,13 @@ internal sealed class PdfEngine : IDisposable
         if (ResolveMaybe(spec.Get("EF")) is PdfObject.Dict ef)
         {
             PdfObject? file = ef.Get("UF") ?? ef.Get("F");
-            if (file is PdfObject.Ref reference)
-            {
-                streamId = reference.ObjectId;
-            }
-
             if (ResolveMaybe(file) is PdfObject.Dict stream)
             {
+                if (file is PdfObject.Ref reference)
+                {
+                    streamId = reference.ObjectId;
+                }
+
                 mime = NameOf(stream.Get("Subtype"));
                 if (ResolveMaybe(stream.Get("Params")) is PdfObject.Dict parameters && LongOrNull(parameters.Get("Size")) is long declared)
                 {
@@ -2688,7 +2780,7 @@ internal sealed class PdfEngine : IDisposable
         tree.Set("Names", names);
         PdfObject.Dict catalog = EditCatalog();
         PdfObject.Dict nameDict;
-        if (catalog.Get("Names") is PdfObject.Ref nameRef)
+        if (catalog.Get("Names") is PdfObject.Ref nameRef && IsLive(nameRef) && Resolve(nameRef) is PdfObject.Dict)
         {
             nameDict = (PdfObject.Dict)EditAny(nameRef.ObjectId);
         }
@@ -2863,7 +2955,7 @@ internal sealed class PdfEngine : IDisposable
                 return ResolveMaybe(value);
             }
 
-            if (dict.Get("Parent") is not PdfObject.Ref parent)
+            if (dict.Get("Parent") is not PdfObject.Ref parent || !IsLive(parent))
             {
                 return null;
             }
@@ -2876,7 +2968,7 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject.Arr EditArray(PdfObject.Dict parent, string key)
     {
-        if (parent.Get(key) is PdfObject.Ref reference)
+        if (parent.Get(key) is PdfObject.Ref reference && IsLive(reference))
         {
             return (PdfObject.Arr)EditAny(reference.ObjectId);
         }

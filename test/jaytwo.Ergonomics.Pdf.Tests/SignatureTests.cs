@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
@@ -13,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using jaytwo.Ergonomics.Pdf.Internal;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -797,14 +799,17 @@ public class SignatureTests
             stream.Write(pdf, 0, pdf.Length);
             using var document = PdfDocument.Open(stream, leaveOpen: true);
             var authority = new ChainAuthority(EssForm.V2DefaultHashWithIssuerSerial, TimestampCertificates.Tsa, Array.Empty<byte[]>());
+
+            // The CMS reservation fits the leaf and the 256-byte signature value, so only the token overflows it.
+            int reserved = documentTimestamp ? 1024 : TimestampCertificates.Signer.Signer.Length + 256 + 64;
             PdfSignatureOptions options = documentTimestamp
-                ? new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 }
-                : new PdfSignatureOptions { ReservedContentsBytes = 1024, SigningTime = TestCompat.UnixEpoch };
+                ? new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = reserved }
+                : new PdfSignatureOptions { ReservedContentsBytes = reserved, SigningTime = TestCompat.UnixEpoch };
 
             PdfSignatureTooLargeException tooLarge = Assert.Throws<PdfSignatureTooLargeException>(() => document.Sign(stream, options, TimestampProvider(authority, documentTimestamp, null)));
 
-            Assert.Equal(1024, tooLarge.ReservedBytes);
-            Assert.True(tooLarge.ActualBytes > 1024);
+            Assert.Equal(reserved, tooLarge.ReservedBytes);
+            Assert.True(tooLarge.ActualBytes > reserved);
             Assert.True(authority.Token.Length > 0);
             Assert.Equal(pdf, stream.ToArray());
         }
@@ -908,6 +913,372 @@ public class SignatureTests
         Assert.DoesNotContain(again.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature);
     }
 
+    [Fact]
+    public void signer_certificate_getter_failure_is_sanitized_and_does_not_extend_the_file()
+    {
+        const string secret = "sentinel-certificate-pin";
+        var signers = new List<HostileSigner>();
+        AssertSignerFailureIsSanitized(secret, () => Track(signers, Hostile(certificate: () => throw new InvalidOperationException(secret))));
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void signer_chain_getter_failure_is_sanitized_and_does_not_extend_the_file()
+    {
+        const string secret = "sentinel-chain-pin";
+        var signers = new List<HostileSigner>();
+        AssertSignerFailureIsSanitized(secret, () => Track(signers, Hostile(additional: () => throw new InvalidOperationException(secret))));
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void signer_chain_enumeration_failure_is_sanitized_and_does_not_extend_the_file()
+    {
+        const string secret = "sentinel-enumeration-pin";
+        var chains = new List<LazyCertificates>();
+        var signers = new List<HostileSigner>();
+        AssertSignerFailureIsSanitized(secret, () =>
+        {
+            var chain = new LazyCertificates(TimestampCertificates.Signer.Intermediate, 2, secret);
+            chains.Add(chain);
+            return Track(signers, Hostile(additional: () => chain));
+        });
+
+        Assert.All(chains, chain => Assert.Equal(3, chain.MoveNextCalls));
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void empty_signer_outputs_throw_sign_exception_and_do_not_extend_the_file()
+    {
+        PdfSignatureOptions options = SignerBoundOptions(8192);
+        Assert.Contains("certificate is empty", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(certificate: () => Array.Empty<byte>()))).Message, StringComparison.Ordinal);
+        Assert.Contains("additional certificate is empty", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(additional: () => new[] { Array.Empty<byte>() }))).Message, StringComparison.Ordinal);
+        Assert.Contains("empty signature", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(sign: hash => Array.Empty<byte>()))).Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void successful_sign_reads_the_leaf_once_and_enumerates_the_chain_once()
+    {
+        TimestampChain chain = TimestampCertificates.Signer;
+        var additional = new CountingCertificates(chain.Intermediate, chain.Root);
+        HostileSigner signer = Hostile(additional: () => additional);
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            document.Sign(stream, SignerBoundOptions(8192), new CmsDetachedSignatureProvider(signer));
+        }
+
+        Assert.True(stream.Length > pdf.Length);
+        Assert.Equal(1, signer.CertificateReads);
+        Assert.Equal(1, signer.AdditionalReads);
+        Assert.Equal(1, additional.GetEnumeratorCalls);
+        Assert.Equal(1, signer.SignCalls);
+    }
+
+    [Fact]
+    public void leaf_certificate_that_changes_after_the_first_read_is_not_read_again()
+    {
+        const int reserved = 8192;
+        byte[] leaf = TimestampCertificates.Signer.Signer;
+        int reads = 0;
+
+        // A second read would return zeros twice the reserved size, which is neither a certificate nor in bounds.
+        HostileSigner signer = Hostile(certificate: () => ++reads == 1 ? leaf : new byte[reserved * 2]);
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            document.Sign(stream, SignerBoundOptions(reserved), new CmsDetachedSignatureProvider(signer));
+        }
+
+        Assert.Equal(1, reads);
+        Assert.True(Encoding.ASCII.GetString(stream.ToArray()).IndexOf(TestCompat.ToHexString(leaf), StringComparison.OrdinalIgnoreCase) > 0, "The first leaf was not embedded.");
+    }
+
+    [Fact]
+    public void malformed_signer_certificate_throws_sign_exception_and_does_not_extend_the_file()
+    {
+        byte[] leaf = TimestampCertificates.Signer.Signer;
+        var trailing = new byte[leaf.Length + 1];
+        Buffer.BlockCopy(leaf, 0, trailing, 0, leaf.Length);
+        var malformed = new[]
+        {
+            new byte[] { 0x30, 0x05 },
+            new byte[] { 0x04, 0x00 },
+            new byte[] { 0x30, 0x03, 0x02, 0x01, 0x01 },
+            new byte[] { 0x30, 0x08, 0x30, 0x06, 0x02, 0x01, 0x01, 0x02, 0x01, 0x01 },
+            new byte[] { 0x30, 0x09, 0x30, 0x07, 0x02, 0x01, 0x01, 0x30, 0x00, 0x04, 0x00 },
+            trailing,
+        };
+
+        foreach (byte[] certificate in malformed)
+        {
+            var signers = new List<HostileSigner>();
+            PdfSignException rejected = AssertSignFailsWithoutWriting<PdfSignException>(
+                SignerBoundOptions(8192),
+                () => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => certificate))));
+
+            Assert.Equal("The signer certificate is not a DER-encoded certificate.", rejected.Message);
+            Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+        }
+    }
+
+    [Fact]
+    public void oversize_signer_certificate_is_refused_before_it_is_parsed_or_signed()
+    {
+        const int reserved = 8192;
+        var signers = new List<HostileSigner>();
+
+        // Zero bytes are not a certificate, so reaching the parser would throw PdfSignException.
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            SignerBoundOptions(reserved),
+            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => new byte[reserved + 1]))));
+
+        Assert.Equal(reserved + 1, tooLarge.ActualBytes);
+        Assert.Equal(reserved, tooLarge.ReservedBytes);
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void oversize_signer_chain_is_refused_before_signing()
+    {
+        const int reserved = 8192;
+        byte[] leaf = TimestampCertificates.Signer.Signer;
+        var signers = new List<HostileSigner>();
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            SignerBoundOptions(reserved),
+            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(additional: () => new[] { new byte[reserved / 2], new byte[reserved / 2] }))));
+
+        Assert.Equal(leaf.Length + reserved, tooLarge.ActualBytes);
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void endless_signer_chain_stops_enumerating_at_the_reserved_size()
+    {
+        const int reserved = 8192;
+        const int certificateBytes = 1000;
+        byte[] leaf = TimestampCertificates.Signer.Signer;
+        int expectedCalls = ((reserved - leaf.Length) / certificateBytes) + 1;
+        var chains = new List<LazyCertificates>();
+        var signers = new List<HostileSigner>();
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            SignerBoundOptions(reserved),
+            () =>
+            {
+                var chain = new LazyCertificates(new byte[certificateBytes], -1, string.Empty);
+                chains.Add(chain);
+                return new CmsDetachedSignatureProvider(Track(signers, Hostile(additional: () => chain)));
+            });
+
+        Assert.Equal(leaf.Length + (expectedCalls * certificateBytes), tooLarge.ActualBytes);
+        Assert.Equal(2, chains.Count);
+        Assert.All(chains, chain => Assert.Equal(expectedCalls, chain.MoveNextCalls));
+        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
+    }
+
+    [Fact]
+    public void oversize_signature_value_is_refused_before_it_is_encoded()
+    {
+        const int reserved = 8192;
+        byte[] leaf = TimestampCertificates.Signer.Signer;
+        var signers = new List<HostileSigner>();
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            SignerBoundOptions(reserved),
+            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(sign: hash => new byte[reserved]))));
+
+        Assert.Equal(leaf.Length + reserved, tooLarge.ActualBytes);
+        Assert.All(signers, signer => Assert.Equal(1, signer.SignCalls));
+    }
+
+    [Fact]
+    public void oversize_signature_timestamp_token_is_refused_before_it_is_parsed()
+    {
+        const int reserved = 8192;
+        var authorities = new List<OversizeAuthority>();
+
+        // Zero bytes are not a token, so reaching the token parser would throw PdfTimestampException.
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            SignerBoundOptions(reserved),
+            () =>
+            {
+                var authority = new OversizeAuthority(reserved + 1);
+                authorities.Add(authority);
+                return new CmsDetachedSignatureProvider(Hostile(), authority);
+            });
+
+        Assert.True(tooLarge.ActualBytes > reserved + 1);
+        Assert.Equal(reserved, tooLarge.ReservedBytes);
+        Assert.All(authorities, authority => Assert.Equal(1, authority.Calls));
+    }
+
+    [Fact]
+    public void oversize_document_timestamp_token_is_refused_before_it_is_parsed()
+    {
+        const int reserved = 8192;
+        var authorities = new List<OversizeAuthority>();
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
+            new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = reserved },
+            () =>
+            {
+                var authority = new OversizeAuthority(reserved + 1);
+                authorities.Add(authority);
+                return new DocTimeStampSignatureProvider(authority);
+            });
+
+        Assert.Equal(reserved + 1, tooLarge.ActualBytes);
+        Assert.Equal(reserved, tooLarge.ReservedBytes);
+        Assert.All(authorities, authority => Assert.Equal(1, authority.Calls));
+    }
+
+    [Fact]
+    public void reused_field_whose_dictionary_exceeds_8_mib_is_refused_without_writing_and_the_document_can_still_be_signed()
+    {
+        // Audit SA-07: the estimate runs before BuildSignature dirties the reused field, so only
+        // the bounded appendix buffer sees the 9 MiB literal that SealExistingField rewrites.
+        byte[] pdf = FilledSignatureField(9 * 1024 * 1024);
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
+            AssertPrefix(pdf, stream.ToArray(), pdf.Length);
+
+            using (var destination = new MemoryStream())
+            {
+                PdfSignException cross = Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
+                Assert.Equal(same.Message, cross.Message);
+                Assert.Equal(0, destination.Length);
+                AssertPrefix(pdf, stream.ToArray(), pdf.Length);
+            }
+
+            PdfSignException again = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            Assert.Equal(same.Message, again.Message);
+            AssertPrefix(pdf, stream.ToArray(), pdf.Length);
+
+            document.Sign(stream, AppendixOptions("Other"), new FixedProvider());
+        }
+
+        byte[] saved = stream.ToArray();
+        Assert.True(saved.Length - pdf.Length < 64 * 1024, "appendix " + (saved.Length - pdf.Length).ToString());
+        AssertPrefix(pdf, saved, saved.Length);
+        string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
+        Assert.DoesNotContain("SignHere", appendix, StringComparison.Ordinal);
+        Assert.Contains("(Other)", appendix, StringComparison.Ordinal);
+        using var reopened = PdfDocument.Open(new MemoryStream(saved), leaveOpen: true);
+        Assert.Equal(new[] { "Other", "SignHere" }, reopened.AcroForm.Fields.Select(field => field.FullName).OrderBy(name => name, StringComparer.Ordinal).ToArray());
+    }
+
+    [Fact]
+    public void signature_appendix_of_exactly_8_mib_is_written_and_one_byte_more_is_refused()
+    {
+        const int cap = 8 * 1024 * 1024;
+        const int probe = 8000000;
+        byte[] probed = FilledSignatureField(probe);
+        long overhead;
+        using (var source = new MemoryStream(probed, false))
+        using (var document = PdfDocument.Open(source, leaveOpen: true))
+        using (var destination = new MemoryStream())
+        {
+            document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true);
+            overhead = destination.Length - probed.Length - probe;
+        }
+
+        byte[] fits = FilledSignatureField(checked((int)(cap - overhead)));
+        using (var stream = new MemoryStream())
+        {
+            stream.Write(fits, 0, fits.Length);
+            using (var document = PdfDocument.Open(stream, leaveOpen: true))
+            {
+                document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider());
+            }
+
+            AssertPrefix(fits, stream.ToArray(), fits.Length + (long)cap);
+        }
+
+        byte[] over = FilledSignatureField(checked((int)(cap - overhead + 1)));
+        using (var stream = new MemoryStream())
+        {
+            stream.Write(over, 0, over.Length);
+            using var document = PdfDocument.Open(stream, leaveOpen: true);
+            PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
+            AssertPrefix(over, stream.ToArray(), over.Length);
+            using var destination = new MemoryStream();
+            Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
+            Assert.Equal(0, destination.Length);
+            AssertPrefix(over, stream.ToArray(), over.Length);
+        }
+    }
+
+    [Fact]
+    public void attachment_appendix_of_exactly_8_mib_is_signed_and_one_byte_more_is_refused()
+    {
+        // QA-B37-01: the early estimate must not refuse an appendix whose bulk is a dirty stream body.
+        const int cap = 8 * 1024 * 1024;
+        const int probe = 8000000;
+        byte[] pdf = PdfBuilder.Basic().Finish();
+        long overhead = SignWithAttachment(probe, same: false).Length - pdf.Length - probe;
+
+        int fits = checked((int)(cap - overhead));
+        byte[] signed = SignWithAttachment(fits, same: true);
+        AssertPrefix(pdf, signed, pdf.Length + (long)cap);
+
+        var content = new byte[fits + 1];
+        using var source = new MemoryStream();
+        source.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+        document.Attachments.Add("big.bin", new MemoryStream(content), leaveOpen: false);
+        PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(source, AppendixOptions("Signature1"), new FixedProvider()));
+        Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
+        AssertPrefix(pdf, source.ToArray(), pdf.Length);
+        using var destination = new MemoryStream();
+        Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true));
+        Assert.Equal(0, destination.Length);
+        AssertPrefix(pdf, source.ToArray(), pdf.Length);
+    }
+
+    [Fact]
+    public void appendix_buffer_holds_exactly_8_mib_and_never_allocates_past_it()
+    {
+        const int cap = 8 * 1024 * 1024;
+        var chunk = new byte[1000];
+        using var buffer = new PdfAppendixBuffer();
+        while (buffer.Length + chunk.Length <= cap)
+        {
+            buffer.Write(chunk, 0, chunk.Length);
+            Assert.True(buffer.Capacity <= cap, "capacity " + buffer.Capacity.ToString());
+        }
+
+        int rest = (int)(cap - buffer.Length);
+        buffer.Write(chunk, 0, rest);
+        Assert.Equal(cap, buffer.Length);
+        Assert.Equal(cap, buffer.Capacity);
+
+        Assert.Throws<PdfSignException>(() => buffer.WriteByte(0));
+        Assert.Throws<PdfSignException>(() => buffer.Write(chunk, 0, 1));
+#if NET6_0_OR_GREATER
+        Assert.Throws<PdfSignException>(() => buffer.Write(new ReadOnlySpan<byte>(chunk, 0, 1)));
+#endif
+        Assert.Throws<PdfSignException>(() => buffer.SetLength(cap + 1L));
+        Assert.Equal(cap, buffer.Length);
+        Assert.Equal(cap, buffer.Capacity);
+
+        using var large = new PdfAppendixBuffer();
+        Assert.Throws<PdfSignException>(() => large.Write(new byte[cap + 1], 0, cap + 1));
+        Assert.Equal(0, large.Length);
+        Assert.True(large.Capacity <= 256, "capacity " + large.Capacity.ToString());
+
+        buffer.Position = 10;
+        buffer.Write(chunk, 0, chunk.Length);
+        Assert.Equal(cap, buffer.Length);
+    }
+
 #if NET8_0_OR_GREATER
     private static byte[] MessageDigest(SignedCms cms)
     {
@@ -940,7 +1311,7 @@ public class SignatureTests
         IPdfSignatureProvider provider;
         if (documentTimestamp)
         {
-            options = new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 };
+            options = new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 8192 };
             provider = new DocTimeStampSignatureProvider(new FaultAuthority(fault));
             PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
             Assert.Contains(phrase, rejected.Message, StringComparison.Ordinal);
@@ -956,6 +1327,57 @@ public class SignatureTests
         PdfTimestampException exception = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
         Assert.Contains(phrase, exception.Message, StringComparison.Ordinal);
         Assert.Equal(length, stream.Length);
+    }
+
+    private static PdfSignatureOptions SignerBoundOptions(int reserved)
+    {
+        return new PdfSignatureOptions { ReservedContentsBytes = reserved, SigningTime = TestCompat.UnixEpoch };
+    }
+
+    // A signer over the shared 2048-bit test chain. Each argument replaces one well-behaved member.
+    private static HostileSigner Hostile(Func<byte[]>? certificate = null, Func<IReadOnlyList<byte[]>>? additional = null, Func<byte[], byte[]>? sign = null)
+    {
+        TimestampChain chain = TimestampCertificates.Signer;
+        return new HostileSigner(
+            certificate ?? (() => chain.Signer),
+            additional ?? (() => Array.Empty<byte[]>()),
+            sign ?? (hash => chain.SignerKey.SignHash(hash, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1)));
+    }
+
+    private static HostileSigner Track(List<HostileSigner> signers, HostileSigner signer)
+    {
+        signers.Add(signer);
+        return signer;
+    }
+
+    private static void AssertSignerFailureIsSanitized(string secret, Func<HostileSigner> createSigner)
+    {
+        CryptographicException exception = AssertSignFailsWithoutWriting<CryptographicException>(SignerBoundOptions(8192), () => new CmsDetachedSignatureProvider(createSigner()));
+        Assert.Equal("The external signer failed.", exception.Message);
+        Assert.Null(exception.InnerException);
+        Assert.Empty(exception.Data);
+        AssertDiagnosticOmits(exception, secret, "signer secret");
+    }
+
+    // Signs once into the source stream and once into an empty cross-stream destination.
+    // Both must throw the same exception type and leave their destination unchanged.
+    private static TException AssertSignFailsWithoutWriting<TException>(PdfSignatureOptions options, Func<IPdfSignatureProvider> createProvider)
+        where TException : Exception
+    {
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        TException same = Assert.Throws<TException>(() => document.Sign(stream, options, createProvider()));
+        Assert.Equal(pdf, stream.ToArray());
+
+        using var destination = new MemoryStream();
+        TException cross = Assert.Throws<TException>(() => document.Sign(destination, options, createProvider(), leaveOpen: true));
+        Assert.Equal(0, destination.Length);
+        Assert.Equal(pdf, stream.ToArray());
+        Assert.Equal(same.Message, cross.Message);
+        return cross;
     }
 
     private static byte[] SignWithTimestamp(byte[] pdf, ITimestampAuthority authority, bool documentTimestamp, PdfSignatureOptions options, TimestampChain? signerChain)
@@ -1285,6 +1707,68 @@ public class SignatureTests
         return builder.Finish();
     }
 
+    private static byte[] FilledSignatureField(int filler)
+    {
+        return SignatureField("<< /Subtype /Widget /FT /Sig /T (SignHere) /Rect [10 20 110 40] /P 3 0 R /Filler (" + new string('a', filler) + ") >>");
+    }
+
+    // Adds a zero-filled attachment to a one-page file and signs it in the same revision.
+    // Returns the signed file, from the source stream or from an empty cross-stream destination.
+    private static byte[] SignWithAttachment(int attachmentLength, bool same)
+    {
+        byte[] pdf = PdfBuilder.Basic().Finish();
+        using var source = new MemoryStream();
+        source.Write(pdf, 0, pdf.Length);
+        using var destination = new MemoryStream();
+        using (var document = PdfDocument.Open(source, leaveOpen: true))
+        {
+            document.Attachments.Add("big.bin", new MemoryStream(new byte[attachmentLength]), leaveOpen: false);
+            if (same)
+            {
+                document.Sign(source, AppendixOptions("Signature1"), new FixedProvider());
+            }
+            else
+            {
+                document.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true);
+            }
+        }
+
+        if (same)
+        {
+            return source.ToArray();
+        }
+
+        AssertPrefix(pdf, source.ToArray(), pdf.Length);
+        return destination.ToArray();
+    }
+
+    // Checks that actual has the expected length and starts with every byte of prefix.
+    private static void AssertPrefix(byte[] prefix, byte[] actual, long length)
+    {
+        Assert.Equal(length, actual.Length);
+        int difference = -1;
+        for (int i = 0; i < prefix.Length; i++)
+        {
+            if (prefix[i] != actual[i])
+            {
+                difference = i;
+                break;
+            }
+        }
+
+        Assert.Equal(-1, difference);
+    }
+
+    private static PdfSignatureOptions AppendixOptions(string field)
+    {
+        return new PdfSignatureOptions
+        {
+            FieldName = field,
+            ReservedContentsBytes = 32,
+            SigningTime = new DateTimeOffset(2026, 10, 19, 12, 0, 0, TimeSpan.Zero),
+        };
+    }
+
     private static byte[] EncryptedPage(string user, string owner)
     {
         var crypt = new StandardEncryptor(revision6: true, user, owner, permissions: -4, encryptMetadata: true);
@@ -1506,6 +1990,136 @@ public class SignatureTests
             exception.Data[_sentinel] = TestCompat.ToHexString(_sentinelKey);
             exception.Data["raw"] = Encoding.GetEncoding(28591).GetString(_sentinelKey);
             throw exception;
+        }
+    }
+
+    private sealed class HostileSigner : IPdfExternalSigner
+    {
+        private readonly Func<byte[]> _certificate;
+        private readonly Func<IReadOnlyList<byte[]>> _additional;
+        private readonly Func<byte[], byte[]> _sign;
+
+        public HostileSigner(Func<byte[]> certificate, Func<IReadOnlyList<byte[]>> additional, Func<byte[], byte[]> sign)
+        {
+            _certificate = certificate;
+            _additional = additional;
+            _sign = sign;
+        }
+
+        public byte[] CertificateDer
+        {
+            get
+            {
+                CertificateReads++;
+                return _certificate();
+            }
+        }
+
+        public IReadOnlyList<byte[]> AdditionalCertificates
+        {
+            get
+            {
+                AdditionalReads++;
+                return _additional();
+            }
+        }
+
+        public int CertificateReads { get; private set; }
+
+        public int AdditionalReads { get; private set; }
+
+        public int SignCalls { get; private set; }
+
+        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        {
+            SignCalls++;
+            return _sign(hash.ToArray());
+        }
+    }
+
+    // An endless lazy chain. MoveNext throws a secret-bearing exception at throwAt, or never when it is negative.
+    private sealed class LazyCertificates : IReadOnlyList<byte[]>
+    {
+        private readonly byte[] _certificate;
+        private readonly int _throwAt;
+        private readonly string _secret;
+
+        public LazyCertificates(byte[] certificate, int throwAt, string secret)
+        {
+            _certificate = certificate;
+            _throwAt = throwAt;
+            _secret = secret;
+        }
+
+        public int Count => int.MaxValue;
+
+        public int MoveNextCalls { get; private set; }
+
+        public byte[] this[int index] => _certificate;
+
+        public IEnumerator<byte[]> GetEnumerator()
+        {
+            for (int index = 0; ; index++)
+            {
+                MoveNextCalls++;
+                if (index == _throwAt)
+                {
+                    throw new InvalidOperationException(_secret);
+                }
+
+                yield return _certificate;
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    // A finite chain that counts how often it is enumerated.
+    private sealed class CountingCertificates : IReadOnlyList<byte[]>
+    {
+        private readonly byte[][] _certificates;
+
+        public CountingCertificates(params byte[][] certificates)
+        {
+            _certificates = certificates;
+        }
+
+        public int Count => _certificates.Length;
+
+        public int GetEnumeratorCalls { get; private set; }
+
+        public byte[] this[int index] => _certificates[index];
+
+        public IEnumerator<byte[]> GetEnumerator()
+        {
+            GetEnumeratorCalls++;
+            return ((IEnumerable<byte[]>)_certificates).GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+    }
+
+    private sealed class OversizeAuthority : ITimestampAuthority
+    {
+        private readonly int _length;
+
+        public OversizeAuthority(int length)
+        {
+            _length = length;
+        }
+
+        public int Calls { get; private set; }
+
+        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        {
+            Calls++;
+            return new byte[_length];
         }
     }
 

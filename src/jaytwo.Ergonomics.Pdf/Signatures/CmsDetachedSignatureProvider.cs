@@ -43,6 +43,9 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// </summary>
     /// <param name="context">The signed ranges.</param>
     /// <returns>The CMS ContentInfo bytes.</returns>
+    /// <exception cref="CryptographicException">A member of the host signer threw. The message is generic, and the exception has no inner exception.</exception>
+    /// <exception cref="PdfSignException">The leaf certificate is null, empty, or not a DER-encoded certificate, or an additional certificate or the signature value is null or empty.</exception>
+    /// <exception cref="PdfSignatureTooLargeException">The certificates, signature value, and time-stamp token returned so far already exceed <see cref="PdfSignatureContext.ReservedContentsBytes"/>.</exception>
     /// <exception cref="PdfTimestampException">The time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
     public byte[] CreateContents(PdfSignatureContext context)
     {
@@ -51,6 +54,12 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             throw new ArgumentNullException(nameof(context));
         }
 
+        // Each certificate, the signature value, and the token are embedded verbatim, so their
+        // running total is a lower bound on the CMS length. It is checked before any DER is built.
+        int reserved = context.ReservedContentsBytes;
+        long total = 0;
+        List<byte[]> certificates = ReadCertificates(reserved, ref total);
+
         byte[] digest;
         using (Stream signed = context.OpenSignedBytes())
         using (SHA256 sha = SHA256.Create())
@@ -58,7 +67,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             digest = sha.ComputeHash(signed);
         }
 
-        (byte[] issuer, byte[] serial) = DerCodec.ReadCertificateIdentity(_signer.CertificateDer);
+        (byte[] issuer, byte[] serial) = ReadLeafIdentity(certificates[0]);
         byte[] contentType = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.9.3"),
             DerCodec.Set(DerCodec.Oid("1.2.840.113549.1.7.1")));
@@ -70,20 +79,19 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             DerCodec.Oid("1.2.840.113549.1.9.5"),
             DerCodec.Set(DerCodec.UtcTime(when)));
         byte[] signedAttrs = DerCodec.Set(contentType, messageDigest, signingTime);
-        byte[] signature;
+        byte[]? signature;
         using (SHA256 sha256 = SHA256.Create())
         {
             byte[] hash = sha256.ComputeHash(signedAttrs);
-            try
-            {
-                signature = _signer.SignHash(hash);
-            }
-            catch (Exception)
-            {
-                throw new CryptographicException("The external signer failed.");
-            }
+            signature = CallSigner(() => _signer.SignHash(hash));
         }
 
+        if (signature == null || signature.Length == 0)
+        {
+            throw new PdfSignException("The external signer returned an empty signature.");
+        }
+
+        AddToTotal(ref total, signature.Length, reserved);
         byte[]? unsignedAttrs = null;
         if (_timestampAuthority != null)
         {
@@ -94,12 +102,17 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             }
 
             byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
-            byte[] token = _timestampAuthority.GetTimeStampToken(Rfc3161TimeStampRequest.Create(imprint, nonce));
+            byte[]? token = _timestampAuthority.GetTimeStampToken(Rfc3161TimeStampRequest.Create(imprint, nonce));
+            if (token != null)
+            {
+                AddToTotal(ref total, token.Length, reserved);
+            }
+
             Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
 
             byte[] attribute = DerCodec.Sequence(
                 DerCodec.Oid("1.2.840.113549.1.9.16.2.14"),
-                DerCodec.Set(token));
+                DerCodec.Set(token!));
             unsignedAttrs = DerCodec.ReplaceTag(DerCodec.Set(attribute), 0xA1);
         }
 
@@ -119,20 +132,6 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
                 DerCodec.AlgorithmSha256WithRsa(),
                 DerCodec.OctetString(signature),
                 unsignedAttrs);
-        var certificates = new List<byte[]> { _signer.CertificateDer };
-        if (_signer.AdditionalCertificates != null)
-        {
-            foreach (byte[] extra in _signer.AdditionalCertificates)
-            {
-                if (extra == null || extra.Length == 0)
-                {
-                    throw new PdfSignException("An additional certificate is empty.");
-                }
-
-                certificates.Add(extra);
-            }
-        }
-
         byte[] certificateSet = DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0);
         byte[] signedData = DerCodec.Sequence(
             DerCodec.Integer(1),
@@ -143,5 +142,121 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         return DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.7.2"),
             DerCodec.ExplicitContext(0, signedData));
+    }
+
+    private static T CallSigner<T>(Func<T> access)
+    {
+        try
+        {
+            return access();
+        }
+        catch (Exception)
+        {
+            throw SignerFailed();
+        }
+    }
+
+    // A fixed-depth walk: Certificate, then TBSCertificate, then its first fields. The leaf must be
+    // one SEQUENCE with nothing after it, and the serial and issuer must carry their DER tags.
+    private static (byte[] Issuer, byte[] Serial) ReadLeafIdentity(byte[] leaf)
+    {
+        DerCodec.DerTlv certificate;
+        DerCodec.DerTlv tbs;
+        (byte[] Issuer, byte[] Serial) identity;
+        try
+        {
+            certificate = DerCodec.ReadTlv(leaf);
+            tbs = DerCodec.ReadTlv(certificate.Content);
+            identity = DerCodec.ReadCertificateIdentity(leaf);
+        }
+        catch (PdfTimestampException)
+        {
+            throw NotCertificate();
+        }
+
+        if (certificate.Tag != 0x30
+            || certificate.Full.Length != leaf.Length
+            || tbs.Tag != 0x30
+            || identity.Serial[0] != 0x02
+            || identity.Issuer[0] != 0x30)
+        {
+            throw NotCertificate();
+        }
+
+        return identity;
+    }
+
+    private static PdfSignException NotCertificate()
+    {
+        return new PdfSignException("The signer certificate is not a DER-encoded certificate.");
+    }
+
+    private static CryptographicException SignerFailed()
+    {
+        return new CryptographicException("The external signer failed.");
+    }
+
+    private static void AddToTotal(ref long total, int length, int reserved)
+    {
+        total += length;
+        if (total > reserved)
+        {
+            throw new PdfSignatureTooLargeException((int)Math.Min(total, int.MaxValue), reserved);
+        }
+    }
+
+    // Reads CertificateDer once, and enumerates AdditionalCertificates only until the running
+    // total passes the reserved gap. A host exception becomes the generic signer failure.
+    private List<byte[]> ReadCertificates(int reserved, ref long total)
+    {
+        byte[]? leaf = CallSigner(() => _signer.CertificateDer);
+        if (leaf == null || leaf.Length == 0)
+        {
+            throw new PdfSignException("The signer certificate is empty.");
+        }
+
+        AddToTotal(ref total, leaf.Length, reserved);
+        var certificates = new List<byte[]> { leaf };
+        IReadOnlyList<byte[]>? additional = CallSigner(() => _signer.AdditionalCertificates);
+        if (additional == null)
+        {
+            return certificates;
+        }
+
+        IEnumerator<byte[]>? enumerator = CallSigner(() => additional.GetEnumerator());
+        try
+        {
+            while (CallSigner(() => enumerator!.MoveNext()))
+            {
+                byte[]? extra = CallSigner(() => enumerator!.Current);
+                if (extra == null || extra.Length == 0)
+                {
+                    throw new PdfSignException("An additional certificate is empty.");
+                }
+
+                AddToTotal(ref total, extra.Length, reserved);
+                certificates.Add(extra);
+            }
+        }
+        catch (Exception)
+        {
+            try
+            {
+                enumerator?.Dispose();
+            }
+            catch (Exception)
+            {
+                // The exception already propagating wins over a failure to dispose.
+            }
+
+            throw;
+        }
+
+        CallSigner(() =>
+        {
+            enumerator?.Dispose();
+            return true;
+        });
+        return certificates;
     }
 }

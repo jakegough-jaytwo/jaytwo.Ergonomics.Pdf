@@ -1,10 +1,10 @@
 namespace jaytwo.Ergonomics.Pdf.Internal;
 
 // One cross-reference entry packed into 8 bytes, so the merged map costs about 28 bytes a slot instead of 44.
-// Bits 62-63 hold the type: 0 free, 1 in use, 2 compressed, and 3 for any other type, which Load refuses.
+// Bits 62-63 hold the type: 0 free, 1 in use, 2 compressed, and 3 for any other type, which resolves as null.
 // Bits 22-61 hold field 1: a file offset (an offset outside 0 to 2^40 - 2 is stored as 2^40 - 1, past any real file)
-// or an object-stream number. Bits 0-21 hold field 2, which nothing reads beyond its sign, so it saturates and
-// every negative value reads back as -1.
+// or an object-stream number. Bits 0-21 hold field 2, the generation or object-stream index. It saturates above any
+// generation the format allows, and every negative value reads back as -1.
 internal readonly struct XrefEntry
 {
     private const int Field2Bits = 22;

@@ -168,6 +168,49 @@ public class HardeningTests
         Assert.True(perSectionEntry < 48, report);
     }
 
+    // B-41: a classic subsection header is range-checked before any of its entries are read. The trailing row would
+    // otherwise be read as another subsection header, so the message, not only the exception type, shows the refusal.
+    [Theory]
+    [InlineData("-1 1", true)]
+    [InlineData("0 -1", true)]
+    [InlineData("2147483647 2", true)]
+    [InlineData("2147483648 1", true)]
+    [InlineData("0 4294967297", true)]
+    [InlineData("2147483647 1", false)]
+    public void classic_xref_subsection_outside_the_object_number_range_is_refused(string header, bool refused)
+    {
+        byte[] pdf = ClassicSubsectionDocument(header);
+        if (!refused)
+        {
+            using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+            Assert.Equal("ok", document.Metadata.Title);
+            return;
+        }
+
+        AssertOpenRefused<PdfParseException>(pdf, out PdfParseException error);
+
+        Assert.Contains("object number range", error.Message, StringComparison.Ordinal);
+    }
+
+    // QA-B36-02: a classic section used to be built in full beside the merged map. It is now merged as it is read, so it
+    // costs what an xref stream section costs.
+    [Fact]
+    public void classic_xref_map_memory_grows_with_unique_objects_not_with_prev_sections()
+    {
+        const int small = 16384;
+        const int large = PdfParser.MinXrefEntryBudget;
+        long oneSmall = OpenAllocation(ClassicChainDocument(small, 1));
+        long oneLarge = OpenAllocation(ClassicChainDocument(large, 1));
+        long threeLarge = OpenAllocation(ClassicChainDocument(large, 3));
+
+        double perEntry = (double)(oneLarge - oneSmall) / (large - small);
+        double perSectionEntry = (double)(threeLarge - oneLarge) / (2 * large);
+        string report = "Per entry " + perEntry.ToString("F1", CultureInfo.InvariantCulture) + " bytes; per extra section entry " + perSectionEntry.ToString("F1", CultureInfo.InvariantCulture) + " bytes.";
+
+        Assert.True(perEntry < 128, report);
+        Assert.True(perSectionEntry < 48, report);
+    }
+
     [Fact]
     public void object_stream_header_is_read_pair_by_pair_without_tokenizing_the_rest()
     {
@@ -563,6 +606,51 @@ public class HardeningTests
             builder.Ascii((entries + section).ToString(CultureInfo.InvariantCulture) + " 0 obj\n<< /Type /XRef /Size " + size + " /W [1 4 2] /Index [0 " + size + "] /Root 1 0 R /Filter /FlateDecode" + prev + " /Length " + data.Length.ToString(CultureInfo.InvariantCulture) + " >>\nstream\n");
             builder.Bytes(data);
             builder.Ascii("\nendstream\nendobj\n");
+            previous = offset;
+        }
+
+        builder.Ascii("startxref\n" + previous.ToString(CultureInfo.InvariantCulture) + "\n%%EOF\n");
+        return builder.Snapshot();
+    }
+
+    // A valid one-page file whose classic xref lists objects 0 to 4, then one more subsection with the given header and
+    // a single free row.
+    private static byte[] ClassicSubsectionDocument(string header)
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        builder.Indirect(4, "<< /Title (ok) >>");
+        long xref = builder.Length;
+        var text = new StringBuilder("xref\n0 5\n0000000000 65535 f\r\n");
+        for (int id = 1; id <= 4; id++)
+        {
+            text.Append(builder.OffsetOf(id).ToString("D10", CultureInfo.InvariantCulture)).Append(" 00000 n\r\n");
+        }
+
+        text.Append(header).Append("\n0000000000 65535 f\r\n");
+        text.Append("trailer\n<< /Size 5 /Root 1 0 R /Info 4 0 R >>\nstartxref\n").Append(xref.ToString(CultureInfo.InvariantCulture)).Append("\n%%EOF\n");
+        builder.Ascii(text.ToString());
+        return builder.Snapshot();
+    }
+
+    // The classic counterpart of XrefChainDocument: each section lists [0 entries], objects 1 to 3 in use, the rest free.
+    private static byte[] ClassicChainDocument(int entries, int sections)
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        var rows = new StringBuilder(entries * 20);
+        rows.Append("0000000000 65535 f\r\n");
+        for (int id = 1; id < entries; id++)
+        {
+            rows.Append(id <= 3 ? builder.OffsetOf(id).ToString("D10", CultureInfo.InvariantCulture) + " 00000 n\r\n" : "0000000000 65535 f\r\n");
+        }
+
+        string size = entries.ToString(CultureInfo.InvariantCulture);
+        string table = rows.ToString();
+        long previous = -1;
+        for (int section = 0; section < sections; section++)
+        {
+            long offset = builder.Length;
+            string prev = previous < 0 ? string.Empty : " /Prev " + previous.ToString(CultureInfo.InvariantCulture);
+            builder.Ascii("xref\n0 " + size + "\n" + table + "trailer\n<< /Size " + size + " /Root 1 0 R" + prev + " >>\n");
             previous = offset;
         }
 
