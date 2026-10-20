@@ -293,7 +293,7 @@ def is_record_path(path: str) -> bool:
 
 
 def _owns_transaction(before: str | list[str] | None, after: str | list[str] | None) -> bool:
-    return (after == "active" and before != "active") or (after == "done" and before in {"active", "ready"})
+    return (after == "active" and before != "active") or (after == "done" and before not in {"done", "cancelled"})
 
 
 def resolve_owner(head_records: list[Record], staged_records: list[Record], paths: list[str]) -> tuple[Record | None, list[str]]:
