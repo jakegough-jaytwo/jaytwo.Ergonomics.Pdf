@@ -67,7 +67,7 @@ Large-file behavior is part of the design. Memory follows the working set of the
 
 ## CI
 
-- Jenkins builds the `builder` stage of the `Dockerfile` on Ubuntu and runs `make unit-test` there on net8.0 and net6.0. net48 tests run on Windows only. Before you commit a checkpoint, run `make docker-builder docker-test`. It reproduces the Jenkins run locally and must pass.
+- Jenkins builds the `builder` stage of the `Dockerfile` on Ubuntu and runs `make unit-test` there on net10.0, net8.0, and net6.0. net48 tests run on Windows only. Before you commit a checkpoint, run `make docker-builder docker-test`. It reproduces the Jenkins run locally and must pass.
 - The Linux image installs every tool the tests require. A change that adds a test needing a new external tool also adds that tool to the `base` stage of the `Dockerfile`.
 - Tests find tools through `ExternalTool.Locate` and `ExternalTool.Executable`. Do not hard-code `.exe` names, `where.exe`, or absolute Windows paths. On Unix, `Environment.SetEnvironmentVariable` does not change the native environment that an in-process native library reads.
 

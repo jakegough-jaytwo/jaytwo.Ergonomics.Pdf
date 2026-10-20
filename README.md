@@ -104,4 +104,4 @@ PDF 1.0 through 1.7, the operations above, standard security revisions 2 through
 dotnet test jaytwo.Ergonomics.Pdf.sln
 ```
 
-The package targets `net8.0`, `net6.0`, `netstandard2.1`, and `netstandard2.0`. The `netstandard2.0` build depends on `System.Memory`. Acceptance criteria for the tests live in `ACCEPTANCE.md`.
+The package targets `net10.0`, `net8.0`, `net6.0`, and `netstandard2.0`. `netstandard2.1` consumers use the `netstandard2.0` build. The `netstandard2.0` build depends on `System.Memory`. Acceptance criteria for the tests live in `ACCEPTANCE.md`.

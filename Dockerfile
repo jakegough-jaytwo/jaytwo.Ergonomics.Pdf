@@ -15,6 +15,7 @@ RUN apt-get update \
 
 RUN curl -fsSL https://dot.net/v1/dotnet-install.sh -o /tmp/dotnet-install.sh \
   && chmod +x /tmp/dotnet-install.sh \
+  && /tmp/dotnet-install.sh --channel 10.0 --install-dir "$DOTNET_ROOT" \
   && /tmp/dotnet-install.sh --channel 8.0 --install-dir "$DOTNET_ROOT" \
   && /tmp/dotnet-install.sh --channel 6.0 --install-dir "$DOTNET_ROOT" \
   && ln -sf "$DOTNET_ROOT/dotnet" /usr/bin/dotnet \
