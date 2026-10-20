@@ -119,6 +119,26 @@ class WorkflowTests(unittest.TestCase):
         self.assertEqual("W-1", owner.meta["id"])
         self.assertEqual([], errors)
 
+    def test_proposed_item_activated_and_completed_with_work_passes(self):
+        head = [_record("W-1", "proposed", [])]
+        staged = [_record("W-1", "done", ["src/"])]
+        owner, errors = workflow.resolve_owner(head, staged, ["agents/work-items/W-1.md", "src/a.cs"])
+        self.assertEqual("W-1", owner.meta["id"])
+        self.assertEqual([], errors)
+
+    def test_new_item_created_done_with_work_passes(self):
+        staged = [_record("W-1", "done", ["src/"])]
+        owner, errors = workflow.resolve_owner([], staged, ["agents/work-items/W-1.md", "src/a.cs"])
+        self.assertEqual("W-1", owner.meta["id"])
+        self.assertEqual([], errors)
+
+    def test_cancelled_item_reopened_as_done_does_not_own_work(self):
+        head = [_record("W-1", "cancelled", ["src/"])]
+        staged = [_record("W-1", "done", ["src/"])]
+        owner, errors = workflow.resolve_owner(head, staged, ["agents/work-items/W-1.md", "src/a.cs"])
+        self.assertIsNone(owner)
+        self.assertEqual(1, len(errors))
+
     def test_record_only_change_passes_without_active_item(self):
         head = [_record("W-1", "done", ["x/"]), _record("W-2", "proposed", [])]
         paths = ["agents/work-items/W-1.md", "agents/work-items/W-2.md", "agents/state/current.md"]
@@ -164,6 +184,13 @@ class StagedIndexTests(unittest.TestCase):
 
     def test_activation_and_work_in_one_transaction_passes(self):
         self._write("agents/work-items/W-1.md", _item_text("W-1", "active", ["src/"]))
+        self._write("src/a.cs", "class A {}\n")
+        self._git("add", ".")
+        self.assertEqual([], workflow.task_check(self.root))
+
+    def test_activation_completion_and_work_in_one_transaction_passes(self):
+        self._write("agents/work-items/W-1.md", _item_text("W-1", "done", ["src/", "agents/state/current.md"]))
+        self._write("agents/state/current.md", "# Next\n")
         self._write("src/a.cs", "class A {}\n")
         self._git("add", ".")
         self.assertEqual([], workflow.task_check(self.root))
