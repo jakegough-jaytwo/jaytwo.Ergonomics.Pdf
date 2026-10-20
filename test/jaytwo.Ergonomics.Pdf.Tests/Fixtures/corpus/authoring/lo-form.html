@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Carrier Onboarding Form</title><meta name="author" content="Example Freight Procurement"></head>
+<body>
+<h1>Carrier Onboarding Form</h1>
+<p>Complete every field. This form was authored in LibreOffice Writer for the jaytwo.Ergonomics.Pdf interoperability corpus.</p>
+<form action="https://example.com/onboarding" method="post">
+<p>Legal name: <input type="text" name="LegalName" size="40" maxlength="80"></p>
+<p>Tax identifier: <input type="text" name="TaxId" size="20" maxlength="20"></p>
+<p>Contact email: <input type="text" name="Email" size="40"></p>
+<p>Fleet size: <select name="FleetSize"><option>1-10</option><option>11-50</option><option selected>51-200</option><option>201+</option></select></p>
+<p>Service: <input type="radio" name="Service" value="FTL" checked> Full truckload
+<input type="radio" name="Service" value="LTL"> Less than truckload
+<input type="radio" name="Service" value="Intermodal"> Intermodal</p>
+<p><input type="checkbox" name="Hazmat" value="Yes"> Certified for hazardous materials</p>
+<p><input type="checkbox" name="Insurance" value="Yes" checked> Insurance certificate attached</p>
+<p>Notes:<br><textarea name="Notes" rows="4" cols="60">Preferred lanes: Zürich – Köln</textarea></p>
+</form>
+</body>
+</html>

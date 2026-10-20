@@ -1,0 +1,3963 @@
+{
+  "description": "G2 interoperability corpus (QUALIFICATION.md section 5). Paths are relative to the test Fixtures directory. 'probe' is what Fixtures/corpus/corpus_probe.py reports with qpdf, pypdf, and pyHanko; CorpusManifestTests re-runs it on every test run.",
+  "entries": [
+    {
+      "id": "irs-fw9-2024-03",
+      "file": "corpus/irs-fw9-2024-03.pdf",
+      "sha256": "2d420cbb4123dcf1fb82595b2359cfbb5d81f00b9df9d359fcc7af361d093f53",
+      "size": 140815,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.irs.gov/pub/irs-pdf/fw9.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.irs.gov/pub/irs-pdf/fw9.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe LiveCycle Designer",
+        "version": "6.5",
+        "detail": "Info /Producer and /Creator: Designer 6.5; Reader-extended by ARE Production V8.1"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Hybrid XFA form with Reader-extension usage rights, document JavaScript, linearized first revision followed by an incremental update, xref streams and object streams.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "topmostSubform[0].Page1[0].f1_01[0]",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "javascript",
+          "linearized",
+          "multiple-revisions",
+          "object-streams",
+          "tagged",
+          "usage-rights",
+          "xfa",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "ae0b2c1b4e855ada65c394d3766913d24b75ddfc21d8f0dd58ab7c43c7ccec8d",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            611.976,
+            791.968
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Designer 6.5",
+          "title": "Form W-9 (Rev. March 2024)"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 6,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": true,
+        "widgets": 23,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "irs-f1040es-2026",
+      "file": "corpus/irs-f1040es-2026.pdf",
+      "sha256": "396ffad25baa737b33a67d27624f7444be3ac4e7245d287aebe5f89864f90b54",
+      "size": 331490,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.irs.gov/pub/irs-pdf/f1040es.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.irs.gov/pub/irs-pdf/f1040es.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Antenna House PDF Output Library",
+        "version": "6.6.1437",
+        "detail": "Info /Producer: Antenna House PDF Output Library 6.6.1437 (Linux64); /Creator: AH XSL Formatter V6.6 MR4"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "AcroForm (no XFA) with usage rights, an embedded Distiller joboptions file, outlines, 16 pages, and two revisions.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "PdfParseException",
+        "revise": "ok",
+        "fill": {
+          "field": "topmostSubform[0].Page12[0].f12_1[0]",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Defect (G2 corpus finding D1): the embedded file's Flate stream ends one byte before /Length (a trailing 0x0A). The library takes the last four bytes of the stream data as the Adler-32 and reports 'The zlib checksum does not match', but the checksum that follows the deflate data matches; qpdf, pypdf, and Python zlib decode the 15,003 bytes. Listing works; reading the content throws PdfParseException."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [
+          {
+            "name": "Press Quality(1).joboptions",
+            "sha256": "042d4c5545cd9496023aaf718131a1e9fc4c200bc130a1b2581d888224eebc97"
+          }
+        ],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "embedded-files",
+          "javascript",
+          "linearized",
+          "multiple-revisions",
+          "object-streams",
+          "outlines",
+          "tagged",
+          "usage-rights",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "42959f27ef141a6f5123af603d1428f527977a8829314c37f941953d0bdd3c04",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Antenna House PDF Output Library 6.6.1437 (Linux64)",
+          "title": "2026 Form 1040-ES"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 16,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": true,
+        "widgets": 118,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "uscis-i9-2025",
+      "file": "corpus/uscis-i9-2025.pdf",
+      "sha256": "780f348c34df694bb0b4dbbfaf9f22b99b9757b80d16a37ba89aadf069597281",
+      "size": 524095,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.uscis.gov/sites/default/files/document/forms/i-9.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.uscis.gov/sites/default/files/document/forms/i-9.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Acrobat Distiller",
+        "version": "23.0",
+        "detail": "Info /Producer: Acrobat Distiller 23.0 (Windows); /Creator: Designer 6.5"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "AcroForm-only government form with text, choice, and button fields, tagged, xref stream with object streams.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "Last Name (Family Name)",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "object-streams",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "a089731d7856e2fca30c10b2fe62f2a17737d034d7eacd2fdf19247c8c053abc",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Acrobat Distiller 23.0 (Windows)",
+          "title": "Form I-9, Employment Eligibility Verification"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 4,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 130,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "va-21-4138",
+      "file": "corpus/va-21-4138.pdf",
+      "sha256": "f534b7c43aa774ed8a9005d7e564cbf18d4ce54d04e0e0559282d95ba2c6c6be",
+      "size": 881905,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.vba.va.gov/pubs/forms/VBA-21-4138-ARE.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.vba.va.gov/pubs/forms/VBA-21-4138-ARE.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe LiveCycle Designer",
+        "version": "6.5",
+        "detail": "Info /Producer and /Creator: Designer 6.5; Reader-extended by ARE Production V8.1"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Hybrid XFA form with usage rights, an unsigned signature field, /SigFlags 3, linearized then updated.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]",
+          "value": "Ada",
+          "result": "NeedAppearances"
+        }
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill.",
+        "The fill field is a comb field (/Ff bit 25, /MaxLen 12, /DA CourierNewPSMT), so the library sets /NeedAppearances instead of drawing it (ACCEPTANCE: comb sets /NeedAppearances)."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "dct",
+          "javascript",
+          "linearized",
+          "multiple-revisions",
+          "object-streams",
+          "signature-field",
+          "tagged",
+          "usage-rights",
+          "xfa",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "f3eed9cb95d911fe1a771c62975bac1a9098143c516f40a0191a78b2290fdc5b",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Designer 6.5",
+          "title": "VA Form 21-4138, STATEMENT IN SUPPORT OF CLAIM"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 2,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": true,
+        "widgets": 33,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "grants-sf424-v4",
+      "file": "corpus/grants-sf424-v4.pdf",
+      "sha256": "5cad14f3d86f8cb0c4b9ed6e1b4f5fcefd0d492f164e56573864bafd6cdcf2a5",
+      "size": 149909,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://apply07.grants.gov/apply/forms/sample/SF424_4_0-V4.0.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://apply07.grants.gov/apply/forms/sample/SF424_4_0-V4.0.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe LiveCycle Designer",
+        "version": "6.4",
+        "detail": "Info /Producer and /Creator: Designer 6.4"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens, reads, and accepts a metadata revision. It has no AcroForm fields, so fill does not apply; XFA editing is out of scope (charter).",
+      "exercises": "XFA form whose /AcroForm has no fields (/NeedAppearances true); the fields exist only in XFA.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "XFA-only content: W-76 classifies it."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "javascript",
+          "need-appearances",
+          "object-streams",
+          "tagged",
+          "usage-rights",
+          "xfa",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Designer 6.4",
+          "title": "Application for Federal Assistance (SF-424)"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": true,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "cms-40b",
+      "file": "corpus/cms-40b.pdf",
+      "sha256": "c991595989dafd5bff332bef16bc8f18bf2263db0799b738bdb9c528d51cf470",
+      "size": 108533,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.cms.gov/medicare/cms-forms/cms-forms/downloads/cms40b-e.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.cms.gov/medicare/cms-forms/cms-forms/downloads/cms40b-e.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe PDF Library",
+        "version": "17.0",
+        "detail": "Info /Producer: Adobe PDF Library 17.0; /Creator: Adobe InDesign 20.3 (Macintosh); fields and usage rights added in Acrobat"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "InDesign layout with Acrobat-authored fields, two unsigned signature fields, usage rights, linearized with inconsistent hint tables.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "1-2",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "linearized",
+          "object-streams",
+          "outlines",
+          "signature-field",
+          "tagged",
+          "usage-rights",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "6f41cb8d47347b1fd28626c7bb5739a2a567a0cf5ccd2e2e585b2e775b3ac37a",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.6",
+        "info": {
+          "producer": "Adobe PDF Library 17.0",
+          "title": "Application for Enrollment in Medicare Part B (Medical Insurance)"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": true,
+        "widgets": 47,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "faa-8710-1",
+      "file": "corpus/faa-8710-1.pdf",
+      "sha256": "3cdda1d9975be05aa68dccf614f899726c9469239127d8d4803c04e1e0394b4c",
+      "size": 409501,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.faa.gov/documentLibrary/media/form/faa_form_8710-1.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.faa.gov/documentLibrary/media/form/faa_form_8710-1.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe PDF Library",
+        "version": "15.0",
+        "detail": "Info /Producer: Adobe PDF Library 15.0; /Creator: Acrobat PDFMaker 15 for Word"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Word-to-PDFMaker form with 331 widgets and an embedded file whose name-tree key is UTF-16LE without a byte-order mark; linearized with inconsistent hint tables.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "PdfParseException",
+        "revise": "ok",
+        "fill": {
+          "field": "A. Name (Last, First, Middle)",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization.",
+        "Writer quirk (G2 corpus finding Q1, for W-66): the /EmbeddedFiles name-tree key is UTF-16LE without a byte-order mark (a\u0000c\u0000c\u0000...). It is not a valid text string (ISO 32000-1 7.9.2.2), so listing attachments throws PdfParseException; the filespec's /F and /UF are valid. qpdf and pypdf read the key as raw bytes."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [
+          {
+            "name": "a\u0000c\u0000c\u0000r\u0000e\u0000p\u0000o\u0000r\u0000t\u0000.\u0000h\u0000t\u0000m\u0000l\u0000",
+            "sha256": null
+          }
+        ],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "embedded-files",
+          "linearized",
+          "object-streams",
+          "outlines",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "1a172c975cf113b86e15f4e9e44f0581ace7dfd865f27d14b689ccefa79fc331",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.6",
+        "info": {
+          "producer": "Adobe PDF Library 15.0",
+          "title": "FAA Form"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 6,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 331,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "opm-of306",
+      "file": "corpus/opm-of306.pdf",
+      "sha256": "3229d821dd6b07b2f38c73fa5be4ce87276a09f03df881fab2be9ef3bd5b6261",
+      "size": 171239,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.opm.gov/forms/pdf_fill/of0306.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.opm.gov/forms/pdf_fill/of0306.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft Word for Microsoft 365",
+        "version": null,
+        "detail": "Info /Producer and /Creator: Microsoft Word for Microsoft 365; fields added in Acrobat"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Word export with Acrobat fields, two unsigned signature fields, linearized with inconsistent hint tables.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "Name",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "linearized",
+          "object-streams",
+          "outlines",
+          "signature-field",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "d27569c903e1bd6a0bb72c5249db4b7b0fff070aa903e1e92b1721d5cdb3dbd7",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft® Word for Microsoft 365",
+          "title": "Declaration for Federal Employment, Optional Form 306"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 55,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "libreoffice-form",
+      "file": "corpus/libreoffice-form.pdf",
+      "sha256": "cbef8f2cf3eb2ad547b26e9f6866812f978ec256fb10f4294c412f2300db2a72",
+      "size": 58794,
+      "category": "forms",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/lo-form.html",
+        "acquired": "2026-10-20",
+        "command": "soffice 26.8.1 --headless --infilter=\"HTML (StarWriter)\" --convert-to 'pdf:writer_pdf_Export:{\"ExportFormFields\":{\"type\":\"boolean\",\"value\":\"true\"},\"FormsType\":{\"type\":\"long\",\"value\":\"0\"}}' lo-form.html"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LibreOffice",
+        "version": "26.8.1.1",
+        "detail": "Info /Producer: LibreOffice 26.8.1.1 (X86_64); /Creator: Writer"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "LibreOffice Writer form: text, choice, radio, check box, and multiline fields with /NeedAppearances true; /Resources inherited from the page-tree root.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "LegalName",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "inherited-page-attributes",
+          "need-appearances",
+          "outlines",
+          "xmp"
+        ],
+        "fieldNamesSha256": "5cfbb127fa20ec4b170f71cac041fe13ec7551aebe2cfc66472cf014a10c32d8",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "LibreOffice 26.8.1.1 (X86_64)",
+          "title": "Carrier Onboarding Form"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 10,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "cms-40b-pyhanko-approved",
+      "file": "corpus/cms-40b-pyhanko-approved.pdf",
+      "sha256": "01709e690e9e2bd622fc0b87069eb3dc30c07a72246db7ae10f849e5bfafb171",
+      "size": 141868,
+      "category": "forms",
+      "authoring": "transformed",
+      "provenance": {
+        "method": "transformed",
+        "source": "corpus entry cms-40b",
+        "acquired": "2026-10-20",
+        "command": "python authoring/transform_pyhanko.py approve cms-40b.pdf cms-40b-pyhanko-approved.pdf Signature-1"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105). The added signature is from a throwaway test key.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe PDF Library",
+        "version": "17.0",
+        "detail": "As cms-40b, then signed by pyHanko"
+      },
+      "transformations": [
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "change": "approval signature (adbe.pkcs7.detached, throwaway self-signed RSA-2048 key) in the existing field Signature-1"
+        }
+      ],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A real government form with an approval signature in its own signature field, appended as an incremental revision over usage rights.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "1-2",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [
+        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": "1.7",
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "linearized",
+          "multiple-revisions",
+          "object-streams",
+          "outlines",
+          "signature-field",
+          "signed",
+          "tagged",
+          "usage-rights",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "6f41cb8d47347b1fd28626c7bb5739a2a567a0cf5ccd2e2e585b2e775b3ac37a",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.6",
+        "info": {
+          "producer": "Adobe PDF Library 17.0; pyHanko 0.38.0",
+          "title": "Application for Enrollment in Medicare Part B (Medical Insurance)"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [
+          {
+            "coverage": "ENTIRE_FILE",
+            "docmdpOk": true,
+            "field": "Signature-1",
+            "intact": true,
+            "modification": "NONE",
+            "valid": true
+          }
+        ],
+        "usageRights": true,
+        "widgets": 47,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "opm-of306-pyhanko-certified",
+      "file": "corpus/opm-of306-pyhanko-certified.pdf",
+      "sha256": "8c46212815ec6a424a2f688d4aff96dba2b2a834fdddb81e6e011ed2a96a8008",
+      "size": 179882,
+      "category": "forms",
+      "authoring": "transformed",
+      "provenance": {
+        "method": "transformed",
+        "source": "corpus entry opm-of306",
+        "acquired": "2026-10-20",
+        "command": "python authoring/transform_pyhanko.py certify opm-of306.pdf opm-of306-pyhanko-certified.pdf CorpusCertification"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105). The added signature is from a throwaway test key.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft Word for Microsoft 365",
+        "version": null,
+        "detail": "As opm-of306, then certified by pyHanko"
+      },
+      "transformations": [
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "change": "certification signature, DocMDP P 2, in a new invisible field CorpusCertification"
+        }
+      ],
+      "classification": "supported",
+      "justification": "Opens and reads. DocMDP P 2 allows form filling and refuses the metadata revision (ACCEPTANCE: certification).",
+      "exercises": "A real form certified with DocMDP P 2: fills are allowed, other writes are refused.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "PdfCertificationLockedException",
+        "fill": {
+          "field": "Name",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": 2,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "certified",
+          "linearized",
+          "multiple-revisions",
+          "object-streams",
+          "outlines",
+          "signature-field",
+          "signed",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "c17bbc1471d651f5f63e47c7df79c48933f5cb449a629675661627368aea7d9a",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft® Word for Microsoft 365; pyHanko 0.38.0",
+          "title": "Declaration for Federal Employment, Optional Form 306"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [
+          {
+            "coverage": "ENTIRE_FILE",
+            "docmdpOk": true,
+            "field": "CorpusCertification",
+            "intact": true,
+            "modification": "NONE",
+            "valid": true
+          }
+        ],
+        "usageRights": false,
+        "widgets": 56,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "libreoffice-form-pypdf-inherited",
+      "file": "corpus/libreoffice-form-pypdf-inherited.pdf",
+      "sha256": "f833215307709b67c00499f3e1341ad3a02939ff0215f21106c7f6cc81875c43",
+      "size": 59301,
+      "category": "forms",
+      "authoring": "transformed",
+      "provenance": {
+        "method": "transformed",
+        "source": "corpus entry libreoffice-form",
+        "acquired": "2026-10-20",
+        "command": "python authoring/transform_pypdf.py inherit libreoffice-form.pdf libreoffice-form-pypdf-inherited.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LibreOffice",
+        "version": "26.8.1.1",
+        "detail": "As libreoffice-form, then rewritten by pypdf"
+      },
+      "transformations": [
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "change": "full rewrite; /MediaBox and /Resources moved to the root /Pages node with /Rotate 90; /Title changed"
+        }
+      ],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A form page that inherits /MediaBox, /Resources, and /Rotate 90 from the page-tree root.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "LegalName",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "inherited-page-attributes",
+          "need-appearances",
+          "outlines",
+          "rotated-pages",
+          "xmp"
+        ],
+        "fieldNamesSha256": "5cfbb127fa20ec4b170f71cac041fe13ec7551aebe2cfc66472cf014a10c32d8",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 90
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "LibreOffice 26.8.1.1 (X86_64)",
+          "title": "Carrier Onboarding Form (rotated, inherited attributes)"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 10,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "pypdf-acroform",
+      "file": "pypdf-acroform.pdf",
+      "sha256": "04ae561b996e3dfebe91ac6bc59d3861a3c8d95ccfe6d6b688977b029d02f7d5",
+      "size": 1201,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "python generate_foreign_pdfs.py (write_form)"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "pypdf",
+        "version": null,
+        "detail": "pypdf PdfWriter"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Text, check box, and choice fields without appearances; /NeedAppearances.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "Name",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "need-appearances"
+        ],
+        "fieldNamesSha256": "05cfe76ac624eda269984cf1e240aee14925ef87af4fa70ee2d7403bcdf68cbf",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf",
+          "title": null
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 4,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "pypdf-dangling",
+      "file": "pypdf-dangling.pdf",
+      "sha256": "283cff3703628e5bf7fc45180c54f499a58e77c113258ac1f817e4e1d4af1019",
+      "size": 758,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-19",
+        "command": "python generate_foreign_pdfs.py (write_dangling)"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "pypdf",
+        "version": null,
+        "detail": "pypdf PdfWriter"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "/Fields with free, undefined, and stale-generation references, read as null (ISO 32000-1 7.3.10).",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": {
+          "field": "Name",
+          "value": "Ada",
+          "result": "Generated"
+        }
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "need-appearances"
+        ],
+        "fieldNamesSha256": "dcd1d5223f73b3a965c07e3ff5dbee3eedcfedb806686a05b9b3868a2c3d6d50",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf",
+          "title": null
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 1,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "pyhanko-sigfield",
+      "file": "pyhanko-sigfield.pdf",
+      "sha256": "1b95f440159cd947a069736510e2ca95a99d43e94abe58e613eed9cb801d79b1",
+      "size": 1422,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "python generate_foreign_pdfs.py (write_signature_field)"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "pyHanko",
+        "version": "0.38.0",
+        "detail": "pypdf base, signature field appended by pyHanko"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "An empty signature field appended as an incremental revision.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": "1.7",
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "multiple-revisions",
+          "signature-field"
+        ],
+        "fieldNamesSha256": "fa6a8dd3b01be44d76b5197dff1c8d898666857c81289f3bfdf38fc2a19ef583",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf; pyHanko 0.38.0",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 1,
+        "xmp": false,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "word-report",
+      "file": "corpus/word-report.pdf",
+      "sha256": "aeb50d34ba918a7c9003e3e79bf3770b04b01e58da656994554b5a82313d0490",
+      "size": 273349,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/word-report.html",
+        "acquired": "2026-10-20",
+        "command": "make_assets.sh assets; powershell -File word.ps1 -Source word-report.html -Out word-report.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft Word",
+        "version": "2016 (Microsoft 365 build 16.0.20430)",
+        "detail": "Info /Producer: Microsoft® Word 2016"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Word export with tags, heading bookmarks, document properties, images, a link, and Word's hybrid layout: a classic section plus an empty update section that carries /XRefStm.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "dct",
+          "hybrid-xref",
+          "multiple-revisions",
+          "object-streams",
+          "outlines",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft® Word 2016",
+          "title": "Quarterly Operations Review"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "excel-invoice",
+      "file": "corpus/excel-invoice.pdf",
+      "sha256": "9dc75910a00e7ffdc68a490c0a78df5bbc460f99a5f1ffb5d6ea78506571a791",
+      "size": 213088,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/excel.ps1",
+        "acquired": "2026-10-20",
+        "command": "powershell -File excel.ps1 -Out excel-invoice.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft Excel",
+        "version": "2016 (Microsoft 365 build 16.0.20430)",
+        "detail": "Info /Producer: Microsoft® Excel® 2016"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Excel export of two sheets, a chart, and a landscape page, in Office's hybrid cross-reference layout.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "hybrid-xref",
+          "multiple-revisions",
+          "object-streams",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft® Excel® 2016",
+          "title": "Invoice INV-2026-0042"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 4,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "ms-print-to-pdf",
+      "file": "corpus/ms-print-to-pdf.pdf",
+      "sha256": "250102650dd6115f4e0fb4c921295a404fd73cf7d5ddaf248adeb73df0177a37",
+      "size": 508943,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/word-report.html",
+        "acquired": "2026-10-20",
+        "command": "powershell -File word.ps1 -Source word-report.html -Out word-report-2.pdf -Print ms-print-to-pdf.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft Print To PDF",
+        "version": "Windows 11 26100",
+        "detail": "Info /Producer: Microsoft: Print To PDF"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "The Word report printed through the Windows print driver: untagged, classic cross-reference, DCT images.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "dct"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft: Print To PDF",
+          "title": "Microsoft Word - word-report.html"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "chrome-invoice",
+      "file": "corpus/chrome-invoice.pdf",
+      "sha256": "5f943b65535887d160c811a753868d18b5afe6bfa74ea5016e41a07ff5c3099d",
+      "size": 91810,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/chrome-invoice.html",
+        "acquired": "2026-10-20",
+        "command": "chrome 155 --headless=new --no-pdf-header-footer --print-to-pdf=chrome-invoice.pdf chrome-invoice.html"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Skia/PDF (Google Chrome)",
+        "version": "m155 (Chrome 155.0.8059.85)",
+        "detail": "Info /Producer: Skia/PDF m155"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Chrome print with SVG, a tagged structure tree, and a link.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "tagged"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Skia/PDF m155",
+          "title": "Invoice INV-2026-0107"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 2,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "edge-handbook",
+      "file": "corpus/edge-handbook.pdf",
+      "sha256": "12da032e4f2d3f710831c3802493e32792b45bccf813dc85b3159d3fd00f865b",
+      "size": 142455,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/make_html.py",
+        "acquired": "2026-10-20",
+        "command": "python make_html.py .; msedge 155 --headless=new --no-pdf-header-footer --generate-pdf-document-outline --print-to-pdf=edge-handbook.pdf edge-handbook.html"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Skia/PDF (Microsoft Edge)",
+        "version": "m155 (Edge 155.0.4283.62)",
+        "detail": "Info /Producer: Skia/PDF m155"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Edge print of 16 pages with a document outline, internal links, and tags.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "outlines",
+          "tagged"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            594.96,
+            841.92
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Skia/PDF m155",
+          "title": "Employee Handbook"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 16,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "libreoffice-memo-rc4",
+      "file": "corpus/libreoffice-memo-rc4.pdf",
+      "sha256": "f876ef84252a03dfbefff7506241dfb6ba5b515108d4785027e6e69fafdb20ab",
+      "size": 76884,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/lo-memo.html",
+        "acquired": "2026-10-20",
+        "command": "soffice 26.8.1 --headless --infilter=\"HTML (StarWriter)\" --convert-to 'pdf:writer_pdf_Export:{\"EncryptFile\":true,\"DocumentOpenPassword\":\"corpus-user\",\"RestrictPermissions\":true,\"PermissionPassword\":\"corpus-owner\",\"Changes\":0,\"Printing\":1,\"EnableCopyingOfContent\":false}' lo-memo.html (typed JSON form)"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LibreOffice",
+        "version": "26.8.1.1",
+        "detail": "Info /Producer: LibreOffice 26.8.1.1 (X86_64); /Creator: Writer"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens with the user password and reads. The user password honors the permission bits, so the metadata revision is refused (ACCEPTANCE: encryption).",
+      "exercises": "Standard security revision 3 (128-bit RC4) with user password corpus-user, owner password corpus-owner, and modification not permitted.",
+      "password": "corpus-user",
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "PdfEncryptionRestrictedException",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": {
+          "permissions": {
+            "extract for accessibility": true,
+            "extract for any purpose": false,
+            "modify annotations": false,
+            "modify anything": false,
+            "modify document assembly": false,
+            "modify forms": false,
+            "modify other": false,
+            "print high resolution": false,
+            "print low resolution": true
+          },
+          "revision": 3
+        },
+        "features": [
+          "classic-xref",
+          "encryption",
+          "inherited-page-attributes",
+          "outlines",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "LibreOffice 26.8.1.1 (X86_64)",
+          "title": "Confidential Rate Memo"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "libreoffice-hybrid-pdfa3",
+      "file": "corpus/libreoffice-hybrid-pdfa3.pdf",
+      "sha256": "8af25afb19122dc515b585a7d3823154f799704222fafbb46b9a6a39b9eb0548",
+      "size": 76848,
+      "category": "office-browser",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/lo-hybrid.html",
+        "acquired": "2026-10-20",
+        "command": "soffice 26.8.1 --headless --infilter=\"HTML (StarWriter)\" --convert-to 'pdf:writer_pdf_Export:{\"IsAddStream\":true,\"SelectPdfVersion\":3}' lo-hybrid.html (typed JSON form)"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LibreOffice",
+        "version": "26.8.1.1",
+        "detail": "Info /Producer: LibreOffice 26.8.1.1 (X86_64); /Creator: Writer"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "LibreOffice hybrid PDF claiming PDF/A-3b: the OpenDocument source as an embedded file with /AF and /AFRelationship /Source.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [
+          {
+            "name": "Original.odt",
+            "sha256": "62ca904ac8b9f25ed7c82363f5ec440298ceba1c56ed6dea144f200f03ca96a1"
+          }
+        ],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "associated-files",
+          "classic-xref",
+          "embedded-files",
+          "inherited-page-attributes",
+          "outlines",
+          "tagged",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "LibreOffice 26.8.1.1 (X86_64)",
+          "title": "Depot Inspection Checklist"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "chrome-invoice-pyhanko-pubkey",
+      "file": "corpus/chrome-invoice-pyhanko-pubkey.pdf",
+      "sha256": "f6955c5e07c7214a323062f5ceb09f1628b599d4ca8b1dc16a85d5686c4847d5",
+      "size": 107305,
+      "category": "office-browser",
+      "authoring": "transformed",
+      "provenance": {
+        "method": "transformed",
+        "source": "corpus entry chrome-invoice",
+        "acquired": "2026-10-20",
+        "command": "python authoring/transform_pyhanko.py pubkey chrome-invoice.pdf chrome-invoice-pyhanko-pubkey.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Skia/PDF (Google Chrome)",
+        "version": "m155",
+        "detail": "As chrome-invoice, then rewritten and encrypted by pyHanko"
+      },
+      "transformations": [
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "change": "full rewrite with public-key security handler (AES-128) for a throwaway recipient certificate"
+        }
+      ],
+      "classification": "unsupported",
+      "justification": "Public-key encryption is never in scope (AGENTS.md). Open must refuse it with a controlled exception and no partial state.",
+      "exercises": "Public-key (/Adobe.PubSec) encryption, which the charter excludes.",
+      "password": null,
+      "operations": {
+        "open": "PdfEncryptedException",
+        "attachments": null,
+        "revise": null,
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "encryption": null,
+        "features": [
+          "classic-xref"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "header": "2.0",
+        "linearizationValid": false,
+        "openError": "NotImplementedError: only Standard PDF encryption handler is available",
+        "pages": null,
+        "qpdfCheck": {
+          "exit": 2
+        },
+        "widgets": 0
+      }
+    },
+    {
+      "id": "qpdf-encrypted",
+      "file": "qpdf-encrypted.pdf",
+      "sha256": "a4096a9567f6e07370c0832465d36000f354b2c2096b109ef21643bcb20270be",
+      "size": 1363,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "qpdf --encrypt user-secret owner-secret 256 -- pypdf-base.pdf qpdf-encrypted.pdf"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "qpdf",
+        "version": "12.4.2",
+        "detail": "pypdf base encrypted by qpdf"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Standard security revision 6 (AES-256) opened with the user password.",
+      "password": "user-secret",
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": {
+          "permissions": {
+            "extract for accessibility": true,
+            "extract for any purpose": true,
+            "modify annotations": true,
+            "modify anything": true,
+            "modify document assembly": true,
+            "modify forms": true,
+            "modify other": true,
+            "print high resolution": true,
+            "print low resolution": true
+          },
+          "revision": 6
+        },
+        "features": [
+          "classic-xref",
+          "encryption"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "pypdf",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "naca-tn2350",
+      "file": "corpus/naca-tn2350.pdf",
+      "sha256": "f6803764c0c1bc9459a50cb84744a98a74a0df4b47f4a1c27803787bc9016462",
+      "size": 752570,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://ntrs.nasa.gov/api/citations/19930083024/downloads/19930083024.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://ntrs.nasa.gov/api/citations/19930083024/downloads/19930083024.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105). NACA Technical Note 2350 (1951); NTRS copyright determination GOV_PUBLIC_USE_PERMITTED.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Acrobat PDFWriter",
+        "version": "2.01",
+        "detail": "Info /Producer: Acrobat PDFWriter 2.01 for Windows"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "300 dpi CCITT G4 page scans, PDF 1.4, linearized with inconsistent hint tables, classic cross-reference.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "ccitt",
+          "classic-xref",
+          "linearized",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            614.0,
+            795.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Acrobat PDFWriter 2.01 for Windows",
+          "title": "rnp1254.tmp"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 24,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "naca-rm-19930086000",
+      "file": "corpus/naca-rm-19930086000.pdf",
+      "sha256": "d5eed87c2b2f155a06128c30a492e8a0a1037362433baaee3e9d68951fbdde47",
+      "size": 428197,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://ntrs.nasa.gov/api/citations/19930086000/downloads/19930086000.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://ntrs.nasa.gov/api/citations/19930086000/downloads/19930086000.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105). NACA report (1949); NTRS copyright determination GOV_PUBLIC_USE_PERMITTED.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe PDF Library",
+        "version": "4.0",
+        "detail": "Info /Producer: Adobe PDF Library 4.0; /Creator: Acrobat Capture 3.0 (Searchable Image (Exact))"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Acrobat Capture searchable-image scan: CCITT images under an OCR text layer, PDF 1.3, linearized.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "ccitt",
+          "classic-xref",
+          "linearized"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            614.8795,
+            691.6794
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "Adobe PDF Library 4.0",
+          "title": null
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 12,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "nbs-circular-1",
+      "file": "corpus/nbs-circular-1.pdf",
+      "sha256": "edaa52d57f35a6f7bd743b309a8a053d0b291b4ef5b19511e0afb42a337b0960",
+      "size": 323504,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://nvlpubs.nist.gov/nistpubs/Legacy/circ/nbscircular1.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://nvlpubs.nist.gov/nistpubs/Legacy/circ/nbscircular1.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105). National Bureau of Standards Circular 1 (1901); digitized by the Internet Archive, distributed by NIST.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LuraDocument PDF",
+        "version": "2.65",
+        "detail": "Info /Producer: Recoded by LuraDocument PDF v2.65; /Creator: Digitized by the Internet Archive"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Internet Archive mixed-raster scan: JPX background and foreground with a JBIG2 mask, linearized, no /Rotate on pages.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "jbig2",
+          "jpx",
+          "linearized",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            638.0,
+            959.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.5",
+        "info": {
+          "producer": "Recoded by LuraDocument PDF v2.65",
+          "title": "Bureau circular no. 1: verification of standards and measuring instruments"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 4,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "nist-sp1271",
+      "file": "corpus/nist-sp1271.pdf",
+      "sha256": "f3b4436626b87fceb12cde8dd29da7432254821e3e2753103fe3500dd1f6e17d",
+      "size": 462621,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.1271.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.1271.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Adobe PDF Library",
+        "version": "21.5.90",
+        "detail": "Info /Producer: Adobe PDF Library 21.5.90; /Creator: Acrobat PDFMaker 21 for PowerPoint"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Image-heavy PowerPoint-to-PDFMaker quick start: linearized with an xref stream and object streams, tagged.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "dct",
+          "linearized",
+          "object-streams",
+          "outlines",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.6",
+        "info": {
+          "producer": "Adobe PDF Library 21.5.90",
+          "title": "Getting Started with the NIST Cybersecurity Framework: A Quick Start Guide"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "powerpoint-photos",
+      "file": "corpus/powerpoint-photos.pdf",
+      "sha256": "5ff533a34c2281e514a7ff5a0f139e5cc6b56bcd1d87c9e80a6cfd150d515374",
+      "size": 479772,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/powerpoint.ps1",
+        "acquired": "2026-10-20",
+        "command": "make_assets.sh assets; powershell -File powerpoint.ps1 -Assets assets -Out powerpoint-photos.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Microsoft PowerPoint",
+        "version": "2016 (Microsoft 365 build 16.0.20430)",
+        "detail": "Info /Producer: Microsoft® PowerPoint® 2016"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Photo deck: full-bleed DCT images in Office's hybrid cross-reference layout.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "dct",
+          "hybrid-xref",
+          "multiple-revisions",
+          "object-streams",
+          "outlines",
+          "tagged",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            960.0,
+            540.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "Microsoft® PowerPoint® 2016",
+          "title": "Fleet Photo Review"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "imagemagick-scan",
+      "file": "corpus/imagemagick-scan.pdf",
+      "sha256": "2bf1a103218a48de73b2fc65de6c6bfdd41deb46d622e164301d43b9d6e022a4",
+      "size": 282384,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/imagemagick-scan.sh",
+        "acquired": "2026-10-20",
+        "command": "sh imagemagick-scan.sh ."
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "ImageMagick",
+        "version": "7.1.2-22",
+        "detail": "Info /Producer: https://imagemagick.org"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Three 150 dpi grayscale JPEG page images, the shape of a desktop-scanner PDF.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "dct"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "https://imagemagick.org",
+          "title": "Scanned delivery receipts"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 3,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "inkscape-network",
+      "file": "corpus/inkscape-network.pdf",
+      "sha256": "20dea582d288c9904a046ab26015d92182b377b118d36a7995cf4c8af0cc0e71",
+      "size": 345719,
+      "category": "scans-linearized",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/inkscape-network.svg",
+        "acquired": "2026-10-20",
+        "command": "make_assets.sh assets; inkscape 1.4.4 --export-type=pdf --export-filename=inkscape-network.pdf inkscape-network.svg"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "cairo",
+        "version": "1.18.4",
+        "detail": "Info /Producer: cairo 1.18.4 (https://cairographics.org), via Inkscape 1.4.4"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Vector map with an embedded photograph and gradients; cairo's xref stream and object streams.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "dct",
+          "object-streams",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            631.5,
+            446.25
+          ],
+          "rotation": 0
+        },
+        "header": "1.5",
+        "info": {
+          "producer": "cairo 1.18.4 (https://cairographics.org)",
+          "title": null
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "gpo-bills-118hr815enr",
+      "file": "corpus/gpo-bills-118hr815enr.pdf",
+      "sha256": "0ced1efb0610dbb34ab437f16c53362a847b4fb69b3025b1c876a872611b9939",
+      "size": 360076,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.govinfo.gov/content/pkg/BILLS-118hr815enr/pdf/BILLS-118hr815enr.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.govinfo.gov/content/pkg/BILLS-118hr815enr/pdf/BILLS-118hr815enr.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Acrobat Distiller",
+        "version": "24.0",
+        "detail": "Info /Producer: Acrobat Distiller 24.0 (Windows); modified using iText Core 7.2.3; /Creator: ACOMP.exe; certified by GPO"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads. DocMDP P 1 blocks every write (AGENTS.md, ACCEPTANCE: certification), so the metadata revision is refused and the file is not extended.",
+      "exercises": "Enrolled bill (110 pages) certified by the Government Publishing Office with DocMDP P 1 and FieldMDP.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "PdfCertificationLockedException",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": 1,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "certified",
+          "classic-xref",
+          "signature-field",
+          "signed",
+          "xmp"
+        ],
+        "fieldNamesSha256": "ede897c458d04ca3f92197f2a79e23150ee661b369e4aacd758232877f4b8c09",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            720.0,
+            1080.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.5",
+        "info": {
+          "producer": "Acrobat Distiller 24.0 (Windows); modified using iText® Core 7.2.3 (production version) ©2000-2022 iText Group NV, Government Publishing Office",
+          "title": ""
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 110,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [
+          {
+            "coverage": "ENTIRE_FILE",
+            "docmdpOk": true,
+            "field": "USGPOSignature",
+            "intact": true,
+            "modification": "NONE",
+            "valid": true
+          }
+        ],
+        "usageRights": false,
+        "widgets": 1,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "chrome-ledger-2000p",
+      "file": "corpus/chrome-ledger-2000p.pdf",
+      "sha256": "ea0b5289b577f7a17fbddef19d5a1cb1edd739c67cde139b6dbae048fd708a89",
+      "size": 2775168,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/make_html.py",
+        "acquired": "2026-10-20",
+        "command": "python make_html.py .; chrome 155 --headless=new --no-pdf-header-footer --print-to-pdf=chrome-ledger-2000p.pdf chrome-ledger.html"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Skia/PDF (Google Chrome)",
+        "version": "m155 (Chrome 155.0.8059.85)",
+        "detail": "Info /Producer: Skia/PDF m155"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A 2,000-page generated ledger with a balanced page tree (287 /Pages nodes) and a tagged structure tree.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "tagged",
+          "thousand-pages"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Skia/PDF m155",
+          "title": "Shipment Ledger 2026"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 2000,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "irs-f5500-2005",
+      "file": "corpus/irs-f5500-2005.pdf",
+      "sha256": "f35aec19e5c601c370e73a2e49636caae821c4806d86b115b7527344e092d037",
+      "size": 43695,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.irs.gov/pub/irs-pdf/f5500.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.irs.gov/pub/irs-pdf/f5500.pdf"
+      },
+      "license": {
+        "terms": "Public domain in the United States: a work of the U.S. Government (17 U.S.C. 105).",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Acrobat Distiller",
+        "version": "6.0.1",
+        "detail": "Info /Producer: Acrobat Distiller 6.0.1 (Windows); /Creator: PageMaker 7.0"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "PageMaker and Distiller 6 output from 2005: classic cross-reference, linearized, then two incremental updates.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "linearized",
+          "multiple-revisions",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Acrobat Distiller 6.0.1 (Windows)",
+          "title": "2005 Form 5500"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 4,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 3
+      }
+    },
+    {
+      "id": "libreoffice-calc-ledger",
+      "file": "corpus/libreoffice-calc-ledger.pdf",
+      "sha256": "01a0452c76307d2f21712c07b87f128a177d7dda479d9b2c5ae53dcea60476ca",
+      "size": 226413,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/make_csv.py",
+        "acquired": "2026-10-20",
+        "command": "python make_csv.py lo-calc-ledger.csv; soffice 26.8.1 --headless --infilter=CSV:44,34,76,1 --convert-to 'pdf:calc_pdf_Export:{\"UseTaggedPDF\":false}' lo-calc-ledger.csv (typed JSON form)"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "LibreOffice",
+        "version": "26.8.1.1",
+        "detail": "Info /Producer: LibreOffice 26.8.1.1 (X86_64); /Creator: Calc"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A 62-page Calc report from 3,000 CSV rows; /Resources inherited from the page-tree root.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "inherited-page-attributes",
+          "outlines",
+          "xmp"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "LibreOffice 26.8.1.1 (X86_64)",
+          "title": null
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 62,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "matplotlib-report",
+      "file": "corpus/matplotlib-report.pdf",
+      "sha256": "27b1e0f5a05e002195867d6a24f45fead5befb151532a7e96c85b20191ed8afb",
+      "size": 33595,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "authored",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/corpus/authoring/matplotlib_report.py",
+        "acquired": "2026-10-20",
+        "command": "python matplotlib_report.py matplotlib-report.pdf"
+      },
+      "license": {
+        "terms": "Authored for this repository from the committed sources under corpus/authoring; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "Matplotlib pdf backend",
+        "version": "3.11.2",
+        "detail": "Info /Producer: Matplotlib pdf backend v3.11.2"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A six-page chart report from matplotlib's own PDF writer: Type 3 and embedded TrueType text, vector paths.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.4",
+        "info": {
+          "producer": "Matplotlib pdf backend v3.11.2",
+          "title": "Fleet Utilization Report"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 6,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "frb-beige-book-2024-01",
+      "file": "corpus/frb-beige-book-2024-01.pdf",
+      "sha256": "8b7d6baaa3f692021ec51418600a2a5ae71a4b9ae1dc0148e4b27de79b2cf230",
+      "size": 1027803,
+      "category": "reports",
+      "authoring": "external",
+      "provenance": {
+        "method": "downloaded",
+        "source": "https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240117.pdf",
+        "acquired": "2026-10-20",
+        "command": "curl -L -o FILE https://www.federalreserve.gov/monetarypolicy/files/BeigeBook_20240117.pdf"
+      },
+      "license": {
+        "terms": "Public domain: the Federal Reserve Board states that information on its website is in the public domain unless otherwise indicated (federalreserve.gov/disclaimer.htm); none is indicated on this report.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "PDFlib+PDI",
+        "version": "9.3.0p6",
+        "detail": "Info /Producer: PDFlib+PDI 9.3.0p6 (Linux-x86_64); /Creator: XPP"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A 54-page XPP and PDFlib report: linearized with an xref stream and object streams, outlines.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [
+        "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "linearized",
+          "object-streams",
+          "outlines",
+          "xmp",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.7",
+        "info": {
+          "producer": "PDFlib+PDI 9.3.0p6 (Linux-x86_64)",
+          "title": "Federal Reserve Board Publication"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 54,
+        "qpdfCheck": {
+          "exit": 3
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": true,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "pypdf-base",
+      "file": "pypdf-base.pdf",
+      "sha256": "f2a70d070564dd6b2a8f63bee1e1f1119a46fbb51fb644fff178c7a16c107120",
+      "size": 469,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "python generate_foreign_pdfs.py (write_base)"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "pypdf",
+        "version": null,
+        "detail": "pypdf PdfWriter"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "The minimal one-page base the other generated fixtures build on.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "pyhanko-signed",
+      "file": "pyhanko-signed.pdf",
+      "sha256": "0dc5f99225d18dae729709b6c1266b3e4681574ee2007a12dfce382036afc716",
+      "size": 7255,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "python generate_foreign_pdfs.py (write_signed)"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "pyHanko",
+        "version": "0.38.0",
+        "detail": "pypdf base, approval signature appended by pyHanko"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "An approval signature appended as an incremental revision.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": "1.7",
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "acroform",
+          "classic-xref",
+          "multiple-revisions",
+          "signature-field",
+          "signed"
+        ],
+        "fieldNamesSha256": "c345fc1d6c87252ae9e4f453516b295f2e496a5dbfaa681fca141eec55cc8842",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf; pyHanko 0.38.0",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 2,
+        "signatures": [
+          {
+            "coverage": "ENTIRE_FILE",
+            "docmdpOk": true,
+            "field": "PyHankoSig",
+            "intact": true,
+            "modification": "NONE",
+            "valid": true
+          }
+        ],
+        "usageRights": false,
+        "widgets": 1,
+        "xmp": false,
+        "xrefSections": 2
+      }
+    },
+    {
+      "id": "qpdf-object-streams",
+      "file": "qpdf-object-streams.pdf",
+      "sha256": "61c184db8f5f08cd24e5ef4147ecd301455a1ebdca8c2f9ede75629a9b23b83b",
+      "size": 584,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "qpdf --object-streams=generate pypdf-base.pdf qpdf-object-streams.pdf"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "qpdf",
+        "version": "12.4.2",
+        "detail": "pypdf base rewritten by qpdf"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "Cross-reference stream with object streams.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "object-streams",
+          "xref-stream"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.5",
+        "info": {
+          "producer": "pypdf",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    },
+    {
+      "id": "qpdf-attachment",
+      "file": "qpdf-attachment.pdf",
+      "sha256": "356a740cdf1c07a493a00e6b03db10ef09fc31dbf8f666d7fe3f1f49e72eda6a",
+      "size": 1067,
+      "category": "synthetic",
+      "authoring": "test-generator",
+      "provenance": {
+        "method": "generated",
+        "source": "test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/generate_foreign_pdfs.py",
+        "acquired": "2026-10-18",
+        "command": "qpdf --add-attachment note.txt -- pypdf-base.pdf qpdf-attachment.pdf"
+      },
+      "license": {
+        "terms": "Generated by the repository's own test generator; MIT, as the repository.",
+        "redistributable": true
+      },
+      "producer": {
+        "name": "qpdf",
+        "version": "12.4.2",
+        "detail": "pypdf base with an attachment added by qpdf"
+      },
+      "transformations": [],
+      "classification": "supported",
+      "justification": "Opens and reads; the existing operations apply.",
+      "exercises": "A document-level embedded file with /Params.",
+      "password": null,
+      "operations": {
+        "open": "ok",
+        "attachments": "ok",
+        "revise": "ok",
+        "fill": null
+      },
+      "notes": [],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "version": "12.4.2",
+          "property": "structural check, page count, encryption and permissions, widget full names, embedded-file names"
+        },
+        {
+          "tool": "pypdf",
+          "version": "6.21.1",
+          "property": "Info title and producer, first-page box and rotation, catalog features, embedded-file bytes, field values"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "property": "cross-reference sections, signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ],
+      "probe": {
+        "attachments": [
+          {
+            "name": "note.txt",
+            "sha256": "d9c634a9a73190ead100b65cb42626b88d43ba3a5b34ec4ed3076a1e821a672b"
+          }
+        ],
+        "catalogVersion": null,
+        "docMdp": null,
+        "encryption": null,
+        "features": [
+          "classic-xref",
+          "embedded-files"
+        ],
+        "fieldNamesSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "firstPage": {
+          "mediaBox": [
+            0.0,
+            0.0,
+            612.0,
+            792.0
+          ],
+          "rotation": 0
+        },
+        "header": "1.3",
+        "info": {
+          "producer": "pypdf",
+          "title": "Foreign base"
+        },
+        "linearizationValid": false,
+        "openError": null,
+        "pages": 1,
+        "qpdfCheck": {
+          "exit": 0
+        },
+        "revisions": 1,
+        "signatures": [],
+        "usageRights": false,
+        "widgets": 0,
+        "xmp": false,
+        "xrefSections": 1
+      }
+    }
+  ]
+}

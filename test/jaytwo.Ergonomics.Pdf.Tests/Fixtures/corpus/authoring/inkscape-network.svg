@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="842" height="595" viewBox="0 0 842 595">
+  <title>Example Freight Network Map</title>
+  <desc>Corpus fixture authored in Inkscape for the jaytwo.Ergonomics.Pdf interoperability corpus.</desc>
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#dbe9f6"/><stop offset="1" stop-color="#9cc3e6"/></linearGradient>
+  </defs>
+  <rect width="842" height="595" fill="url(#sea)"/>
+  <path d="M120 120 C 200 80, 320 100, 380 160 S 520 260, 600 220 S 720 160, 760 260" fill="none" stroke="#1f4e79" stroke-width="4" stroke-dasharray="12 6"/>
+  <path d="M140 420 L 300 360 L 460 400 L 620 330 L 740 380" fill="none" stroke="#c55a11" stroke-width="3"/>
+  <g font-family="DejaVu Sans, Arial, sans-serif" font-size="16" fill="#222">
+    <circle cx="120" cy="120" r="9" fill="#1f4e79"/><text x="132" y="115">Zürich hub</text>
+    <circle cx="380" cy="160" r="9" fill="#1f4e79"/><text x="392" y="155">Köln</text>
+    <circle cx="600" cy="220" r="9" fill="#1f4e79"/><text x="612" y="215">Amsterdam</text>
+    <circle cx="760" cy="260" r="9" fill="#1f4e79"/><text x="680" y="290">London</text>
+    <circle cx="140" cy="420" r="7" fill="#c55a11"/><text x="150" y="445">Dublin</text>
+    <circle cx="740" cy="380" r="7" fill="#c55a11"/><text x="660" y="410">New York (via sea)</text>
+  </g>
+  <rect x="20" y="500" width="300" height="80" fill="white" fill-opacity="0.85" stroke="#444"/>
+  <text x="32" y="528" font-family="Arial" font-size="18" font-weight="bold">Network map Q3 2026</text>
+  <text x="32" y="556" font-family="Arial" font-size="13">Dashed: road linehaul. Solid: intermodal.</text>
+  <image x="600" y="470" width="220" height="110" preserveAspectRatio="none" xlink:href="assets/photo2.jpg" opacity="0.9"/>
+</svg>
