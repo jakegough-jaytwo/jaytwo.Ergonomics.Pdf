@@ -1,6 +1,6 @@
 # Charter reset plan
 
-Status: **proposed, for independent review.** Written 2026-10-19 under W-61 at the commit that adds this file. Nothing in it has started. Steps that change `AGENTS.md`, `QUALIFICATION.md`, or `.agents/skills/` also need the owner's approval of the exact text.
+Status: **agreed by author and reviewer; pending the owner's approvals in section 8.** Written 2026-10-19 under W-61 and revised the same day with every agreed finding from `agents/reports/2026-10-19-W-61-review.md`. Nothing in this plan has started. Steps that change `AGENTS.md`, `QUALIFICATION.md`, or `.agents/skills/` also need the owner's approval of the exact text.
 
 ## 0. For the reviewer
 
@@ -56,7 +56,7 @@ This is the most important change. The spec describes the target state and marks
 
 Proposed rule for `AGENTS.md` and `pdf-task-workflow`:
 
-> `docs/spec/` defines scope and target behavior. `ACCEPTANCE.md` and `README.md` define shipped behavior. A spec requirement marked New or Change is not a disagreement with them until its work item lands; that item updates `ACCEPTANCE.md` and `README.md` to match the spec. A real disagreement is the spec contradicting `AGENTS.md`, or shipped behavior contradicting the spec for a requirement marked Exists.
+> `docs/spec/` defines scope and target behavior. `ACCEPTANCE.md` and `README.md` define shipped behavior. A spec requirement marked New or Change is target behavior: it is not a disagreement with them, and it must not be advertised as shipped. The work item that implements it, in the same commit, changes its status to Exists, updates `ACCEPTANCE.md` and the shipped-behavior sections of `README.md`, and adds the required evidence. From then on, a contradiction among the implementation, `ACCEPTANCE.md`, `README.md`, and that requirement is a disagreement. A spec contradicting `AGENTS.md` is always a disagreement.
 
 Proposed authority order:
 
@@ -77,7 +77,14 @@ Proposed authority order:
   - Remove merge, split, rotate, and ECDSA from the exclusion list.
   - Narrow "annotation editing" to "annotation editing beyond what flatten requires".
   - Keep the rest: rendering, text extraction, rewrite in place, creating encryption, XFA editing, JavaScript, redaction, signature validation. PAdES-LTV moves from "never" to "planned for 1.x".
-- **Dependencies:** `System.Memory` and `Microsoft.Bcl.AsyncInterfaces` on `netstandard2.0` (D-16, D-39), and none on other targets. Keep the "do not flag it" sentence and extend it to cover both packages.
+- **Versions** (agreed in review; corrects adopted spec §7.5, so the owner confirms):
+  - Phase 1 opens PDF 1.0 to 1.7 plus the PDF 2.0 structures in R1.
+  - An incremental write raises catalog `/Version` only up to `/1.7`, and only for a feature ISO 32000-1 defines at a later version than the file's effective version. Phase 1 never raises a file to `/2.0`. The header is never rewritten.
+  - Writing `/AF` and `/AFRelationship` without a raise is a deliberate, documented compatibility extension to PDF 1.x, not strict ISO 32000-1 conformance. PDF/A-3 added associated files to its PDF 1.7 base, and PDF 2.0 later adopted them; 1.x readers ignore the keys, and `/EmbeddedFiles` stays the backward-compatible discovery path.
+  - The PDF/A-3 relationship subset is `Source`, `Data`, `Alternative`, `Supplement`, and `Unspecified`. The other W9 values come from PDF 2.0. A PDF/A-3 input is not promised to stay conformant when the caller picks a value outside that subset.
+  - W9 supplies associated-file building blocks useful to Factur-X and ZUGFeRD. It does not by itself claim PDF/A-3, Factur-X, or ZUGFeRD conformance; those formats also need profile-specific XMP metadata and an extension schema.
+  - The W9 item tests that a representative PDF/A-3 input keeps effective version 1.7, that `/EmbeddedFiles` still lists the file, and that no PDF/A claim is made. A veraPDF observation is credited only for the profile property it actually checks.
+- **Dependencies:** `System.Memory` (D-16) and, as an owner authorization, `Microsoft.Bcl.AsyncInterfaces` (D-39), both on `netstandard2.0` only, and none on other targets. Keep the "do not flag it" sentence and extend it to cover both packages.
 - **Bullets to rewrite:**
   - DocMDP: flatten and rotate are blocked at every `P` level; the opt-in rule for approval signatures (spec 7.2).
   - Appearances: unchanged except that flatten requires them.
@@ -89,10 +96,11 @@ Proposed authority order:
 ### A3. `README.md` and `ACCEPTANCE.md`
 
 - `README.md`:
-  - Replace "Charter" with a short Phase 1 list and a link to the spec.
+  - Replace "Charter" with a short Phase 1 list, labeled as the 1.0 target, and a link to the spec. Current support stays separately visible.
   - Replace "Out of scope" with the spec's "Never" list, and add a one-line roadmap for Phase 2 and the 1.x items.
   - Keep the support matrix and tenets describing shipped behavior only (A1).
-  - Fix the target-framework line.
+  - Fix the target-framework line. List `Microsoft.Bcl.AsyncInterfaces` as a dependency only when the async item adds it.
+  - Say that no PDF/A conformance is claimed, and that appending to a PDF/A file is not guaranteed to keep it conformant.
 - `ACCEPTANCE.md`: no change now. Each Phase 1 work item adds or changes its rows.
 
 ### A4. Target frameworks (separate work item, build change)
@@ -110,13 +118,13 @@ Rewrite from about 400 lines to about 150. Keep the structure that works: defini
 
 | Gate | Today | Proposed |
 | --- | --- | --- |
-| G2 | 50+ fixtures, 4+ producers | About 30 files, mostly real-world, all four categories (business and government forms, Office and browser exports, scans and linearized files, generated reports), each with a manifest entry |
+| G2 | 50+ fixtures, 4+ producers | At least 30 distinct, meaningful files, at least 5 in each of the four categories (business and government forms, Office and browser exports, scans and linearized files, generated reports), and at least two thirds authored by tools other than the repository's test generators (pypdf, qpdf, pyHanko). Each has a manifest entry. |
 | G4 | Two independent verifiers | pyHanko plus Poppler `pdfsig`, across RSA and ECDSA, each digest, and both formats |
 | G6 | Second renderer desirable | Poppler plus MuPDF required, for fill and flatten |
 | G7 | Existing workloads | Adds flatten on 1,000 pages, bulk fill of 500 fields, inspection and revision listing on 1 GiB without reading signed ranges, and a compressed 1 GiB attachment; timings recorded as a baseline |
-| G8 | 24 CPU-hour campaign plus independent review | One campaign within D-23's cap, run after the parser-surface items (C3), plus one independent review of the parser and signer |
+| G8 | 24 CPU-hour campaign plus independent review | One campaign within D-23's aggregate cap, run after the input-surface items (C3). Its plan predeclares, for every target, a bounded allocation or stop condition. It is complete only when every target reaches that allocation or condition (otherwise the gate records it as failed or incomplete), every artifact is triaged, and affected targets are rerun from fixed code. Its record names the targets, seeds and corpus hashes, per-input time, memory, and size limits, coverage or health observations, and triage and rerun results. No fixed minimum duration. Plus one independent review of the parser and signer. |
 
-Also add the freshness rule: evidence names its commit and goes stale when the code it covers changes. Then regenerate `agents/evidence/qualification/status.md` and `acceptance-matrix.md` against the new gates.
+Also add the freshness rule: evidence names its commit, and it expires when the relevant production code, test oracle, fixture, tool configuration, or gate definition changes. Then regenerate `agents/evidence/qualification/status.md` and `acceptance-matrix.md` against the new gates.
 
 ## 4. Workstream B: slim the workflow
 
@@ -138,15 +146,25 @@ Closed work items cost nothing until read. The costs are ceremony and stale guid
 
 - **B1. Stop the tail plan.** `agents/reference/skill-plan.md` (D-27, D-32) still plans four new skills: interop, performance, spec-conformance, and release qualification.
   - Cancel them.
-  - Fold the one valuable artifact, the corpus manifest format, into the corpus item (C2), plus a short reference under `pdf-change-verification`.
+  - Re-home the minimum durable artifacts the new gates still need:
+    - the corpus manifest and its validator, under the corpus item and `pdf-change-verification`;
+    - the performance workload and baseline record, under G7 and `pdf-change-verification`;
+    - the qualification evidence inventory and its freshness check, under A5;
+    - a release-gate summary generated from that inventory, not maintained as a second board.
+  - Defer the clause-to-contract map until a concrete conformance problem justifies it.
   - Delete `skill-plan.md` and point `agents/state/current.md` at the Phase 1 queue.
   - Mark D-27 and D-32 superseded.
-- **B2. Remove dead decisions from the tree.** Delete the nine superseded decisions (D-01 to D-08, D-11) and the rejected D-O4, as D-34 to D-36 did for other historical material. Git keeps them. One closed work item cites one of them, so either the validator accepts a closed item that cites a removed decision, or that one citation is annotated; pick one in the item.
-- **B3. One commit per task transaction.** Today `task-check` requires a separate record-only commit to activate an item before its work can be committed. Proposal: accept one transaction that sets the item `active` and includes paths inside that item's own `allowed_changes`. Keep:
-  - one active item
-  - `allowed_changes`
-  - the item-ID commit prefix
-  - `make agents-check` before work
+- **B2. Keep superseded decisions; remove them from active navigation.** Verify that D-01 to D-08, D-11, and D-O4 have terminal statuses (superseded or rejected) and that no current guidance points to them. Do not delete them: D-34 to D-36 distilled material into decisions rather than deleting decisions, and keeping them preserves the authority chain and validator references.
+- **B3. One commit per task transaction.** Today `task-check` requires a separate record-only commit to activate an item before its work can be committed. Its useful protection is that every non-record path is checked against an already committed item's `allowed_changes`. Keep that protection by making the staged transaction self-describing:
+  - parse work items from the staged index, not the working tree or HEAD;
+  - require at most one `active` item in the staged repository state;
+  - keep record-only transitions (work-item records and `agents/state/current.md` only) valid without an owner;
+  - for staged non-record paths, resolve exactly one owner: the item whose staged transition the transaction makes (activation, or completion from `active` or `ready` to `done`), or else the unchanged HEAD-active item; reject the transaction when the owner is ambiguous;
+  - check every staged non-record path against that owner's staged `allowed_changes`;
+  - validate the staged repository state;
+  - add tests for unrelated pre-staged files, two activations, an activation with a disallowed path, activation plus allowed work, completion plus work leaving zero active items, and record-only changes.
+
+  Also keep the item-ID commit prefix and `make agents-check` before work.
 - **B4. Shorten `pdf-task-workflow`** from 88 to about 40 lines.
   - Drop text that repeats `AGENTS.md`.
   - Replace the source-of-truth section with A1.
@@ -168,9 +186,9 @@ Closed work items cost nothing until read. The costs are ceremony and stale guid
 
 | Item | Today | Proposed disposition | Why |
 | --- | --- | --- | --- |
-| W-13 corpus | ready, 50 files | Rescope to G2 as revised; start early | Real files decide the quirk list (R11) and drive tests for every feature. Licensing must be recorded per file. |
-| W-14 second verifier | ready | Keep: add `pdfsig` for today's RSA output, then extend in each signing item | Building the harness early makes every signing item verifiable. |
-| W-18 fuzz and review | waiting | Keep waiting; new blocker: the C3 parser-surface items | R9 parses untrusted CMS, R10 walks xref chains, R11 changes the parser. Qualifying before they land wastes the campaign. The smoke run stays in CI. |
+| W-13 corpus | ready, 50 files | Rescope to G2 as revised; start early, limited to fixtures, provenance, manifest validation, and format probes | Real files decide the quirk list (R11) and give later items realistic fixtures. Feature-specific API tests come with the feature items, so the API reshape does not rewrite them. Licensing is recorded per file. |
+| W-14 second verifier | ready | Keep, ahead of every signing behavior change: add `pdfsig` for today's RSA output, then extend in each signing item | No new signature code is accepted on the old single-verifier path. |
+| W-18 fuzz and review | waiting | Keep waiting; `depends_on` the input-surface items 5, 6, 7, 13, 14, 16, and 17 (C2) | Each adds or changes parsing of untrusted input: filters, quirks, CMS, xref chains, attachment parameters, XFA detection, usage-rights parameters. Qualifying before they land wastes the campaign. The smoke run stays in CI. |
 | W-40 indirect filters | proposed | Ready, early | Real-world compatibility (R1); ISO permits indirect `/Filter`. |
 | W-42 object-stream churn | proposed | Ready, before G7 | G7 evidence. |
 | W-47 auto-size and `/MK` colors | ready | Keep, before flatten | Flatten makes a clipped or colorless appearance permanent. |
@@ -190,17 +208,17 @@ Create each as `proposed` with Problem and Scope citing spec IDs. Refine its acc
 | 4 | Corpus (rescoped W-13) | §8, G2 | change-verification | L |
 | 5 | Indirect filters (W-40) | R1 | core | S |
 | 6 | Writer quirks from the corpus | R11, §8 | core | M |
-| 7 | Form value model, single and bulk fill, export (API reshape) | W1, W2, R6 | acroform | M |
-| 8 | Async signer, timestamp, and save (+W-49, adds D-39 package) | W20 | signing | M |
+| 7 | Usage rights, common policy for every write | §7.3 | signing | S |
+| 8 | Form value model, single and bulk fill, export (API reshape) | W1, W2, R6 | acroform | M |
 | 9 | Second verifier (W-14) | G4 | signing | S |
-| 10 | Digests and ECDSA | W15, W16 | signing | M |
-| 11 | PAdES B-B (+W-51) | W17 | signing | M |
-| 12 | Signature inspection | R9 | signing | M |
-| 13 | Revision listing | R10 | core | S |
-| 14 | Catalog version raising | §7.5 | core | S |
-| 15 | Attachment relationship, dates, checksum, compression, page mode | R8, W9–W13 | core | M |
-| 16 | XFA classification and removal | R12, W4 | acroform | S |
-| 17 | Usage rights | §7.3 | signing | S |
+| 10 | Async signer, timestamp, and save (+W-49, adds D-39 package) | W20 | signing | M |
+| 11 | Digests and ECDSA | W15, W16 | signing | M |
+| 12 | PAdES B-B (+W-51) | W17 | signing | M |
+| 13 | Signature inspection | R9 | signing | M |
+| 14 | Revision listing | R10 | core | S |
+| 15 | Catalog version raising (up to 1.7; see A2) | §7.5 | core | S |
+| 16 | Attachment relationship, dates, checksum, compression, page mode | R8, W9–W13 | core | M |
+| 17 | XFA classification and removal | R12, W4 | acroform | S |
 | 18 | Auto-size and `/MK` colors (W-47) | §7.6 | acroform | M |
 | 19 | Flatten | W3, §7.1, §7.2 | acroform | L |
 | 20 | Rotate | W6, §7.2 | core | S |
@@ -213,12 +231,27 @@ Create each as `proposed` with Problem and Scope citing spec IDs. Refine its acc
 
 - **Documents before code** (1–3), so no feature item trips the disagreement rule.
 - **Corpus early** (4–6). Real files decide which quirks exist and give every later item realistic fixtures.
-- **API reshape early** (7, 8). Breaking changes are free until 1.0. Doing them first means later tests and evidence are written once against the final shape.
-- **Signing grouped** (8–12), with the verifier harness first, so every signing change is checked by two PDF verifiers as it lands.
-- **Version raising before attachments** (14 → 15), because `/AF` needs it.
+- **Usage rights before the first new write** (7). The common policy lands once, for the writes that exist today; each later write item adds its operation-specific cases, so every item can meet C4 when it lands.
+- **API reshape early** (8, 10). Breaking changes are free until 1.0. Doing them first means later tests and evidence are written once against the final shape.
+- **Signing grouped** (9–13), with the verifier harness (9) before any signing behavior change, so every signing change is checked by two PDF verifiers as it lands.
+- **Version raising before attachments** (15 → 16), because `/PageMode /UseAttachments` needs it. (`/AF` does not trigger a raise; see A2.)
 - **Appearances before flatten** (18 → 19).
-- **Parser-surface items before fuzzing.** Items 6, 12, 13, and 16 add or change parsing of untrusted input, so the G8 campaign (23) runs after them.
+- **Input-surface items before fuzzing.** Items 5, 6, 7, 13, 14, 16, and 17 add or change parsing of untrusted input, so the G8 campaign (23) depends on all of them.
 - **Qualification last** (21–24) against final code, so evidence is not stale at release.
+
+### C4. Checks every new write must include
+
+Each item that adds or changes a write covers, in its acceptance criteria:
+
+- encrypted input under the owner and the user password, including refusal when the permission bits forbid the write;
+- new strings and streams encrypted with the document's cipher, with `/Encrypt` and `/ID` kept;
+- the original bytes kept as a prefix, and the destination unchanged on every documented failure;
+- certification, approval-signature, FieldMDP, and usage-rights behavior where it applies;
+- for the async item, sync and async equivalence, and cancellation leaving the destination unchanged.
+
+For flatten specifically: DocMDP blocks it at every `P` level; an approval signature requires the explicit opt-in; signed signature fields are never flattened. Tests show that the earlier signature's bytes stay cryptographically intact while an independent verifier reports the expected later modification.
+
+For usage rights: the item resolves the actual signature `/Reference`, `/TransformMethod`, and `/TransformParams`. For a write that password permissions, DocMDP, and FieldMDP otherwise allow, a UR3 transform that is absent, unresolvable, malformed, unknown, or insufficient for the change causes `/UR3` to be removed from `/Perms` in the same revision, and the write proceeds. The library never keeps a rights signature it cannot show permits the change. A structural failure that prevents safely reading or rewriting the document stays an ordinary parse failure; this rule does not mean repairing arbitrary corruption.
 
 ## 6. Risks
 
@@ -235,6 +268,8 @@ Create each as `proposed` with Problem and Scope citing spec IDs. Refine its acc
 
 ## 7. Questions for the reviewer
 
+Answered in `agents/reports/2026-10-19-W-61-review.md`. Kept here for the record.
+
 1. Does A1's precedence rule remove the stall without letting the spec silently override `AGENTS.md`?
 2. Is anything in `docs/spec/phase-1.md` inconsistent with ISO 32000-1, ISO 32000-2, or ETSI EN 319 142-1? Check especially PAdES B-B attributes (W17), the flatten placement algorithm (§7.1), the version-raising rule (§7.5), linearized revision counting (R10), and the `/UR3` transform parameters (§7.3).
 3. Is the C2 order right? In particular: corpus before the API reshape, and signature inspection (12) before fuzzing.
@@ -248,11 +283,12 @@ Create each as `proposed` with Problem and Scope citing spec IDs. Refine its acc
 | Step | Needs owner approval | Why |
 | --- | --- | --- |
 | A1, A2 | Yes | `AGENTS.md` |
+| Spec §7.5 and W9 correction (A2 versions) | Yes | Changes the adopted spec |
 | A3 | No | Follows the adopted spec |
 | A4 | No | Decided in D-38; D-13 is superseded |
 | A5 | Yes | `QUALIFICATION.md` |
 | B1 | Yes | Changes D-27's approved skill plan |
-| B2, B6 | No | Records cleanup, as D-34 to D-36 |
+| B2, B6 | No | Records cleanup; B2 deletes nothing |
 | B3 | Yes | Changes the workflow guarantees in `AGENTS.md` |
 | B4, B5 | Yes | `.agents/skills/` |
 | C1, C2 | No | Work-item records; the order goes to the owner as `agents/state/current.md` |
