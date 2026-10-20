@@ -44,6 +44,14 @@ Claim a test passed only when you ran it and have the output. Counting test decl
 
 Do not infer rendering from a structural check, trust from certificate embedding, bounded memory from one successful run, or production qualification from green unit tests. For resource claims, record the environment, workload, and metrics, and compare before and after. Do not suppress or reclassify a failure to unblock a task or a release.
 
+## Qualification records
+
+These live under `agents/evidence/` and change only from observed results:
+
+- The evidence inventory and gate status, with the freshness check of `QUALIFICATION.md` section 3. The release-gate summary is generated from the inventory, not kept as a second board.
+- The G2 corpus manifest. Run its validator whenever a corpus fixture is added or changed.
+- The G7 workloads, their approved budgets, and the timing baseline, measured with Release builds, coverage off, and process isolation where counters are process-wide.
+
 ## Defects
 
 Record each defect with:

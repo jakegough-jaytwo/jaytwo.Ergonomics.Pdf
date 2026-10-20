@@ -6,7 +6,7 @@ This repository uses one active agent with progressively disclosed skills. The a
 
 | Skill | Use it for |
 |---|---|
-| `pdf-task-workflow` | Scope and execute one work item, update current ordering or evidence, or assess release readiness. |
+| `pdf-task-workflow` | Select, scope, execute, or record one work item, or assess release readiness. |
 | `pdf-core-change` | Parser, xref, filters, encryption, incremental writing, pages, metadata, or attachments. |
 | `pdf-acroform-change` | Form discovery, values, appearances, signature-field discovery, or widget geometry. |
 | `pdf-signing-change` | PDF signatures, CMS, external signing, RFC 3161, DocMDP, or FieldMDP. |
@@ -36,7 +36,7 @@ Do not add `.claude/skills/`, `.cursor/skills/`, or `.grok/skills/` mirrors. Cur
 - `decisions/D-NN.md` contains durable choices and proposals. Decisions are not work items.
 - `evidence/` contains reusable cross-task and qualification evidence; `reference/` contains durable navigation material. Task-specific evidence stays in the work item's Closeout.
 - `reports/` contains task reports. Existing B-prefixed filenames remain unchanged. New work writes at most one report named `<yyyy-mm-dd>-<work-id>.md` when a durable report is needed.
-- `reference/skill-plan.md` is the approved tail plan (D-27) that `state/current.md` points to.
+- `reference/skill-plan.md`, the tail plan D-27 approved, was deleted under D-41 and W-65; historical versions remain in the surviving mainline before W-65.
 - D-34 and W-54 record the removal of the role prompts and review rounds (`roles/`, `reviews/`, `skill-reviews/`, `workflow-review/`); their pre-removal state is [squashed]. D-35 and W-55 record the removal of the team contract (`team.md`), the v1 role prompts (`archive/roles-v1/`), the role-named reports, and the legacy `state/` pointer files; their pre-removal state is [squashed]. D-36 and W-56 record the removal of the byte-exact pre-migration state (`archive/state-v1/`); its pre-removal state is [squashed]. Every closed B item is now a closed W record with the same number under D-37 and W-60.
 
 Responsibility labels such as “Core Engineer” in historical state are provenance, not instructions to launch another agent. For current work, select the matching skill.

@@ -16,6 +16,9 @@ WORK_DIR = ROOT / "agents" / "work-items"
 DECISION_DIR = ROOT / "agents" / "decisions"
 CURRENT_FILE = ROOT / "agents" / "state" / "current.md"
 CHECKPOINT_DIR = ROOT / "agents" / "evidence" / "checkpoints"
+WORK_PREFIX = "agents/work-items/"
+DECISION_PREFIX = "agents/decisions/"
+CURRENT_PATH = "agents/state/current.md"
 
 WORK_ID = re.compile(r"W-\d+$")
 DECISION_ID = re.compile(r"D-(?:O)?\d+$")
@@ -117,12 +120,16 @@ def _list(meta: dict[str, str | list[str]], key: str) -> list[str]:
     return value if isinstance(value, list) else []
 
 
-def current_ids() -> tuple[list[str], list[str]]:
+def read_current() -> str | None:
+    return CURRENT_FILE.read_text(encoding="utf-8-sig") if CURRENT_FILE.exists() else None
+
+
+def current_ids(text: str | None) -> tuple[list[str], list[str]]:
     errors: list[str] = []
-    if not CURRENT_FILE.exists():
+    if text is None:
         return [], ["agents/state/current.md: missing"]
     ids: list[str] = []
-    for line_number, line in enumerate(CURRENT_FILE.read_text(encoding="utf-8-sig").splitlines(), 1):
+    for line_number, line in enumerate(text.splitlines(), 1):
         match = re.fullmatch(r"\d+\. (W-\d+)", line)
         if match:
             ids.append(match.group(1))
@@ -137,7 +144,12 @@ def validate() -> tuple[list[Record], list[Record], list[str]]:
     works, errors = load_records(WORK_DIR)
     decisions, decision_errors = load_records(DECISION_DIR)
     errors.extend(decision_errors)
+    errors.extend(validate_state(works, decisions, read_current()))
+    return works, decisions, errors
 
+
+def validate_state(works: list[Record], decisions: list[Record], current: str | None) -> list[str]:
+    errors: list[str] = []
     work_by_id: dict[str, Record] = {}
     for record in works:
         rel = record.path.relative_to(ROOT)
@@ -214,14 +226,14 @@ def validate() -> tuple[list[Record], list[Record], list[str]]:
     if len(active) > 1:
         errors.append("more than one active work item: " + ", ".join(str(x.meta["id"]) for x in active))
 
-    queued, queue_errors = current_ids()
+    queued, queue_errors = current_ids(current)
     errors.extend(queue_errors)
     for item_id in queued:
         if item_id not in work_by_id:
             errors.append(f"agents/state/current.md: unknown work item {item_id}")
         elif work_by_id[item_id].meta.get("status") in {"done", "cancelled"}:
             errors.append(f"agents/state/current.md: closed work item {item_id} is queued")
-    return works, decisions, errors
+    return errors
 
 
 def path_allowed(path: str, allowed: list[str]) -> bool:
@@ -229,59 +241,98 @@ def path_allowed(path: str, allowed: list[str]) -> bool:
     return any(normalized.startswith(entry) if entry.endswith("/") else normalized == entry for entry in allowed)
 
 
-def staged_paths() -> list[str]:
-    result = subprocess.run(
-        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMRD"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    return [line.strip().replace("\\", "/") for line in result.stdout.splitlines() if line.strip()]
+def _git(root: Path, *args: str, data: bytes | None = None) -> bytes:
+    return subprocess.run(["git", *args], cwd=root, check=True, capture_output=True, input=data).stdout
 
 
-def head_works() -> list[Record]:
-    listing = subprocess.run(
-        ["git", "ls-tree", "--name-only", "HEAD", "agents/work-items/"],
-        cwd=ROOT,
-        check=True,
-        capture_output=True,
-        text=True,
-    )
-    records: list[Record] = []
-    for name in listing.stdout.splitlines():
-        if not name.endswith(".md"):
+def staged_paths(root: Path = ROOT) -> list[str]:
+    output = _git(root, "diff", "--cached", "--name-only", "--no-renames", "--diff-filter=ACMRD", "-z")
+    return [path for path in output.decode("utf-8").split("\0") if path]
+
+
+def git_texts(index: bool, root: Path = ROOT) -> dict[str, str]:
+    """Return the workflow record files as they are in the staged index or in HEAD."""
+    pathspec = ["--", WORK_PREFIX, DECISION_PREFIX, CURRENT_PATH]
+    listing = _git(root, "ls-files", "-s", "-z", *pathspec) if index else _git(root, "ls-tree", "-r", "-z", "HEAD", *pathspec)
+    entries: list[tuple[str, str]] = []
+    for entry in listing.decode("utf-8").split("\0"):
+        if entry:
+            info, path = entry.split("\t", 1)
+            entries.append((path, info.split()[1 if index else 2]))
+    if not entries:
+        return {}
+    output = _git(root, "cat-file", "--batch", data="".join(f"{sha}\n" for _, sha in entries).encode())
+    texts: dict[str, str] = {}
+    offset = 0
+    for path, _ in entries:
+        header_end = output.index(b"\n", offset)
+        size = int(output[offset:header_end].split()[2])
+        texts[path] = output[header_end + 1 : header_end + 1 + size].decode("utf-8").lstrip("\ufeff")
+        offset = header_end + 2 + size
+    return texts
+
+
+def split_records(texts: dict[str, str]) -> tuple[list[Record], list[Record], str | None, list[str]]:
+    """Parse git-sourced record texts; record paths are labelled relative to ROOT."""
+    works: list[Record] = []
+    decisions: list[Record] = []
+    errors: list[str] = []
+    for path, text in sorted(texts.items()):
+        prefix = next((x for x in (WORK_PREFIX, DECISION_PREFIX) if path.startswith(x)), None)
+        if prefix is None or "/" in path[len(prefix) :] or not path.endswith(".md"):
             continue
-        shown = subprocess.run(["git", "show", f"HEAD:{name}"], cwd=ROOT, check=True, capture_output=True, text=True, encoding="utf-8")
-        records.append(parse_text(ROOT / name, shown.stdout.lstrip("\ufeff")))
-    return records
+        try:
+            (works if prefix == WORK_PREFIX else decisions).append(parse_text(ROOT / path, text))
+        except ValueError as error:
+            errors.append(f"{path}: {error}")
+    return works, decisions, texts.get(CURRENT_PATH), errors
 
 
-def resolve_owner(head_records: list[Record], paths: list[str]) -> tuple[Record | None, list[str]]:
-    """Return (owner, errors); a None owner means a record-only commit or an error."""
-    item_paths = [path for path in paths if re.fullmatch(r"agents/work-items/[^/]+\.md", path)]
-    if len(item_paths) == 1 and all(path in {item_paths[0], "agents/state/current.md"} for path in paths):
+def is_record_path(path: str) -> bool:
+    return path == CURRENT_PATH or re.fullmatch(r"agents/work-items/[^/]+\.md", path) is not None
+
+
+def _owns_transaction(before: str | list[str] | None, after: str | list[str] | None) -> bool:
+    return (after == "active" and before != "active") or (after == "done" and before in {"active", "ready"})
+
+
+def resolve_owner(head_records: list[Record], staged_records: list[Record], paths: list[str]) -> tuple[Record | None, list[str]]:
+    """Return (owner, errors); a None owner without errors is a record-only transaction."""
+    work_paths = [path for path in paths if not is_record_path(path)]
+    if not work_paths:
         return None, []
-    active = [record for record in head_records if record.meta.get("status") == "active"]
-    if len(active) != 1:
-        return None, ["task-check: staged transaction needs one item active in HEAD or one record-only work-item update"]
-    owner = active[0]
-    allowed = [*_list(owner.meta, "allowed_changes"), str(owner.path.relative_to(ROOT)).replace("\\", "/")]
-    return owner, [f"task-check: {path} is outside {owner.meta['id']} allowed_changes" for path in paths if not path_allowed(path, allowed)]
+    before = {record.meta.get("id"): record.meta.get("status") for record in head_records}
+    transitions = [record for record in staged_records if _owns_transaction(before.get(record.meta.get("id")), record.meta.get("status"))]
+    if len(transitions) > 1:
+        names = ", ".join(str(record.meta["id"]) for record in transitions)
+        return None, [f"task-check: ambiguous owner; the transaction activates or completes {names}"]
+    if transitions:
+        owner = transitions[0]
+    else:
+        head_active = {record.meta.get("id") for record in head_records if record.meta.get("status") == "active"}
+        active = [record for record in staged_records if record.meta.get("id") in head_active and record.meta.get("status") == "active"]
+        if len(active) != 1:
+            return None, ["task-check: staged work needs an item this transaction activates or completes, or one item still active from HEAD"]
+        owner = active[0]
+    allowed = _list(owner.meta, "allowed_changes")
+    return owner, [f"task-check: {path} is outside {owner.meta['id']} allowed_changes" for path in work_paths if not path_allowed(path, allowed)]
 
 
-def task_check() -> list[str]:
-    paths = staged_paths()
+def task_check(root: Path = ROOT) -> list[str]:
+    paths = staged_paths(root)
     if not paths:
         return ["task-check: no staged paths"]
-    return resolve_owner(head_works(), paths)[1]
+    head_records = split_records(git_texts(False, root))[0]
+    works, decisions, current, errors = split_records(git_texts(True, root))
+    errors = [f"task-check: staged {error}" for error in errors + validate_state(works, decisions, current)]
+    return errors + resolve_owner(head_records, works, paths)[1]
 
 
 def show_status(works: list[Record], decisions: list[Record]) -> None:
     active = [record for record in works if record.meta.get("status") == "active"]
     waiting = [record for record in works if record.meta.get("status") == "waiting"]
     proposed = [record for record in decisions if record.meta.get("status") == "proposed"]
-    queued, _ = current_ids()
+    queued, _ = current_ids(read_current())
     checkpoints = sorted(CHECKPOINT_DIR.glob("*.md"))
     print("Active:", active[0].meta["id"] if active else "none")
     print("Waiting:", ", ".join(str(x.meta["id"]) for x in waiting) or "none")
@@ -294,6 +345,14 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("command", choices=("check", "status", "task-check"))
     args = parser.parse_args()
+    if args.command == "task-check":
+        errors = task_check()
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        if errors:
+            return 1
+        print("task-check: OK")
+        return 0
     works, decisions, errors = validate()
     if errors:
         for error in errors:
@@ -301,13 +360,6 @@ def main() -> int:
         return 1
     if args.command == "status":
         show_status(works, decisions)
-    elif args.command == "task-check":
-        errors = task_check()
-        if errors:
-            for error in errors:
-                print(f"ERROR: {error}", file=sys.stderr)
-            return 1
-        print("task-check: OK")
     else:
         print(f"agents-check: OK ({len(works)} work items, {len(decisions)} decisions)")
     return 0
