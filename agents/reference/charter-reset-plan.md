@@ -260,9 +260,9 @@ For usage rights: the item resolves the actual signature `/Reference`, `/Transfo
 | The disagreement rule stalls every feature item | A1 lands first. |
 | Corpus licensing: real-world files may not be redistributable | US federal government forms are public domain. Office and browser exports can be authored for the corpus with the real tools. Record the license per file. Files that cannot be committed are fetched by a script with a pinned hash, and their tests skip with a recorded reason, never a silent pass. |
 | The corpus shows that common files need a full-scan repair, which the spec excludes | Record the evidence and escalate to the owner. Do not widen R11 inside an item. |
-| API reshape invalidates existing tests and evidence | Do it at item 7, before new evidence is produced. Re-run the full suite and regenerate the acceptance matrix in that item. |
+| API reshape invalidates existing tests and evidence | Do it at item 8, before new evidence is produced. Re-run the full suite and regenerate the acceptance matrix in that item. |
 | Flatten geometry (rotated pages, `/Matrix`, nonzero origins) is subtle | Two renderers (G6), corpus forms with rotation, ISO 32000-1 12.5.5 cited in tests. |
-| Usage-rights rules: Reader's real behavior may differ from the transform parameters | Verify against Adobe Reader behavior where available. Otherwise remove `/UR3` on any non-fill write; the safe default only loses features and never shows an error. |
+| Usage-rights rules: Reader's real behavior may differ from the transform parameters | Verify against Adobe Reader behavior where available. Remove `/UR3` when the transform is absent, unresolvable, malformed, unknown, or insufficient for the otherwise-authorized write; the safe default only loses features and never shows an error. |
 | Phase 1 is roughly 24 items | Each S/M item is a single focused commit. The L items (corpus, flatten, fuzz) may split when activated. |
 | Slimming becomes its own long project, as the last migration did | B is one item with a fixed list. Anything not on the list waits. |
 
@@ -272,7 +272,7 @@ Answered in `agents/reports/2026-10-19-W-61-review.md`. Kept here for the record
 
 1. Does A1's precedence rule remove the stall without letting the spec silently override `AGENTS.md`?
 2. Is anything in `docs/spec/phase-1.md` inconsistent with ISO 32000-1, ISO 32000-2, or ETSI EN 319 142-1? Check especially PAdES B-B attributes (W17), the flatten placement algorithm (§7.1), the version-raising rule (§7.5), linearized revision counting (R10), and the `/UR3` transform parameters (§7.3).
-3. Is the C2 order right? In particular: corpus before the API reshape, and signature inspection (12) before fuzzing.
+3. Is the C2 order right? In particular: corpus before the API reshape, and signature inspection (13) before fuzzing.
 4. Is deleting superseded decisions (B2) worth the validator change, or should they stay with `status: superseded`?
 5. Does B3 weaken any protection the two-commit activation was providing?
 6. Is anything missing from Phase 1 that the spec's tenets imply? For example: encrypted-input coverage for every new write, and what flatten does with an existing signature on a field it does not touch.
