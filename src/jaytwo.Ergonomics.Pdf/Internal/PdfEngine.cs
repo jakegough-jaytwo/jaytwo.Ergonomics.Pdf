@@ -1300,6 +1300,8 @@ internal sealed class PdfEngine : IDisposable
         }
 
         byte[] raw = ReadRange(body.Offset, (int)body.Length);
+
+        // ISO 32000-1 7.5.8.2: an xref stream's /Filter and /DecodeParms are direct, so no resolver is passed.
         List<string> filters = PdfStreamDecoder.FiltersOf(dict);
         List<PdfObject.Dict?> parms = PdfStreamDecoder.ParmsOf(dict, filters.Count);
         PdfParser.EnsureXrefColumns(dict, parms);
@@ -3201,8 +3203,8 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(0, "The stream has no bytes.");
         }
 
-        List<string> filters = PdfStreamDecoder.FiltersOf(dict);
-        List<PdfObject.Dict?> parms = PdfStreamDecoder.ParmsOf(dict, filters.Count);
+        List<string> filters = PdfStreamDecoder.FiltersOf(dict, Resolve);
+        List<PdfObject.Dict?> parms = PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve);
         return PdfStreamDecoder.OpenDecoded(OpenStored(dict, file), filters, parms);
     }
 
@@ -3229,13 +3231,13 @@ internal sealed class PdfEngine : IDisposable
             raw = _security.Decrypt(raw, dict);
         }
 
-        List<string> filters = PdfStreamDecoder.FiltersOf(dict);
+        List<string> filters = PdfStreamDecoder.FiltersOf(dict, Resolve);
         if (filters.Count == 0)
         {
             return raw;
         }
 
-        return PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count), cap);
+        return PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap);
     }
 
     private byte[] ReadRange(long offset, int count)

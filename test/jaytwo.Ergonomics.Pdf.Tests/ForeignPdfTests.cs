@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Xunit;
@@ -69,6 +70,56 @@ public class ForeignPdfTests
         AssertPrefix(revised, original);
         Assert.Equal("foreign-attachment", ReadAttachment(revised, null, "note.txt"));
         Check(revised, null);
+    }
+
+    [Fact]
+    public void qpdf_rewrite_with_indirect_filters_is_read_and_decodes_as_qpdf_decodes_it()
+    {
+        // W-40: qpdf keeps the indirect /Filter and /DecodeParms of each attachment stream, moves the referenced names,
+        // arrays, and dictionaries into an object stream, and decodes each attachment itself for comparison.
+        byte[] plain = Encoding.ASCII.GetBytes("attachment-bytes");
+        byte[] predicted = new byte[20];
+        for (int row = 0; row < 4; row++)
+        {
+            Buffer.BlockCopy(plain, row * 4, predicted, (row * 5) + 1, 4);
+        }
+
+        var builder = PdfBuilder.Basic(" /Names << /EmbeddedFiles << /Names [(array.txt) 9 0 R (name.txt) 6 0 R] >> >>");
+        builder.StreamObject(5, "/Type /EmbeddedFile /Filter 7 0 R", TestCompat.Zlib(plain));
+        builder.Indirect(6, "<< /Type /Filespec /UF (name.txt) /EF << /F 5 0 R >> >>");
+        builder.Indirect(7, "/FlateDecode");
+        builder.StreamObject(8, "/Type /EmbeddedFile /Filter 10 0 R /DecodeParms 11 0 R", Encoding.ASCII.GetBytes(TestCompat.ToHexString(TestCompat.Zlib(predicted)) + ">"));
+        builder.Indirect(9, "<< /Type /Filespec /UF (array.txt) /EF << /F 8 0 R >> >>");
+        builder.Indirect(10, "[/ASCIIHexDecode 12 0 R]");
+        builder.Indirect(11, "[null << /Predictor 12 /Columns 13 0 R >>]");
+        builder.Indirect(12, "/FlateDecode");
+        builder.Indirect(13, "4");
+        string input = WriteTemp(builder.Finish());
+        string output = WriteTemp(Array.Empty<byte>());
+        try
+        {
+            Run(LocateQpdf(), "--stream-data=preserve", "--object-streams=generate", input, output);
+            byte[] rewritten = File.ReadAllBytes(output);
+            string text = TestCompat.Latin1.GetString(rewritten);
+            Assert.Contains("/ObjStm", text, StringComparison.Ordinal);
+            Assert.Equal(2, Regex.Matches(text, @"/Filter \d+ 0 R").Count);
+            Assert.Single(Regex.Matches(text, @"/DecodeParms \d+ 0 R"));
+
+            foreach (string name in new[] { "name.txt", "array.txt" })
+            {
+                Assert.Equal(plain, Run(LocateQpdf(), "--show-attachment=" + name, output));
+                using var document = PdfDocument.Open(new MemoryStream(rewritten, writable: false), leaveOpen: true);
+                using Stream content = document.Attachments[name].Open();
+                using var copy = new MemoryStream();
+                content.CopyTo(copy);
+                Assert.Equal(plain, copy.ToArray());
+            }
+        }
+        finally
+        {
+            File.Delete(input);
+            File.Delete(output);
+        }
     }
 
     [Fact]
@@ -268,6 +319,19 @@ public class ForeignPdfTests
                 File.Delete(certPath);
             }
         }
+    }
+
+    private static byte[] Run(string fileName, params string[] args)
+    {
+        using Process process = Start(fileName, args);
+        using var stdout = new MemoryStream();
+        process.StandardOutput.BaseStream.CopyTo(stdout);
+        string stderr = process.StandardError.ReadToEnd();
+        process.WaitForExit();
+        Assert.True(
+            process.ExitCode == 0,
+            Path.GetFileName(fileName) + " " + string.Join(" ", args) + " exited " + process.ExitCode.ToString() + Environment.NewLine + stderr);
+        return stdout.ToArray();
     }
 
     private static string LocateQpdf()
