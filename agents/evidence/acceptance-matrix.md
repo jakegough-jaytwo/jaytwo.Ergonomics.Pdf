@@ -4,6 +4,8 @@ Migrated from `agents/archive/state-v1/status.md` under D-33; D-36 and W-56 reco
 
 Maintained through `pdf-change-verification`. Refreshed 2026-10-19. The 46-row table maps the acceptance bullets to tests. None are Production-qualified. No qualification gate is passed. A missing tool stays not run, and that is not a pass.
 
+Under the revised `QUALIFICATION.md` (W-62, 2026-10-20), these rows are test evidence for `ACCEPTANCE.md` criteria, which W-62 did not change. They are not gate evidence. A row recorded at a commit or dirty tree that later production-code changes affect is stale, and it counts toward a gate only when re-run and recorded at a named commit. `status.md` lists the gates.
+
 A passing test in this repository is Internally tested. Independently validated is used only where the named tool and version established the named property. pypdf 6.21.1 was invoked under B-23 for Info, XMP, and attachment reads. `SignedCms.CheckSignature(verifySignatureOnly: true)` is compiled only for `net8.0` (`#if NET8_0_OR_GREATER` in `SignatureTests.cs`). `jaytwo.Ergonomics.Pdf.Tests.csproj` references `System.Security.Cryptography.Pkcs` 10.0.13 only when the target is `net8.0`.
 
 | # | Row | Tests | Result | Level | Independent property | Evidence date | Commit | Tree |

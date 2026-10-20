@@ -1,400 +1,168 @@
 # Production Qualification Standard
 
-jaytwo.Ergonomics.Pdf, Release 1.0. Owner: human owner. Adopted 2026-10-18.
+jaytwo.Ergonomics.Pdf, Release 1.0 (Phase 1). Owner: human owner. Adopted 2026-10-18; revised for the Phase 1 scope under D-38.
 
-`ACCEPTANCE.md` states the required behavior. This document states the evidence a release needs before that behavior can be called production-qualified. Where it disagrees with `AGENTS.md`, `AGENTS.md` wins.
+`docs/spec/phase-1.md` states the target behavior and `ACCEPTANCE.md` the shipped behavior. This document states the evidence a release needs before that behavior can be called production-qualified. Where it disagrees with `AGENTS.md`, `AGENTS.md` wins. Phase 2 capabilities get their gates when the owner adopts `docs/spec/phase-2.md`.
 
 ## 1. Definition
 
-A capability may be designated **Production-Qualified** when it has passed all applicable acceptance gates in this document.
+A capability is **Production-Qualified** when it has passed every applicable gate in this document. That means it is suitable for real enterprise documents **within its documented support boundaries**. It does not mean that every valid PDF is supported, every PDF feature is implemented, every malformed PDF can be recovered, every viewer renders identically, or every performance characteristic is optimal.
 
-Production qualification means the capability is suitable for use with real enterprise documents **within its explicitly documented support boundaries**.
+The library is **Production-Qualified 1.0** only when every capability `docs/spec/phase-1.md` advertises passes its gates. A capability that is not qualified is not advertised as production-supported.
 
-It does not mean:
-
-- Every valid PDF is supported.
-- Every feature in the PDF specification is implemented.
-- Every malformed PDF can be recovered.
-- Every PDF viewer renders identically.
-- Every performance characteristic is optimal.
-- Every future integration or deployment environment is automatically qualified.
-
-The library as a whole may be designated **Production-Qualified 1.0** only when all capabilities advertised as production-supported pass their applicable gates.
-
-Partially implemented or experimental capabilities must be clearly distinguished from production-supported functionality.
-
-## 2. Mandatory release gates
+## 2. Gates
 
 | Gate | Requirement | Release blocking? |
-|---|---|---|
+| --- | --- | --- |
 | G1 | Documented capability and compatibility boundaries | Yes |
-| G2 | Independent PDF structural interoperability | Yes |
-| G3 | Correctness of supported document operations | Yes |
-| G4 | Independent cryptographic signature verification | Yes |
+| G2 | Interoperability with real-world PDFs | Yes |
+| G3 | Correctness of supported operations | Yes |
+| G4 | Independent signature verification | Yes |
 | G5 | Independent RFC 3161 timestamp verification | Yes, for timestamped signing |
-| G6 | Independent form-appearance rendering | Yes, for field filling |
+| G6 | Independent rendering of generated appearances | Yes, for fill and flatten |
 | G7 | Large-file resource qualification | Yes |
 | G8 | Security and adversarial-input testing | Yes |
 | G9 | Failure handling and output integrity | Yes |
-| G10 | Stable API, reproducible build, and documentation | Yes |
+| G10 | API, build, and documentation | Yes |
 
-A gate passes on recorded evidence, not developer confidence.
+A gate passes on recorded evidence, not developer confidence. A check that did not run is not a pass.
 
-## 3. G1: Documented support boundaries
+## 3. Evidence and freshness
 
-Before qualification, establish an accurate support matrix.
+Evidence records name the commit, framework, build configuration, environment, tool versions, fixtures with their hashes, the command, the property established, and the result: pass, fail, not run, not applicable, or expired. They live under `agents/evidence/`.
 
-It must identify:
+Evidence expires when the relevant production code, test oracle, fixture, tool configuration, or gate definition changes. Expired evidence does not count toward a gate.
 
-- Supported PDF versions and structural representations.
-- Supported cross-reference and object-stream structures.
-- Supported encryption types and algorithms.
-- Supported AcroForm field types and appearances.
-- Supported signing algorithms and signature profiles.
-- Supported metadata and attachment operations.
-- Input, output, and resource limits.
-- Features that are unsupported or experimental.
+`pdf-change-verification` maintains the evidence inventory and its freshness check. The release-gate summary is generated from that inventory; it is not maintained as a second board.
 
-The support matrix must distinguish read-only compatibility from modification compatibility.
+## 4. G1: Documented support boundaries
 
-For example, successfully opening an existing signed PDF does not establish that the library can safely modify it.
+`README.md` carries a support matrix for shipped behavior. It separates read compatibility from modification compatibility; opening a signed PDF does not establish that the library can safely modify it. It names supported PDF versions and structures, encryption, field types and appearances, signing algorithms and formats, metadata and attachment operations, resource limits, every tolerated writer quirk, and what is unsupported. It states that no PDF/A conformance is claimed.
 
-**Acceptance:**
+**Acceptance:** every advertised capability has explicit supported behavior; known limitations are documented; unsupported operations fail predictably; no known case silently produces an incorrect result while reporting success.
 
-- Every advertised capability has explicit supported behavior.
-- Known limitations are documented.
-- Unsupported operations reject predictably.
-- No known case silently produces an incorrect result while reporting success.
+## 5. G2: Interoperability with real-world PDFs
 
-No requirement exists to support XFA, rendering, stamping, general page-content editing, or other excluded functionality.
+**Corpus:**
 
-## 4. G2: Independent structural interoperability
+- At least 30 distinct, meaningful files. No padding with trivial variants.
+- At least 5 in each category: business and government forms (including hybrid XFA, Reader-extended, and signed forms); Office and browser exports (Word, Excel, LibreOffice, Chrome or Edge); scans and image-heavy files (including linearized files); generated reports (including thousands of pages).
+- At least two thirds authored by tools other than the repository's own test generators (pypdf, qpdf, pyHanko). A file those tools rewrite or sign is recorded as transformed, not as a new producer.
+- Coverage of classic and stream cross-references, object streams, hybrid files, multiple revisions, inherited page attributes, supported encryption, form and signature fields, metadata, and embedded files.
 
-The library must demonstrate compatibility with independently generated PDF documents.
-
-**Initial qualification corpus:**
-
-- At least 50 distinct, meaningful PDF fixtures.
-- At least four independent producers or PDF toolchains.
-- Classic xref tables, xref streams, object streams, and hybrid references.
-- Multiple incremental revisions.
-- Nested page trees and inherited properties.
-- Supported encrypted PDFs.
-- Existing form fields and signature fields.
-- Metadata and embedded files.
-- At least some real-world documents not designed specifically around this library.
-
-The 50-fixture target is an initial engineering acceptance threshold, not a statistical guarantee of universal PDF compatibility. Avoid padding the corpus with trivial variations.
-
-For every relevant fixture, test the supported operations and independently inspect the result.
+Each file has a manifest entry: ID and SHA-256, provenance and acquisition date, license and redistributability, producer and version, transformations, PDF version and features, supported or unsupported classification with justification, the operations run, expected results, and the validators with the property each establishes. A file that cannot be committed is fetched by a script with a pinned hash; when it is unavailable, its checks report not run.
 
 **Acceptance:**
 
-- 100% of fixtures classified as supported pass their applicable correctness checks.
-- 100% of deliberately unsupported cases tested fail predictably and without corruption.
-- Modified output passes `qpdf --check` without unexpected warnings.
-- At least one additional independent PDF implementation confirms relevant object semantics.
-- Original document bytes remain unchanged when an incremental revision is promised.
-- Any interoperability failure is fixed, explicitly excluded from the supported matrix with justification, or escalated as a release blocker.
+- Every file classified as supported passes its operations' correctness checks.
+- Every deliberately unsupported file fails predictably and without corruption.
+- Modified output passes `qpdf --check` without unexpected warnings, and at least one other independent implementation confirms the relevant object semantics. `qpdf --check` alone is not proof of content or visual correctness.
+- The original bytes stay a prefix of every incremental output.
+- Each interoperability failure is fixed, excluded from the support matrix with justification, or a release blocker.
 
-Do not treat `qpdf --check` as proof of content semantics or visual correctness.
+## 6. G3: Correctness of supported operations
 
-## 5. G3: Functional correctness
+Every Phase 1 operation has positive, negative, and independent-reader tests (pypdf, qpdf, Poppler, or pyHanko, for the property each tool exposes reliably):
 
-Each production-supported operation must be independently verified.
+- **Reads:** pages and boxes; fields with names, types, values, widgets, pages, and geometry, including hierarchical fields, merged and separate widgets, rotated pages, and nonzero origins; form-data export; Info and XMP; attachments with relationship and dates; signature inspection; revision listing, including linearized files.
+- **Form writes:** single and bulk fill, where a bulk fill with one invalid value changes nothing; values, appearance states, and appearances agree; hybrid XFA removal; flatten of all and of named fields.
+- **Other writes:** rotation; Info and XMP edits with unrelated metadata intact; attachment add, replace, and remove with exact byte equality, including large binaries and the compressed form; catalog version raising up to 1.7 only.
 
-**AcroForm extraction**
+Every write also covers: encrypted input under the owner and the user password, including refusal by the permission bits; new strings and streams encrypted with the document's cipher, with `/Encrypt` and `/ID` kept; the original bytes kept as a prefix and the destination unchanged on every documented failure; certification, approval-signature, FieldMDP, and usage-rights behavior where it applies. Usage-rights cases include permitted, absent, unresolvable, malformed, unknown, and insufficient `/UR3`; except for a structural parse failure, every non-permitting case removes `/UR3` in the same revision and proceeds when password permissions, DocMDP, and FieldMDP otherwise allow the write. Async writes also demonstrate sync/async equivalence and cancellation leaving the destination unchanged.
 
-Verify names, types, values, widget associations, page numbers, bounds, and applicable inherited properties.
+**Acceptance:** no known case silently produces incorrect values, geometry, bytes, or unintended modifications.
 
-Include hierarchical fields, separate and merged widgets, multiple placements, rotated pages, and nonzero page origins.
+## 7. G4: Independent signature verification
 
-**AcroForm filling**
+Two PDF-aware verifiers check signed output: pyHanko and Poppler `pdfsig`. `SignedCms` or OpenSSL may add CMS checks; a CMS-only check does not count as one of the two.
 
-Verify supported text, checkbox, radio, and choice-field operations.
+**Scenarios:** a new and an existing empty signature field; RSA and ECDSA P-256 and P-384; SHA-256, SHA-384, and SHA-512; `adbe.pkcs7.detached` and PAdES baseline B-B; correct signed attributes for each format; `/ByteRange` and revision coverage; certificate-chain inclusion; trust under explicitly configured test anchors; signing through SoftHSM; signing encrypted PDFs; the async signer; existing signatures preserved by permitted later writes; prohibited writes refused; tampered data rejected by the verifiers; signer failure. A flatten or rotation after an approval signature, with the caller's opt-in, leaves the earlier signature's bytes cryptographically intact while a verifier reports the later modification.
 
-Values, appearance states, and generated appearances must agree.
+For earlier signatures, report integrity, coverage, trust, and modification-policy compliance separately. Signature inspection is checked against the verifiers' reports for the same files.
 
-**Metadata**
+**Acceptance:** every positive signed-output scenario passes both verifiers; both verifiers reject each tampered case; refusal and failure scenarios meet their prescribed negative assertions without producing a completed output; the signed bytes are exactly those intended; the signer certificate matches the key; no false success for an invalid signature or a prohibited write; no known cryptographic correctness defect is open. A successful CMS digest check alone is insufficient.
 
-Verify Info and XMP updates with an independent reader. Unrelated metadata and document content must remain intact.
+## 8. G5: RFC 3161 timestamps
 
-**Attachments**
+A signature timestamp and a document timestamp are distinct capabilities. Each is tested against a timestamp authority other than the code under test.
 
-Verify enumeration, extraction, addition, replacement, and removal.
+**Acceptance:** a genuine RFC 3161 response is obtained and embedded; its imprint matches the signature value (for a signature timestamp) or the signed ranges (for a document timestamp); pyHanko and `openssl ts -verify` verify it under an explicit test trust configuration; the library rejects malformed responses, wrong imprints, wrong digest algorithms, and mismatched nonces; a TSA failure never yields a reported success. A timestamped PAdES B-B signature is claimed as PAdES B-T only when independently validated against that profile. PAdES B-LT and B-LTA are not claimed.
 
-Extracted attachment bytes must match the expected bytes exactly, including for large binary inputs.
+## 9. G6: Rendering of generated appearances
 
-**Incremental revisions**
+Poppler and MuPDF render the output of fill and of flatten. Cover visibility, WinAnsi characters, alignment, auto-sized and long values, check box and radio states, clipping, `/MK` colors, rotated pages, crop-box offsets, and flatten placement through the appearance `/Matrix` and `/BBox`.
 
-Verify that changed objects are visible in the latest revision without corrupting unrelated objects or previous signed revisions.
+**Acceptance:** every supported field type renders its value correctly in both renderers, filled and flattened; no missing, displaced, wrongly selected, or unexpectedly clipped appearance remains in the supported matrix; supported fields never depend on a viewer generating appearances; values the library cannot draw are reported, and flatten and signing refuse them. Pixel-identical rendering is not required.
 
-**Acceptance:**
+## 10. G7: Large-file resources
 
-Every production-supported operation has positive, negative, and interoperability tests.
+Workloads use real file-backed inputs. Sparse files alone are insufficient.
 
-No known case may silently produce incorrect values, geometry, attachment bytes, or unintended modifications.
+| Workload | Objective |
+| --- | --- |
+| Sparse PDF of at least 3 GiB | Correct 64-bit offsets, reads, saves, and signature coverage |
+| Dense PDF of at least 1 GiB | Inspect, edit, and sign without whole-document materialization |
+| 1 GiB PDF | Signature inspection and revision listing without reading signed ranges |
+| Attachment of at least 1 GiB | Streaming add with compression, and extraction |
+| 500-page form | Extraction, bulk fill of 500 fields, and signing |
+| 1,000-page form | Flatten |
+| Repeated object-stream access, and repeated open and dispose | No retained-memory growth |
+| Encrypted xref-stream PDF | No full-file discovery scan |
 
-## 6. G4: Digital signature correctness
+Budgets are approved by the owner and recorded with the workload in `agents/evidence/qualification/memory-budgets.md` (D-20 sets the ceilings). Each new workload gets its approved budget before it counts. Measurements use Release builds, coverage off, and process isolation where counters are process-wide. Timings are recorded as a repeatable baseline, not as targets; a material regression is investigated.
 
-This gate is mandatory before production deployment of the signing capability.
+**Acceptance:** no operation loads the whole input into memory; peak memory stays within the approved budgets; memory does not grow across repeated use and disposal; large attachments stream; output limits and decompression limits are documented and fail safely; no serious performance regression is unexplained. The 8 MiB signature appendix and the classic-xref offset limit remain where documented.
 
-At least two independent cryptographic/PDF verification implementations must be used. One should understand PDF signature semantics, not only CMS syntax.
+## 11. G8: Security and adversarial input
 
-Example verification tools include pyHanko and pdfsig, with `SignedCms` or OpenSSL as additional independent CMS checks.
+The library parses untrusted input. Fuzzing covers the parser and every Phase 1 input surface: object parsing, cross-references, object streams, filters and predictors, encryption, field walks, XMP, attachment parameters, DER and CMS (including signature inspection), RFC 3161 tokens, usage-rights parameters, XFA detection, and tolerated quirks.
 
-**Required scenarios:**
+**Campaign:** one campaign within D-23's aggregate cap, run after every Phase 1 input surface has landed. Its plan predeclares a bounded allocation or stop condition for every target, with per-input time, memory, and size limits. The campaign is complete only when every target reaches its allocation or condition (otherwise the gate records that target as failed or incomplete), every artifact is triaged, and affected targets are rerun from fixed code. Its record names targets, seeds and corpus hashes, limits, coverage or health observations, and triage and rerun results. There is no fixed minimum duration. A smaller fixed-seed smoke suite runs in CI.
 
-- Signing a new signature field.
-- Signing an existing empty signature field.
-- Correct CMS signed-attributes encoding.
-- Correct `/ByteRange` and revision coverage.
-- Correct certificate-chain inclusion.
-- Trusted validation, by the independent verifier, using explicitly configured test trust anchors.
-- Signing through an actual PKCS#11 provider, such as SoftHSM.
-- Signing encrypted PDFs within the documented support matrix.
-- Preserving existing signatures during subsequent permitted operations.
-- Rejecting prohibited modifications or unsupported signing conditions.
-- Rejecting tampered signed data.
-- Correct handling of external signer failure.
+**Review:** an agent or person who did not implement the code reviews the parser, decoders, PDF encryption, CMS and DER handling, signature construction, and their failure paths.
 
-For a newly signed final document, independent validation must confirm cryptographic integrity, expected revision coverage, and trust under the configured test validation policy.
+**Acceptance:** no known unmitigated Critical or High security defect affects a supported operation; no reproducible uncontrolled memory growth, infinite loop, or crash in the qualified corpus; confirmed defects become permanent regression cases; input limits are documented. Resource-limit exceptions are acceptable. Uncontrolled failure is not.
 
-For earlier signatures, report cryptographic integrity, coverage, trust, and modification-policy compliance separately.
+## 12. G9: Failure and output integrity
 
-**Acceptance:**
+Test failures during reading, parsing, object resolution, incremental writing, attachment copying, flattening, external signing, timestamping, cancellation of async operations, and disposal.
 
-- All required signing scenarios pass.
-- The signed bytes are exactly those intended.
-- The signer certificate matches the signing key.
-- Independently verified CMS cryptographic integrity is established.
-- No false success is reported for invalid signatures or prohibited operations.
-- Supported signed output can be opened and verified by at least two independent implementations.
-- No known cryptographic correctness defect remains open.
+**Acceptance:** inputs stay unchanged unless an API documents in-place appending; no operation reports success when output finalization fails; a failed or cancelled write leaves the destination unchanged, except when the destination stream itself fails (for example an I/O error or a full disk), in which case the library attempts to restore the destination's original length, rethrows, and `README.md` documents that this restoration cannot be guaranteed; no invalid output is presented as a completed signed document; stream ownership follows documented behavior; diagnostics never expose private keys, PINs, passwords, or other secrets. The library does not provide atomic publication to an object store and must not imply that it does. A fault-injecting destination verifies both branches: when writing fails after N bytes and length restoration remains available, the original length is restored; when restoration also fails, the operation still reports failure and the documented limitation applies.
 
-A successful CMS digest check alone is insufficient.
+## 13. G10: API, build, and documentation
 
-## 7. G5: RFC 3161 timestamping
+**Acceptance:** the public API is documented; `README.md` examples compile and run; every advertised target framework builds with warnings as errors; tests pass on the maintained runtime matrix; verification jobs report unexecuted checks when tools are missing; runtime dependencies match `AGENTS.md`; the package carries no test-tool dependency; semantic versioning applies from 1.0 and is documented; limits are discoverable; a release build and package verification are reproducible.
 
-A signature timestamp and a separate PDF document timestamp are distinct capabilities.
+## 14. Defect policy
 
-The production-supported timestamped-signing workflow must be tested against an independently implemented RFC 3161 timestamp authority.
+A release candidate is not production-qualified with any known unresolved Critical defect, any unresolved High defect affecting a supported operation, any unexplained interoperability failure in the supported corpus, any known false success or false signature-validity result, any known silent corruption, or any unmet gate.
 
-**Acceptance:**
+Medium and Low defects may be accepted when they violate no explicit guarantee and their impact, workaround, and disposition are documented. Rejecting an unsupported feature is not a defect unless it contradicts advertised support or behaves unsafely.
 
-- A genuine RFC 3161 response is obtained and incorporated.
-- The timestamp message imprint matches the intended cryptographic signature value for a CMS signature timestamp.
-- The resulting timestamp is independently verified.
-- Timestamp trust is validated by the independent verifier under an explicit test trust configuration. The library does not validate TSA trust, because `AGENTS.md` excludes signature validation.
-- The library rejects malformed responses, incorrect imprints, and mismatched nonces. The independent verifier rejects untrusted timestamps.
-- TSA failures do not result in an incorrectly reported successful timestamped signature.
-- The resulting PDF signature remains independently verifiable.
+## 15. Capabilities
 
-If PAdES B-T compliance is claimed, independently validate the resulting document against the requirements of that profile.
+Each capability carries its own status. A capability may be qualified while an unrelated one is not, but an incomplete capability is never advertised as production-qualified.
 
-Do not claim B-LT or B-LTA support unless their separate requirements are implemented and independently verified. `AGENTS.md` currently excludes PAdES-LTV.
-
-## 8. G6: AcroForm appearance correctness
-
-Generated appearances must be verified by at least one independent PDF renderer.
-
-A second renderer is desirable for representative cases.
-
-The initial test set should cover:
-
-- Text visibility.
-- Supported character encodings.
-- Left, center, and right alignment.
-- Long values.
-- Checkbox and radio appearances.
-- Field boundary clipping.
-- Rotated pages.
-- CropBox offsets.
-- Representative font sizes and field dimensions.
-
-Use deterministic reference fixtures and automated visual comparisons where practical.
-
-**Acceptance:**
-
-- Every production-supported field type renders its populated value correctly.
-- No known cases of missing, displaced, incorrectly selected, or unexpectedly clipped appearances remain within the supported matrix.
-- Supported fields do not depend on a downstream viewer generating missing appearances.
-- Unsupported font or text features are rejected or explicitly classified rather than silently rendered incorrectly.
-
-Pixel-identical rendering across every viewer is not required.
-
-## 9. G7: Large-document performance and memory
-
-The library must demonstrate resource consumption consistent with its stream-native architecture.
-
-**Initial benchmark suite:**
-
-| Workload | Qualification objective |
-|---|---|
-| 500-page representative PDF | Form extraction, metadata editing, and signing complete correctly |
-| Dense PDF of at least 1 GiB | No whole-document materialization |
-| Sparse PDF of at least 3 GiB | Correct 64-bit offsets, reads, and signature coverage |
-| Large attachment of at least 250 MiB | Streaming addition and extraction |
-| Repeated object-stream access | No unacceptable retained-memory growth |
-| Encrypted xref-stream PDF | No unnecessary full-file discovery scan |
-
-Use real file-backed inputs. Sparse tests alone are insufficient.
-
-**Proposed starting memory budget:** For the benchmark fixtures above, target no more than 256 MiB of peak managed heap growth for simple inspect/edit/sign operations, with a 512 MiB exception ceiling for more complex structural traversals. These are proposed product thresholds, not PDF specification requirements. The active agent uses `pdf-change-verification` to measure the final fixture-specific budgets and records owner approval before release.
-
-Also establish repeatable timing baselines and investigate material regressions. Do not impose arbitrary throughput targets without accounting for storage, cryptographic providers, TSA latency, and the benchmark environment.
-
-**Acceptance:**
-
-- No operation unexpectedly loads the entire input PDF into managed memory.
-- Measured peak memory remains within the approved workload budgets.
-- Memory does not grow indefinitely during repeated use or document disposal.
-- Large attachments are processed without whole-attachment buffering where streaming is supported.
-- Output limits are documented and fail safely.
-- Resource limits protect against excessive allocations and decompression.
-- No known serious performance regression remains unexplained.
-
-The 8 MiB signing-appendix limit and classic-xref output-offset limit may remain if documented and if they do not violate an advertised production workflow.
-
-## 10. G8: Security and adversarial robustness
-
-The library processes potentially untrusted PDF inputs.
-
-Qualification requires deliberate negative testing and an independent security-focused review of the PDF parsing and signing paths.
-
-Include:
-
-- Malformed xref structures.
-- Invalid indirect references.
-- Recursive or cyclic object relationships.
-- Truncated files.
-- Incorrect stream lengths.
-- Decompression amplification.
-- Excessive nesting.
-- Unsupported encryption.
-- Malformed CMS/DER.
-- Malformed TSA responses.
-- Integer overflow conditions.
-- Object-count and allocation pressure.
-
-Introduce repeatable fuzz testing for high-risk parsing and decoding entry points.
-
-**Initial fuzzing target:** At least 24 aggregate CPU-hours over the selected high-risk entry points before release, followed by a smaller continuous CI suite. This is a minimum exercise target, not proof of security; coverage quality and discovered defects matter more than elapsed time.
-
-**Acceptance:**
-
-- Zero known unmitigated Critical or High security defects affecting supported operations.
-- No reproducible uncontrolled memory growth, infinite loops, or process crashes in the qualified adversarial corpus.
-- Confirmed defects become permanent regression cases.
-- Input limits and security-sensitive error behavior are documented.
-- Cryptographic signing and PDF security handling have received an independent review by an agent or reviewer who did not implement the relevant code.
-
-Resource-limit exceptions are acceptable. Uncontrolled failure is not.
-
-## 11. G9: Failure and output integrity
-
-Test failures during:
-
-- Reading.
-- Parsing.
-- Object resolution.
-- Incremental writing.
-- Attachment copying.
-- External signing.
-- Timestamping.
-- Stream disposal and cleanup.
-
-**Acceptance:**
-
-- Input PDFs remain unchanged unless the API explicitly documents in-place modification.
-- No operation reports success when output finalization fails.
-- Cryptographic and timestamp failures are reported accurately.
-- No invalid output is silently published as a completed signed document.
-- Partial destination writes are either rolled back where guaranteed or explicitly documented as requiring caller-managed staging.
-- Stream ownership and cleanup follow documented behavior.
-- Failure handling does not expose private keys, PINs, passwords, or sensitive cryptographic material through diagnostics.
-
-Transactional guarantees must be accurately stated. The library is not required to provide atomic publication to an object store, but it must not imply such a guarantee when it does not exist.
-
-## 12. G10: API, build, and operational readiness
-
-The library must be suitable for consumption by other .NET applications.
-
-**Acceptance:**
-
-- Public API is documented.
-- The documented operations compile and execute as examples.
-- All advertised target frameworks build successfully.
-- Automated tests pass on the maintained target-runtime matrix.
-- Independent verification jobs fail or explicitly report unexecuted checks when required tools are unavailable.
-- Runtime package dependencies match the settled set in `AGENTS.md`.
-- No accidental dependency on test-time PDF tools exists in the shipped package.
-- Package versioning and compatibility expectations are documented.
-- Known limitations and resource constraints are discoverable.
-- Reproducible release build and package verification are demonstrated.
-
-No requirement exists for an elaborate framework or fluent API.
-
-## 13. Defect policy
-
-A release candidate cannot be production-qualified with:
-
-- Any known unresolved Critical defect.
-- Any known unresolved High defect affecting a production-supported operation.
-- Any unexplained independent interoperability failure in the supported corpus.
-- Any known false-positive success or signature-validity result.
-- Any known silent document corruption.
-- Any unmet mandatory acceptance gate.
-
-Medium and Low defects may be accepted when they do not violate an explicit production guarantee and their impact, workaround, and release disposition are documented.
-
-Unsupported-feature rejections are not automatically defects. They are defects when they contradict advertised support or behave unsafely.
-
-## 14. Qualification is capability-specific
-
-Maintain a status for each supported capability.
-
-| Capability | Qualification evidence required |
-|---|---|
-| Field extraction | Foreign input fixtures, independently checked values and geometry |
-| Field population | Logical correctness plus independent rendering |
-| Metadata | Independent round-trip verification |
-| Attachments | Independent extraction and byte equality |
-| Incremental writing | Independent structural validation and preservation tests |
-| PDF signing | Independent cryptographic, trust, coverage, and permission checks |
+| Capability | Evidence required |
+| --- | --- |
+| Field and page reads, form-data export | Corpus files with independently checked values and geometry |
+| Fill and bulk fill | Logical correctness, atomicity, and rendering in two renderers |
+| Flatten | Placement and content in two renderers; signature and certification behavior |
+| Rotation | Independent reader and renderer checks; signature behavior |
+| Metadata | Independent round trip |
+| Attachments | Independent extraction, byte equality, relationship, dates, and checksum |
+| Incremental writing | Structural validation, prefix preservation, version rules |
+| Encrypted documents | Owner and user password coverage for every operation |
+| Usage rights and XFA | Kept or removed exactly as the spec states, on real forms |
+| Signing | Two PDF-aware verifiers across algorithms, digests, and formats |
+| Signature inspection and revisions | Agreement with independent verifiers and readers |
 | Timestamping | Real TSA integration and independent token validation |
-| Large-file support | Measured memory, I/O, and resource behavior |
+| Large files | Measured memory, I/O, and timing baselines |
 
-A capability may be qualified even when an unrelated capability remains experimental.
+## 16. Release decision
 
-However, the library must not be marketed as production-qualified for an incomplete feature.
+The release decision is built from the generated gate summary and includes: the supported-capability matrix; the status of every gate; independent verification results with tool versions; outstanding defects and documented limitations; performance measurements; security review findings; and a recommendation of **Qualified**, **Qualified with documented limitations**, or **Not qualified**. "Qualified with documented limitations" is acceptable only when no limitation violates advertised behavior or a safety gate.
 
-## 15. Release decision
-
-The active agent uses `pdf-change-verification` to maintain the evidence inventory and verification results.
-
-The active agent uses the applicable domain skill to review technical correctness and integration quality, and `pdf-task-workflow` to record the engineering disposition of defects.
-
-The active agent uses `pdf-task-workflow` for acceptance tracking, release-scope recommendations, and confirmation that the required gates have been addressed.
-
-These workflows do not convert self-review into independent review. Any gate that requires an independent reviewer still needs a human or a fresh context that did not implement the affected code.
-
-The human product owner retains final release authority.
-
-A release decision must include:
-
-1. The exact supported-capability matrix.
-2. The status of each mandatory qualification gate.
-3. Independent verification results and relevant tool versions.
-4. Outstanding defects and documented limitations.
-5. Performance measurements.
-6. Security review findings.
-7. A clear recommendation: **Qualified**, **Qualified with documented limitations**, or **Not qualified**.
-
-"Qualified with documented limitations" is acceptable only when those limitations do not violate any advertised production-supported behavior or mandatory safety gate.
-
-## 16. Guiding principle
+Skills do not turn self-review into independent review. Any gate that requires an independent reviewer needs a person or a fresh context that did not implement the affected code. The owner holds final release authority.
 
 **Production qualification is not a statement that the library can do everything. It is evidence that the things we promise it can do are correct, safe, interoperable, and operationally reliable.**
-
-The team should prioritize satisfying these guarantees for the narrow intended product before expanding the scope of the library.

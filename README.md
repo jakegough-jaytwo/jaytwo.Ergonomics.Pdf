@@ -4,13 +4,25 @@ Stream-native PDF operations for .NET. MIT licensed, no runtime dependencies bey
 
 The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PDF 2.0 xref and metadata behavior that shows up in real files). It is for the operations below, not a general PDF toolkit. Files produced by pypdf, qpdf, and pyHanko are part of the test suite, and those tools check the revisions this library writes.
 
-## Charter
+## Scope
+
+### Supported today
 
 1. Fill AcroForm fields.
 2. Digitally seal a document with a host PKCS#11 signer and an RFC 3161 timestamp authority.
 3. Read AcroForm field geometry: name, value, rectangle, page number, rotation, and media box.
 4. Read and write document information and XMP metadata.
 5. Read and write embedded-file attachments.
+
+Everything else in this README describes what ships today.
+
+### Target for 1.0 (Phase 1, not yet released)
+
+Release 1.0 adds reading and incremental-update operations: bulk fill, form-data export, flatten, page rotation, signature inspection, revision listing, attachment relationships, dates, checksums, and compression, ECDSA keys, SHA-384 and SHA-512, PAdES baseline B-B, and async signing and saving. The specification is [`docs/spec/phase-1.md`](docs/spec/phase-1.md). These are targets, not shipped behavior, until this README lists them as supported.
+
+### Later
+
+Release 1.x adds operations that write a new file: page extraction, concatenation, compaction, removing revisions, and removing passwords ([`docs/spec/phase-2.md`](docs/spec/phase-2.md), draft). Caller-supplied fonts for non-WinAnsi appearances and PAdES long-term validation are also planned for 1.x.
 
 ## Tenets
 
@@ -30,7 +42,9 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 
 ## Out of scope
 
-Rendering, page-content text extraction, reflow, merge, split, rotate, creating a PDF from scratch, rewriting the file in place, creating encryption, public-key encryption, signature validation and revocation, PAdES-LTV, ECDSA, XFA, JavaScript, annotation editing, and redaction. Page content streams are never decoded. Filters other than Flate, LZW, RunLength, ASCIIHex, and ASCII85 (and the abbreviations `Fl`, `LZW`, `RL`, `AHx`, and `A85`) throw when their bytes are actually required.
+Never in scope: rendering, page-content text extraction, reflow, stamping and watermarks, layout or creating a PDF from scratch, rewriting a file in place, redaction, signature validation (trust, revocation, or cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file. Page content streams are never decoded.
+
+No PDF/A conformance is claimed. Appending to a PDF/A file is not guaranteed to keep it conformant. Filters other than Flate, LZW, RunLength, ASCIIHex, and ASCII85 (and the abbreviations `Fl`, `LZW`, `RL`, `AHx`, and `A85`) throw when their bytes are actually required.
 
 ## Support matrix
 
