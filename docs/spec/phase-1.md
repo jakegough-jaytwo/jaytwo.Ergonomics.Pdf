@@ -86,7 +86,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | ID | Requirement | Status |
 | --- | --- | --- |
 | W8 | Add, replace (add with an existing name), and remove document-level embedded files. Content is streamed from a seekable stream, never buffered whole. These are the files Acrobat lists in its attachments panel. | Exists |
-| W9 | **Relationship.** The caller chooses `/AFRelationship`: `Source`, `Data`, `Alternative`, `Supplement`, `EncryptedPayload`, `FormData`, `Schema`, or `Unspecified` (default). This is what e-invoice formats such as Factur-X and ZUGFeRD require on their embedded XML. | New |
+| W9 | **Relationship.** The caller chooses `/AFRelationship`: `Source`, `Data`, `Alternative`, `Supplement`, `EncryptedPayload`, `FormData`, `Schema`, or `Unspecified` (default). E-invoice formats such as Factur-X and ZUGFeRD require one of these on their embedded XML. The PDF/A-3 subset is `Source`, `Data`, `Alternative`, `Supplement`, and `Unspecified`; the other values come from PDF 2.0, and a PDF/A-3 input is not promised to stay conformant when one of them is chosen. This supplies associated-file building blocks only; it does not claim PDF/A-3, Factur-X, or ZUGFeRD conformance, which also need profile-specific XMP metadata. | New |
 | W10 | **Dates and checksum.** `/Params` carries `/CreationDate`, `/ModDate`, and `/CheckSum` (MD5 of the uncompressed bytes, computed in an extra streaming pass over the content). | New |
 | W11 | **Optional compression.** `Compress = true` writes the content Flate-encoded while streaming, in constant memory. Default is off. | New |
 | W12 | **Open to attachments.** An option sets catalog `/PageMode /UseAttachments` so viewers open with the attachments panel showing. | New |
@@ -163,7 +163,11 @@ New strings and streams use the document's existing cipher. The trailer keeps `/
 
 ### 7.5 Version
 
-When a write uses a feature newer than the file's effective version (for example `/AF` and `/AFRelationship`, or `/PageMode /UseAttachments`), the catalog `/Version` is raised in the same revision (ISO 32000-1 7.7.2). The header is never rewritten.
+When a write uses a feature that ISO 32000-1 defines at a later version than the file's effective version (for example `/PageMode /UseAttachments`, PDF 1.6), the catalog `/Version` is raised in the same revision, never above `/1.7` (ISO 32000-1 7.7.2). Phase 1 never raises a file to `/2.0`. The header is never rewritten.
+
+`/AF` and `/AFRelationship` are written without a version raise. This is a deliberate, documented compatibility extension to PDF 1.x, not strict ISO 32000-1 conformance: PDF/A-3 (ISO 19005-3) added associated files to its PDF 1.7 base, PDF 2.0 later adopted them, 1.x readers ignore the keys, and `/EmbeddedFiles` stays the backward-compatible way to find the file. Raising to 2.0 instead would break PDF/A-3 inputs such as e-invoices, and would subject the file to PDF 2.0 deprecations (for example RC4 security) that Phase 1 deliberately preserves.
+
+No PDF/A conformance is claimed. Appending to a PDF/A file is not guaranteed to keep it conformant.
 
 ### 7.6 Appearances
 
