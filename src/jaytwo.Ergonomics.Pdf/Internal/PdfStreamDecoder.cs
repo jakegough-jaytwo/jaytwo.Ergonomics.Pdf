@@ -11,6 +11,9 @@ internal static class PdfStreamDecoder
     public const int StructuralCap = 32 * 1024 * 1024;
     public const int XrefCap = 64 * 1024 * 1024;
 
+    // The DecodeParms keys the decoder reads. Only these are resolved when indirect.
+    private static readonly string[] DecoderParameters = { "Predictor", "Colors", "BitsPerComponent", "Columns", "EarlyChange" };
+
     public static byte[] Decode(byte[] data, IReadOnlyList<string> filters, IReadOnlyList<PdfObject.Dict?> parms, int maxBytes)
     {
         byte[] current = data;
@@ -64,10 +67,13 @@ internal static class PdfStreamDecoder
         return new MemoryStream(plain, false);
     }
 
-    public static List<string> FiltersOf(PdfObject.Dict dict)
+    // ISO 32000-1 7.3.10 lets /Filter, /DecodeParms, their array entries, and the parameter values be indirect. Pass the
+    // document's resolver to follow them within its chain, cycle, and load-depth bounds. Without one, as for a
+    // cross-reference stream (ISO 32000-1 7.5.8.2 requires direct values there), a reference is refused.
+    public static List<string> FiltersOf(PdfObject.Dict dict, Func<PdfObject.Ref, PdfObject>? resolve = null)
     {
         var names = new List<string>();
-        PdfObject? filter = dict.Get("Filter");
+        PdfObject? filter = Direct(dict.Get("Filter"), resolve, "/Filter");
         if (filter == null || filter is PdfObject.NullObj)
         {
             return names;
@@ -86,7 +92,7 @@ internal static class PdfStreamDecoder
 
         foreach (PdfObject item in array.Items)
         {
-            if (item is not PdfObject.Name itemName)
+            if (Direct(item, resolve, "/Filter array entry") is not PdfObject.Name itemName)
             {
                 throw new PdfParseException(0, "Stream /Filter array has an entry that is not a name.");
             }
@@ -97,11 +103,11 @@ internal static class PdfStreamDecoder
         return names;
     }
 
-    public static List<PdfObject.Dict?> ParmsOf(PdfObject.Dict dict, int filterCount)
+    public static List<PdfObject.Dict?> ParmsOf(PdfObject.Dict dict, int filterCount, Func<PdfObject.Ref, PdfObject>? resolve = null)
     {
         var list = new List<PdfObject.Dict?>();
-        PdfObject? parms = dict.Get("DecodeParms");
-        if (parms == null || parms is PdfObject.NullObj || filterCount == 0)
+        PdfObject? parms = filterCount == 0 ? null : Direct(dict.Get("DecodeParms"), resolve, "/DecodeParms");
+        if (parms == null || parms is PdfObject.NullObj)
         {
             for (int i = 0; i < filterCount; i++)
             {
@@ -118,7 +124,7 @@ internal static class PdfStreamDecoder
                 throw new PdfParseException(0, "Stream /DecodeParms is one dictionary for several filters.");
             }
 
-            list.Add(one);
+            list.Add(DirectParameters(one, resolve));
             return list;
         }
 
@@ -134,11 +140,12 @@ internal static class PdfStreamDecoder
 
         foreach (PdfObject item in array.Items)
         {
-            if (item is PdfObject.Dict entry)
+            PdfObject? value = Direct(item, resolve, "/DecodeParms array entry");
+            if (value is PdfObject.Dict entry)
             {
-                list.Add(entry);
+                list.Add(DirectParameters(entry, resolve));
             }
-            else if (item is PdfObject.NullObj)
+            else if (value is PdfObject.NullObj)
             {
                 list.Add(null);
             }
@@ -149,6 +156,50 @@ internal static class PdfStreamDecoder
         }
 
         return list;
+    }
+
+    private static PdfObject? Direct(PdfObject? value, Func<PdfObject.Ref, PdfObject>? resolve, string what)
+    {
+        if (value is not PdfObject.Ref reference)
+        {
+            return value;
+        }
+
+        if (resolve == null)
+        {
+            throw new PdfParseException(0, "Stream " + what + " is an indirect reference where a direct object is required.");
+        }
+
+        return resolve(reference);
+    }
+
+    // Returns the dictionary itself when the parameters the decoder reads are direct. Otherwise returns a copy with those
+    // values resolved, so the document's cached object keeps its references.
+    private static PdfObject.Dict DirectParameters(PdfObject.Dict parms, Func<PdfObject.Ref, PdfObject>? resolve)
+    {
+        bool indirect = false;
+        foreach (string key in DecoderParameters)
+        {
+            if (parms.Get(key) is PdfObject.Ref)
+            {
+                indirect = true;
+                break;
+            }
+        }
+
+        if (!indirect)
+        {
+            return parms;
+        }
+
+        var copy = new PdfObject.Dict();
+        foreach ((string key, PdfObject value) in parms.Items)
+        {
+            bool read = Array.IndexOf(DecoderParameters, key) >= 0;
+            copy.Append(key, read ? Direct(value, resolve, "/DecodeParms /" + key)! : value);
+        }
+
+        return copy;
     }
 
     private static bool IsSupported(string filter)
