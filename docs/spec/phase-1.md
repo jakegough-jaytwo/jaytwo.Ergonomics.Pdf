@@ -14,7 +14,7 @@ In priority order. When two conflict, the earlier one wins.
 
 1. **Not a general toolkit.** We do not compete with qpdf, iText, PDFsharp, or Aspose. Every operation is a named business use case. There is no layout engine, no "create a hello-world PDF", no fluent document model.
 2. **Usable.** A developer can do each use case in a few lines, with errors that say what to do next.
-3. **Production-ready.** Every advertised operation passes the release gates in section 10. Failure never leaves a half-written output.
+3. **Production-ready.** Every advertised operation passes the release gates in section 10. Failure never leaves a half-written output. The one exception is a failure of the destination stream itself, such as an I/O error or a full disk: the library then attempts to restore the destination's original length, still reports the failure, and documents that restoration cannot be guaranteed (`QUALIFICATION.md` G9).
 4. **According to the spec.** ISO 32000-1 (PDF 1.7) is the reference; ISO 32000-2 is followed where real files use it. Deviations are deliberate, listed, and tested.
 5. **Compatible with real-world PDFs.** The test corpus is dominated by files real tools produced, not files this library or its test generators made.
 6. **Maintainable.** Small internal surface, one way to do each thing, no speculative abstraction.
