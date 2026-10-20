@@ -31,7 +31,7 @@ Structures covered by supported files, as `corpus_probe.py` reports them: classi
 
 ## Findings
 
-These are recorded, not fixed, under W-13. Each one is asserted as a controlled exception in the manifest, so a change in behavior fails the corpus tests until the manifest is updated.
+W-13 recorded these without fixing them and asserted each as a controlled exception in the manifest. W-66 resolved both on 2026-10-20; the manifest now records `attachments: ok` for both files, so `CorpusTests` checks their names and bytes against qpdf and pypdf.
 
 ### D1. A Flate stream with a trailing byte inside `/Length` fails with a false checksum error
 
@@ -41,7 +41,7 @@ These are recorded, not fixed, under W-13. Each one is asserted as a controlled 
 - Expected: RFC 1950 places the Adler-32 immediately after the deflate data. qpdf 12.4.2 (`--show-attachment`), pypdf 6.21.1, and Python's strict `zlib.decompress` all decode the 15,003 bytes. The deflate data ends at byte 3,963 of `/Length 3968`, its checksum `54fc9fc4` matches, and one `0x0A` byte follows.
 - Actual: `PdfParseException` from `ZlibInflateStream.Read`.
 - Severity: Medium (a predictable, controlled failure on a real file; no corruption).
-- Disposition: G2 release blocker, owned by W-66 (`QUALIFICATION.md` section 5: fix, exclude with justification, or block). Whether trailing bytes after the zlib stream are tolerated is a quirk-list decision; locating the checksum after the deflate data, and the misleading message, need fixing either way. Regression test: the manifest's `attachments: PdfParseException` for `irs-f1040es-2026`, asserted by `CorpusTests`.
+- Disposition (W-66): fixed as a tolerated writer quirk. The extra byte is the end-of-line marker before `endstream`, which ISO 32000-1 7.3.8.1 excludes from `/Length`. The decoder checks the Adler-32 at the end of the stream data and, when that does not match, in front of a final CR, LF, or CR LF; nothing else is searched. Other trailing bytes, and a checksum that matches neither place, still throw `PdfParseException`, whose message now names the Adler-32 at the end of the stream data. The same shape is in seven Flate streams of `irs-f5500-2005` (three font programs, a `/ToUnicode` CMap, and three page content streams) (Acrobat Distiller 6.0.1); the library never decodes those, and `WriterQuirkTests` decodes one font program directly. Listed in `README.md` (support matrix, Writer quirks). Regression tests: `WriterQuirkTests` and the `irs-f1040es-2026` corpus entry.
 
 ### Q1. Embedded-file name-tree key in UTF-16LE without a byte-order mark
 
@@ -49,7 +49,7 @@ These are recorded, not fixed, under W-13. Each one is asserted as a controlled 
 - Impact: no attachment of that file can be listed. The file spec's `/F` and `/UF` are valid (`FAA_Form_8710-1_.pdf.accreport.html`). Opening, reading fields, the metadata revision, and fill all work.
 - Independent tools: qpdf 12.4.2 reports the key with embedded NULs; pypdf 6.21.1 does not match it to a file spec.
 - Severity: Medium.
-- Disposition: G2 release blocker, owned by W-66, which decides whether this quirk joins the tolerated list (spec section 8) or is excluded with justification. Regression test: the manifest's `attachments: PdfParseException` for `faa-8710-1`.
+- Disposition (W-66): fixed as a defect in the library's reading, not added to the quirk list. ISO 32000-1 7.9.6 requires a name-tree key to be a string, not a text string, so the key is legal and the library was too strict. A key that is not a text string now names its attachment by the file specification (`/UF`, then `/F`): `FAA_Form_8710-1_.pdf.accreport.html`, which is qpdf's preferred name; the bytes match pypdf and the file's `/Params /CheckSum`. A later attachment edit keeps the key's bytes. Guessing UTF-16LE (pypdf reports `accreport.html`) was rejected as an encoding heuristic the standard does not call for. Documented in `README.md` (support matrix, Attachments) and `ACCEPTANCE.md`. Regression tests: `WriterQuirkTests` and the `faa-8710-1` corpus entry; the probe now records qpdf's `preferredname` as `fileName` and lets pypdf find the bytes by it.
 
 ### Known Phase 1 gaps the corpus now has real fixtures for
 
@@ -57,4 +57,4 @@ These are recorded, not fixed, under W-13. Each one is asserted as a controlled 
 - Hybrid XFA: filling the IRS W-9 updates the AcroForm value but not the XFA `datasets` packet. W-76.
 - The VA 21-4138 first-name field is a comb field, so a fill sets `/NeedAppearances` as documented.
 - Every nonzero `qpdf --check` exit on a supported original comes from linearization hint tables (CMS-40B, FAA 8710-1, OPM OF-306, NIST SP 1271, Beige Book, both NACA scans, NBS Circular 1). The library ignores hints, and its incremental output checks clean.
-- No common file needed a whole-file scan or cross-reference repair. Nothing here needs escalation under spec section 8.
+- No common file needed a whole-file scan or cross-reference repair. Nothing here needs escalation under spec section 8. W-66 rechecked the other section 8 candidates against every corpus file: no bytes after the final `%%EOF` beyond an end-of-line, every `startxref` lands on `xref` or an object, and every directly or indirectly given `/Length` outside object streams ends at `endstream` (allowing one end-of-line marker); the corpus opens without any of those handlers.

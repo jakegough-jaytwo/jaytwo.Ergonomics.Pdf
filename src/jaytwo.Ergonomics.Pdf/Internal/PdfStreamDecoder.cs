@@ -656,7 +656,6 @@ internal static class PdfStreamDecoder
     {
         private readonly Stream _source;
         private readonly bool _leaveOpen;
-        private readonly byte[] _checksum = new byte[4];
         private ZlibPayloadStream? _payload;
         private DeflateStream? _deflate;
         private uint _sum1 = 1;
@@ -714,11 +713,9 @@ internal static class PdfStreamDecoder
             {
                 _payload!.Drain();
                 _verified = true;
-                uint expected = ((uint)_checksum[0] << 24) | ((uint)_checksum[1] << 16) | ((uint)_checksum[2] << 8) | _checksum[3];
-                uint actual = (_sum2 << 16) | _sum1;
-                if (expected != actual)
+                if (!_payload.ChecksumMatches((_sum2 << 16) | _sum1))
                 {
-                    throw new PdfParseException(0, "The zlib checksum does not match.");
+                    throw new PdfParseException(0, "The zlib Adler-32 checksum at the end of the stream data does not match the decoded bytes.");
                 }
             }
 
@@ -762,7 +759,7 @@ internal static class PdfStreamDecoder
             }
 
             ReadHeader(_source);
-            _payload = new ZlibPayloadStream(_source, _checksum);
+            _payload = new ZlibPayloadStream(_source);
             _deflate = new DeflateStream(_payload, CompressionMode.Decompress, leaveOpen: true);
         }
 
@@ -794,20 +791,25 @@ internal static class PdfStreamDecoder
         }
     }
 
+    // Passes the deflate data on and holds back the last four bytes of the stream data, which RFC 1950 makes the
+    // Adler-32. It also keeps the last six bytes, so that the checksum can be found in front of an end-of-line
+    // marker that the writer counted in /Length (a tolerated writer quirk; ISO 32000-1 7.3.8.1 excludes that
+    // marker from /Length). Bytes past the end of the deflate data are ignored by the inflater.
     private sealed class ZlibPayloadStream : Stream
     {
+        private const int TailLength = 6;
         private readonly Stream _source;
-        private readonly byte[] _checksum;
         private readonly byte[] _hold = new byte[4];
         private readonly byte[] _swap = new byte[4];
         private readonly byte[] _incoming = new byte[8192];
+        private readonly byte[] _tail = new byte[TailLength];
+        private int _tailCount;
         private bool _primed;
         private bool _exhausted;
 
-        public ZlibPayloadStream(Stream source, byte[] checksum)
+        public ZlibPayloadStream(Stream source)
         {
             _source = source;
-            _checksum = checksum;
         }
 
         public override bool CanRead => true;
@@ -837,6 +839,24 @@ internal static class PdfStreamDecoder
             }
         }
 
+        // Call after Drain. The stored checksum is the last four bytes of the stream data, or the four bytes in
+        // front of a final CR, LF, or CR LF.
+        public bool ChecksumMatches(uint actual)
+        {
+            if (StoredChecksum(0) == actual)
+            {
+                return true;
+            }
+
+            byte last = _tail[TailLength - 1];
+            if (_tailCount >= 5 && (last == (byte)'\n' || last == (byte)'\r') && StoredChecksum(1) == actual)
+            {
+                return true;
+            }
+
+            return _tailCount >= 6 && _tail[TailLength - 2] == (byte)'\r' && last == (byte)'\n' && StoredChecksum(2) == actual;
+        }
+
         public override void Flush()
         {
         }
@@ -862,17 +882,18 @@ internal static class PdfStreamDecoder
                     filled += header;
                 }
 
+                Remember(_hold, 4);
                 _primed = true;
             }
 
             int incoming = _source.Read(_incoming, 0, Math.Min(count, _incoming.Length));
             if (incoming == 0)
             {
-                Buffer.BlockCopy(_hold, 0, _checksum, 0, 4);
                 _exhausted = true;
                 return 0;
             }
 
+            Remember(_incoming, incoming);
             if (incoming < 4)
             {
                 Buffer.BlockCopy(_hold, 0, buffer, offset, incoming);
@@ -901,6 +922,28 @@ internal static class PdfStreamDecoder
         public override void Write(byte[] buffer, int offset, int count)
         {
             throw new NotSupportedException();
+        }
+
+        private void Remember(byte[] data, int count)
+        {
+            if (count >= TailLength)
+            {
+                Buffer.BlockCopy(data, count - TailLength, _tail, 0, TailLength);
+            }
+            else
+            {
+                Buffer.BlockCopy(_tail, count, _tail, 0, TailLength - count);
+                Buffer.BlockCopy(data, 0, _tail, TailLength - count, count);
+            }
+
+            _tailCount = Math.Min(TailLength, _tailCount + count);
+        }
+
+        // The big-endian checksum that ends `trailing` bytes before the end of the stream data.
+        private uint StoredChecksum(int trailing)
+        {
+            int start = TailLength - trailing - 4;
+            return ((uint)_tail[start] << 24) | ((uint)_tail[start + 1] << 16) | ((uint)_tail[start + 2] << 8) | _tail[start + 3];
         }
     }
 

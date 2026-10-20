@@ -55,13 +55,13 @@ public class CorpusTests
 
         if (entry.Attachments == "ok")
         {
-            string[] expectedNames = probe.GetProperty("attachments").EnumerateArray().Select(a => CorpusManifest.Text(a, "name")!).ToArray();
+            string[] expectedNames = probe.GetProperty("attachments").EnumerateArray().Select(ExpectedName).OrderBy(n => n, StringComparer.Ordinal).ToArray();
             Assert.Equal(expectedNames, document.Attachments.Select(a => a.Name).OrderBy(n => n, StringComparer.Ordinal).ToArray());
             foreach (JsonElement attachment in probe.GetProperty("attachments").EnumerateArray())
             {
                 string? sha = CorpusManifest.Text(attachment, "sha256");
                 Assert.True(sha != null, id + ": pypdf did not decode " + CorpusManifest.Text(attachment, "name"));
-                using Stream content = document.Attachments[CorpusManifest.Text(attachment, "name")!].Open();
+                using Stream content = document.Attachments[ExpectedName(attachment)].Open();
                 Assert.Equal(sha, CorpusManifest.Sha256(content));
             }
         }
@@ -215,6 +215,14 @@ public class CorpusTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    // An attachment is named by its name-tree key when the key is a text string, and otherwise by its file
+    // specification (G2 finding Q1). qpdf renders a key that is not text with its undefined bytes, such as NUL.
+    private static string ExpectedName(JsonElement attachment)
+    {
+        string key = CorpusManifest.Text(attachment, "name")!;
+        return key.IndexOf('\0') >= 0 ? CorpusManifest.Text(attachment, "fileName")! : key;
     }
 
     private static string NamesHash(IEnumerable<string> names)

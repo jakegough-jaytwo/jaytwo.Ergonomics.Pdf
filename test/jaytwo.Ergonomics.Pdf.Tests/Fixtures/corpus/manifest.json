@@ -134,7 +134,7 @@
       "password": null,
       "operations": {
         "open": "ok",
-        "attachments": "PdfParseException",
+        "attachments": "ok",
         "revise": "ok",
         "fill": {
           "field": "topmostSubform[0].Page12[0].f12_1[0]",
@@ -144,7 +144,7 @@
       },
       "notes": [
         "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
-        "Defect (G2 corpus finding D1): the embedded file's Flate stream ends one byte before /Length (a trailing 0x0A). The library takes the last four bytes of the stream data as the Adler-32 and reports 'The zlib checksum does not match', but the checksum that follows the deflate data matches; qpdf, pypdf, and Python zlib decode the 15,003 bytes. Listing works; reading the content throws PdfParseException."
+        "Writer quirk (G2 corpus finding D1, tolerated under W-66): the embedded file's Flate stream ends one byte before /Length, which counts the LF before endstream (ISO 32000-1 7.3.8.1 excludes it). The library found the Adler-32 only in the last four bytes of the stream data and failed with a false checksum error; it now also looks in front of a final CR, LF, or CR LF. qpdf, pypdf, and Python zlib decode the same 15,003 bytes."
       ],
       "validators": [
         {
@@ -166,6 +166,7 @@
       "probe": {
         "attachments": [
           {
+            "fileName": "Press Quality(1).joboptions",
             "name": "Press Quality(1).joboptions",
             "sha256": "042d4c5545cd9496023aaf718131a1e9fc4c200bc130a1b2581d888224eebc97"
           }
@@ -648,7 +649,7 @@
       "password": null,
       "operations": {
         "open": "ok",
-        "attachments": "PdfParseException",
+        "attachments": "ok",
         "revise": "ok",
         "fill": {
           "field": "A. Name (Last, First, Middle)",
@@ -658,7 +659,7 @@
       },
       "notes": [
         "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization.",
-        "Writer quirk (G2 corpus finding Q1, for W-66): the /EmbeddedFiles name-tree key is UTF-16LE without a byte-order mark (a\u0000c\u0000c\u0000...). It is not a valid text string (ISO 32000-1 7.9.2.2), so listing attachments throws PdfParseException; the filespec's /F and /UF are valid. qpdf and pypdf read the key as raw bytes."
+        "G2 corpus finding Q1, fixed under W-66: the /EmbeddedFiles name-tree key is UTF-16LE without a byte-order mark (a\u0000c\u0000c\u0000...). A name-tree key is a string, not necessarily a text string (ISO 32000-1 7.9.6), so the library no longer requires one: a key that is not text names the attachment by its file specification (/UF, then /F), here FAA_Form_8710-1_.pdf.accreport.html, qpdf's preferred name. pypdf lists the bytes under that name."
       ],
       "validators": [
         {
@@ -680,8 +681,9 @@
       "probe": {
         "attachments": [
           {
+            "fileName": "FAA_Form_8710-1_.pdf.accreport.html",
             "name": "a\u0000c\u0000c\u0000r\u0000e\u0000p\u0000o\u0000r\u0000t\u0000.\u0000h\u0000t\u0000m\u0000l\u0000",
-            "sha256": null
+            "sha256": "25c8f01ca127048475d224db43c4075afabf42d6f7ef8a7efb78851e6ae37b02"
           }
         ],
         "catalogVersion": null,
@@ -2160,6 +2162,7 @@
       "probe": {
         "attachments": [
           {
+            "fileName": "Original.odt",
             "name": "Original.odt",
             "sha256": "62ca904ac8b9f25ed7c82363f5ec440298ceba1c56ed6dea144f200f03ca96a1"
           }
@@ -3919,6 +3922,7 @@
       "probe": {
         "attachments": [
           {
+            "fileName": "note.txt",
             "name": "note.txt",
             "sha256": "d9c634a9a73190ead100b65cb42626b88d43ba3a5b34ec4ed3076a1e821a672b"
           }

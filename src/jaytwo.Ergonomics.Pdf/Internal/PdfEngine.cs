@@ -2707,9 +2707,15 @@ internal sealed class PdfEngine : IDisposable
                     continue;
                 }
 
+                // A name-tree key is a string, not necessarily a text string (ISO 32000-1 7.9.6). A key that is not
+                // text keeps the file specification's name (/UF, then /F); its bytes stay the key on a later write.
                 AttachmentSlot slot = ToAttachment(spec, id);
                 slot.SortKey = key.Raw;
-                slot.Name = ValueText(key) ?? slot.Name;
+                if (PdfTextCodec.TryDecode(key.Raw, out string keyText, out _))
+                {
+                    slot.Name = keyText;
+                }
+
                 list.Add(slot);
             }
         }
