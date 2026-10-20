@@ -22,7 +22,7 @@ On 2026-10-19 the owner set a two-phase scope (D-38):
 - **Phase 2, release 1.x:** a new-file writer for page extraction, concatenation, compaction, removing revisions, and removing passwords. Its spec is a draft; a separate owner interview settles it.
 
 The owner also decided:
-- Targets become `netstandard2.0`, `net8.0`, and `net10.0`.
+- Targets become `netstandard2.0`, `net6.0`, `net8.0`, and `net10.0` (D-38 as amended by D-40, 2026-10-20).
 - `Microsoft.Bcl.AsyncInterfaces` is approved on `netstandard2.0` (D-39).
 - The public API may change freely until 1.0.
 - `QUALIFICATION.md` is right-sized (spec section 10).
@@ -105,7 +105,7 @@ Proposed authority order:
 
 ### A4. Target frameworks (separate work item, build change)
 
-- Library: `netstandard2.0;net8.0;net10.0`. Test project: `net8.0;net10.0`, plus `net48` on Windows. `net48` runs the `netstandard2.0` library build, so that build stays exercised.
+- Library: `netstandard2.0;net6.0;net8.0;net10.0` (D-40 keeps `net6.0`). Test project: `net6.0;net8.0;net10.0`, plus `net48` on Windows. `net48` runs the `netstandard2.0` library build, so that build stays exercised.
 - Update the test project's `System.Security.Cryptography.Pkcs` condition, the `Dockerfile` SDK and runtimes, `Makefile` `unit-test`, and README's build section. The fuzz project targets `net8.0` only and needs no change.
 - Do not add the D-39 package yet; the first async item adds it.
 - Mark D-13 superseded by D-38. D-13 forbade dropping a target for lifecycle reasons; the owner overrode it.
@@ -226,6 +226,37 @@ Create each as `proposed` with Problem and Scope citing spec IDs. Refine its acc
 | 22 | Second renderer (MuPDF) for G6 | G6 | change-verification | S |
 | 23 | Fuzz campaign and independent review (W-18) | G8 | fuzz, security-review | L |
 | 24 | Release checks: README examples run, pack, versioning | G10 | change-verification | M |
+
+### C2 work items
+
+Created under W-63 on 2026-10-20.
+
+| Seq | Work item |
+| --- | --- |
+| 1 | W-62 (done) |
+| 2 | W-64 |
+| 3 | W-65 |
+| 4 | W-13 |
+| 5 | W-40 |
+| 6 | W-66 |
+| 7 | W-67 |
+| 8 | W-68 |
+| 9 | W-14 |
+| 10 | W-69 (absorbs W-49) |
+| 11 | W-70 |
+| 12 | W-71 (absorbs W-51) |
+| 13 | W-72 |
+| 14 | W-73 |
+| 15 | W-74 |
+| 16 | W-75 |
+| 17 | W-76 |
+| 18 | W-47 |
+| 19 | W-77 |
+| 20 | W-78 |
+| 21 | W-42, W-50, W-79 |
+| 22 | W-80 |
+| 23 | W-18 |
+| 24 | W-81 |
 
 ### C3. Ordering rationale
 
