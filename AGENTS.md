@@ -27,7 +27,7 @@ Sources, in order of authority:
 
 A spec requirement marked New or Change is target behavior. It is not a disagreement with `ACCEPTANCE.md` or `README.md`, and it must not be advertised as shipped. The work item that implements it, in the same commit, changes its status to Exists, updates `ACCEPTANCE.md` and the shipped-behavior sections of `README.md`, and adds the required evidence. From then on, a contradiction among the implementation, `ACCEPTANCE.md`, `README.md`, and that requirement is a disagreement. A spec that contradicts `AGENTS.md` is always a disagreement. When sources disagree, stop the affected work and report the disagreement to the owner. Do not choose between them yourself.
 
-`AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and `.agents/skills/` change only with the owner's approval. Propose an edit to them instead of making it.
+`AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and `.agents/skills/` change only with the owner's approval. Propose an edit to them instead of making it.  Exception (D-43): the work item that ships a requirement marked New or Change sets its status to Exists in the same commit, together with `ACCEPTANCE.md` and `README.md`, without separate approval. Changing a requirement's text, adding or removing a requirement, or moving one between phases still needs the owner.
 
 Agents commit task work without being asked each time (D-31). A commit holds one work item's changes and starts its subject with that item ID. Intermediate commits are allowed. A second item does not become active until the first item's tracked changes are committed. A task commit runs the verification its item requires. `make docker-builder docker-test` gates integration checkpoints, not every task commit. This does not authorize pushing.
 
