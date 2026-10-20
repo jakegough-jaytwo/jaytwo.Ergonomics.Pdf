@@ -14,19 +14,30 @@ internal static class PdfTextCodec
 
     public static string Decode(byte[] raw)
     {
+        return TryDecode(raw, out string text, out string error) ? text : throw new PdfParseException(0, error);
+    }
+
+    // A text string (ISO 32000-1 7.9.2.2) decodes; any other byte string returns false with the reason.
+    public static bool TryDecode(byte[] raw, out string text, out string error)
+    {
+        text = string.Empty;
+        error = string.Empty;
         if (raw.Length >= 2 && raw[0] == 0xFE && raw[1] == 0xFF)
         {
             if (((raw.Length - 2) & 1) != 0)
             {
-                throw new PdfParseException(0, "UTF-16BE string has an odd length.");
+                error = "UTF-16BE string has an odd length.";
+                return false;
             }
 
-            return Encoding.BigEndianUnicode.GetString(raw, 2, raw.Length - 2);
+            text = Encoding.BigEndianUnicode.GetString(raw, 2, raw.Length - 2);
+            return true;
         }
 
         if (raw.Length >= 3 && raw[0] == 0xEF && raw[1] == 0xBB && raw[2] == 0xBF)
         {
-            return Encoding.UTF8.GetString(raw, 3, raw.Length - 3);
+            text = Encoding.UTF8.GetString(raw, 3, raw.Length - 3);
+            return true;
         }
 
         var chars = new char[raw.Length];
@@ -35,13 +46,15 @@ internal static class PdfTextCodec
             ushort mapped = PdfDoc[raw[i]];
             if (mapped == 0xFFFF)
             {
-                throw new PdfParseException(0, $"Undefined PDFDocEncoding byte 0x{raw[i]:X2}.");
+                error = $"Undefined PDFDocEncoding byte 0x{raw[i]:X2}.";
+                return false;
             }
 
             chars[i] = (char)mapped;
         }
 
-        return new string(chars);
+        text = new string(chars);
+        return true;
     }
 
     public static PdfObject.Str Encode(string value)

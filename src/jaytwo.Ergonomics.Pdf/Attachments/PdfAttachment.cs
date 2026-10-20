@@ -20,7 +20,8 @@ public sealed class PdfAttachment
     }
 
     /// <summary>
-    /// Gets the attachment name.
+    /// Gets the attachment name: the <c>/EmbeddedFiles</c> name-tree key when that key is a text string, otherwise
+    /// the file specification's <c>/UF</c>, then <c>/F</c>.
     /// </summary>
     public string Name { get; }
 

@@ -61,8 +61,10 @@ def qpdf_facts(qpdf, path, password):
     facts["attachments"] = []
     code, out, err = run([qpdf] + pw + ["--json=2", "--json-key=attachments", path])
     if code in (0, 3):
-        # qpdf names the embedded files (name-tree keys); pypdf_facts adds each one's decoded bytes.
-        facts["attachments"] = [{"name": key, "sha256": None} for key in sorted(json.loads(out).get("attachments", {}))]
+        # qpdf names the embedded files (name-tree keys) and gives each file specification's preferred name
+        # (/UF, then /F); pypdf_facts adds each one's decoded bytes.
+        found = json.loads(out).get("attachments", {})
+        facts["attachments"] = [{"name": key, "fileName": found[key].get("preferredname"), "sha256": None} for key in sorted(found)]
     return facts
 
 
@@ -78,7 +80,9 @@ def pypdf_facts(path, password, data, wanted_fields, attachments):
             raise ValueError("pypdf could not decrypt")
     contents = reader.attachments
     for attachment in attachments:
-        values = contents.get(attachment["name"], [])
+        # pypdf lists each file under its decoded key and its file name; a key that is not a text string (G2
+        # finding Q1) is decoded differently from qpdf, so the file name finds it.
+        values = contents.get(attachment["name"]) or contents.get(attachment["fileName"], [])
         if len(values) == 1:
             attachment["sha256"] = hashlib.sha256(values[0]).hexdigest()
     root = resolve(reader.trailer["/Root"])
