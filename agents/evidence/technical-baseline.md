@@ -1,5 +1,7 @@
 # Technical baseline
 
+**Historical.** Marked under W-65 (2026-10-20). This records the repository before the Phase 1 charter reset and is not current evidence. `qualification/status.md` lists the gates and the evidence that still counts.
+
 Migrated from `agents/archive/state-v1/status.md` under D-33; D-36 and W-56 record its removal, and its pre-removal state is [squashed].
 
 Maintained through `pdf-task-workflow`. As of 2026-10-18. Inventory only. B-02 is accepted. On 2026-10-18 the suite ran on `net8.0` and on `net6.0`: 145 executed, 145 passed, and 0 failed on each. TRX files are `%LOCALAPPDATA%\Temp\jaytwo-b02\b02-net8.trx` and `b02-net6.trx`.
