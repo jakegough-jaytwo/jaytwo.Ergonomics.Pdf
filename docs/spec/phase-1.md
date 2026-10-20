@@ -52,7 +52,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R8 | Document-level embedded files: list with name, description, MIME type, size, relationship, dates; open the content as a stream. | Change (relationship and dates) |
 | R9 | **Signature inspection.** List every signature field: field name, whether it is signed, SubFilter, signer certificate (DER), chain certificates present in the CMS, digest and signature algorithm, `/M` and CMS signing time, reason, location, contact, `/ByteRange`, which revision it signs, whether later revisions exist, whether a timestamp token is embedded and its time, certification level (DocMDP `P`) if it certifies. No trust, revocation, or cryptographic validation (section 11). Reading signature metadata does not read the signed byte range. | New |
 | R10 | **Revision listing.** List revisions in order with the end offset of each and whether a signature covers it. A linearized file's first-page cross-reference section and its main section are one revision, not two. Only cross-reference sections and trailers are read. | New |
-| R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Change |
+| R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
 | R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | New |
 
 ## 6. Incremental writes
