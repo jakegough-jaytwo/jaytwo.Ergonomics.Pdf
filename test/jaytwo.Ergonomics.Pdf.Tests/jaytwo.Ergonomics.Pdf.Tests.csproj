@@ -22,6 +22,8 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="System.Net.Http" />
+    <!-- The G2 corpus manifest is JSON; System.Text.Json is in the box on the other targets. -->
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <!-- The .NET Framework test host redirects Unsafe to 6.0.0.0; ship that version so the redirect resolves. -->
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
@@ -31,6 +33,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Fixtures\*.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Fixtures\corpus\*.pdf;Fixtures\corpus\*.py;Fixtures\corpus\manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
