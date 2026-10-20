@@ -240,7 +240,7 @@ The library must demonstrate resource consumption consistent with its stream-nat
 
 Use real file-backed inputs. Sparse tests alone are insufficient.
 
-**Proposed starting memory budget:** For the benchmark fixtures above, target no more than 256 MiB of peak managed heap growth for simple inspect/edit/sign operations, with a 512 MiB exception ceiling for more complex structural traversals. These are proposed product thresholds, not PDF specification requirements. The Technical Lead and QA must measure and approve the final fixture-specific budgets before release.
+**Proposed starting memory budget:** For the benchmark fixtures above, target no more than 256 MiB of peak managed heap growth for simple inspect/edit/sign operations, with a 512 MiB exception ceiling for more complex structural traversals. These are proposed product thresholds, not PDF specification requirements. The active agent uses `pdf-change-verification` to measure the final fixture-specific budgets and records owner approval before release.
 
 Also establish repeatable timing baselines and investigate material regressions. Do not impose arbitrary throughput targets without accounting for storage, cryptographic providers, TSA latency, and the benchmark environment.
 
@@ -371,11 +371,13 @@ However, the library must not be marketed as production-qualified for an incompl
 
 ## 15. Release decision
 
-The QA Engineer owns the evidence inventory and verification results.
+The active agent uses `pdf-change-verification` to maintain the evidence inventory and verification results.
 
-The Technical Lead owns technical review, integration quality, and engineering disposition of defects.
+The active agent uses the applicable domain skill to review technical correctness and integration quality, and `pdf-task-workflow` to record the engineering disposition of defects.
 
-The Product Manager owns acceptance tracking, release-scope recommendations, and confirmation that the required gates have been addressed.
+The active agent uses `pdf-task-workflow` for acceptance tracking, release-scope recommendations, and confirmation that the required gates have been addressed.
+
+These workflows do not convert self-review into independent review. Any gate that requires an independent reviewer still needs a human or a fresh context that did not implement the affected code.
 
 The human product owner retains final release authority.
 

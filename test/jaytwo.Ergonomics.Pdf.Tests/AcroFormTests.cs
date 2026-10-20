@@ -70,6 +70,25 @@ public class AcroFormTests
     }
 
     [Fact]
+    public void radio_button_opt_does_not_replace_the_on_state_contract()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [5 0 R 6 0 R] >>");
+        builder.Indirect(4, "<< /FT /Btn /Ff 32768 /T (Color) /Opt [(Red) (Blue)] /V /1 /Kids [5 0 R 6 0 R] >>");
+        builder.Indirect(5, "<< /Subtype /Widget /Parent 4 0 R /Rect [10 10 30 30] /AP << /N << /Off null /0 null >> >> /P 3 0 R >>");
+        builder.Indirect(6, "<< /Subtype /Widget /Parent 4 0 R /Rect [40 10 60 30] /AP << /N << /Off null /1 null >> >> /P 3 0 R >>");
+        using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+
+        var fields = document.AcroForm.GetFields("Color");
+        Assert.Equal("0", fields[0].ExportValue);
+        Assert.Equal("1", fields[1].ExportValue);
+        Assert.True(fields[1].IsChecked);
+        Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, document.AcroForm.SetRadio("Color", "0"));
+    }
+
+    [Fact]
     public void simple_text_generates_helvetica_and_other_values_request_appearances()
     {
         byte[] pdf = Form(
@@ -369,6 +388,25 @@ public class AcroFormTests
     }
 
     [Fact]
+    public void list_box_fill_removes_stale_indices_and_draws_the_selected_value()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Ch /T (List) /Opt [(A) (B) (C)] /V (A) /I [0] /Rect [0 0 100 60] /P 3 0 R >>");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("List", "B"));
+            document.SaveIncremental(stream);
+        }
+
+        string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)(stream.Length - pdf.Length));
+        Assert.DoesNotContain("/I [", appendix, StringComparison.Ordinal);
+        Assert.Contains("(B) Tj", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain("(A) Tj", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain("(C) Tj", appendix, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void choice_without_options_does_not_dirty_the_document()
     {
         byte[] pdf = Form("<< /Subtype /Widget /FT /Ch /T (Choice) /Rect [0 0 10 10] /P 3 0 R >>");
@@ -414,6 +452,18 @@ public class AcroFormTests
         double narrow = TmX(AppendixAfterFill(pdf, "Name", "i"));
 
         Assert.True(wide < narrow);
+    }
+
+    [Fact]
+    public void text_fill_preserves_the_widget_mk_dictionary()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 24] /DA (/Helv 12 Tf 0 g) /MK << /BG [1 0 0] /BC [0 0 1] >> /P 3 0 R >>");
+
+        string appendix = AppendixAfterFill(pdf, "Name", "Ada");
+
+        Assert.Contains("/MK <<", appendix, StringComparison.Ordinal);
+        Assert.Contains("/BG [1 0 0]", appendix, StringComparison.Ordinal);
+        Assert.Contains("/BC [0 0 1]", appendix, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -465,6 +515,28 @@ public class AcroFormTests
         Assert.Equal("Yes", bare.ExportValue);
         Assert.Equal("Yes", bare.Value);
         Assert.True(bare.IsChecked);
+    }
+
+    [Fact]
+    public void check_box_widgets_with_different_on_states_are_rejected_without_writing()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [5 0 R 6 0 R] >>");
+        builder.Indirect(4, "<< /FT /Btn /T (Agree) /Kids [5 0 R 6 0 R] >>");
+        builder.Indirect(5, "<< /Subtype /Widget /Parent 4 0 R /Rect [10 10 30 30] /AP << /N << /Off null /First null >> >> /P 3 0 R >>");
+        builder.Indirect(6, "<< /Subtype /Widget /Parent 4 0 R /Rect [40 10 60 30] /AP << /N << /Off null /Second null >> >> /P 3 0 R >>");
+        byte[] pdf = builder.Finish();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        PdfFieldValueException error = Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetCheckBox("Agree", true));
+        Assert.Contains("different on-state", error.Message, StringComparison.Ordinal);
+        document.SaveIncremental(stream);
+
+        Assert.Equal(pdf.Length, stream.Length);
     }
 
     [Fact]

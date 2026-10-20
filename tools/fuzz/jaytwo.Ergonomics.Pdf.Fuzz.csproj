@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Test-only fuzz harness for QUALIFICATION.md gate G8 (B-18). Not packed, not a runtime dependency. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>jaytwo.Ergonomics.Pdf.Fuzz</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
+    <PackageReference Include="SharpFuzz" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\test\jaytwo.Ergonomics.Pdf.Tests\PdfBuilder.cs" Link="Linked\PdfBuilder.cs" />
+    <Compile Include="..\..\test\jaytwo.Ergonomics.Pdf.Tests\TestCompat.cs" Link="Linked\TestCompat.cs" />
+  </ItemGroup>
+
+</Project>

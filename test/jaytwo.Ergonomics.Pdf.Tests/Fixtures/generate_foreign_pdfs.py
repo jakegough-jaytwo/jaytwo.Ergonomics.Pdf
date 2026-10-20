@@ -22,6 +22,7 @@ from pypdf.generic import (
     BooleanObject,
     DictionaryObject,
     FloatObject,
+    IndirectObject,
     NameObject,
     NumberObject,
     TextStringObject,
@@ -143,6 +144,53 @@ def write_form(path: Path) -> None:
         writer.write(handle)
 
 
+def write_dangling(path: Path) -> None:
+    """A form whose /Fields and /Annots keep references that resolve to null.
+
+    pypdf writes the deleted field as a free xref entry. The other two entries name
+    an object number with no xref entry and the live field at generation 1.
+    """
+    writer = PdfWriter()
+    writer.add_blank_page(width=612, height=792)
+    page = writer.pages[0]
+
+    def widget(name: str, top: int) -> DictionaryObject:
+        field = DictionaryObject()
+        field.update(
+            {
+                NameObject("/Type"): NameObject("/Annot"),
+                NameObject("/Subtype"): NameObject("/Widget"),
+                NameObject("/FT"): NameObject("/Tx"),
+                NameObject("/T"): TextStringObject(name),
+                NameObject("/Rect"): ArrayObject(
+                    [FloatObject(72), FloatObject(top), FloatObject(300), FloatObject(top + 24)]
+                ),
+                NameObject("/DA"): TextStringObject("/Helv 12 Tf 0 g"),
+                NameObject("/F"): NumberObject(4),
+                NameObject("/P"): page.indirect_reference,
+            }
+        )
+        return field
+
+    live_ref = writer._add_object(widget("Name", 700))
+    deleted_ref = writer._add_object(widget("Deleted", 660))
+    undefined_ref = IndirectObject(len(writer._objects) + 50, 0, writer)
+    stale_ref = IndirectObject(live_ref.idnum, 1, writer)
+    refs = [deleted_ref, live_ref, stale_ref, undefined_ref]
+    page[NameObject("/Annots")] = ArrayObject(refs)
+    form = DictionaryObject()
+    form.update(
+        {
+            NameObject("/Fields"): ArrayObject(refs),
+            NameObject("/NeedAppearances"): BooleanObject(False),
+        }
+    )
+    writer._root_object[NameObject("/AcroForm")] = writer._add_object(form)
+    writer._objects[deleted_ref.idnum - 1] = None
+    with path.open("wb") as handle:
+        writer.write(handle)
+
+
 def write_signing_key(directory: Path) -> tuple[Path, Path]:
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "pyHanko fixture")])
@@ -234,6 +282,7 @@ def main() -> None:
     )
     note.unlink()
     write_form(root / "pypdf-acroform.pdf")
+    write_dangling(root / "pypdf-dangling.pdf")
     key_path, cert_path = write_signing_key(root)
     try:
         write_signature_field(base, root / "pyhanko-sigfield.pdf")

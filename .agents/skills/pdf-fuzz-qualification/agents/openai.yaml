@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Fuzz Qualification"
+  short_description: "Build, run, and record G8 fuzz campaigns"
+  default_prompt: "Use $pdf-fuzz-qualification for this fuzz harness, smoke run, campaign, or fuzz-finding triage."

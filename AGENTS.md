@@ -1,5 +1,29 @@
 # Repo Instructions
 
+## Working model
+
+Use one agent for ordered repository work. Do not simulate Product Manager, Technical Lead, implementer, and QA handoffs or create separate reports for those personas.
+
+Repository workflows are skills. Skill `<name>` is the file `.agents/skills/<name>/SKILL.md`. When a rule below applies, read that file before starting the work, whether or not your tool lists the skill natively. Load each skill only when its rule applies:
+
+- `pdf-task-workflow` (`.agents/skills/pdf-task-workflow/SKILL.md`): selecting, scoping, executing, or recording a work item, or assessing release readiness.
+- The one primary domain skill that matches the change: `pdf-core-change` (`.agents/skills/pdf-core-change/SKILL.md`), `pdf-acroform-change` (`.agents/skills/pdf-acroform-change/SKILL.md`), or `pdf-signing-change` (`.agents/skills/pdf-signing-change/SKILL.md`). Load another only when the task crosses that boundary.
+- `pdf-change-verification` (`.agents/skills/pdf-change-verification/SKILL.md`): after runtime, test, build, or behavior-documentation changes, and for acceptance or qualification claims.
+- `pdf-fuzz-qualification` (`.agents/skills/pdf-fuzz-qualification/SKILL.md`): the fuzz harness, the smoke run, a G8 fuzz campaign, or triage of a fuzz finding.
+- `pdf-security-review` (`.agents/skills/pdf-security-review/SKILL.md`): only for an explicitly requested read-only audit or `QUALIFICATION.md` gate G8 evidence.
+
+`.agents/skills/` is the only copy. Do not mirror it into `.claude/skills/`, `.cursor/skills/`, or `.grok/skills/`. Cursor scans `.claude/skills/` as well as `.agents/skills/`, so a mirror loads every skill twice.
+
+Read only the state and supporting documents needed for the task. Keep work single-agent unless the user explicitly requests delegation. A fresh human or agent context may still be required when an evidence claim genuinely depends on reviewer independence; changing persona in one context does not provide that independence.
+
+If `AGENTS.md`, `ACCEPTANCE.md`, `README.md`, `QUALIFICATION.md`, and the task disagree, stop the affected work and report the disagreement to the owner. Do not choose between them yourself.
+
+`AGENTS.md`, `QUALIFICATION.md`, and `.agents/skills/` change only with the owner's approval. Propose an edit to them instead of making it.
+
+Agents commit task work without being asked each time (D-31). A commit holds one work item's changes and starts its subject with that item ID. Intermediate commits are allowed. A second item does not become active until the first item's tracked changes are committed. A task commit runs the verification its item requires. `make docker-builder docker-test` gates integration checkpoints, not every task commit. This does not authorize pushing.
+
+Work items are stable `agents/work-items/W-NN.md` files under D-33. Their front matter owns lifecycle status and exact or directory-prefix `allowed_changes`; status changes never move files. `agents/state/current.md` is the only maintained ordering file, and `make agents-status` derives the overview. Decisions are separate records in `agents/decisions/`. Run `make agents-check` before task work and `make task-check` against the staged transaction before committing. At most one item is `active`; an externally blocked item may become `waiting` only at a committed, verified safe checkpoint.
+
 ## Product charter
 
 Stream-native PDF operations. See `README.md` and `ACCEPTANCE.md`.

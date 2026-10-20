@@ -49,5 +49,14 @@ WORKDIR /build
 COPY . /build
 RUN make deps restore build
 
+# B-18 fuzz campaigns (test-only): SharpFuzz instruments the library and libfuzzer-dotnet drives it.
+FROM builder AS fuzz
+ARG LIBFUZZER_DOTNET_VERSION=v2025.05.02.0904
+ENV LIBFUZZER_DOTNET_VERSION=${LIBFUZZER_DOTNET_VERSION}
+RUN dotnet tool install --global SharpFuzz.CommandLine --version 2.3.0 \
+  && curl -fsSL -o /usr/local/bin/libfuzzer-dotnet \
+    "https://github.com/Metalnem/libfuzzer-dotnet/releases/download/${LIBFUZZER_DOTNET_VERSION}/libfuzzer-dotnet-ubuntu" \
+  && chmod +x /usr/local/bin/libfuzzer-dotnet
+
 FROM builder AS test
 RUN make test

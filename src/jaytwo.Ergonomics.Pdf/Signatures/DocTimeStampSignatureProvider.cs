@@ -30,6 +30,7 @@ public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider
     /// </summary>
     /// <param name="context">The signed ranges.</param>
     /// <returns>The TimeStampToken bytes returned by the authority.</returns>
+    /// <exception cref="PdfSignatureTooLargeException">The token is larger than <see cref="PdfSignatureContext.ReservedContentsBytes"/>. It is not parsed.</exception>
     /// <exception cref="PdfTimestampException">The time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
     public byte[] CreateContents(PdfSignatureContext context)
     {
@@ -47,8 +48,13 @@ public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider
 
         byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
         byte[] request = Rfc3161TimeStampRequest.Create(digest, nonce);
-        byte[] token = _authority.GetTimeStampToken(request);
+        byte[]? token = _authority.GetTimeStampToken(request);
+        if (token != null && token.Length > context.ReservedContentsBytes)
+        {
+            throw new PdfSignatureTooLargeException(token.Length, context.ReservedContentsBytes);
+        }
+
         Rfc3161TimeStampToken.RequireMatch(token, digest, nonce);
-        return token;
+        return token!;
     }
 }

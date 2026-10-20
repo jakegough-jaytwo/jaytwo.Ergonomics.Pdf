@@ -497,6 +497,11 @@ internal sealed class PdfSecurity
 
     private static void ValidatePerms(byte[] fileKey, byte[] perms, int permissions, bool metadata)
     {
+        if (perms.Length != 16)
+        {
+            throw Unsupported();
+        }
+
         byte[] plain = AesEcb(fileKey, perms, encrypt: false);
         uint stored = (uint)(plain[0] | (plain[1] << 8) | (plain[2] << 16) | (plain[3] << 24));
         if (stored != unchecked((uint)permissions)

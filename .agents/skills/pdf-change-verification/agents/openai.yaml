@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Change Verification"
+  short_description: "Verify code changes and qualification evidence"
+  default_prompt: "Use $pdf-change-verification to verify the completed repository change."

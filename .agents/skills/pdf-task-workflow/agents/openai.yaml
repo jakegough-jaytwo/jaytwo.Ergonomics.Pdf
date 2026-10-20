@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Task Workflow"
+  short_description: "Shape and execute one repository task"
+  default_prompt: "Use $pdf-task-workflow to scope and execute the next PDF library task."

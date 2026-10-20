@@ -10,6 +10,7 @@ TOPDIR=${CURDIR}
 BUILD_TEST_RESULTS_DIR=${TOPDIR}/out/testResults
 BUILD_TEST_COVERAGE_DIR=${TOPDIR}/out/coverage
 BUILD_PACKED_DIR=${TOPDIR}/out/packed
+PYTHON?=python
 
 DOCKER_TAG?=$(call getDockerTag,$(BUILD_SLN))
 DOCKER_BASE_TAG?=${DOCKER_TAG}__base
@@ -38,6 +39,18 @@ build: restore
 
 test: unit-test
 
+agents-check:
+	${PYTHON} tools/agents/workflow.py check
+
+agents-status:
+	${PYTHON} tools/agents/workflow.py status
+
+task-check:
+	${PYTHON} tools/agents/workflow.py task-check
+
+agents-test:
+	${PYTHON} tools/agents/test_workflow.py
+
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"
 	rm -rf "${BUILD_TEST_COVERAGE_DIR}"
@@ -57,6 +70,21 @@ unit-test:
 		"-reports:${BUILD_TEST_COVERAGE_DIR}/**/*.cobertura.xml" \
 		"-targetdir:${BUILD_TEST_COVERAGE_DIR}/html" \
 		"-reportTypes:Html"
+	$(MAKE) fuzz-smoke
+
+# W-18 (legacy B-18): the fixed-seed fuzz smoke run (G8). Deterministic; a failure is a regression.
+fuzz-smoke:
+	dotnet run --project ./tools/fuzz/jaytwo.Ergonomics.Pdf.Fuzz.csproj -c Release -- smoke
+
+# W-18 (legacy B-18): a bounded libFuzzer campaign in the fuzz image. FUZZ_TARGETS is TARGET:SECONDS pairs; CPU time is about
+# FUZZ_WORKERS x SECONDS per target. D-23 caps a campaign at 24 aggregate CPU-hours.
+FUZZ_WORKERS?=7
+FUZZ_TARGETS?=open:60 edit:60 object:60 objstm:60 decode:60 der:60 tsr:60 xmp:60
+docker-fuzz-campaign:
+	docker build -t ${DOCKER_TAG}__fuzz . --target fuzz
+	docker run --rm -v "${TOPDIR}/out/fuzz:/out" \
+		-e COMMIT=$$(git rev-parse HEAD) -e DIRTY=$$(git status --porcelain | grep -q . && echo yes || echo no) \
+		${DOCKER_TAG}__fuzz sh tools/fuzz/run-campaign.sh /out ${FUZZ_WORKERS} ${FUZZ_TARGETS}
 
 pack:
 	rm -rf "${BUILD_PACKED_DIR}";

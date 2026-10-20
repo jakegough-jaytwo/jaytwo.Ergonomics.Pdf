@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Security Review"
+  short_description: "Audit hostile-input and cryptographic failure paths"
+  default_prompt: "Use $pdf-security-review to perform a read-only security audit of the requested scope."
