@@ -68,7 +68,7 @@ Every Phase 1 operation has positive, negative, and independent-reader tests (py
 - **Form writes:** single and bulk fill, where a bulk fill with one invalid value changes nothing; values, appearance states, and appearances agree; hybrid XFA removal; flatten of all and of named fields.
 - **Other writes:** rotation; Info and XMP edits with unrelated metadata intact; attachment add, replace, and remove with exact byte equality, including large binaries and the compressed form; catalog version raising up to 1.7 only.
 
-Every write also covers: encrypted input under the owner and the user password, including refusal by the permission bits; new strings and streams encrypted with the document's cipher, with `/Encrypt` and `/ID` kept; the original bytes kept as a prefix and the destination unchanged on every documented failure; certification, approval-signature, FieldMDP, and usage-rights behavior where it applies.
+Every write also covers: encrypted input under the owner and the user password, including refusal by the permission bits; new strings and streams encrypted with the document's cipher, with `/Encrypt` and `/ID` kept; the original bytes kept as a prefix and the destination unchanged on every documented failure; certification, approval-signature, FieldMDP, and usage-rights behavior where it applies. Usage-rights cases include permitted, absent, unresolvable, malformed, unknown, and insufficient `/UR3`; except for a structural parse failure, every non-permitting case removes `/UR3` in the same revision and proceeds when password permissions, DocMDP, and FieldMDP otherwise allow the write. Async writes also demonstrate sync/async equivalence and cancellation leaving the destination unchanged.
 
 **Acceptance:** no known case silently produces incorrect values, geometry, bytes, or unintended modifications.
 
@@ -80,7 +80,7 @@ Two PDF-aware verifiers check signed output: pyHanko and Poppler `pdfsig`. `Sign
 
 For earlier signatures, report integrity, coverage, trust, and modification-policy compliance separately. Signature inspection is checked against the verifiers' reports for the same files.
 
-**Acceptance:** every scenario passes both verifiers; the signed bytes are exactly those intended; the signer certificate matches the key; no false success for an invalid signature or a prohibited write; no known cryptographic correctness defect is open. A successful CMS digest check alone is insufficient.
+**Acceptance:** every positive signed-output scenario passes both verifiers; both verifiers reject each tampered case; refusal and failure scenarios meet their prescribed negative assertions without producing a completed output; the signed bytes are exactly those intended; the signer certificate matches the key; no false success for an invalid signature or a prohibited write; no known cryptographic correctness defect is open. A successful CMS digest check alone is insufficient.
 
 ## 8. G5: RFC 3161 timestamps
 
@@ -127,7 +127,7 @@ The library parses untrusted input. Fuzzing covers the parser and every Phase 1 
 
 Test failures during reading, parsing, object resolution, incremental writing, attachment copying, flattening, external signing, timestamping, cancellation of async operations, and disposal.
 
-**Acceptance:** inputs stay unchanged unless an API documents in-place appending; no operation reports success when output finalization fails; a failed or cancelled write leaves the destination unchanged where that is guaranteed, and the guarantee is stated accurately; no invalid output is presented as a completed signed document; stream ownership follows documented behavior; diagnostics never expose private keys, PINs, passwords, or other secrets. The library does not provide atomic publication to an object store and must not imply that it does.
+**Acceptance:** inputs stay unchanged unless an API documents in-place appending; no operation reports success when output finalization fails; a failed or cancelled write leaves the destination unchanged, except when the destination stream itself fails (for example an I/O error or a full disk), in which case the library attempts to restore the destination's original length, rethrows, and `README.md` documents that this restoration cannot be guaranteed; no invalid output is presented as a completed signed document; stream ownership follows documented behavior; diagnostics never expose private keys, PINs, passwords, or other secrets. The library does not provide atomic publication to an object store and must not imply that it does. A fault-injecting destination verifies both branches: when writing fails after N bytes and length restoration remains available, the original length is restored; when restoration also fails, the operation still reports failure and the documented limitation applies.
 
 ## 13. G10: API, build, and documentation
 
