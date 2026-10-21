@@ -60,6 +60,8 @@ public sealed class PdfDocument : IDisposable
 
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
+    internal bool HasUsageRights => _engine.HasUsageRights;
+
     /// <summary>
     /// Opens a PDF from a readable seekable stream. An encrypted file whose user password is empty opens with the permission bits.
     /// </summary>

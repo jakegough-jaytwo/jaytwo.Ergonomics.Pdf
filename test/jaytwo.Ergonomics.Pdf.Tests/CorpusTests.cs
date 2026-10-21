@@ -128,6 +128,9 @@ public class CorpusTests
         byte[] revised = destination.ToArray();
         CheckOutput(entry, original, revised, null, out JsonElement after);
         Assert.Equal(RevisedTitle, CorpusManifest.Text(after.GetProperty("info"), "title"));
+
+        // Spec 7.3: no usage-rights transform grants a metadata write, so a Reader-extended form loses /UR3.
+        Assert.False(after.GetProperty("usageRights").GetBoolean(), id + ": /UR3 survived a metadata write");
         using var again = new MemoryStream(revised, writable: false);
         using PdfDocument reopened = PdfDocument.Open(again, entry.Password, leaveOpen: true);
         Assert.Equal(RevisedTitle, reopened.Metadata.Title);
@@ -168,6 +171,9 @@ public class CorpusTests
         Assert.Equal(expected, disposition);
         CheckOutput(entry, original, destination.ToArray(), field, out JsonElement after);
         Assert.Equal(value, CorpusManifest.Text(after.GetProperty("fieldValues"), field));
+
+        // Spec 7.3: every Reader-extended corpus form grants /Form FillIn, so a fill keeps /UR3 (UsageRightsTests).
+        Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
     }
 
     // The checks every modified corpus file gets: the original is a prefix, qpdf --check passes with no warnings,
