@@ -189,7 +189,7 @@ public class SigningInteropTests
             using (var stream = new MemoryStream(locked, writable: false))
             using (var document = PdfDocument.Open(stream, leaveOpen: true))
             {
-                Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Name", "Ada"));
+                Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
                 Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Changed");
             }
 
@@ -249,11 +249,11 @@ public class SigningInteropTests
                     {
                         if (lines.Contains("fieldmdp:" + name + "=locked"))
                         {
-                            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText(name, "Ada"));
+                            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill(name, "Ada"));
                         }
                         else
                         {
-                            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText(name, "Ada"));
+                            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill(name, "Ada"));
                         }
                     }
 
@@ -327,7 +327,7 @@ public class SigningInteropTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", value));
+        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", value));
         var destination = new MemoryStream();
         document.SaveIncremental(destination, leaveOpen: true);
         byte[] saved = destination.ToArray();

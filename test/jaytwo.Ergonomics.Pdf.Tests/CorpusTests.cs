@@ -158,7 +158,7 @@ public class CorpusTests
         PdfAppearanceDisposition disposition = default;
         Exception? error = Record.Exception(() =>
         {
-            disposition = document.AcroForm.SetText(field, value);
+            disposition = document.AcroForm.Fill(field, value);
             document.SaveIncremental(destination, leaveOpen: true);
         });
         if (!Enum.TryParse(result, out PdfAppearanceDisposition expected))
@@ -176,6 +176,43 @@ public class CorpusTests
 
         // Spec 7.3: every Reader-extended corpus form grants /Form FillIn, so a fill keeps /UR3 (UsageRightsTests).
         Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+    }
+
+    // Spec R6 and W2: the export agrees with pypdf's reading of every terminal field, and one bulk fill that changes
+    // every field a caller can fill is accepted by qpdf, pypdf, and pyHanko, in the same shape as the export.
+    [Theory]
+    [MemberData(nameof(Ids))]
+    public void form_export_agrees_with_pypdf_and_a_bulk_fill_is_accepted_by_independent_tools(string id)
+    {
+        CorpusEntry entry = CorpusManifest.Get(id);
+        if (entry.Open != "ok" || entry.Probe.GetProperty("widgets").GetInt32() == 0)
+        {
+            return;
+        }
+
+        byte[] original = File.ReadAllBytes(entry.FullPath);
+        using var source = new MemoryStream(original, writable: false);
+        using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        IReadOnlyDictionary<string, PdfFieldValue> before = document.AcroForm.Export();
+        FormValues.AssertAgree(before, FormValues.Pypdf(original, entry.Password), id + " before");
+        Dictionary<string, PdfFieldValue> values = ChangedValues(document.AcroForm.Fields, before);
+        if (values.Count == 0)
+        {
+            return;
+        }
+
+        var destination = new MemoryStream();
+        document.AcroForm.Fill(values);
+        document.SaveIncremental(destination, leaveOpen: true);
+
+        byte[] revised = destination.ToArray();
+        CheckOutput(entry, original, revised, null, out JsonElement after);
+        Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+        var expected = before.ToDictionary(item => item.Key, item => values.TryGetValue(item.Key, out PdfFieldValue value) ? value : item.Value);
+        using var again = new MemoryStream(revised, writable: false);
+        using PdfDocument reopened = PdfDocument.Open(again, entry.Password, leaveOpen: true);
+        Assert.Equal(expected, reopened.AcroForm.Export());
+        FormValues.AssertAgree(reopened.AcroForm.Export(), FormValues.Pypdf(revised, entry.Password), id + " after");
     }
 
     // The checks every modified corpus file gets: the original is a prefix, qpdf --check passes with no warnings,
@@ -231,6 +268,49 @@ public class CorpusTests
     {
         string key = CorpusManifest.Text(attachment, "name")!;
         return key.IndexOf('\0') >= 0 ? CorpusManifest.Text(attachment, "fileName")! : key;
+    }
+
+    // A different value for every field that can be filled: read-only fields, and fields the export leaves out, are skipped.
+    private static Dictionary<string, PdfFieldValue> ChangedValues(IReadOnlyList<PdfField> fields, IReadOnlyDictionary<string, PdfFieldValue> export)
+    {
+        var values = new Dictionary<string, PdfFieldValue>(StringComparer.Ordinal);
+        foreach (IGrouping<string, PdfField> group in fields.GroupBy(field => field.FullName, StringComparer.Ordinal))
+        {
+            PdfField first = group.First();
+            if (first.ReadOnly || !export.TryGetValue(group.Key, out PdfFieldValue current))
+            {
+                continue;
+            }
+
+            if (first.FieldType == PdfFieldType.Text)
+            {
+                string text = current.Text == "W68" ? "W69" : "W68";
+                values[group.Key] = first.MaxLength is int max ? text.Substring(0, Math.Min(max, text.Length)) : text;
+            }
+            else if (first.ButtonKind == PdfButtonKind.CheckBox)
+            {
+                values[group.Key] = current.Boolean != true;
+            }
+            else if (first.ButtonKind == PdfButtonKind.Radio)
+            {
+                string? state = group.Select(field => field.ExportValue).FirstOrDefault(name => name != null && name != current.Text);
+                if (state != null)
+                {
+                    values[group.Key] = state;
+                }
+            }
+            else if (first.Options.Count > 0)
+            {
+                string option = first.Options.Select(item => item.Value).LastOrDefault(item => item != current.Text) ?? first.Options[0].Value;
+                values[group.Key] = first.MultiSelect ? new[] { option } : option;
+            }
+            else if (first.Editable)
+            {
+                values[group.Key] = current.Text == "W68" ? "W69" : "W68";
+            }
+        }
+
+        return values;
     }
 
     private static string NamesHash(IEnumerable<string> names)

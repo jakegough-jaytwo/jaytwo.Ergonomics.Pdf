@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using jaytwo.Ergonomics.Pdf.Internal;
 
@@ -41,46 +42,69 @@ public sealed class PdfAcroForm
     }
 
     /// <summary>
-    /// Sets a text field value and generates a Helvetica appearance when the value is simple enough.
+    /// Fills one field by its dotted full name.
     /// </summary>
+    /// <remarks>
+    /// A text field takes text. A check box takes a Boolean. A radio takes an on-state name, or <see cref="PdfFieldValue.None"/>
+    /// to turn every widget off. A choice field takes one export value, a list of export values (more than one only when it
+    /// is multi-select), or <see cref="PdfFieldValue.None"/> or an empty list to clear it. WinAnsi text and choice values
+    /// get a Helvetica appearance. Check boxes and radios select an existing on-state. A value the library cannot draw
+    /// sets /NeedAppearances and returns <see cref="PdfAppearanceDisposition.NeedsViewer"/>. A refused fill does not
+    /// change the document. The change is written by the next save or signature.
+    /// </remarks>
     /// <param name="fullName">The dotted field name.</param>
     /// <param name="value">The new value.</param>
-    /// <returns>Whether an appearance was generated.</returns>
-    public PdfAppearanceDisposition SetText(string fullName, string value)
+    /// <returns>How the widget appearance was produced.</returns>
+    /// <exception cref="PdfFieldNotFoundException">No field has the name.</exception>
+    /// <exception cref="PdfFieldReadOnlyException">The field is read-only.</exception>
+    /// <exception cref="PdfFieldValueException">The field cannot take the value, or it is a password, signature, or push-button field.</exception>
+    /// <exception cref="PdfCertificationLockedException">A certification or a FieldMDP lock forbids the change.</exception>
+    /// <exception cref="PdfEncryptionRestrictedException">The user password does not allow form filling.</exception>
+    public PdfAppearanceDisposition Fill(string fullName, PdfFieldValue value)
     {
-        return _engine.SetText(fullName, value);
+        if (fullName == null)
+        {
+            throw new ArgumentNullException(nameof(fullName));
+        }
+
+        return _engine.Fill(new[] { new KeyValuePair<string, PdfFieldValue>(fullName, value) })[fullName];
     }
 
     /// <summary>
-    /// Sets a check box by selecting its existing on-state appearance when one exists.
+    /// Fills several fields, all or nothing.
     /// </summary>
-    /// <param name="fullName">The dotted field name.</param>
-    /// <param name="isChecked">True to select the on-state.</param>
-    /// <returns>Whether an existing appearance was selected.</returns>
-    public PdfAppearanceDisposition SetCheckBox(string fullName, bool isChecked)
+    /// <remarks>
+    /// Every value is checked as <see cref="Fill(string, PdfFieldValue)"/> checks it before any field changes: the name,
+    /// the value kind, read-only, /MaxLen, listed options, FieldMDP, certification, and the permission bits. One failure
+    /// throws and leaves the document unchanged. The fills then apply in the order given, in one pending revision.
+    /// </remarks>
+    /// <param name="values">Full names and values, for example a <see cref="Dictionary{TKey, TValue}"/> or the result of <see cref="Export"/>.</param>
+    /// <returns>How each field's appearance was produced, by full name.</returns>
+    /// <exception cref="ArgumentException">A name is <see langword="null"/> or appears more than once.</exception>
+    /// <exception cref="PdfFieldNotFoundException">No field has one of the names.</exception>
+    /// <exception cref="PdfFieldReadOnlyException">One of the fields is read-only.</exception>
+    /// <exception cref="PdfFieldValueException">One of the fields cannot take its value.</exception>
+    /// <exception cref="PdfCertificationLockedException">A certification or a FieldMDP lock forbids one of the changes.</exception>
+    /// <exception cref="PdfEncryptionRestrictedException">The user password does not allow form filling.</exception>
+    public IReadOnlyDictionary<string, PdfAppearanceDisposition> Fill(IEnumerable<KeyValuePair<string, PdfFieldValue>> values)
     {
-        return _engine.SetCheckBox(fullName, isChecked);
+        return _engine.Fill(values);
     }
 
     /// <summary>
-    /// Sets a radio group to the widget whose on-state matches <paramref name="exportValue"/>.
+    /// Reads the value of every terminal field: one entry per field, not per widget.
     /// </summary>
-    /// <param name="fullName">The dotted field name.</param>
-    /// <param name="exportValue">The on-state name, without a leading slash.</param>
-    /// <returns>Whether an existing appearance was selected.</returns>
-    public PdfAppearanceDisposition SetRadio(string fullName, string exportValue)
+    /// <remarks>
+    /// A text field is text, empty when it has no value. A check box is a Boolean. A radio is the selected on-state name,
+    /// or <see cref="PdfFieldValue.None"/> when no widget is on. A single-select choice field is its export value or
+    /// <see cref="PdfFieldValue.None"/>. A multi-select choice field is a list. Signature fields, push buttons, and password
+    /// fields hold no form data and are left out. Read-only fields are included but cannot be filled, so leave out the
+    /// fields whose <see cref="PdfField.ReadOnly"/> is set before passing an export to
+    /// <see cref="Fill(IEnumerable{KeyValuePair{string, PdfFieldValue}})"/>.
+    /// </remarks>
+    /// <returns>The values by dotted full name.</returns>
+    public IReadOnlyDictionary<string, PdfFieldValue> Export()
     {
-        return _engine.SetRadio(fullName, exportValue);
-    }
-
-    /// <summary>
-    /// Sets a choice field to the export values and requests viewer appearances.
-    /// </summary>
-    /// <param name="fullName">The dotted field name.</param>
-    /// <param name="values">The export values. A multi-select field accepts more than one and is stored as a PDF array.</param>
-    /// <returns>Always <see cref="PdfAppearanceDisposition.NeedAppearances"/>.</returns>
-    public PdfAppearanceDisposition SetChoice(string fullName, params string[] values)
-    {
-        return _engine.SetChoice(fullName, values);
+        return _engine.Export();
     }
 }

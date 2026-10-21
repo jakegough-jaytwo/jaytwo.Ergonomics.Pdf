@@ -1,6 +1,7 @@
 #pragma warning disable SA1201, SA1202, SA1204
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -399,40 +400,277 @@ internal sealed class PdfEngine : IDisposable
         return matches;
     }
 
-    internal PdfAppearanceDisposition SetText(string fullName, string value)
+    // W1 and W2: fills are validated in full, against one read of the field tree, before any object is edited, so a
+    // refused entry leaves the document unchanged. They then apply in order, exactly as single fills would.
+    internal IReadOnlyDictionary<string, PdfAppearanceDisposition> Fill(IEnumerable<KeyValuePair<string, PdfFieldValue>> values)
     {
         CheckDisposed();
-        if (fullName == null)
+        if (values == null)
         {
-            throw new ArgumentNullException(nameof(fullName));
+            throw new ArgumentNullException(nameof(values));
         }
 
-        if (value == null)
+        var entries = new List<KeyValuePair<string, PdfFieldValue>>();
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        foreach (KeyValuePair<string, PdfFieldValue> entry in values)
         {
-            throw new ArgumentNullException(nameof(value));
+            if (entry.Key == null)
+            {
+                throw new ArgumentException("A field name cannot be null.", nameof(values));
+            }
+
+            if (!names.Add(entry.Key))
+            {
+                throw new ArgumentException("A field name appears more than once: " + entry.Key, nameof(values));
+            }
+
+            entries.Add(entry);
+        }
+
+        var results = new Dictionary<string, PdfAppearanceDisposition>(StringComparer.Ordinal);
+        if (entries.Count == 0)
+        {
+            return results;
         }
 
         using var release = ReleaseAfter();
-        EnsureFieldChange(fullName);
+        List<FieldSlot> slots = CollectFields();
+        if (CertificationLevel(slots) == 1)
+        {
+            throw new PdfCertificationLockedException();
+        }
+
+        foreach (KeyValuePair<string, PdfFieldValue> entry in entries)
+        {
+            if (FieldChangeBlocked(entry.Key, slots))
+            {
+                throw new PdfCertificationLockedException();
+            }
+        }
+
         RequireFill();
-        List<FieldSlot> matches = RequireFields(fullName);
+        var byName = new Dictionary<string, List<FieldSlot>>(StringComparer.Ordinal);
+        foreach (FieldSlot slot in slots)
+        {
+            if (!byName.TryGetValue(slot.FullName, out List<FieldSlot>? group))
+            {
+                group = new List<FieldSlot>();
+                byName[slot.FullName] = group;
+            }
+
+            group.Add(slot);
+        }
+
+        var plans = new List<FillPlan>(entries.Count);
+        foreach (KeyValuePair<string, PdfFieldValue> entry in entries)
+        {
+            if (!byName.TryGetValue(entry.Key, out List<FieldSlot>? matches))
+            {
+                throw new PdfFieldNotFoundException(entry.Key);
+            }
+
+            plans.Add(PlanFill(entry.Key, entry.Value, matches));
+        }
+
+        // Applying reads objects the checks did not, such as /DR; a failure there restores every edit.
+        int savedSize = _size;
+        int savedHelv = _helvId;
+        bool savedSticky = _stickyNeedAppearances;
+        var savedDirty = new HashSet<int>(_dirty);
+        _backup = new Dictionary<int, PdfObject?>();
+        try
+        {
+            ApplyUsageRights("Form", "FillIn");
+            foreach (FillPlan plan in plans)
+            {
+                results[plan.Name] = ApplyFill(plan);
+            }
+        }
+        catch
+        {
+            Restore(savedSize, _infoId, _infoGen, _id, savedHelv, savedSticky, savedDirty);
+            throw;
+        }
+
+        _backup = null;
+        return results;
+    }
+
+    internal IReadOnlyDictionary<string, PdfFieldValue> Export()
+    {
+        CheckDisposed();
+        using var release = ReleaseAfter();
+        var values = new Dictionary<string, PdfFieldValue>(StringComparer.Ordinal);
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (FieldSlot slot in CollectFields())
+        {
+            if (!seen.Add(slot.FullName))
+            {
+                continue;
+            }
+
+            // R6: one entry per terminal field, read from its first widget as a fill reads it. A password field's value
+            // is not meant to be stored in the file (ISO 32000-1 Table 228), and it cannot be filled (W5).
+            if (slot.FieldType == PdfFieldType.Text && !slot.Password)
+            {
+                values[slot.FullName] = PdfFieldValue.FromText(slot.SelectedValues.Count == 0 ? string.Empty : slot.SelectedValues[0]);
+            }
+            else if (slot.ButtonKind == PdfButtonKind.CheckBox)
+            {
+                values[slot.FullName] = PdfFieldValue.FromBoolean(slot.Value != null && slot.Value != "Off");
+            }
+            else if (slot.ButtonKind == PdfButtonKind.Radio)
+            {
+                values[slot.FullName] = slot.Value == null || slot.Value == "Off" ? PdfFieldValue.None : PdfFieldValue.FromText(slot.Value);
+            }
+            else if (slot.FieldType == PdfFieldType.Choice)
+            {
+                values[slot.FullName] = slot.MultiSelect
+                    ? PdfFieldValue.FromList(slot.SelectedValues)
+                    : slot.SelectedValues.Count == 0 ? PdfFieldValue.None : PdfFieldValue.FromText(slot.SelectedValues[0]);
+            }
+        }
+
+        return new ReadOnlyDictionary<string, PdfFieldValue>(values);
+    }
+
+    private FillPlan PlanFill(string fullName, PdfFieldValue value, List<FieldSlot> matches)
+    {
         FieldSlot first = matches[0];
         if (first.ReadOnly)
         {
             throw new PdfFieldReadOnlyException(fullName);
         }
 
-        if (first.FieldType != PdfFieldType.Text || first.Password)
+        var plan = new FillPlan(fullName, matches, value);
+        if (first.FieldType == PdfFieldType.Text)
         {
-            throw new PdfFieldValueException("The field cannot be filled as text.");
+            if (first.Password)
+            {
+                throw new PdfFieldValueException("A password field cannot be filled.");
+            }
+
+            if (value.Kind != PdfFieldValueKind.Text)
+            {
+                throw new PdfFieldValueException("A text field takes a text value.");
+            }
+
+            if (first.MaxLength is int max && value.Text!.Length > max)
+            {
+                throw new PdfFieldValueException("The value exceeds /MaxLen.");
+            }
+
+            return plan;
         }
 
-        if (first.MaxLength is int max && value.Length > max)
+        if (first.ButtonKind == PdfButtonKind.CheckBox)
         {
-            throw new PdfFieldValueException("The value exceeds /MaxLen.");
+            if (value.Kind != PdfFieldValueKind.Boolean)
+            {
+                throw new PdfFieldValueException("A check box takes a Boolean value.");
+            }
+
+            foreach (FieldSlot slot in matches)
+            {
+                if (Load(slot.WidgetObjectId) is PdfObject.Dict widget)
+                {
+                    string? widgetOn = OnState(widget);
+                    if (value.Boolean == true && plan.OnState != null && widgetOn != null && widgetOn != plan.OnState)
+                    {
+                        throw new PdfFieldValueException("The check box widgets have different on-state names.");
+                    }
+
+                    plan.OnState ??= widgetOn;
+                }
+            }
+
+            return plan;
         }
 
-        ApplyUsageRights("Form", "FillIn");
+        if (first.ButtonKind == PdfButtonKind.Radio)
+        {
+            if (value.Kind == PdfFieldValueKind.None)
+            {
+                return plan;
+            }
+
+            if (value.Kind != PdfFieldValueKind.Text)
+            {
+                throw new PdfFieldValueException("A radio takes an on-state name or no value.");
+            }
+
+            bool found = false;
+            foreach (FieldSlot slot in matches)
+            {
+                if (slot.ExportValue != null)
+                {
+                    plan.HasOnStates = true;
+                    found |= slot.ExportValue == value.Text;
+                }
+            }
+
+            if (plan.HasOnStates && !found)
+            {
+                throw new PdfFieldValueException("The radio export value was not found.");
+            }
+
+            return plan;
+        }
+
+        if (first.FieldType == PdfFieldType.Choice)
+        {
+            plan.Items = value.Kind switch
+            {
+                PdfFieldValueKind.Text => new[] { value.Text! },
+                PdfFieldValueKind.List => value.Values,
+                PdfFieldValueKind.None => Array.Empty<string>(),
+                _ => throw new PdfFieldValueException("A choice field takes export values or no value."),
+            };
+            if (!first.MultiSelect && plan.Items.Count > 1)
+            {
+                throw new PdfFieldValueException("The choice field accepts one value.");
+            }
+
+            foreach (string item in plan.Items)
+            {
+                RequireOption(first, item);
+            }
+
+            return plan;
+        }
+
+        if (first.FieldType == PdfFieldType.Signature)
+        {
+            throw new PdfFieldValueException("A signature field cannot be filled. Sign it with Sign and FieldName.");
+        }
+
+        throw new PdfFieldValueException("A push button has no value to fill.");
+    }
+
+    private PdfAppearanceDisposition ApplyFill(FillPlan plan)
+    {
+        FieldSlot first = plan.Matches[0];
+        if (first.FieldType == PdfFieldType.Text)
+        {
+            return ApplyText(plan.Matches, plan.Value.Text!);
+        }
+
+        if (first.ButtonKind == PdfButtonKind.CheckBox)
+        {
+            return ApplyCheckBox(plan.Matches, plan.Value.Boolean == true, plan.OnState);
+        }
+
+        if (first.ButtonKind == PdfButtonKind.Radio)
+        {
+            return ApplyRadio(plan.Matches, plan.Value.Text, plan.HasOnStates);
+        }
+
+        return ApplyChoice(plan.Matches, plan.Items);
+    }
+
+    private PdfAppearanceDisposition ApplyText(List<FieldSlot> matches, string value)
+    {
+        FieldSlot first = matches[0];
         bool simple = first.FieldType == PdfFieldType.Text
             && !first.Comb
             && !first.RichText
@@ -456,7 +694,7 @@ internal sealed class PdfEngine : IDisposable
         if (!simple)
         {
             SetNeedAppearances(true);
-            return PdfAppearanceDisposition.NeedAppearances;
+            return PdfAppearanceDisposition.NeedsViewer;
         }
 
         int fontId = EnsureHelv();
@@ -500,44 +738,8 @@ internal sealed class PdfEngine : IDisposable
         return PdfAppearanceDisposition.Generated;
     }
 
-    internal PdfAppearanceDisposition SetCheckBox(string fullName, bool isChecked)
+    private PdfAppearanceDisposition ApplyCheckBox(List<FieldSlot> matches, bool isChecked, string? on)
     {
-        CheckDisposed();
-        if (fullName == null)
-        {
-            throw new ArgumentNullException(nameof(fullName));
-        }
-
-        using var release = ReleaseAfter();
-        EnsureFieldChange(fullName);
-        RequireFill();
-        List<FieldSlot> matches = RequireFields(fullName);
-        if (matches[0].ReadOnly)
-        {
-            throw new PdfFieldReadOnlyException(fullName);
-        }
-
-        if (matches[0].ButtonKind != PdfButtonKind.CheckBox)
-        {
-            throw new PdfFieldValueException("The field is not a check box.");
-        }
-
-        string? on = null;
-        foreach (FieldSlot slot in matches)
-        {
-            if (Load(slot.WidgetObjectId) is PdfObject.Dict widget)
-            {
-                string? widgetOn = OnState(widget);
-                if (isChecked && on != null && widgetOn != null && widgetOn != on)
-                {
-                    throw new PdfFieldValueException("The check box widgets have different on-state names.");
-                }
-
-                on ??= widgetOn;
-            }
-        }
-
-        ApplyUsageRights("Form", "FillIn");
         bool generated = false;
         if (on == null)
         {
@@ -545,7 +747,7 @@ internal sealed class PdfEngine : IDisposable
             {
                 SetNameValue(matches, isChecked ? "Yes" : "Off", setAppearanceState: false);
                 SetNeedAppearances(true);
-                return PdfAppearanceDisposition.NeedAppearances;
+                return PdfAppearanceDisposition.NeedsViewer;
             }
 
             on = "Yes";
@@ -561,53 +763,14 @@ internal sealed class PdfEngine : IDisposable
         return generated ? PdfAppearanceDisposition.Generated : PdfAppearanceDisposition.ExistingAppearanceSelected;
     }
 
-    internal PdfAppearanceDisposition SetRadio(string fullName, string exportValue)
+    private PdfAppearanceDisposition ApplyRadio(List<FieldSlot> matches, string? exportValue, bool any)
     {
-        CheckDisposed();
-        if (fullName == null)
-        {
-            throw new ArgumentNullException(nameof(fullName));
-        }
-
         if (exportValue == null)
         {
-            throw new ArgumentNullException(nameof(exportValue));
+            SetNameValue(matches, "Off", setAppearanceState: true);
+            return PdfAppearanceDisposition.ExistingAppearanceSelected;
         }
 
-        using var release = ReleaseAfter();
-        EnsureFieldChange(fullName);
-        RequireFill();
-        List<FieldSlot> matches = RequireFields(fullName);
-        if (matches[0].ReadOnly)
-        {
-            throw new PdfFieldReadOnlyException(fullName);
-        }
-
-        if (matches[0].ButtonKind != PdfButtonKind.Radio)
-        {
-            throw new PdfFieldValueException("The field is not a radio button.");
-        }
-
-        bool any = false;
-        bool found = false;
-        foreach (FieldSlot slot in matches)
-        {
-            if (slot.ExportValue != null)
-            {
-                any = true;
-                if (slot.ExportValue == exportValue)
-                {
-                    found = true;
-                }
-            }
-        }
-
-        if (any && !found)
-        {
-            throw new PdfFieldValueException("The radio export value was not found.");
-        }
-
-        ApplyUsageRights("Form", "FillIn");
         if (!any)
         {
             if (matches.Count == 1 && TryWriteRadioAppearances(matches, exportValue))
@@ -623,7 +786,7 @@ internal sealed class PdfEngine : IDisposable
 
             SetNameValue(matches, exportValue, setAppearanceState: false);
             SetNeedAppearances(true);
-            return PdfAppearanceDisposition.NeedAppearances;
+            return PdfAppearanceDisposition.NeedsViewer;
         }
 
         foreach (FieldSlot slot in matches)
@@ -637,63 +800,18 @@ internal sealed class PdfEngine : IDisposable
         return PdfAppearanceDisposition.ExistingAppearanceSelected;
     }
 
-    internal PdfAppearanceDisposition SetChoice(string fullName, IReadOnlyList<string> values)
+    private PdfAppearanceDisposition ApplyChoice(List<FieldSlot> matches, IReadOnlyList<string> values)
     {
-        CheckDisposed();
-        if (fullName == null)
-        {
-            throw new ArgumentNullException(nameof(fullName));
-        }
-
-        if (values == null)
-        {
-            throw new ArgumentNullException(nameof(values));
-        }
-
-        if (values.Count == 0)
-        {
-            throw new ArgumentException("A choice field requires a value.", nameof(values));
-        }
-
-        foreach (string item in values)
-        {
-            if (item == null)
-            {
-                throw new ArgumentException("Choice values cannot contain null.", nameof(values));
-            }
-        }
-
-        using var release = ReleaseAfter();
-        EnsureFieldChange(fullName);
-        RequireFill();
-        List<FieldSlot> matches = RequireFields(fullName);
         FieldSlot first = matches[0];
-        if (first.ReadOnly)
-        {
-            throw new PdfFieldReadOnlyException(fullName);
-        }
-
-        if (first.FieldType != PdfFieldType.Choice)
-        {
-            throw new PdfFieldValueException("The field is not a choice field.");
-        }
-
-        if (!first.MultiSelect && values.Count != 1)
-        {
-            throw new PdfFieldValueException("The choice field accepts one value.");
-        }
-
-        foreach (string item in values)
-        {
-            RequireOption(first, item);
-        }
-
-        ApplyUsageRights("Form", "FillIn");
         foreach (FieldSlot slot in matches)
         {
             PdfObject.Dict owner = (PdfObject.Dict)EditAny(slot.ValueObjectId);
             owner.Remove("I");
-            if (first.MultiSelect)
+            if (values.Count == 0)
+            {
+                owner.Remove("V");
+            }
+            else if (first.MultiSelect)
             {
                 var array = new PdfObject.Arr();
                 foreach (string item in values)
@@ -718,7 +836,7 @@ internal sealed class PdfEngine : IDisposable
         }
 
         SetNeedAppearances(true);
-        return PdfAppearanceDisposition.NeedAppearances;
+        return PdfAppearanceDisposition.NeedsViewer;
     }
 
     private static void RequireOption(FieldSlot slot, string value)
@@ -1998,18 +2116,18 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(0, "The field tree is too deep.");
         }
 
+        // The value belongs to the field dictionary (ISO 32000-1 12.7.3.1): a top-level entry of /Fields or a node with
+        // /T. A kid without /T is a widget annotation, even when its writer copied field entries such as /FT onto it,
+        // as LibreOffice does, so it neither holds nor overrides the value.
+        bool isField = inherited.ValueOwner == 0 || field.Get("T") != null;
         string? ft = NameOf(field.Get("FT")) ?? inherited.Ft;
-        PdfObject? value = field.Get("V") ?? inherited.Value;
+        PdfObject? value = (isField ? field.Get("V") : null) ?? inherited.Value;
         int flags = field.Get("Ff") != null ? IntOf(field.Get("Ff")) : inherited.Flags;
         string? da = ValueText(field.Get("DA")) ?? inherited.Da;
         int align = field.Get("Q") != null ? IntOf(field.Get("Q")) : inherited.Align;
         int? maxLen = field.Get("MaxLen") != null ? IntOf(field.Get("MaxLen")) : inherited.MaxLen;
         PdfObject? opt = field.Get("Opt") ?? inherited.Opt;
-        int valueOwner = NameOf(field.Get("FT")) != null ? fieldId : inherited.ValueOwner;
-        if (valueOwner == 0)
-        {
-            valueOwner = fieldId;
-        }
+        int valueOwner = isField ? fieldId : inherited.ValueOwner;
 
         string? partial = ValueText(field.Get("T"));
         string full = string.IsNullOrEmpty(partial) ? parentName : (parentName.Length == 0 ? partial! : parentName + "." + partial);
@@ -2098,17 +2216,6 @@ internal sealed class PdfEngine : IDisposable
             DefaultAppearance = da,
             Align = align,
         });
-    }
-
-    private List<FieldSlot> RequireFields(string fullName)
-    {
-        List<FieldSlot> matches = CollectFields().Where(slot => slot.FullName == fullName).ToList();
-        if (matches.Count == 0)
-        {
-            throw new PdfFieldNotFoundException(fullName);
-        }
-
-        return matches;
     }
 
     private void SetNameValue(List<FieldSlot> matches, string name, bool setAppearanceState)
@@ -2225,14 +2332,6 @@ internal sealed class PdfEngine : IDisposable
     private void EnsureSigningAllowed()
     {
         if (CertificationLevel() == 1)
-        {
-            throw new PdfCertificationLockedException();
-        }
-    }
-
-    private void EnsureFieldChange(string fullName)
-    {
-        if (CertificationLevel() == 1 || FieldChangeBlocked(fullName))
         {
             throw new PdfCertificationLockedException();
         }
@@ -2378,6 +2477,11 @@ internal sealed class PdfEngine : IDisposable
 
     private int CertificationLevel()
     {
+        return CertificationLevel(CollectFields());
+    }
+
+    private int CertificationLevel(List<FieldSlot> slots)
+    {
         int level = 0;
         PdfObject? permsValue = CatalogDict().Get("Perms");
         if (IsDangling(permsValue))
@@ -2389,7 +2493,7 @@ internal sealed class PdfEngine : IDisposable
             Restrict(ref level, PermissionOf(perms.Get("DocMDP")));
         }
 
-        foreach (FieldSlot slot in CollectFields())
+        foreach (FieldSlot slot in slots)
         {
             if (slot.FieldType != PdfFieldType.Signature)
             {
@@ -2499,9 +2603,9 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private bool FieldChangeBlocked(string fullName)
+    private bool FieldChangeBlocked(string fullName, List<FieldSlot> slots)
     {
-        foreach (FieldSlot slot in CollectFields())
+        foreach (FieldSlot slot in slots)
         {
             if (slot.FieldType != PdfFieldType.Signature)
             {
@@ -3949,6 +4053,30 @@ internal sealed class PdfEngine : IDisposable
         public string? DefaultAppearance { get; set; }
 
         public int Align { get; set; }
+    }
+
+    private sealed class FillPlan
+    {
+        public FillPlan(string name, List<FieldSlot> matches, PdfFieldValue value)
+        {
+            Name = name;
+            Matches = matches;
+            Value = value;
+        }
+
+        public string Name { get; }
+
+        public List<FieldSlot> Matches { get; }
+
+        public PdfFieldValue Value { get; }
+
+        // A check box's shared on-state name, or null when no widget has one.
+        public string? OnState { get; set; }
+
+        // Whether any radio widget has an on-state.
+        public bool HasOnStates { get; set; }
+
+        public IReadOnlyList<string> Items { get; set; } = Array.Empty<string>();
     }
 
     private sealed class AttachmentSlot

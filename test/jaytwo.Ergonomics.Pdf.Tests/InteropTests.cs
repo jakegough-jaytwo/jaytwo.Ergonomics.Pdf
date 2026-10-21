@@ -226,7 +226,7 @@ public class InteropTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", value));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", value));
             document.SaveIncremental(stream);
         }
 

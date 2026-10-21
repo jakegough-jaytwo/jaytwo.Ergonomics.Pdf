@@ -98,11 +98,12 @@ public class UsageRightsTests
 
     private static readonly Dictionary<string, PolicyWrite> Writes = new[]
     {
-        Write("fill text", FillIn, document => document.AcroForm.SetText("Name", "Ada")),
-        Write("fill check box", FillIn, document => document.AcroForm.SetCheckBox("Agree", true)),
-        Write("fill radio, generated", FillIn, document => document.AcroForm.SetRadio("Pick", "One")),
-        Write("fill radio, existing state", FillIn, document => document.AcroForm.SetRadio("Size", "Small")),
-        Write("fill choice", FillIn, document => document.AcroForm.SetChoice("Color", new[] { "Red" })),
+        Write("fill text", FillIn, document => document.AcroForm.Fill("Name", "Ada")),
+        Write("fill check box", FillIn, document => document.AcroForm.Fill("Agree", true)),
+        Write("fill radio, generated", FillIn, document => document.AcroForm.Fill("Pick", "One")),
+        Write("fill radio, existing state", FillIn, document => document.AcroForm.Fill("Size", "Small")),
+        Write("fill choice", FillIn, document => document.AcroForm.Fill("Color", new[] { "Red" })),
+        Write("bulk fill", FillIn, document => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Agree"] = true, ["Pick"] = "One", ["Size"] = "Small", ["Color"] = new[] { "Red" } })),
         Write("metadata title", null, document => document.Metadata.Title = "Usage rights"),
         Write("metadata date", null, document => document.Metadata.CreationDate = new DateTimeOffset(2026, 10, 20, 0, 0, 0, TimeSpan.Zero)),
         Write("metadata trapped", null, document => document.Metadata["Trapped"] = "True"),
@@ -216,10 +217,10 @@ public class UsageRightsTests
         byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.SetText("Name", "Ada");
+        document.AcroForm.Fill("Name", "Ada");
         Assert.Equal(policy.HasUsageRights && (signed || policy.Grants.Contains(FillIn)), document.HasUsageRights);
         document.Metadata.Title = "Usage rights";
-        document.AcroForm.SetText("Name", "Grace");
+        document.AcroForm.Fill("Name", "Grace");
         Assert.Equal(policy.HasUsageRights && signed, document.HasUsageRights);
 
         var destination = new MemoryStream();
@@ -242,10 +243,11 @@ public class UsageRightsTests
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
 
-        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.SetText("Missing", "Ada"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetCheckBox("Name", true));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetRadio("Size", "Large"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.SetChoice("Color", new[] { "Green" }));
+        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Fill("Missing", "Ada"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", true));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Size", "Large"));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Color", new[] { "Green" }));
+        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Size"] = "Large" }));
         Assert.Throws<ArgumentException>(() => document.Metadata["Trapped"] = "Maybe");
         Assert.Throws<PdfAttachmentNotFoundException>(() => document.Attachments.Remove("missing.txt"));
         Assert.True(document.HasUsageRights);
@@ -294,7 +296,7 @@ public class UsageRightsTests
         Assert.True(document.HasUsageRights);
 
         // P 2 allows a fill and a signature into a new field, which no right grants; neither changes /Perms.
-        document.AcroForm.SetText("Name", "Ada");
+        document.AcroForm.Fill("Name", "Ada");
         Assert.True(document.HasUsageRights);
         var destination = new MemoryStream();
         document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
@@ -349,14 +351,14 @@ public class UsageRightsTests
             {
                 ["fill"] = (document, destination) =>
                 {
-                    document.AcroForm.SetText("Name", "Ada");
+                    document.AcroForm.Fill("Name", "Ada");
                     document.SaveIncremental(destination, leaveOpen: true);
                 },
                 ["sign, existing field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true),
                 ["sign, new field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
                 ["fill, then sign existing field"] = (document, destination) =>
                 {
-                    document.AcroForm.SetText("Name", "Ada");
+                    document.AcroForm.Fill("Name", "Ada");
                     document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true);
                 },
                 ["document timestamp, existing field"] = (document, destination) => document.Sign(destination, Timestamp("Signer"), stamp, leaveOpen: true),
@@ -435,7 +437,7 @@ public class UsageRightsTests
         {
             Assert.Throws<PdfEncryptionRestrictedException>(() => user.Metadata.Title = "Nope");
             Assert.True(user.HasUsageRights);
-            user.AcroForm.SetText("Name", "Ada");
+            user.AcroForm.Fill("Name", "Ada");
             user.SaveIncremental(filled, leaveOpen: true);
         }
 
@@ -580,7 +582,7 @@ public class UsageRightsTests
             {
                 ["fill"] = (document, destination) =>
                 {
-                    document.AcroForm.SetText("1-2", "Ada");
+                    document.AcroForm.Fill("1-2", "Ada");
                     document.SaveIncremental(destination, leaveOpen: true);
                 },
                 ["metadata"] = (document, destination) =>

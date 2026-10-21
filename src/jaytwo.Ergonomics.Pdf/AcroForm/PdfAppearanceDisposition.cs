@@ -16,7 +16,8 @@ public enum PdfAppearanceDisposition
     ExistingAppearanceSelected,
 
     /// <summary>
-    /// The value was stored and /NeedAppearances was set because no appearance was generated.
+    /// The value was stored without an appearance and /NeedAppearances was set, so a viewer must draw it. Signing refuses
+    /// while /NeedAppearances is set.
     /// </summary>
-    NeedAppearances,
+    NeedsViewer,
 }

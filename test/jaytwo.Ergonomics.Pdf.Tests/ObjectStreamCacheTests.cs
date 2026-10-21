@@ -52,7 +52,7 @@ public class ObjectStreamCacheTests
             Assert.Equal("Gamma", Assert.Single(again, field => field.FullName == "C").Value);
             Assert.Equal("Delta", Assert.Single(again, field => field.FullName == "D").Value);
 
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("A", "Edited"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("A", "Edited"));
             Assert.Equal("Edited", Value(document, "A"));
             Assert.Equal("Beta", Value(document, "B"));
             Assert.Equal("Gamma", Value(document, "C"));

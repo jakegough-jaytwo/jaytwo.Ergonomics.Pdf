@@ -47,7 +47,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R3 | `Permissions` reports the user-access bits. A user password is held to them; an owner password is not. | Exists |
 | R4 | `Pages`: number, media box, crop box, rotation, in PDF user space. | Exists |
 | R5 | Fields: full name, type, value, flags, rectangle, page, options, check state. | Exists |
-| R6 | **Form-data export.** `AcroForm.Export()` returns one entry per terminal field (not per widget): text as string, check box as bool, radio as the selected export value or null, choice as string or string list. | New |
+| R6 | **Form-data export.** `AcroForm.Export()` returns one entry per terminal field (not per widget): text as string, check box as bool, radio as the selected export value or null, choice as string or string list. | Exists |
 | R7 | Document information dictionary and XMP, by property and by key. | Exists |
 | R8 | Document-level embedded files: list with name, description, MIME type, size, relationship, dates; open the content as a stream. | Change (relationship and dates) |
 | R9 | **Signature inspection.** List every signature field: field name, whether it is signed, SubFilter, signer certificate (DER), chain certificates present in the CMS, digest and signature algorithm, `/M` and CMS signing time, reason, location, contact, `/ByteRange`, which revision it signs, whether later revisions exist, whether a timestamp token is embedded and its time, certification level (DocMDP `P`) if it certifies. No trust, revocation, or cryptographic validation (section 11). Reading signature metadata does not read the signed byte range. | New |
@@ -63,8 +63,8 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 
 | ID | Requirement | Status |
 | --- | --- | --- |
-| W1 | Fill a text, check box, radio, or choice field by full name. Text and choice values in WinAnsi get a generated Helvetica appearance. Other values set `/NeedAppearances true` and return `NeedsViewer`. | Change (API reshaped, see 6.6) |
-| W2 | **Bulk fill**, all-or-nothing. Every value is validated (field exists, type, read-only, `/MaxLen`, listed option, FieldMDP, certification, permissions) before anything is changed. One failure throws and leaves the document unchanged. | New |
+| W1 | Fill a text, check box, radio, or choice field by full name. Text and choice values in WinAnsi get a generated Helvetica appearance. Other values set `/NeedAppearances true` and return `NeedsViewer`. | Exists |
+| W2 | **Bulk fill**, all-or-nothing. Every value is validated (field exists, type, read-only, `/MaxLen`, listed option, FieldMDP, certification, permissions) before anything is changed. One failure throws and leaves the document unchanged. | Exists |
 | W3 | **Flatten** all fields or named fields (section 7.1). | New |
 | W4 | **Hybrid XFA.** The first form write to a hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values. A write to an XFA-only form throws `PdfUnsupportedFormException`. | New |
 | W5 | Password and signature fields cannot be filled. Read-only fields throw `PdfFieldReadOnlyException`. Neither dirties the document. | Exists |
