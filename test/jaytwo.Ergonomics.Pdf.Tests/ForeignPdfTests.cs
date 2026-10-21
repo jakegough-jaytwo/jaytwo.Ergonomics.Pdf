@@ -130,8 +130,8 @@ public class ForeignPdfTests
         stream.Write(original, 0, original.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetCheckBox("Agree", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
             Assert.False(document.AcroForm.NeedAppearances);
             document.SaveIncremental(stream);
         }
@@ -164,7 +164,7 @@ public class ForeignPdfTests
             PdfField field = Assert.Single(document.AcroForm.Fields);
             Assert.Equal("Name", field.FullName);
             Assert.Equal(1, field.PageNumber);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
             document.SaveIncremental(stream);
         }
 

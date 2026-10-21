@@ -119,10 +119,10 @@ public class AppearanceRenderTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetCheckBox("Agree", true));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetChoice("Color", "Blue"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetRadio("Station", "Yes"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Color", "Blue"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Station", "Yes"));
             Assert.False(document.AcroForm.NeedAppearances);
             document.SaveIncremental(stream);
         }
@@ -320,20 +320,20 @@ public class AppearanceRenderTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Seen", "Seen"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Cafe", "Caf\u00e9"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Mark", "A\u2022B"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Left", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Center", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Right", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Long", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Clip", "WIDEMARK"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Small", "Small"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Large", "Large"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Wide", "Wide"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Tall", "One\nTwo\nThree"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Turn", "Rotated"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Crop", "Cropped"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Seen", "Seen"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Cafe", "Caf\u00e9"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Mark", "A\u2022B"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Left", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Center", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Right", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Long", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Clip", "WIDEMARK"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Small", "Small"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Large", "Large"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Wide", "Wide"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Tall", "One\nTwo\nThree"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Turn", "Rotated"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Crop", "Cropped"));
             Assert.False(document.AcroForm.NeedAppearances);
             document.SaveIncremental(stream);
         }

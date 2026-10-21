@@ -338,22 +338,22 @@ internal static class FuzzTargets
             if (!text && field.FieldType == PdfFieldType.Text)
             {
                 text = true;
-                Try(() => form.SetText(field.FullName, "Fuzz é (1)"));
+                Try(() => form.Fill(field.FullName, "Fuzz é (1)"));
             }
             else if (!check && field.FieldType == PdfFieldType.Button && field.ButtonKind == PdfButtonKind.CheckBox)
             {
                 check = true;
-                Try(() => form.SetCheckBox(field.FullName, true));
+                Try(() => form.Fill(field.FullName, true));
             }
             else if (!radio && field.FieldType == PdfFieldType.Button && field.ButtonKind == PdfButtonKind.Radio && field.ExportValue != null)
             {
                 radio = true;
-                Try(() => form.SetRadio(field.FullName, field.ExportValue));
+                Try(() => form.Fill(field.FullName, field.ExportValue));
             }
             else if (!choice && field.FieldType == PdfFieldType.Choice && field.Options.Count > 0)
             {
                 choice = true;
-                Try(() => form.SetChoice(field.FullName, field.Options[field.Options.Count - 1].Value));
+                Try(() => form.Fill(field.FullName, field.Options[field.Options.Count - 1].Value));
             }
         }
 

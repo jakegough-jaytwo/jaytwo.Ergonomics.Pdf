@@ -147,7 +147,7 @@ public class NullReferenceTests
         using var document = Open(builder.Finish());
 
         Assert.Equal("Name", Assert.Single(document.AcroForm.Fields).FullName);
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
         Assert.Throws<PdfCertificationLockedException>(() => document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
     }
 
@@ -169,7 +169,7 @@ public class NullReferenceTests
         builder.Indirect(10, transform);
         using var document = Open(builder.Finish());
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.SetText("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
         Assert.Null(document.AcroForm.GetFields("Name")[0].Value);
     }
 

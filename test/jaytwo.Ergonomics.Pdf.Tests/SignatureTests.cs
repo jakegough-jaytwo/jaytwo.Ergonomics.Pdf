@@ -279,7 +279,7 @@ public class SignatureTests
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
             document.Metadata.Title = "Signed";
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
             document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 128, SigningTime = TestCompat.UnixEpoch }, new FixedProvider());
         }
 
@@ -365,7 +365,7 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        document.AcroForm.SetText("Name", "日本語");
+        document.AcroForm.Fill("Name", "日本語");
 
         Assert.Throws<PdfSignException>(() => document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
         Assert.Equal(length, stream.Length);
@@ -415,7 +415,7 @@ public class SignatureTests
                 new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 },
                 new FixedProvider()));
             Assert.Equal(length, stream.Length);
-            document.AcroForm.SetText("Name", "Ada");
+            document.AcroForm.Fill("Name", "Ada");
             document.SaveIncremental();
             document.Sign(new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
         }

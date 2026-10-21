@@ -18,7 +18,7 @@ public class EncryptionTests
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
             Assert.Equal("Secret", document.Metadata.Title);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
             document.Metadata.Title = "Updated";
             document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
             document.SaveIncremental(stream);
@@ -67,7 +67,7 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "caf\u00e9", leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
             document.Metadata.Title = "Updated";
             document.SaveIncremental(stream);
         }
@@ -148,7 +148,7 @@ public class EncryptionTests
 
         Assert.False(document.Permissions.CanModify);
         Assert.True(document.Permissions.CanFillForms);
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
         Assert.Throws<PdfEncryptionRestrictedException>(() => document.Metadata.Title = "Nope");
     }
 
@@ -181,7 +181,7 @@ public class EncryptionTests
         byte[] pdf = Document(revision6, "user", "owner", StandardEncryptor.FillOnly(), textField: true);
         using var user = PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true);
 
-        Assert.Equal(PdfAppearanceDisposition.Generated, user.AcroForm.SetText("Name", "Ada"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, user.AcroForm.Fill("Name", "Ada"));
         Assert.Throws<PdfEncryptionRestrictedException>(() => user.Metadata.Title = "Nope");
         Assert.Throws<PdfEncryptionRestrictedException>(() => user.Attachments.Add("a.bin", new MemoryStream(new byte[] { 1 }), leaveOpen: true));
         Assert.Throws<PdfEncryptionRestrictedException>(() => user.Sign(new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider()));
@@ -232,11 +232,11 @@ public class EncryptionTests
             AssertPermissions(name + " owner", owner.Permissions, print, high, modify, copy, annotate, fill, assemble, access);
             if (fillAllowed)
             {
-                Assert.Throws<PdfFieldNotFoundException>(() => user.AcroForm.SetText("Name", "Ada"));
+                Assert.Throws<PdfFieldNotFoundException>(() => user.AcroForm.Fill("Name", "Ada"));
             }
             else
             {
-                Assert.Throws<PdfEncryptionRestrictedException>(() => user.AcroForm.SetText("Name", "Ada"));
+                Assert.Throws<PdfEncryptionRestrictedException>(() => user.AcroForm.Fill("Name", "Ada"));
             }
 
             owner.Metadata.Title = name;
@@ -396,7 +396,7 @@ public class EncryptionTests
         Assert.False(document.Permissions.CanAnnotate);
         Assert.False(document.Permissions.CanFillForms);
         long length = stream.Length;
-        Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.SetText("Name", "Ada"));
+        Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Fill("Name", "Ada"));
         document.SaveIncremental();
         Assert.Equal(length, stream.Length);
     }
@@ -424,7 +424,7 @@ public class EncryptionTests
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
             Assert.Equal("Secret", document.Metadata.Title);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.SetText("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
             document.Metadata.Title = "Updated";
             document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
             document.SaveIncremental(stream);
