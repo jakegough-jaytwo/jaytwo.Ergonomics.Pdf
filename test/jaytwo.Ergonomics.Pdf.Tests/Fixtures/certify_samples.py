@@ -11,8 +11,15 @@ signature whose lock is Exclude [Open, Group.Child], and
 fieldmdp-certified.pdf certifies with P=2 and the lock Include [Locked].
 fieldmdp-include-parent.pdf and fieldmdp-exclude-parent.pdf are approval
 signatures whose locks name the non-terminal field Group.
+
+With "fieldmdp-encrypted" and the path to qpdf, qpdf encrypts the FieldMDP
+form (user password user, owner password owner) and pyHanko adds the
+Include [Locked] approval signature: fieldmdp-include-rc4.pdf uses 128-bit
+RC4 and fieldmdp-include-aes256.pdf AES-256. pyHanko encrypts every string in
+the signature dictionary except /Contents, the lock's field names among them.
 """
 
+import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -150,10 +157,13 @@ def sign(
     certify: bool,
     perm: MDPPerm,
     lock: FieldMDPSpec | None = None,
+    password: str | None = None,
 ) -> None:
     signer = signers.SimpleSigner.load(str(key_path), str(cert_path), ca_chain_files=())
     with source.open("rb") as handle:
         writer = IncrementalPdfFileWriter(handle)
+        if password is not None:
+            writer.encrypt(password)
         with dest.open("wb") as output:
             signers.PdfSigner(
                 signers.PdfSignatureMetadata(
@@ -188,11 +198,35 @@ def write_fieldmdp(root: Path) -> None:
         form.unlink(missing_ok=True)
 
 
+def write_fieldmdp_encrypted(root: Path, qpdf: str) -> None:
+    form = root / "fieldmdp-form.pdf"
+    write_fieldmdp_form(form)
+    key_path, cert_path = write_key(root)
+    include = FieldMDPSpec(FieldMDPAction.INCLUDE, ["Locked"])
+    try:
+        # pypdf writes /P as an unsigned number, which the library refuses (W-99); qpdf writes the signed integer.
+        for suffix, cipher in (("rc4", ["128", "--use-aes=n"]), ("aes256", ["256"])):
+            encrypted = root / ("fieldmdp-form-" + suffix + ".pdf")
+            subprocess.check_call(
+                [qpdf, "--allow-weak-crypto", "--encrypt", "user", "owner", *cipher, "--", str(form), str(encrypted)]
+            )
+            dest = root / ("fieldmdp-include-" + suffix + ".pdf")
+            sign(encrypted, dest, key_path, cert_path, False, MDPPerm.FILL_FORMS, include, password="user")
+            encrypted.unlink(missing_ok=True)
+    finally:
+        key_path.unlink(missing_ok=True)
+        cert_path.unlink(missing_ok=True)
+        form.unlink(missing_ok=True)
+
+
 def main() -> None:
     root = Path(sys.argv[1])
     root.mkdir(parents=True, exist_ok=True)
     if len(sys.argv) > 2 and sys.argv[2] == "fieldmdp":
         write_fieldmdp(root)
+        return
+    if len(sys.argv) > 2 and sys.argv[2] == "fieldmdp-encrypted":
+        write_fieldmdp_encrypted(root, sys.argv[3])
         return
     form = root / "form.pdf"
     write_form(form)

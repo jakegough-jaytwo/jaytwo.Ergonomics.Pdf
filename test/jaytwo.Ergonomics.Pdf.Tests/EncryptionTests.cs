@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -243,29 +247,173 @@ public class EncryptionTests
         }
     }
 
-    [Fact]
-    public void signature_dictionary_stays_plaintext()
+    // Spec 7.4 (W-97): the signature dictionary's strings are encrypted with the document's cipher under the signature
+    // object's number, like every new object. Only /Contents stays plaintext, and the /ByteRange covers the ciphertext.
+    // Each expected ciphertext is computed here by StandardEncryptor; for AES it reuses the IV the library chose.
+    [Theory]
+    [InlineData(2, 40, false, "user")]
+    [InlineData(2, 40, false, "owner")]
+    [InlineData(3, 40, false, "user")]
+    [InlineData(3, 128, false, "owner")]
+    [InlineData(4, 128, false, "user")]
+    [InlineData(4, 128, false, "owner")]
+    [InlineData(4, 128, true, "user")]
+    [InlineData(4, 128, true, "owner")]
+    [InlineData(5, 256, true, "user")]
+    [InlineData(5, 256, true, "owner")]
+    [InlineData(6, 256, true, "user")]
+    [InlineData(6, 256, true, "owner")]
+    public void signature_dictionary_strings_are_encrypted_and_contents_stays_plaintext(int revision, int keyBits, bool aes, string password)
     {
-        byte[] pdf = Document(revision6: true, "user", "owner", -4, textField: false);
+        var crypt = new StandardEncryptor(revision == 4 && !aes ? StandardEncryptor.Kind.Revision4Rc4 : KindFor(revision), "user", "owner", -4, encryptMetadata: true, keyBits);
+        byte[] pdf = SignableDocument(crypt);
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
-        using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
+        using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
             document.Sign(
                 new PdfSignatureOptions
                 {
                     ReservedContentsBytes = 32,
                     Reason = "Because",
+                    Location = "Lab",
+                    ContactInfo = "ada@example.com",
+                    SignerName = "Ada",
                     SigningTime = TestCompat.UnixEpoch,
                 },
                 new FixedProvider());
         }
 
-        string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
-        Assert.Contains("(Because)", appendix, StringComparison.Ordinal);
-        Assert.DoesNotContain("(Signature1)", appendix, StringComparison.Ordinal);
-        using var again = PdfDocument.Open(stream, "user", leaveOpen: true);
+        byte[] saved = stream.ToArray();
+        Assert.True(saved.AsSpan(0, pdf.Length).SequenceEqual(pdf));
+        string file = Encoding.ASCII.GetString(saved);
+        Match signature = Regex.Match(file.Substring(pdf.Length), "(\\d+) 0 obj\n<<\n/Type /Sig\n.*?\nendobj", RegexOptions.Singleline);
+        Assert.True(signature.Success, file.Substring(pdf.Length));
+        int objectNumber = int.Parse(signature.Groups[1].Value, CultureInfo.InvariantCulture);
+        int start = pdf.Length + signature.Index;
+        Match range = Regex.Match(signature.Value, "/ByteRange \\[(\\d+) (\\d+) (\\d+) (\\d+)\\]");
+        long[] byteRange = Enumerable.Range(1, 4).Select(i => long.Parse(range.Groups[i].Value, CultureInfo.InvariantCulture)).ToArray();
+        Assert.Equal(0, byteRange[0]);
+        Assert.Equal(saved.Length, byteRange[2] + byteRange[3]);
+        Assert.Equal("<01020304" + new string('0', 56) + ">", file.Substring((int)byteRange[1], (int)(byteRange[2] - byteRange[1])));
+        Assert.Contains("\n/Contents <01020304", signature.Value, StringComparison.Ordinal);
+
+        var expected = new Dictionary<string, string>
+        {
+            ["Reason"] = "Because",
+            ["Location"] = "Lab",
+            ["ContactInfo"] = "ada@example.com",
+            ["Name"] = "Ada",
+            ["M"] = "D:19700101000000Z",
+        };
+        foreach (KeyValuePair<string, string> entry in expected)
+        {
+            Match value = Regex.Match(signature.Value, "\n/" + entry.Key + " <([0-9A-F]+)>");
+            Assert.True(value.Success, entry.Key + " is not a hex string: " + signature.Value);
+            byte[] cipher = TestCompat.FromHexString(value.Groups[1].Value);
+            byte[] plain = Encoding.ASCII.GetBytes(entry.Value);
+            byte[] encrypted = aes ? crypt.Encrypt(plain, objectNumber, 0, cipher.AsSpan(0, 16).ToArray()) : crypt.Encrypt(plain, objectNumber, 0);
+            Assert.Equal(encrypted, cipher);
+            Assert.True(start + value.Index < byteRange[1], entry.Key + " lies outside the first signed range");
+            Assert.DoesNotContain("(" + entry.Value + ")", file, StringComparison.Ordinal);
+        }
+
+        Assert.DoesNotContain("(Signature1)", file, StringComparison.Ordinal);
+        using var again = PdfDocument.Open(stream, password, leaveOpen: true);
         Assert.Contains(again.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature && field.PartialName == "Signature1");
+    }
+
+    // W-97: a document timestamp dictionary carries no text strings, and its /Contents is the plaintext reserved hex.
+    [Theory]
+    [InlineData(3, 128)]
+    [InlineData(6, 256)]
+    public void document_timestamp_contents_stays_plaintext(int revision, int keyBits)
+    {
+        var crypt = new StandardEncryptor(KindFor(revision), "user", "owner", -4, encryptMetadata: true, keyBits);
+        byte[] pdf = SignableDocument(crypt);
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, "owner", leaveOpen: true))
+        {
+            document.Sign(new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 }, new TimeStampProvider());
+        }
+
+        string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
+        Match timestamp = Regex.Match(appendix, "\\d+ 0 obj\n<<\n/Type /DocTimeStamp\n.*?\nendobj", RegexOptions.Singleline);
+        Assert.True(timestamp.Success, appendix);
+        Assert.Contains("\n/Contents <01020304" + new string('0', 56) + ">", timestamp.Value, StringComparison.Ordinal);
+        Assert.DoesNotContain("(", timestamp.Value, StringComparison.Ordinal);
+        using var again = PdfDocument.Open(stream, "user", leaveOpen: true);
+        Assert.Contains(again.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature);
+    }
+
+    // W-97: a signature dictionary already in the file is read like any other object. Its FieldMDP field names are
+    // decrypted, so an Include lock on an encrypted name holds, and its plaintext /Contents is left as it is.
+    [Theory]
+    [InlineData(3, 128)]
+    [InlineData(4, 128)]
+    [InlineData(6, 256)]
+    public void existing_signature_dictionary_strings_are_decrypted_except_contents(int revision, int keyBits)
+    {
+        var crypt = new StandardEncryptor(KindFor(revision), "user", "owner", -4, encryptMetadata: true, keyBits);
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 6 0 R 5 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 6 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T " + crypt.Text("Locked", 4) + " /Rect [0 0 100 20] /DA " + crypt.Text("/Helv 0 Tf 0 g", 4) + " /P 3 0 R >>");
+        builder.Indirect(6, "<< /Subtype /Widget /FT /Tx /T " + crypt.Text("Open", 6) + " /Rect [0 30 100 50] /DA " + crypt.Text("/Helv 0 Tf 0 g", 6) + " /P 3 0 R >>");
+        builder.Indirect(5, "<< /Subtype /Widget /FT /Sig /T " + crypt.Text("Sig", 5) + " /V 9 0 R /Rect [0 0 10 10] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /M " + crypt.Text("D:20261021000000Z", 9) + " /ByteRange [0 0 0 0] /Contents <0102030405> /Reference [<< /Type /SigRef /TransformMethod /FieldMDP /TransformParams << /Type /TransformParams /Action /Include /Fields [" + crypt.Text("Locked", 9) + "] /V /1.2 >> >>] >>");
+        builder.Indirect(20, crypt.Dictionary(null));
+        byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+
+        using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false), "user");
+
+        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Locked", "Ada"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Open", "Ada"));
+    }
+
+    // W-97: a signature dictionary the library writes again, here a direct /UR3 in the catalog that an attachment
+    // changes, is encrypted again under the catalog's number, and its plaintext /Contents is written as it was read.
+    [Theory]
+    [InlineData(3, 128)]
+    [InlineData(4, 128)]
+    [InlineData(6, 256)]
+    public void rewritten_signature_dictionary_keeps_contents_plaintext_and_strings_encrypted(int revision, int keyBits)
+    {
+        var crypt = new StandardEncryptor(KindFor(revision), "user", "owner", -4, encryptMetadata: true, keyBits);
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Perms << /UR3 << /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /Name " + crypt.Text("ARE Test", 1) + " /ByteRange [0 0 0 0] /Contents <0102030405> /Reference [<< /Type /SigRef /TransformMethod /UR3 /TransformParams << /V /2.2 /EF [/Create] >> >>] >> >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(4, "<< /Title " + crypt.Text("Secret", 4) + " >>");
+        builder.Indirect(20, crypt.Dictionary(null));
+        byte[] pdf = builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
+        {
+            Assert.True(document.HasUsageRights);
+            document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
+            document.SaveIncremental(stream);
+        }
+
+        string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
+        Match catalog = Regex.Match(appendix, "(?:^|\n)1 0 obj\n.*?\nendobj", RegexOptions.Singleline);
+        Assert.True(catalog.Success, appendix);
+        Assert.Contains("\n/Contents <0102030405>", catalog.Value, StringComparison.Ordinal);
+        Match name = Regex.Match(catalog.Value, "\n/Name <([0-9A-F]+)>");
+        Assert.True(name.Success, catalog.Value);
+        byte[] cipher = TestCompat.FromHexString(name.Groups[1].Value);
+        byte[] plain = Encoding.ASCII.GetBytes("ARE Test");
+        Assert.Equal(revision == 3 ? crypt.Encrypt(plain, 1, 0) : crypt.Encrypt(plain, 1, 0, cipher.AsSpan(0, 16).ToArray()), cipher);
+
+        using var again = PdfDocument.Open(stream, "user", leaveOpen: true);
+        Assert.True(again.HasUsageRights);
+        using Stream notes = again.Attachments["notes.bin"].Open();
+        var body = new MemoryStream();
+        notes.CopyTo(body);
+        Assert.Equal(new byte[] { 0, 127, 255 }, body.ToArray());
     }
 
     [Fact]
@@ -670,6 +818,17 @@ public class EncryptionTests
         return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
     }
 
+    private static byte[] SignableDocument(StandardEncryptor crypt)
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(4, "<< /Title " + crypt.Text("Secret", 4) + " >>");
+        builder.Indirect(20, crypt.Dictionary(null));
+        return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+    }
+
     private static byte[] AesDocument(StandardEncryptor.Kind kind, string user, string owner, bool textField)
     {
         var crypt = new StandardEncryptor(kind, user, owner, -4, encryptMetadata: true);
@@ -711,6 +870,16 @@ public class EncryptionTests
     private sealed class FixedProvider : IPdfSignatureProvider
     {
         public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
+
+        public byte[] CreateContents(PdfSignatureContext context)
+        {
+            return new byte[] { 1, 2, 3, 4 };
+        }
+    }
+
+    private sealed class TimeStampProvider : IPdfSignatureProvider
+    {
+        public PdfSignatureKind Kind => PdfSignatureKind.DocTimeStamp;
 
         public byte[] CreateContents(PdfSignatureContext context)
         {

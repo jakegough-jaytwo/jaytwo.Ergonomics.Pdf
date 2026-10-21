@@ -16,7 +16,7 @@ Keep these properties separate. A test or external verifier establishes only the
 | `/SV` seed-value constraints and `/Lock` on a reused signature field | library tests against ISO 32000-1 12.7.4.5 and 12.8 |
 | CMS signature timestamp versus document timestamp | the unsigned attribute (`id-aa-timeStampToken`) versus a `/DocTimeStamp` revision |
 | Timestamp imprint over the signature value, nonce echo, digest algorithm, `certReq` and certificate inclusion | `RequireMatch`; OpenSSL `ts -verify`; pyHanko |
-| Encrypted PDF: signature dictionary strings stay plaintext; the rest of the revision is encrypted | library tests; pyHanko with the password |
+| Encrypted PDF: the signature `/Contents` stays plaintext; every other string in the signature dictionary and the rest of the revision is encrypted | library tests; pypdf, pyHanko, and `pdfsig` with the password |
 | Failure: provider throws, appendix overflow, TSA timeout or rejection | destination unchanged or as documented; `PdfSignException`, `PdfSignatureTooLargeException`, `PdfTimestampException` |
 
 Where ISO 32000 is ambiguous, the evidence record names the reference interpretation it follows, such as pyHanko or Acrobat.

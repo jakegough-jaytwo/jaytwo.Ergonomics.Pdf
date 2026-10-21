@@ -427,7 +427,8 @@ public class UsageRightsTests
         builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T " + crypt.Text("Name", 4) + " /Rect [72 700 240 720] /DA " + crypt.Text("/Helv 0 Tf 0 g", 4) + " /P 3 0 R >>");
         builder.Indirect(5, "<< /Title " + crypt.Text("Secret", 5) + " >>");
         builder.Indirect(9, "<< /UR3 10 0 R >>");
-        builder.Indirect(10, SignatureBody("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn] >>") + "]"));
+        // W-97: the signature's /Name is encrypted like any string; only /Contents is plaintext.
+        builder.Indirect(10, SignatureBody("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn] >>") + "]").Replace("/Name (ARE Test)", "/Name " + crypt.Text("ARE Test", 10)));
         builder.Indirect(20, crypt.Dictionary(null));
         byte[] original = builder.Finish("/Info 5 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
 

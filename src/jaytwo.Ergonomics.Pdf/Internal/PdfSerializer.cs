@@ -63,14 +63,13 @@ internal sealed class PdfSerializer
     {
         if (value is PdfObject.Dict dict)
         {
-            bool nested = encryptStrings && !IsSignature(dict);
             WriteAscii("<<");
             foreach (var item in dict.Items)
             {
                 WriteByte('\n');
                 WriteName(item.Key);
                 WriteByte(' ');
-                WriteValue(item.Value, objectNumber, generation, nested);
+                WriteValue(item.Value, objectNumber, generation, encryptStrings && !PdfSecurity.IsSignatureContents(dict, item.Key));
             }
 
             WriteAscii("\n>>");
@@ -186,11 +185,6 @@ internal sealed class PdfSerializer
         }
 
         body.CopyTo(_output);
-    }
-
-    private static bool IsSignature(PdfObject.Dict dict)
-    {
-        return dict.Get("Type") is PdfObject.Name name && (name.Value == "Sig" || name.Value == "DocTimeStamp");
     }
 
     private void WriteString(PdfObject.Str str)
