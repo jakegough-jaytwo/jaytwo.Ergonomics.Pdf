@@ -10,6 +10,8 @@ checks is a comma-separated list:
   docmdp-illegal        post-signature changes violate the modification policy
   modification=NAME     NONE, FORM_FILLING, ANNOTATIONS, OTHER, or ABSENT
   broken                the byte range must fail the integrity check
+  invalid               the byte range must be intact and the signature value must not
+                        verify under the embedded signer certificate
   fieldmdp=A|B          print pyHanko's FieldMDP verdict for each named field,
                         as fieldmdp:NAME=locked or fieldmdp:NAME=open
 
@@ -90,6 +92,10 @@ def main() -> None:
     if "broken" in checks:
         if status.intact:
             sys.exit("expected the byte range integrity check to fail")
+        return
+    if "invalid" in checks:
+        if not status.intact or status.valid:
+            sys.exit("expected an intact byte range with a signature value that does not verify")
         return
     if not status.intact:
         sys.exit("signature byte range is not intact")

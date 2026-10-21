@@ -25,8 +25,10 @@ FROM dotnet-sdk AS base
 
 # External tools for the interop tests. They are test-only, not runtime dependencies.
 # Pkcs11Interop loads the unversioned "libdl", which glibc 2.34+ no longer ships, so link it to libdl.so.2.
+# libnss3-tools provides NSS certutil, which builds the trust database for poppler-utils' pdfsig (W-14).
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
+    libnss3-tools \
     openssl \
     poppler-utils \
     python-is-python3 \
