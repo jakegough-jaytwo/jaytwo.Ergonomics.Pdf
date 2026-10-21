@@ -298,9 +298,9 @@ public class UsageRightsTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
-        // The name sorts first both by its bytes and as text. The IRS 1040-ES keys its attachment in UTF-16BE, and qpdf
-        // 12.4.2 compares name-tree keys as text while the library orders them by bytes (W-86).
-        document.Attachments.Add("Attachment.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
+        // The IRS 1040-ES keys its attachment "Press Quality(1).joboptions" in UTF-16BE. This name sorts after it as text,
+        // so qpdf --check passes only when the new key is UTF-16BE too (W-86).
+        document.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
         var destination = new MemoryStream();
         document.SaveIncremental(destination, leaveOpen: true);
 
@@ -308,7 +308,7 @@ public class UsageRightsTests
         Assert.Equal(grantsAttachmentEdits, after.GetProperty("usageRights").GetBoolean());
         using var reopened = PdfDocument.Open(new MemoryStream(destination.ToArray(), writable: false), entry.Password);
         Assert.Equal(grantsAttachmentEdits, reopened.HasUsageRights);
-        Assert.Contains(reopened.Attachments, attachment => attachment.Name == "Attachment.txt");
+        Assert.Contains(reopened.Attachments, attachment => attachment.Name == "usage-rights.txt");
     }
 
     [Theory]
