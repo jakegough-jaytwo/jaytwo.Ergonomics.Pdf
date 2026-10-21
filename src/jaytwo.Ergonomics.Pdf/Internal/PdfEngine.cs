@@ -774,6 +774,7 @@ internal sealed class PdfEngine : IDisposable
         EnsureDocumentChange();
         RequireModify();
         List<AttachmentSlot> slots = ReadAttachments();
+        AttachmentSlot? previous = slots.FirstOrDefault(slot => slot.Name == name && slot.KeyInTree);
         int replaced = slots.RemoveAll(slot => slot.Name == name);
         ApplyUsageRights("EF", replaced == 0 ? "Create" : "Modify");
         long start = content.Position;
@@ -811,7 +812,8 @@ internal sealed class PdfEngine : IDisposable
             _ownedStreams.Add(content);
         }
 
-        slots.Add(new AttachmentSlot(name, PdfTextCodec.Encode(name).Raw, specId, options?.Description, options?.MimeType, length, streamId));
+        // A replaced attachment keeps the key the tree held; WriteAttachments encodes a new one.
+        slots.Add(new AttachmentSlot(name, previous?.SortKey ?? Array.Empty<byte>(), specId, options?.Description, options?.MimeType, length, streamId) { KeyInTree = previous != null });
         WriteAttachments(slots);
         return new PdfAttachment(this, name, options?.Description, options?.MimeType, length);
     }
@@ -2817,6 +2819,7 @@ internal sealed class PdfEngine : IDisposable
                 // text keeps the file specification's name (/UF, then /F); its bytes stay the key on a later write.
                 AttachmentSlot slot = ToAttachment(spec, id);
                 slot.SortKey = key.Raw;
+                slot.KeyInTree = true;
                 if (PdfTextCodec.TryDecode(key.Raw, out string keyText, out _))
                 {
                     slot.Name = keyText;
@@ -2870,6 +2873,19 @@ internal sealed class PdfEngine : IDisposable
 
     private void WriteAttachments(List<AttachmentSlot> slots)
     {
+        // ISO 32000-1 7.9.6 orders name-tree keys by their bytes and requires one self-consistent encoding, and ISO
+        // 32000-2 keeps the rule (PDF Association issue 214). Keys the tree holds keep their bytes. Every other key, for
+        // a new attachment or a file listed only in /AF, follows them: UTF-16BE when the tree holds no keys or only
+        // UTF-16BE ones, otherwise PDFDocEncoding when the name has a code in it.
+        bool utf16 = slots.TrueForAll(slot => !slot.KeyInTree || IsUtf16BeKey(slot.SortKey));
+        foreach (AttachmentSlot slot in slots)
+        {
+            if (!slot.KeyInTree)
+            {
+                slot.SortKey = utf16 ? PdfTextCodec.EncodeUtf16Be(slot.Name) : PdfTextCodec.EncodePdfDocOrUtf16Be(slot.Name);
+            }
+        }
+
         slots.Sort((left, right) => CompareBytes(left.SortKey, right.SortKey));
         var names = new PdfObject.Arr();
         var af = new PdfObject.Arr();
@@ -3649,6 +3665,11 @@ internal sealed class PdfEngine : IDisposable
         return value.ToString("D10", CultureInfo.InvariantCulture);
     }
 
+    private static bool IsUtf16BeKey(byte[] key)
+    {
+        return key.Length >= 2 && key[0] == 0xFE && key[1] == 0xFF;
+    }
+
     private static int CompareBytes(byte[] left, byte[] right)
     {
         int count = Math.Min(left.Length, right.Length);
@@ -3906,6 +3927,9 @@ internal sealed class PdfEngine : IDisposable
         public string Name { get; set; }
 
         public byte[] SortKey { get; set; }
+
+        // True when SortKey is a key the /EmbeddedFiles name tree already holds.
+        public bool KeyInTree { get; set; }
 
         public int SpecId { get; }
 

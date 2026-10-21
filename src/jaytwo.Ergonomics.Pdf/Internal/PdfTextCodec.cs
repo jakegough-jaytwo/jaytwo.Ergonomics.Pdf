@@ -69,12 +69,46 @@ internal static class PdfTextCodec
             return new PdfObject.Str(Encoding.ASCII.GetBytes(value), false);
         }
 
+        return new PdfObject.Str(EncodeUtf16Be(value), true);
+    }
+
+    // UTF-16BE with its byte-order mark: the text-string encoding that holds any value (ISO 32000-1 7.9.2.2).
+    public static byte[] EncodeUtf16Be(string value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
         byte[] be = Encoding.BigEndianUnicode.GetBytes(value);
         var raw = new byte[be.Length + 2];
         raw[0] = 0xFE;
         raw[1] = 0xFF;
         Buffer.BlockCopy(be, 0, raw, 2, be.Length);
-        return new PdfObject.Str(raw, true);
+        return raw;
+    }
+
+    // PDFDocEncoding when every character has a code and the bytes cannot be read as a byte-order mark; otherwise UTF-16BE.
+    public static byte[] EncodePdfDocOrUtf16Be(string value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException(nameof(value));
+        }
+
+        var bytes = new byte[value.Length];
+        for (int i = 0; i < value.Length; i++)
+        {
+            if (!PdfDocReverse.TryGetValue(value[i], out byte encoded))
+            {
+                return EncodeUtf16Be(value);
+            }
+
+            bytes[i] = encoded;
+        }
+
+        bool bom = (bytes.Length >= 2 && bytes[0] == 0xFE && bytes[1] == 0xFF) || (bytes.Length >= 3 && bytes[0] == 0xEF && bytes[1] == 0xBB && bytes[2] == 0xBF);
+        return bom ? EncodeUtf16Be(value) : bytes;
     }
 
     public static byte[] EncodePdfDoc(string value)
