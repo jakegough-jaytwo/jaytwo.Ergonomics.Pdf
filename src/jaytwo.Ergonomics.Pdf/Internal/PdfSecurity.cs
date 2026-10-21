@@ -146,6 +146,19 @@ internal sealed class PdfSecurity
         return _strings != CipherKind.None && !IsExempt(value);
     }
 
+    // Spec 7.4: the signature /Contents is the one plaintext string. It is written into a gap reserved before the digest,
+    // and Poppler and pyHanko read it raw. Every other string in a signature dictionary is encrypted (ISO 32000-1 7.6.1).
+    public static bool IsSignatureContents(PdfObject.Dict dict, string key)
+    {
+        if (key != "Contents")
+        {
+            return false;
+        }
+
+        string? type = ReadName(dict, "Type");
+        return type == "Sig" || type == "DocTimeStamp";
+    }
+
     public bool EncryptsStream(PdfObject.Dict dict)
     {
         return CipherFor(dict) != CipherKind.None;
@@ -683,9 +696,12 @@ internal sealed class PdfSecurity
             return;
         }
 
-        foreach ((string _, PdfObject item) in dict.Items)
+        foreach ((string key, PdfObject item) in dict.Items)
         {
-            Apply(item, objectNumber, generation);
+            if (!IsSignatureContents(dict, key))
+            {
+                Apply(item, objectNumber, generation);
+            }
         }
     }
 
@@ -701,8 +717,7 @@ internal sealed class PdfSecurity
             return false;
         }
 
-        string? type = ReadName(dict, "Type");
-        return type == "Sig" || type == "DocTimeStamp" || type == "XRef";
+        return ReadName(dict, "Type") == "XRef";
     }
 
     private CipherKind CipherFor(PdfObject.Dict dict)

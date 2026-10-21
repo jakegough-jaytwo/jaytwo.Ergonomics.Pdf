@@ -167,7 +167,7 @@ On a document that already has a signature (approval, certification, or document
 
 ### 7.4 Encryption on write
 
-New strings and streams use the document's existing cipher. The trailer keeps `/Encrypt` and `/ID`. Signature dictionaries stay plaintext. A user password is held to the permission bits for every write. No operation adds, removes, or changes encryption in Phase 1.
+New strings and streams use the document's existing cipher. The trailer keeps `/Encrypt` and `/ID`. The signature `/Contents` stays plaintext. A user password is held to the permission bits for every write. No operation adds, removes, or changes encryption in Phase 1.
 
 ### 7.5 Version
 

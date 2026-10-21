@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Net.Pkcs11Interop.Common;
@@ -291,6 +295,53 @@ public class SigningInteropTests
         }
     }
 
+    // W-97: pyHanko encrypts the field names of its FieldMDP lock with the rest of the signature dictionary. The library
+    // decrypts them, so the Include lock holds on an encrypted file, and pdfsig still verifies after the allowed fill.
+    [Fact]
+    public void pyhanko_fieldmdp_lock_on_an_encrypted_file_holds_and_the_allowed_fill_keeps_the_signature()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp-encrypted", CorpusManifest.Qpdf());
+            foreach (string sample in new[] { "fieldmdp-include-rc4.pdf", "fieldmdp-include-aes256.pdf" })
+            {
+                byte[] pdf = File.ReadAllBytes(Path.Combine(directory, sample));
+                byte[] filled;
+                using (var source = new MemoryStream(pdf, writable: false))
+                using (var document = PdfDocument.Open(source, "user", leaveOpen: true))
+                {
+                    Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Locked", "Ada"));
+                    Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Open", "Ada"));
+                    var destination = new MemoryStream();
+                    document.SaveIncremental(destination, leaveOpen: true);
+                    filled = destination.ToArray();
+                }
+
+                // pyHanko 0.38.0 cannot grade the fill: its difference analysis compares a decrypted field name proxy
+                // with a str and raises TypeError on an encrypted FieldMDP lock. pdfsig checks the signature instead.
+                Assert.True(filled.AsSpan(0, pdf.Length).SequenceEqual(pdf), sample);
+                Assert.Contains("intact=true", Validate(pdf, null, "user", "entire", null), StringComparison.Ordinal);
+                (int exitCode, string pdfsig) = Pdfsig.Verify(filled, Array.Empty<byte[]>(), "user");
+                List<List<string>> signatures = Pdfsig.Signatures(pdfsig);
+                Assert.True(exitCode == 0 && signatures.Count == 1, pdfsig);
+                Assert.Contains(Pdfsig.SignedRanges(filled), signatures[0]);
+                Assert.Contains(Pdfsig.NotWholeFile, signatures[0]);
+                Assert.Contains(Pdfsig.Valid, signatures[0]);
+                using (var stream = new MemoryStream(filled, writable: false))
+                using (var reopened = PdfDocument.Open(stream, "user", leaveOpen: true))
+                {
+                    Assert.Null(reopened.AcroForm.GetFields("Locked")[0].Value);
+                    Assert.Equal("Ada", reopened.AcroForm.GetFields("Open")[0].Value);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     [Fact]
     public void pdfsig_and_pyhanko_verify_new_and_existing_field_signatures_and_trust_the_chain_from_the_root()
     {
@@ -344,10 +395,9 @@ public class SigningInteropTests
             Assert.Contains("timestamp_intact=true", report, StringComparison.Ordinal);
             Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
 
-            // The signing time must be real here. pdfsig 26.08.0 treats a CMS signing time at the Unix epoch as missing and
-            // falls back to /M, which on an encrypted file it decrypts because the library writes it in plaintext (W-97).
-            // The result is not a date, and pdfsig crashes on it.
-            byte[] encrypted = Sign(File.ReadAllBytes(ExternalTool.Fixture("qpdf-encrypted.pdf")), "user-secret", null, signer, null, DateTimeOffset.UtcNow);
+            // pdfsig 26.08.0 treats a CMS signing time at the Unix epoch as missing and falls back to /M, which it decrypts.
+            // It crashed on the plaintext /M the library wrote before W-97; /M is now encrypted, so the epoch stays.
+            byte[] encrypted = Sign(File.ReadAllBytes(ExternalTool.Fixture("qpdf-encrypted.pdf")), "user-secret", null, signer, null, TestCompat.UnixEpoch);
             PdfsigAccepts(encrypted, root.RawData, "user-secret", wholeFile: true);
             Assert.Contains("intact=true", Validate(encrypted, root.RawData, "user-secret", "entire", null), StringComparison.Ordinal);
 
@@ -362,6 +412,66 @@ public class SigningInteropTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    // W-97: qpdf encrypts the base file with each cipher. After Sign under the user or the owner password, pypdf reads
+    // every signature dictionary string as passed, the gap the /ByteRange leaves is the plaintext CMS, and pyHanko and
+    // pdfsig verify the signature. The CMS signing time is the Unix epoch, so pdfsig reads /M.
+    [Theory]
+    [InlineData("40", "user-secret")]
+    [InlineData("128-rc4", "owner-secret")]
+    [InlineData("128-aes", "user-secret")]
+    [InlineData("256", "owner-secret")]
+    public void encrypted_signature_dictionary_strings_read_in_pypdf_and_verify_in_pyhanko_and_pdfsig(string cipher, string password)
+    {
+        using var rootKey = RSA.Create(2048);
+        using var leafKey = RSA.Create(2048);
+        using X509Certificate2 root = CreateAuthority("Interop Root", rootKey, null);
+        using X509Certificate2 leaf = CreateLeaf("Interop Leaf", leafKey, root);
+        var signer = new RsaSigner(leafKey, leaf.RawData, new[] { root.RawData });
+        byte[] encrypted = QpdfEncrypt(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), cipher);
+
+        byte[] signed;
+        using (var source = new MemoryStream(encrypted, writable: false))
+        using (var document = PdfDocument.Open(source, password, leaveOpen: true))
+        {
+            var destination = new MemoryStream();
+            document.Sign(
+                destination,
+                new PdfSignatureOptions
+                {
+                    ReservedContentsBytes = 32768,
+                    SigningTime = TestCompat.UnixEpoch,
+                    Reason = "Approved",
+                    Location = "Denver",
+                    ContactInfo = "signer@example.com",
+                    SignerName = "Interop Leaf",
+                },
+                new CmsDetachedSignatureProvider(signer),
+                leaveOpen: true);
+            signed = destination.ToArray();
+        }
+
+        Assert.True(signed.AsSpan(0, encrypted.Length).SequenceEqual(encrypted));
+        string text = Encoding.ASCII.GetString(signed);
+        Assert.DoesNotContain("(Approved)", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("(Interop Leaf)", text, StringComparison.Ordinal);
+        Match range = Regex.Match(text, @"/ByteRange\s*\[\s*0+\s+(\d+)\s+(\d+)\s+\d+\s*\]");
+        Assert.True(range.Success);
+        int gap = int.Parse(range.Groups[1].Value, CultureInfo.InvariantCulture);
+        int end = int.Parse(range.Groups[2].Value, CultureInfo.InvariantCulture);
+        Assert.Matches("^<30[0-9A-F]+>$", text.Substring(gap, end - gap));
+
+        Dictionary<string, JsonElement> strings = SignatureStrings(signed, "user-secret");
+        JsonElement signature = Assert.Single(strings).Value;
+        Assert.Equal("D:19700101000000Z", signature.GetProperty("M").GetString());
+        Assert.Equal("Approved", signature.GetProperty("Reason").GetString());
+        Assert.Equal("Denver", signature.GetProperty("Location").GetString());
+        Assert.Equal("signer@example.com", signature.GetProperty("ContactInfo").GetString());
+        Assert.Equal("Interop Leaf", signature.GetProperty("Name").GetString());
+
+        PdfsigAccepts(signed, root.RawData, "user-secret", wholeFile: true);
+        Assert.Contains("intact=true", Validate(signed, root.RawData, "user-secret", "entire", null), StringComparison.Ordinal);
     }
 
     [Fact]
@@ -430,6 +540,51 @@ public class SigningInteropTests
                 : new CmsDetachedSignatureProvider(signer, authority),
             leaveOpen: true);
         return destination.ToArray();
+    }
+
+    // qpdf's 40-bit RC4 is revision 2, 128-bit RC4 revision 3, AES-128 revision 4, and AES-256 revision 6.
+    private static byte[] QpdfEncrypt(byte[] pdf, string cipher)
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string input = Path.Combine(directory, "base.pdf");
+            string output = Path.Combine(directory, "encrypted.pdf");
+            File.WriteAllBytes(input, pdf);
+            var args = new List<string> { "--allow-weak-crypto", "--encrypt", "user-secret", "owner-secret" };
+            args.AddRange(cipher switch
+            {
+                "40" => new[] { "40" },
+                "128-rc4" => new[] { "128", "--use-aes=n" },
+                "128-aes" => new[] { "128", "--use-aes=y" },
+                _ => new[] { "256" },
+            });
+            args.AddRange(new[] { "--", input, output });
+            RunChecked(CorpusManifest.Qpdf(), args.ToArray());
+            return File.ReadAllBytes(output);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // pypdf's reading of each signature dictionary's text strings (Fixtures/signature_strings.py).
+    private static Dictionary<string, JsonElement> SignatureStrings(byte[] pdf, string password)
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string path = Path.Combine(directory, "signed.pdf");
+            File.WriteAllBytes(path, pdf);
+            using Process process = StartPython(ExternalTool.Fixture("signature_strings.py"), path, password);
+            using JsonDocument document = JsonDocument.Parse(ExternalTool.Output(process));
+            return document.RootElement.EnumerateObject().ToDictionary(item => item.Name, item => item.Value.Clone(), StringComparer.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     private static byte[] ReviseTitle(byte[] pdf, string expected, string title)
