@@ -155,7 +155,13 @@ await doc.SignAsync(output, new PdfSignatureOptions
 
 ### 7.3 Usage rights (Reader extensions)
 
-When the catalog `/Perms` has a `/UR3` signature, a write keeps it when its transform parameters grant that operation (`/Form` `FillIn` for fills; `/EF` `Create`, `Delete`, or `Modify` for attachment edits). Any other write removes `/UR3` from `/Perms` in the same revision, so Adobe Reader drops the extended features silently instead of reporting a broken document.
+When the catalog `/Perms` has a `/UR3` signature, a write keeps it when its transform parameters grant that operation:
+
+- `/Form` `FillIn` for fills;
+- `/EF` `Create`, `Delete`, or `Modify` for attachment edits; replacing an attachment that has the same name is `Modify`;
+- `/Signature` `Modify` for `Sign` into an existing empty signature field (ISO 32000-1 Table 255).
+
+Any other write removes `/UR3` from `/Perms` in the same revision, so Adobe Reader drops the extended features silently instead of reporting a broken document. A `Sign` that creates a new signature field and a document timestamp are such writes.
 
 ### 7.4 Encryption on write
 

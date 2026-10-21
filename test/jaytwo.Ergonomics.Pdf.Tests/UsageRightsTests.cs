@@ -12,19 +12,22 @@ using Xunit;
 namespace jaytwo.Ergonomics.Pdf.Tests;
 
 // Spec 7.3 and reset plan C4. A write keeps the catalog /Perms /UR3 usage-rights signature only when its UR3 transform
-// parameters (ISO 32000-1 12.8.2.3, Table 255) grant that write: /Form FillIn for a fill, and /EF Create, Modify, or
-// Delete for adding, replacing, or removing an attachment. Every other write, and every transform that is absent,
-// unresolvable, malformed, unknown, or insufficient, removes /UR3 from /Perms in the same revision, and the write proceeds.
+// parameters (ISO 32000-1 12.8.2.3, Table 255) grant that write: /Form FillIn for a fill, /EF Create, Modify, or
+// Delete for adding, replacing, or removing an attachment, and /Signature Modify for a signature into an existing empty
+// signature field. Every other write, including a signature that creates a field and a document timestamp, and every
+// transform that is absent, unresolvable, malformed, unknown, or insufficient, removes /UR3 from /Perms in the same
+// revision, and the write proceeds.
 public class UsageRightsTests
 {
     private const string FillIn = "Form/FillIn";
     private const string Create = "EF/Create";
     private const string Modify = "EF/Modify";
     private const string Delete = "EF/Delete";
+    private const string SignField = "Signature/Modify";
     private const string AllRights = "<< /Type /TransformParams /V /2.2 /Document [/FullSave] /Form [/FillIn /Import /Export /SubmitStandalone] /EF [/Create /Delete /Modify /Import] /Signature [/Modify] /Annots [/Create /Delete /Modify] >>";
     private const string Indirect = " /Perms 9 0 R";
 
-    private static readonly string[] EveryRight = { FillIn, Create, Modify, Delete };
+    private static readonly string[] EveryRight = { FillIn, Create, Modify, Delete, SignField };
 
     private static readonly Dictionary<string, PolicyCase> Cases = new[]
     {
@@ -38,10 +41,12 @@ public class UsageRightsTests
                 (10, SignatureBody("/Reference 11 0 R")),
                 (11, "[12 0 R]"),
                 (12, "<< /Type /SigRef /TransformMethod 15 0 R /TransformParams 13 0 R >>"),
-                (13, "<< /Type /TransformParams /Form 14 0 R /EF [16 0 R /Delete /Modify] >>"),
+                (13, "<< /Type /TransformParams /Form 14 0 R /EF [16 0 R /Delete /Modify] /Signature 17 0 R >>"),
                 (14, "[/FillIn]"),
                 (15, "/UR3"),
                 (16, "/Create"),
+                (17, "[18 0 R]"),
+                (18, "/Modify"),
             },
             EveryRight),
         Case("permitted, /Perms and /UR3 direct in the catalog", " /Perms << /UR3 " + SignatureBody("/Reference [" + Transform("UR3", AllRights) + "]") + " >>", Array.Empty<(int, string)>(), EveryRight),
@@ -49,6 +54,7 @@ public class UsageRightsTests
         Case("permitted, attachment create only", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /EF [/Create] >>") + "]"), Create),
         Case("permitted, attachment modify only", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /EF [/Modify] >>") + "]"), Modify),
         Case("permitted, attachment delete only", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /EF [/Delete] >>") + "]"), Delete),
+        Case("permitted, signature modify only", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Signature [/Modify] >>") + "]"), SignField),
         Case("absent: /Perms without /UR3", Indirect, new[] { (9, "<< >>") }, hasUsageRights: false),
         Case("absent: no /Perms", string.Empty, Array.Empty<(int, string)>(), hasUsageRights: false),
         Case("absent transform: no /Reference", Indirect, Signature(string.Empty)),
@@ -58,19 +64,19 @@ public class UsageRightsTests
         Case("unresolvable /Reference", Indirect, Signature("/Reference 99 0 R")),
         Case("unresolvable /Reference entry", Indirect, Signature("/Reference [99 0 R]")),
         Case("unresolvable /TransformParams", Indirect, Signature("/Reference [" + Transform("UR3", "99 0 R") + "]")),
-        Case("unresolvable /V", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V 99 0 R /Form [/FillIn] /EF [/Create /Delete /Modify] >>") + "]")),
-        Case("unresolvable right", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [99 0 R] /EF [99 0 R] >>") + "]")),
+        Case("unresolvable /V", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V 99 0 R /Form [/FillIn] /EF [/Create /Delete /Modify] /Signature [/Modify] >>") + "]")),
+        Case("unresolvable right", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [99 0 R] /EF [99 0 R] /Signature [99 0 R] >>") + "]")),
         Case("malformed /UR3", Indirect, new[] { (9, "<< /UR3 7 >>") }),
         Case("malformed /Reference", Indirect, Signature("/Reference " + Transform("UR3", AllRights))),
         Case("malformed /Reference entry", Indirect, Signature("/Reference [/UR3]")),
         Case("malformed /TransformParams", Indirect, Signature("/Reference [" + Transform("UR3", "[/Form /FillIn]") + "]")),
-        Case("malformed rights", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form /FillIn /EF (Create Delete Modify) >>") + "]")),
-        Case("malformed right entry", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn 1] /EF [/Create /Delete /Modify 1] >>") + "]")),
+        Case("malformed rights", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form /FillIn /EF (Create Delete Modify) /Signature /Modify >>") + "]")),
+        Case("malformed right entry", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn 1] /EF [/Create /Delete /Modify 1] /Signature [/Modify 1] >>") + "]")),
         Case("unknown /TransformMethod", Indirect, Signature("/Reference [" + Transform("UR", AllRights) + "]")),
-        Case("unknown /V", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.3 /Form [/FillIn] /EF [/Create /Delete /Modify] >>") + "]")),
-        Case("unknown /V type", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V 2.2 /Form [/FillIn] /EF [/Create /Delete /Modify] >>") + "]")),
+        Case("unknown /V", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.3 /Form [/FillIn] /EF [/Create /Delete /Modify] /Signature [/Modify] >>") + "]")),
+        Case("unknown /V type", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V 2.2 /Form [/FillIn] /EF [/Create /Delete /Modify] /Signature [/Modify] >>") + "]")),
         Case("unknown second transform", Indirect, Signature("/Reference [" + Transform("UR3", AllRights) + " " + Transform("Identity", "<< >>") + "]")),
-        Case("insufficient rights", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Document [/FullSave] /Form [/Import /Export /SubmitStandalone] /EF [/Import] /Signature [/Modify] /Annots [/Create] >>") + "]")),
+        Case("insufficient rights", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Document [/FullSave] /Form [/Import /Export /SubmitStandalone /Add] /EF [/Import] /Signature [] /Annots [/Create /Modify] >>") + "]")),
         Case("insufficient: no rights categories", Indirect, Signature("/Reference [" + Transform("UR3", "<< /V /2.2 /Document [/FullSave] >>") + "]")),
     }.ToDictionary(item => item.Name);
 
@@ -88,7 +94,11 @@ public class UsageRightsTests
         Write("attachment add", Create, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")))),
         Write("attachment replace", Modify, document => document.Attachments.Add("old.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")))),
         Write("attachment remove", Delete, document => document.Attachments.Remove("old.txt")),
-        new PolicyWrite("sign", null, (document, destination) => document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true)),
+        Sign("sign, existing empty field", SignField, PdfSignatureKind.CmsDetached, "Signer"),
+        Sign("sign, new field", null, PdfSignatureKind.CmsDetached, null),
+        Sign("sign, new named field", null, PdfSignatureKind.CmsDetached, "Fresh"),
+        Sign("document timestamp, existing empty field", null, PdfSignatureKind.DocTimeStamp, "Signer"),
+        Sign("document timestamp, new field", null, PdfSignatureKind.DocTimeStamp, null),
     }.ToDictionary(item => item.Name);
 
     public static IEnumerable<object[]> Matrix => Writes.Keys.SelectMany(write => Cases.Keys.Select(policy => new object[] { write, policy }));
@@ -178,8 +188,15 @@ public class UsageRightsTests
         Assert.Throws<PdfAttachmentNotFoundException>(() => document.Attachments.Remove("missing.txt"));
         Assert.True(document.HasUsageRights);
 
+        // A sign refused by the existing-field checks, or failed by the provider, in a new or an existing field.
         var failed = new MemoryStream();
+        Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Name", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        Assert.Throws<PdfFieldReadOnlyException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Locked", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signed", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        Assert.True(document.HasUsageRights);
         Assert.ThrowsAny<Exception>(() => document.Sign(failed, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
+        Assert.True(document.HasUsageRights);
+        Assert.ThrowsAny<Exception>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signer", ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
         Assert.Equal(0, failed.Length);
         Assert.True(document.HasUsageRights);
 
@@ -214,7 +231,7 @@ public class UsageRightsTests
         var destination = new MemoryStream();
         document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
 
-        using var reopened = PdfDocument.Open(new MemoryStream(destination.ToArray(), writable: false));
+        using var reopened = PdfDocument.Open(new MemoryStream(((MemoryStream)destination).ToArray(), writable: false));
         Assert.False(reopened.HasUsageRights);
         Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
         Assert.Throws<PdfCertificationLockedException>(() => reopened.Metadata.Title = "Still certified");
@@ -311,27 +328,24 @@ public class UsageRightsTests
         Assert.Contains(reopened.Attachments, attachment => attachment.Name == "usage-rights.txt");
     }
 
+    // Every Reader-extended corpus form grants /Signature Modify, but no right grants a signature that creates a field.
     [Theory]
     [MemberData(nameof(ReaderExtendedIds))]
-    public void reader_extended_form_loses_usage_rights_when_signed(string id)
+    public void reader_extended_form_loses_usage_rights_when_signed_into_a_new_field(string id)
     {
-        CorpusEntry entry = CorpusManifest.Get(id);
-        byte[] original = File.ReadAllBytes(entry.FullPath);
-        using var source = new MemoryStream(original, writable: false);
-        using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
-        using RSA rsa = RSA.Create(2048);
-        var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-        using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
-        var destination = new MemoryStream();
-        document.Sign(destination, new PdfSignatureOptions(), new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)), leaveOpen: true);
+        SignCorpusForm(CorpusManifest.Get(id), null, keepsUsageRights: false);
+    }
 
-        JsonElement after = CheckOutput(entry, original, destination.ToArray());
-        Assert.False(after.GetProperty("usageRights").GetBoolean());
-        List<JsonElement> signatures = after.GetProperty("signatures").EnumerateArray().ToList();
-        Assert.Equal(entry.Probe.GetProperty("signatures").GetArrayLength() + 1, signatures.Count);
-        JsonElement signed = signatures.Single(s => CorpusManifest.Text(s, "coverage") == "ENTIRE_FILE");
-        Assert.True(signed.GetProperty("intact").GetBoolean());
-        Assert.True(signed.GetProperty("valid").GetBoolean());
+    // The Reader-extended corpus forms with an empty signature field, as pypdf 6.21.1 reads them. Each grants
+    // /Signature Modify, so signing that field keeps /UR3.
+    [Theory]
+    [InlineData("cms-40b", "Signature-1")]
+    [InlineData("cms-40b", "Signature-2")]
+    [InlineData("cms-40b-pyhanko-approved", "Signature-2")]
+    [InlineData("va-21-4138", "form1[0].#subform[1].Digital_Signature[0]")]
+    public void reader_extended_form_keeps_usage_rights_when_its_empty_signature_field_is_signed(string id, string field)
+    {
+        SignCorpusForm(CorpusManifest.Get(id), field, keepsUsageRights: true);
     }
 
     [Fact]
@@ -361,6 +375,39 @@ public class UsageRightsTests
         JsonElement afterRemove = CheckOutput(entry, original, removed.ToArray());
         Assert.True(afterRemove.GetProperty("usageRights").GetBoolean());
         Assert.Equal(0, afterRemove.GetProperty("attachments").GetArrayLength());
+    }
+
+    // Signs the form with a throwaway RSA key, into `field` or a new field. pypdf (through the corpus probe) reads whether
+    // /UR3 survived, and pyHanko finds the new signature intact and valid over the entire file in that field.
+    private static void SignCorpusForm(CorpusEntry entry, string? field, bool keepsUsageRights)
+    {
+        byte[] original = File.ReadAllBytes(entry.FullPath);
+        using var source = new MemoryStream(original, writable: false);
+        using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        Assert.True(document.HasUsageRights);
+        if (field != null)
+        {
+            Assert.Equal(PdfFieldType.Signature, Assert.Single(document.AcroForm.GetFields(field)).FieldType);
+        }
+
+        using RSA rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        var destination = new MemoryStream();
+        document.Sign(destination, new PdfSignatureOptions { FieldName = field }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)), leaveOpen: true);
+
+        JsonElement after = CheckOutput(entry, original, destination.ToArray());
+        Assert.Equal(keepsUsageRights, after.GetProperty("usageRights").GetBoolean());
+        List<JsonElement> signatures = after.GetProperty("signatures").EnumerateArray().ToList();
+        Assert.Equal(entry.Probe.GetProperty("signatures").GetArrayLength() + 1, signatures.Count);
+        JsonElement signed = signatures.Single(s => CorpusManifest.Text(s, "coverage") == "ENTIRE_FILE");
+        if (field != null)
+        {
+            Assert.Equal(field, CorpusManifest.Text(signed, "field"));
+        }
+
+        Assert.True(signed.GetProperty("intact").GetBoolean());
+        Assert.True(signed.GetProperty("valid").GetBoolean());
     }
 
     // The original is a prefix, qpdf --check passes with no warnings, and pypdf and pyHanko (through the corpus probe)
@@ -414,9 +461,9 @@ public class UsageRightsTests
     private static byte[] Document(PolicyCase policy)
     {
         var builder = new PdfBuilder();
-        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R] >> /Names << /EmbeddedFiles << /Names [(old.txt) 20 0 R] >> >>" + policy.Perms + " >>");
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 22 0 R 23 0 R 24 0 R] >> /Names << /EmbeddedFiles << /Names [(old.txt) 20 0 R] >> >>" + policy.Perms + " >>");
         builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
-        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 22 0 R 23 0 R 24 0 R] >>");
         builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [72 700 240 720] /DA (/Helv 0 Tf 0 g) /P 3 0 R >>");
         builder.Indirect(5, "<< /Subtype /Widget /FT /Btn /T (Agree) /Rect [72 660 90 678] /P 3 0 R >>");
         builder.Indirect(6, "<< /Subtype /Widget /FT /Btn /Ff 49152 /T (Pick) /Rect [72 620 90 638] /P 3 0 R >>");
@@ -429,6 +476,12 @@ public class UsageRightsTests
 
         builder.Indirect(20, "<< /Type /Filespec /F (old.txt) /UF (old.txt) /EF << /F 21 0 R >> >>");
         builder.StreamObject(21, "/Type /EmbeddedFile", Encoding.ASCII.GetBytes("old"));
+
+        // An empty signature field, a read-only one, and one that already has a signature dictionary.
+        builder.Indirect(22, "<< /Subtype /Widget /FT /Sig /T (Signer) /Rect [300 700 500 740] /F 4 /P 3 0 R >>");
+        builder.Indirect(23, "<< /Subtype /Widget /FT /Sig /Ff 1 /T (Locked) /Rect [300 640 500 680] /F 4 /P 3 0 R >>");
+        builder.Indirect(24, "<< /Subtype /Widget /FT /Sig /T (Signed) /V 25 0 R /Rect [300 580 500 620] /F 4 /P 3 0 R >>");
+        builder.Indirect(25, SignatureBody(string.Empty));
         return builder.Finish();
     }
 
@@ -448,6 +501,17 @@ public class UsageRightsTests
         {
             edit(document);
             document.SaveIncremental(destination, leaveOpen: true);
+        });
+    }
+
+    private static PolicyWrite Sign(string name, string? right, PdfSignatureKind kind, string? fieldName)
+    {
+        return new PolicyWrite(name, right, (document, destination) =>
+        {
+            var options = new PdfSignatureOptions { Kind = kind, FieldName = fieldName, ReservedContentsBytes = 64 };
+            document.Sign(destination, options, new FixedProvider { Kind = kind }, leaveOpen: true);
+            using var reopened = PdfDocument.Open(new MemoryStream(((MemoryStream)destination).ToArray(), writable: false));
+            Assert.Equal(fieldName == "Signer" ? 3 : 4, reopened.AcroForm.Fields.Count(field => field.FieldType == PdfFieldType.Signature));
         });
     }
 
@@ -522,7 +586,7 @@ public class UsageRightsTests
     {
         public bool Fail { get; set; }
 
-        public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
+        public PdfSignatureKind Kind { get; set; } = PdfSignatureKind.CmsDetached;
 
         public byte[] CreateContents(PdfSignatureContext context)
         {

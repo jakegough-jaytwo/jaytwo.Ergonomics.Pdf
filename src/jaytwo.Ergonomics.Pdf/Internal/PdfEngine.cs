@@ -975,7 +975,6 @@ internal sealed class PdfEngine : IDisposable
                 _id = NewId();
             }
 
-            ApplyUsageRights(null, null);
             DateTimeOffset? signingTime = options.Kind == PdfSignatureKind.DocTimeStamp
                 ? null
                 : options.SigningTime ?? DateTimeOffset.UtcNow;
@@ -2267,7 +2266,7 @@ internal sealed class PdfEngine : IDisposable
     // (ISO 32000-1 12.8.2.3, Table 255) grant the write: `right` is listed in the `category` array. A write that no
     // right grants (a null category), and a /UR3 whose transform is absent, does not resolve, is malformed, or is
     // unknown, removes /UR3 from /Perms in the same revision. Callers run this after every check that can refuse
-    // the write, so a refused write still does not dirty the document.
+    // the write, so a refused write still does not dirty the document; Sign restores it when signing fails.
     private void ApplyUsageRights(string? category, string? right)
     {
         PdfObject? permsValue = CatalogDict().Get("Perms");
@@ -2943,6 +2942,8 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfSignException("The signature page is outside the document.");
         }
 
+        // Spec 7.3: no right grants a signature that creates a field, so /UR3 is removed.
+        ApplyUsageRights(null, null);
         PageInfo page = pages[options.PageNumber - 1];
         string fieldName = options.FieldName ?? string.Empty;
         if (fieldName.Length == 0)
@@ -3010,6 +3011,17 @@ internal sealed class PdfEngine : IDisposable
             {
                 throw new PdfSignException("The signature field already has a signature dictionary.");
             }
+        }
+
+        // Spec 7.3: /Signature Modify grants signing an existing empty field (ISO 32000-1 Table 255). It does not
+        // grant a document timestamp.
+        if (options.Kind == PdfSignatureKind.DocTimeStamp)
+        {
+            ApplyUsageRights(null, null);
+        }
+        else
+        {
+            ApplyUsageRights("Signature", "Modify");
         }
 
         int signatureId = Allocate(CreateSignatureDictionary(options, signingTime));
