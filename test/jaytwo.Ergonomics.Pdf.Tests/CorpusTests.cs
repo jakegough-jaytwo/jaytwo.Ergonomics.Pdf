@@ -129,8 +129,10 @@ public class CorpusTests
         CheckOutput(entry, original, revised, null, out JsonElement after);
         Assert.Equal(RevisedTitle, CorpusManifest.Text(after.GetProperty("info"), "title"));
 
-        // Spec 7.3: no usage-rights transform grants a metadata write, so a Reader-extended form loses /UR3.
-        Assert.False(after.GetProperty("usageRights").GetBoolean(), id + ": /UR3 survived a metadata write");
+        // Spec 7.3: no usage-rights transform grants a metadata write, so a Reader-extended form loses /UR3, unless it
+        // already has a signature, where no write changes /Perms (W-90).
+        bool signed = entry.Probe.GetProperty("signatures").GetArrayLength() > 0;
+        Assert.Equal(signed && entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
         using var again = new MemoryStream(revised, writable: false);
         using PdfDocument reopened = PdfDocument.Open(again, entry.Password, leaveOpen: true);
         Assert.Equal(RevisedTitle, reopened.Metadata.Title);

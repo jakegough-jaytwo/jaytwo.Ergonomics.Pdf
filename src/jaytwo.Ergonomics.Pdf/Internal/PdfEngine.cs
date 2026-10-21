@@ -2265,8 +2265,10 @@ internal sealed class PdfEngine : IDisposable
     // Spec 7.3: the catalog /Perms /UR3 usage-rights signature is kept only when its UR3 transform parameters
     // (ISO 32000-1 12.8.2.3, Table 255) grant the write: `right` is listed in the `category` array. A write that no
     // right grants (a null category), and a /UR3 whose transform is absent, does not resolve, is malformed, or is
-    // unknown, removes /UR3 from /Perms in the same revision. Callers run this after every check that can refuse
-    // the write, so a refused write still does not dirty the document; Sign restores it when signing fails.
+    // unknown, removes /UR3 from /Perms in the same revision. On a document that already has a signature, no write
+    // changes /Perms (spec 7.3): validators report every earlier signature as modified when /UR3 is removed. Callers
+    // run this after every check that can refuse the write, and Sign runs it before it creates its own signature
+    // dictionary, so a refused write still does not dirty the document; Sign restores /UR3 when signing fails.
     private void ApplyUsageRights(string? category, string? right)
     {
         PdfObject? permsValue = CatalogDict().Get("Perms");
@@ -2280,6 +2282,11 @@ internal sealed class PdfEngine : IDisposable
             return;
         }
 
+        if (HasSignature(perms))
+        {
+            return;
+        }
+
         if (permsValue is PdfObject.Ref reference && Load(reference.ObjectId) is PdfObject.Dict)
         {
             ((PdfObject.Dict)EditAny(reference.ObjectId)).Remove("UR3");
@@ -2289,6 +2296,27 @@ internal sealed class PdfEngine : IDisposable
         var copy = (PdfObject.Dict)perms.DeepClone();
         copy.Remove("UR3");
         EditCatalog().Set("Perms", copy);
+    }
+
+    // A document has a signature when /Perms has /DocMDP or a signature field has a /V that resolves to a dictionary,
+    // the test Sign uses to refuse an already signed field. A /V that does not resolve is null (ISO 32000-1 7.3.10),
+    // so that field is unsigned. The /UR3 usage-rights signature is not counted.
+    private bool HasSignature(PdfObject.Dict perms)
+    {
+        if (perms.Get("DocMDP") != null)
+        {
+            return true;
+        }
+
+        foreach (FieldSlot slot in CollectFields())
+        {
+            if (slot.FieldType == PdfFieldType.Signature && HasSignatureDictionary(slot))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private bool UsageRightsGrant(PdfObject usageRights, string category, string right)

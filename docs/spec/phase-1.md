@@ -163,6 +163,8 @@ When the catalog `/Perms` has a `/UR3` signature, a write keeps it when its tran
 
 Any other write removes `/UR3` from `/Perms` in the same revision, so Adobe Reader drops the extended features silently instead of reporting a broken document. A `Sign` that creates a new signature field and a document timestamp are such writes.
 
+On a document that already has a signature (approval, certification, or document timestamp), a write never changes `/Perms`: `/UR3` stays even when its transform does not grant the write, because removing it is a change no signature permits, and validators report the earlier signatures as modified. Adobe Reader may then report that its extended features are unavailable.
+
 ### 7.4 Encryption on write
 
 New strings and streams use the document's existing cipher. The trailer keeps `/Encrypt` and `/ID`. Signature dictionaries stay plaintext. A user password is held to the permission bits for every write. No operation adds, removes, or changes encryption in Phase 1.

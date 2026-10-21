@@ -160,7 +160,8 @@ def pypdf_facts(path, password, data, wanted_fields, attachments):
 
 def pyhanko_facts(path, password):
     from pyhanko.pdf_utils.reader import PdfFileReader
-    from pyhanko.sign.validation import validate_pdf_signature
+    from pyhanko.sign.diff_analysis import SuspiciousModification
+    from pyhanko.sign.validation import validate_pdf_signature, validate_pdf_timestamp
     from pyhanko_certvalidator import ValidationContext
 
     with open(path, "rb") as handle:
@@ -173,15 +174,22 @@ def pyhanko_facts(path, password):
             # Trust the signer certificate itself: this establishes byte-range integrity and cryptographic validity,
             # not trust (the library performs no trust validation).
             context = ValidationContext(trust_roots=[signature.signer_cert], allow_fetching=False, revocation_mode="soft-fail")
-            status = validate_pdf_signature(signature, signer_validation_context=context)
-            signatures.append({
+            if signature.sig_object_type == "/DocTimeStamp":
+                status = validate_pdf_timestamp(signature, validation_context=context)
+            else:
+                status = validate_pdf_signature(signature, signer_validation_context=context)
+            facts = {
                 "field": signature.field_name,
                 "intact": bool(status.intact),
                 "valid": bool(status.valid),
                 "coverage": status.coverage.name,
                 "modification": None if status.modification_level is None else status.modification_level.name,
                 "docmdpOk": bool(status.docmdp_ok),
-            })
+            }
+            # Why difference analysis rejected a later revision, only when it did (W-90).
+            if isinstance(status.diff_result, SuspiciousModification):
+                facts["suspicious"] = str(status.diff_result)
+            signatures.append(facts)
     return sections, signatures
 
 
