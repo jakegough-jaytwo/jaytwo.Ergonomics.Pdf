@@ -135,6 +135,15 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
+    internal bool HasUsageRights
+    {
+        get
+        {
+            using var release = ReleaseAfter();
+            return ResolveMaybe(CatalogDict().Get("Perms")) is PdfObject.Dict perms && perms.Get("UR3") != null;
+        }
+    }
+
     internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password)
     {
         var engine = new PdfEngine(stream, leaveOpen);
@@ -230,6 +239,7 @@ internal sealed class PdfEngine : IDisposable
         using var release = ReleaseAfter();
         EnsureDocumentChange();
         RequireModify();
+        ApplyUsageRights(null, null);
         PdfObject.Dict info = EditInfo();
         if (value == null)
         {
@@ -254,6 +264,7 @@ internal sealed class PdfEngine : IDisposable
 
         EnsureDocumentChange();
         RequireModify();
+        ApplyUsageRights(null, null);
         PdfObject.Dict info = EditInfo();
         if (value == null)
         {
@@ -281,6 +292,7 @@ internal sealed class PdfEngine : IDisposable
         using var release = ReleaseAfter();
         EnsureDocumentChange();
         RequireModify();
+        ApplyUsageRights(null, null);
         if (explicitModification)
         {
             _modDateExplicit = true;
@@ -324,6 +336,7 @@ internal sealed class PdfEngine : IDisposable
         using var release = ReleaseAfter();
         EnsureDocumentChange();
         RequireModify();
+        ApplyUsageRights(null, null);
         var copy = new byte[utf8Packet.Length];
         utf8Packet.CopyTo(copy);
         WriteXmp(copy);
@@ -419,6 +432,7 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfFieldValueException("The value exceeds /MaxLen.");
         }
 
+        ApplyUsageRights("Form", "FillIn");
         bool simple = first.FieldType == PdfFieldType.Text
             && !first.Comb
             && !first.RichText
@@ -523,6 +537,7 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
+        ApplyUsageRights("Form", "FillIn");
         bool generated = false;
         if (on == null)
         {
@@ -587,6 +602,12 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
+        if (any && !found)
+        {
+            throw new PdfFieldValueException("The radio export value was not found.");
+        }
+
+        ApplyUsageRights("Form", "FillIn");
         if (!any)
         {
             if (matches.Count == 1 && TryWriteRadioAppearances(matches, exportValue))
@@ -603,11 +624,6 @@ internal sealed class PdfEngine : IDisposable
             SetNameValue(matches, exportValue, setAppearanceState: false);
             SetNeedAppearances(true);
             return PdfAppearanceDisposition.NeedAppearances;
-        }
-
-        if (!found)
-        {
-            throw new PdfFieldValueException("The radio export value was not found.");
         }
 
         foreach (FieldSlot slot in matches)
@@ -672,6 +688,7 @@ internal sealed class PdfEngine : IDisposable
             RequireOption(first, item);
         }
 
+        ApplyUsageRights("Form", "FillIn");
         foreach (FieldSlot slot in matches)
         {
             PdfObject.Dict owner = (PdfObject.Dict)EditAny(slot.ValueObjectId);
@@ -756,6 +773,9 @@ internal sealed class PdfEngine : IDisposable
         using var release = ReleaseAfter();
         EnsureDocumentChange();
         RequireModify();
+        List<AttachmentSlot> slots = ReadAttachments();
+        int replaced = slots.RemoveAll(slot => slot.Name == name);
+        ApplyUsageRights("EF", replaced == 0 ? "Create" : "Modify");
         long start = content.Position;
         long length = content.Length - start;
         var embedded = new PdfObject.Dict();
@@ -791,8 +811,6 @@ internal sealed class PdfEngine : IDisposable
             _ownedStreams.Add(content);
         }
 
-        List<AttachmentSlot> slots = ReadAttachments();
-        slots.RemoveAll(slot => slot.Name == name);
         slots.Add(new AttachmentSlot(name, PdfTextCodec.Encode(name).Raw, specId, options?.Description, options?.MimeType, length, streamId));
         WriteAttachments(slots);
         return new PdfAttachment(this, name, options?.Description, options?.MimeType, length);
@@ -815,6 +833,7 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfAttachmentNotFoundException(name);
         }
 
+        ApplyUsageRights("EF", "Delete");
         WriteAttachments(slots);
     }
 
@@ -954,6 +973,7 @@ internal sealed class PdfEngine : IDisposable
                 _id = NewId();
             }
 
+            ApplyUsageRights(null, null);
             DateTimeOffset? signingTime = options.Kind == PdfSignatureKind.DocTimeStamp
                 ? null
                 : options.SigningTime ?? DateTimeOffset.UtcNow;
@@ -2239,6 +2259,92 @@ internal sealed class PdfEngine : IDisposable
         {
             throw new PdfEncryptionRestrictedException();
         }
+    }
+
+    // Spec 7.3: the catalog /Perms /UR3 usage-rights signature is kept only when its UR3 transform parameters
+    // (ISO 32000-1 12.8.2.3, Table 255) grant the write: `right` is listed in the `category` array. A write that no
+    // right grants (a null category), and a /UR3 whose transform is absent, does not resolve, is malformed, or is
+    // unknown, removes /UR3 from /Perms in the same revision. Callers run this after every check that can refuse
+    // the write, so a refused write still does not dirty the document.
+    private void ApplyUsageRights(string? category, string? right)
+    {
+        PdfObject? permsValue = CatalogDict().Get("Perms");
+        if (ResolveMaybe(permsValue) is not PdfObject.Dict perms || perms.Get("UR3") is not PdfObject usageRights)
+        {
+            return;
+        }
+
+        if (category != null && right != null && UsageRightsGrant(usageRights, category, right))
+        {
+            return;
+        }
+
+        if (permsValue is PdfObject.Ref reference && Load(reference.ObjectId) is PdfObject.Dict)
+        {
+            ((PdfObject.Dict)EditAny(reference.ObjectId)).Remove("UR3");
+            return;
+        }
+
+        var copy = (PdfObject.Dict)perms.DeepClone();
+        copy.Remove("UR3");
+        EditCatalog().Set("Perms", copy);
+    }
+
+    private bool UsageRightsGrant(PdfObject usageRights, string category, string right)
+    {
+        if (Resolve(usageRights) is not PdfObject.Dict signature
+            || ResolveMaybe(signature.Get("Reference")) is not PdfObject.Arr references
+            || references.Items.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (PdfObject item in references.Items)
+        {
+            if (Resolve(item) is not PdfObject.Dict reference
+                || NameOf(ResolveMaybe(reference.Get("TransformMethod"))) != "UR3"
+                || ResolveMaybe(reference.Get("TransformParams")) is not PdfObject.Dict parameters
+                || !IsUsageRightsVersion(parameters.Get("V"))
+                || !ListsRight(ResolveMaybe(parameters.Get(category)), right))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // ISO 32000-1 Table 255: /V is the name 2.2, which is also its default. An unknown version enables no rights.
+    private bool IsUsageRightsVersion(PdfObject? value)
+    {
+        if (value == null)
+        {
+            return true;
+        }
+
+        return !IsDangling(value) && NameOf(Resolve(value)) == "2.2";
+    }
+
+    private bool ListsRight(PdfObject? value, string right)
+    {
+        if (value is not PdfObject.Arr rights)
+        {
+            return false;
+        }
+
+        bool found = false;
+        foreach (PdfObject item in rights.Items)
+        {
+            string? name = NameOf(Resolve(item));
+            if (name == null)
+            {
+                return false;
+            }
+
+            found |= name == right;
+        }
+
+        return found;
     }
 
     private int CertificationLevel()

@@ -39,7 +39,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and /EF Create, Delete, and Modify. Under spec 7.3 (W-67) a fill or an attachment edit keeps /UR3; a metadata write or a signature removes it in the same revision.",
         "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill."
       ],
       "validators": [
@@ -143,7 +143,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and /EF Create, Delete, and Modify. Under spec 7.3 (W-67) a fill or an attachment edit keeps /UR3; a metadata write or a signature removes it in the same revision.",
         "Writer quirk (G2 corpus finding D1, tolerated under W-66): the embedded file's Flate stream ends one byte before /Length, which counts the LF before endstream (ISO 32000-1 7.3.8.1 excludes it). The library found the Adler-32 only in the last four bytes of the stream data and failed with a false checksum error; it now also looks in front of a final CR, LF, or CR LF. qpdf, pypdf, and Python zlib decode the same 15,003 bytes."
       ],
       "validators": [
@@ -350,7 +350,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and /EF Create, Delete, and Modify. Under spec 7.3 (W-67) a fill or an attachment edit keeps /UR3; a metadata write or a signature removes it in the same revision.",
         "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill.",
         "The fill field is a comb field (/Ff bit 25, /MaxLen 12, /DA CourierNewPSMT), so the library sets /NeedAppearances instead of drawing it (ACCEPTANCE: comb sets /NeedAppearances)."
       ],
@@ -453,7 +453,7 @@
         "fill": null
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and /EF Create, Delete, and Modify. Under spec 7.3 (W-67) a fill or an attachment edit keeps /UR3; a metadata write or a signature removes it in the same revision.",
         "XFA-only content: W-76 classifies it."
       ],
       "validators": [
@@ -555,7 +555,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and no /EF rights. Under spec 7.3 (W-67) a fill keeps /UR3; a metadata write, an attachment edit, or a signature removes it in the same revision.",
         "The linearization hint tables are inconsistent (qpdf --check exits 3 with hint warnings only); readers ignore hints, and the first incremental update ends linearization."
       ],
       "validators": [
@@ -970,7 +970,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights. The library keeps /UR3 on write today; spec 7.3 and W-67 decide keep or remove."
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and no /EF rights. Under spec 7.3 (W-67) a fill keeps /UR3; a metadata write, an attachment edit, or a signature removes it in the same revision."
       ],
       "validators": [
         {

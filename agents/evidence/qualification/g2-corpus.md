@@ -53,7 +53,8 @@ W-13 recorded these without fixing them and asserted each as a controlled except
 
 ### Known Phase 1 gaps the corpus now has real fixtures for
 
-- Usage rights: after a metadata revision or a fill of a Reader-extended form (IRS W-9, 1040-ES, VA 21-4138, CMS-40B, Grants.gov SF-424), `/Perms /UR3` is still present. Spec 7.3 requires keeping it only when it provably permits the write. W-67.
+- Usage rights: before W-67, `/Perms /UR3` stayed after a metadata revision or a fill of a Reader-extended form (IRS W-9, 1040-ES, VA 21-4138, CMS-40B, Grants.gov SF-424). Disposition (W-67): spec 7.3 is applied to every write. pypdf reads `/UR3` kept after a fill (every form grants `/Form FillIn`) and removed after a metadata revision or a signature; an added attachment keeps it except on CMS-40B, which grants no `/EF` rights. Regression tests: `CorpusTests` and `UsageRightsTests`.
+- Name-tree order (W-67 observation, W-86): adding an attachment whose name sorts after `Press Quality(1).joboptions` to the IRS 1040-ES, whose name-tree key is UTF-16BE, makes qpdf 12.4.2 `--check` warn that the keys are not sorted. The library orders keys by their bytes; qpdf compares them as text.
 - Hybrid XFA: filling the IRS W-9 updates the AcroForm value but not the XFA `datasets` packet. W-76.
 - The VA 21-4138 first-name field is a comb field, so a fill sets `/NeedAppearances` as documented.
 - Every nonzero `qpdf --check` exit on a supported original comes from linearization hint tables (CMS-40B, FAA 8710-1, OPM OF-306, NIST SP 1271, Beige Book, both NACA scans, NBS Circular 1). The library ignores hints, and its incremental output checks clean.
