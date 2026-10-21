@@ -560,7 +560,7 @@ public class UsageRightsTests
     // and timestamps that create a field, and the timestamp into Signature-2 removed /UR3, and pyHanko reported OTHER
     // because /Perms differed. pyHanko 0.38.0 still reports OTHER for reasons unrelated to /Perms: CMS-40B is a tagged
     // form, and a revision that changes a widget the structure tree references is unexplained (W-88), and an attachment
-    // adds /AF to the catalog. The writes that touch neither are accepted.
+    // changes the catalog /Names and /AF (W-92). The writes that touch neither are accepted.
     [Fact]
     public void signed_reader_extended_form_keeps_usage_rights_and_pyhanko_finds_no_perms_change()
     {
@@ -631,6 +631,99 @@ public class UsageRightsTests
                 }
 
                 Assert.True(after.GetProperty("usageRights").GetBoolean(), output.Value + ": /UR3 was removed");
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // W-92 and W-93: on a built form without usage rights, with and without an existing attachment listed in /AF, pyHanko
+    // approves or the library time-stamps, and the library then adds an attachment. The earlier signature stays intact
+    // and valid, and pyHanko 0.38.0 reports the revision OTHER, because its policy allows no catalog /Names or /AF change
+    // after a signature, whoever writes it. A metadata write on the same bases is the control it accepts. The reason is
+    // not pinned: pyHanko reports only its first objection.
+    [Fact]
+    public void attachment_added_after_a_signature_leaves_it_intact_and_pyhanko_reports_other()
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));
+            var args = new List<string> { ExternalTool.Fixture("usage_rights_samples.py"), "approve" };
+            var bases = new Dictionary<string, string>();
+            foreach (bool existing in new[] { false, true })
+            {
+                string name = existing ? "attachment" : "plain";
+                byte[] form = SignableForm(existing);
+                File.WriteAllBytes(Path.Combine(directory, name + ".pdf"), form);
+                args.Add(Path.Combine(directory, name + ".pdf"));
+                args.Add(Path.Combine(directory, name + "-approved.pdf"));
+                bases.Add(name + "-approved", "Approve");
+
+                using PdfDocument document = PdfDocument.Open(new MemoryStream(form, writable: false));
+                var stamped = new MemoryStream();
+                document.Sign(stamped, Timestamp("Stamp"), stamp, leaveOpen: true);
+                File.WriteAllBytes(Path.Combine(directory, name + "-stamped.pdf"), stamped.ToArray());
+                bases.Add(name + "-stamped", "Stamp");
+            }
+
+            using (Process process = ExternalTool.Start("python", args.ToArray()))
+            {
+                (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
+                Assert.True(exitCode == 0, stderr + stdout);
+            }
+
+            var writes = new Dictionary<string, Action<PdfDocument>>
+            {
+                ["attachment add"] = document => document.Attachments.Add("invoice.xml", new MemoryStream(Encoding.ASCII.GetBytes("<Invoice/>"))),
+                ["metadata"] = document => document.Metadata.Title = "Signed",
+            };
+
+            var outputs = new Dictionary<string, (string Label, string Earlier, bool Attachment)>();
+            foreach (KeyValuePair<string, string> signedBase in bases)
+            {
+                byte[] signed = File.ReadAllBytes(Path.Combine(directory, signedBase.Key + ".pdf"));
+                foreach (KeyValuePair<string, Action<PdfDocument>> write in writes)
+                {
+                    using var source = new MemoryStream(signed, writable: false);
+                    using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+                    write.Value(document);
+                    var destination = new MemoryStream();
+                    document.SaveIncremental(destination, leaveOpen: true);
+                    byte[] output = destination.ToArray();
+                    string label = signedBase.Key + ", " + write.Key;
+                    Assert.True(output.AsSpan(0, signed.Length).SequenceEqual(signed), label + ": the signed file is not a prefix");
+                    string path = Path.Combine(directory, "output-" + outputs.Count.ToString(CultureInfo.InvariantCulture) + ".pdf");
+                    File.WriteAllBytes(path, output);
+                    outputs.Add(path, (label, signedBase.Value, write.Key == "attachment add"));
+                }
+            }
+
+            JsonElement probe = CorpusManifest.Probe(outputs.Keys.ToArray());
+            foreach (KeyValuePair<string, (string Label, string Earlier, bool Attachment)> output in outputs)
+            {
+                JsonElement after = probe.GetProperty(output.Key);
+                string label = output.Value.Label;
+                Assert.Null(CorpusManifest.Text(after, "openError"));
+                Assert.Equal(0, after.GetProperty("qpdfCheck").GetProperty("exit").GetInt32());
+                JsonElement earlier = Assert.Single(after.GetProperty("signatures").EnumerateArray().ToList());
+                Assert.Equal(output.Value.Earlier, CorpusManifest.Text(earlier, "field"));
+                Assert.True(earlier.GetProperty("intact").GetBoolean() && earlier.GetProperty("valid").GetBoolean(), label + ": the earlier signature is not intact and valid");
+                string? modification = CorpusManifest.Text(earlier, "modification");
+                if (output.Value.Attachment)
+                {
+                    Assert.True(modification == "OTHER", label + ": " + modification);
+                    Assert.NotNull(CorpusManifest.Text(earlier, "suspicious"));
+                    Assert.Contains(after.GetProperty("attachments").EnumerateArray(), attachment => CorpusManifest.Text(attachment, "name") == "invoice.xml");
+                }
+                else
+                {
+                    Assert.True(modification != "OTHER", label + ": " + CorpusManifest.Text(earlier, "suspicious"));
+                }
             }
         }
         finally
@@ -799,6 +892,30 @@ public class UsageRightsTests
         }
 
         builder.Indirect(10, SignatureBody(reference));
+        return builder.Finish("/ID [<0123456789abcdef0123456789abcdef> <0123456789abcdef0123456789abcdef>]");
+    }
+
+    // A W-92 form without usage rights: a text field Name and an empty signature field Signer, and optionally an
+    // attachment existing.txt in an indirect /Names /EmbeddedFiles tree and an indirect catalog /AF, as an e-invoice
+    // that already carries its XML would have.
+    private static byte[] SignableForm(bool existingAttachment)
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R] /DA (/Helv 0 Tf 0 g) /DR << /Font << /Helv 6 0 R >> >> >>" + (existingAttachment ? " /Names 20 0 R /AF 24 0 R" : string.Empty) + " >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << >> /Annots [4 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (Name) /Rect [72 700 300 724] /DA (/Helv 12 Tf 0 g) /F 4 /P 3 0 R >>");
+        builder.Indirect(5, "<< /Type /Annot /Subtype /Widget /FT /Sig /T (Signer) /Rect [300 600 500 640] /F 4 /P 3 0 R >>");
+        builder.Indirect(6, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+        if (existingAttachment)
+        {
+            builder.Indirect(20, "<< /EmbeddedFiles 21 0 R >>");
+            builder.Indirect(21, "<< /Names [(existing.txt) 22 0 R] >>");
+            builder.Indirect(22, "<< /Type /Filespec /F (existing.txt) /UF (existing.txt) /EF << /F 23 0 R >> >>");
+            builder.StreamObject(23, "/Type /EmbeddedFile", Encoding.ASCII.GetBytes("existing"));
+            builder.Indirect(24, "[22 0 R]");
+        }
+
         return builder.Finish("/ID [<0123456789abcdef0123456789abcdef> <0123456789abcdef0123456789abcdef>]");
     }
 
