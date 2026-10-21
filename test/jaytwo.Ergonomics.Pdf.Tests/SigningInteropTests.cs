@@ -89,7 +89,7 @@ public class SigningInteropTests
     }
 
     [Fact]
-    public void pkcs11_signature_matches_pkcs1_and_pyhanko_trusts_the_chain()
+    public void pkcs11_signature_matches_pkcs1_and_pyhanko_and_pdfsig_trust_the_chain()
     {
         string libraryPath = LocatePkcs11();
         string directory = ExternalTool.TempDirectory();
@@ -158,6 +158,7 @@ public class SigningInteropTests
             string report = Validate(signed, root.RawData, null, "entire", "chain");
             Assert.Contains("intact=true", report, StringComparison.Ordinal);
             Assert.Contains("trusted=true", report, StringComparison.Ordinal);
+            Assert.Contains("Signer Certificate Common Name: PKCS11 Leaf", PdfsigAccepts(signed, root.RawData, null, wholeFile: true));
         }
         finally
         {
@@ -290,6 +291,122 @@ public class SigningInteropTests
         }
     }
 
+    [Fact]
+    public void pdfsig_and_pyhanko_verify_new_and_existing_field_signatures_and_trust_the_chain_from_the_root()
+    {
+        using var rootKey = RSA.Create(2048);
+        using var intermediateKey = RSA.Create(2048);
+        using var leafKey = RSA.Create(2048);
+        using X509Certificate2 root = CreateAuthority("Interop Root", rootKey, null);
+        using X509Certificate2 intermediate = CreateAuthority("Interop Intermediate", intermediateKey, root);
+        using X509Certificate2 leaf = CreateLeaf("Interop Leaf", leafKey, intermediate);
+        var signer = new RsaSigner(leafKey, leaf.RawData, new[] { intermediate.RawData, root.RawData });
+        var cases = new (string Fixture, string? FieldName, string Expected)[]
+        {
+            ("pypdf-base.pdf", null, "Signature1"),
+            ("pyhanko-sigfield.pdf", "ExistingSig", "ExistingSig"),
+        };
+        foreach ((string fixture, string? fieldName, string expected) in cases)
+        {
+            byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture(fixture)), null, fieldName, signer, null, DateTimeOffset.UtcNow);
+            List<string> verdict = PdfsigAccepts(signed, root.RawData, null, wholeFile: true);
+            Assert.Contains("Signature Field Name: " + expected, verdict);
+            Assert.Contains("Signer Certificate Common Name: Interop Leaf", verdict);
+
+            // Trust is a separate result: with no configured root the signature is still valid but not trusted.
+            PdfsigAccepts(signed, null, null, wholeFile: true);
+
+            string report = Validate(signed, root.RawData, null, "entire", "chain");
+            Assert.Contains("intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("trusted=true", report, StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    public void pdfsig_and_pyhanko_verify_a_timestamped_signature_an_encrypted_file_and_a_later_revision()
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            using var rootKey = RSA.Create(2048);
+            using var leafKey = RSA.Create(2048);
+            using X509Certificate2 root = CreateAuthority("Interop Root", rootKey, null);
+            using X509Certificate2 leaf = CreateLeaf("Interop Leaf", leafKey, root);
+            var signer = new RsaSigner(leafKey, leaf.RawData, new[] { root.RawData });
+            byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf"));
+
+            // pdfsig does not check the embedded RFC 3161 token; pyHanko does.
+            byte[] timestamped = Sign(original, null, null, signer, new OpenSslTimestampAuthority(openssl, directory), DateTimeOffset.UtcNow);
+            PdfsigAccepts(timestamped, root.RawData, null, wholeFile: true);
+            string report = Validate(timestamped, root.RawData, null, "entire", "timestamp,tsa=" + Path.Combine(directory, "root.pem"));
+            Assert.Contains("timestamp_intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
+
+            // The signing time must be real here. pdfsig 26.08.0 treats a CMS signing time at the Unix epoch as missing and
+            // falls back to /M, which on an encrypted file it decrypts because the library writes it in plaintext (W-97).
+            // The result is not a date, and pdfsig crashes on it.
+            byte[] encrypted = Sign(File.ReadAllBytes(ExternalTool.Fixture("qpdf-encrypted.pdf")), "user-secret", null, signer, null, DateTimeOffset.UtcNow);
+            PdfsigAccepts(encrypted, root.RawData, "user-secret", wholeFile: true);
+            Assert.Contains("intact=true", Validate(encrypted, root.RawData, "user-secret", "entire", null), StringComparison.Ordinal);
+
+            // A later revision leaves the signed ranges as they were; pdfsig reports only that they no longer reach the end.
+            byte[] signed = Sign(original, null, null, signer, null, DateTimeOffset.UtcNow);
+            byte[] revised = ReviseTitle(signed, "Foreign base", "After signing");
+            Assert.Equal(Pdfsig.SignedRanges(signed), Pdfsig.SignedRanges(revised));
+            PdfsigAccepts(revised, root.RawData, null, wholeFile: false);
+            Assert.Contains("intact=true", Validate(revised, root.RawData, null, "revision", null), StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void pdfsig_and_pyhanko_reject_a_tampered_byte_and_a_signature_from_another_key()
+    {
+        using var key = RSA.Create(2048);
+        using var otherKey = RSA.Create(2048);
+        using X509Certificate2 certificate = CreateLeaf("Interop Signer", key, null);
+        byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf"));
+
+        byte[] tampered = Sign(original, null, null, new RsaSigner(key, certificate.RawData, Array.Empty<byte[]>()), null, DateTimeOffset.UtcNow);
+        Assert.Equal((byte)'3', tampered[7]);
+        tampered[7] = (byte)'4';
+        (int exitCode, string report) = Pdfsig.Verify(tampered, new[] { certificate.RawData }, null);
+        Assert.True(exitCode != 0, report);
+        Assert.Contains(Pdfsig.DigestMismatch, Pdfsig.Signatures(report)[0]);
+        Assert.DoesNotContain(Pdfsig.Valid, report, StringComparison.Ordinal);
+        Validate(tampered, certificate.RawData, null, "entire", "broken");
+
+        // The certificate names one key and the host signs with another: the byte range is intact, the signature is not.
+        byte[] mismatched = Sign(original, null, null, new RsaSigner(otherKey, certificate.RawData, Array.Empty<byte[]>()), null, DateTimeOffset.UtcNow);
+        (exitCode, report) = Pdfsig.Verify(mismatched, new[] { certificate.RawData }, null);
+        Assert.True(exitCode != 0, report);
+        Assert.Contains("Signature Validation: Signature is Invalid.", Pdfsig.Signatures(report)[0]);
+        Assert.DoesNotContain(Pdfsig.Valid, report, StringComparison.Ordinal);
+        Validate(mismatched, certificate.RawData, null, "entire", "invalid");
+    }
+
+    // W-14: pdfsig must accept the file's one signature as the library writes it today: adbe.pkcs7.detached, SHA-256,
+    // over exactly the /ByteRange in the file, valid, and trusted only when the root is configured.
+    private static List<string> PdfsigAccepts(byte[] signed, byte[]? root, string? password, bool wholeFile)
+    {
+        (int exitCode, string report) = Pdfsig.Verify(signed, root == null ? Array.Empty<byte[]>() : new[] { root }, password);
+        List<List<string>> signatures = Pdfsig.Signatures(report);
+        Assert.True(exitCode == 0 && signatures.Count == 1, report);
+        List<string> signature = signatures[0];
+        Assert.Contains("Signature Type: adbe.pkcs7.detached", signature);
+        Assert.Contains("Signing Hash Algorithm: SHA-256", signature);
+        Assert.Contains(Pdfsig.SignedRanges(signed), signature);
+        Assert.Contains(wholeFile ? Pdfsig.WholeFile : Pdfsig.NotWholeFile, signature);
+        Assert.Contains(Pdfsig.Valid, signature);
+        Assert.Contains(root == null ? Pdfsig.Untrusted : Pdfsig.Trusted, signature);
+        return signature;
+    }
+
     private static byte[] Sign(byte[] pdf, X509Certificate2 certificate, RSA key, IReadOnlyList<byte[]> chain, ITimestampAuthority? authority)
     {
         return Sign(pdf, new RsaSigner(key, certificate.RawData, chain), authority);
@@ -297,12 +414,17 @@ public class SigningInteropTests
 
     private static byte[] Sign(byte[] pdf, IPdfExternalSigner signer, ITimestampAuthority? authority)
     {
+        return Sign(pdf, null, null, signer, authority, TestCompat.UnixEpoch);
+    }
+
+    private static byte[] Sign(byte[] pdf, string? password, string? fieldName, IPdfExternalSigner signer, ITimestampAuthority? authority, DateTimeOffset signingTime)
+    {
         using var source = new MemoryStream(pdf, writable: false);
-        using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var document = PdfDocument.Open(source, password, leaveOpen: true);
         var destination = new MemoryStream();
         document.Sign(
             destination,
-            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = TestCompat.UnixEpoch },
+            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = signingTime, FieldName = fieldName },
             authority == null
                 ? new CmsDetachedSignatureProvider(signer)
                 : new CmsDetachedSignatureProvider(signer, authority),
