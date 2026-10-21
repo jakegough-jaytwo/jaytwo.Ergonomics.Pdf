@@ -12,15 +12,15 @@ public class OpenSslTimestampTests
     [Fact]
     public void openssl_tsa_document_timestamp_is_accepted_by_pyhanko_and_openssl_verify()
     {
-        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", ExternalTool.Executable("openssl"));
+        string openssl = OpenSslTimestampAuthority.Locate();
         string directory = ExternalTool.TempDirectory();
         try
         {
-            CreatePki(openssl, directory);
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
             var authority = new OpenSslTimestampAuthority(openssl, directory);
             byte[] stamped = Stamp(authority);
 
-            string request = Checked(openssl, "ts", "-query", "-in", authority.RequestPath, "-text");
+            string request = OpenSslTimestampAuthority.Checked(openssl, "ts", "-query", "-in", authority.RequestPath, "-text");
             Assert.Contains("Certificate required: yes", request, StringComparison.Ordinal);
             Assert.Contains("Nonce: 0x", request, StringComparison.Ordinal);
 
@@ -47,11 +47,11 @@ public class OpenSslTimestampTests
     [Fact]
     public void verifiers_reject_an_untrusted_root_and_a_tampered_byte()
     {
-        string openssl = ExternalTool.Locate("JAYTWO_OPENSSL", ExternalTool.Executable("openssl"));
+        string openssl = OpenSslTimestampAuthority.Locate();
         string directory = ExternalTool.TempDirectory();
         try
         {
-            CreatePki(openssl, directory);
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
             byte[] stamped = Stamp(new OpenSslTimestampAuthority(openssl, directory));
             byte[] tampered = (byte[])stamped.Clone();
             Assert.Equal((byte)'3', tampered[7]);
@@ -79,36 +79,6 @@ public class OpenSslTimestampTests
         {
             Directory.Delete(directory, recursive: true);
         }
-    }
-
-    private static void CreatePki(string openssl, string directory)
-    {
-        string config = Path.Combine(directory, "pki.cnf");
-        File.WriteAllText(
-            config,
-            "[req]\ndistinguished_name = dn\nprompt = no\n[dn]\nCN = unused\n"
-            + "[v3_ca]\nbasicConstraints = critical,CA:TRUE\nkeyUsage = critical,keyCertSign,cRLSign\nsubjectKeyIdentifier = hash\n"
-            + "[v3_tsa]\nbasicConstraints = critical,CA:FALSE\nkeyUsage = critical,digitalSignature\n"
-            + "extendedKeyUsage = critical,timeStamping\nsubjectKeyIdentifier = hash\nauthorityKeyIdentifier = keyid\n");
-        Root(openssl, directory, config, "root", "/CN=OpenSSL Test Root");
-        Root(openssl, directory, config, "other", "/CN=OpenSSL Untrusted Root");
-        Checked(openssl, "req", "-new", "-newkey", "rsa:2048", "-nodes", "-config", config, "-subj", "/CN=OpenSSL Test TSA", "-keyout", Path.Combine(directory, "tsa.key"), "-out", Path.Combine(directory, "tsa.csr"));
-        Checked(openssl, "x509", "-req", "-in", Path.Combine(directory, "tsa.csr"), "-CA", Path.Combine(directory, "root.pem"), "-CAkey", Path.Combine(directory, "root.key"), "-set_serial", "2", "-days", "2", "-extfile", config, "-extensions", "v3_tsa", "-out", Path.Combine(directory, "tsa.pem"));
-
-        string slashed = directory.Replace('\\', '/');
-        File.WriteAllText(Path.Combine(directory, "serial"), "01\n");
-        File.WriteAllText(
-            Path.Combine(directory, "ts.cnf"),
-            "[tsa]\ndefault_tsa = tsa1\n[tsa1]\n"
-            + "serial = " + slashed + "/serial\n"
-            + "signer_cert = " + slashed + "/tsa.pem\n"
-            + "signer_key = " + slashed + "/tsa.key\n"
-            + "signer_digest = sha256\ndefault_policy = 1.2.3.4.1\ndigests = sha256\ness_cert_id_alg = sha256\naccuracy = secs:1\n");
-    }
-
-    private static void Root(string openssl, string directory, string config, string name, string subject)
-    {
-        Checked(openssl, "req", "-x509", "-newkey", "rsa:2048", "-nodes", "-config", config, "-extensions", "v3_ca", "-subj", subject, "-days", "2", "-keyout", Path.Combine(directory, name + ".key"), "-out", Path.Combine(directory, name + ".pem"));
     }
 
     private static byte[] Stamp(ITimestampAuthority authority)
@@ -189,37 +159,5 @@ public class OpenSslTimestampTests
             Path.Combine(directory, root));
         (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
         return (exitCode, stdout + stderr);
-    }
-
-    private static string Checked(string fileName, params string[] args)
-    {
-        using Process process = ExternalTool.Start(fileName, args);
-        return ExternalTool.Output(process);
-    }
-
-    private sealed class OpenSslTimestampAuthority : ITimestampAuthority
-    {
-        private readonly string _openssl;
-        private readonly string _directory;
-
-        public OpenSslTimestampAuthority(string openssl, string directory)
-        {
-            _openssl = openssl;
-            _directory = directory;
-            Token = Array.Empty<byte>();
-        }
-
-        public string RequestPath => Path.Combine(_directory, "request.tsq");
-
-        public byte[] Token { get; private set; }
-
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
-        {
-            string tokenPath = Path.Combine(_directory, "token.tst");
-            File.WriteAllBytes(RequestPath, timeStampReqDer.ToArray());
-            Checked(_openssl, "ts", "-reply", "-config", Path.Combine(_directory, "ts.cnf"), "-queryfile", RequestPath, "-token_out", "-out", tokenPath);
-            Token = File.ReadAllBytes(tokenPath);
-            return Token;
-        }
     }
 }

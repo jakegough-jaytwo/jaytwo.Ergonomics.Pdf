@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -16,9 +18,11 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 // Delete for adding, replacing, or removing an attachment, and /Signature Modify for a signature into an existing empty
 // signature field. Every other write, including a signature that creates a field and a document timestamp, and every
 // transform that is absent, unresolvable, malformed, unknown, or insufficient, removes /UR3 from /Perms in the same
-// revision, and the write proceeds.
+// revision, and the write proceeds. On a document that already has a signature (approval, certification, or document
+// timestamp), no write changes /Perms, whatever the transform grants (W-90).
 public class UsageRightsTests
 {
+    private const string Unsigned = "unsigned";
     private const string FillIn = "Form/FillIn";
     private const string Create = "EF/Create";
     private const string Modify = "EF/Modify";
@@ -28,6 +32,18 @@ public class UsageRightsTests
     private const string Indirect = " /Perms 9 0 R";
 
     private static readonly string[] EveryRight = { FillIn, Create, Modify, Delete, SignField };
+
+    // How the field Signed of the test document is signed. Certification also puts /DocMDP in /Perms.
+    private static readonly string[] SignedKinds = { "approval", "certified P 2", "certified P 3", "document timestamp" };
+
+    // The W-88 Reader-extended forms: a UR3 transform that grants only fills, one that also grants signing an
+    // existing field, and a /UR3 with no /Reference.
+    private static readonly Dictionary<string, string> BuiltTransforms = new Dictionary<string, string>
+    {
+        ["fill"] = "/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn] >>") + "]",
+        ["sign"] = "/Reference [" + Transform("UR3", "<< /V /2.2 /Form [/FillIn] /Signature [/Modify] >>") + "]",
+        ["noref"] = string.Empty,
+    };
 
     private static readonly Dictionary<string, PolicyCase> Cases = new[]
     {
@@ -103,10 +119,15 @@ public class UsageRightsTests
 
     public static IEnumerable<object[]> Matrix => Writes.Keys.SelectMany(write => Cases.Keys.Select(policy => new object[] { write, policy }));
 
-    public static IEnumerable<object[]> PolicyNames => Cases.Keys.Select(policy => new object[] { policy });
+    public static IEnumerable<object[]> SignedMatrix => SignedKinds.SelectMany(signedBy => Matrix.Select(row => new object[] { signedBy, row[0], row[1] }));
+
+    public static IEnumerable<object[]> PolicyNamesUnsignedAndSigned => new[] { Unsigned, "approval", "document timestamp" }.SelectMany(signedBy => Cases.Keys.Select(policy => new object[] { signedBy, policy }));
+
+    public static IEnumerable<object[]> PyHankoModes => new[] { new object[] { "certify-p2" }, new object[] { "certify-p3" }, new object[] { "approve" } };
 
     // The Reader-extended corpus forms (G2) and whether their UR3 transform grants /EF Create, Delete, and Modify, as
     // pypdf 6.21.1 reads them. CMS-40B grants form, annotation, and signature rights but no /EF rights. All grant /Form FillIn.
+    // Only cms-40b-pyhanko-approved already has a signature, so no write removes its /UR3 (W-90).
     public static IEnumerable<object[]> ReaderExtended => new[]
     {
         new object[] { "cms-40b", false },
@@ -125,7 +146,7 @@ public class UsageRightsTests
     {
         PolicyWrite write = Writes[writeName];
         PolicyCase policy = Cases[policyName];
-        byte[] original = Document(policy);
+        byte[] original = Document(policy, Unsigned);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
         Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
@@ -148,35 +169,76 @@ public class UsageRightsTests
         Assert.Equal(kept, reopened.HasUsageRights);
     }
 
+    // W-90: once the document has a signature, /Perms is the same in the new revision whatever the transform grants.
+    // DocMDP P 2 and P 3 still refuse metadata and attachment writes before the policy runs.
     [Theory]
-    [MemberData(nameof(PolicyNames))]
-    public void fill_and_metadata_write_in_one_revision_remove_usage_rights(string policyName)
+    [MemberData(nameof(SignedMatrix))]
+    public void write_on_a_signed_document_leaves_perms_unchanged_whatever_the_transform_grants(string signedBy, string writeName, string policyName)
+    {
+        PolicyWrite write = Writes[writeName];
+        PolicyCase policy = Cases[policyName];
+        byte[] original = Document(policy, signedBy);
+        using var source = new MemoryStream(original, writable: false);
+        using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+        Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
+
+        var destination = new MemoryStream();
+        if (signedBy.StartsWith("certified", StringComparison.Ordinal) && !write.CertificationAllows)
+        {
+            Assert.Throws<PdfCertificationLockedException>(() => write.Run(document, destination));
+            Assert.Equal(0, destination.Length);
+            Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
+            return;
+        }
+
+        write.Run(document, destination);
+        byte[] output = destination.ToArray();
+        Assert.True(output.Length > original.Length);
+        Assert.True(output.AsSpan(0, original.Length).SequenceEqual(original), "the original is not a prefix");
+        string appendix = Encoding.ASCII.GetString(output, original.Length, output.Length - original.Length);
+        Assert.Equal(1, Count(appendix, "%%EOF"));
+        foreach ((int id, string _) in policy.Objects)
+        {
+            Assert.DoesNotContain("\n" + id.ToString(CultureInfo.InvariantCulture) + " 0 obj", appendix, StringComparison.Ordinal);
+        }
+
+        Assert.Equal(PermsValue(Encoding.ASCII.GetString(original)), PermsValue(Encoding.ASCII.GetString(output)));
+        using var reopened = PdfDocument.Open(new MemoryStream(output, writable: false));
+        Assert.Equal(policy.HasUsageRights, reopened.HasUsageRights);
+    }
+
+    [Theory]
+    [MemberData(nameof(PolicyNamesUnsignedAndSigned))]
+    public void fill_and_metadata_write_in_one_revision_remove_usage_rights_unless_signed(string signedBy, string policyName)
     {
         PolicyCase policy = Cases[policyName];
-        byte[] original = Document(policy);
+        bool signed = signedBy != Unsigned;
+        byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
         document.AcroForm.SetText("Name", "Ada");
-        Assert.Equal(policy.HasUsageRights && policy.Grants.Contains(FillIn), document.HasUsageRights);
+        Assert.Equal(policy.HasUsageRights && (signed || policy.Grants.Contains(FillIn)), document.HasUsageRights);
         document.Metadata.Title = "Usage rights";
         document.AcroForm.SetText("Name", "Grace");
-        Assert.False(document.HasUsageRights);
+        Assert.Equal(policy.HasUsageRights && signed, document.HasUsageRights);
 
         var destination = new MemoryStream();
         document.SaveIncremental(destination, leaveOpen: true);
         byte[] output = destination.ToArray();
         Assert.Equal(1, Count(Encoding.ASCII.GetString(output, original.Length, output.Length - original.Length), "%%EOF"));
         using var reopened = PdfDocument.Open(new MemoryStream(output, writable: false));
-        Assert.False(reopened.HasUsageRights);
+        Assert.Equal(policy.HasUsageRights && signed, reopened.HasUsageRights);
         Assert.Equal("Grace", reopened.AcroForm.GetFields("Name")[0].Value);
         Assert.Equal("Usage rights", reopened.Metadata.Title);
     }
 
-    [Fact]
-    public void refused_writes_keep_usage_rights_and_do_not_dirty_the_document()
+    [Theory]
+    [InlineData(Unsigned)]
+    [InlineData("approval")]
+    public void refused_writes_keep_usage_rights_and_do_not_dirty_the_document(string signedBy)
     {
         PolicyCase policy = Cases["insufficient: no rights categories"];
-        byte[] original = Document(policy);
+        byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
 
@@ -188,11 +250,16 @@ public class UsageRightsTests
         Assert.Throws<PdfAttachmentNotFoundException>(() => document.Attachments.Remove("missing.txt"));
         Assert.True(document.HasUsageRights);
 
-        // A sign refused by the existing-field checks, or failed by the provider, in a new or an existing field.
+        // A sign refused by the existing-field checks, or failed by the provider, in a new or an existing field. The
+        // field Signed has a signature dictionary only on a signed document.
         var failed = new MemoryStream();
         Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Name", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
         Assert.Throws<PdfFieldReadOnlyException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Locked", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
-        Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signed", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        if (signedBy != Unsigned)
+        {
+            Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signed", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        }
+
         Assert.True(document.HasUsageRights);
         Assert.ThrowsAny<Exception>(() => document.Sign(failed, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
         Assert.True(document.HasUsageRights);
@@ -205,8 +272,9 @@ public class UsageRightsTests
         Assert.Equal(original, destination.ToArray());
     }
 
+    // A catalog /Perms /DocMDP alone makes the document signed, even when no field holds the certification.
     [Fact]
-    public void certified_document_applies_the_policy_after_certification_and_keeps_docmdp()
+    public void certified_document_keeps_usage_rights_and_docmdp()
     {
         var builder = new PdfBuilder();
         builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] >>" + Indirect + " >>");
@@ -225,16 +293,123 @@ public class UsageRightsTests
         Assert.Throws<PdfCertificationLockedException>(() => document.Attachments.Add("new.txt", new MemoryStream(new byte[] { 1 })));
         Assert.True(document.HasUsageRights);
 
-        // P 2 allows a fill, which /Form FillIn keeps, and a signature, which removes /UR3 and keeps /DocMDP.
+        // P 2 allows a fill and a signature into a new field, which no right grants; neither changes /Perms.
         document.AcroForm.SetText("Name", "Ada");
         Assert.True(document.HasUsageRights);
         var destination = new MemoryStream();
         document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
 
-        using var reopened = PdfDocument.Open(new MemoryStream(((MemoryStream)destination).ToArray(), writable: false));
-        Assert.False(reopened.HasUsageRights);
+        byte[] output = destination.ToArray();
+        Assert.DoesNotContain("\n9 0 obj", Encoding.ASCII.GetString(output, original.Length, output.Length - original.Length), StringComparison.Ordinal);
+        using var reopened = PdfDocument.Open(new MemoryStream(output, writable: false));
+        Assert.True(reopened.HasUsageRights);
         Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
         Assert.Throws<PdfCertificationLockedException>(() => reopened.Metadata.Title = "Still certified");
+    }
+
+    // W-88 rebuilt (W-90): pyHanko signs a Reader-extended form (certified at P 2 or P 3, or approved) in a new field,
+    // the library then makes each write W-88 checked, and pyHanko's difference analysis accepts every revision: the
+    // earlier signature reports FORM_FILLING or LTA_UPDATES with docmdp_ok, and /UR3 stays. Before W-90, every write
+    // that removed /UR3 made pyHanko report OTHER, ILLEGAL_MODIFICATIONS. The usage-rights signatures are synthesized.
+    [Theory]
+    [MemberData(nameof(PyHankoModes))]
+    public void pyhanko_accepts_every_write_after_a_signature_on_a_reader_extended_form(string mode)
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));
+            var forms = new List<string>();
+            var args = new List<string> { ExternalTool.Fixture("usage_rights_samples.py"), mode };
+            foreach (KeyValuePair<string, string> transform in BuiltTransforms)
+            {
+                foreach (bool direct in new[] { false, true })
+                {
+                    string name = transform.Key + (direct ? "-direct" : "-indirect");
+                    File.WriteAllBytes(Path.Combine(directory, name + ".pdf"), ReaderExtendedForm(transform.Value, direct));
+                    args.Add(Path.Combine(directory, name + ".pdf"));
+                    args.Add(Path.Combine(directory, name + "-signed.pdf"));
+                    forms.Add(name);
+                }
+            }
+
+            using (Process process = ExternalTool.Start("python", args.ToArray()))
+            {
+                (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
+                Assert.True(exitCode == 0, stderr + stdout);
+            }
+
+            using RSA rsa = RSA.Create(2048);
+            var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+            var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));
+            var writes = new Dictionary<string, Action<PdfDocument, Stream>>
+            {
+                ["fill"] = (document, destination) =>
+                {
+                    document.AcroForm.SetText("Name", "Ada");
+                    document.SaveIncremental(destination, leaveOpen: true);
+                },
+                ["sign, existing field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true),
+                ["sign, new field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
+                ["fill, then sign existing field"] = (document, destination) =>
+                {
+                    document.AcroForm.SetText("Name", "Ada");
+                    document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true);
+                },
+                ["document timestamp, existing field"] = (document, destination) => document.Sign(destination, Timestamp("Signer"), stamp, leaveOpen: true),
+                ["document timestamp, new field"] = (document, destination) => document.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
+            };
+
+            var outputs = new Dictionary<string, (string Label, bool AddsSignature)>();
+            foreach (string form in forms)
+            {
+                byte[] signed = File.ReadAllBytes(Path.Combine(directory, form + "-signed.pdf"));
+                foreach (KeyValuePair<string, Action<PdfDocument, Stream>> write in writes)
+                {
+                    using var source = new MemoryStream(signed, writable: false);
+                    using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+                    var destination = new MemoryStream();
+                    write.Value(document, destination);
+                    byte[] output = destination.ToArray();
+                    Assert.True(output.AsSpan(0, signed.Length).SequenceEqual(signed), form + ", " + write.Key + ": the original is not a prefix");
+                    string path = Path.Combine(directory, "output-" + outputs.Count.ToString(CultureInfo.InvariantCulture) + ".pdf");
+                    File.WriteAllBytes(path, output);
+                    outputs.Add(path, (mode + ", " + form + ", " + write.Key, write.Key != "fill"));
+                }
+            }
+
+            string earlier = mode == "approve" ? "Approve" : "Certify";
+            JsonElement probe = CorpusManifest.Probe(outputs.Keys.ToArray());
+            foreach (KeyValuePair<string, (string Label, bool AddsSignature)> output in outputs)
+            {
+                JsonElement after = probe.GetProperty(output.Key);
+                string label = output.Value.Label;
+                Assert.Null(CorpusManifest.Text(after, "openError"));
+                Assert.Equal(0, after.GetProperty("qpdfCheck").GetProperty("exit").GetInt32());
+                List<JsonElement> signatures = after.GetProperty("signatures").EnumerateArray().ToList();
+                Assert.Equal(output.Value.AddsSignature ? 2 : 1, signatures.Count);
+                JsonElement first = signatures.Single(s => CorpusManifest.Text(s, "field") == earlier);
+                Assert.True(first.GetProperty("intact").GetBoolean() && first.GetProperty("valid").GetBoolean(), label + ": the earlier signature is not intact and valid");
+                Assert.True(first.GetProperty("docmdpOk").GetBoolean(), label + ": " + CorpusManifest.Text(first, "suspicious"));
+                Assert.Contains(CorpusManifest.Text(first, "modification"), new[] { "FORM_FILLING", "LTA_UPDATES" });
+                Assert.True(after.GetProperty("usageRights").GetBoolean(), label + ": /UR3 was removed");
+                if (!output.Value.AddsSignature)
+                {
+                    continue;
+                }
+
+                JsonElement added = signatures.Single(s => CorpusManifest.Text(s, "field") != earlier);
+                Assert.Equal("ENTIRE_FILE", CorpusManifest.Text(added, "coverage"));
+                Assert.True(added.GetProperty("intact").GetBoolean() && added.GetProperty("valid").GetBoolean(), label + ": the new signature is not intact and valid");
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     [Theory]
@@ -308,9 +483,10 @@ public class UsageRightsTests
 
     [Theory]
     [MemberData(nameof(ReaderExtended))]
-    public void reader_extended_form_keeps_usage_rights_on_attachment_add_only_when_granted(string id, bool grantsAttachmentEdits)
+    public void reader_extended_form_keeps_usage_rights_on_attachment_add_only_when_granted_or_signed(string id, bool grantsAttachmentEdits)
     {
         CorpusEntry entry = CorpusManifest.Get(id);
+        bool kept = grantsAttachmentEdits || IsSigned(entry);
         Assert.True(entry.Probe.GetProperty("usageRights").GetBoolean());
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
@@ -322,18 +498,20 @@ public class UsageRightsTests
         document.SaveIncremental(destination, leaveOpen: true);
 
         JsonElement after = CheckOutput(entry, original, destination.ToArray());
-        Assert.Equal(grantsAttachmentEdits, after.GetProperty("usageRights").GetBoolean());
+        Assert.Equal(kept, after.GetProperty("usageRights").GetBoolean());
         using var reopened = PdfDocument.Open(new MemoryStream(destination.ToArray(), writable: false), entry.Password);
-        Assert.Equal(grantsAttachmentEdits, reopened.HasUsageRights);
+        Assert.Equal(kept, reopened.HasUsageRights);
         Assert.Contains(reopened.Attachments, attachment => attachment.Name == "usage-rights.txt");
     }
 
-    // Every Reader-extended corpus form grants /Signature Modify, but no right grants a signature that creates a field.
+    // Every Reader-extended corpus form grants /Signature Modify, but no right grants a signature that creates a field,
+    // so it removes /UR3 unless the form already has a signature.
     [Theory]
     [MemberData(nameof(ReaderExtendedIds))]
-    public void reader_extended_form_loses_usage_rights_when_signed_into_a_new_field(string id)
+    public void reader_extended_form_loses_usage_rights_when_signed_into_a_new_field_unless_already_signed(string id)
     {
-        SignCorpusForm(CorpusManifest.Get(id), null, keepsUsageRights: false);
+        CorpusEntry entry = CorpusManifest.Get(id);
+        SignCorpusForm(entry, null, keepsUsageRights: IsSigned(entry));
     }
 
     // The Reader-extended corpus forms with an empty signature field, as pypdf 6.21.1 reads them. Each grants
@@ -375,6 +553,90 @@ public class UsageRightsTests
         JsonElement afterRemove = CheckOutput(entry, original, removed.ToArray());
         Assert.True(afterRemove.GetProperty("usageRights").GetBoolean());
         Assert.Equal(0, afterRemove.GetProperty("attachments").GetArrayLength());
+    }
+
+    // W-90 on the corpus form with an approval signature, Signature-1 from pyHanko: no write changes /Perms, so pyHanko's
+    // difference analysis of Signature-1 never reports a /Perms change. Before W-90, the metadata write, both signatures
+    // and timestamps that create a field, and the timestamp into Signature-2 removed /UR3, and pyHanko reported OTHER
+    // because /Perms differed. pyHanko 0.38.0 still reports OTHER for reasons unrelated to /Perms: CMS-40B is a tagged
+    // form, and a revision that changes a widget the structure tree references is unexplained (W-88), and an attachment
+    // adds /AF to the catalog. The writes that touch neither are accepted.
+    [Fact]
+    public void signed_reader_extended_form_keeps_usage_rights_and_pyhanko_finds_no_perms_change()
+    {
+        CorpusEntry entry = CorpusManifest.Get("cms-40b-pyhanko-approved");
+        byte[] original = File.ReadAllBytes(entry.FullPath);
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));
+            using RSA rsa = RSA.Create(2048);
+            var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+            var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));
+            var writes = new Dictionary<string, Action<PdfDocument, Stream>>
+            {
+                ["fill"] = (document, destination) =>
+                {
+                    document.AcroForm.SetText("1-2", "Ada");
+                    document.SaveIncremental(destination, leaveOpen: true);
+                },
+                ["metadata"] = (document, destination) =>
+                {
+                    document.Metadata.Title = "Usage rights";
+                    document.SaveIncremental(destination, leaveOpen: true);
+                },
+                ["attachment add"] = (document, destination) =>
+                {
+                    document.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
+                    document.SaveIncremental(destination, leaveOpen: true);
+                },
+                ["sign, existing field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Signature-2" }, cms, leaveOpen: true),
+                ["sign, new field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
+                ["document timestamp, existing field"] = (document, destination) => document.Sign(destination, Timestamp("Signature-2"), stamp, leaveOpen: true),
+                ["document timestamp, new field"] = (document, destination) => document.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
+            };
+            var accepted = new HashSet<string> { "metadata", "sign, new field", "document timestamp, new field" };
+
+            var outputs = new Dictionary<string, string>();
+            foreach (KeyValuePair<string, Action<PdfDocument, Stream>> write in writes)
+            {
+                using var source = new MemoryStream(original, writable: false);
+                using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+                var destination = new MemoryStream();
+                write.Value(document, destination);
+                byte[] output = destination.ToArray();
+                Assert.True(output.AsSpan(0, original.Length).SequenceEqual(original), write.Key + ": the original is not a prefix");
+                string path = Path.Combine(directory, "output-" + outputs.Count.ToString(CultureInfo.InvariantCulture) + ".pdf");
+                File.WriteAllBytes(path, output);
+                outputs.Add(path, write.Key);
+            }
+
+            JsonElement probe = CorpusManifest.Probe(outputs.Keys.ToArray());
+            foreach (KeyValuePair<string, string> output in outputs)
+            {
+                JsonElement after = probe.GetProperty(output.Key);
+                Assert.Null(CorpusManifest.Text(after, "openError"));
+                Assert.Equal(0, after.GetProperty("qpdfCheck").GetProperty("exit").GetInt32());
+                JsonElement first = after.GetProperty("signatures").EnumerateArray().Single(s => CorpusManifest.Text(s, "field") == "Signature-1");
+                Assert.True(first.GetProperty("intact").GetBoolean() && first.GetProperty("valid").GetBoolean(), output.Value + ": Signature-1 is not intact and valid");
+                string? suspicious = CorpusManifest.Text(first, "suspicious");
+                Assert.True(suspicious == null || !(suspicious.Contains("key /Perms") || suspicious.Contains(".Root.Perms")), output.Value + ": " + suspicious);
+                if (accepted.Contains(output.Value))
+                {
+                    Assert.True(first.GetProperty("docmdpOk").GetBoolean(), output.Value + ": " + suspicious);
+                    Assert.NotEqual("OTHER", CorpusManifest.Text(first, "modification"));
+                }
+
+                Assert.True(after.GetProperty("usageRights").GetBoolean(), output.Value + ": /UR3 was removed");
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     // Signs the form with a throwaway RSA key, into `field` or a new field. pypdf (through the corpus probe) reads whether
@@ -458,10 +720,104 @@ public class UsageRightsTests
         Assert.True(exitCode == 0 && !(stdout + stderr).Contains("WARNING"), "qpdf --check exited " + exitCode.ToString() + Environment.NewLine + stderr + stdout);
     }
 
-    private static byte[] Document(PolicyCase policy)
+    private static bool IsSigned(CorpusEntry entry)
+    {
+        return entry.Probe.GetProperty("signatures").GetArrayLength() > 0;
+    }
+
+    private static PdfSignatureOptions Timestamp(string fieldName)
+    {
+        return new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, FieldName = fieldName, ReservedContentsBytes = 16384 };
+    }
+
+    // The catalog's /Perms value in the last revision that writes the catalog (object 1), with whitespace around
+    // delimiters removed, or null when there is none.
+    private static string? PermsValue(string pdf)
+    {
+        MatchCollection catalogs = Regex.Matches(pdf, @"(?m)^1 0 obj");
+        int start = catalogs[catalogs.Count - 1].Index;
+        int end = pdf.IndexOf("endobj", start, StringComparison.Ordinal);
+        int key = pdf.IndexOf("/Perms", start, end - start, StringComparison.Ordinal);
+        if (key < 0)
+        {
+            return null;
+        }
+
+        int i = key + "/Perms".Length;
+        while (char.IsWhiteSpace(pdf[i]))
+        {
+            i++;
+        }
+
+        int valueStart = i;
+        if (string.CompareOrdinal(pdf, i, "<<", 0, 2) != 0)
+        {
+            return Regex.Match(pdf.Substring(i, end - i), @"^\d+\s+\d+\s+R").Value;
+        }
+
+        int depth = 0;
+        do
+        {
+            if (string.CompareOrdinal(pdf, i, "<<", 0, 2) == 0)
+            {
+                depth++;
+                i += 2;
+            }
+            else if (string.CompareOrdinal(pdf, i, ">>", 0, 2) == 0)
+            {
+                depth--;
+                i += 2;
+            }
+            else if (pdf[i] == '<' || pdf[i] == '(')
+            {
+                i = pdf.IndexOf(pdf[i] == '<' ? '>' : ')', i) + 1;
+            }
+            else
+            {
+                i++;
+            }
+        }
+        while (depth > 0);
+
+        return Regex.Replace(pdf.Substring(valueStart, i - valueStart), @"\s*([<>\[\]()/])\s*", "$1");
+    }
+
+    // A W-88 form: a text field Name, an empty signature field Signer, and /UR3 with the given /Reference, in an
+    // indirect /Perms or a direct one.
+    private static byte[] ReaderExtendedForm(string reference, bool directPerms)
     {
         var builder = new PdfBuilder();
-        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 22 0 R 23 0 R 24 0 R] >> /Names << /EmbeddedFiles << /Names [(old.txt) 20 0 R] >> >>" + policy.Perms + " >>");
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R] /DA (/Helv 0 Tf 0 g) /DR << /Font << /Helv 6 0 R >> >> >>" + (directPerms ? " /Perms << /UR3 10 0 R >>" : Indirect) + " >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << >> /Annots [4 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (Name) /Rect [72 700 300 724] /DA (/Helv 12 Tf 0 g) /F 4 /P 3 0 R >>");
+        builder.Indirect(5, "<< /Type /Annot /Subtype /Widget /FT /Sig /T (Signer) /Rect [300 600 500 640] /F 4 /P 3 0 R >>");
+        builder.Indirect(6, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+        if (!directPerms)
+        {
+            builder.Indirect(9, "<< /UR3 10 0 R >>");
+        }
+
+        builder.Indirect(10, SignatureBody(reference));
+        return builder.Finish("/ID [<0123456789abcdef0123456789abcdef> <0123456789abcdef0123456789abcdef>]");
+    }
+
+    // The policy document, unsigned or signed in the field Signed. A certification also puts /DocMDP in /Perms.
+    private static byte[] Document(PolicyCase policy, string signedBy)
+    {
+        bool certified = signedBy.StartsWith("certified", StringComparison.Ordinal);
+        string perms = policy.Perms;
+        if (certified && perms.Length == 0)
+        {
+            perms = " /Perms << /DocMDP 25 0 R >>";
+        }
+        else if (certified && perms != Indirect)
+        {
+            perms = perms.Replace(" /Perms <<", " /Perms << /DocMDP 25 0 R");
+        }
+
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 22 0 R 23 0 R 24 0 R] >> /Names << /EmbeddedFiles << /Names [(old.txt) 20 0 R] >> >>" + perms + " >>");
         builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
         builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 5 0 R 6 0 R 7 0 R 8 0 R 22 0 R 23 0 R 24 0 R] >>");
         builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [72 700 240 720] /DA (/Helv 0 Tf 0 g) /P 3 0 R >>");
@@ -471,17 +827,33 @@ public class UsageRightsTests
         builder.Indirect(8, "<< /Subtype /Widget /FT /Btn /Ff 49152 /T (Size) /AP << /N << /Small null /Off null >> >> /Rect [72 540 90 558] /P 3 0 R >>");
         foreach ((int id, string body) in policy.Objects)
         {
-            builder.Indirect(id, body);
+            Assert.True(id != 9 || body.StartsWith("<<", StringComparison.Ordinal));
+            builder.Indirect(id, certified && id == 9 ? "<< /DocMDP 25 0 R" + body.Substring(2) : body);
         }
 
         builder.Indirect(20, "<< /Type /Filespec /F (old.txt) /UF (old.txt) /EF << /F 21 0 R >> >>");
         builder.StreamObject(21, "/Type /EmbeddedFile", Encoding.ASCII.GetBytes("old"));
 
-        // An empty signature field, a read-only one, and one that already has a signature dictionary.
+        // An empty signature field, a read-only one, and one that has a signature dictionary only when the document is
+        // signed: an approval signature, a DocMDP certification, or a document timestamp.
         builder.Indirect(22, "<< /Subtype /Widget /FT /Sig /T (Signer) /Rect [300 700 500 740] /F 4 /P 3 0 R >>");
         builder.Indirect(23, "<< /Subtype /Widget /FT /Sig /Ff 1 /T (Locked) /Rect [300 640 500 680] /F 4 /P 3 0 R >>");
+        if (signedBy == Unsigned)
+        {
+            builder.Indirect(24, "<< /Subtype /Widget /FT /Sig /T (Signed) /Rect [300 580 500 620] /F 4 /P 3 0 R >>");
+            return builder.Finish();
+        }
+
         builder.Indirect(24, "<< /Subtype /Widget /FT /Sig /T (Signed) /V 25 0 R /Rect [300 580 500 620] /F 4 /P 3 0 R >>");
-        builder.Indirect(25, SignatureBody(string.Empty));
+        string signature = signedBy switch
+        {
+            "approval" => "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /ByteRange [0 0 0 0] /Contents <00> >>",
+            "certified P 2" => "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /ByteRange [0 0 0 0] /Contents <00> /Reference [" + Transform("DocMDP", "<< /Type /TransformParams /P 2 /V /1.2 >>") + "] >>",
+            "certified P 3" => "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /ByteRange [0 0 0 0] /Contents <00> /Reference [" + Transform("DocMDP", "<< /Type /TransformParams /P 3 /V /1.2 >>") + "] >>",
+            "document timestamp" => "<< /Type /DocTimeStamp /Filter /Adobe.PPKLite /SubFilter /ETSI.RFC3161 /ByteRange [0 0 0 0] /Contents <00> >>",
+            _ => throw new ArgumentOutOfRangeException(nameof(signedBy)),
+        };
+        builder.Indirect(25, signature);
         return builder.Finish();
     }
 
@@ -495,9 +867,10 @@ public class UsageRightsTests
         return new PolicyCase(name, perms, objects, Array.Empty<string>(), hasUsageRights);
     }
 
+    // DocMDP P 2 and P 3 allow fills and signing, and refuse metadata and attachment writes.
     private static PolicyWrite Write(string name, string? right, Action<PdfDocument> edit)
     {
-        return new PolicyWrite(name, right, (document, destination) =>
+        return new PolicyWrite(name, right, right == FillIn, (document, destination) =>
         {
             edit(document);
             document.SaveIncremental(destination, leaveOpen: true);
@@ -506,7 +879,7 @@ public class UsageRightsTests
 
     private static PolicyWrite Sign(string name, string? right, PdfSignatureKind kind, string? fieldName)
     {
-        return new PolicyWrite(name, right, (document, destination) =>
+        return new PolicyWrite(name, right, true, (document, destination) =>
         {
             var options = new PdfSignatureOptions { Kind = kind, FieldName = fieldName, ReservedContentsBytes = 64 };
             document.Sign(destination, options, new FixedProvider { Kind = kind }, leaveOpen: true);
@@ -568,16 +941,19 @@ public class UsageRightsTests
 
     private sealed class PolicyWrite
     {
-        public PolicyWrite(string name, string? right, Action<PdfDocument, Stream> run)
+        public PolicyWrite(string name, string? right, bool certificationAllows, Action<PdfDocument, Stream> run)
         {
             Name = name;
             Right = right;
+            CertificationAllows = certificationAllows;
             Run = run;
         }
 
         public string Name { get; }
 
         public string? Right { get; }
+
+        public bool CertificationAllows { get; }
 
         public Action<PdfDocument, Stream> Run { get; }
     }

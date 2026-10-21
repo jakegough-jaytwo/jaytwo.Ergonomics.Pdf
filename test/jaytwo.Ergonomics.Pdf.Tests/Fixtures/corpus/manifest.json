@@ -970,7 +970,7 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights granting /Form FillIn and /Signature Modify and no /EF rights. Under spec 7.3 (W-67, W-87) a fill or a signature into an existing empty signature field keeps /UR3; a metadata write, an attachment edit, or a signature into a new field removes it in the same revision."
+        "Carries /Perms /UR3 usage rights granting /Form FillIn and /Signature Modify and no /EF rights. The approval signature in Signature-1 means no write changes /Perms (spec 7.3, W-90): /UR3 stays after a fill, a metadata write, an attachment edit, a signature into an existing or a new field, and a document timestamp."
       ],
       "validators": [
         {
