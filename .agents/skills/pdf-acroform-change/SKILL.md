@@ -7,7 +7,7 @@ description: Change AcroForm discovery, values, appearances, signature-field dis
 
 Follow the fixed field shape and appearance policy in `AGENTS.md`. Read only the applicable `ACCEPTANCE.md` and `README.md` sections and the current task record.
 
-For field topology, inheritance, button, choice, or appearance changes, read `references/field-matrix.md`. It lists the producer variants and the per-setter invariants a fill must keep.
+For field topology, inheritance, button, choice, or appearance changes, read `references/field-matrix.md`. It lists the producer variants and the invariants a fill of each field kind must keep.
 
 ## Working rules
 

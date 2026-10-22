@@ -5,6 +5,7 @@ A checklist of field topology, inheritance, and appearance variants that real pr
 ## Topology
 
 - Terminal and nonterminal fields; kids without `/T` are widgets of their parent.
+- Widget kids that carry field entries such as `/FT` (LibreOffice) are still widgets: the value is read from and written to the field dictionary.
 - Merged field/widget dictionaries, separate widgets, and several widgets for one field.
 - Widgets reached through `/P` and widgets reachable only through page `/Annots`.
 - Dotted and Unicode partial names. Duplicate fully qualified names are reported, not guessed.
@@ -34,13 +35,13 @@ A checklist of field topology, inheritance, and appearance variants that real pr
 - `/MK` border, background, and rotation; `/Rect` with a nonzero origin; widget rotation and the appearance `/Matrix`; clipping to the box.
 - Pre-existing `/NeedAppearances true` is kept unless the operation documents otherwise.
 
-## Per-setter invariants
+## Fill invariants by field kind
 
-| Setter | `/V` | `/AS` | `/AP` | `/I` | `/NeedAppearances` |
+| Field kind | `/V` | `/AS` | `/AP` | `/I` | `/NeedAppearances` |
 |---|---|---|---|---|---|
 | Text | set on the field | n/a | generated per widget in the subset | n/a | set when outside the subset |
 | Check box | on-state name or `/Off` | the shared on-state or `/Off`; differing on-states refuse | kept; generated `Yes`/`Off` only when none exists | n/a | unchanged |
-| Radio | export value's state name | the matching widget on, others `/Off` | kept; generated for a single widget with no on-state | n/a | unchanged |
-| Choice | export value(s) | n/a | generated in the subset | updated to match `/V` or removed | set when outside the subset |
+| Radio | export value's state name; no value: `/Off` | the matching widget on, others `/Off`; no value: every widget `/Off` | kept; generated for a single widget with no on-state | n/a | unchanged |
+| Choice | export value(s); no value or an empty list: removed | n/a | generated in the subset; empty appearance for no value or an empty list | updated to match `/V`; removed for no value or an empty list | set when outside the subset |
 
 Any row a change alters is a contract change: check it against `ACCEPTANCE.md` and `README.md` before editing.
