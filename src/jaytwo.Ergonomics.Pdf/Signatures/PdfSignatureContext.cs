@@ -10,11 +10,12 @@ public sealed class PdfSignatureContext
 {
     private readonly Func<Stream> _openSignedBytes;
 
-    internal PdfSignatureContext(PdfByteRange byteRange, int reservedContentsBytes, DateTimeOffset? signingTime, Func<Stream> openSignedBytes)
+    internal PdfSignatureContext(PdfByteRange byteRange, int reservedContentsBytes, DateTimeOffset? signingTime, PdfDigestAlgorithm digestAlgorithm, Func<Stream> openSignedBytes)
     {
         ByteRange = byteRange;
         ReservedContentsBytes = reservedContentsBytes;
         SigningTime = signingTime;
+        DigestAlgorithm = digestAlgorithm;
         _openSignedBytes = openSignedBytes;
     }
 
@@ -32,6 +33,11 @@ public sealed class PdfSignatureContext
     /// Gets the signing time stored in the signature dictionary /M. Null for a document timestamp.
     /// </summary>
     public DateTimeOffset? SigningTime { get; }
+
+    /// <summary>
+    /// Gets the digest from <see cref="PdfSignatureOptions.DigestAlgorithm"/>. Always SHA-256 for a document timestamp.
+    /// </summary>
+    public PdfDigestAlgorithm DigestAlgorithm { get; }
 
     /// <summary>
     /// Opens a read-only stream of the bytes that the signature covers.

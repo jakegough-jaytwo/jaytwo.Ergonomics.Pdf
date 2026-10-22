@@ -1982,9 +1982,9 @@ public class SignatureTests
 
         public byte[] LastSignature { get; private set; } = Array.Empty<byte>();
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
-            LastSignature = _rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            LastSignature = _rsa.SignHash(hash.ToArray(), hashAlgorithm, RSASignaturePadding.Pkcs1);
             return new ValueTask<byte[]>(LastSignature);
         }
     }
@@ -2000,7 +2000,7 @@ public class SignatureTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             throw new CryptographicException("The external signer failed.");
         }
@@ -2022,7 +2022,7 @@ public class SignatureTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             var inner = new InvalidOperationException(Convert.ToBase64String(_sentinelKey));
             var exception = new InvalidOperationException(_sentinel, inner);
@@ -2069,7 +2069,7 @@ public class SignatureTests
 
         public int SignCalls { get; private set; }
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             SignCalls++;
             return new ValueTask<byte[]>(_sign(hash.ToArray()));

@@ -28,6 +28,12 @@ public sealed class PdfSignatureOptions
     public PdfSignatureKind Kind { get; init; } = PdfSignatureKind.CmsDetached;
 
     /// <summary>
+    /// Gets the digest of a CMS signature. The default is SHA-256. A document timestamp uses SHA-256 only;
+    /// any other value with <see cref="PdfSignatureKind.DocTimeStamp"/> throws <see cref="PdfSignException"/>.
+    /// </summary>
+    public PdfDigestAlgorithm DigestAlgorithm { get; init; } = PdfDigestAlgorithm.Sha256;
+
+    /// <summary>
     /// Gets the number of bytes reserved for the hexadecimal /Contents value.
     /// </summary>
     public int ReservedContentsBytes { get; init; } = 16384;

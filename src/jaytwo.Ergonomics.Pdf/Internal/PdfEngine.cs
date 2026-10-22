@@ -1098,6 +1098,14 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfSignException("The signature provider does not match the requested signature kind.");
         }
 
+        if (options.DigestAlgorithm != PdfDigestAlgorithm.Sha256
+            && (options.Kind == PdfSignatureKind.DocTimeStamp || (options.DigestAlgorithm != PdfDigestAlgorithm.Sha384 && options.DigestAlgorithm != PdfDigestAlgorithm.Sha512)))
+        {
+            throw new PdfSignException(options.Kind == PdfSignatureKind.DocTimeStamp
+                ? "A document timestamp uses SHA-256."
+                : "The digest algorithm must be SHA-256, SHA-384, or SHA-512.");
+        }
+
         ValidateDestination(destination);
         if (_length > MaxClassicOffset)
         {
@@ -1173,7 +1181,7 @@ internal sealed class PdfEngine : IDisposable
             long total = _length + buffer.Length;
             var range = new PdfByteRange(0, less, less + gap, total - less - gap);
             PatchAscii(buffer, layout.ByteRange.DigitPosition, Ten(range.Offset0) + " " + Ten(range.Length0) + " " + Ten(range.Offset1) + " " + Ten(range.Length1));
-            var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, () => OpenSigned(buffer, layout.Contents.LessThanPosition, gap));
+            var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, options.DigestAlgorithm, () => OpenSigned(buffer, layout.Contents.LessThanPosition, gap));
             ValueTask<byte[]> pending = provider.CreateContentsAsync(context, cancellationToken);
             byte[] contents = useAsync ? await pending.ConfigureAwait(false) : pending.AsTask().GetAwaiter().GetResult();
             if (contents.Length > options.ReservedContentsBytes)

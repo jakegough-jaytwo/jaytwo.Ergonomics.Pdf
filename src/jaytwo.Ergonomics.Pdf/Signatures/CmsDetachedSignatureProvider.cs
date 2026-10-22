@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
@@ -8,10 +9,15 @@ using System.Threading.Tasks;
 namespace jaytwo.Ergonomics.Pdf.Signatures;
 
 /// <summary>
-/// Builds a detached CMS SignedData value from a host RSA signer.
+/// Builds a detached CMS SignedData value from a host RSA or ECDSA signer.
 /// </summary>
 public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
 {
+    private static readonly byte[] RsaEncryption = DerCodec.Oid("1.2.840.113549.1.1.1");
+    private static readonly byte[] EcPublicKey = DerCodec.Oid("1.2.840.10045.2.1");
+    private static readonly byte[] CurveP256 = DerCodec.Oid("1.2.840.10045.3.1.7");
+    private static readonly byte[] CurveP384 = DerCodec.Oid("1.3.132.0.34");
+
     private readonly IPdfExternalSigner _signer;
     private readonly ITimestampAuthority? _timestampAuthority;
 
@@ -48,7 +54,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// <returns>The CMS ContentInfo bytes.</returns>
     /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. An exception the signer or a host authority throws after cancellation is replaced with a fresh one.</exception>
     /// <exception cref="CryptographicException">A member of the host signer threw. The message is generic, and the exception has no inner exception.</exception>
-    /// <exception cref="PdfSignException">The leaf certificate is null, empty, or not a DER-encoded certificate, or an additional certificate or the signature value is null or empty.</exception>
+    /// <exception cref="PdfSignException">The leaf certificate is null, empty, or not a DER-encoded certificate; its key is not RSA, ECDSA P-256, or ECDSA P-384; an additional certificate or the signature value is null or empty; or an ECDSA signature value is not the P1363 length for its curve.</exception>
     /// <exception cref="PdfSignatureTooLargeException">The certificates, signature value, and time-stamp token returned so far already exceed <see cref="PdfSignatureContext.ReservedContentsBytes"/>.</exception>
     /// <exception cref="PdfTimestampException">A host timestamp authority threw; the message is generic, and the exception has no inner exception. Or the time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
     public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
@@ -65,15 +71,16 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         int reserved = context.ReservedContentsBytes;
         long total = 0;
         List<byte[]> certificates = ReadCertificates(reserved, ref total);
+        (byte[] issuer, byte[] serial, int ecdsaHalf) = ReadLeaf(certificates[0]);
+        (string digestOid, HashAlgorithmName hashAlgorithm, int arc) = Digest(context.DigestAlgorithm);
 
         byte[] digest;
         using (Stream signed = context.OpenSignedBytes())
-        using (SHA256 sha = SHA256.Create())
+        using (HashAlgorithm hasher = CreateHash(hashAlgorithm))
         {
-            digest = sha.ComputeHash(signed);
+            digest = hasher.ComputeHash(signed);
         }
 
-        (byte[] issuer, byte[] serial) = ReadLeafIdentity(certificates[0]);
         byte[] contentType = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.9.3"),
             DerCodec.Set(DerCodec.Oid("1.2.840.113549.1.7.1")));
@@ -86,12 +93,12 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             DerCodec.Set(DerCodec.UtcTime(when)));
         byte[] signedAttrs = DerCodec.Set(contentType, messageDigest, signingTime);
         byte[] hash;
-        using (SHA256 sha256 = SHA256.Create())
+        using (HashAlgorithm hasher = CreateHash(hashAlgorithm))
         {
-            hash = sha256.ComputeHash(signedAttrs);
+            hash = hasher.ComputeHash(signedAttrs);
         }
 
-        byte[]? signature = await CallSignerAsync(hash, cancellationToken).ConfigureAwait(false);
+        byte[]? signature = await CallSignerAsync(hash, hashAlgorithm, cancellationToken).ConfigureAwait(false);
 
         if (signature == null || signature.Length == 0)
         {
@@ -99,6 +106,19 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         }
 
         AddToTotal(ref total, signature.Length, reserved);
+        byte[] signatureAlgorithm;
+        if (ecdsaHalf == 0)
+        {
+            // sha256WithRSAEncryption is arc 11, sha384 12, and sha512 13.
+            signatureAlgorithm = DerCodec.Algorithm("1.2.840.113549.1.1." + (10 + arc).ToString(CultureInfo.InvariantCulture));
+        }
+        else
+        {
+            // ecdsa-with-SHA256, -SHA384, and -SHA512 are arcs 2, 3, and 4 and take no parameters (RFC 5758 3.2).
+            signatureAlgorithm = DerCodec.Sequence(DerCodec.Oid("1.2.840.10045.4.3." + (1 + arc).ToString(CultureInfo.InvariantCulture)));
+            signature = EncodeEcdsa(signature, ecdsaHalf);
+        }
+
         byte[]? unsignedAttrs = null;
         if (_timestampAuthority != null)
         {
@@ -127,22 +147,22 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             ? DerCodec.Sequence(
                 DerCodec.Integer(1),
                 DerCodec.Sequence(issuer, serial),
-                DerCodec.AlgorithmSha256(),
+                DerCodec.Algorithm(digestOid),
                 DerCodec.ReplaceTag(signedAttrs, 0xA0),
-                DerCodec.AlgorithmSha256WithRsa(),
+                signatureAlgorithm,
                 DerCodec.OctetString(signature))
             : DerCodec.Sequence(
                 DerCodec.Integer(1),
                 DerCodec.Sequence(issuer, serial),
-                DerCodec.AlgorithmSha256(),
+                DerCodec.Algorithm(digestOid),
                 DerCodec.ReplaceTag(signedAttrs, 0xA0),
-                DerCodec.AlgorithmSha256WithRsa(),
+                signatureAlgorithm,
                 DerCodec.OctetString(signature),
                 unsignedAttrs);
         byte[] certificateSet = DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0);
         byte[] signedData = DerCodec.Sequence(
             DerCodec.Integer(1),
-            DerCodec.Set(DerCodec.AlgorithmSha256()),
+            DerCodec.Set(DerCodec.Algorithm(digestOid)),
             DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.1")),
             certificateSet,
             DerCodec.Set(signerInfo));
@@ -163,18 +183,28 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         }
     }
 
-    // A fixed-depth walk: Certificate, then TBSCertificate, then its first fields. The leaf must be
-    // one SEQUENCE with nothing after it, and the serial and issuer must carry their DER tags.
-    private static (byte[] Issuer, byte[] Serial) ReadLeafIdentity(byte[] leaf)
+    // A fixed-depth walk: Certificate, then TBSCertificate, then its fields up to the public key. The leaf must be
+    // one SEQUENCE with nothing after it, and the serial, issuer, and key algorithm must carry their DER tags.
+    // EcdsaHalf is 0 for an RSA key, otherwise the length of r and of s in a P1363 signature.
+    private static (byte[] Issuer, byte[] Serial, int EcdsaHalf) ReadLeaf(byte[] leaf)
     {
         DerCodec.DerTlv certificate;
         DerCodec.DerTlv tbs;
         (byte[] Issuer, byte[] Serial) identity;
+        DerCodec.DerTlv keyAlgorithm;
+        DerCodec.DerTlv keyOid;
+        byte[]? curve = null;
         try
         {
             certificate = DerCodec.ReadTlv(leaf);
             tbs = DerCodec.ReadTlv(certificate.Content);
             identity = DerCodec.ReadCertificateIdentity(leaf);
+            keyAlgorithm = DerCodec.ReadCertificateKeyAlgorithm(leaf);
+            keyOid = DerCodec.ReadTlv(keyAlgorithm.Content);
+            if (keyOid.Full.Length < keyAlgorithm.Content.Length)
+            {
+                curve = DerCodec.ReadTlv(keyAlgorithm.Content, keyOid.Full.Length).Full;
+            }
         }
         catch (PdfTimestampException)
         {
@@ -185,12 +215,75 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             || certificate.Full.Length != leaf.Length
             || tbs.Tag != 0x30
             || identity.Serial[0] != 0x02
-            || identity.Issuer[0] != 0x30)
+            || identity.Issuer[0] != 0x30
+            || keyAlgorithm.Tag != 0x30)
         {
             throw NotCertificate();
         }
 
-        return identity;
+        if (Same(keyOid.Full, RsaEncryption))
+        {
+            return (identity.Issuer, identity.Serial, 0);
+        }
+
+        if (Same(keyOid.Full, EcPublicKey) && curve != null)
+        {
+            if (Same(curve, CurveP256))
+            {
+                return (identity.Issuer, identity.Serial, 32);
+            }
+
+            if (Same(curve, CurveP384))
+            {
+                return (identity.Issuer, identity.Serial, 48);
+            }
+        }
+
+        throw new PdfSignException("The signer certificate key must be RSA, ECDSA P-256, or ECDSA P-384.");
+    }
+
+    private static bool Same(byte[] left, byte[] right)
+    {
+        return ((ReadOnlySpan<byte>)left).SequenceEqual(right);
+    }
+
+    // The digest OID, its framework name, and its arc under 2.16.840.1.101.3.4.2, which also numbers the signature algorithms.
+    private static (string Oid, HashAlgorithmName Name, int Arc) Digest(PdfDigestAlgorithm algorithm)
+    {
+        switch (algorithm)
+        {
+            case PdfDigestAlgorithm.Sha256:
+                return ("2.16.840.1.101.3.4.2.1", HashAlgorithmName.SHA256, 1);
+            case PdfDigestAlgorithm.Sha384:
+                return ("2.16.840.1.101.3.4.2.2", HashAlgorithmName.SHA384, 2);
+            case PdfDigestAlgorithm.Sha512:
+                return ("2.16.840.1.101.3.4.2.3", HashAlgorithmName.SHA512, 3);
+            default:
+                throw new PdfSignException("The digest algorithm must be SHA-256, SHA-384, or SHA-512.");
+        }
+    }
+
+    private static HashAlgorithm CreateHash(HashAlgorithmName name)
+    {
+        if (name == HashAlgorithmName.SHA384)
+        {
+            return SHA384.Create();
+        }
+
+        return name == HashAlgorithmName.SHA512 ? SHA512.Create() : SHA256.Create();
+    }
+
+    // CMS carries ECDSA-Sig-Value, SEQUENCE { r INTEGER, s INTEGER } (RFC 5753 7.2), not the P1363 r||s the host returns.
+    private static byte[] EncodeEcdsa(byte[] signature, int half)
+    {
+        if (signature.Length != half * 2)
+        {
+            throw new PdfSignException("The ECDSA signature must be the " + (half * 2).ToString(CultureInfo.InvariantCulture) + "-byte IEEE P1363 r||s value.");
+        }
+
+        return DerCodec.Sequence(
+            DerCodec.Integer(new ReadOnlySpan<byte>(signature, 0, half)),
+            DerCodec.Integer(new ReadOnlySpan<byte>(signature, half, half)));
     }
 
     private static PdfSignException NotCertificate()
@@ -213,11 +306,11 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     }
 
     // A host that throws after the caller canceled gets a fresh cancellation, so none of its details leave either way.
-    private async ValueTask<byte[]?> CallSignerAsync(byte[] hash, CancellationToken cancellationToken)
+    private async ValueTask<byte[]?> CallSignerAsync(byte[] hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
     {
         try
         {
-            return await _signer.SignHashAsync(hash, cancellationToken).ConfigureAwait(false);
+            return await _signer.SignHashAsync(hash, hashAlgorithm, cancellationToken).ConfigureAwait(false);
         }
         catch (Exception) when (cancellationToken.IsCancellationRequested)
         {

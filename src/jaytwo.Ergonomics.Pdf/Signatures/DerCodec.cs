@@ -105,7 +105,13 @@ internal static class DerCodec
 
     public static byte[] AlgorithmSha256()
     {
-        return Sequence(Oid("2.16.840.1.101.3.4.2.1"), Null());
+        return Algorithm("2.16.840.1.101.3.4.2.1");
+    }
+
+    // An AlgorithmIdentifier with NULL parameters, as the digest and RSA identifiers are written.
+    public static byte[] Algorithm(string oid)
+    {
+        return Sequence(Oid(oid), Null());
     }
 
     public static byte[] AlgorithmSha256WithRsa()
@@ -193,6 +199,26 @@ internal static class DerCodec
         pos += signature.Full.Length;
         DerTlv issuer = ReadTlv(tbs.Content, pos);
         return (issuer.Full, serial.Full);
+    }
+
+    // The AlgorithmIdentifier of the SubjectPublicKeyInfo, which follows issuer, validity, and subject in the TBSCertificate.
+    public static DerTlv ReadCertificateKeyAlgorithm(byte[] certificate)
+    {
+        DerTlv cert = ReadTlv(certificate);
+        DerTlv tbs = ReadTlv(cert.Content);
+        int pos = 0;
+        if (tbs.Content.Length > 0 && tbs.Content[0] == 0xA0)
+        {
+            pos += ReadTlv(tbs.Content, 0).Full.Length;
+        }
+
+        for (int field = 0; field < 5; field++)
+        {
+            pos += ReadTlv(tbs.Content, pos).Full.Length;
+        }
+
+        DerTlv publicKeyInfo = ReadTlv(tbs.Content, pos);
+        return ReadTlv(publicKeyInfo.Content);
     }
 
     private static byte[] Tlv(byte tag, byte[] content)

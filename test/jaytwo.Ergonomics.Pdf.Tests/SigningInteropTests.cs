@@ -148,7 +148,7 @@ public class SigningInteropTests
             using (var verifier = RSA.Create())
             {
                 verifier.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
-                Assert.True(verifier.VerifyHash(probe, await signer.SignHashAsync(probe, CancellationToken.None), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+                Assert.True(verifier.VerifyHash(probe, await signer.SignHashAsync(probe, HashAlgorithmName.SHA256, CancellationToken.None), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
             }
 
             using var rootKey = RSA.Create(2048);
@@ -869,9 +869,9 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
-            return new ValueTask<byte[]>(_key.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+            return new ValueTask<byte[]>(_key.SignHash(hash.ToArray(), hashAlgorithm, RSASignaturePadding.Pkcs1));
         }
     }
 
@@ -889,10 +889,10 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => _inner.AdditionalCertificates;
 
-        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             await Task.Delay(1, cancellationToken).ConfigureAwait(false);
-            return await _inner.SignHashAsync(hash, cancellationToken).ConfigureAwait(false);
+            return await _inner.SignHashAsync(hash, hashAlgorithm, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -939,7 +939,7 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => Chain;
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             byte[] digestInfo = DerCodec.Sequence(
                 DerCodec.Sequence(DerCodec.Oid("2.16.840.1.101.3.4.2.1"), DerCodec.Null()),

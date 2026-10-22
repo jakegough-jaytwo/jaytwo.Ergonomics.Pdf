@@ -421,9 +421,9 @@ public class ForeignPdfTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
-        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
-            return new ValueTask<byte[]>(_rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+            return new ValueTask<byte[]>(_rsa.SignHash(hash.ToArray(), hashAlgorithm, RSASignaturePadding.Pkcs1));
         }
     }
 }

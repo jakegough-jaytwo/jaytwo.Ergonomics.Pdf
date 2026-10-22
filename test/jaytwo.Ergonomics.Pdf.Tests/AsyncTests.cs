@@ -441,10 +441,10 @@ public class AsyncTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => Array.Empty<byte[]>();
 
-        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             await Task.Delay(1, cancellationToken).ConfigureAwait(false);
-            return _key.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            return _key.SignHash(hash.ToArray(), hashAlgorithm, RSASignaturePadding.Pkcs1);
         }
     }
 
@@ -465,7 +465,7 @@ public class AsyncTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => Array.Empty<byte[]>();
 
-        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
             _cancellation.CancelAfter(50);
             if (_throwSecret)
