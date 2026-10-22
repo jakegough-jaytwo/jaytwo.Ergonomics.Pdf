@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Ergonomics.Pdf.Signatures;
 
@@ -16,7 +18,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="CmsDetachedSignatureProvider"/> class.
     /// </summary>
-    /// <param name="signer">The host signer. For PKCS#11, <see cref="IPdfExternalSigner.SignHash"/> must not hash the digest again.</param>
+    /// <param name="signer">The host signer. For PKCS#11, <see cref="IPdfExternalSigner.SignHashAsync"/> must not hash the digest again.</param>
     public CmsDetachedSignatureProvider(IPdfExternalSigner signer)
         : this(signer, null)
     {
@@ -25,7 +27,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// <summary>
     /// Initializes a new instance of the <see cref="CmsDetachedSignatureProvider"/> class.
     /// </summary>
-    /// <param name="signer">The host signer. For PKCS#11, <see cref="IPdfExternalSigner.SignHash"/> must not hash the digest again.</param>
+    /// <param name="signer">The host signer. For PKCS#11, <see cref="IPdfExternalSigner.SignHashAsync"/> must not hash the digest again.</param>
     /// <param name="timestampAuthority">When set, the signature value is timestamped and the token is stored as an unsigned CMS attribute. This is not a document timestamp revision.</param>
     public CmsDetachedSignatureProvider(IPdfExternalSigner signer, ITimestampAuthority? timestampAuthority)
     {
@@ -42,17 +44,21 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// Creates a detached CMS SignedData value over the signed byte ranges.
     /// </summary>
     /// <param name="context">The signed ranges.</param>
+    /// <param name="cancellationToken">Passed to the signer and the timestamp authority.</param>
     /// <returns>The CMS ContentInfo bytes.</returns>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. An exception the signer or a host authority throws after cancellation is replaced with a fresh one.</exception>
     /// <exception cref="CryptographicException">A member of the host signer threw. The message is generic, and the exception has no inner exception.</exception>
     /// <exception cref="PdfSignException">The leaf certificate is null, empty, or not a DER-encoded certificate, or an additional certificate or the signature value is null or empty.</exception>
     /// <exception cref="PdfSignatureTooLargeException">The certificates, signature value, and time-stamp token returned so far already exceed <see cref="PdfSignatureContext.ReservedContentsBytes"/>.</exception>
-    /// <exception cref="PdfTimestampException">The time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
-    public byte[] CreateContents(PdfSignatureContext context)
+    /// <exception cref="PdfTimestampException">A host timestamp authority threw; the message is generic, and the exception has no inner exception. Or the time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
+    public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
     {
         if (context == null)
         {
             throw new ArgumentNullException(nameof(context));
         }
+
+        cancellationToken.ThrowIfCancellationRequested();
 
         // Each certificate, the signature value, and the token are embedded verbatim, so their
         // running total is a lower bound on the CMS length. It is checked before any DER is built.
@@ -79,12 +85,13 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             DerCodec.Oid("1.2.840.113549.1.9.5"),
             DerCodec.Set(DerCodec.UtcTime(when)));
         byte[] signedAttrs = DerCodec.Set(contentType, messageDigest, signingTime);
-        byte[]? signature;
+        byte[] hash;
         using (SHA256 sha256 = SHA256.Create())
         {
-            byte[] hash = sha256.ComputeHash(signedAttrs);
-            signature = CallSigner(() => _signer.SignHash(hash));
+            hash = sha256.ComputeHash(signedAttrs);
         }
+
+        byte[]? signature = await CallSignerAsync(hash, cancellationToken).ConfigureAwait(false);
 
         if (signature == null || signature.Length == 0)
         {
@@ -102,7 +109,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             }
 
             byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
-            byte[]? token = _timestampAuthority.GetTimeStampToken(Rfc3161TimeStampRequest.Create(imprint, nonce));
+            byte[]? token = await TimestampAuthorityCall.GetTokenAsync(_timestampAuthority, Rfc3161TimeStampRequest.Create(imprint, nonce), cancellationToken).ConfigureAwait(false);
             if (token != null)
             {
                 AddToTotal(ref total, token.Length, reserved);
@@ -202,6 +209,23 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         if (total > reserved)
         {
             throw new PdfSignatureTooLargeException((int)Math.Min(total, int.MaxValue), reserved);
+        }
+    }
+
+    // A host that throws after the caller canceled gets a fresh cancellation, so none of its details leave either way.
+    private async ValueTask<byte[]?> CallSignerAsync(byte[] hash, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await _signer.SignHashAsync(hash, cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception) when (cancellationToken.IsCancellationRequested)
+        {
+            throw new OperationCanceledException(cancellationToken);
+        }
+        catch (Exception)
+        {
+            throw SignerFailed();
         }
     }
 

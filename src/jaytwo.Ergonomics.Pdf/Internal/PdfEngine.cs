@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Attachments;
@@ -978,7 +980,46 @@ internal sealed class PdfEngine : IDisposable
 
     internal void SaveIncremental(Stream destination, bool leaveOpen)
     {
+        SaveIncrementalAsync(destination, leaveOpen, false, CancellationToken.None).GetAwaiter().GetResult();
+    }
+
+    internal Task SaveIncrementalAsync(CancellationToken cancellationToken)
+    {
+        return SaveIncrementalAsync(_stream, _leaveOpen, true, cancellationToken);
+    }
+
+    internal Task SaveIncrementalAsync(Stream destination, bool leaveOpen, CancellationToken cancellationToken)
+    {
+        return SaveIncrementalAsync(destination, leaveOpen, true, cancellationToken);
+    }
+
+    internal void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)
+    {
+        using var release = ReleaseAfter();
+        Sign(_stream, options, provider, _leaveOpen);
+    }
+
+    internal void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen)
+    {
+        SignAsync(destination, options, provider, leaveOpen, false, CancellationToken.None).GetAwaiter().GetResult();
+    }
+
+    internal Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken)
+    {
+        return SignAsync(_stream, options, provider, _leaveOpen, true, cancellationToken);
+    }
+
+    internal Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen, CancellationToken cancellationToken)
+    {
+        return SignAsync(destination, options, provider, leaveOpen, true, cancellationToken);
+    }
+
+    // The synchronous and asynchronous saves share this path, so their bytes are identical. With useAsync false
+    // every await completes synchronously. The serializer writes the appendix to the destination synchronously.
+    private async Task SaveIncrementalAsync(Stream destination, bool leaveOpen, bool useAsync, CancellationToken cancellationToken)
+    {
         CheckDisposed();
+        cancellationToken.ThrowIfCancellationRequested();
         using var release = ReleaseAfter();
         ValidateDestination(destination);
         if (_length > MaxClassicOffset)
@@ -991,7 +1032,16 @@ internal sealed class PdfEngine : IDisposable
         {
             if (!same)
             {
-                CopyPrefix(destination);
+                try
+                {
+                    await CopyPrefixAsync(destination, useAsync, cancellationToken).ConfigureAwait(false);
+                }
+                catch
+                {
+                    Truncate(destination, 0);
+                    throw;
+                }
+
                 SwitchStream(destination, leaveOpen);
             }
 
@@ -999,33 +1049,39 @@ internal sealed class PdfEngine : IDisposable
         }
 
         EnsureAppendAllowed();
-        if (!same)
+        AppendixLayout layout;
+        try
         {
-            CopyPrefix(destination);
+            if (!same)
+            {
+                await CopyPrefixAsync(destination, useAsync, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                destination.Seek(_length, SeekOrigin.Begin);
+            }
+
+            if (NeedsLeadingLineFeed())
+            {
+                destination.WriteByte((byte)'\n');
+            }
+
+            layout = WriteAppendix(destination, 0);
         }
-        else
+        catch
         {
-            destination.Seek(_length, SeekOrigin.Begin);
+            Truncate(destination, same ? _length : 0);
+            throw;
         }
 
-        if (NeedsLeadingLineFeed())
-        {
-            destination.WriteByte((byte)'\n');
-        }
-
-        AppendixLayout layout = WriteAppendix(destination, 0);
         FinishWrite(destination, leaveOpen, same, layout);
     }
 
-    internal void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)
-    {
-        using var release = ReleaseAfter();
-        Sign(_stream, options, provider, _leaveOpen);
-    }
-
-    internal void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen)
+    // Shared by Sign and SignAsync like SaveIncrementalAsync. The synchronous sign waits for the provider.
+    private async Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen, bool useAsync, CancellationToken cancellationToken)
     {
         CheckDisposed();
+        cancellationToken.ThrowIfCancellationRequested();
         using var release = ReleaseAfter();
         if (options == null)
         {
@@ -1118,7 +1174,8 @@ internal sealed class PdfEngine : IDisposable
             var range = new PdfByteRange(0, less, less + gap, total - less - gap);
             PatchAscii(buffer, layout.ByteRange.DigitPosition, Ten(range.Offset0) + " " + Ten(range.Length0) + " " + Ten(range.Offset1) + " " + Ten(range.Length1));
             var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, () => OpenSigned(buffer, layout.Contents.LessThanPosition, gap));
-            byte[] contents = provider.CreateContents(context);
+            ValueTask<byte[]> pending = provider.CreateContentsAsync(context, cancellationToken);
+            byte[] contents = useAsync ? await pending.ConfigureAwait(false) : pending.AsTask().GetAwaiter().GetResult();
             if (contents.Length > options.ReservedContentsBytes)
             {
                 throw new PdfSignatureTooLargeException(contents.Length, options.ReservedContentsBytes);
@@ -1133,17 +1190,34 @@ internal sealed class PdfEngine : IDisposable
             string encoded = PdfTextCodec.ToUpperHex(contents);
             encoded.CopyTo(0, hex, 0, encoded.Length);
             PatchAscii(buffer, layout.Contents.HexPosition, new string(hex));
+            cancellationToken.ThrowIfCancellationRequested();
             bool same = ReferenceEquals(destination, _stream);
-            if (!same)
+            try
             {
-                CopyPrefix(destination);
+                if (!same)
+                {
+                    await CopyPrefixAsync(destination, useAsync, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    destination.Seek(_length, SeekOrigin.Begin);
+                }
+
+                if (useAsync)
+                {
+                    await destination.WriteAsync(buffer.GetBuffer(), 0, (int)buffer.Length, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    buffer.WriteTo(destination);
+                }
             }
-            else
+            catch
             {
-                destination.Seek(_length, SeekOrigin.Begin);
+                Truncate(destination, same ? _length : 0);
+                throw;
             }
 
-            buffer.WriteTo(destination);
             FinishWrite(destination, leaveOpen, same, layout);
             _backup = null;
         }
@@ -3392,22 +3466,49 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private void CopyPrefix(Stream destination)
+    private async Task CopyPrefixAsync(Stream destination, bool useAsync, CancellationToken cancellationToken)
     {
         _stream.Seek(0, SeekOrigin.Begin);
         var buffer = new byte[1024 * 1024];
         long remaining = _length;
         while (remaining > 0)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             int count = (int)Math.Min(buffer.Length, remaining);
-            int read = _stream.Read(buffer, 0, count);
+            int read = useAsync
+                ? await _stream.ReadAsync(buffer, 0, count, cancellationToken).ConfigureAwait(false)
+                : _stream.Read(buffer, 0, count);
             if (read == 0)
             {
                 throw new EndOfStreamException("The PDF stream ended before its declared length.");
             }
 
-            destination.Write(buffer, 0, read);
+            if (useAsync)
+            {
+                await destination.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                destination.Write(buffer, 0, read);
+            }
+
             remaining -= read;
+        }
+    }
+
+    // A failed or canceled write returns the destination to the length it had: empty, or the opened file's length.
+    // The write's own exception is the one the caller needs, so a failure to truncate is not reported over it.
+    private static void Truncate(Stream destination, long length)
+    {
+        try
+        {
+            if (destination.Length != length)
+            {
+                destination.SetLength(length);
+            }
+        }
+        catch (Exception)
+        {
         }
     }
 

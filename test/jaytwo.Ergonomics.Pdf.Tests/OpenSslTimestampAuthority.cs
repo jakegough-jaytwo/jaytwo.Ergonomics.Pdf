@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
 
@@ -58,13 +60,13 @@ internal sealed class OpenSslTimestampAuthority : ITimestampAuthority
         return ExternalTool.Output(process);
     }
 
-    public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+    public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
     {
         string tokenPath = Path.Combine(_directory, "token.tst");
         File.WriteAllBytes(RequestPath, timeStampReqDer.ToArray());
         Checked(_openssl, "ts", "-reply", "-config", Path.Combine(_directory, "ts.cnf"), "-queryfile", RequestPath, "-token_out", "-out", tokenPath);
         Token = File.ReadAllBytes(tokenPath);
-        return Token;
+        return new ValueTask<byte[]>(Token);
     }
 
     private static void Root(string openssl, string directory, string config, string name, string subject)

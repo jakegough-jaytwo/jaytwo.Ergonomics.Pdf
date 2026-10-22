@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.Internal;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Xunit;
@@ -731,9 +733,9 @@ public class HardeningTests
     {
         public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 }

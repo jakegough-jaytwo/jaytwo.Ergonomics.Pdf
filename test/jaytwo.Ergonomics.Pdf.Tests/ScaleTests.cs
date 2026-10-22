@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -104,10 +106,10 @@ public class ScaleTests
 
         public PdfByteRange Range { get; private set; }
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
             Range = context.ByteRange;
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 }

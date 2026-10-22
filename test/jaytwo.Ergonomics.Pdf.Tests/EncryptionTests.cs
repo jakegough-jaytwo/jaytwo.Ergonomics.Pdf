@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -871,9 +873,9 @@ public class EncryptionTests
     {
         public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 
@@ -881,9 +883,9 @@ public class EncryptionTests
     {
         public PdfSignatureKind Kind => PdfSignatureKind.DocTimeStamp;
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 }

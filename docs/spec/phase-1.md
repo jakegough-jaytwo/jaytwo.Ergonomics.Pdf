@@ -102,7 +102,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | W17 | **Formats.** `adbe.pkcs7.detached` (current) and **PAdES baseline B-B** (`ETSI.CAdES.detached`, ETSI EN 319 142-1): `signing-certificate-v2` signed attribute, no CMS `signing-time` attribute (the time is in `/M`). With a timestamp authority, the result is PAdES B-T. | Change (PAdES new) |
 | W18 | RFC 3161 signature timestamp as an unsigned attribute, and document timestamps as a separate revision, with the existing nonce, imprint, algorithm, and certificate checks. | Exists |
 | W19 | Failure never extends the output: signer, timestamp, size, and validation failures leave the destination unchanged. Signer exception details are not exposed. | Exists |
-| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. `SaveIncrementalAsync` and `SignAsync` exist beside the synchronous methods. Reads stay synchronous. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | New |
+| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. `SaveIncrementalAsync` and `SignAsync` exist beside the synchronous methods. Reads stay synchronous. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | Exists |
 
 ### 6.6 API
 

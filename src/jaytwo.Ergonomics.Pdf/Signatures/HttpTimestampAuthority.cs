@@ -33,12 +33,14 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
     /// Posts the request and returns the embedded time-stamp token.
     /// </summary>
     /// <param name="timeStampReqDer">A DER-encoded TimeStampReq.</param>
+    /// <param name="cancellationToken">Cancels the exchange. Its cancellation is an <see cref="OperationCanceledException"/>, not a timeout.</param>
     /// <returns>The TimeStampToken ContentInfo.</returns>
     /// <exception cref="PdfTimestampException">The response is not HTTP success, is larger than 2 MiB, or does not carry a granted token.</exception>
     /// <exception cref="TaskCanceledException"><see cref="HttpClient.Timeout"/> elapsed while waiting for the response headers or reading the body. The inner exception is a <see cref="TimeoutException"/> on every framework.</exception>
-    public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. Its <see cref="OperationCanceledException.CancellationToken"/> is that token on every framework.</exception>
+    public async ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
     {
-        byte[] body = ExchangeAsync(timeStampReqDer.ToArray()).ConfigureAwait(false).GetAwaiter().GetResult();
+        byte[] body = await ExchangeAsync(timeStampReqDer.ToArray(), cancellationToken).ConfigureAwait(false);
         return ExtractToken(body);
     }
 
@@ -107,15 +109,22 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
         return token.Full;
     }
 
-    private async Task<byte[]> ExchangeAsync(byte[] timeStampReqDer)
+    private async Task<byte[]> ExchangeAsync(byte[] timeStampReqDer, CancellationToken cancellationToken)
     {
         // This token owns the deadline for both response headers and the body. It is armed just
         // ahead of HttpClient's framework-specific timer so .NET Framework cannot win the timer
         // race with an unidentifiable bare cancellation. CancelPendingRequests does not set it.
         using CancellationTokenSource timeout = CreateDeadline();
+        using CancellationTokenSource linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
         try
         {
-            return await SendAndReadAsync(timeStampReqDer, timeout.Token).ConfigureAwait(false);
+            return await SendAndReadAsync(timeStampReqDer, linked.Token).ConfigureAwait(false);
+        }
+        catch (Exception exception) when (!(exception is PdfTimestampException) && cancellationToken.IsCancellationRequested)
+        {
+            // Aborting the body by disposing the response surfaces as an I/O error, and HttpClient
+            // reports the linked token, so the caller's cancellation is restated with its own token.
+            throw new OperationCanceledException("The timestamp request was canceled.", exception, cancellationToken);
         }
         catch (Exception exception) when (!(exception is PdfTimestampException) && timeout.IsCancellationRequested)
         {
@@ -130,8 +139,8 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
 
     private async Task<byte[]> SendAndReadAsync(byte[] timeStampReqDer, CancellationToken timeout)
     {
-        // ResponseHeadersRead keeps HttpClient from buffering the body. The same deadline token
-        // covers the header wait, body reads, and the response-disposal abort path.
+        // ResponseHeadersRead keeps HttpClient from buffering the body. The same deadline token,
+        // linked to the caller's, covers the header wait, body reads, and the response-disposal abort path.
         using var content = new ByteArrayContent(timeStampReqDer);
         content.Headers.ContentType = new MediaTypeHeaderValue("application/timestamp-query");
         using var request = new HttpRequestMessage(HttpMethod.Post, _endpoint) { Content = content };

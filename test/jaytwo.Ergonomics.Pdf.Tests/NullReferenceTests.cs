@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Xunit;
@@ -218,9 +220,9 @@ public class NullReferenceTests
     {
         public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 }

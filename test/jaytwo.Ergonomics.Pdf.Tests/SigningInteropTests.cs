@@ -11,6 +11,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Net.Pkcs11Interop.Common;
@@ -93,7 +95,7 @@ public class SigningInteropTests
     }
 
     [Fact]
-    public void pkcs11_signature_matches_pkcs1_and_pyhanko_and_pdfsig_trust_the_chain()
+    public async Task pkcs11_signature_matches_pkcs1_and_pyhanko_and_pdfsig_trust_the_chain()
     {
         string libraryPath = LocatePkcs11();
         string directory = ExternalTool.TempDirectory();
@@ -146,7 +148,7 @@ public class SigningInteropTests
             using (var verifier = RSA.Create())
             {
                 verifier.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
-                Assert.True(verifier.VerifyHash(probe, signer.SignHash(probe), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+                Assert.True(verifier.VerifyHash(probe, await signer.SignHashAsync(probe, CancellationToken.None), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
             }
 
             using var rootKey = RSA.Create(2048);
@@ -414,6 +416,47 @@ public class SigningInteropTests
         }
     }
 
+    // W-69: SignAsync, with a signer and an authority that complete asynchronously, writes what both verifiers
+    // accept: a timestamped signature, and one on a qpdf AES-256 file under the user and the owner password.
+    [Fact]
+    public async Task pdfsig_and_pyhanko_verify_signatures_from_sign_async()
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            using var rootKey = RSA.Create(2048);
+            using var leafKey = RSA.Create(2048);
+            using X509Certificate2 root = CreateAuthority("Interop Root", rootKey, null);
+            using X509Certificate2 leaf = CreateLeaf("Interop Leaf", leafKey, root);
+            var signer = new DeferredSigner(new RsaSigner(leafKey, leaf.RawData, new[] { root.RawData }));
+            byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf"));
+
+            byte[] timestamped = await SignAsync(original, null, signer, new DeferredAuthority(new OpenSslTimestampAuthority(openssl, directory)), DateTimeOffset.UtcNow);
+            Assert.Contains("Signer Certificate Common Name: Interop Leaf", PdfsigAccepts(timestamped, root.RawData, null, wholeFile: true));
+            string report = Validate(timestamped, root.RawData, null, "entire", "timestamp,tsa=" + Path.Combine(directory, "root.pem"));
+            Assert.Contains("intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("trusted=true", report, StringComparison.Ordinal);
+            Assert.Contains("timestamp_intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
+
+            byte[] encrypted = QpdfEncrypt(original, "256");
+            foreach (string password in new[] { "user-secret", "owner-secret" })
+            {
+                byte[] signed = await SignAsync(encrypted, password, signer, null, TestCompat.UnixEpoch);
+                PdfsigAccepts(signed, root.RawData, "user-secret", wholeFile: true);
+                string verdict = Validate(signed, root.RawData, "user-secret", "entire", null);
+                Assert.Contains("intact=true", verdict, StringComparison.Ordinal);
+                Assert.Contains("trusted=true", verdict, StringComparison.Ordinal);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     // W-97: qpdf encrypts the base file with each cipher. After Sign under the user or the owner password, pypdf reads
     // every signature dictionary string as passed, the gap the /ByteRange leaves is the plaintext CMS, and pyHanko and
     // pdfsig verify the signature. The CMS signing time is the Unix epoch, so pdfsig reads /M.
@@ -535,6 +578,21 @@ public class SigningInteropTests
         document.Sign(
             destination,
             new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = signingTime, FieldName = fieldName },
+            authority == null
+                ? new CmsDetachedSignatureProvider(signer)
+                : new CmsDetachedSignatureProvider(signer, authority),
+            leaveOpen: true);
+        return destination.ToArray();
+    }
+
+    private static async Task<byte[]> SignAsync(byte[] pdf, string? password, IPdfExternalSigner signer, ITimestampAuthority? authority, DateTimeOffset signingTime)
+    {
+        using var source = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(source, password, leaveOpen: true);
+        var destination = new MemoryStream();
+        await document.SignAsync(
+            destination,
+            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = signingTime },
             authority == null
                 ? new CmsDetachedSignatureProvider(signer)
                 : new CmsDetachedSignatureProvider(signer, authority),
@@ -811,9 +869,46 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
-            return _key.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            return new ValueTask<byte[]>(_key.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+        }
+    }
+
+    // Completes asynchronously, as a cloud key service does.
+    private sealed class DeferredSigner : IPdfExternalSigner
+    {
+        private readonly IPdfExternalSigner _inner;
+
+        public DeferredSigner(IPdfExternalSigner inner)
+        {
+            _inner = inner;
+        }
+
+        public byte[] CertificateDer => _inner.CertificateDer;
+
+        public IReadOnlyList<byte[]> AdditionalCertificates => _inner.AdditionalCertificates;
+
+        public async ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
+        {
+            await Task.Delay(1, cancellationToken).ConfigureAwait(false);
+            return await _inner.SignHashAsync(hash, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private sealed class DeferredAuthority : ITimestampAuthority
+    {
+        private readonly ITimestampAuthority _inner;
+
+        public DeferredAuthority(ITimestampAuthority inner)
+        {
+            _inner = inner;
+        }
+
+        public async ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
+        {
+            await Task.Delay(1, cancellationToken).ConfigureAwait(false);
+            return await _inner.GetTimeStampTokenAsync(timeStampReqDer, cancellationToken).ConfigureAwait(false);
         }
     }
 
@@ -844,13 +939,13 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => Chain;
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
             byte[] digestInfo = DerCodec.Sequence(
                 DerCodec.Sequence(DerCodec.Oid("2.16.840.1.101.3.4.2.1"), DerCodec.Null()),
                 DerCodec.OctetString(hash.ToArray()));
             using IMechanism mechanism = _session.Factories.MechanismFactory.Create(CKM.CKM_RSA_PKCS);
-            return _session.Sign(mechanism, _privateKey, digestInfo);
+            return new ValueTask<byte[]>(_session.Sign(mechanism, _privateKey, digestInfo));
         }
     }
 }

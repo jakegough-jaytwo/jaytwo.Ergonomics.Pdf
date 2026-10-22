@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.Signatures;
 
 namespace jaytwo.Ergonomics.Pdf.Fuzz;
@@ -31,8 +33,8 @@ internal sealed class SeedSigner : IPdfExternalSigner
         return new SeedSigner(rsa, certificate.RawData);
     }
 
-    public byte[] SignHash(ReadOnlySpan<byte> hash)
+    public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
     {
-        return _rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        return new ValueTask<byte[]>(_rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
     }
 }

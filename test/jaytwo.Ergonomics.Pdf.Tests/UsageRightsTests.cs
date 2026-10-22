@@ -9,6 +9,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
@@ -1084,14 +1086,14 @@ public class UsageRightsTests
 
         public PdfSignatureKind Kind { get; set; } = PdfSignatureKind.CmsDetached;
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
             if (Fail)
             {
                 throw new InvalidOperationException("The test provider failed.");
             }
 
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 
@@ -1110,9 +1112,9 @@ public class UsageRightsTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
-            return _rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            return new ValueTask<byte[]>(_rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
         }
     }
 }

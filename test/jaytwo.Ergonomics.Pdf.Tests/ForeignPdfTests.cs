@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using jaytwo.Ergonomics.Pdf.Signatures;
 using Xunit;
@@ -419,9 +421,9 @@ public class ForeignPdfTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
-            return _rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            return new ValueTask<byte[]>(_rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
         }
     }
 }

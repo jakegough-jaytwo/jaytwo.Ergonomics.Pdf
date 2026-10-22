@@ -83,14 +83,14 @@ public class SignatureTests
     }
 
     [Fact]
-    public void http_timestamp_authority_posts_the_query_and_returns_the_token()
+    public async Task http_timestamp_authority_posts_the_query_and_returns_the_token()
     {
         byte[] token = DerCodec.Sequence(DerCodec.Integer(7));
         byte[] body = DerCodec.Sequence(DerCodec.Sequence(DerCodec.Integer(0)), token);
         var handler = new RecordingHandler(body);
         var authority = new HttpTimestampAuthority(new HttpClient(handler), new Uri("https://tsa.example/stamp"));
 
-        byte[] returned = authority.GetTimeStampToken(new byte[] { 1, 2, 3 });
+        byte[] returned = await authority.GetTimeStampTokenAsync(new byte[] { 1, 2, 3 }, CancellationToken.None);
 
         Assert.Equal(token, returned);
         Assert.Equal("application/timestamp-query", handler.ContentType);
@@ -98,22 +98,22 @@ public class SignatureTests
     }
 
     [Fact]
-    public void http_timestamp_authority_accepts_granted_with_mods()
+    public async Task http_timestamp_authority_accepts_granted_with_mods()
     {
         byte[] token = DerCodec.Sequence(DerCodec.Integer(4));
         byte[] body = DerCodec.Sequence(DerCodec.Sequence(DerCodec.Integer(1)), token);
         var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(body)), new Uri("https://tsa.example/stamp"));
 
-        Assert.Equal(token, authority.GetTimeStampToken(new byte[] { 1 }));
+        Assert.Equal(token, await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
     }
 
     [Fact]
-    public void http_timestamp_authority_rejects_a_failure_status()
+    public async Task http_timestamp_authority_rejects_a_failure_status()
     {
         byte[] body = DerCodec.Sequence(DerCodec.Sequence(DerCodec.Integer(2)));
         var authority = new HttpTimestampAuthority(new HttpClient(new RecordingHandler(body)), new Uri("https://tsa.example/stamp"));
 
-        Assert.Throws<PdfTimestampException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        await Assert.ThrowsAsync<PdfTimestampException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
     }
 
     [Fact]
@@ -135,12 +135,12 @@ public class SignatureTests
     }
 
     [Fact]
-    public void oversized_timestamp_response_is_refused_after_a_bounded_read()
+    public async Task oversized_timestamp_response_is_refused_after_a_bounded_read()
     {
         var body = new GeneratedStream(Array.Empty<byte>(), 16777216);
         var authority = new HttpTimestampAuthority(new HttpClient(new StreamHandler(body)), new Uri("https://tsa.example/stamp"));
 
-        Exception? thrown = Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        Exception? thrown = await Record.ExceptionAsync(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
 
         Assert.InRange(body.BytesRead, 0, 2179072);
         PdfTimestampException rejected = Assert.IsType<PdfTimestampException>(thrown);
@@ -157,12 +157,12 @@ public class SignatureTests
     }
 
     [Fact]
-    public void declared_oversized_timestamp_response_is_refused_before_reading()
+    public async Task declared_oversized_timestamp_response_is_refused_before_reading()
     {
         var body = new GeneratedStream(Array.Empty<byte>(), 16777216);
         var authority = new HttpTimestampAuthority(new HttpClient(new StreamHandler(body, 16777216)), new Uri("https://tsa.example/stamp"));
 
-        Exception? thrown = Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        Exception? thrown = await Record.ExceptionAsync(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
 
         Assert.Equal(0, body.BytesRead);
         PdfTimestampException rejected = Assert.IsType<PdfTimestampException>(thrown);
@@ -170,76 +170,115 @@ public class SignatureTests
     }
 
     [Fact]
-    public void timestamp_response_at_the_cap_returns_its_token_and_one_byte_more_is_refused()
+    public async Task timestamp_response_at_the_cap_returns_its_token_and_one_byte_more_is_refused()
     {
         (byte[] atCap, byte[] token) = PaddedTimestampResponse(2097152);
         var atCapBody = new GeneratedStream(atCap, atCap.Length);
         var accepted = new HttpTimestampAuthority(new HttpClient(new StreamHandler(atCapBody)), new Uri("https://tsa.example/stamp"));
 
-        Assert.Equal(token, accepted.GetTimeStampToken(new byte[] { 1 }));
+        Assert.Equal(token, await accepted.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         Assert.Equal(2097152, atCapBody.BytesRead);
 
         (byte[] overCap, _) = PaddedTimestampResponse(2097153);
         var overCapBody = new GeneratedStream(overCap, overCap.Length);
         var refused = new HttpTimestampAuthority(new HttpClient(new StreamHandler(overCapBody)), new Uri("https://tsa.example/stamp"));
 
-        PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => refused.GetTimeStampToken(new byte[] { 1 }));
+        PdfTimestampException rejected = await Assert.ThrowsAsync<PdfTimestampException>(async () => await refused.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         Assert.Contains("larger than", rejected.Message, StringComparison.Ordinal);
         Assert.InRange(overCapBody.BytesRead, 0, 2179072);
     }
 
     [Fact]
-    public void stalled_timestamp_response_body_still_times_out()
+    public async Task stalled_timestamp_response_body_still_times_out()
     {
         var client = new HttpClient(new StreamHandler(new StallingStream())) { Timeout = TimeSpan.FromMilliseconds(500) };
         var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
         var watch = Stopwatch.StartNew();
 
-        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        TaskCanceledException canceled = await Assert.ThrowsAsync<TaskCanceledException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         Assert.IsType<TimeoutException>(canceled.InnerException);
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
     [Fact]
-    public void stalled_timestamp_response_headers_still_time_out()
+    public async Task stalled_timestamp_response_headers_still_time_out()
     {
         var client = new HttpClient(new StallingHandler()) { Timeout = TimeSpan.FromMilliseconds(500) };
         var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
         var watch = Stopwatch.StartNew();
 
-        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        TaskCanceledException canceled = await Assert.ThrowsAsync<TaskCanceledException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         Assert.IsType<TimeoutException>(canceled.InnerException);
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
     [Fact]
-    public void cancel_pending_timestamp_requests_is_not_reported_as_a_timeout()
+    public async Task cancel_pending_timestamp_requests_is_not_reported_as_a_timeout()
     {
         var handler = new ObservableStallingHandler();
         var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
         var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
-        Task<Exception> pending = Task.Run(() => Record.Exception(() => authority.GetTimeStampToken(new byte[] { 1 })));
+        Task<Exception> pending = Record.ExceptionAsync(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         Assert.True(handler.Started.Wait(TimeSpan.FromSeconds(10)));
 
         client.CancelPendingRequests();
 
-        Exception canceled = Assert.IsAssignableFrom<OperationCanceledException>(pending.GetAwaiter().GetResult());
+        Exception canceled = Assert.IsAssignableFrom<OperationCanceledException>(await pending);
         Assert.False(canceled.InnerException is TimeoutException);
     }
 
     [Fact]
-    public void stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response()
+    public async Task stalled_timestamp_body_that_ignores_the_token_is_aborted_by_disposing_the_response()
     {
         var body = new TokenIgnoringStream();
         var client = new HttpClient(new StreamHandler(body)) { Timeout = TimeSpan.FromMilliseconds(500) };
         var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
         var watch = Stopwatch.StartNew();
 
-        TaskCanceledException canceled = Assert.Throws<TaskCanceledException>(() => authority.GetTimeStampToken(new byte[] { 1 }));
+        TaskCanceledException canceled = await Assert.ThrowsAsync<TaskCanceledException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
         TimeoutException timeout = Assert.IsType<TimeoutException>(canceled.InnerException);
         Assert.IsType<ObjectDisposedException>(timeout.InnerException);
         Assert.True(body.Disposed);
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    [Fact]
+    public async Task caller_cancellation_of_timestamp_headers_is_not_reported_as_a_timeout()
+    {
+        var handler = new ObservableStallingHandler();
+        var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        using var cancellation = new CancellationTokenSource();
+        Task<Exception> pending = Record.ExceptionAsync(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, cancellation.Token));
+        Assert.True(handler.Started.Wait(TimeSpan.FromSeconds(10)));
+        var watch = Stopwatch.StartNew();
+
+        cancellation.Cancel();
+
+        OperationCanceledException canceled = Assert.IsAssignableFrom<OperationCanceledException>(await pending);
+        Assert.Equal(cancellation.Token, canceled.CancellationToken);
+        Assert.False(canceled is TaskCanceledException);
+        Assert.False(canceled.InnerException is TimeoutException);
+        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+    }
+
+    // The HttpClient deadline is far past the caller's, so finishing well before it shows the caller's cancellation
+    // aborted the body. The margin is wide because a loaded thread pool delays the abort continuation.
+    [Fact]
+    public async Task caller_cancellation_aborts_a_timestamp_body_that_ignores_the_token()
+    {
+        var body = new TokenIgnoringStream();
+        var client = new HttpClient(new StreamHandler(body)) { Timeout = TimeSpan.FromMinutes(5) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
+        using var cancellation = new CancellationTokenSource(TimeSpan.FromMilliseconds(500));
+        var watch = Stopwatch.StartNew();
+
+        OperationCanceledException canceled = await Assert.ThrowsAsync<OperationCanceledException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, cancellation.Token));
+
+        Assert.Equal(cancellation.Token, canceled.CancellationToken);
+        Assert.False(canceled.InnerException is TimeoutException);
+        Assert.True(body.Disposed);
+        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromMinutes(2));
     }
 
     [Fact]
@@ -1888,9 +1927,9 @@ public class SignatureTests
 
         public byte[] Payload { get; set; } = new byte[] { 1, 2, 3, 4 };
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
-            return Payload;
+            return new ValueTask<byte[]>(Payload);
         }
     }
 
@@ -1900,12 +1939,12 @@ public class SignatureTests
 
         public byte[] Digest { get; private set; } = Array.Empty<byte>();
 
-        public byte[] CreateContents(PdfSignatureContext context)
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
             using Stream signed = context.OpenSignedBytes();
             using SHA256 sha = SHA256.Create();
             Digest = sha.ComputeHash(signed);
-            return new byte[] { 1, 2, 3, 4 };
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
         }
     }
 
@@ -1913,11 +1952,11 @@ public class SignatureTests
     {
         public byte[] Request { get; private set; } = Array.Empty<byte>();
 
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             Request = timeStampReqDer.ToArray();
             (byte[] imprint, byte[] nonce) = ReadTimestampRequest(Request);
-            return BuildTimestampToken(imprint, nonce, TimestampFault.None);
+            return new ValueTask<byte[]>(BuildTimestampToken(imprint, nonce, TimestampFault.None));
         }
     }
 
@@ -1943,10 +1982,10 @@ public class SignatureTests
 
         public byte[] LastSignature { get; private set; } = Array.Empty<byte>();
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
             LastSignature = _rsa.SignHash(hash.ToArray(), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-            return LastSignature;
+            return new ValueTask<byte[]>(LastSignature);
         }
     }
 
@@ -1961,7 +2000,7 @@ public class SignatureTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
             throw new CryptographicException("The external signer failed.");
         }
@@ -1983,7 +2022,7 @@ public class SignatureTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
             var inner = new InvalidOperationException(Convert.ToBase64String(_sentinelKey));
             var exception = new InvalidOperationException(_sentinel, inner);
@@ -2030,10 +2069,10 @@ public class SignatureTests
 
         public int SignCalls { get; private set; }
 
-        public byte[] SignHash(ReadOnlySpan<byte> hash)
+        public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, CancellationToken cancellationToken)
         {
             SignCalls++;
-            return _sign(hash.ToArray());
+            return new ValueTask<byte[]>(_sign(hash.ToArray()));
         }
     }
 
@@ -2116,16 +2155,16 @@ public class SignatureTests
 
         public int Calls { get; private set; }
 
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             Calls++;
-            return new byte[_length];
+            return new ValueTask<byte[]>(new byte[_length]);
         }
     }
 
     private sealed class ThrowingAuthority : ITimestampAuthority
     {
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             throw new PdfTimestampException("The timestamp authority failed.");
         }
@@ -2135,11 +2174,11 @@ public class SignatureTests
     {
         public byte[] Request { get; private set; } = Array.Empty<byte>();
 
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             Request = timeStampReqDer.ToArray();
             (byte[] imprint, byte[] nonce) = ReadTimestampRequest(Request);
-            return BuildTimestampToken(imprint, nonce, TimestampFault.None);
+            return new ValueTask<byte[]>(BuildTimestampToken(imprint, nonce, TimestampFault.None));
         }
     }
 
@@ -2152,10 +2191,10 @@ public class SignatureTests
             _fault = fault;
         }
 
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             (byte[] imprint, byte[] nonce) = ReadTimestampRequest(timeStampReqDer.ToArray());
-            return BuildTimestampToken(imprint, nonce, _fault);
+            return new ValueTask<byte[]>(BuildTimestampToken(imprint, nonce, _fault));
         }
     }
 
@@ -2174,11 +2213,11 @@ public class SignatureTests
 
         public byte[] Token { get; private set; } = Array.Empty<byte>();
 
-        public byte[] GetTimeStampToken(ReadOnlySpan<byte> timeStampReqDer)
+        public ValueTask<byte[]> GetTimeStampTokenAsync(ReadOnlyMemory<byte> timeStampReqDer, CancellationToken cancellationToken)
         {
             (byte[] imprint, byte[] nonce) = ReadTimestampRequest(timeStampReqDer.ToArray());
             Token = BuildTimestampToken(imprint, nonce, TimestampFault.None, _form, _tsa, _chain);
-            return Token;
+            return new ValueTask<byte[]>(Token);
         }
     }
 
