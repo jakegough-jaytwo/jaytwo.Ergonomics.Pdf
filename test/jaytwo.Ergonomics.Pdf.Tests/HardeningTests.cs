@@ -228,6 +228,53 @@ public class HardeningTests
     }
 
     [Fact]
+    public void object_stream_body_allocation_is_proportional_to_decoded_size()
+    {
+        const int count = 65536;
+        byte[] warmup = ObjectStreamData(out int warmupFirst, 8);
+        Assert.Equal(8, PdfParser.ParseObjectStream(warmup, 8, warmupFirst).Count);
+        byte[] data = ObjectStreamData(out int first, count);
+
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        var objects = PdfParser.ParseObjectStream(data, count, first);
+        long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+        double factor = (double)allocated / data.Length;
+
+        Assert.Equal(count, objects.Count);
+        Assert.True(factor < 16, "Object-stream parsing allocated " + factor.ToString("F1", CultureInfo.InvariantCulture) + " bytes per decoded byte.");
+    }
+
+    [Theory]
+    [InlineData("0", 0L)]
+    [InlineData("+42", 42L)]
+    [InlineData("-42", -42L)]
+    [InlineData("9223372036854775807", long.MaxValue)]
+    [InlineData("-9223372036854775808", long.MinValue)]
+    public void integer_token_fast_path_preserves_the_full_long_range(string text, long expected)
+    {
+        byte[] data = Encoding.ASCII.GetBytes(text);
+        var parser = new PdfParser(PdfCursor.FromBytes(data), null, 0);
+
+        PdfObject.Num number = Assert.IsType<PdfObject.Num>(parser.ParseValue());
+
+        Assert.True(number.IsInteger);
+        Assert.Equal(expected, number.LongValue);
+    }
+
+    [Theory]
+    [InlineData("9223372036854775808")]
+    [InlineData("-9223372036854775809")]
+    public void integer_token_fast_path_still_refuses_values_outside_the_long_range(string text)
+    {
+        byte[] data = Encoding.ASCII.GetBytes(text);
+        var parser = new PdfParser(PdfCursor.FromBytes(data), null, 0);
+
+        PdfParseException error = Assert.Throws<PdfParseException>(() => parser.ParseValue());
+
+        Assert.Contains("Integer is out of range", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void object_stream_count_that_cannot_fit_before_first_is_refused()
     {
         byte[] pdf = ObjectStreamDocument("4 0 ", "<< /Title (ok) >>", count: "3");
@@ -543,6 +590,23 @@ public class HardeningTests
         builder.Compressed(4, 5, 0);
         builder.AppendXrefStream(7, "/Info 4 0 R");
         return builder.Snapshot();
+    }
+
+    private static byte[] ObjectStreamData(out int first, int count)
+    {
+        var header = new StringBuilder();
+        var body = new StringBuilder(count * 2);
+        for (int i = 0; i < count; i++)
+        {
+            header.Append((i + 1).ToString(CultureInfo.InvariantCulture));
+            header.Append(' ');
+            header.Append(body.Length.ToString(CultureInfo.InvariantCulture));
+            header.Append(' ');
+            body.Append("0 ");
+        }
+
+        first = header.Length;
+        return Encoding.ASCII.GetBytes(header.ToString() + body.ToString());
     }
 
     private static long OpenAllocation(byte[] pdf)

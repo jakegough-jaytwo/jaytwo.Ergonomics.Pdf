@@ -541,6 +541,7 @@ internal sealed class PdfParser
     {
         var map = new Dictionary<int, PdfObject>();
         var cursor = PdfCursor.FromBytes(data);
+        var parser = new PdfParser(cursor, null, 0);
         long budget = ((long)data.Length * ObjectStreamReadFactor) + ObjectStreamReadSlack;
         long consumed = 0;
         int header = 0;
@@ -555,7 +556,7 @@ internal sealed class PdfParser
 
             int start = first + offset;
             cursor.Seek(start);
-            var parser = new PdfParser(cursor, null, 0);
+            parser._pushback.Clear();
             PdfObject value = parser.ParseValue();
             if (parser.NextIsKeyword("stream"))
             {
@@ -857,17 +858,87 @@ internal sealed class PdfParser
 
     private Token ReadNumber(int first)
     {
-        var text = new StringBuilder();
-        text.Append((char)first);
-        bool real = first == '.';
+        long start = _cursor.Position - 1;
+        bool negative = first == '-';
         bool digits = first >= '0' && first <= '9';
+        if (first == '.')
+        {
+            return ReadRealNumber(start);
+        }
+
+        long limit = negative ? long.MinValue : -long.MaxValue;
+        long multiplyLimit = limit / 10;
+        long integer = digits ? -(first - '0') : 0;
+        bool overflow = false;
+        int length = 1;
         while (true)
         {
             int b = _cursor.PeekByte();
-            if ((b == '.' && !real) || (b >= '0' && b <= '9'))
+            if (b == '.')
+            {
+                return ReadRealNumber(start);
+            }
+
+            if (b < '0' || b > '9')
+            {
+                break;
+            }
+
+            CheckTokenLength(length, "number");
+            length++;
+            _cursor.ReadByte();
+            digits = true;
+            if (!overflow)
+            {
+                int digit = b - '0';
+                if (integer < multiplyLimit)
+                {
+                    overflow = true;
+                }
+                else
+                {
+                    integer *= 10;
+                    if (integer < limit + digit)
+                    {
+                        overflow = true;
+                    }
+                    else
+                    {
+                        integer -= digit;
+                    }
+                }
+            }
+        }
+
+        if (!digits)
+        {
+            throw Error("Invalid number.");
+        }
+
+        if (overflow)
+        {
+            throw Error("Integer is out of range.");
+        }
+
+        integer = negative ? integer : -integer;
+        return new Token(TokenKind.Integer, string.Empty, Array.Empty<byte>(), integer, integer);
+    }
+
+    private Token ReadRealNumber(long start)
+    {
+        _cursor.Seek(start);
+        var text = new StringBuilder();
+        int first = _cursor.ReadByte();
+        text.Append((char)first);
+        bool digits = first >= '0' && first <= '9';
+        bool decimalPoint = first == '.';
+        while (true)
+        {
+            int b = _cursor.PeekByte();
+            if ((b == '.' && !decimalPoint) || (b >= '0' && b <= '9'))
             {
                 CheckTokenLength(text.Length, "number");
-                real |= b == '.';
+                decimalPoint |= b == '.';
                 digits |= b != '.';
                 text.Append((char)_cursor.ReadByte());
                 continue;
@@ -882,16 +953,6 @@ internal sealed class PdfParser
         }
 
         string value = text.ToString();
-        if (!real)
-        {
-            if (!long.TryParse(value, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out long integer))
-            {
-                throw Error("Integer is out of range.");
-            }
-
-            return new Token(TokenKind.Integer, value, Array.Empty<byte>(), integer, integer);
-        }
-
         if (!double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double number))
         {
             throw Error("Real number is invalid.");
