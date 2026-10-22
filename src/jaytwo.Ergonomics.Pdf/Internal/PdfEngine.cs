@@ -748,6 +748,7 @@ internal sealed class PdfEngine : IDisposable
         foreach (FieldSlot slot in matches)
         {
             var appearance = AppearanceBuilder.ParseDefaultAppearance(slot.DefaultAppearance);
+            var box = AppearanceBox(slot.WidgetObjectId);
             byte[] bytes = AppearanceBuilder.Build(
                 value,
                 Math.Abs(slot.Rect.Width),
@@ -757,7 +758,11 @@ internal sealed class PdfEngine : IDisposable
                 appearance.Red,
                 appearance.Green,
                 appearance.Blue,
-                slot.Multiline);
+                slot.Multiline,
+                !slot.Multiline,
+                box.Background,
+                box.Border,
+                box.BorderWidth);
             var stream = new PdfObject.Dict();
             stream.Set("Type", new PdfObject.Name("XObject"));
             stream.Set("Subtype", new PdfObject.Name("Form"));
@@ -3212,6 +3217,7 @@ internal sealed class PdfEngine : IDisposable
         foreach (FieldSlot slot in matches)
         {
             var appearance = AppearanceBuilder.ParseDefaultAppearance(slot.DefaultAppearance);
+            var box = AppearanceBox(slot.WidgetObjectId);
             byte[] bytes = AppearanceBuilder.Build(
                 text,
                 Math.Abs(slot.Rect.Width),
@@ -3221,7 +3227,11 @@ internal sealed class PdfEngine : IDisposable
                 appearance.Red,
                 appearance.Green,
                 appearance.Blue,
-                lines.Count > 1 || slot.Multiline);
+                lines.Count > 1 || slot.Multiline,
+                false,
+                box.Background,
+                box.Border,
+                box.BorderWidth);
             WriteNormalAppearance(slot.WidgetObjectId, AllocateHelvAppearance(bytes, slot, fontId));
         }
 
@@ -3257,6 +3267,65 @@ internal sealed class PdfEngine : IDisposable
     private int AllocateHelvAppearance(byte[] bytes, FieldSlot slot, int fontId)
     {
         return AllocateFormXObject(bytes, Math.Abs(slot.Rect.Width), Math.Abs(slot.Rect.Height), true, fontId);
+    }
+
+    private (double[]? Background, double[]? Border, double BorderWidth) AppearanceBox(int widgetId)
+    {
+        PdfObject.Dict widget = (PdfObject.Dict)EditAny(widgetId);
+        if (ResolveMaybe(widget.Get("MK")) is not PdfObject.Dict appearance)
+        {
+            return (null, null, 0);
+        }
+
+        double[]? background = AppearanceColor(appearance.Get("BG"));
+        double[]? border = AppearanceColor(appearance.Get("BC"));
+        double borderWidth = border == null ? 0 : 1;
+        if (ResolveMaybe(widget.Get("BS")) is PdfObject.Dict borderStyle)
+        {
+            string? style = NameOf(ResolveMaybe(borderStyle.Get("S")));
+            if (style != null && style != "S")
+            {
+                border = null;
+                borderWidth = 0;
+            }
+            else if (TryNumber(borderStyle.Get("W"), out double width))
+            {
+                borderWidth = Math.Max(0, width);
+            }
+        }
+
+        return (background, border, borderWidth);
+    }
+
+    private double[]? AppearanceColor(PdfObject? value)
+    {
+        if (ResolveMaybe(value) is not PdfObject.Arr array || (array.Items.Count != 1 && array.Items.Count != 3 && array.Items.Count != 4))
+        {
+            return null;
+        }
+
+        var color = new double[array.Items.Count];
+        for (int i = 0; i < color.Length; i++)
+        {
+            if (!TryNumber(array.Items[i], out color[i]))
+            {
+                return null;
+            }
+        }
+
+        return color;
+    }
+
+    private bool TryNumber(PdfObject? value, out double number)
+    {
+        if (ResolveMaybe(value) is PdfObject.Num numeric)
+        {
+            number = numeric.IsInteger ? numeric.LongValue : numeric.DoubleValue;
+            return true;
+        }
+
+        number = 0;
+        return false;
     }
 
     private int AllocateFormXObject(byte[] bytes, double width, double height, bool helvetica, int fontId)

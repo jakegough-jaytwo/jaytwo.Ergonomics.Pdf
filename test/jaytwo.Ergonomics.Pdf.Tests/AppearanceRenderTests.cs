@@ -46,6 +46,33 @@ public class AppearanceRenderTests
     }
 
     [Fact]
+    public void poppler_fits_auto_sized_text_and_paints_widget_colors()
+    {
+        string poppler = LocatePoppler();
+        byte[] original = BuildAutoSizeAndColorForm();
+        byte[] filled = FillAutoSizeAndColorForm(original);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string path = Path.Combine(directory, "auto-size-and-color.pdf");
+            File.WriteAllBytes(path, filled);
+            List<PlacedWord> words = ReadWords(PdfToBBox(poppler, path));
+            PlacedWord fitted = Assert.Single(words, word => word.Text == "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            Assert.InRange(fitted.XMin, 40, 44);
+            Assert.InRange(fitted.XMax, 130, 180);
+
+            RasterPages(poppler, directory, "auto-size-and-color", path);
+            byte[] raster = ReadRaster(directory, "auto-size-and-color", 1);
+            Assert.True(CountDominantColor(raster, 320, 350, 74, 88, 0) > 200, "red background");
+            Assert.True(CountDominantColor(raster, 220, 360, 68, 72, 2) > 100, "blue border");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
     public void poppler_checks_visibility_encoding_alignment_clipping_rotation_and_crop()
     {
         string poppler = LocatePoppler();
@@ -357,6 +384,31 @@ public class AppearanceRenderTests
         return builder.Finish();
     }
 
+    private static byte[] BuildAutoSizeAndColorForm()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R 5 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Tx /T (Fit) /Rect [40 700 180 724] /DA (/Helv 0 Tf 0 g) /P 3 0 R >>");
+        builder.Indirect(5, "<< /Subtype /Widget /FT /Tx /T (Color) /Rect [220 700 360 724] /DA (/Helv 12 Tf 0 g) /MK << /BG [1 0 0] /BC [0 0 1] >> /BS << /W 2 /S /S >> /P 3 0 R >>");
+        return builder.Finish();
+    }
+
+    private static byte[] FillAutoSizeAndColorForm(byte[] pdf)
+    {
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Fit", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Color", "Color"));
+            document.SaveIncremental(stream);
+        }
+
+        return stream.ToArray();
+    }
+
     private static byte[] FillMatrix(byte[] pdf)
     {
         using var stream = new MemoryStream();
@@ -441,6 +493,27 @@ public class AppearanceRenderTests
     {
         (int width, int height, _) = ReadPpm(ppm);
         return DarkPixels(ppm, 0, width, 0, height);
+    }
+
+    private static int CountDominantColor(byte[] ppm, int x0, int x1, int y0, int y1, int channel)
+    {
+        (int width, _, int offset) = ReadPpm(ppm);
+        int count = 0;
+        for (int y = y0; y < y1; y++)
+        {
+            for (int x = x0; x < x1; x++)
+            {
+                int pixel = offset + (((y * width) + x) * 3);
+                int firstOther = (channel + 1) % 3;
+                int secondOther = (channel + 2) % 3;
+                if (ppm[pixel + channel] > 150 && ppm[pixel + firstOther] < 100 && ppm[pixel + secondOther] < 100)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     private static int LeftmostDark(byte[] ppm)

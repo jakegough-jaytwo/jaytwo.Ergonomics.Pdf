@@ -498,6 +498,64 @@ public class AcroFormTests
     }
 
     [Fact]
+    public void auto_sized_single_line_text_fits_width_down_to_the_six_point_floor()
+    {
+        const string value = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        byte[] fit = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 140 24] /DA (/Helv 0 Tf 0 g) /P 3 0 R >>");
+        byte[] floor = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 40 24] /DA (/Helv 0 Tf 0 g) /P 3 0 R >>");
+
+        double fittedSize = TfSize(AppendixAfterFill(fit, "Name", value));
+        double floorSize = TfSize(AppendixAfterFill(floor, "Name", value));
+
+        Assert.InRange(fittedSize, 6.001, 13.999);
+        Assert.Equal(6, floorSize);
+    }
+
+    [Theory]
+    [InlineData("[0.5]", "[0.25]", "0.5 g", "0.25 G")]
+    [InlineData("[1 0 0]", "[0 0 1]", "1 0 0 rg", "0 0 1 RG")]
+    [InlineData("[0 1 1 0]", "[1 0 0 0]", "0 1 1 0 k", "1 0 0 0 K")]
+    public void text_fill_paints_supported_mk_colors_and_a_solid_border_inside_the_box(
+        string background,
+        string border,
+        string backgroundOperator,
+        string borderOperator)
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 24] /DA (/Helv 12 Tf 0 g) /MK << /BG " + background + " /BC " + border + " >> /BS << /W 4 /S /S >> /P 3 0 R >>");
+
+        string appendix = AppendixAfterFill(pdf, "Name", "Ada");
+        int backgroundIndex = appendix.IndexOf(backgroundOperator + "\n0 0 100 24 re f", StringComparison.Ordinal);
+        int borderIndex = appendix.IndexOf(borderOperator + "\n4 w\n2 2 96 20 re S", StringComparison.Ordinal);
+        int textIndex = appendix.IndexOf("BT\n/Helv 12 Tf", StringComparison.Ordinal);
+
+        Assert.True(backgroundIndex >= 0);
+        Assert.True(borderIndex > backgroundIndex);
+        Assert.True(textIndex > borderIndex);
+    }
+
+    [Fact]
+    public void text_fill_without_mk_keeps_the_existing_appearance_stream_shape()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 24] /DA (/Helv 12 Tf 0 g) /P 3 0 R >>");
+
+        string appendix = AppendixAfterFill(pdf, "Name", "Ada");
+
+        Assert.Contains("q\nBT\n/Helv 12 Tf\n0 0 0 rg\n1 0 0 1 2 10 Tm\n(Ada) Tj\nET\nQ", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain(" re f\n", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain(" re S\n", appendix, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void choice_fill_paints_widget_mk_colors()
+    {
+        byte[] pdf = Form("<< /Subtype /Widget /FT /Ch /T (Choice) /Rect [0 0 100 24] /DA (/Helv 12 Tf 0 g) /Opt [(Ada)] /MK << /BG [1 0 0] /BC [0 0 1] >> /BS << /W 2 /S /S >> /P 3 0 R >>");
+
+        string appendix = AppendixAfterFill(pdf, "Choice", "Ada");
+
+        Assert.Contains("1 0 0 rg\n0 0 100 24 re f\n0 0 1 RG\n2 w\n1 1 98 22 re S", appendix, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void text_fill_preserves_the_widget_mk_dictionary()
     {
         byte[] pdf = Form("<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 100 24] /DA (/Helv 12 Tf 0 g) /MK << /BG [1 0 0] /BC [0 0 1] >> /P 3 0 R >>");
@@ -724,6 +782,18 @@ public class AcroFormTests
         Assert.True(start >= 0);
         start += marker.Length;
         int end = appendix.IndexOf(' ', start);
+        return double.Parse(appendix.Substring(start, end - start), CultureInfo.InvariantCulture);
+    }
+
+    private static double TfSize(string appendix)
+    {
+        const string marker = "/Helv ";
+        int end = appendix.LastIndexOf(" Tf", StringComparison.Ordinal);
+        Assert.True(end > 0);
+        int start = appendix.LastIndexOf(marker, end, StringComparison.Ordinal);
+        Assert.True(start >= 0);
+        start += marker.Length;
+        Assert.True(end > start);
         return double.Parse(appendix.Substring(start, end - start), CultureInfo.InvariantCulture);
     }
 

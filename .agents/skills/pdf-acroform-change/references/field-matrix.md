@@ -30,7 +30,7 @@ A checklist of field topology, inheritance, and appearance variants that real pr
 
 ## Text and appearances
 
-- `/DA` font size zero means auto size. The generator fits height only; width fitting and `/MK` drawing are documented limitations awaiting an owner decision on widening the subset (F-5, B-47).
+- `/DA` font size zero means auto size. Single-line WinAnsi text fits the field height and width, with six points as the floor. A regenerated appearance paints supported gray, RGB, and CMYK `/MK /BG` and `/MK /BC` colors, using a solid `/BS /W` border inside the box (W-47).
 - Fonts outside the supported Helvetica/WinAnsi subset, comb, rich text, and non-WinAnsi values set `/NeedAppearances` instead of a generated stream.
 - `/MK` border, background, and rotation; `/Rect` with a nonzero origin; widget rotation and the appearance `/Matrix`; clipping to the box.
 - Pre-existing `/NeedAppearances true` is kept unless the operation documents otherwise.

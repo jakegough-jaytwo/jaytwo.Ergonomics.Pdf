@@ -32,17 +32,41 @@ internal static class AppearanceBuilder
         556, 556, 556, 556, 556, 556, 556, 584, 611, 556, 556, 556, 556, 500, 556, 500,
     };
 
-    public static byte[] Build(string text, double width, double height, double fontSize, int align, double red, double green, double blue, bool multiline)
+    public static byte[] Build(
+        string text,
+        double width,
+        double height,
+        double fontSize,
+        int align,
+        double red,
+        double green,
+        double blue,
+        bool multiline,
+        bool fitWidth,
+        double[]? background,
+        double[]? border,
+        double borderWidth)
     {
         if (fontSize <= 0)
         {
             fontSize = Clamp(height - 4, 6, 14);
+            if (fitWidth)
+            {
+                string singleLine = text.Replace("\r", string.Empty).Replace("\n", string.Empty);
+                double measured = Measure(singleLine, 1);
+                if (measured > 0)
+                {
+                    fontSize = Math.Max(6, Math.Min(fontSize, Math.Max(0, width - 4) / measured));
+                }
+            }
         }
 
         List<string> lines = Wrap(text, width, fontSize, multiline);
         double leading = fontSize * 1.2;
         var builder = new StringBuilder();
-        builder.Append("q\nBT\n/Helv ");
+        builder.Append("q\n");
+        AppendBox(builder, width, height, background, border, borderWidth);
+        builder.Append("BT\n/Helv ");
         builder.Append(Format(fontSize));
         builder.Append(" Tf\n");
         builder.Append(Format(red));
@@ -117,6 +141,45 @@ internal static class AppearanceBuilder
     public static byte[] Radio(bool selected, double width, double height)
     {
         return Mark(selected, width, height, true);
+    }
+
+    private static void AppendBox(StringBuilder builder, double width, double height, double[]? background, double[]? border, double borderWidth)
+    {
+        if (background != null)
+        {
+            AppendColor(builder, background, stroking: false);
+            builder.Append("0 0 ").Append(Format(width)).Append(' ').Append(Format(height)).Append(" re f\n");
+        }
+
+        if (border == null || borderWidth <= 0)
+        {
+            return;
+        }
+
+        double effectiveWidth = Math.Min(borderWidth, Math.Min(width, height));
+        double inset = effectiveWidth / 2;
+        AppendColor(builder, border, stroking: true);
+        builder.Append(Format(effectiveWidth)).Append(" w\n");
+        builder.Append(Format(inset)).Append(' ').Append(Format(inset)).Append(' ');
+        builder.Append(Format(Math.Max(0, width - effectiveWidth))).Append(' ');
+        builder.Append(Format(Math.Max(0, height - effectiveWidth))).Append(" re S\n");
+    }
+
+    private static void AppendColor(StringBuilder builder, double[] color, bool stroking)
+    {
+        for (int i = 0; i < color.Length; i++)
+        {
+            if (i > 0)
+            {
+                builder.Append(' ');
+            }
+
+            builder.Append(Format(color[i]));
+        }
+
+        builder.Append(stroking
+            ? color.Length == 1 ? " G\n" : color.Length == 3 ? " RG\n" : " K\n"
+            : color.Length == 1 ? " g\n" : color.Length == 3 ? " rg\n" : " k\n");
     }
 
     private static List<string> Wrap(string text, double width, double fontSize, bool multiline)
