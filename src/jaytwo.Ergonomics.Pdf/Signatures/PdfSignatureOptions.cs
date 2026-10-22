@@ -6,6 +6,11 @@ namespace jaytwo.Ergonomics.Pdf.Signatures;
 public sealed class PdfSignatureOptions
 {
     /// <summary>
+    /// The largest <see cref="ReservedContentsBytes"/> accepted.
+    /// </summary>
+    internal const int MaxReservedContentsBytes = 1024 * 1024;
+
+    /// <summary>
     /// Gets the signature field name. When null, the next SignatureN name is used.
     /// An existing empty signature field with this name is reused, and its rectangle is kept.
     /// </summary>
@@ -28,13 +33,19 @@ public sealed class PdfSignatureOptions
     public PdfSignatureKind Kind { get; init; } = PdfSignatureKind.CmsDetached;
 
     /// <summary>
+    /// Gets the format of a CMS signature. The default is <see cref="PdfSignatureFormat.AdbePkcs7Detached"/>.
+    /// A document timestamp has no format; any other value with <see cref="PdfSignatureKind.DocTimeStamp"/> throws <see cref="PdfSignException"/>.
+    /// </summary>
+    public PdfSignatureFormat Format { get; init; } = PdfSignatureFormat.AdbePkcs7Detached;
+
+    /// <summary>
     /// Gets the digest of a CMS signature. The default is SHA-256. A document timestamp uses SHA-256 only;
     /// any other value with <see cref="PdfSignatureKind.DocTimeStamp"/> throws <see cref="PdfSignException"/>.
     /// </summary>
     public PdfDigestAlgorithm DigestAlgorithm { get; init; } = PdfDigestAlgorithm.Sha256;
 
     /// <summary>
-    /// Gets the number of bytes reserved for the hexadecimal /Contents value.
+    /// Gets the number of bytes reserved for the hexadecimal /Contents value, from 1 to 1,048,576.
     /// </summary>
     public int ReservedContentsBytes { get; init; } = 16384;
 
@@ -59,7 +70,8 @@ public sealed class PdfSignatureOptions
     public string? SignerName { get; init; }
 
     /// <summary>
-    /// Gets the signing time stored in /M and in the CMS signing-time attribute. When null, UTC now is used for CMS signatures.
+    /// Gets the signing time stored in /M and, for <see cref="PdfSignatureFormat.AdbePkcs7Detached"/>, in the CMS signing-time attribute.
+    /// When null, UTC now is used for CMS signatures.
     /// </summary>
     public System.DateTimeOffset? SigningTime { get; init; }
 }

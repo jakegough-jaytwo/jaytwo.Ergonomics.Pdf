@@ -135,6 +135,52 @@ public class SigningInteropTests
         }
     }
 
+    // W-71: every key and digest as PAdES baseline B-B. pyHanko trusts the signature and its signing-certificate-v2,
+    // the EN 319 142-1 checklist in validate_signature.py passes, and pdfsig reports ETSI.CAdES.detached.
+    [Theory]
+    [MemberData(nameof(SigningAlgorithmTests.Combinations), MemberType = typeof(SigningAlgorithmTests))]
+    public void pyhanko_and_pdfsig_accept_pades_baseline_b_for_every_key_and_digest(string keyKind, PdfDigestAlgorithm digestAlgorithm)
+    {
+        using var rootKey = RSA.Create(2048);
+        using X509Certificate2 root = CreateAuthority("PAdES Root", rootKey, null);
+        using AsymmetricAlgorithm leafKey = TestKeys.Create(keyKind);
+        using X509Certificate2 leaf = CreateLeaf("PAdES Leaf", leafKey, root);
+        var signer = new KeySigner(leafKey, leaf.RawData, new[] { root.RawData }, null);
+        byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, digestAlgorithm, null, PdfSignatureFormat.PadesBaselineB);
+        AssertVerifiersAccept(signed, root.RawData, "pades-b", keyKind, digestAlgorithm, "PAdES Leaf", "ETSI.CAdES.detached");
+        Assert.Contains("pades=B-B", Validate(signed, root.RawData, null, "entire", "pades-b"), StringComparison.Ordinal);
+    }
+
+    // W-71: with an OpenSSL RFC 3161 authority the signature is PAdES baseline B-T. pyHanko trusts the
+    // signature-time-stamp under the TSA root, and the checklist finds exactly that one unsigned attribute.
+    [Theory]
+    [InlineData(TestKeys.Rsa, PdfDigestAlgorithm.Sha256)]
+    [InlineData(TestKeys.P256, PdfDigestAlgorithm.Sha384)]
+    public void pyhanko_and_pdfsig_accept_pades_baseline_t_with_an_openssl_timestamp(string keyKind, PdfDigestAlgorithm digestAlgorithm)
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            using var rootKey = RSA.Create(2048);
+            using X509Certificate2 root = CreateAuthority("PAdES Root", rootKey, null);
+            using AsymmetricAlgorithm leafKey = TestKeys.Create(keyKind);
+            using X509Certificate2 leaf = CreateLeaf("PAdES Leaf", leafKey, root);
+            var signer = new KeySigner(leafKey, leaf.RawData, new[] { root.RawData }, null);
+            byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, digestAlgorithm, new OpenSslTimestampAuthority(openssl, directory), PdfSignatureFormat.PadesBaselineB);
+            string checks = "timestamp,tsa=" + Path.Combine(directory, "root.pem") + ",pades-t";
+            AssertVerifiersAccept(signed, root.RawData, checks, keyKind, digestAlgorithm, "PAdES Leaf", "ETSI.CAdES.detached");
+            string report = Validate(signed, root.RawData, null, "entire", checks);
+            Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
+            Assert.Contains("pades=B-T", report, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     // W-70: RSA through CKM_RSA_PKCS with a host-built DigestInfo, and P-256 and P-384 through CKM_ECDSA
     // on the raw digest, which returns the P1363 r||s value. Each key signs with every digest.
     [Theory]
@@ -489,12 +535,15 @@ public class SigningInteropTests
     // W-97: qpdf encrypts the base file with each cipher. After Sign under the user or the owner password, pypdf reads
     // every signature dictionary string as passed, the gap the /ByteRange leaves is the plaintext CMS, and pyHanko and
     // pdfsig verify the signature. The CMS signing time is the Unix epoch, so pdfsig reads /M.
+    // W-71: the PAdES rows check the same strings and the EN 319 142-1 checklist under each password.
     [Theory]
-    [InlineData("40", "user-secret")]
-    [InlineData("128-rc4", "owner-secret")]
-    [InlineData("128-aes", "user-secret")]
-    [InlineData("256", "owner-secret")]
-    public void encrypted_signature_dictionary_strings_read_in_pypdf_and_verify_in_pyhanko_and_pdfsig(string cipher, string password)
+    [InlineData("40", "user-secret", PdfSignatureFormat.AdbePkcs7Detached)]
+    [InlineData("128-rc4", "owner-secret", PdfSignatureFormat.AdbePkcs7Detached)]
+    [InlineData("128-aes", "user-secret", PdfSignatureFormat.AdbePkcs7Detached)]
+    [InlineData("256", "owner-secret", PdfSignatureFormat.AdbePkcs7Detached)]
+    [InlineData("128-aes", "owner-secret", PdfSignatureFormat.PadesBaselineB)]
+    [InlineData("256", "user-secret", PdfSignatureFormat.PadesBaselineB)]
+    public void encrypted_signature_dictionary_strings_read_in_pypdf_and_verify_in_pyhanko_and_pdfsig(string cipher, string password, PdfSignatureFormat format)
     {
         using var rootKey = RSA.Create(2048);
         using var leafKey = RSA.Create(2048);
@@ -518,6 +567,7 @@ public class SigningInteropTests
                     Location = "Denver",
                     ContactInfo = "signer@example.com",
                     SignerName = "Interop Leaf",
+                    Format = format,
                 },
                 new CmsDetachedSignatureProvider(signer),
                 leaveOpen: true);
@@ -542,8 +592,14 @@ public class SigningInteropTests
         Assert.Equal("signer@example.com", signature.GetProperty("ContactInfo").GetString());
         Assert.Equal("Interop Leaf", signature.GetProperty("Name").GetString());
 
-        PdfsigAccepts(signed, root.RawData, "user-secret", wholeFile: true);
-        Assert.Contains("intact=true", Validate(signed, root.RawData, "user-secret", "entire", null), StringComparison.Ordinal);
+        bool pades = format == PdfSignatureFormat.PadesBaselineB;
+        PdfsigAccepts(signed, root.RawData, "user-secret", wholeFile: true, signatureType: pades ? "ETSI.CAdES.detached" : "adbe.pkcs7.detached");
+        string report = Validate(signed, root.RawData, "user-secret", "entire", pades ? "pades-b" : null);
+        Assert.Contains("intact=true", report, StringComparison.Ordinal);
+        if (pades)
+        {
+            Assert.Contains("pades=B-B", report, StringComparison.Ordinal);
+        }
     }
 
     [Fact]
@@ -572,15 +628,15 @@ public class SigningInteropTests
         Validate(mismatched, certificate.RawData, null, "entire", "invalid");
     }
 
-    // W-14: pdfsig must accept the file's one signature as the library writes it today: adbe.pkcs7.detached, SHA-256 unless named,
-    // over exactly the /ByteRange in the file, valid, and trusted only when the root is configured.
-    private static List<string> PdfsigAccepts(byte[] signed, byte[]? root, string? password, bool wholeFile, string signingHash = "SHA-256")
+    // W-14: pdfsig must accept the file's one signature as the library writes it: adbe.pkcs7.detached unless named (W-71),
+    // SHA-256 unless named, over exactly the /ByteRange in the file, valid, and trusted only when the root is configured.
+    private static List<string> PdfsigAccepts(byte[] signed, byte[]? root, string? password, bool wholeFile, string signingHash = "SHA-256", string signatureType = "adbe.pkcs7.detached")
     {
         (int exitCode, string report) = Pdfsig.Verify(signed, root == null ? Array.Empty<byte[]>() : new[] { root }, password);
         List<List<string>> signatures = Pdfsig.Signatures(report);
         Assert.True(exitCode == 0 && signatures.Count == 1, report);
         List<string> signature = signatures[0];
-        Assert.Contains("Signature Type: adbe.pkcs7.detached", signature);
+        Assert.Contains("Signature Type: " + signatureType, signature);
         Assert.Contains("Signing Hash Algorithm: " + signingHash, signature);
         Assert.Contains(Pdfsig.SignedRanges(signed), signature);
         Assert.Contains(wholeFile ? Pdfsig.WholeFile : Pdfsig.NotWholeFile, signature);
@@ -595,7 +651,7 @@ public class SigningInteropTests
     }
 
     // W-70: pyHanko and pdfsig both report the digest, and pyHanko the signature mechanism, that the CMS names.
-    private static void AssertVerifiersAccept(byte[] signed, byte[] root, string? checks, string keyKind, PdfDigestAlgorithm digestAlgorithm, string commonName)
+    private static void AssertVerifiersAccept(byte[] signed, byte[] root, string? checks, string keyKind, PdfDigestAlgorithm digestAlgorithm, string commonName, string signatureType = "adbe.pkcs7.detached")
     {
         string bits = digestAlgorithm switch
         {
@@ -606,17 +662,17 @@ public class SigningInteropTests
         string report = Validate(signed, root, null, "entire", checks);
         Assert.Contains("md_algorithm=sha" + bits + "\n", report.Replace("\r\n", "\n"), StringComparison.Ordinal);
         Assert.Contains("mechanism=sha" + bits + (keyKind == TestKeys.Rsa ? "_rsa" : "_ecdsa") + "\n", report.Replace("\r\n", "\n"), StringComparison.Ordinal);
-        Assert.Contains("Signer Certificate Common Name: " + commonName, PdfsigAccepts(signed, root, null, wholeFile: true, "SHA-" + bits));
+        Assert.Contains("Signer Certificate Common Name: " + commonName, PdfsigAccepts(signed, root, null, wholeFile: true, "SHA-" + bits, signatureType));
     }
 
-    private static byte[] Sign(byte[] pdf, IPdfExternalSigner signer, PdfDigestAlgorithm digestAlgorithm, ITimestampAuthority? authority)
+    private static byte[] Sign(byte[] pdf, IPdfExternalSigner signer, PdfDigestAlgorithm digestAlgorithm, ITimestampAuthority? authority, PdfSignatureFormat format = PdfSignatureFormat.AdbePkcs7Detached)
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
         var destination = new MemoryStream();
         document.Sign(
             destination,
-            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = authority == null ? TestCompat.UnixEpoch : DateTimeOffset.UtcNow, DigestAlgorithm = digestAlgorithm },
+            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = authority == null ? TestCompat.UnixEpoch : DateTimeOffset.UtcNow, DigestAlgorithm = digestAlgorithm, Format = format },
             new CmsDetachedSignatureProvider(signer, authority),
             leaveOpen: true);
         return destination.ToArray();

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace jaytwo.Ergonomics.Pdf.Signatures;
 
 /// <summary>
-/// Builds a detached CMS SignedData value from a host RSA or ECDSA signer.
+/// Builds a detached CMS SignedData value from a host RSA or ECDSA signer, in the format that <see cref="PdfSignatureContext.Format"/> names.
 /// </summary>
 public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
 {
@@ -55,7 +55,8 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. An exception the signer or a host authority throws after cancellation is replaced with a fresh one.</exception>
     /// <exception cref="CryptographicException">A member of the host signer threw. The message is generic, and the exception has no inner exception.</exception>
     /// <exception cref="PdfSignException">The leaf certificate is null, empty, or not a DER-encoded certificate; its key is not RSA, ECDSA P-256, or ECDSA P-384; an additional certificate or the signature value is null or empty; or an ECDSA signature value is not the P1363 length for its curve.</exception>
-    /// <exception cref="PdfSignatureTooLargeException">The certificates, signature value, and time-stamp token returned so far already exceed <see cref="PdfSignatureContext.ReservedContentsBytes"/>.</exception>
+    /// <exception cref="PdfSignException">The certificates exceed 1,048,576 bytes, the largest reservation, so no reservation can hold the signature. The chain is not enumerated further, and the signer is not called.</exception>
+    /// <exception cref="PdfSignatureTooLargeException">The CMS value is larger than <see cref="PdfSignatureContext.ReservedContentsBytes"/>. <see cref="PdfSignatureTooLargeException.ActualBytes"/> is its exact length. The signer and any timestamp authority have been called, and a time-stamp token is not parsed.</exception>
     /// <exception cref="PdfTimestampException">A host timestamp authority threw; the message is generic, and the exception has no inner exception. Or the time-stamp token does not match the request by message imprint, digest algorithm, or nonce, or it does not include the TSA signing certificate that its ESS signing-certificate attribute identifies. The request sets certReq. Inclusion is checked; the certificate chain and trust are not.</exception>
     public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
     {
@@ -66,11 +67,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
 
         cancellationToken.ThrowIfCancellationRequested();
 
-        // Each certificate, the signature value, and the token are embedded verbatim, so their
-        // running total is a lower bound on the CMS length. It is checked before any DER is built.
-        int reserved = context.ReservedContentsBytes;
-        long total = 0;
-        List<byte[]> certificates = ReadCertificates(reserved, ref total);
+        List<byte[]> certificates = ReadCertificates();
         (byte[] issuer, byte[] serial, int ecdsaHalf) = ReadLeaf(certificates[0]);
         (string digestOid, HashAlgorithmName hashAlgorithm, int arc) = Digest(context.DigestAlgorithm);
 
@@ -87,11 +84,9 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         byte[] messageDigest = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.9.4"),
             DerCodec.Set(DerCodec.OctetString(digest)));
-        DateTimeOffset when = context.SigningTime ?? DateTimeOffset.UtcNow;
-        byte[] signingTime = DerCodec.Sequence(
-            DerCodec.Oid("1.2.840.113549.1.9.5"),
-            DerCodec.Set(DerCodec.UtcTime(when)));
-        byte[] signedAttrs = DerCodec.Set(contentType, messageDigest, signingTime);
+        byte[] signedAttrs = context.Format == PdfSignatureFormat.PadesBaselineB
+            ? DerCodec.Set(contentType, messageDigest, SigningCertificateV2(certificates[0], issuer, serial))
+            : DerCodec.Set(contentType, messageDigest, SigningTime(context.SigningTime ?? DateTimeOffset.UtcNow));
         byte[] hash;
         using (HashAlgorithm hasher = CreateHash(hashAlgorithm))
         {
@@ -105,7 +100,6 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             throw new PdfSignException("The external signer returned an empty signature.");
         }
 
-        AddToTotal(ref total, signature.Length, reserved);
         byte[] signatureAlgorithm;
         if (ecdsaHalf == 0)
         {
@@ -120,23 +114,24 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         }
 
         byte[]? unsignedAttrs = null;
+        byte[]? token = null;
+        byte[]? imprint = null;
+        byte[]? nonce = null;
         if (_timestampAuthority != null)
         {
-            byte[] imprint;
             using (SHA256 sha256 = SHA256.Create())
             {
                 imprint = sha256.ComputeHash(signature);
             }
 
-            byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
-            byte[]? token = await TimestampAuthorityCall.GetTokenAsync(_timestampAuthority, Rfc3161TimeStampRequest.Create(imprint, nonce), cancellationToken).ConfigureAwait(false);
-            if (token != null)
+            nonce = Rfc3161TimeStampRequest.NewNonce();
+            token = await TimestampAuthorityCall.GetTokenAsync(_timestampAuthority, Rfc3161TimeStampRequest.Create(imprint, nonce), cancellationToken).ConfigureAwait(false);
+            if (token == null)
             {
-                AddToTotal(ref total, token.Length, reserved);
+                Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
             }
 
-            Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
-
+            // The token is wrapped verbatim, so the CMS length below is exact before the token is parsed.
             byte[] attribute = DerCodec.Sequence(
                 DerCodec.Oid("1.2.840.113549.1.9.16.2.14"),
                 DerCodec.Set(token!));
@@ -166,9 +161,20 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.1")),
             certificateSet,
             DerCodec.Set(signerInfo));
-        return DerCodec.Sequence(
+        byte[] contents = DerCodec.Sequence(
             DerCodec.Oid("1.2.840.113549.1.7.2"),
             DerCodec.ExplicitContext(0, signedData));
+        if (contents.Length > context.ReservedContentsBytes)
+        {
+            throw new PdfSignatureTooLargeException(contents.Length, context.ReservedContentsBytes);
+        }
+
+        if (token != null)
+        {
+            Rfc3161TimeStampToken.RequireMatch(token, imprint!, nonce!);
+        }
+
+        return contents;
     }
 
     private static T CallSigner<T>(Func<T> access)
@@ -242,6 +248,30 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         throw new PdfSignException("The signer certificate key must be RSA, ECDSA P-256, or ECDSA P-384.");
     }
 
+    private static byte[] SigningTime(DateTimeOffset when)
+    {
+        return DerCodec.Sequence(
+            DerCodec.Oid("1.2.840.113549.1.9.5"),
+            DerCodec.Set(DerCodec.UtcTime(when)));
+    }
+
+    // ESS signing-certificate-v2 (RFC 5035 3) holds one ESSCertIDv2. Its certHash is SHA-256, so hashAlgorithm takes its
+    // DEFAULT and DER omits it. issuerSerial names the leaf issuer as the GeneralNames directoryName [4], as pyHanko writes it.
+    private static byte[] SigningCertificateV2(byte[] leaf, byte[] issuer, byte[] serial)
+    {
+        byte[] certHash;
+        using (SHA256 sha256 = SHA256.Create())
+        {
+            certHash = sha256.ComputeHash(leaf);
+        }
+
+        byte[] issuerSerial = DerCodec.Sequence(DerCodec.Sequence(DerCodec.ExplicitContext(4, issuer)), serial);
+        byte[] certId = DerCodec.Sequence(DerCodec.OctetString(certHash), issuerSerial);
+        return DerCodec.Sequence(
+            DerCodec.Oid("1.2.840.113549.1.9.16.2.47"),
+            DerCodec.Set(DerCodec.Sequence(DerCodec.Sequence(certId))));
+    }
+
     private static bool Same(byte[] left, byte[] right)
     {
         return ((ReadOnlySpan<byte>)left).SequenceEqual(right);
@@ -296,12 +326,12 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         return new CryptographicException("The external signer failed.");
     }
 
-    private static void AddToTotal(ref long total, int length, int reserved)
+    private static void AddToTotal(ref long total, int length)
     {
         total += length;
-        if (total > reserved)
+        if (total > PdfSignatureOptions.MaxReservedContentsBytes)
         {
-            throw new PdfSignatureTooLargeException((int)Math.Min(total, int.MaxValue), reserved);
+            throw new PdfSignException("The signer certificates exceed 1048576 bytes, the largest signature that can be reserved.");
         }
     }
 
@@ -322,17 +352,18 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         }
     }
 
-    // Reads CertificateDer once, and enumerates AdditionalCertificates only until the running
-    // total passes the reserved gap. A host exception becomes the generic signer failure.
-    private List<byte[]> ReadCertificates(int reserved, ref long total)
+    // Reads CertificateDer once, and enumerates AdditionalCertificates only until the running total passes
+    // the largest reservation, which bounds an endless chain. A host exception becomes the generic signer failure.
+    private List<byte[]> ReadCertificates()
     {
+        long total = 0;
         byte[]? leaf = CallSigner(() => _signer.CertificateDer);
         if (leaf == null || leaf.Length == 0)
         {
             throw new PdfSignException("The signer certificate is empty.");
         }
 
-        AddToTotal(ref total, leaf.Length, reserved);
+        AddToTotal(ref total, leaf.Length);
         var certificates = new List<byte[]> { leaf };
         IReadOnlyList<byte[]>? additional = CallSigner(() => _signer.AdditionalCertificates);
         if (additional == null)
@@ -351,7 +382,7 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
                     throw new PdfSignException("An additional certificate is empty.");
                 }
 
-                AddToTotal(ref total, extra.Length, reserved);
+                AddToTotal(ref total, extra.Length);
                 certificates.Add(extra);
             }
         }

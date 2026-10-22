@@ -14,6 +14,10 @@ checks is a comma-separated list:
                         verify under the embedded signer certificate
   fieldmdp=A|B          print pyHanko's FieldMDP verdict for each named field,
                         as fieldmdp:NAME=locked or fieldmdp:NAME=open
+  pades-b               the signature meets the PAdES baseline B-B profile
+                        (ETSI EN 319 142-1 6.3) and has no unsigned attributes
+  pades-t               the same, with exactly one signature-time-stamp unsigned
+                        attribute, which makes it PAdES baseline B-T
 
 Without checks, the signature must be intact, cryptographically valid, and trusted.
 """
@@ -21,10 +25,13 @@ Without checks, the signature must be intact, cryptographically valid, and trust
 import sys
 from pathlib import Path
 
+from asn1crypto import core
+from asn1crypto import tsp  # noqa: F401  registers signing_certificate_v2
 from asn1crypto import x509 as asn1x509
 from cryptography.hazmat.primitives.serialization import Encoding
 from cryptography.x509 import load_pem_x509_certificate
 from pyhanko.pdf_utils.reader import PdfFileReader
+from pyhanko.sign.general import check_ess_certid
 from pyhanko.sign.validation import validate_pdf_signature
 from pyhanko.sign.validation.status import SignatureCoverageLevel
 from pyhanko_certvalidator import ValidationContext
@@ -46,6 +53,47 @@ def parse_checks(raw: str) -> tuple[list[str], str | None]:
         else:
             checks.append(item)
     return checks, tsa
+
+
+def check_pades(signature, timestamped: bool) -> None:
+    """ETSI EN 319 142-1 6.3, read from the file and the CMS without the library's code."""
+    sig = signature.sig_object
+    if sig.get("/SubFilter") != "/ETSI.CAdES.detached":
+        sys.exit("PAdES: /SubFilter is " + str(sig.get("/SubFilter")) + ", expected /ETSI.CAdES.detached")
+    if "/M" not in sig:
+        sys.exit("PAdES: the signature dictionary has no /M")
+    if "/Cert" in sig:
+        sys.exit("PAdES: the signature dictionary has /Cert")
+    signer_info = signature.signer_info
+    signed = {}
+    for attribute in signer_info["signed_attrs"]:
+        name = attribute["type"].native
+        if name in signed:
+            sys.exit("PAdES: signed attribute " + name + " appears twice")
+        signed[name] = attribute["values"]
+    expected = {"content_type", "message_digest", "signing_certificate_v2"}
+    if set(signed) != expected:
+        sys.exit("PAdES: signed attributes are " + str(sorted(signed)) + ", expected " + str(sorted(expected)))
+    if len(signed["content_type"]) != 1 or signed["content_type"][0].native != "data":
+        sys.exit("PAdES: content-type is not id-data")
+    if len(signed["signing_certificate_v2"]) != 1:
+        sys.exit("PAdES: signing-certificate-v2 must have one value")
+    certs = signed["signing_certificate_v2"][0]["certs"]
+    if len(certs) < 1 or not check_ess_certid(signature.signer_cert, certs[0]):
+        sys.exit("PAdES: signing-certificate-v2 does not identify the signer certificate")
+    embedded = [c.chosen.dump() for c in signature.signed_data["certificates"]]
+    if signature.signer_cert.dump() not in embedded:
+        sys.exit("PAdES: the CMS does not carry the signer certificate")
+    unsigned_attrs = signer_info["unsigned_attrs"]
+    unsigned = [] if isinstance(unsigned_attrs, core.Void) else [
+        (a["type"].native, len(a["values"])) for a in unsigned_attrs
+    ]
+    if timestamped:
+        if unsigned != [("signature_time_stamp_token", 1)]:
+            sys.exit("PAdES B-T: unsigned attributes are " + str(unsigned) + ", expected one signature-time-stamp")
+    elif unsigned:
+        sys.exit("PAdES B-B: unexpected unsigned attributes " + str(unsigned))
+    print("pades=" + ("B-T" if timestamped else "B-B"))
 
 
 def main() -> None:
@@ -126,6 +174,8 @@ def main() -> None:
         print("timestamp_trusted=" + str(bool(token.trusted)).lower())
         if not token.intact or not token.valid or not token.trusted:
             sys.exit("time-stamp token was not accepted: " + token.summary())
+    if "pades-b" in checks or "pades-t" in checks:
+        check_pades(signature, "pades-t" in checks)
     if "docmdp-ok" in checks and not status.docmdp_ok:
         sys.exit("modification policy rejected the changes after signing")
     if "docmdp-illegal" in checks and status.docmdp_ok:

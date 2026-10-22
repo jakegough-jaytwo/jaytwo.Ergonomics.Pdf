@@ -10,12 +10,13 @@ public sealed class PdfSignatureContext
 {
     private readonly Func<Stream> _openSignedBytes;
 
-    internal PdfSignatureContext(PdfByteRange byteRange, int reservedContentsBytes, DateTimeOffset? signingTime, PdfDigestAlgorithm digestAlgorithm, Func<Stream> openSignedBytes)
+    internal PdfSignatureContext(PdfByteRange byteRange, int reservedContentsBytes, DateTimeOffset? signingTime, PdfDigestAlgorithm digestAlgorithm, PdfSignatureFormat format, Func<Stream> openSignedBytes)
     {
         ByteRange = byteRange;
         ReservedContentsBytes = reservedContentsBytes;
         SigningTime = signingTime;
         DigestAlgorithm = digestAlgorithm;
+        Format = format;
         _openSignedBytes = openSignedBytes;
     }
 
@@ -38,6 +39,12 @@ public sealed class PdfSignatureContext
     /// Gets the digest from <see cref="PdfSignatureOptions.DigestAlgorithm"/>. Always SHA-256 for a document timestamp.
     /// </summary>
     public PdfDigestAlgorithm DigestAlgorithm { get; }
+
+    /// <summary>
+    /// Gets the format from <see cref="PdfSignatureOptions.Format"/>. A CMS provider writes the signed attributes it names, because the
+    /// /SubFilter already declares it. Always <see cref="PdfSignatureFormat.AdbePkcs7Detached"/> for a document timestamp.
+    /// </summary>
+    public PdfSignatureFormat Format { get; }
 
     /// <summary>
     /// Opens a read-only stream of the bytes that the signature covers.

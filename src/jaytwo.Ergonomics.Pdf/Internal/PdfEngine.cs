@@ -1106,13 +1106,21 @@ internal sealed class PdfEngine : IDisposable
                 : "The digest algorithm must be SHA-256, SHA-384, or SHA-512.");
         }
 
+        if (options.Format != PdfSignatureFormat.AdbePkcs7Detached
+            && (options.Kind == PdfSignatureKind.DocTimeStamp || options.Format != PdfSignatureFormat.PadesBaselineB))
+        {
+            throw new PdfSignException(options.Kind == PdfSignatureKind.DocTimeStamp
+                ? "A document timestamp has no signature format."
+                : "The signature format must be adbe.pkcs7.detached or PAdES baseline B-B.");
+        }
+
         ValidateDestination(destination);
         if (_length > MaxClassicOffset)
         {
             throw new PdfTooLargeForClassicXrefException();
         }
 
-        if (options.ReservedContentsBytes < 1 || options.ReservedContentsBytes > (1024 * 1024))
+        if (options.ReservedContentsBytes < 1 || options.ReservedContentsBytes > PdfSignatureOptions.MaxReservedContentsBytes)
         {
             throw new PdfSignException("Reserved contents size must be between 1 and 1048576 bytes.");
         }
@@ -1181,7 +1189,7 @@ internal sealed class PdfEngine : IDisposable
             long total = _length + buffer.Length;
             var range = new PdfByteRange(0, less, less + gap, total - less - gap);
             PatchAscii(buffer, layout.ByteRange.DigitPosition, Ten(range.Offset0) + " " + Ten(range.Length0) + " " + Ten(range.Offset1) + " " + Ten(range.Length1));
-            var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, options.DigestAlgorithm, () => OpenSigned(buffer, layout.Contents.LessThanPosition, gap));
+            var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, options.DigestAlgorithm, options.Format, () => OpenSigned(buffer, layout.Contents.LessThanPosition, gap));
             ValueTask<byte[]> pending = provider.CreateContentsAsync(context, cancellationToken);
             byte[] contents = useAsync ? await pending.ConfigureAwait(false) : pending.AsTask().GetAwaiter().GetResult();
             if (contents.Length > options.ReservedContentsBytes)
@@ -3272,7 +3280,7 @@ internal sealed class PdfEngine : IDisposable
         {
             signature.Set("Type", new PdfObject.Name("Sig"));
             signature.Set("Filter", new PdfObject.Name("Adobe.PPKLite"));
-            signature.Set("SubFilter", new PdfObject.Name("adbe.pkcs7.detached"));
+            signature.Set("SubFilter", new PdfObject.Name(options.Format == PdfSignatureFormat.PadesBaselineB ? "ETSI.CAdES.detached" : "adbe.pkcs7.detached"));
             SetOptional(signature, "Reason", options.Reason);
             SetOptional(signature, "Location", options.Location);
             SetOptional(signature, "ContactInfo", options.ContactInfo);

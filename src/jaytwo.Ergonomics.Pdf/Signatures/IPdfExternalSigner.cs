@@ -15,14 +15,14 @@ public interface IPdfExternalSigner
 {
     /// <summary>
     /// Gets the leaf certificate, DER encoded. It is read once per signature, before <see cref="SignHashAsync"/>.
-    /// It must not be empty, and it counts toward the reserved contents size.
+    /// It must not be empty.
     /// </summary>
     byte[] CertificateDer { get; }
 
     /// <summary>
     /// Gets intermediate and root certificates, DER encoded, not including <see cref="CertificateDer"/>.
     /// An empty list means the host has only the leaf. The list is enumerated once, before <see cref="SignHashAsync"/>.
-    /// Enumeration stops with <see cref="PdfSignatureTooLargeException"/> as soon as the certificates read so far exceed the reserved contents size.
+    /// Enumeration stops with <see cref="PdfSignException"/> as soon as the certificates read so far exceed 1,048,576 bytes, the largest reservation.
     /// </summary>
     IReadOnlyList<byte[]> AdditionalCertificates { get; }
 
@@ -34,7 +34,7 @@ public interface IPdfExternalSigner
     /// and PKCS#11 <c>CKM_ECDSA</c> produce; the library DER-encodes it.
     /// Exceptions thrown by the implementation are replaced with a generic <see cref="CryptographicException"/>,
     /// or with a fresh <see cref="OperationCanceledException"/> when <paramref name="cancellationToken"/> has been canceled.
-    /// A signature that, with the certificates, exceeds the reserved contents size throws <see cref="PdfSignatureTooLargeException"/>.
+    /// A CMS value that exceeds the reserved contents size throws <see cref="PdfSignatureTooLargeException"/> with its exact length, after this call.
     /// </summary>
     /// <param name="hash">The raw digest: 32 bytes for SHA-256, 48 for SHA-384, 64 for SHA-512. Do not hash it again; a mechanism such as <c>CKM_SHA256_RSA_PKCS</c> or <c>CKM_ECDSA_SHA256</c> would.</param>
     /// <param name="hashAlgorithm">The digest algorithm from <see cref="PdfSignatureOptions.DigestAlgorithm"/>: <see cref="HashAlgorithmName.SHA256"/>, <see cref="HashAlgorithmName.SHA384"/>, or <see cref="HashAlgorithmName.SHA512"/>.</param>

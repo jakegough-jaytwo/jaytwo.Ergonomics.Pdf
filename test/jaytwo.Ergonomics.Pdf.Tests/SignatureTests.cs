@@ -1066,47 +1066,30 @@ public class SignatureTests
         }
     }
 
+    // W-71: certificates past the largest reservation can never fit, so they are refused before the leaf is parsed. Zero bytes
+    // are not a certificate, so reaching the parser would say so instead.
     [Fact]
-    public void oversize_signer_certificate_is_refused_before_it_is_parsed_or_signed()
+    public void certificates_past_the_largest_reservation_are_refused_before_they_are_parsed_or_signed()
     {
-        const int reserved = 8192;
         var signers = new List<HostileSigner>();
+        PdfSignException refused = AssertSignFailsWithoutWriting<PdfSignException>(
+            SignerBoundOptions(8192),
+            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => new byte[(1024 * 1024) + 1]))));
 
-        // Zero bytes are not a certificate, so reaching the parser would throw PdfSignException.
-        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
-            SignerBoundOptions(reserved),
-            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => new byte[reserved + 1]))));
-
-        Assert.Equal(reserved + 1, tooLarge.ActualBytes);
-        Assert.Equal(reserved, tooLarge.ReservedBytes);
+        Assert.Equal("The signer certificates exceed 1048576 bytes, the largest signature that can be reserved.", refused.Message);
         Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
     }
 
     [Fact]
-    public void oversize_signer_chain_is_refused_before_signing()
+    public void endless_signer_chain_stops_enumerating_at_the_largest_reservation()
     {
-        const int reserved = 8192;
+        const int certificateBytes = 4096;
         byte[] leaf = TimestampCertificates.Signer.Signer;
-        var signers = new List<HostileSigner>();
-        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
-            SignerBoundOptions(reserved),
-            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(additional: () => new[] { new byte[reserved / 2], new byte[reserved / 2] }))));
-
-        Assert.Equal(leaf.Length + reserved, tooLarge.ActualBytes);
-        Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
-    }
-
-    [Fact]
-    public void endless_signer_chain_stops_enumerating_at_the_reserved_size()
-    {
-        const int reserved = 8192;
-        const int certificateBytes = 1000;
-        byte[] leaf = TimestampCertificates.Signer.Signer;
-        int expectedCalls = ((reserved - leaf.Length) / certificateBytes) + 1;
+        int expectedCalls = (((1024 * 1024) - leaf.Length) / certificateBytes) + 1;
         var chains = new List<LazyCertificates>();
         var signers = new List<HostileSigner>();
-        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
-            SignerBoundOptions(reserved),
+        AssertSignFailsWithoutWriting<PdfSignException>(
+            SignerBoundOptions(8192),
             () =>
             {
                 var chain = new LazyCertificates(new byte[certificateBytes], -1, string.Empty);
@@ -1114,45 +1097,69 @@ public class SignatureTests
                 return new CmsDetachedSignatureProvider(Track(signers, Hostile(additional: () => chain)));
             });
 
-        Assert.Equal(leaf.Length + (expectedCalls * certificateBytes), tooLarge.ActualBytes);
         Assert.Equal(2, chains.Count);
         Assert.All(chains, chain => Assert.Equal(expectedCalls, chain.MoveNextCalls));
         Assert.All(signers, signer => Assert.Equal(0, signer.SignCalls));
     }
 
-    [Fact]
-    public void oversize_signature_value_is_refused_before_it_is_encoded()
+    // W-71: ActualBytes is the exact CMS length, like pyHanko's "contents required N bytes": reserving exactly that many bytes
+    // signs with no padding, and one byte fewer reports the same length again. The chain and the signature value are embedded
+    // verbatim, so zero bytes stand in for them, and the RSA test key signs deterministically.
+    [Theory]
+    [InlineData("chain")]
+    [InlineData("signature")]
+    public void overflow_reports_the_exact_cms_length_and_that_reservation_signs(string part)
     {
         const int reserved = 8192;
-        byte[] leaf = TimestampCertificates.Signer.Signer;
         var signers = new List<HostileSigner>();
+        Func<HostileSigner> create = part == "chain"
+            ? () => Track(signers, Hostile(additional: () => new[] { new byte[reserved / 2], new byte[reserved / 2] }))
+            : () => Track(signers, Hostile(sign: hash => new byte[reserved]));
+
         PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
             SignerBoundOptions(reserved),
-            () => new CmsDetachedSignatureProvider(Track(signers, Hostile(sign: hash => new byte[reserved]))));
+            () => new CmsDetachedSignatureProvider(create()));
 
-        Assert.Equal(leaf.Length + reserved, tooLarge.ActualBytes);
+        Assert.True(tooLarge.ActualBytes > reserved, tooLarge.Message);
+        Assert.Equal(reserved, tooLarge.ReservedBytes);
         Assert.All(signers, signer => Assert.Equal(1, signer.SignCalls));
+        Assert.Equal(tooLarge.ActualBytes, AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(SignerBoundOptions(tooLarge.ActualBytes - 1), () => new CmsDetachedSignatureProvider(create())).ActualBytes);
+
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            document.Sign(stream, SignerBoundOptions(tooLarge.ActualBytes), new CmsDetachedSignatureProvider(create()));
+        }
+
+        Match contents = Regex.Match(Encoding.ASCII.GetString(stream.ToArray()), @"/Contents\s*<([0-9A-Fa-f]+)>");
+        byte[] gap = TestCompat.FromHexString(contents.Groups[1].Value);
+        Assert.Equal(tooLarge.ActualBytes, gap.Length);
+        Assert.Equal(gap.Length, DerCodec.ReadTlv(gap).Full.Length);
     }
 
+    // W-71: an oversize token is wrapped verbatim to measure the CMS, and parsed only once it fits. At the reported size the
+    // zero-byte token fits, and only then does the parser reject it.
     [Fact]
-    public void oversize_signature_timestamp_token_is_refused_before_it_is_parsed()
+    public void oversize_signature_timestamp_token_reports_the_exact_length_before_it_is_parsed()
     {
         const int reserved = 8192;
         var authorities = new List<OversizeAuthority>();
+        Func<IPdfSignatureProvider> create = () =>
+        {
+            var authority = new OversizeAuthority(reserved + 1);
+            authorities.Add(authority);
+            return new CmsDetachedSignatureProvider(Hostile(), authority);
+        };
 
-        // Zero bytes are not a token, so reaching the token parser would throw PdfTimestampException.
-        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(
-            SignerBoundOptions(reserved),
-            () =>
-            {
-                var authority = new OversizeAuthority(reserved + 1);
-                authorities.Add(authority);
-                return new CmsDetachedSignatureProvider(Hostile(), authority);
-            });
+        PdfSignatureTooLargeException tooLarge = AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(SignerBoundOptions(reserved), create);
 
         Assert.True(tooLarge.ActualBytes > reserved + 1);
         Assert.Equal(reserved, tooLarge.ReservedBytes);
         Assert.All(authorities, authority => Assert.Equal(1, authority.Calls));
+        Assert.Equal(tooLarge.ActualBytes, AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(SignerBoundOptions(tooLarge.ActualBytes - 1), create).ActualBytes);
+        AssertSignFailsWithoutWriting<PdfTimestampException>(SignerBoundOptions(tooLarge.ActualBytes), create);
     }
 
     [Fact]
