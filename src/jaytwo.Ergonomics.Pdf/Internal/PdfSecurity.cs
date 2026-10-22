@@ -9,6 +9,8 @@ namespace jaytwo.Ergonomics.Pdf.Internal;
 
 internal sealed class PdfSecurity
 {
+    private const int StringChunk = 4096;
+
     private static readonly byte[] PasswordPadding =
     {
         0x28, 0xBF, 0x4E, 0x5E, 0x4E, 0x75, 0x8A, 0x41, 0x64, 0x00, 0x4E, 0x56, 0xFF, 0xFA, 0x01, 0x08,
@@ -174,9 +176,17 @@ internal sealed class PdfSecurity
         Apply(value, value.ObjectNumber, value.Generation);
     }
 
-    public byte[] Encrypt(byte[] plain, int objectNumber, int generation)
+    // Writes the string ciphertext to destination as Encrypt writes a stream body: through the cipher in bounded chunks,
+    // so the working set does not grow with the string.
+    public void Encrypt(byte[] plain, int objectNumber, int generation, Stream destination)
     {
-        return EncryptBytes(plain, objectNumber, generation, _strings);
+        Encrypt(_strings, ObjectKey(objectNumber, generation, _strings), destination, target =>
+        {
+            for (int offset = 0; offset < plain.Length; offset += StringChunk)
+            {
+                target.Write(plain, offset, Math.Min(StringChunk, plain.Length - offset));
+            }
+        });
     }
 
     public byte[] Decrypt(byte[] cipher, PdfObject.Dict dict)
@@ -187,34 +197,7 @@ internal sealed class PdfSecurity
     public void Encrypt(PdfObject.Dict dict, PdfObject.StreamBody body, Stream destination)
     {
         CipherKind kind = CipherFor(dict);
-        byte[] key = ObjectKey(dict.ObjectNumber, dict.Generation, kind);
-        if (kind == CipherKind.Rc4)
-        {
-            using (var rc4Guard = new NonClosingStream(destination))
-            using (var rc4 = new Rc4Stream(rc4Guard, key))
-            {
-                body.CopyTo(rc4);
-            }
-
-            return;
-        }
-
-        byte[] iv = new byte[16];
-        using (RandomNumberGenerator random = RandomNumberGenerator.Create())
-        {
-            random.GetBytes(iv);
-        }
-
-        destination.Write(iv, 0, iv.Length);
-        using var aes = Aes.Create();
-        aes.Mode = CipherMode.CBC;
-        aes.Padding = PaddingMode.PKCS7;
-        aes.Key = key;
-        aes.IV = iv;
-        using var guard = new NonClosingStream(destination);
-        using var crypto = new CryptoStream(guard, aes.CreateEncryptor(), CryptoStreamMode.Write);
-        body.CopyTo(crypto);
-        crypto.FlushFinalBlock();
+        Encrypt(kind, ObjectKey(dict.ObjectNumber, dict.Generation, kind), destination, body.CopyTo);
     }
 
     public Stream OpenDecrypted(Stream ciphertext, PdfObject.Dict dict)
@@ -746,12 +729,17 @@ internal sealed class PdfSecurity
         return _streams;
     }
 
-    private byte[] EncryptBytes(byte[] plain, int objectNumber, int generation, CipherKind kind)
+    private static void Encrypt(CipherKind kind, byte[] key, Stream destination, Action<Stream> writePlain)
     {
-        byte[] key = ObjectKey(objectNumber, generation, kind);
         if (kind == CipherKind.Rc4)
         {
-            return Rc4(key, plain);
+            using (var rc4Guard = new NonClosingStream(destination))
+            using (var rc4 = new Rc4Stream(rc4Guard, key))
+            {
+                writePlain(rc4);
+            }
+
+            return;
         }
 
         byte[] iv = new byte[16];
@@ -760,11 +748,11 @@ internal sealed class PdfSecurity
             random.GetBytes(iv);
         }
 
-        byte[] body = Transform(plain, key, iv, encrypt: true);
-        var cipher = new byte[iv.Length + body.Length];
-        Buffer.BlockCopy(iv, 0, cipher, 0, iv.Length);
-        Buffer.BlockCopy(body, 0, cipher, iv.Length, body.Length);
-        return cipher;
+        destination.Write(iv, 0, iv.Length);
+        using var guard = new NonClosingStream(destination);
+        using var aes = new EncryptingStream(guard, key, iv);
+        writePlain(aes);
+        aes.FlushFinalBlock();
     }
 
     private byte[] DecryptBytes(byte[] cipher, int objectNumber, int generation, CipherKind kind)
@@ -1254,6 +1242,110 @@ internal sealed class PdfSecurity
             {
                 _crypto.Dispose();
                 _aes.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+    }
+
+    // AES-CBC with PKCS#7 padding on write. Whole blocks go through the transform into a fixed buffer, so the working
+    // set does not grow with the plaintext; .NET Framework's CryptoStream allocates an output array on every write.
+    private sealed class EncryptingStream : Stream
+    {
+        private readonly Stream _inner;
+        private readonly Aes _aes;
+        private readonly ICryptoTransform _encryptor;
+        private readonly byte[] _chunk = new byte[65536];
+        private readonly byte[] _partial = new byte[16];
+        private int _partialCount;
+
+        public EncryptingStream(Stream inner, byte[] key, byte[] iv)
+        {
+            _inner = inner;
+            _aes = Aes.Create();
+            _aes.Mode = CipherMode.CBC;
+            _aes.Padding = PaddingMode.PKCS7;
+            _aes.Key = key;
+            _aes.IV = iv;
+            _encryptor = _aes.CreateEncryptor();
+        }
+
+        public override bool CanRead => false;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => true;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Flush()
+        {
+            _inner.Flush();
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            while (count > 0)
+            {
+                if (_partialCount > 0 || count < _partial.Length)
+                {
+                    int taken = Math.Min(count, _partial.Length - _partialCount);
+                    Buffer.BlockCopy(buffer, offset, _partial, _partialCount, taken);
+                    _partialCount += taken;
+                    offset += taken;
+                    count -= taken;
+                    if (_partialCount == _partial.Length)
+                    {
+                        _inner.Write(_chunk, 0, _encryptor.TransformBlock(_partial, 0, _partial.Length, _chunk, 0));
+                        _partialCount = 0;
+                    }
+
+                    continue;
+                }
+
+                int whole = Math.Min(count - (count % _partial.Length), _chunk.Length);
+                _inner.Write(_chunk, 0, _encryptor.TransformBlock(buffer, offset, whole, _chunk, 0));
+                offset += whole;
+                count -= whole;
+            }
+        }
+
+        // Pads and writes the last block. Call once, after the last Write.
+        public void FlushFinalBlock()
+        {
+            byte[] last = _encryptor.TransformFinalBlock(_partial, 0, _partialCount);
+            _inner.Write(last, 0, last.Length);
+            _partialCount = 0;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _encryptor.Dispose();
+                _aes.Dispose();
+                _inner.Dispose();
             }
 
             base.Dispose(disposing);

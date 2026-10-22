@@ -7,6 +7,9 @@ namespace jaytwo.Ergonomics.Pdf.Internal;
 
 internal static class PdfTextCodec
 {
+    // The longest escape of one literal-string byte: a backslash and three octal digits.
+    public const int MaxEscapedLength = 4;
+
     private static readonly ushort[] PdfDoc = BuildPdfDoc();
     private static readonly ushort[] WinAnsi = BuildWinAnsi();
     private static readonly Dictionary<int, byte> PdfDocReverse = BuildPdfDocReverse();
@@ -169,39 +172,48 @@ internal static class PdfTextCodec
     public static string EscapeLiteral(byte[] bytes)
     {
         var builder = new StringBuilder(bytes.Length + 8);
+        var escaped = new byte[MaxEscapedLength];
         foreach (byte b in bytes)
         {
-            if (b == (byte)'(' || b == (byte)')' || b == (byte)'\\')
+            int length = EscapeLiteral(b, escaped, 0);
+            for (int i = 0; i < length; i++)
             {
-                builder.Append('\\');
-                builder.Append((char)b);
-            }
-            else if (b == (byte)'\n')
-            {
-                builder.Append("\\n");
-            }
-            else if (b == (byte)'\r')
-            {
-                builder.Append("\\r");
-            }
-            else if (b == (byte)'\t')
-            {
-                builder.Append("\\t");
-            }
-            else if (b < 32 || b > 126)
-            {
-                builder.Append('\\');
-                builder.Append((b >> 6).ToString(CultureInfo.InvariantCulture));
-                builder.Append(((b >> 3) & 7).ToString(CultureInfo.InvariantCulture));
-                builder.Append((b & 7).ToString(CultureInfo.InvariantCulture));
-            }
-            else
-            {
-                builder.Append((char)b);
+                builder.Append((char)escaped[i]);
             }
         }
 
         return builder.ToString();
+    }
+
+    // Writes one byte of a literal string body, escaped, at destination[offset], and returns how many bytes it took:
+    // at most MaxEscapedLength.
+    public static int EscapeLiteral(byte b, byte[] destination, int offset)
+    {
+        if (b == (byte)'(' || b == (byte)')' || b == (byte)'\\')
+        {
+            destination[offset] = (byte)'\\';
+            destination[offset + 1] = b;
+            return 2;
+        }
+
+        if (b == (byte)'\n' || b == (byte)'\r' || b == (byte)'\t')
+        {
+            destination[offset] = (byte)'\\';
+            destination[offset + 1] = b == (byte)'\n' ? (byte)'n' : b == (byte)'\r' ? (byte)'r' : (byte)'t';
+            return 2;
+        }
+
+        if (b < 32 || b > 126)
+        {
+            destination[offset] = (byte)'\\';
+            destination[offset + 1] = (byte)('0' + (b >> 6));
+            destination[offset + 2] = (byte)('0' + ((b >> 3) & 7));
+            destination[offset + 3] = (byte)('0' + (b & 7));
+            return 4;
+        }
+
+        destination[offset] = b;
+        return 1;
     }
 
     public static DateTimeOffset ParseDate(string text)
@@ -287,6 +299,13 @@ internal static class PdfTextCodec
         }
 
         return new string(chars);
+    }
+
+    // Writes the two upper-case hex digits of value at destination[offset].
+    public static void ToUpperHex(byte value, byte[] destination, int offset)
+    {
+        destination[offset] = (byte)HexDigit(value >> 4);
+        destination[offset + 1] = (byte)HexDigit(value & 0xF);
     }
 
     private static bool IsAscii(string value)

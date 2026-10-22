@@ -12,6 +12,9 @@ internal sealed class PdfSerializer
     private readonly Action<PdfObject.FileBody, Stream> _copyFileBody;
     private readonly PdfSecurity? _security;
 
+    // Strings and the /Contents gap are encoded through this buffer rather than whole.
+    private readonly byte[] _chunk = new byte[4096];
+
     public PdfSerializer(Stream output, Action<PdfObject.FileBody, Stream> copyFileBody, PdfSecurity? security)
     {
         _output = output;
@@ -103,7 +106,13 @@ internal sealed class PdfSerializer
         {
             if (encryptStrings && _security != null)
             {
-                WriteString(new PdfObject.Str(_security.Encrypt(str.Raw, objectNumber, generation), true));
+                WriteByte('<');
+                using (var hex = new HexStream(this))
+                {
+                    _security.Encrypt(str.Raw, objectNumber, generation, hex);
+                }
+
+                WriteByte('>');
             }
             else
             {
@@ -156,7 +165,16 @@ internal sealed class PdfSerializer
             contents.LessThanPosition = _output.Position;
             WriteByte('<');
             contents.HexPosition = _output.Position;
-            WriteAscii(new string('0', checked(contents.ReservedBytes * 2)));
+            for (int i = 0; i < _chunk.Length; i++)
+            {
+                _chunk[i] = (byte)'0';
+            }
+
+            for (long remaining = checked(contents.ReservedBytes * 2L); remaining > 0; remaining -= _chunk.Length)
+            {
+                _output.Write(_chunk, 0, (int)Math.Min(_chunk.Length, remaining));
+            }
+
             WriteByte('>');
             return;
         }
@@ -205,14 +223,43 @@ internal sealed class PdfSerializer
         if (hex)
         {
             WriteByte('<');
-            WriteAscii(PdfTextCodec.ToUpperHex(str.Raw));
+            WriteHex(str.Raw, 0, str.Raw.Length);
             WriteByte('>');
             return;
         }
 
         WriteByte('(');
-        WriteAscii(PdfTextCodec.EscapeLiteral(str.Raw));
+        int used = 0;
+        foreach (byte b in str.Raw)
+        {
+            if (used > _chunk.Length - PdfTextCodec.MaxEscapedLength)
+            {
+                _output.Write(_chunk, 0, used);
+                used = 0;
+            }
+
+            used += PdfTextCodec.EscapeLiteral(b, _chunk, used);
+        }
+
+        _output.Write(_chunk, 0, used);
         WriteByte(')');
+    }
+
+    // Encodes in chunks, so the working set does not grow with the string.
+    private void WriteHex(byte[] data, int offset, int count)
+    {
+        while (count > 0)
+        {
+            int taken = Math.Min(count, _chunk.Length / 2);
+            for (int i = 0; i < taken; i++)
+            {
+                PdfTextCodec.ToUpperHex(data[offset + i], _chunk, i * 2);
+            }
+
+            _output.Write(_chunk, 0, taken * 2);
+            offset += taken;
+            count -= taken;
+        }
     }
 
     private void WriteName(string value)
@@ -252,5 +299,54 @@ internal sealed class PdfSerializer
     private static bool IsDelimiter(byte b)
     {
         return b is (byte)'(' or (byte)')' or (byte)'<' or (byte)'>' or (byte)'[' or (byte)']' or (byte)'{' or (byte)'}' or (byte)'/' or (byte)'%';
+    }
+
+    // Writes what the cipher produces to the serializer's output as hex digits.
+    private sealed class HexStream : Stream
+    {
+        private readonly PdfSerializer _serializer;
+
+        public HexStream(PdfSerializer serializer)
+        {
+            _serializer = serializer;
+        }
+
+        public override bool CanRead => false;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => true;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            _serializer.WriteHex(buffer, offset, count);
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            throw new NotSupportedException();
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new NotSupportedException();
+        }
     }
 }
