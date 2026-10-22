@@ -879,7 +879,7 @@ internal sealed class PdfEngine : IDisposable
         var list = new List<PdfAttachment>();
         foreach (AttachmentSlot slot in ReadAttachments())
         {
-            list.Add(new PdfAttachment(this, slot.Name, slot.Description, slot.MimeType, slot.Size));
+            list.Add(new PdfAttachment(this, slot.Name, slot.Description, slot.MimeType, slot.Size, slot.Relationship, slot.CreationDate, slot.ModificationDate));
         }
 
         return list;
@@ -903,15 +903,41 @@ internal sealed class PdfEngine : IDisposable
             throw new ArgumentException("Attachment content must be a seekable stream.", nameof(content));
         }
 
+        PdfAttachmentRelationship relationship = options?.Relationship ?? PdfAttachmentRelationship.Unspecified;
+        if (RelationshipOf(relationship.ToString()) != relationship)
+        {
+            throw new ArgumentOutOfRangeException(nameof(options), "The attachment relationship is not defined.");
+        }
+
         using var release = ReleaseAfter();
         EnsureDocumentChange();
         RequireModify();
         List<AttachmentSlot> slots = ReadAttachments();
         AttachmentSlot? previous = slots.FirstOrDefault(slot => slot.Name == name && slot.KeyInTree);
-        int replaced = slots.RemoveAll(slot => slot.Name == name);
-        ApplyUsageRights("EF", replaced == 0 ? "Create" : "Modify");
         long start = content.Position;
         long length = content.Length - start;
+
+        // Spec W10 and W11: the extra streaming pass for /CheckSum and the compressed /Length. It runs after every
+        // check that can refuse the write and before the document is dirtied.
+        bool compress = options?.Compress == true;
+        PdfObject.ExternalBody body = PdfObject.ExternalBody.Read(content, start, length, compress);
+        DateTimeOffset now = DateTimeOffset.UtcNow;
+        string creationDate = PdfTextCodec.FormatDate(options?.CreationDate ?? now);
+        string modificationDate = PdfTextCodec.FormatDate(options?.ModificationDate ?? now);
+        bool pageMode = options?.OpenAttachmentsPanel == true && NameOf(ResolveMaybe(CatalogDict().Get("PageMode"))) != "UseAttachments";
+        int replaced = slots.RemoveAll(slot => slot.Name == name);
+
+        // No UR3 right covers the catalog /PageMode (ISO 32000-1 Table 255), so a page-mode change is a write the
+        // transform cannot grant (spec 7.3).
+        if (pageMode)
+        {
+            ApplyUsageRights(null, null);
+        }
+        else
+        {
+            ApplyUsageRights("EF", replaced == 0 ? "Create" : "Modify");
+        }
+
         var embedded = new PdfObject.Dict();
         embedded.Set("Type", new PdfObject.Name("EmbeddedFile"));
         if (options?.MimeType is string mimeType && mimeType.Length > 0)
@@ -919,11 +945,20 @@ internal sealed class PdfEngine : IDisposable
             embedded.Set("Subtype", new PdfObject.Name(mimeType));
         }
 
+        if (compress)
+        {
+            embedded.Set("Filter", new PdfObject.Name("FlateDecode"));
+        }
+
+        // ISO 32000-1 Table 46: /CheckSum is the MD5 of the uncompressed bytes, a byte string.
         var parameters = new PdfObject.Dict();
         parameters.Set("Size", PdfObject.Num.FromLong(length));
+        parameters.Set("CreationDate", PdfTextCodec.Encode(creationDate));
+        parameters.Set("ModDate", PdfTextCodec.Encode(modificationDate));
+        parameters.Set("CheckSum", new PdfObject.Str(body.Checksum, true));
         embedded.Set("Params", parameters);
-        embedded.Set("Length", PdfObject.Num.FromLong(length));
-        embedded.Body = new PdfObject.ExternalBody(content, start, length);
+        embedded.Set("Length", PdfObject.Num.FromLong(body.Length));
+        embedded.Body = body;
         int streamId = Allocate(embedded);
         var spec = new PdfObject.Dict();
         spec.Set("Type", new PdfObject.Name("Filespec"));
@@ -933,7 +968,7 @@ internal sealed class PdfEngine : IDisposable
         ef.Set("F", new PdfObject.Ref(streamId, 0));
         ef.Set("UF", new PdfObject.Ref(streamId, 0));
         spec.Set("EF", ef);
-        spec.Set("AFRelationship", new PdfObject.Name("Unspecified"));
+        spec.Set("AFRelationship", new PdfObject.Name(relationship.ToString()));
         if (options?.Description is string description && description.Length > 0)
         {
             spec.Set("Desc", PdfTextCodec.Encode(description));
@@ -946,12 +981,23 @@ internal sealed class PdfEngine : IDisposable
         }
 
         // A replaced attachment keeps the key the tree held; WriteAttachments encodes a new one.
-        slots.Add(new AttachmentSlot(name, previous?.SortKey ?? Array.Empty<byte>(), specId, options?.Description, options?.MimeType, length, streamId) { KeyInTree = previous != null });
+        slots.Add(new AttachmentSlot(name, previous?.SortKey ?? Array.Empty<byte>(), specId, options?.Description, options?.MimeType, length, streamId)
+        {
+            KeyInTree = previous != null,
+            Relationship = relationship,
+            CreationDate = creationDate,
+            ModificationDate = modificationDate,
+        });
         WriteAttachments(slots);
+        if (pageMode)
+        {
+            EditCatalog().Set("PageMode", new PdfObject.Name("UseAttachments"));
+        }
 
-        // /UF in the file specification and in /EF is PDF 1.7 (ISO 32000-1 Table 44); /AF and /AFRelationship raise nothing (spec 7.5).
+        // /UF in the file specification and in /EF is PDF 1.7 (ISO 32000-1 Table 44), which covers /PageMode
+        // /UseAttachments (PDF 1.6, Table 28); /AF and /AFRelationship raise nothing (spec 7.5).
         RaiseVersion(17);
-        return new PdfAttachment(this, name, options?.Description, options?.MimeType, length);
+        return new PdfAttachment(this, name, options?.Description, options?.MimeType, length, relationship, creationDate, modificationDate);
     }
 
     internal void RemoveAttachment(string name)
@@ -3295,6 +3341,8 @@ internal sealed class PdfEngine : IDisposable
         int streamId = 0;
         string? mime = null;
         long? size = null;
+        string? creationDate = null;
+        string? modificationDate = null;
         if (ResolveMaybe(spec.Get("EF")) is PdfObject.Dict ef)
         {
             PdfObject? file = ef.Get("UF") ?? ef.Get("F");
@@ -3306,14 +3354,38 @@ internal sealed class PdfEngine : IDisposable
                 }
 
                 mime = NameOf(stream.Get("Subtype"));
-                if (ResolveMaybe(stream.Get("Params")) is PdfObject.Dict parameters && LongOrNull(parameters.Get("Size")) is long declared)
+                if (ResolveMaybe(stream.Get("Params")) is PdfObject.Dict parameters)
                 {
-                    size = declared;
+                    size = LongOrNull(parameters.Get("Size"));
+                    creationDate = ResolveMaybe(parameters.Get("CreationDate")) is PdfObject.Str created ? PdfTextCodec.Decode(created.Raw) : null;
+                    modificationDate = ResolveMaybe(parameters.Get("ModDate")) is PdfObject.Str modified ? PdfTextCodec.Decode(modified.Raw) : null;
                 }
             }
         }
 
-        return new AttachmentSlot(name, sort, specId, description, mime, size, streamId);
+        return new AttachmentSlot(name, sort, specId, description, mime, size, streamId)
+        {
+            Relationship = RelationshipOf(NameOf(ResolveMaybe(spec.Get("AFRelationship")))),
+            CreationDate = creationDate,
+            ModificationDate = modificationDate,
+        };
+    }
+
+    // ISO 32000-2 Table 43. An absent value, and a name that is not one of these, such as a second-class name, read
+    // as Unspecified, the value the standard gives a relationship that is not known.
+    private static PdfAttachmentRelationship RelationshipOf(string? name)
+    {
+        return name switch
+        {
+            "Source" => PdfAttachmentRelationship.Source,
+            "Data" => PdfAttachmentRelationship.Data,
+            "Alternative" => PdfAttachmentRelationship.Alternative,
+            "Supplement" => PdfAttachmentRelationship.Supplement,
+            "EncryptedPayload" => PdfAttachmentRelationship.EncryptedPayload,
+            "FormData" => PdfAttachmentRelationship.FormData,
+            "Schema" => PdfAttachmentRelationship.Schema,
+            _ => PdfAttachmentRelationship.Unspecified,
+        };
     }
 
     private void WriteAttachments(List<AttachmentSlot> slots)
@@ -3888,7 +3960,7 @@ internal sealed class PdfEngine : IDisposable
 
         if (dict.Body is PdfObject.ExternalBody external)
         {
-            return new PdfSliceStream(external.Source, external.Start, external.Length);
+            return new PdfSliceStream(external.Source, external.Start, external.ContentLength);
         }
 
         if (dict.Body is not PdfObject.FileBody file)
@@ -4565,5 +4637,12 @@ internal sealed class PdfEngine : IDisposable
         public long? Size { get; }
 
         public int StreamId { get; }
+
+        public PdfAttachmentRelationship Relationship { get; init; }
+
+        // The /Params dates as written, parsed only when PdfAttachment reads them.
+        public string? CreationDate { get; init; }
+
+        public string? ModificationDate { get; init; }
     }
 }

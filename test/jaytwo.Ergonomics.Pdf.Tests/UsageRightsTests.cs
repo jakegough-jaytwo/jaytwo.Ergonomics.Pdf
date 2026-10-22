@@ -111,6 +111,16 @@ public class UsageRightsTests
         Write("metadata trapped", null, document => document.Metadata["Trapped"] = "True"),
         Write("metadata XMP", null, document => document.Metadata.SetXmp(Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>"))),
         Write("attachment add", Create, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")))),
+
+        // W-75: the relationship, dates, checksum, and compression are part of the embedded file /EF Create grants.
+        // No UR3 right covers the catalog /PageMode, so opening the attachments panel is a write no transform grants.
+        Write("attachment add, relationship, dates, compressed", Create, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions
+        {
+            Relationship = PdfAttachmentRelationship.Data,
+            CreationDate = new DateTimeOffset(2026, 10, 21, 0, 0, 0, TimeSpan.Zero),
+            Compress = true,
+        })),
+        Write("attachment add, open attachments panel", null, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions { OpenAttachmentsPanel = true })),
         Write("attachment replace", Modify, document => document.Attachments.Add("old.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")))),
         Write("attachment remove", Delete, document => document.Attachments.Remove("old.txt")),
         Sign("sign, existing empty field", SignField, PdfSignatureKind.CmsDetached, "Signer"),

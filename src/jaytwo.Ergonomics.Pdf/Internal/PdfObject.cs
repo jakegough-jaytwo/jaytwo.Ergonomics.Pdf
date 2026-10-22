@@ -339,16 +339,27 @@ internal abstract class PdfObject
         }
     }
 
+    // Caller content for an embedded file. Read measures it once, for /Params /CheckSum and, when compressed, the
+    // encoded /Length the serializer writes before the body. CopyTo reads it again and refuses bytes that no longer
+    // match, so a save never publishes a checksum or length the content does not have.
     internal sealed class ExternalBody : StreamBody
     {
+        private const string ChangedMessage = "Attachment content changed after it was added.";
+
         private readonly Stream _stream;
         private readonly long _start;
+        private readonly long _contentLength;
+        private readonly bool _compress;
+        private readonly byte[] _checksum;
         private readonly long _length;
 
-        public ExternalBody(Stream stream, long start, long length)
+        private ExternalBody(Stream stream, long start, long contentLength, bool compress, byte[] checksum, long length)
         {
-            _stream = stream ?? throw new ArgumentNullException(nameof(stream));
+            _stream = stream;
             _start = start;
+            _contentLength = contentLength;
+            _compress = compress;
+            _checksum = checksum;
             _length = length;
         }
 
@@ -356,24 +367,42 @@ internal abstract class PdfObject
 
         public long Start => _start;
 
+        // The content's own bytes, before compression.
+        public long ContentLength => _contentLength;
+
+        // The MD5 of the content.
+        public byte[] Checksum => (byte[])_checksum.Clone();
+
+        // The bytes written between stream and endstream, before encryption.
         public override long Length => _length;
+
+        public static ExternalBody Read(Stream stream, long start, long contentLength, bool compress)
+        {
+            if (stream == null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            (byte[] checksum, long length) = PdfFlateEncoder.Copy(stream, start, contentLength, null, compress);
+            return new ExternalBody(stream, start, contentLength, compress, checksum, length);
+        }
 
         public override void CopyTo(Stream destination)
         {
-            _stream.Seek(_start, SeekOrigin.Begin);
-            var buffer = new byte[65536];
-            long remaining = _length;
-            while (remaining > 0)
+            byte[] checksum;
+            long written;
+            try
             {
-                int count = (int)Math.Min(buffer.Length, remaining);
-                int read = _stream.Read(buffer, 0, count);
-                if (read == 0)
-                {
-                    throw new EndOfStreamException("Attachment stream ended before its declared length.");
-                }
+                (checksum, written) = PdfFlateEncoder.Copy(_stream, _start, _contentLength, destination, _compress);
+            }
+            catch (EndOfStreamException exception)
+            {
+                throw new InvalidOperationException(ChangedMessage, exception);
+            }
 
-                destination.Write(buffer, 0, read);
-                remaining -= read;
+            if (written != _length || !checksum.AsSpan().SequenceEqual(_checksum))
+            {
+                throw new InvalidOperationException(ChangedMessage);
             }
         }
     }

@@ -418,6 +418,81 @@ public class EncryptionTests
         Assert.Equal(new byte[] { 0, 127, 255 }, body.ToArray());
     }
 
+    // W-75, plan C4: a compressed attachment's stream is Flate-encoded and then encrypted with the document's cipher,
+    // and its /Params dates and /CheckSum are encrypted strings. pypdf 6.21.1 decrypts and reads them.
+    [Theory]
+    [InlineData(2, 40, "user")]
+    [InlineData(3, 128, "owner")]
+    [InlineData(4, 128, "user")]
+    [InlineData(4, 128, "owner")]
+    [InlineData(6, 256, "user")]
+    [InlineData(6, 256, "owner")]
+    public void compressed_attachment_with_dates_and_checksum_round_trips_encrypted(int revision, int keyBits, string password)
+    {
+        byte[] pdf = revision switch
+        {
+            2 => Rc4Document(StandardEncryptor.Kind.Revision2, keyBits, textField: false),
+            3 => Rc4Document(StandardEncryptor.Kind.Revision3, keyBits, textField: false),
+            4 => AesDocument(StandardEncryptor.Kind.Revision4Aes, "user", "owner", textField: false),
+            _ => AesDocument(StandardEncryptor.Kind.Revision6, "user", "owner", textField: false),
+        };
+        byte[] content = Enumerable.Range(0, 3000).Select(value => (byte)(value % 7 == 0 ? value : 0x41)).ToArray();
+        var created = new DateTimeOffset(2026, 1, 2, 3, 4, 5, TimeSpan.Zero);
+        var destination = new MemoryStream();
+        using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false), password))
+        {
+            document.Attachments.Add("invoice.xml", new MemoryStream(content), options: new PdfAttachmentOptions
+            {
+                Relationship = PdfAttachmentRelationship.Alternative,
+                CreationDate = created,
+                ModificationDate = created,
+                Compress = true,
+            });
+            document.SaveIncremental(destination, leaveOpen: true);
+        }
+
+        byte[] saved = destination.ToArray();
+        Assert.True(saved.AsSpan(0, pdf.Length).SequenceEqual(pdf));
+        string appendix = Encoding.ASCII.GetString(saved, pdf.Length, saved.Length - pdf.Length);
+        string md5;
+        using (var hash = System.Security.Cryptography.MD5.Create())
+        {
+            md5 = TestCompat.ToHexString(hash.ComputeHash(content));
+        }
+
+        Assert.Contains("/Encrypt 20 0 R", appendix, StringComparison.Ordinal);
+        Assert.Contains("0102030405060708090A0B0C0D0E0F10", appendix, StringComparison.Ordinal);
+        Assert.Contains("/Filter /FlateDecode", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain("D:2026", appendix, StringComparison.Ordinal);
+        Assert.DoesNotContain(md5, appendix, StringComparison.OrdinalIgnoreCase);
+        using (var again = PdfDocument.Open(new MemoryStream(saved, writable: false), "user"))
+        {
+            PdfAttachment attachment = again.Attachments["invoice.xml"];
+            Assert.Equal(PdfAttachmentRelationship.Alternative, attachment.Relationship);
+            Assert.Equal(created, attachment.CreationDate);
+            using Stream opened = attachment.Open();
+            var body = new MemoryStream();
+            opened.CopyTo(body);
+            Assert.Equal(content, body.ToArray());
+        }
+
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string path = Path.Combine(directory, "encrypted.pdf");
+            File.WriteAllBytes(path, saved);
+            System.Text.Json.JsonElement item = AttachmentTests.InspectAttachments(path, "user").GetProperty("attachments")[0];
+            Assert.Equal("/Alternative", item.GetProperty("relationship").GetString());
+            Assert.Equal("2026-01-02T03:04:05Z", item.GetProperty("creationDate").GetString());
+            Assert.Equal(md5, item.GetProperty("checksum").GetString(), StringComparer.OrdinalIgnoreCase);
+            Assert.Equal(md5, item.GetProperty("md5").GetString(), StringComparer.OrdinalIgnoreCase);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     [Fact]
     public void clear_metadata_and_identity_attachments_are_not_encrypted()
     {

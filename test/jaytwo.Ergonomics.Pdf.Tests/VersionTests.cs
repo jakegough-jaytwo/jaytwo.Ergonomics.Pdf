@@ -74,6 +74,52 @@ public class VersionTests
         }
     }
 
+    // W-75: a relationship from the PDF/A-3 subset, the /Params dates and checksum, compression, and /PageMode
+    // /UseAttachments (PDF 1.6) keep the PDF/A-3 input at 1.7. pypdf 6.21.1 reads the relationship and the page mode.
+    // No PDF/A conformance is claimed (spec W9).
+    [Fact]
+    public void pdfa3_input_with_relationship_dates_compression_and_page_mode_stays_at_1_7()
+    {
+        CorpusEntry entry = CorpusManifest.Get("libreoffice-hybrid-pdfa3");
+        byte[] pdf = File.ReadAllBytes(entry.FullPath);
+        string[] before;
+        using (PdfDocument document = PdfDocument.Open(new MemoryStream(pdf, writable: false), entry.Password))
+        {
+            before = document.Attachments.Select(attachment => attachment.Name).ToArray();
+        }
+
+        byte[] output = Save(pdf, document => document.Attachments.Add("factur-x.xml", new MemoryStream(Encoding.ASCII.GetBytes("<rsm:CrossIndustryInvoice/>")), options: new PdfAttachmentOptions
+        {
+            MimeType = "text/xml",
+            Relationship = PdfAttachmentRelationship.Alternative,
+            CreationDate = new DateTimeOffset(2026, 10, 21, 9, 0, 0, TimeSpan.Zero),
+            ModificationDate = new DateTimeOffset(2026, 10, 21, 9, 0, 0, TimeSpan.Zero),
+            Compress = true,
+            OpenAttachmentsPanel = true,
+        }));
+
+        Assert.Null(AppendedVersion(output, pdf.Length));
+        Assert.Equal("1.7", PdfInfoVersion(output));
+        WithFile(output, path =>
+        {
+            using (Process process = ExternalTool.Start(CorpusManifest.Qpdf(), "--list-attachments", path))
+            {
+                string listed = ExternalTool.Output(process);
+                foreach (string name in before.Append("factur-x.xml"))
+                {
+                    Assert.Contains(name + " ->", listed);
+                }
+            }
+
+            System.Text.Json.JsonElement report = AttachmentTests.InspectAttachments(path, entry.Password);
+            Assert.Equal("/UseAttachments", report.GetProperty("pageMode").GetString());
+            System.Text.Json.JsonElement added = report.GetProperty("attachments").EnumerateArray().Single(item => item.GetProperty("name").GetString() == "factur-x.xml");
+            Assert.Equal("/Alternative", added.GetProperty("relationship").GetString());
+            Assert.Equal("2026-10-21T09:00:00Z", added.GetProperty("modDate").GetString());
+            return 0;
+        });
+    }
+
     [Theory]
     [InlineData("1.3", "1.4")]
     [InlineData("1.4", null)]

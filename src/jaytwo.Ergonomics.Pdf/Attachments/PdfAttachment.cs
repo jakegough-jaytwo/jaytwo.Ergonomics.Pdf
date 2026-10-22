@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using jaytwo.Ergonomics.Pdf.Internal;
 
@@ -9,14 +10,19 @@ namespace jaytwo.Ergonomics.Pdf.Attachments;
 public sealed class PdfAttachment
 {
     private readonly PdfEngine _engine;
+    private readonly string? _creationDate;
+    private readonly string? _modificationDate;
 
-    internal PdfAttachment(PdfEngine engine, string name, string? description, string? mimeType, long? size)
+    internal PdfAttachment(PdfEngine engine, string name, string? description, string? mimeType, long? size, PdfAttachmentRelationship relationship, string? creationDate, string? modificationDate)
     {
         _engine = engine;
         Name = name;
         Description = description;
         MimeType = mimeType;
         Size = size;
+        Relationship = relationship;
+        _creationDate = creationDate;
+        _modificationDate = modificationDate;
     }
 
     /// <summary>
@@ -39,6 +45,24 @@ public sealed class PdfAttachment
     /// Gets /Params /Size, or <see langword="null"/> when the parameter is absent.
     /// </summary>
     public long? Size { get; }
+
+    /// <summary>
+    /// Gets the file specification's /AFRelationship. A value that is absent or not one of the
+    /// <see cref="PdfAttachmentRelationship"/> names reads as <see cref="PdfAttachmentRelationship.Unspecified"/>.
+    /// </summary>
+    public PdfAttachmentRelationship Relationship { get; }
+
+    /// <summary>
+    /// Gets /Params /CreationDate, or <see langword="null"/> when the parameter is absent.
+    /// </summary>
+    /// <exception cref="PdfParseException">The date is not a PDF date.</exception>
+    public DateTimeOffset? CreationDate => _creationDate == null ? null : PdfTextCodec.ParseDate(_creationDate);
+
+    /// <summary>
+    /// Gets /Params /ModDate, or <see langword="null"/> when the parameter is absent.
+    /// </summary>
+    /// <exception cref="PdfParseException">The date is not a PDF date.</exception>
+    public DateTimeOffset? ModificationDate => _modificationDate == null ? null : PdfTextCodec.ParseDate(_modificationDate);
 
     /// <summary>
     /// Opens the decoded file bytes. The caller disposes the stream.

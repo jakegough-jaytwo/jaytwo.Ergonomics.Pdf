@@ -49,7 +49,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R5 | Fields: full name, type, value, flags, rectangle, page, options, check state. | Exists |
 | R6 | **Form-data export.** `AcroForm.Export()` returns one entry per terminal field (not per widget): text as string, check box as bool, radio as the selected export value or null, choice as string or string list. | Exists |
 | R7 | Document information dictionary and XMP, by property and by key. | Exists |
-| R8 | Document-level embedded files: list with name, description, MIME type, size, relationship, dates; open the content as a stream. | Change (relationship and dates) |
+| R8 | Document-level embedded files: list with name, description, MIME type, size, relationship, dates; open the content as a stream. | Exists |
 | R9 | **Signature inspection.** List every signature field: field name, whether it is signed, SubFilter, signer certificate (DER), chain certificates present in the CMS, digest and signature algorithm, `/M` and CMS signing time, reason, location, contact, `/ByteRange`, which revision it signs, whether later revisions exist, whether a timestamp token is embedded and its time, certification level (DocMDP `P`) if it certifies. No trust, revocation, or cryptographic validation (section 11). Reading signature metadata does not read the signed byte range. | Exists |
 | R10 | **Revision listing.** List revisions in order with the end offset of each and whether a signature covers it. A linearized file's first-page cross-reference section and its main section are one revision, not two. Only cross-reference sections and trailers are read. | Exists |
 | R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
@@ -86,11 +86,11 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | ID | Requirement | Status |
 | --- | --- | --- |
 | W8 | Add, replace (add with an existing name), and remove document-level embedded files. Content is streamed from a seekable stream, never buffered whole. These are the files Acrobat lists in its attachments panel. | Exists |
-| W9 | **Relationship.** The caller chooses `/AFRelationship`: `Source`, `Data`, `Alternative`, `Supplement`, `EncryptedPayload`, `FormData`, `Schema`, or `Unspecified` (default). E-invoice formats such as Factur-X and ZUGFeRD require one of these on their embedded XML. The PDF/A-3 subset is `Source`, `Data`, `Alternative`, `Supplement`, and `Unspecified`; the other values come from PDF 2.0, and a PDF/A-3 input is not promised to stay conformant when one of them is chosen. This supplies associated-file building blocks only; it does not claim PDF/A-3, Factur-X, or ZUGFeRD conformance, which also need profile-specific XMP metadata. | New |
-| W10 | **Dates and checksum.** `/Params` carries `/CreationDate`, `/ModDate`, and `/CheckSum` (MD5 of the uncompressed bytes, computed in an extra streaming pass over the content). | New |
-| W11 | **Optional compression.** `Compress = true` writes the content Flate-encoded while streaming, in constant memory. Default is off. | New |
-| W12 | **Open to attachments.** An option sets catalog `/PageMode /UseAttachments` so viewers open with the attachments panel showing. | New |
-| W13 | Removing an attachment removes it from the name tree and `/AF`. Its bytes stay in earlier revisions until Phase 2 compaction; this is documented on `Remove`. | Change (documentation) |
+| W9 | **Relationship.** The caller chooses `/AFRelationship`: `Source`, `Data`, `Alternative`, `Supplement`, `EncryptedPayload`, `FormData`, `Schema`, or `Unspecified` (default). E-invoice formats such as Factur-X and ZUGFeRD require one of these on their embedded XML. The PDF/A-3 subset is `Source`, `Data`, `Alternative`, `Supplement`, and `Unspecified`; the other values come from PDF 2.0, and a PDF/A-3 input is not promised to stay conformant when one of them is chosen. This supplies associated-file building blocks only; it does not claim PDF/A-3, Factur-X, or ZUGFeRD conformance, which also need profile-specific XMP metadata. | Exists |
+| W10 | **Dates and checksum.** `/Params` carries `/CreationDate`, `/ModDate`, and `/CheckSum` (MD5 of the uncompressed bytes, computed in an extra streaming pass over the content). | Exists |
+| W11 | **Optional compression.** `Compress = true` writes the content Flate-encoded while streaming, in constant memory. Default is off. | Exists |
+| W12 | **Open to attachments.** An option sets catalog `/PageMode /UseAttachments` so viewers open with the attachments panel showing. | Exists |
+| W13 | Removing an attachment removes it from the name tree and `/AF`. Its bytes stay in earlier revisions until Phase 2 compaction; this is documented on `Remove`. | Exists |
 
 ### 6.5 Signing
 
