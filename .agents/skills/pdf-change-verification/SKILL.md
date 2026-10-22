@@ -34,13 +34,15 @@ Claim a test passed only when you ran it and have the output. Counting test decl
 
 ## Workflow
 
+Go up these tiers and stop at the one the change needs. Run builds and tests through the quiet targets: `make quiet-build`, `make quiet-test`, and `make quiet-docker-test`. They write the full output to `out/logs/<name>.log` and print the exit status, the counts for each framework, the failing tests, the build errors, and the fuzz result. They print the log tail only when nothing else explains a failure. Read a log only to diagnose a failure that the summary does not explain.
+
 1. Inspect the diff, task criteria, applicable acceptance rows, and documented failure guarantee.
-2. Run the smallest focused tests that can falsify the change, including a regression test for each confirmed defect.
-3. Run relevant target frameworks and external interoperability or rendering checks.
-4. For a checkpoint, run `make docker-builder docker-test`. It is the Jenkins-equivalent gate. Any new external tool is in the `Dockerfile`.
-5. Check StyleCop, XML documentation, public API compatibility, runtime dependency policy, resource bounds, stream disposal, prefix preservation, and error-path stream behavior as applicable.
-6. Confirm `README.md` and `ACCEPTANCE.md` changed when public behavior changed and that no criterion was weakened.
-7. Report exact commands, frameworks, tool versions, results, unrun checks, and remaining limitations. Update the evidence inventory only from observed results.
+2. Focused: run the smallest tests that can falsify the change, including a regression test for each confirmed defect, for example `make quiet-test TEST_FRAMEWORK=net10.0 TEST_FILTER=FullyQualifiedName~SignatureTests`.
+3. Targets: when the change touches framework-specific code, the `netstandard2.0` build, or external interoperability or rendering checks, run the affected tests on the other targets. net48 runs only on Windows, so run it locally. The checkpoint gate runs net10.0, net8.0, and net6.0, so do not also run the full local matrix when a checkpoint follows.
+4. Checkpoint: for an integration checkpoint, run `make quiet-docker-test`. It runs the Jenkins-equivalent `make docker-builder docker-test` with quiet output. Run it detached when the tool allows. Any new external tool is in the `Dockerfile`.
+5. A passing build is the evidence for StyleCop and XML documentation. A diff with no `PackageReference` change under `src/` is the evidence for the runtime dependency policy. Do not re-read files to check them. Check by hand, where the diff touches them, what no build or test covers: public API compatibility, resource bounds, stream disposal, prefix preservation, and error-path stream behavior.
+6. Confirm from `git diff --stat` that `README.md` and `ACCEPTANCE.md` changed when public behavior changed. Confirm from their changed hunks that no criterion was weakened.
+7. Report exact commands, frameworks, tool versions, counts, unrun checks, and remaining limitations. Do not paste passing output. When the run is green, do not re-read the diff or the changed files to confirm what the run already showed. Update the evidence inventory only from observed results.
 
 Do not infer rendering from a structural check, trust from certificate embedding, bounded memory from one successful run, or production qualification from green unit tests. For resource claims, record the environment, workload, and metrics, and compare before and after. Do not suppress or reclassify a failure to unblock a task or a release.
 

@@ -11,6 +11,7 @@ BUILD_TEST_RESULTS_DIR=${TOPDIR}/out/testResults
 BUILD_TEST_COVERAGE_DIR=${TOPDIR}/out/coverage
 BUILD_PACKED_DIR=${TOPDIR}/out/packed
 PYTHON?=python
+QUIET_RUN=${PYTHON} tools/agents/quiet_run.py
 
 DOCKER_TAG?=$(call getDockerTag,$(BUILD_SLN))
 DOCKER_BASE_TAG?=${DOCKER_TAG}__base
@@ -50,6 +51,19 @@ task-check:
 
 agents-test:
 	${PYTHON} tools/agents/test_workflow.py
+	${PYTHON} tools/agents/test_quiet_run.py
+
+# W-102: agent verification with the full output in out/logs/<name>.log and only the exit status, per-framework test
+# counts, failing tests, build errors, fuzz result, and the log tail on failure on the console. Jenkins and the targets
+# they wrap keep their output. TEST_FRAMEWORK and TEST_FILTER narrow quiet-test, which runs without coverage.
+quiet-build:
+	${QUIET_RUN} --name build -- dotnet build "${BUILD_SLN}" --nologo $(if ${CONFIGURATION},-c ${CONFIGURATION})
+
+quiet-test:
+	${QUIET_RUN} --name test --tests -- dotnet test "${BUILD_SLN}" --nologo -p:CollectCoverage=false 		$(if ${TEST_FRAMEWORK},-f ${TEST_FRAMEWORK}) $(if ${TEST_FILTER},--filter "${TEST_FILTER}")
+
+quiet-docker-test:
+	${QUIET_RUN} --name docker-test --tests -- $(MAKE) docker-builder docker-test
 
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"
