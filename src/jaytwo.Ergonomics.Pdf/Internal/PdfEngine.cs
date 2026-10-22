@@ -136,6 +136,24 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
+    internal bool IsHybridXfa
+    {
+        get
+        {
+            using var release = ReleaseAfter();
+            return ClassifyXfa(CollectFields()) == XfaKind.Hybrid;
+        }
+    }
+
+    internal bool IsXfaOnly
+    {
+        get
+        {
+            using var release = ReleaseAfter();
+            return ClassifyXfa(CollectFields()) == XfaKind.XfaOnly;
+        }
+    }
+
     internal bool HasXmp
     {
         get
@@ -447,6 +465,12 @@ internal sealed class PdfEngine : IDisposable
 
         using var release = ReleaseAfter();
         List<FieldSlot> slots = CollectFields();
+        XfaKind xfa = ClassifyXfa(slots);
+        if (xfa == XfaKind.XfaOnly)
+        {
+            throw new PdfUnsupportedFormException("The form is XFA-only; the library does not edit XFA.");
+        }
+
         if (CertificationLevel(slots) == 1)
         {
             throw new PdfCertificationLockedException();
@@ -493,6 +517,14 @@ internal sealed class PdfEngine : IDisposable
         try
         {
             ApplyUsageRights("Form", "FillIn");
+
+            // W4: XFA-aware viewers show the XFA data of a hybrid form, not the AcroForm values, so the first fill drops
+            // /XFA in the same revision. The packets stay in the file, unreferenced.
+            if (xfa == XfaKind.Hybrid)
+            {
+                EnsureAcroForm().Remove("XFA");
+            }
+
             foreach (FillPlan plan in plans)
             {
                 results[plan.Name] = ApplyFill(plan);
@@ -2628,6 +2660,22 @@ internal sealed class PdfEngine : IDisposable
         return (PdfObject.Dict)_cache[id];
     }
 
+    // R12: /XFA is a stream or an array of packets (ISO 32000-1 Table 218); neither is decoded here. A dynamic form sets
+    // the catalog /NeedsRendering, and viewers that ignore XFA then draw only the placeholder page content, so it is
+    // XFA-only even when it carries AcroForm widgets. A form with XFA and no widgets has nothing an AcroForm fill can change.
+    private XfaKind ClassifyXfa(List<FieldSlot> slots)
+    {
+        PdfObject.Dict catalog = CatalogDict();
+        if (ResolveMaybe(catalog.Get("AcroForm")) is not PdfObject.Dict acro
+            || ResolveMaybe(acro.Get("XFA")) is not (PdfObject.Arr or PdfObject.Dict { Body: not null }))
+        {
+            return XfaKind.None;
+        }
+
+        bool needsRendering = ResolveMaybe(catalog.Get("NeedsRendering")) is PdfObject.Bool flag && flag.Value;
+        return needsRendering || slots.Count == 0 ? XfaKind.XfaOnly : XfaKind.Hybrid;
+    }
+
     private int EnsureHelv()
     {
         if (_helvId != 0)
@@ -4417,6 +4465,13 @@ internal sealed class PdfEngine : IDisposable
         }
 
         return true;
+    }
+
+    private enum XfaKind
+    {
+        None,
+        Hybrid,
+        XfaOnly,
     }
 
     private readonly struct ObjectStreamLease : IDisposable

@@ -282,6 +282,7 @@ internal static class FuzzTargets
         }
 
         PdfAcroForm form = document.AcroForm;
+        _ = (form.IsHybridXfa, form.IsXfaOnly);
         if (form.HasFields)
         {
             _ = form.NeedAppearances;

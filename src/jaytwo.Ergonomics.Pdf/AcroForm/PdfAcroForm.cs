@@ -27,6 +27,25 @@ public sealed class PdfAcroForm
     public bool NeedAppearances => _engine.NeedAppearances;
 
     /// <summary>
+    /// Gets a value indicating whether the form carries XFA beside AcroForm fields that viewers can show instead.
+    /// </summary>
+    /// <remarks>
+    /// The AcroForm /XFA is a stream or an array, the form has field widgets, and the catalog /NeedsRendering is not
+    /// true. XFA-aware viewers show the XFA data, so the first fill removes /XFA in the same revision and every viewer
+    /// then shows the AcroForm values. The XFA packets are not read.
+    /// </remarks>
+    public bool IsHybridXfa => _engine.IsHybridXfa;
+
+    /// <summary>
+    /// Gets a value indicating whether the form is defined only by XFA, so a fill cannot change what viewers show.
+    /// </summary>
+    /// <remarks>
+    /// The AcroForm /XFA is a stream or an array, and the catalog /NeedsRendering is true or the form has no field
+    /// widgets. Reads work; a fill throws <see cref="PdfUnsupportedFormException"/>. The XFA packets are not read.
+    /// </remarks>
+    public bool IsXfaOnly => _engine.IsXfaOnly;
+
+    /// <summary>
     /// Gets the widgets in the form.
     /// </summary>
     public IReadOnlyList<PdfField> Fields => _engine.ListFields();
@@ -49,12 +68,14 @@ public sealed class PdfAcroForm
     /// to turn every widget off. A choice field takes one export value, a list of export values (more than one only when it
     /// is multi-select), or <see cref="PdfFieldValue.None"/> or an empty list to clear it. WinAnsi text and choice values
     /// get a Helvetica appearance. Check boxes and radios select an existing on-state. A value the library cannot draw
-    /// sets /NeedAppearances and returns <see cref="PdfAppearanceDisposition.NeedsViewer"/>. A refused fill does not
-    /// change the document. The change is written by the next save or signature.
+    /// sets /NeedAppearances and returns <see cref="PdfAppearanceDisposition.NeedsViewer"/>. On a hybrid XFA form
+    /// (<see cref="IsHybridXfa"/>) the fill also removes /XFA. A refused fill does not change the document. The change is
+    /// written by the next save or signature.
     /// </remarks>
     /// <param name="fullName">The dotted field name.</param>
     /// <param name="value">The new value.</param>
     /// <returns>How the widget appearance was produced.</returns>
+    /// <exception cref="PdfUnsupportedFormException">The form is XFA-only (<see cref="IsXfaOnly"/>).</exception>
     /// <exception cref="PdfFieldNotFoundException">No field has the name.</exception>
     /// <exception cref="PdfFieldReadOnlyException">The field is read-only.</exception>
     /// <exception cref="PdfFieldValueException">The field cannot take the value, or it is a password, signature, or push-button field.</exception>
@@ -76,11 +97,13 @@ public sealed class PdfAcroForm
     /// <remarks>
     /// Every value is checked as <see cref="Fill(string, PdfFieldValue)"/> checks it before any field changes: the name,
     /// the value kind, read-only, /MaxLen, listed options, FieldMDP, certification, and the permission bits. One failure
-    /// throws and leaves the document unchanged. The fills then apply in the order given, in one pending revision.
+    /// throws and leaves the document unchanged. The fills then apply in the order given, in one pending revision. On a
+    /// hybrid XFA form the set also removes /XFA; an empty set changes nothing.
     /// </remarks>
     /// <param name="values">Full names and values, for example a <see cref="Dictionary{TKey, TValue}"/> or the result of <see cref="Export"/>.</param>
     /// <returns>How each field's appearance was produced, by full name.</returns>
     /// <exception cref="ArgumentException">A name is <see langword="null"/> or appears more than once.</exception>
+    /// <exception cref="PdfUnsupportedFormException">The set is not empty and the form is XFA-only (<see cref="IsXfaOnly"/>).</exception>
     /// <exception cref="PdfFieldNotFoundException">No field has one of the names.</exception>
     /// <exception cref="PdfFieldReadOnlyException">One of the fields is read-only.</exception>
     /// <exception cref="PdfFieldValueException">One of the fields cannot take its value.</exception>

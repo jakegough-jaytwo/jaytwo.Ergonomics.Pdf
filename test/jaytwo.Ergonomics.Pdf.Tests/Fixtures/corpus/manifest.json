@@ -40,7 +40,7 @@
       },
       "notes": [
         "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
-        "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill."
+        "Hybrid XFA (spec R12, W-76): a fill removes /XFA from the AcroForm in the same revision, so XFA-aware viewers show the AcroForm values."
       ],
       "validators": [
         {
@@ -351,7 +351,7 @@
       },
       "notes": [
         "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
-        "Hybrid XFA: a fill updates only the AcroForm. W-76 classifies XFA and removes hybrid XFA on fill.",
+        "Hybrid XFA (spec R12, W-76): a fill removes /XFA from the AcroForm in the same revision, so XFA-aware viewers show the AcroForm values.",
         "The fill field is a comb field (/Ff bit 25, /MaxLen 12, /DA CourierNewPSMT), so the library sets /NeedAppearances instead of drawing it (ACCEPTANCE: comb sets /NeedAppearances)."
       ],
       "validators": [
@@ -454,7 +454,7 @@
       },
       "notes": [
         "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
-        "XFA-only content: W-76 classifies it."
+        "XFA-only (spec R12, W-76): the catalog sets /NeedsRendering and the AcroForm has no fields, so a fill throws PdfUnsupportedFormException; reads still work."
       ],
       "validators": [
         {

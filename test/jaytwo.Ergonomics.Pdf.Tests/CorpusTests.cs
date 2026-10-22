@@ -52,6 +52,7 @@ public class CorpusTests
         IReadOnlyList<PdfField> fields = document.AcroForm.Fields;
         Assert.Equal(probe.GetProperty("widgets").GetInt32(), fields.Count);
         Assert.Equal(CorpusManifest.Text(probe, "fieldNamesSha256"), NamesHash(fields.Select(f => f.FullName)));
+        Assert.Equal(HasXfa(probe), document.AcroForm.IsHybridXfa || document.AcroForm.IsXfaOnly);
 
         if (entry.Attachments == "ok")
         {
@@ -176,6 +177,9 @@ public class CorpusTests
 
         // Spec 7.3: every Reader-extended corpus form grants /Form FillIn, so a fill keeps /UR3 (UsageRightsTests).
         Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+
+        // Spec W4: the fill of a hybrid form removes /XFA in the same revision.
+        Assert.False(HasXfa(after), id + ": /XFA is still in the AcroForm");
     }
 
     // Spec R6 and W2: the export agrees with pypdf's reading of every terminal field, and one bulk fill that changes
@@ -208,6 +212,7 @@ public class CorpusTests
         byte[] revised = destination.ToArray();
         CheckOutput(entry, original, revised, null, out JsonElement after);
         Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+        Assert.False(HasXfa(after), id + ": /XFA is still in the AcroForm");
         var expected = before.ToDictionary(item => item.Key, item => values.TryGetValue(item.Key, out PdfFieldValue value) ? value : item.Value);
         using var again = new MemoryStream(revised, writable: false);
         using PdfDocument reopened = PdfDocument.Open(again, entry.Password, leaveOpen: true);
@@ -311,6 +316,12 @@ public class CorpusTests
         }
 
         return values;
+    }
+
+    // corpus_probe.py lists the "xfa" feature when pypdf finds /XFA in the AcroForm dictionary.
+    private static bool HasXfa(JsonElement probe)
+    {
+        return probe.GetProperty("features").EnumerateArray().Any(feature => feature.GetString() == "xfa");
     }
 
     private static string NamesHash(IEnumerable<string> names)

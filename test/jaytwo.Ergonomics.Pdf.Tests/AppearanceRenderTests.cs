@@ -113,6 +113,49 @@ public class AppearanceRenderTests
         }
     }
 
+    // Spec W4 (W-76): after a fill of a hybrid XFA corpus form removes /XFA, the generated appearance is drawn on the page.
+    // Poppler ignores XFA either way, so this shows the AcroForm value that XFA-aware viewers now fall back to.
+    [Theory]
+    [InlineData("irs-fw9-2024-03", "topmostSubform[0].Page1[0].f1_01[0]")]
+    [InlineData("va-21-4138", "form1[0].#subform[0].International_Phone_Number[0]")]
+    public void poppler_renders_the_fill_of_a_hybrid_xfa_corpus_form(string id, string field)
+    {
+        string poppler = LocatePoppler();
+        byte[] original = File.ReadAllBytes(CorpusManifest.Get(id).FullPath);
+        using var stream = new MemoryStream();
+        stream.Write(original, 0, original.Length);
+        PdfField widget;
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.True(document.AcroForm.IsHybridXfa);
+            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill(field, "Zephyr"));
+            Assert.False(document.AcroForm.IsHybridXfa);
+            widget = Assert.Single(document.AcroForm.GetFields(field));
+            document.SaveIncremental(stream);
+        }
+
+        Assert.Equal(1, widget.PageNumber);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string beforePath = Path.Combine(directory, "before.pdf");
+            string afterPath = Path.Combine(directory, "after.pdf");
+            File.WriteAllBytes(beforePath, original);
+            File.WriteAllBytes(afterPath, stream.ToArray());
+            Assert.DoesNotContain("Zephyr", PdfToText(poppler, beforePath), StringComparison.Ordinal);
+            Assert.Contains("Zephyr", PdfToText(poppler, afterPath), StringComparison.Ordinal);
+
+            byte[] beforeRaster = Raster(poppler, directory, "before", beforePath);
+            byte[] afterRaster = Raster(poppler, directory, "after", afterPath);
+            PdfRect rect = widget.Rect;
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, (int)rect.Llx, (int)Math.Ceiling(rect.Urx), (int)rect.Lly, (int)Math.Ceiling(rect.Ury)) > 20);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static byte[] Fill(byte[] pdf)
     {
         using var stream = new MemoryStream();

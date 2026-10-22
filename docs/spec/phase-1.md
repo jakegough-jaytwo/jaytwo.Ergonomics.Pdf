@@ -53,7 +53,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R9 | **Signature inspection.** List every signature field: field name, whether it is signed, SubFilter, signer certificate (DER), chain certificates present in the CMS, digest and signature algorithm, `/M` and CMS signing time, reason, location, contact, `/ByteRange`, which revision it signs, whether later revisions exist, whether a timestamp token is embedded and its time, certification level (DocMDP `P`) if it certifies. No trust, revocation, or cryptographic validation (section 11). Reading signature metadata does not read the signed byte range. | Exists |
 | R10 | **Revision listing.** List revisions in order with the end offset of each and whether a signature covers it. A linearized file's first-page cross-reference section and its main section are one revision, not two. Only cross-reference sections and trailers are read. | Exists |
 | R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
-| R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | New |
+| R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | Exists |
 
 ## 6. Incremental writes
 
@@ -66,7 +66,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | W1 | Fill a text, check box, radio, or choice field by full name. Text and choice values in WinAnsi get a generated Helvetica appearance. Other values set `/NeedAppearances true` and return `NeedsViewer`. | Exists |
 | W2 | **Bulk fill**, all-or-nothing. Every value is validated (field exists, type, read-only, `/MaxLen`, listed option, FieldMDP, certification, permissions) before anything is changed. One failure throws and leaves the document unchanged. | Exists |
 | W3 | **Flatten** all fields or named fields (section 7.1). | New |
-| W4 | **Hybrid XFA.** The first form write to a hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values. A write to an XFA-only form throws `PdfUnsupportedFormException`. | New |
+| W4 | **Hybrid XFA.** The first form write to a hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values. A write to an XFA-only form throws `PdfUnsupportedFormException`. | Exists |
 | W5 | Password and signature fields cannot be filled. Read-only fields throw `PdfFieldReadOnlyException`. Neither dirties the document. | Exists |
 
 ### 6.2 Pages
