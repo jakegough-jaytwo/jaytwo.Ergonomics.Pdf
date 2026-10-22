@@ -33,4 +33,4 @@ What the campaign did not reach or establish: targets skipped, time cut short, c
 
 ## Result
 
-State whether the campaign meets the G8 fuzzing target. It does not when CPU-hours are short of 24, when a Critical or High finding is open, or when the campaign ran on code that a fix later changed without a rerun. The record does not pass G8 alone; G8 also needs the independent review.
+State whether the campaign meets the G8 fuzzing target. It does not when a target fails to reach its predeclared allocation or stop condition, when a Critical or High finding is open, or when the campaign ran on code that a fix later changed without a rerun. D-23's 24 aggregate CPU-hours is a cap, not a minimum. The record does not pass G8 alone; G8 also needs the independent review.
