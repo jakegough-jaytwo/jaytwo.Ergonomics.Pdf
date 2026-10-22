@@ -67,6 +67,14 @@ public sealed class PdfDocument : IDisposable
     /// <exception cref="PdfParseException">A signature's <c>/ByteRange</c>, <c>/M</c>, or CMS <c>/Contents</c> does not parse.</exception>
     public IReadOnlyList<PdfSignatureInfo> Signatures => _engine.ListSignatures();
 
+    /// <summary>
+    /// Gets the logical revisions in oldest-to-newest order (spec R10). A linearized file's main and first-page
+    /// cross-reference sections are one revision. Signature coverage is reported from <c>/ByteRange</c>, not validated,
+    /// and the signed byte ranges are not read.
+    /// </summary>
+    /// <exception cref="PdfParseException">A revision footer or a signature <c>/ByteRange</c> does not parse.</exception>
+    public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
+
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
     internal bool HasUsageRights => _engine.HasUsageRights;

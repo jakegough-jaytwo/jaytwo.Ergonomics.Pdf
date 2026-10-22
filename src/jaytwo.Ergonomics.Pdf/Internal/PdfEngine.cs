@@ -33,12 +33,14 @@ internal sealed class PdfEngine : IDisposable
     private const int FlagMultiSelect = 1 << 21;
     private const int FlagComb = 1 << 24;
     private const int FlagRichText = 1 << 25;
+    private const int MaxRevisionFooterBytes = 64 * 1024;
 
     private readonly Dictionary<int, XrefEntry> _xref = new Dictionary<int, XrefEntry>();
     private readonly Dictionary<int, PdfObject> _cache = new Dictionary<int, PdfObject>();
     private readonly Dictionary<int, Dictionary<int, PdfObject>> _objectStreams = new Dictionary<int, Dictionary<int, PdfObject>>();
     private readonly HashSet<int> _dirty = new HashSet<int>();
     private readonly HashSet<long> _loadedXrefs = new HashSet<long>();
+    private readonly List<RevisionSection> _revisionSections = new List<RevisionSection>();
     private readonly HashSet<int> _loadingObjects = new HashSet<int>();
     private readonly List<Stream> _ownedStreams = new List<Stream>();
     private Stream _stream;
@@ -978,6 +980,17 @@ internal sealed class PdfEngine : IDisposable
     {
         CheckDisposed();
         using var release = ReleaseAfter();
+        IReadOnlyDictionary<long, int> revisionNumbers;
+        try
+        {
+            revisionNumbers = RevisionNumbersByEnd();
+        }
+        catch (PdfParseException)
+        {
+            // Signature inspection remains available when a historical revision footer is malformed.
+            revisionNumbers = new Dictionary<long, int>();
+        }
+
         var list = new List<PdfSignatureInfo>();
         var seen = new HashSet<int>();
         foreach (FieldSlot slot in CollectFields())
@@ -992,15 +1005,126 @@ internal sealed class PdfEngine : IDisposable
             {
                 int id = value is PdfObject.Ref reference ? reference.ObjectId : slot.ValueObjectId;
                 long offset = _xref.TryGetValue(id, out XrefEntry entry) && entry.Type == 1 ? entry.Field1 : 0;
-                list.Add(ReadSignature(slot.FullName, signature, offset));
+                list.Add(ReadSignature(slot.FullName, signature, offset, revisionNumbers));
             }
             else
             {
-                list.Add(new PdfSignatureInfo(slot.FullName, false, null, null, Array.Empty<byte[]>(), null, null, null, null, null, null, null, null, null, false, null, null));
+                list.Add(new PdfSignatureInfo(slot.FullName, false, null, null, Array.Empty<byte[]>(), null, null, null, null, null, null, null, null, null, null, false, null, null));
             }
         }
 
         return list;
+    }
+
+    // Spec R10. The xref chain is stored newest first; reversing it gives chronological order. In a linearized file,
+    // the main section is followed by the lower-offset first-page section, and those two sections form one revision.
+    internal IReadOnlyList<PdfRevision> ListRevisions()
+    {
+        CheckDisposed();
+        using var release = ReleaseAfter();
+        List<long> ends = LogicalRevisionEnds();
+        HashSet<long> signedEnds = SignatureRevisionEnds();
+        var revisions = new List<PdfRevision>(ends.Count);
+        for (int i = 0; i < ends.Count; i++)
+        {
+            revisions.Add(new PdfRevision(i + 1, ends[i], signedEnds.Contains(ends[i])));
+        }
+
+        return revisions;
+    }
+
+    private IReadOnlyDictionary<long, int> RevisionNumbersByEnd()
+    {
+        List<long> ends = LogicalRevisionEnds();
+        var numbers = new Dictionary<long, int>();
+        for (int i = 0; i < ends.Count; i++)
+        {
+            numbers[ends[i]] = i + 1;
+        }
+
+        return numbers;
+    }
+
+    private List<long> LogicalRevisionEnds()
+    {
+        var sections = new List<RevisionSection>(_revisionSections);
+        sections.Reverse();
+        var ends = new List<long>(sections.Count);
+        for (int i = 0; i < sections.Count; i++)
+        {
+            long end = RevisionEnd(sections[i].EndOfSection);
+            bool linearizedFirstPageSection = i == 1 && sections[i].Offset < sections[i - 1].Offset;
+            if (linearizedFirstPageSection)
+            {
+                ends[0] = Math.Max(ends[0], end);
+            }
+            else
+            {
+                ends.Add(end);
+            }
+        }
+
+        return ends;
+    }
+
+    private HashSet<long> SignatureRevisionEnds()
+    {
+        var ends = new HashSet<long>();
+        var seen = new HashSet<int>();
+        foreach (FieldSlot slot in CollectFields())
+        {
+            if (slot.FieldType != PdfFieldType.Signature || !seen.Add(slot.ValueObjectId))
+            {
+                continue;
+            }
+
+            PdfObject? value = Load(slot.ValueObjectId) is PdfObject.Dict field ? field.Get("V") : null;
+            if (ResolveMaybe(value) is not PdfObject.Dict signature)
+            {
+                continue;
+            }
+
+            int id = value is PdfObject.Ref reference ? reference.ObjectId : slot.ValueObjectId;
+            long offset = _xref.TryGetValue(id, out XrefEntry entry) && entry.Type == 1 ? entry.Field1 : 0;
+            if (ReadByteRange(signature, offset) is PdfByteRange range)
+            {
+                ends.Add(range.Offset1 + range.Length1);
+            }
+        }
+
+        return ends;
+    }
+
+    private long RevisionEnd(long sectionEnd)
+    {
+        if (sectionEnd < 0 || sectionEnd >= _length)
+        {
+            throw new PdfParseException(sectionEnd, "The cross-reference section has no revision footer.");
+        }
+
+        int count = (int)Math.Min(MaxRevisionFooterBytes, _length - sectionEnd);
+        byte[] footer = ReadRange(sectionEnd, count);
+        byte[] startXref = Encoding.ASCII.GetBytes("startxref");
+        int marker = IndexOf(footer, startXref, 0);
+        if (marker < 0 || !TryParseStartXref(footer, marker + startXref.Length, out _))
+        {
+            throw new PdfParseException(sectionEnd, "The cross-reference section has no valid startxref / %%EOF footer within 64 KiB.");
+        }
+
+        byte[] eof = Encoding.ASCII.GetBytes("%%EOF");
+        int eofIndex = IndexOf(footer, eof, marker + startXref.Length);
+        int end = eofIndex + eof.Length;
+        while (end < footer.Length && footer[end] is 0 or 9 or 10 or 12 or 13 or 32)
+        {
+            end++;
+        }
+
+        if (end == footer.Length && sectionEnd + end < _length)
+        {
+            throw new PdfParseException(sectionEnd, "The cross-reference section's revision footer exceeds 64 KiB.");
+        }
+
+        return sectionEnd + end;
     }
 
     internal void SaveIncremental()
@@ -1284,7 +1408,7 @@ internal sealed class PdfEngine : IDisposable
 
         EnsureHeader();
         _startXref = FindStartXref();
-        LoadXref(_startXref, true, true, new HashSet<long>(), password);
+        LoadXref(_startXref, true, true, true, new HashSet<long>(), password);
         if (_rootId == 0)
         {
             throw new PdfParseException(_startXref, "The trailer has no /Root.");
@@ -1354,7 +1478,7 @@ internal sealed class PdfEngine : IDisposable
         throw new PdfParseException(_length, "startxref was not found.");
     }
 
-    private void LoadXref(long offset, bool overwrite, bool recordTrailer, HashSet<long> stack, string? password)
+    private void LoadXref(long offset, bool overwrite, bool recordTrailer, bool recordRevision, HashSet<long> stack, string? password)
     {
         if (!stack.Add(offset))
         {
@@ -1377,12 +1501,14 @@ internal sealed class PdfEngine : IDisposable
         var parser = new PdfParser(_cursor, Resolve, 0);
         int budget = PdfParser.XrefEntryBudget(_length);
         PdfObject.Dict trailer;
+        long sectionEnd;
         bool pendingEncrypt;
         if (classic)
         {
             // The table is merged as it is read, before its /XRefStm stream and before /Prev, the search order of
             // ISO 32000-1 7.5.8.4. A /Prev chain never holds a second copy of the map.
             trailer = parser.ParseClassicXref(_xref, overwrite, budget);
+            sectionEnd = _cursor.Position;
             pendingEncrypt = !TryEnsureSecurity(trailer, _xref, password);
         }
         else
@@ -1393,6 +1519,7 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(offset, "Xref stream object was expected.");
             }
 
+            sectionEnd = _cursor.Position;
             // A stream section is merged as it is read, so a /Prev chain never holds a second copy of the map.
             ReadXrefStream(parser, streamDict, overwrite, budget);
             pendingEncrypt = !TryEnsureSecurity(streamDict, _xref, password);
@@ -1401,7 +1528,13 @@ internal sealed class PdfEngine : IDisposable
 
         if (classic && LongOrNull(trailer.Get("XRefStm")) is long streamOffset)
         {
-            LoadXref(streamOffset, false, false, stack, password);
+            LoadXref(streamOffset, false, false, false, stack, password);
+        }
+
+        long? previous = LongOrNull(trailer.Get("Prev"));
+        if (recordRevision)
+        {
+            _revisionSections.Add(new RevisionSection(offset, sectionEnd));
         }
 
         PdfObject.Dict? encryptedInline = null;
@@ -1415,9 +1548,9 @@ internal sealed class PdfEngine : IDisposable
         }
 
         _loadedXrefs.Add(offset);
-        if (LongOrNull(trailer.Get("Prev")) is long previous)
+        if (previous is long previousOffset)
         {
-            LoadXref(previous, false, _rootId == 0, stack, password);
+            LoadXref(previousOffset, false, _rootId == 0, true, stack, password);
         }
 
         bool chainComplete = stack.Count == 1;
@@ -3334,36 +3467,10 @@ internal sealed class PdfEngine : IDisposable
         return NearestFieldValue(slot.WidgetObjectId) is PdfObject.Dict;
     }
 
-    private PdfSignatureInfo ReadSignature(string fieldName, PdfObject.Dict signature, long offset)
+    private PdfSignatureInfo ReadSignature(string fieldName, PdfObject.Dict signature, long offset, IReadOnlyDictionary<long, int> revisionNumbers)
     {
         string? subFilter = NameOf(ResolveMaybe(signature.Get("SubFilter")));
-        PdfByteRange? byteRange = null;
-        PdfObject? rangeValue = ResolveMaybe(signature.Get("ByteRange"));
-        if (rangeValue != null)
-        {
-            var numbers = new long[4];
-            if (rangeValue is not PdfObject.Arr range || range.Items.Count != 4)
-            {
-                throw new PdfParseException(offset, "The signature /ByteRange is not four integers.");
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                if (ResolveMaybe(range.Items[i]) is not PdfObject.Num { IsInteger: true, LongValue: >= 0 } number)
-                {
-                    throw new PdfParseException(offset, "The signature /ByteRange is not four non-negative integers.");
-                }
-
-                numbers[i] = number.LongValue;
-            }
-
-            if (numbers[2] > long.MaxValue - numbers[3])
-            {
-                throw new PdfParseException(offset, "The signature /ByteRange ends past the largest offset.");
-            }
-
-            byteRange = new PdfByteRange(numbers[0], numbers[1], numbers[2], numbers[3]);
-        }
+        PdfByteRange? byteRange = ReadByteRange(signature, offset);
 
         CmsSignatureReader.Result? cms = null;
         if (subFilter is "adbe.pkcs7.detached" or "adbe.pkcs7.sha1" or "ETSI.CAdES.detached" or "ETSI.RFC3161")
@@ -3393,9 +3500,42 @@ internal sealed class PdfEngine : IDisposable
             SignatureText(signature.Get("Location")),
             SignatureText(signature.Get("ContactInfo")),
             byteRange,
+            byteRange is PdfByteRange numbered && revisionNumbers.TryGetValue(numbered.Offset1 + numbered.Length1, out int revisionNumber) ? revisionNumber : null,
             byteRange is PdfByteRange signed && _startXref >= signed.Offset1 + signed.Length1,
             cms?.TimestampTime,
             certification == 0 ? null : certification);
+    }
+
+    private PdfByteRange? ReadByteRange(PdfObject.Dict signature, long offset)
+    {
+        PdfObject? rangeValue = ResolveMaybe(signature.Get("ByteRange"));
+        if (rangeValue == null)
+        {
+            return null;
+        }
+
+        var numbers = new long[4];
+        if (rangeValue is not PdfObject.Arr range || range.Items.Count != 4)
+        {
+            throw new PdfParseException(offset, "The signature /ByteRange is not four integers.");
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (ResolveMaybe(range.Items[i]) is not PdfObject.Num { IsInteger: true, LongValue: >= 0 } number)
+            {
+                throw new PdfParseException(offset, "The signature /ByteRange is not four non-negative integers.");
+            }
+
+            numbers[i] = number.LongValue;
+        }
+
+        if (numbers[2] > long.MaxValue - numbers[3])
+        {
+            throw new PdfParseException(offset, "The signature /ByteRange ends past the largest offset.");
+        }
+
+        return new PdfByteRange(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 
     private string? SignatureText(PdfObject? value)
@@ -4079,6 +4219,29 @@ internal sealed class PdfEngine : IDisposable
         return -1;
     }
 
+    private static int IndexOf(byte[] data, byte[] needle, int start)
+    {
+        for (int i = Math.Max(0, start); i + needle.Length <= data.Length; i++)
+        {
+            bool match = true;
+            for (int j = 0; j < needle.Length; j++)
+            {
+                if (data[i + j] != needle[j])
+                {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     private static bool TryParseStartXref(byte[] data, int index, out long value)
     {
         value = 0;
@@ -4133,6 +4296,19 @@ internal sealed class PdfEngine : IDisposable
         {
             _engine.ReleaseCleanObjectStreams(null, null);
         }
+    }
+
+    private readonly struct RevisionSection
+    {
+        public RevisionSection(long offset, long endOfSection)
+        {
+            Offset = offset;
+            EndOfSection = endOfSection;
+        }
+
+        public long Offset { get; }
+
+        public long EndOfSection { get; }
     }
 
     private sealed class AppendixLayout

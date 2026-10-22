@@ -26,6 +26,7 @@ public sealed class PdfSignatureInfo
         string? location,
         string? contactInfo,
         PdfByteRange? byteRange,
+        int? signedRevisionNumber,
         bool hasLaterRevisions,
         DateTimeOffset? timestampTime,
         int? certificationLevel)
@@ -53,6 +54,7 @@ public sealed class PdfSignatureInfo
         Location = location;
         ContactInfo = contactInfo;
         ByteRange = byteRange;
+        SignedRevisionNumber = signedRevisionNumber;
         HasLaterRevisions = hasLaterRevisions;
         TimestampTime = timestampTime;
         CertificationLevel = certificationLevel;
@@ -143,6 +145,12 @@ public sealed class PdfSignatureInfo
     /// Gets the end of the second signed range, which is the offset where the revision the signature signs ends.
     /// </summary>
     public long? SignedRevisionEnd => ByteRange is PdfByteRange range ? range.Offset1 + range.Length1 : null;
+
+    /// <summary>
+    /// Gets the 1-based logical revision whose end offset matches <see cref="SignedRevisionEnd"/>, or null when no listed
+    /// revision ends there. A linearized file's main and first-page cross-reference sections count as one revision.
+    /// </summary>
+    public int? SignedRevisionNumber { get; }
 
     /// <summary>
     /// Gets a value indicating whether the newest cross-reference section starts at or after <see cref="SignedRevisionEnd"/>,

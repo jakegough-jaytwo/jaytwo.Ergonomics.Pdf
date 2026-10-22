@@ -309,7 +309,17 @@ public class SignatureInspectionTests
             Assert.Equal(fixedProvider.Range, signature.ByteRange);
             Assert.True(signature.ByteRange!.Value.Length0 > 1L << 30);
             Assert.Equal(sparse.Length, signature.SignedRevisionEnd);
+            Assert.Equal(2, signature.SignedRevisionNumber);
             Assert.False(signature.HasLaterRevisions);
+            Assert.Collection(
+                document.Revisions,
+                revision => Assert.False(revision.IsCoveredBySignature),
+                revision =>
+                {
+                    Assert.Equal(2, revision.Number);
+                    Assert.Equal(sparse.Length, revision.EndOffset);
+                    Assert.True(revision.IsCoveredBySignature);
+                });
         }
 
         Assert.False(sparse.TouchedHole);
