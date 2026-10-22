@@ -25,6 +25,13 @@ These are the checks the test suite builds from. A change that breaks one of the
 - A cross-stream save of a file larger than 1 MiB requests reads of at most 1 MiB and reads the source less than twice plus 1 MiB. The source bytes do not change. A non-empty destination throws and is left untouched.
 - A 1,000-page file reports page 1000 for a field on the last page, including an inherited media box and `/Rotate 90`. `Pages` reports the same count, rotation, and media box, and an omitted crop box equals that media box. Content streams that live in an unread hole are not read.
 - A file whose length is past 9,999,999,999 throws `PdfTooLargeForClassicXrefException` on save and writes nothing.
+- G7 workloads on real files (`LargeWorkloadTests`). Each measured window's peak managed-heap growth stays within the D-20 ceilings: 256 MiB for inspect, edit, and sign, and 512 MiB for form extraction and flatten. The fixture budgets, measured in isolated Release processes, are in `agents/evidence/qualification/memory-budgets.md`.
+- On a dense 1 GiB file with a metadata revision and a signature, `Signatures` reports the signature, its reason, certificate, and signed revision 3 ending at the file's end, and `Revisions` lists three revisions at the exact end offsets with only the last covered. Each opens the file and reads less than 16 MiB of it, so no signed range is read.
+- A 1 GiB CSV attachment added with `Compress = true` is read twice in requests of at most 64 KiB, and the save grows the file by less than half the payload. Extracting it through file streams returns bytes with the payload's SHA-256, the carrier's original bytes stay a prefix, and `qpdf --check` passes.
+- On a 500-page qpdf object-stream form, one `Fill` of 500 text fields generates every appearance, and its save keeps the prefix. A signature over that revision covers it, the 500 values read back, the CMS verifies, and `qpdf --check` passes.
+- On a 1,000-page qpdf object-stream form with 2,000 fields, `Flatten` and its save keep the prefix and leave no field, and `qpdf --check` passes.
+- Twenty open, field and page read, and dispose cycles on the 500-page object-stream form, and twenty field reads on one open document, leave the managed heap retained after a full collection within 1 MiB of the heap after the first cycle.
+- A qpdf AES-256 copy of the dense 1 GiB file, with a cross-reference stream and object streams, opens under the user and the owner password and reports its pages, title, and fields while reading less than 16 MiB, so `/Encrypt` is found without a discovery scan.
 
 ## Limits
 

@@ -19,7 +19,9 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 
 // QUALIFICATION.md G7 workloads under the D-20 working budget. Fixtures are written to real files in a
 // temp directory at test time and deleted afterward. Each measured window covers only library calls on
-// file streams; fixture generation and verification run outside the windows. See WorkloadMeter.
+// file streams; fixture generation and verification run outside the windows. See WorkloadMeter. The
+// heap counter is process-wide, so `make g7-workloads` runs each test in its own Release process for the
+// fixture budgets in agents/evidence/qualification/memory-budgets.md.
 [Collection("dense-memory")]
 public class LargeWorkloadTests
 {
@@ -34,6 +36,16 @@ public class LargeWorkloadTests
     private const int ImageWidth = 2048;
     private const int ImageHeight = 2731;
     private const int FormPages = 500;
+    private const int FlattenPages = 1000;
+    private const int Cycles = 20;
+
+    // Reads that stay this small on a 1 GiB file cannot include a signed range or a discovery scan.
+    private const long SmallReadLimit = 16L * 1024 * 1024;
+
+    // Retained-heap drift allowed across repeated use, after the warm-up cycle.
+    private const long RetainedDrift = 1024 * 1024;
+
+    private static readonly string[] Customers = { "Acme Widgets Ltd", "Globex Corporation", "Initech", "Umbrella Supply Co", "Hooli Services", "Stark Industrial", "Wayne Logistics", "Tyrell Parts" };
 
     private readonly ITestOutputHelper _output;
 
@@ -119,13 +131,47 @@ public class LargeWorkloadTests
                 Assert.Contains(document.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature);
             }
 
+            // Signature inspection and revision listing report the coverage from the xref sections, the
+            // field tree, and the signature dictionary, so neither reads the signed ranges.
+            ProbeStream? signaturesProbe = null;
+            WorkloadMeter.Sample signatures = WorkloadMeter.Measure(() =>
+            {
+                using var file = OpenRead(signedPath);
+                signaturesProbe = new ProbeStream(file);
+                using var document = PdfDocument.Open(signaturesProbe, leaveOpen: true);
+                PdfSignatureInfo signature = Assert.Single(document.Signatures);
+                Assert.True(signature.IsSigned);
+                Assert.Equal("G7", signature.Reason);
+                Assert.Equal(signedLength, signature.SignedRevisionEnd);
+                Assert.Equal(3, signature.SignedRevisionNumber);
+                Assert.NotNull(signature.SignerCertificate);
+            });
+            Report("dense signature inspection", signatures, SimpleBudget, signaturesProbe!);
+
+            ProbeStream? revisionsProbe = null;
+            WorkloadMeter.Sample revisions = WorkloadMeter.Measure(() =>
+            {
+                using var file = OpenRead(signedPath);
+                revisionsProbe = new ProbeStream(file);
+                using var document = PdfDocument.Open(revisionsProbe, leaveOpen: true);
+                IReadOnlyList<PdfRevision> listed = document.Revisions;
+                Assert.Equal(3, listed.Count);
+                Assert.Equal(new[] { sourceLength, editedLength, signedLength }, new[] { listed[0].EndOffset, listed[1].EndOffset, listed[2].EndOffset });
+                Assert.Equal(new[] { false, false, true }, new[] { listed[0].IsCoveredBySignature, listed[1].IsCoveredBySignature, listed[2].IsCoveredBySignature });
+            });
+            Report("dense revision listing", revisions, SimpleBudget, revisionsProbe!);
+
             // No whole-document materialization: inspection reads a small part of the file, and no
             // window's heap grows by anything near the file size.
             Assert.True(inspectProbe!.BytesRead < 16L * 1024 * 1024, "inspect read " + inspectProbe.BytesRead.ToString(CultureInfo.InvariantCulture) + " bytes");
             Assert.True(editProbe!.MaxRequested <= 1024 * 1024, "edit requested " + editProbe.MaxRequested.ToString(CultureInfo.InvariantCulture) + " bytes in one read");
+            Assert.True(signaturesProbe!.BytesRead < SmallReadLimit, "signature inspection read " + signaturesProbe.BytesRead.ToString(CultureInfo.InvariantCulture) + " bytes");
+            Assert.True(revisionsProbe!.BytesRead < SmallReadLimit, "revision listing read " + revisionsProbe.BytesRead.ToString(CultureInfo.InvariantCulture) + " bytes");
             AssertBudget("dense inspect", inspect, SimpleBudget);
             AssertBudget("dense metadata edit", edit, SimpleBudget);
             AssertBudget("dense sign", sign, SimpleBudget);
+            AssertBudget("dense signature inspection", signatures, SimpleBudget);
+            AssertBudget("dense revision listing", revisions, SimpleBudget);
         }
         finally
         {
@@ -140,13 +186,14 @@ public class LargeWorkloadTests
         try
         {
             string pdfPath = Path.Combine(directory, "carrier.pdf");
-            string payloadPath = Path.Combine(directory, "payload.bin");
-            string extractedPath = Path.Combine(directory, "extracted.bin");
-            File.WriteAllBytes(pdfPath, PdfBuilder.Basic().Finish());
-            long payloadLength = (256L * 1024 * 1024) + 4097;
+            string payloadPath = Path.Combine(directory, "payload.csv");
+            string extractedPath = Path.Combine(directory, "extracted.csv");
+            // qpdf --check below needs a page with /Resources.
+            File.WriteAllBytes(pdfPath, PdfBuilder.Basic(pageExtra: " /Resources << >>").Finish());
+            long payloadLength = OneGibibyte + 4097;
             using (var payload = CreateFile(payloadPath))
             {
-                WriteRandom(payload, payloadLength, 0x5EED0250UL);
+                WriteRecords(payload, payloadLength, 0x5EED0250UL);
             }
 
             long carrierLength = new FileInfo(pdfPath).Length;
@@ -160,13 +207,14 @@ public class LargeWorkloadTests
                 using var content = OpenRead(payloadPath);
                 addProbe = new ProbeStream(content);
                 using var document = PdfDocument.Open(pdf, leaveOpen: true);
-                document.Attachments.Add("payload.bin", addProbe, leaveOpen: true, new PdfAttachmentOptions { Description = "G7 payload", MimeType = "application/octet-stream" });
+                document.Attachments.Add("payload.csv", addProbe, leaveOpen: true, new PdfAttachmentOptions { Description = "G7 payload", MimeType = "text/csv", Compress = true });
                 document.SaveIncremental();
             });
-            Report("attachment add and save", add, SimpleBudget, addProbe!);
+            Report("compressed attachment add and save", add, SimpleBudget, addProbe!);
 
+            // The payload compresses, so the save grows the carrier by less than half the payload.
             long savedLength = new FileInfo(pdfPath).Length;
-            Assert.True(savedLength > carrierLength + payloadLength);
+            Assert.True(savedLength - carrierLength < payloadLength / 2, "the save added " + (savedLength - carrierLength).ToString(CultureInfo.InvariantCulture) + " bytes");
             _output.WriteLine("attachment carrier after save " + savedLength.ToString(CultureInfo.InvariantCulture) + " bytes");
 
             ProbeStream? extractProbe = null;
@@ -175,21 +223,29 @@ public class LargeWorkloadTests
                 using var pdf = OpenRead(pdfPath);
                 extractProbe = new ProbeStream(pdf);
                 using var document = PdfDocument.Open(extractProbe, leaveOpen: true);
-                PdfAttachment attachment = document.Attachments["payload.bin"];
+                PdfAttachment attachment = document.Attachments["payload.csv"];
                 Assert.Equal(payloadLength, attachment.Size);
                 Assert.Equal("G7 payload", attachment.Description);
                 using Stream opened = attachment.Open();
                 using var destination = CreateFile(extractedPath);
                 opened.CopyTo(destination);
             });
-            Report("attachment reopen and extract", extract, SimpleBudget, extractProbe!);
+            Report("compressed attachment reopen and extract", extract, SimpleBudget, extractProbe!);
 
             Assert.Equal(payloadLength, new FileInfo(extractedPath).Length);
             Assert.Equal(HashFile(payloadPath, 0, payloadLength), HashFile(extractedPath, 0, payloadLength));
             Assert.Equal(carrierHash, HashFile(pdfPath, 0, carrierLength));
-            Assert.True(addProbe!.MaxRequested <= 1024 * 1024, "add requested " + addProbe.MaxRequested.ToString(CultureInfo.InvariantCulture) + " bytes in one read");
-            AssertBudget("attachment add and save", add, SimpleBudget);
-            AssertBudget("attachment reopen and extract", extract, SimpleBudget);
+            Assert.True(addProbe!.MaxRequested <= 64 * 1024, "add requested " + addProbe.MaxRequested.ToString(CultureInfo.InvariantCulture) + " bytes in one read");
+
+            // qpdf inflates every stream it checks, so it also confirms the Flate body independently.
+            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
+            using (Process process = ExternalTool.Start(qpdf, "--check", pdfPath))
+            {
+                ExternalTool.Output(process);
+            }
+
+            AssertBudget("compressed attachment add and save", add, SimpleBudget);
+            AssertBudget("compressed attachment reopen and extract", extract, SimpleBudget);
         }
         finally
         {
@@ -206,17 +262,10 @@ public class LargeWorkloadTests
             string classicPath = Path.Combine(directory, "form-classic.pdf");
             string sourcePath = Path.Combine(directory, "form.pdf");
             string editedPath = Path.Combine(directory, "form-edited.pdf");
+            string filledPath = Path.Combine(directory, "form-filled.pdf");
             string signedPath = Path.Combine(directory, "form-signed.pdf");
-            WriteForm(classicPath);
-            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
-            using (Process process = ExternalTool.Start(qpdf, "--object-streams=generate", classicPath, sourcePath))
-            {
-                ExternalTool.Output(process);
-            }
-
-            string layout = TestCompat.Latin1.GetString(File.ReadAllBytes(sourcePath));
-            Assert.Contains("/ObjStm", layout, StringComparison.Ordinal);
-            Assert.Contains("/XRef", layout, StringComparison.Ordinal);
+            WriteForm(classicPath, FormPages, "Five Hundred");
+            string qpdf = ObjectStreamCopy(classicPath, sourcePath);
             long sourceLength = new FileInfo(sourcePath).Length;
             _output.WriteLine("form classic " + new FileInfo(classicPath).Length.ToString(CultureInfo.InvariantCulture) + " bytes, qpdf object-stream source " + sourceLength.ToString(CultureInfo.InvariantCulture) + " bytes");
 
@@ -265,12 +314,29 @@ public class LargeWorkloadTests
             long editedLength = new FileInfo(editedPath).Length;
             Assert.Equal(HashFile(sourcePath, 0, sourceLength), HashFile(editedPath, 0, sourceLength));
 
+            ProbeStream? fillProbe = null;
+            WorkloadMeter.Sample fill = WorkloadMeter.Measure(() =>
+            {
+                using var file = OpenRead(editedPath);
+                fillProbe = new ProbeStream(file);
+                using var document = PdfDocument.Open(fillProbe, leaveOpen: true);
+                IReadOnlyDictionary<string, PdfAppearanceDisposition> filled = document.AcroForm.Fill(TextValues(FormPages));
+                Assert.Equal(FormPages, filled.Count);
+                Assert.All(filled.Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
+                using var destination = CreateFile(filledPath);
+                document.SaveIncremental(destination, leaveOpen: true);
+            });
+            Report("500-page bulk fill of 500 fields", fill, SimpleBudget, fillProbe!);
+
+            long filledLength = new FileInfo(filledPath).Length;
+            Assert.Equal(HashFile(editedPath, 0, editedLength), HashFile(filledPath, 0, editedLength));
+
             ProbeStream? signProbe = null;
             using var rsa = RSA.Create(2048);
             byte[] certificate = SelfSigned(rsa);
             WorkloadMeter.Sample sign = WorkloadMeter.Measure(() =>
             {
-                using var file = OpenRead(editedPath);
+                using var file = OpenRead(filledPath);
                 signProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signProbe, leaveOpen: true);
                 using var destination = CreateFile(signedPath);
@@ -279,9 +345,9 @@ public class LargeWorkloadTests
             Report("500-page sign", sign, SimpleBudget, signProbe!);
 
             long signedLength = new FileInfo(signedPath).Length;
-            _output.WriteLine("form edited " + editedLength.ToString(CultureInfo.InvariantCulture) + " bytes, signed " + signedLength.ToString(CultureInfo.InvariantCulture) + " bytes");
-            Assert.Equal(HashFile(editedPath, 0, editedLength), HashFile(signedPath, 0, editedLength));
-            VerifySignatureCoverage(signedPath, editedLength, verifyCms: true);
+            _output.WriteLine("form edited " + editedLength.ToString(CultureInfo.InvariantCulture) + " bytes, filled " + filledLength.ToString(CultureInfo.InvariantCulture) + " bytes, signed " + signedLength.ToString(CultureInfo.InvariantCulture) + " bytes");
+            Assert.Equal(HashFile(filledPath, 0, filledLength), HashFile(signedPath, 0, filledLength));
+            VerifySignatureCoverage(signedPath, filledLength, verifyCms: true);
             using (var file = OpenRead(signedPath))
             using (var document = PdfDocument.Open(file, leaveOpen: true))
             {
@@ -289,7 +355,12 @@ public class LargeWorkloadTests
                 Assert.Equal("G7", document.Metadata.Subject);
                 IReadOnlyList<PdfField> fields = document.AcroForm.Fields;
                 Assert.Equal((FormPages * 2) + 1, fields.Count);
-                Assert.Equal("Name 500", fields[(FormPages * 2) - 2].Value);
+                for (int page = 1; page <= FormPages; page++)
+                {
+                    Assert.Equal("Filled " + page.ToString(CultureInfo.InvariantCulture), fields[(page - 1) * 2].Value);
+                }
+
+                Assert.Equal(signedLength, Assert.Single(document.Signatures).SignedRevisionEnd);
             }
 
             using (Process process = ExternalTool.Start(qpdf, "--check", signedPath))
@@ -299,7 +370,196 @@ public class LargeWorkloadTests
 
             AssertBudget("500-page form extraction", extract, TraversalBudget);
             AssertBudget("500-page metadata edit", edit, SimpleBudget);
+            AssertBudget("500-page bulk fill of 500 fields", fill, SimpleBudget);
             AssertBudget("500-page sign", sign, SimpleBudget);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void thousand_page_form_is_flattened_within_budget()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string classicPath = Path.Combine(directory, "flatten-classic.pdf");
+            string sourcePath = Path.Combine(directory, "flatten.pdf");
+            string filledPath = Path.Combine(directory, "flatten-filled.pdf");
+            string flattenedPath = Path.Combine(directory, "flatten-flattened.pdf");
+            WriteForm(classicPath, FlattenPages, "One Thousand");
+            string qpdf = ObjectStreamCopy(classicPath, sourcePath);
+
+            // Flatten refuses a field that shows a value without an appearance, so the text fields are filled
+            // first, outside the measured window.
+            using (var file = OpenRead(sourcePath))
+            using (var document = PdfDocument.Open(file, leaveOpen: true))
+            {
+                document.AcroForm.Fill(TextValues(FlattenPages));
+                using var destination = CreateFile(filledPath);
+                document.SaveIncremental(destination, leaveOpen: true);
+            }
+
+            long filledLength = new FileInfo(filledPath).Length;
+            _output.WriteLine("flatten source " + new FileInfo(sourcePath).Length.ToString(CultureInfo.InvariantCulture) + " bytes, filled " + filledLength.ToString(CultureInfo.InvariantCulture) + " bytes, " + (FlattenPages * 2).ToString(CultureInfo.InvariantCulture) + " fields");
+
+            ProbeStream? flattenProbe = null;
+            WorkloadMeter.Sample flatten = WorkloadMeter.Measure(() =>
+            {
+                using var file = OpenRead(filledPath);
+                flattenProbe = new ProbeStream(file);
+                using var document = PdfDocument.Open(flattenProbe, leaveOpen: true);
+                document.AcroForm.Flatten();
+                using var destination = CreateFile(flattenedPath);
+                document.SaveIncremental(destination, leaveOpen: true);
+            });
+            Report("1,000-page flatten", flatten, TraversalBudget, flattenProbe!);
+
+            long flattenedLength = new FileInfo(flattenedPath).Length;
+            _output.WriteLine("flattened " + flattenedLength.ToString(CultureInfo.InvariantCulture) + " bytes");
+            Assert.Equal(HashFile(filledPath, 0, filledLength), HashFile(flattenedPath, 0, filledLength));
+            using (var file = OpenRead(flattenedPath))
+            using (var document = PdfDocument.Open(file, leaveOpen: true))
+            {
+                Assert.Equal(FlattenPages, document.PageCount);
+                Assert.Equal("One Thousand", document.Metadata.Title);
+                Assert.Empty(document.AcroForm.Fields);
+            }
+
+            using (Process process = ExternalTool.Start(qpdf, "--check", flattenedPath))
+            {
+                ExternalTool.Output(process);
+            }
+
+            AssertBudget("1,000-page flatten", flatten, TraversalBudget);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void repeated_open_and_object_stream_reads_do_not_retain_memory()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string classicPath = Path.Combine(directory, "repeat-classic.pdf");
+            string sourcePath = Path.Combine(directory, "repeat.pdf");
+            WriteForm(classicPath, FormPages, "Five Hundred");
+            ObjectStreamCopy(classicPath, sourcePath);
+
+            // Each cycle decodes the object streams again; the document releases their clean objects when the
+            // public operation returns, and Dispose releases the rest.
+            var opened = new long[Cycles];
+            var clock = Stopwatch.StartNew();
+            for (int cycle = 0; cycle < Cycles; cycle++)
+            {
+                using (var file = OpenRead(sourcePath))
+                using (var document = PdfDocument.Open(file, leaveOpen: true))
+                {
+                    Assert.Equal(FormPages * 2, document.AcroForm.Fields.Count);
+                    Assert.Equal(FormPages, document.Pages.Count);
+                }
+
+                opened[cycle] = Retained();
+            }
+
+            clock.Stop();
+            ReportDrift("repeated open, field and page read, and dispose", opened, clock.Elapsed);
+
+            var reads = new long[Cycles];
+            clock.Restart();
+            using (var file = OpenRead(sourcePath))
+            using (var document = PdfDocument.Open(file, leaveOpen: true))
+            {
+                for (int read = 0; read < Cycles; read++)
+                {
+                    IReadOnlyList<PdfField> fields = document.AcroForm.Fields;
+                    Assert.Equal("Name " + FormPages.ToString(CultureInfo.InvariantCulture), fields[(FormPages * 2) - 2].Value);
+                    reads[read] = Retained();
+                }
+            }
+
+            clock.Stop();
+            ReportDrift("repeated object-stream field reads on one document", reads, clock.Elapsed);
+            AssertDrift("repeated open, field and page read, and dispose", opened);
+            AssertDrift("repeated object-stream field reads on one document", reads);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    [Fact]
+    public void encrypted_xref_stream_gibibyte_pdf_opens_without_a_discovery_scan()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string densePath = Path.Combine(directory, "dense.pdf");
+            string encryptedPath = Path.Combine(directory, "dense-aes256.pdf");
+            WriteDense(densePath);
+            string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
+            using (Process process = ExternalTool.Start(qpdf, "--object-streams=generate", "--encrypt", "user-secret", "owner-secret", "256", "--", densePath, encryptedPath))
+            {
+                ExternalTool.Output(process);
+            }
+
+            File.Delete(densePath);
+            long length = new FileInfo(encryptedPath).Length;
+            Assert.True(length >= OneGibibyte, "encrypted fixture is " + length.ToString(CultureInfo.InvariantCulture) + " bytes");
+
+            // qpdf's own listing shows objects stored in object streams, and the tail is a cross-reference
+            // stream whose dictionary names /Encrypt.
+            using (Process process = ExternalTool.Start(qpdf, "--password=owner-secret", "--show-xref", encryptedPath))
+            {
+                Assert.Contains("compressed; stream", ExternalTool.Output(process), StringComparison.Ordinal);
+            }
+
+            int tailLength = 64 * 1024;
+            var tail = new byte[tailLength];
+            using (var file = OpenRead(encryptedPath))
+            {
+                file.Seek(length - tailLength, SeekOrigin.Begin);
+                int total = 0;
+                while (total < tailLength)
+                {
+                    int read = file.Read(tail, total, tailLength - total);
+                    Assert.True(read > 0);
+                    total += read;
+                }
+            }
+
+            string tailText = TestCompat.Latin1.GetString(tail);
+            Assert.Contains("/XRef", tailText, StringComparison.Ordinal);
+            Assert.Contains("/Encrypt", tailText, StringComparison.Ordinal);
+            _output.WriteLine("encrypted source " + length.ToString(CultureInfo.InvariantCulture) + " bytes, AES-256 with a cross-reference stream and object streams");
+
+            foreach (string password in new[] { "user-secret", "owner-secret" })
+            {
+                ProbeStream? probe = null;
+                WorkloadMeter.Sample inspect = WorkloadMeter.Measure(() =>
+                {
+                    using var file = OpenRead(encryptedPath);
+                    probe = new ProbeStream(file);
+                    using var document = PdfDocument.Open(probe, password, leaveOpen: true);
+                    Assert.Equal(DensePages, document.PageCount);
+                    Assert.Equal("Dense GiB", document.Metadata.Title);
+                    Assert.True(document.Permissions.CanModify);
+                    IReadOnlyList<PdfField> fields = document.AcroForm.Fields;
+                    Assert.Equal(DensePages, fields.Count);
+                    Assert.Equal("value " + DensePages.ToString(CultureInfo.InvariantCulture), fields[DensePages - 1].Value);
+                });
+                string workload = "encrypted xref-stream inspect, " + password;
+                Report(workload, inspect, SimpleBudget, probe!);
+                Assert.True(probe!.BytesRead < SmallReadLimit, workload + " read " + probe.BytesRead.ToString(CultureInfo.InvariantCulture) + " bytes");
+                AssertBudget(workload, inspect, SimpleBudget);
+            }
         }
         finally
         {
@@ -310,6 +570,24 @@ public class LargeWorkloadTests
     private static void AssertBudget(string workload, WorkloadMeter.Sample sample, long budget)
     {
         Assert.True(sample.PeakHeapGrowth <= budget, sample.Describe(workload, budget));
+    }
+
+    // The first cycle loads code and static state; growth is measured from the heap retained after it.
+    private static void AssertDrift(string workload, long[] retained)
+    {
+        long drift = Drift(retained);
+        Assert.True(drift <= RetainedDrift, workload + ": retained heap grew " + drift.ToString(CultureInfo.InvariantCulture) + " bytes after the warm-up cycle");
+    }
+
+    private static long Drift(long[] retained)
+    {
+        long highest = retained[1];
+        for (int i = 2; i < retained.Length; i++)
+        {
+            highest = Math.Max(highest, retained[i]);
+        }
+
+        return highest - retained[0];
     }
 
     private static FileStream OpenRead(string path)
@@ -408,17 +686,50 @@ public class LargeWorkloadTests
         }
     }
 
-    private static void WriteRandom(Stream stream, long count, ulong seed)
+    // CSV invoice rows whose fields come from SplitMix64 with a fixed seed: every run writes the same bytes,
+    // and the repeated layout with random digits gives Flate real work at a realistic ratio.
+    private static void WriteRecords(Stream stream, long count, ulong seed)
     {
         var buffer = new byte[1024 * 1024];
+        int used = 0;
         ulong state = seed;
+        long row = 0;
         long remaining = count;
         while (remaining > 0)
         {
-            int chunk = (int)Math.Min(buffer.Length, remaining);
-            state = FillRandom(buffer, chunk, state);
-            stream.Write(buffer, 0, chunk);
-            remaining -= chunk;
+            ulong a = NextRandom(ref state);
+            ulong b = NextRandom(ref state);
+            row++;
+            string line = row.ToString("D10", CultureInfo.InvariantCulture)
+                + ",INV-" + ((uint)a).ToString("X8", CultureInfo.InvariantCulture)
+                + ",2026-" + (1 + ((a >> 32) % 12)).ToString("D2", CultureInfo.InvariantCulture)
+                + "-" + (1 + ((a >> 40) % 28)).ToString("D2", CultureInfo.InvariantCulture)
+                + "," + ((b % 10000000) / 100).ToString(CultureInfo.InvariantCulture)
+                + "." + (b % 100).ToString("D2", CultureInfo.InvariantCulture)
+                + "," + Customers[(int)(b >> 56) % Customers.Length] + "\n";
+            int length = (int)Math.Min(line.Length, remaining);
+            if (used + length > buffer.Length)
+            {
+                stream.Write(buffer, 0, used);
+                used = 0;
+            }
+
+            used += Encoding.ASCII.GetBytes(line, 0, length, buffer, used);
+            remaining -= length;
+        }
+
+        stream.Write(buffer, 0, used);
+    }
+
+    private static ulong NextRandom(ref ulong state)
+    {
+        unchecked
+        {
+            state += 0x9E3779B97F4A7C15UL;
+            ulong z = state;
+            z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL;
+            z = (z ^ (z >> 27)) * 0x94D049BB133111EBUL;
+            return z ^ (z >> 31);
         }
     }
 
@@ -489,18 +800,18 @@ public class LargeWorkloadTests
         writer.Finish("/Root 1 0 R /Info 3 0 R");
     }
 
-    // 500 pages under ten intermediate page-tree nodes. Each page has a Flate content stream of text and
-    // a parent field with a text kid and a check-box kid (shared on and off appearances). Classic xref;
-    // the test then has qpdf rewrite it with object streams and a cross-reference stream.
-    private static void WriteForm(string path)
+    // Pages under ten intermediate page-tree nodes. Each page has a Flate content stream of text and a
+    // parent field with a text kid and a check-box kid (shared on and off appearances). Classic xref; the
+    // test then has qpdf rewrite it with object streams and a cross-reference stream.
+    private static void WriteForm(string path, int pages, string title)
     {
         const int nodes = 10;
-        const int perNode = FormPages / nodes;
-        int size = 100 + (FormPages * 5);
+        int perNode = pages / nodes;
+        int size = 100 + (pages * 5);
         using var writer = new FixtureWriter(path, size);
         var fields = new StringBuilder();
         var nodeKids = new StringBuilder();
-        for (int i = 0; i < FormPages; i++)
+        for (int i = 0; i < pages; i++)
         {
             fields.Append(Id(100 + (i * 5) + 2)).Append(' ');
         }
@@ -511,8 +822,8 @@ public class LargeWorkloadTests
         }
 
         writer.Object(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [" + fields + "] /DA (/Helv 0 Tf 0 g) /DR << /Font << /Helv 4 0 R >> >> >> >>");
-        writer.Object(2, "<< /Type /Pages /Count " + FormPages.ToString(CultureInfo.InvariantCulture) + " /Kids [" + nodeKids + "] >>");
-        writer.Object(3, "<< /Title (Five Hundred) /Author (QA) /Producer (LargeWorkloadTests) >>");
+        writer.Object(2, "<< /Type /Pages /Count " + pages.ToString(CultureInfo.InvariantCulture) + " /Kids [" + nodeKids + "] >>");
+        writer.Object(3, "<< /Title (" + title + ") /Author (QA) /Producer (LargeWorkloadTests) >>");
         writer.Object(4, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
         writer.Stream(5, "/Type /XObject /Subtype /Form /BBox [0 0 14 14]", Encoding.ASCII.GetBytes("q 0 g 3 3 8 8 re f Q\n"));
         writer.Stream(6, "/Type /XObject /Subtype /Form /BBox [0 0 14 14]", Encoding.ASCII.GetBytes("q 0 G 0.5 0.5 13 13 re S Q\n"));
@@ -527,7 +838,7 @@ public class LargeWorkloadTests
             writer.Object(10 + n, "<< /Type /Pages /Parent 2 0 R /Count " + perNode.ToString(CultureInfo.InvariantCulture) + " /Kids [" + kids + "] >>");
         }
 
-        for (int i = 0; i < FormPages; i++)
+        for (int i = 0; i < pages; i++)
         {
             int page = 100 + (i * 5);
             string number = (i + 1).ToString(CultureInfo.InvariantCulture);
@@ -548,6 +859,43 @@ public class LargeWorkloadTests
         writer.Finish("/Root 1 0 R /Info 3 0 R");
     }
 
+    // qpdf rewrites the classic fixture with object streams and a cross-reference stream.
+    private static string ObjectStreamCopy(string classicPath, string path)
+    {
+        string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
+        using (Process process = ExternalTool.Start(qpdf, "--object-streams=generate", classicPath, path))
+        {
+            ExternalTool.Output(process);
+        }
+
+        string layout = TestCompat.Latin1.GetString(File.ReadAllBytes(path));
+        Assert.Contains("/ObjStm", layout, StringComparison.Ordinal);
+        Assert.Contains("/XRef", layout, StringComparison.Ordinal);
+        return qpdf;
+    }
+
+    // The text field of every page of a WriteForm fixture.
+    private static Dictionary<string, PdfFieldValue> TextValues(int pages)
+    {
+        var values = new Dictionary<string, PdfFieldValue>();
+        for (int page = 1; page <= pages; page++)
+        {
+            string number = page.ToString(CultureInfo.InvariantCulture);
+            values["page" + number + ".name"] = "Filled " + number;
+        }
+
+        return values;
+    }
+
+    // The managed heap after a full blocking collection: what the process still holds.
+    private static long Retained()
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        return GC.GetTotalMemory(true);
+    }
+
     private static string Id(int id)
     {
         return id.ToString(CultureInfo.InvariantCulture) + " 0 R";
@@ -559,6 +907,18 @@ public class LargeWorkloadTests
             sample.Describe(workload, budget)
             + ", source bytes read " + probe.BytesRead.ToString(CultureInfo.InvariantCulture)
             + ", largest read request " + probe.MaxRequested.ToString(CultureInfo.InvariantCulture));
+    }
+
+    private void ReportDrift(string workload, long[] retained, TimeSpan elapsed)
+    {
+        _output.WriteLine(
+            workload
+            + ": " + retained.Length.ToString(CultureInfo.InvariantCulture) + " cycles"
+            + ", retained after warm-up " + (retained[0] / (1024.0 * 1024.0)).ToString("0.00", CultureInfo.InvariantCulture)
+            + " MiB, last " + (retained[retained.Length - 1] / (1024.0 * 1024.0)).ToString("0.00", CultureInfo.InvariantCulture)
+            + " MiB, largest growth " + (Drift(retained) / 1024.0).ToString("0.0", CultureInfo.InvariantCulture)
+            + " KiB, time " + elapsed.TotalSeconds.ToString("0.00", CultureInfo.InvariantCulture) + " s"
+            + ", growth per cycle in KiB " + string.Join(" ", Array.ConvertAll(retained, bytes => ((bytes - retained[0]) / 1024).ToString(CultureInfo.InvariantCulture))));
     }
 
     private sealed class FixtureWriter : IDisposable

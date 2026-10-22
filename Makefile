@@ -65,6 +65,29 @@ quiet-test:
 quiet-docker-test:
 	${QUIET_RUN} --name docker-test --tests -- $(MAKE) docker-builder docker-test
 
+# W-79: the QUALIFICATION.md G7 workloads, each in its own Release process with coverage off, so the process-wide heap
+# counter sees one workload. G7_FRAMEWORKS narrows the frameworks (net48 runs only on Windows). Each run's full output
+# is out/logs/g7-<framework>-<workload>.log; the console gets the measurement lines.
+G7_FRAMEWORKS?=net10.0 net8.0 net6.0 $(if $(filter Windows_NT,${OS}),net48)
+G7_WORKLOADS=dense_gibibyte_pdf_is_inspected_edited_and_signed_within_budget \
+	large_attachment_is_added_and_extracted_through_file_streams_within_budget \
+	five_hundred_page_form_is_extracted_edited_and_signed_within_budget \
+	thousand_page_form_is_flattened_within_budget \
+	repeated_open_and_object_stream_reads_do_not_retain_memory \
+	encrypted_xref_stream_gibibyte_pdf_opens_without_a_discovery_scan
+
+g7-workloads:
+	dotnet build "${BUILD_SLN}" --nologo -c Release
+	mkdir -p out/logs
+	status=0; for framework in ${G7_FRAMEWORKS}; do for workload in ${G7_WORKLOADS}; do \
+		log="out/logs/g7-$$framework-$$workload.log"; \
+		dotnet test "${BUILD_TEST_DIRS}" --nologo --no-build -c Release -f $$framework -p:CollectCoverage=false \
+			--filter "FullyQualifiedName=jaytwo.Ergonomics.Pdf.Tests.LargeWorkloadTests.$$workload" \
+			--logger "console;verbosity=detailed" > "$$log" 2>&1 && result=PASS || { result=FAIL; status=1; }; \
+		echo "$$framework $$workload: $$result"; \
+		grep -E 'peak heap growth|retained after warm-up|Assert\.' "$$log" | sed 's/^[[:space:]]*/  /'; \
+	done; done; exit $$status
+
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"
 	rm -rf "${BUILD_TEST_COVERAGE_DIR}"
