@@ -171,6 +171,37 @@ public class WriterQuirkTests
         Assert.Equal("783658f5ffb42a35b8c49d28cf0c7bcd", string.Concat(md5.ComputeHash(bytes).Select(b => b.ToString("x2", System.Globalization.CultureInfo.InvariantCulture))));
     }
 
+    // Real-world fixture: Acrobat's certification of a GPO enrolled bill encodes the signature /Contents in BER, with
+    // indefinite lengths on the outer CMS containers, where ISO 32000-1 12.8.3.3.1 requires DER (W-72). The expected
+    // values are what pdfsig 26.08.0 and pyHanko 0.38.0 report for this file.
+    [Fact]
+    public void gpo_bill_signature_in_ber_is_inspected()
+    {
+        CorpusEntry entry = CorpusManifest.Get("gpo-bills-118hr815enr");
+        byte[] pdf = File.ReadAllBytes(entry.FullPath);
+        string text = TestCompat.Latin1.GetString(pdf);
+        int contents = text.IndexOf("/Contents<", StringComparison.Ordinal);
+        Assert.True(contents > 0);
+        Assert.Equal("3080", text.Substring(contents + "/Contents<".Length, 4));
+        using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false), leaveOpen: true);
+
+        PdfSignatureInfo signature = Assert.Single(document.Signatures);
+
+        Assert.Equal("USGPOSignature", signature.FieldName);
+        Assert.Equal("adbe.pkcs7.detached", signature.SubFilter);
+        Assert.Equal(new PdfByteRange(0, 323818, 336016, 24060), signature.ByteRange);
+        Assert.False(signature.HasLaterRevisions);
+        Assert.Equal(HashAlgorithmName.SHA256, signature.DigestAlgorithm);
+        Assert.Equal("1.2.840.113549.1.1.11", signature.SignatureAlgorithmOid);
+        Assert.Equal(3, signature.Certificates.Count);
+        Assert.Equal("a124e7f1533fb272e8744a0bedeea8c92c8170d7890f90400892e15e55e1b808", CorpusManifest.Sha256(signature.SignerCertificate!));
+        Assert.Equal(new DateTimeOffset(2024, 4, 25, 23, 25, 37, TimeSpan.Zero), signature.CmsSigningTime);
+        Assert.Equal(new DateTimeOffset(2024, 4, 25, 19, 25, 37, TimeSpan.FromHours(-4)), signature.SigningTime);
+        Assert.Equal("Government Publishing Office", signature.Name);
+        Assert.Null(signature.TimestampTime);
+        Assert.Equal(1, signature.CertificationLevel);
+    }
+
     private static byte[] FlateAttachment(byte[] data)
     {
         var builder = new PdfBuilder();

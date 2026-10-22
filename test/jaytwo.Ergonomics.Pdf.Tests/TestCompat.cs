@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,6 +85,15 @@ internal static class TestCompat
         random.GetBytes(data);
 #else
         RandomNumberGenerator.Fill(data);
+#endif
+    }
+
+    public static X509Certificate2 LoadCertificate(byte[] der)
+    {
+#if NET9_0_OR_GREATER
+        return X509CertificateLoader.LoadCertificate(der);
+#else
+        return new X509Certificate2(der);
 #endif
     }
 

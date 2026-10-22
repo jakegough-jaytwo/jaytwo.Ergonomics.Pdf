@@ -60,6 +60,13 @@ public sealed class PdfDocument : IDisposable
     /// </summary>
     public PdfPermissions Permissions => _engine.Permissions;
 
+    /// <summary>
+    /// Gets every signature field, signed or not, with what its signature dictionary and CMS value say (spec R9).
+    /// Nothing is validated, and the signed byte range is not read.
+    /// </summary>
+    /// <exception cref="PdfParseException">A signature's <c>/ByteRange</c>, <c>/M</c>, or CMS <c>/Contents</c> does not parse.</exception>
+    public IReadOnlyList<PdfSignatureInfo> Signatures => _engine.ListSignatures();
+
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
     internal bool HasUsageRights => _engine.HasUsageRights;

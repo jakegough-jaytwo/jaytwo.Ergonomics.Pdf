@@ -972,6 +972,37 @@ internal sealed class PdfEngine : IDisposable
         return OpenBody(dict);
     }
 
+    // Spec R9. One entry per terminal signature field, from the value owner each widget names, so a field with two
+    // widgets is listed once. Only the field tree, the signature dictionaries, and the xref state are read.
+    internal IReadOnlyList<PdfSignatureInfo> ListSignatures()
+    {
+        CheckDisposed();
+        using var release = ReleaseAfter();
+        var list = new List<PdfSignatureInfo>();
+        var seen = new HashSet<int>();
+        foreach (FieldSlot slot in CollectFields())
+        {
+            if (slot.FieldType != PdfFieldType.Signature || !seen.Add(slot.ValueObjectId))
+            {
+                continue;
+            }
+
+            PdfObject? value = Load(slot.ValueObjectId) is PdfObject.Dict field ? field.Get("V") : null;
+            if (ResolveMaybe(value) is PdfObject.Dict signature)
+            {
+                int id = value is PdfObject.Ref reference ? reference.ObjectId : slot.ValueObjectId;
+                long offset = _xref.TryGetValue(id, out XrefEntry entry) && entry.Type == 1 ? entry.Field1 : 0;
+                list.Add(ReadSignature(slot.FullName, signature, offset));
+            }
+            else
+            {
+                list.Add(new PdfSignatureInfo(slot.FullName, false, null, null, Array.Empty<byte[]>(), null, null, null, null, null, null, null, null, null, false, null, null));
+            }
+        }
+
+        return list;
+    }
+
     internal void SaveIncremental()
     {
         using var release = ReleaseAfter();
@@ -3301,6 +3332,75 @@ internal sealed class PdfEngine : IDisposable
         }
 
         return NearestFieldValue(slot.WidgetObjectId) is PdfObject.Dict;
+    }
+
+    private PdfSignatureInfo ReadSignature(string fieldName, PdfObject.Dict signature, long offset)
+    {
+        string? subFilter = NameOf(ResolveMaybe(signature.Get("SubFilter")));
+        PdfByteRange? byteRange = null;
+        PdfObject? rangeValue = ResolveMaybe(signature.Get("ByteRange"));
+        if (rangeValue != null)
+        {
+            var numbers = new long[4];
+            if (rangeValue is not PdfObject.Arr range || range.Items.Count != 4)
+            {
+                throw new PdfParseException(offset, "The signature /ByteRange is not four integers.");
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (ResolveMaybe(range.Items[i]) is not PdfObject.Num { IsInteger: true, LongValue: >= 0 } number)
+                {
+                    throw new PdfParseException(offset, "The signature /ByteRange is not four non-negative integers.");
+                }
+
+                numbers[i] = number.LongValue;
+            }
+
+            if (numbers[2] > long.MaxValue - numbers[3])
+            {
+                throw new PdfParseException(offset, "The signature /ByteRange ends past the largest offset.");
+            }
+
+            byteRange = new PdfByteRange(numbers[0], numbers[1], numbers[2], numbers[3]);
+        }
+
+        CmsSignatureReader.Result? cms = null;
+        if (subFilter is "adbe.pkcs7.detached" or "adbe.pkcs7.sha1" or "ETSI.CAdES.detached" or "ETSI.RFC3161")
+        {
+            if (ResolveMaybe(signature.Get("Contents")) is not PdfObject.Str contents)
+            {
+                throw new PdfParseException(offset, "The signature has no /Contents string.");
+            }
+
+            cms = CmsSignatureReader.Read(contents.Raw, subFilter == "ETSI.RFC3161", offset);
+        }
+
+        string? modified = SignatureText(signature.Get("M"));
+        int certification = PermissionOnSignature(signature, "DocMDP");
+        return new PdfSignatureInfo(
+            fieldName,
+            true,
+            subFilter,
+            cms?.SignerCertificate,
+            cms?.Certificates ?? Array.Empty<byte[]>(),
+            cms?.DigestAlgorithm,
+            cms?.SignatureAlgorithm,
+            modified == null ? null : PdfTextCodec.ParseDate(modified),
+            cms?.SigningTime,
+            SignatureText(signature.Get("Name")),
+            SignatureText(signature.Get("Reason")),
+            SignatureText(signature.Get("Location")),
+            SignatureText(signature.Get("ContactInfo")),
+            byteRange,
+            byteRange is PdfByteRange signed && _startXref >= signed.Offset1 + signed.Length1,
+            cms?.TimestampTime,
+            certification == 0 ? null : certification);
+    }
+
+    private string? SignatureText(PdfObject? value)
+    {
+        return ResolveMaybe(value) is PdfObject.Str text ? PdfTextCodec.Decode(text.Raw) : null;
     }
 
     private PdfObject? NearestFieldValue(int objectId)
