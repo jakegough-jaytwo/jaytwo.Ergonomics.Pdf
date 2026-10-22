@@ -118,6 +118,54 @@ public sealed class PdfAcroForm
     }
 
     /// <summary>
+    /// Flattens every field except signature fields: each widget's appearance becomes page content and the field is removed.
+    /// </summary>
+    /// <remarks>
+    /// See <see cref="Flatten(IEnumerable{string})"/>. Signature fields, signed or not, are kept. A form with no other
+    /// field is left unchanged.
+    /// </remarks>
+    /// <exception cref="PdfUnsupportedFormException">The form is XFA-only, /NeedAppearances is true, or a widget has no usable appearance.</exception>
+    /// <exception cref="PdfCertificationLockedException">The document is certified, or a FieldMDP lock covers one of the fields.</exception>
+    /// <exception cref="PdfSignatureConflictException">The document has a signature and <see cref="PdfDocument.AllowBreakingSignatures"/> is not set.</exception>
+    /// <exception cref="PdfEncryptionRestrictedException">The user password does not allow modifying the document and its annotations.</exception>
+    public void Flatten()
+    {
+        _engine.Flatten(null);
+    }
+
+    /// <summary>
+    /// Flattens the named fields: each widget's appearance becomes page content and the field is removed.
+    /// </summary>
+    /// <remarks>
+    /// Each widget's normal appearance, selected by /AS for a check box or radio, is painted on every page whose /Annots
+    /// lists it, placed as ISO 32000-1 12.5.5 places it, inside the widget's optional content when it has one. The page's
+    /// existing content streams are wrapped in q and Q and are not read. Hidden and NoView widgets are removed without
+    /// being drawn, and a widget draws nothing when its field shows no value and it has no appearance, or its state is Off
+    /// and has none. The widgets leave the page /Annots, the fields leave /Fields, their parents' /Kids, and /CO, and a
+    /// parent left with no kids is removed too. When no field remains, /XFA and /NeedAppearances are removed. A flatten of a
+    /// hybrid XFA form also removes /XFA, and on an unsigned document every flatten removes the /UR3 usage rights. An
+    /// unsigned signature field is flattened only when named; a signed one never is. Every check runs before anything
+    /// changes, so a refused flatten does not change the document. The change is written by the next save or signature.
+    /// </remarks>
+    /// <param name="fullNames">The dotted full names. An empty set changes nothing.</param>
+    /// <exception cref="ArgumentNullException"><paramref name="fullNames"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">A name is <see langword="null"/> or appears more than once.</exception>
+    /// <exception cref="PdfFieldNotFoundException">No field has one of the names.</exception>
+    /// <exception cref="PdfUnsupportedFormException">The form is XFA-only, /NeedAppearances is true, a widget has a value and no usable appearance, or a NoRotate widget is on a rotated page.</exception>
+    /// <exception cref="PdfCertificationLockedException">The document is certified, or a FieldMDP lock covers one of the fields.</exception>
+    /// <exception cref="PdfSignatureConflictException">A named field is a signed signature field, or the document has a signature and <see cref="PdfDocument.AllowBreakingSignatures"/> is not set.</exception>
+    /// <exception cref="PdfEncryptionRestrictedException">The user password does not allow modifying the document and its annotations.</exception>
+    public void Flatten(IEnumerable<string> fullNames)
+    {
+        if (fullNames == null)
+        {
+            throw new ArgumentNullException(nameof(fullNames));
+        }
+
+        _engine.Flatten(fullNames);
+    }
+
+    /// <summary>
     /// Reads the value of every terminal field: one entry per field, not per widget.
     /// </summary>
     /// <remarks>

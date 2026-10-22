@@ -75,6 +75,21 @@ public sealed class PdfDocument : IDisposable
     /// <exception cref="PdfParseException">A revision footer or a signature <c>/ByteRange</c> does not parse.</exception>
     public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
 
+    /// <summary>
+    /// Gets or sets a value indicating whether <see cref="PdfAcroForm.Flatten()"/> may change a document that has a signature.
+    /// </summary>
+    /// <remarks>
+    /// Flattening changes page content, which no signature permits, so validators report every earlier signature, approval
+    /// or document timestamp, as modified. The earlier signatures' bytes stay a prefix of the file. Without this opt-in,
+    /// flatten throws <see cref="PdfSignatureConflictException"/> on such a document. A certified document stays locked
+    /// against flatten either way, and signed signature fields are never flattened.
+    /// </remarks>
+    public bool AllowBreakingSignatures
+    {
+        get => _engine.AllowBreakingSignatures;
+        set => _engine.AllowBreakingSignatures = value;
+    }
+
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
     internal bool HasUsageRights => _engine.HasUsageRights;

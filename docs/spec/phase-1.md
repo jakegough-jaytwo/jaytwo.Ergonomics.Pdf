@@ -65,7 +65,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | --- | --- | --- |
 | W1 | Fill a text, check box, radio, or choice field by full name. Text and choice values in WinAnsi get a generated Helvetica appearance. Other values set `/NeedAppearances true` and return `NeedsViewer`. | Exists |
 | W2 | **Bulk fill**, all-or-nothing. Every value is validated (field exists, type, read-only, `/MaxLen`, listed option, FieldMDP, certification, permissions) before anything is changed. One failure throws and leaves the document unchanged. | Exists |
-| W3 | **Flatten** all fields or named fields (section 7.1). | New |
+| W3 | **Flatten** all fields or named fields (section 7.1). | Exists |
 | W4 | **Hybrid XFA.** The first fill of an unsigned hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values; it also removes `/UR3` (section 7.3). A fill of a hybrid form that has a signature throws `PdfSignatureConflictException`. A write to an XFA-only form throws `PdfUnsupportedFormException`. | Exists |
 | W5 | Password and signature fields cannot be filled. Read-only fields throw `PdfFieldReadOnlyException`. Neither dirties the document. | Exists |
 

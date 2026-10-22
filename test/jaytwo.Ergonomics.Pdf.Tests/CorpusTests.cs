@@ -219,6 +219,96 @@ public class CorpusTests
         FormValues.AssertAgree(reopened.AcroForm.Export(), FormValues.Pypdf(revised, entry.Password), id + " after");
     }
 
+    // Spec W3, 7.1, and 7.2 (W-77): after the bulk fill above, flattening every field, with the signature opt-in, is
+    // refused as documented on an XFA-only form, a certified one, and one left with /NeedAppearances true. Otherwise the
+    // original is a prefix, qpdf --check passes with no warnings, pypdf finds only the signature fields, the earlier
+    // signatures stay intact and valid in pyHanko, and /UR3 stays only where a signature keeps /Perms unchanged.
+    [Theory]
+    [MemberData(nameof(Ids))]
+    public void flatten_after_a_bulk_fill_is_accepted_by_independent_tools_or_refused_as_documented(string id)
+    {
+        CorpusEntry entry = CorpusManifest.Get(id);
+        if (entry.Open != "ok" || entry.Probe.GetProperty("widgets").GetInt32() == 0)
+        {
+            return;
+        }
+
+        byte[] original = File.ReadAllBytes(entry.FullPath);
+        using var source = new MemoryStream(original, writable: false);
+        using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        string? refusal = null;
+        if (document.AcroForm.IsXfaOnly)
+        {
+            refusal = nameof(PdfUnsupportedFormException);
+        }
+        else if (document.Signatures.Any(signature => signature.CertificationLevel != null))
+        {
+            refusal = nameof(PdfCertificationLockedException);
+        }
+        else
+        {
+            // A value the library cannot draw, such as a comb field's, sets /NeedAppearances, which flatten refuses, so
+            // those values are left out after a trial fill of a copy.
+            Dictionary<string, PdfFieldValue> values = ChangedValues(document.AcroForm.Fields, document.AcroForm.Export());
+            using (var trial = PdfDocument.Open(new MemoryStream(original, writable: false), entry.Password))
+            {
+                foreach (KeyValuePair<string, PdfAppearanceDisposition> result in trial.AcroForm.Fill(values))
+                {
+                    if (result.Value == PdfAppearanceDisposition.NeedsViewer)
+                    {
+                        values.Remove(result.Key);
+                    }
+                }
+            }
+
+            document.AcroForm.Fill(values);
+            refusal = document.AcroForm.NeedAppearances ? nameof(PdfUnsupportedFormException) : null;
+        }
+
+        document.AllowBreakingSignatures = true;
+        var destination = new MemoryStream();
+        Exception? error = Record.Exception(() => document.AcroForm.Flatten());
+        if (refusal != null)
+        {
+            Assert.True(error != null, id + ": the flatten succeeded, but " + refusal + " was expected");
+            Assert.Equal(refusal, error!.GetType().Name);
+            return;
+        }
+
+        Assert.Null(error);
+        document.SaveIncremental(destination, leaveOpen: true);
+        byte[] flattened = destination.ToArray();
+        Assert.True(flattened.AsSpan(0, original.Length).SequenceEqual(original), id + ": the original is not a prefix");
+        FormValues.AssertQpdfCheck(flattened, entry.Password);
+        Assert.All(FormValues.Pypdf(flattened, entry.Password).Values, field => Assert.Equal("signature", field.GetProperty("kind").GetString()));
+
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string path = Path.Combine(directory, "flattened.pdf");
+            File.WriteAllBytes(path, flattened);
+            string spec = entry.ProbeSpec(path, null);
+            JsonElement after = CorpusManifest.Probe(spec).GetProperty(spec);
+            Assert.Null(CorpusManifest.Text(after, "openError"));
+            Assert.Equal(entry.Probe.GetProperty("pages").GetInt32(), after.GetProperty("pages").GetInt32());
+            Assert.False(HasXfa(after), id + ": /XFA is still in the AcroForm");
+            List<JsonElement> signatures = after.GetProperty("signatures").EnumerateArray().ToList();
+            foreach (JsonElement signature in entry.Probe.GetProperty("signatures").EnumerateArray())
+            {
+                string name = CorpusManifest.Text(signature, "field")!;
+                JsonElement match = signatures.Single(s => CorpusManifest.Text(s, "field") == name);
+                Assert.True(match.GetProperty("intact").GetBoolean() && match.GetProperty("valid").GetBoolean(), id + ": signature " + name + " is not intact and valid after the flatten");
+            }
+
+            bool signed = entry.Probe.GetProperty("signatures").GetArrayLength() > 0;
+            Assert.Equal(signed && entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     // The checks every modified corpus file gets: the original is a prefix, qpdf --check passes with no warnings,
     // and the probe sees the same pages, fields, and attachments, with every earlier signature still intact and valid.
     private static void CheckOutput(CorpusEntry entry, byte[] original, byte[] output, string? field, out JsonElement after)

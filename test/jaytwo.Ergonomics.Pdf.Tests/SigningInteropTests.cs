@@ -295,6 +295,96 @@ public class SigningInteropTests
         }
     }
 
+    // W-77 (spec 7.2): flatten refuses a certified document at P 1 and P 2 even with the opt-in, and a document with an
+    // approval signature without it. With the opt-in it flattens every field but the signed one; the signature's bytes
+    // stay a prefix, pyHanko finds it intact and valid and reports the change as beyond form filling, and pdfsig
+    // verifies it over a range that no longer covers the file.
+    [Fact]
+    public void opted_in_flatten_after_an_approval_signature_keeps_it_intact_and_verifiers_report_the_modification()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory);
+            byte[] approval = File.ReadAllBytes(Path.Combine(directory, "approval.pdf"));
+            foreach (string certified in new[] { "locked.pdf", "fillable.pdf" })
+            {
+                byte[] pdf = File.ReadAllBytes(Path.Combine(directory, certified));
+                using var stream = new MemoryStream(pdf, writable: false);
+                using var document = PdfDocument.Open(stream, leaveOpen: true);
+                document.AllowBreakingSignatures = true;
+                Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten());
+            }
+
+            byte[] flattened;
+            using (var stream = new MemoryStream(approval, writable: false))
+            using (var document = PdfDocument.Open(stream, leaveOpen: true))
+            {
+                Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Flatten());
+                Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+                document.AllowBreakingSignatures = true;
+                Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Flatten(new[] { "PolicySig" }));
+                document.AcroForm.Flatten();
+                Assert.Equal("PolicySig", Assert.Single(document.AcroForm.Fields).FullName);
+                var destination = new MemoryStream();
+                document.SaveIncremental(destination, leaveOpen: true);
+                flattened = destination.ToArray();
+            }
+
+            Assert.True(flattened.AsSpan(0, approval.Length).SequenceEqual(approval));
+            string report = Validate(flattened, null, null, "revision", "docmdp-illegal,modification=OTHER");
+            Assert.Contains("intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("valid=true", report, StringComparison.Ordinal);
+            (int exitCode, string pdfsig) = Pdfsig.Verify(flattened, Array.Empty<byte[]>(), null);
+            List<string> signature = Assert.Single(Pdfsig.Signatures(pdfsig));
+            Assert.True(exitCode == 0, pdfsig);
+            Assert.Contains(Pdfsig.Valid, signature);
+            Assert.Contains(Pdfsig.NotWholeFile, signature);
+            Assert.Contains(Pdfsig.SignedRanges(flattened), signature);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // W-77 (spec 7.2): FieldMDP applies to flatten. With the opt-in, the Include [Locked] lock refuses a flatten of
+    // Locked and of every field, and a flatten of Open keeps the signature intact and valid in pyHanko.
+    [Fact]
+    public void pyhanko_fieldmdp_lock_refuses_a_flatten_of_the_locked_field()
+    {
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
+            byte[] include = File.ReadAllBytes(Path.Combine(directory, "fieldmdp-include.pdf"));
+            byte[] flattened;
+            using (var stream = new MemoryStream(include, writable: false))
+            using (var document = PdfDocument.Open(stream, leaveOpen: true))
+            {
+                document.AllowBreakingSignatures = true;
+                Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten(new[] { "Locked" }));
+                Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten());
+                Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Open", "Ada"));
+                document.AcroForm.Flatten(new[] { "Open" });
+                var destination = new MemoryStream();
+                document.SaveIncremental(destination, leaveOpen: true);
+                flattened = destination.ToArray();
+            }
+
+            Assert.True(flattened.AsSpan(0, include.Length).SequenceEqual(include));
+            string report = Validate(flattened, null, null, "revision", "modification=OTHER");
+            Assert.Contains("intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("valid=true", report, StringComparison.Ordinal);
+            Assert.DoesNotContain("Open", FormValues.Pypdf(flattened).Keys);
+            Assert.Contains("Locked", FormValues.Pypdf(flattened).Keys);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     [Fact]
     public void pyhanko_fieldmdp_include_and_exclude_lock_the_same_fields_and_allowed_fills_keep_the_signature()
     {

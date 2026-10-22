@@ -13,6 +13,11 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 
 public class AppearanceRenderTests
 {
+    // Poppler paints a widget appearance and the same form XObject drawn by Do with the same placement, but its glyph
+    // anti-aliasing can differ in a few pixels: 22 pixels of the 4.5-point text the fill generates on page 5 of the FAA
+    // 8710-1, with the text in the same place. A misplaced or missing appearance changes far more.
+    private const int MaxAntialiasPixels = 48;
+
     [Fact]
     public void poppler_renders_generated_text_choice_checkbox_and_radio_appearances()
     {
@@ -181,6 +186,160 @@ public class AppearanceRenderTests
         {
             Directory.Delete(directory, recursive: true);
         }
+    }
+
+    // Spec W3 and 7.1 (W-77): the flattened page, rendered with annotations hidden, is the filled page rendered with its
+    // widgets. Covers generated text, choice, check box, and radio appearances; quadding, clipping, and font sizes; a
+    // /Rotate 90 page; a crop box offset; and appearance /Matrix and /BBox placement on a page whose media box does not
+    // start at the origin.
+    [Theory]
+    [InlineData("acroform")]
+    [InlineData("matrix")]
+    [InlineData("placement")]
+    public void poppler_renders_the_flattened_form_as_the_filled_form(string form)
+    {
+        byte[] filled = form switch
+        {
+            "acroform" => Fill(File.ReadAllBytes(ExternalTool.Fixture("pypdf-acroform.pdf"))),
+            "matrix" => FillMatrix(BuildMatrix()),
+            _ => BuildPlacementForm(),
+        };
+        AssertFlattenRendersAsFilled(filled, null);
+    }
+
+    // The same check on corpus forms after a fill of their first text fields: Acrobat, LiveCycle, and other producers'
+    // appearance streams, check boxes, and radios, the I-9 appearances without /Subtype, and the hybrid W-9 and VA 21-4138.
+    [Theory]
+    [InlineData("opm-of306")]
+    [InlineData("faa-8710-1")]
+    [InlineData("uscis-i9-2025")]
+    [InlineData("irs-fw9-2024-03")]
+    [InlineData("va-21-4138")]
+    [InlineData("cms-40b")]
+    [InlineData("irs-f1040es-2026")]
+    [InlineData("libreoffice-form")]
+    public void poppler_renders_a_flattened_corpus_form_as_the_filled_form(string id)
+    {
+        byte[] original = File.ReadAllBytes(CorpusManifest.Get(id).FullPath);
+        using var stream = new MemoryStream();
+        stream.Write(original, 0, original.Length);
+        var values = new Dictionary<string, PdfFieldValue>(StringComparer.Ordinal);
+        using (var document = PdfDocument.Open(new MemoryStream(original), leaveOpen: true))
+        {
+            foreach (PdfField field in document.AcroForm.Fields)
+            {
+                if (values.Count < 6 && field.FieldType == PdfFieldType.Text && !field.ReadOnly && field.MaxLength is null or >= 5 && !values.ContainsKey(field.FullName))
+                {
+                    values[field.FullName] = "Flat" + values.Count.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+
+            // A comb or rich-text field gets no generated appearance and would set /NeedAppearances, which flatten refuses.
+            foreach (KeyValuePair<string, PdfAppearanceDisposition> result in document.AcroForm.Fill(values))
+            {
+                if (result.Value != PdfAppearanceDisposition.Generated)
+                {
+                    values.Remove(result.Key);
+                }
+            }
+        }
+
+        Assert.NotEmpty(values);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            Assert.All(document.AcroForm.Fill(values).Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
+            document.SaveIncremental();
+        }
+
+        AssertFlattenRendersAsFilled(stream.ToArray(), values.Values.First().Text);
+    }
+
+    private static void AssertFlattenRendersAsFilled(byte[] filled, string? expectedText)
+    {
+        string poppler = LocatePoppler();
+        using var stream = new MemoryStream();
+        stream.Write(filled, 0, filled.Length);
+        int pages;
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            pages = document.PageCount;
+            document.AcroForm.Flatten();
+            Assert.Equal(0, document.AcroForm.Fields.Count(field => field.FieldType != PdfFieldType.Signature));
+            document.SaveIncremental();
+        }
+
+        byte[] flattened = stream.ToArray();
+        Assert.True(flattened.AsSpan(0, filled.Length).SequenceEqual(filled));
+        FormValues.AssertQpdfCheck(flattened);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string filledPath = Path.Combine(directory, "filled.pdf");
+            string flattenedPath = Path.Combine(directory, "flattened.pdf");
+            File.WriteAllBytes(filledPath, filled);
+            File.WriteAllBytes(flattenedPath, flattened);
+            if (expectedText != null)
+            {
+                Assert.Contains(expectedText, PdfToText(poppler, flattenedPath), StringComparison.Ordinal);
+            }
+
+            RasterPages(poppler, directory, "filled", filledPath);
+            RasterPages(poppler, directory, "flattened", flattenedPath, "-hide-annotations");
+            int inked = 0;
+            for (int page = 1; page <= pages; page++)
+            {
+                string name = PageRaster(directory, "filled", page, pages);
+                byte[] before = File.ReadAllBytes(name);
+                byte[] after = File.ReadAllBytes(PageRaster(directory, "flattened", page, pages));
+                (int width, int height, _) = ReadPpm(before);
+                Assert.Equal(width, ReadPpm(after).Width);
+                Assert.Equal(height, ReadPpm(after).Height);
+                int changed = ChangedPixels(before, after, 0, width, 0, height);
+                Assert.True(changed <= MaxAntialiasPixels, "page " + page.ToString(CultureInfo.InvariantCulture) + ": " + changed.ToString(CultureInfo.InvariantCulture) + " pixels differ");
+                inked += CountDark(after);
+            }
+
+            Assert.True(inked > 0);
+            string[] filledWords = ReadWords(PdfToBBox(poppler, filledPath)).Select(WordKey).ToArray();
+            string[] flattenedWords = ReadWords(PdfToBBox(poppler, flattenedPath)).Select(WordKey).ToArray();
+            Assert.Equal(filledWords, flattenedWords);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // A word and its box to a tenth of a point, as pdftotext -bbox reports it.
+    private static string WordKey(PlacedWord word)
+    {
+        return word.Text + "@" + string.Join(",", new[] { word.XMin, word.YMin, word.XMax, word.YMax }.Select(value => Math.Round(value, 1).ToString("0.0", CultureInfo.InvariantCulture)));
+    }
+
+    // pdftoppm pads the page number to the width of the page count.
+    private static string PageRaster(string directory, string name, int page, int pages)
+    {
+        string number = page.ToString(CultureInfo.InvariantCulture).PadLeft(pages.ToString(CultureInfo.InvariantCulture).Length, '0');
+        return Path.Combine(directory, name + "-" + number + ".ppm");
+    }
+
+    // Appearances drawn under a /Matrix that rotates them, a /BBox that does not start at the origin, a /Rect given with
+    // its corners swapped, and an appearance that shrinks to its rectangle, on a page whose media box starts at (100, 50).
+    private static byte[] BuildPlacementForm()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R 5 0 R 6 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [100 50 712 842] /Contents 10 0 R /Resources << /Font << /F1 11 0 R >> >> /Annots [4 0 R 5 0 R 6 0 R] >>");
+        builder.Indirect(4, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (Turned) /V (x) /F 4 /Rect [320 300 200 500] /AP << /N 7 0 R >> /P 3 0 R >>");
+        builder.Indirect(5, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (Offset) /V (x) /F 4 /Rect [400 600 600 640] /AP << /N 8 0 R >> /P 3 0 R >>");
+        builder.Indirect(6, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (Shrunk) /V (x) /F 4 /Rect [400 700 500 720] /AP << /N 9 0 R >> /P 3 0 R >>");
+        builder.StreamObject(7, "/Type /XObject /Subtype /Form /BBox [0 0 200 120] /Matrix [0 1 -1 0 0 0] /Resources << /Font << /F1 11 0 R >> >>", Encoding.ASCII.GetBytes("0 0 1 rg 0 0 200 120 re f 1 g BT /F1 24 Tf 10 50 Td (Turned) Tj ET 1 0 0 rg 0 0 20 20 re f"));
+        builder.StreamObject(8, "/Type /XObject /Subtype /Form /BBox [50 50 250 90] /Resources << /Font << /F1 11 0 R >> >>", Encoding.ASCII.GetBytes("0 0.6 0 rg 50 50 200 40 re f 0 g BT /F1 18 Tf 60 60 Td (Offset) Tj ET"));
+        builder.StreamObject(9, "/Type /XObject /Subtype /Form /BBox [0 0 200 40] /Resources << /Font << /F1 11 0 R >> >>", Encoding.ASCII.GetBytes("1 0.5 0 rg 0 0 200 40 re f 0 g BT /F1 24 Tf 10 10 Td (Shrunk) Tj ET"));
+        builder.StreamObject(10, string.Empty, Encoding.ASCII.GetBytes("0 g BT /F1 18 Tf 120 800 Td (Page) Tj ET 0.5 g 120 60 m 700 60 l S"));
+        builder.Indirect(11, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>");
+        return builder.Finish();
     }
 
     private static byte[] Fill(byte[] pdf)
@@ -442,10 +601,14 @@ public class AppearanceRenderTests
         return ExternalTool.Output(process);
     }
 
-    private static void RasterPages(string poppler, string directory, string name, string pdf)
+    private static void RasterPages(string poppler, string directory, string name, string pdf, params string[] options)
     {
         string prefix = Path.Combine(directory, name);
-        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), "-cropbox", "-r", "72", pdf, prefix);
+        var args = new List<string> { "-cropbox", "-r", "72" };
+        args.AddRange(options);
+        args.Add(pdf);
+        args.Add(prefix);
+        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), args.ToArray());
         ExternalTool.Output(process);
     }
 
