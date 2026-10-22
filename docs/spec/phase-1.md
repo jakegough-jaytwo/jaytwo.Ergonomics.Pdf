@@ -237,5 +237,5 @@ These were flagged for discussion at adoption. Settled requirements above do not
 4. **Integrity check in inspection.** Should signature inspection offer an opt-in check that the signed bytes still hash to the CMS message digest? It reads the whole signed range, and it is the first step toward the validation that section 11 excludes.
 5. **Page-level attachment listing.** Read-only listing of paperclip annotations was declined. Confirm.
 6. **Unsigned signature fields on flatten.** Keep them (current rule), or flatten them as empty boxes?
-7. **Value typing.** `PdfFieldValue` with implicit conversions, or plain `object`?
+7. **Value typing.** Confirmed for 1.0: `PdfFieldValue` is a readonly value type with implicit conversions, and its default value is `None`. Do not accept plain `object`.
 8. **MD5 under FIPS.** On .NET Framework with the FIPS policy enabled, MD5 throws. Should the checksum be skipped silently, skipped with a flag, or fail the add?
