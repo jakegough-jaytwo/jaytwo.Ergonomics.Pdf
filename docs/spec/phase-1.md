@@ -66,7 +66,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | W1 | Fill a text, check box, radio, or choice field by full name. Text and choice values in WinAnsi get a generated Helvetica appearance. Other values set `/NeedAppearances true` and return `NeedsViewer`. | Exists |
 | W2 | **Bulk fill**, all-or-nothing. Every value is validated (field exists, type, read-only, `/MaxLen`, listed option, FieldMDP, certification, permissions) before anything is changed. One failure throws and leaves the document unchanged. | Exists |
 | W3 | **Flatten** all fields or named fields (section 7.1). | New |
-| W4 | **Hybrid XFA.** The first form write to a hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values. A write to an XFA-only form throws `PdfUnsupportedFormException`. | Exists |
+| W4 | **Hybrid XFA.** The first fill of an unsigned hybrid form removes `/XFA` from the AcroForm dictionary in the same revision, so every viewer shows the AcroForm values; it also removes `/UR3` (section 7.3). A fill of a hybrid form that has a signature throws `PdfSignatureConflictException`. A write to an XFA-only form throws `PdfUnsupportedFormException`. | Exists |
 | W5 | Password and signature fields cannot be filled. Read-only fields throw `PdfFieldReadOnlyException`. Neither dirties the document. | Exists |
 
 ### 6.2 Pages
@@ -151,7 +151,7 @@ await doc.SignAsync(output, new PdfSignatureOptions
 ### 7.2 Writes on signed or certified documents
 
 - Certification (DocMDP) rules stay as today: `P` 1 blocks every write and signing; `P` 2 and `P` 3 allow fills and signing; metadata, attachment, flatten, and rotate writes are blocked at every level. FieldMDP locks apply to fills and flatten.
-- On a document with any approval signature, **flatten and rotate throw** `PdfSignatureConflictException` unless the caller sets `AllowBreakingSignatures = true`, because both change page content and viewers will report the earlier signatures as modified. Fills, metadata, attachments, and new signatures stay allowed, as today.
+- On a document with any approval signature, **flatten and rotate throw** `PdfSignatureConflictException` unless the caller sets `AllowBreakingSignatures = true`, because both change page content and viewers will report the earlier signatures as modified. Fills, metadata, attachments, and new signatures stay allowed, as today, except a fill of a hybrid XFA form, which throws `PdfSignatureConflictException` on a document with any signature (W4).
 
 ### 7.3 Usage rights (Reader extensions)
 
@@ -160,6 +160,8 @@ When the catalog `/Perms` has a `/UR3` signature, a write keeps it when its tran
 - `/Form` `FillIn` for fills;
 - `/EF` `Create`, `Delete`, or `Modify` for attachment edits; replacing an attachment that has the same name is `Modify`;
 - `/Signature` `Modify` for `Sign` into an existing empty signature field (ISO 32000-1 Table 255).
+
+A fill that removes `/XFA` (W4) is not granted by `FillIn`, which permits filling fields, not deleting the XFA definition, so it removes `/UR3`.
 
 Any other write removes `/UR3` from `/Perms` in the same revision, so Adobe Reader drops the extended features silently instead of reporting a broken document. A `Sign` that creates a new signature field and a document timestamp are such writes.
 

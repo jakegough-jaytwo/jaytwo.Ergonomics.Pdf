@@ -39,8 +39,8 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
-        "Hybrid XFA (spec R12, W-76): a fill removes /XFA from the AcroForm in the same revision, so XFA-aware viewers show the AcroForm values."
+        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) an attachment edit or a signature into an existing empty signature field keeps /UR3; a metadata write, a signature into a new field, or a fill, which also removes /XFA (spec W4, D-48), removes it in the same revision.",
+        "Hybrid XFA (spec R12, W-76, D-48): a fill removes /XFA from the AcroForm and /UR3 from /Perms in the same revision, so XFA-aware viewers show the AcroForm values; once signed, it refuses a fill with PdfSignatureConflictException."
       ],
       "validators": [
         {
@@ -350,8 +350,8 @@
         }
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
-        "Hybrid XFA (spec R12, W-76): a fill removes /XFA from the AcroForm in the same revision, so XFA-aware viewers show the AcroForm values.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) an attachment edit or a signature into an existing empty signature field keeps /UR3; a metadata write, a signature into a new field, or a fill, which also removes /XFA (spec W4, D-48), removes it in the same revision.",
+        "Hybrid XFA (spec R12, W-76, D-48): a fill removes /XFA from the AcroForm and /UR3 from /Perms in the same revision, so XFA-aware viewers show the AcroForm values; once signed, it refuses a fill with PdfSignatureConflictException.",
         "The fill field is a comb field (/Ff bit 25, /MaxLen 12, /DA CourierNewPSMT), so the library sets /NeedAppearances instead of drawing it (ACCEPTANCE: comb sets /NeedAppearances)."
       ],
       "validators": [
@@ -453,7 +453,7 @@
         "fill": null
       },
       "notes": [
-        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) a fill, an attachment edit, or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision.",
+        "Carries /Perms /UR3 usage rights granting /Form FillIn, /EF Create, Delete, and Modify, and /Signature Modify. Under spec 7.3 (W-67, W-87) an attachment edit or a signature into an existing empty signature field keeps /UR3; a metadata write or a signature into a new field removes it in the same revision. As an XFA-only form it refuses a fill (spec W4).",
         "XFA-only (spec R12, W-76): the catalog sets /NeedsRendering and the AcroForm has no fields, so a fill throws PdfUnsupportedFormException; reads still work."
       ],
       "validators": [

@@ -175,10 +175,9 @@ public class CorpusTests
         CheckOutput(entry, original, destination.ToArray(), field, out JsonElement after);
         Assert.Equal(value, CorpusManifest.Text(after.GetProperty("fieldValues"), field));
 
-        // Spec 7.3: every Reader-extended corpus form grants /Form FillIn, so a fill keeps /UR3 (UsageRightsTests).
-        Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
-
-        // Spec W4: the fill of a hybrid form removes /XFA in the same revision.
+        // Spec 7.3: every Reader-extended corpus form grants /Form FillIn, so a fill keeps /UR3 (UsageRightsTests),
+        // except on a hybrid form, where the fill also removes /XFA, which FillIn does not grant (spec W4, D-48).
+        Assert.Equal(KeepsUsageRightsAfterFill(entry), after.GetProperty("usageRights").GetBoolean());
         Assert.False(HasXfa(after), id + ": /XFA is still in the AcroForm");
     }
 
@@ -211,7 +210,7 @@ public class CorpusTests
 
         byte[] revised = destination.ToArray();
         CheckOutput(entry, original, revised, null, out JsonElement after);
-        Assert.Equal(entry.Probe.GetProperty("usageRights").GetBoolean(), after.GetProperty("usageRights").GetBoolean());
+        Assert.Equal(KeepsUsageRightsAfterFill(entry), after.GetProperty("usageRights").GetBoolean());
         Assert.False(HasXfa(after), id + ": /XFA is still in the AcroForm");
         var expected = before.ToDictionary(item => item.Key, item => values.TryGetValue(item.Key, out PdfFieldValue value) ? value : item.Value);
         using var again = new MemoryStream(revised, writable: false);
@@ -322,6 +321,12 @@ public class CorpusTests
     private static bool HasXfa(JsonElement probe)
     {
         return probe.GetProperty("features").EnumerateArray().Any(feature => feature.GetString() == "xfa");
+    }
+
+    // Every corpus form that can be filled is unsigned or has no XFA, so a hybrid fill removes /UR3 (D-48).
+    private static bool KeepsUsageRightsAfterFill(CorpusEntry entry)
+    {
+        return entry.Probe.GetProperty("usageRights").GetBoolean() && !HasXfa(entry.Probe);
     }
 
     private static string NamesHash(IEnumerable<string> names)

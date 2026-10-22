@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.AcroForm;
 using Xunit;
 
@@ -15,6 +17,8 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class XfaTests
 {
     private const string Packets = "/XFA [(template) 10 0 R (datasets) 11 0 R]";
+    private const string UsageRights = "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached /Reference [31 0 R] >>";
+    private const string FillInTransform = "<< /Type /SigRef /TransformMethod /UR3 /TransformParams << /Type /TransformParams /V /2.2 /Form [/FillIn] >> >>";
 
     public static IEnumerable<object[]> Classifications => new[]
     {
@@ -126,22 +130,14 @@ public class XfaTests
     }
 
     [Fact]
-    public void certification_and_fieldmdp_apply_to_a_hybrid_fill()
+    public void certification_and_fieldmdp_locks_refuse_a_hybrid_fill_first()
     {
-        // DocMDP P 1 refuses and keeps /XFA; P 2 allows the fill, which removes /XFA.
+        // DocMDP P 1 refuses with the certification lock, ahead of the signed-hybrid refusal (D-48), and keeps /XFA.
         byte[] locked = Form(Packets, " /Perms << /DocMDP 20 0 R >>", widgets: true, signatureField: false, (20, "<< /Type /Sig /Reference [21 0 R] >>"), (21, "<< /TransformMethod /DocMDP /TransformParams << /P 1 /V /1.2 >> >>"));
         using (var document = PdfDocument.Open(new MemoryStream(locked, writable: false), leaveOpen: true))
         {
             Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
             Assert.True(document.AcroForm.IsHybridXfa);
-        }
-
-        byte[] formFill = Form(Packets, " /Perms << /DocMDP 20 0 R >>", widgets: true, signatureField: false, (20, "<< /Type /Sig /Reference [21 0 R] >>"), (21, "<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>"));
-        byte[] filled = Save(formFill, null, document => document.AcroForm.Fill("Name", "Ada"));
-        using (var reopened = PdfDocument.Open(new MemoryStream(filled, writable: false), leaveOpen: true))
-        {
-            Assert.False(reopened.AcroForm.IsHybridXfa);
-            Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
         }
 
         // A FieldMDP lock on the field refuses and keeps /XFA.
@@ -151,6 +147,88 @@ public class XfaTests
             Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
             Assert.True(document.AcroForm.IsHybridXfa);
         }
+    }
+
+    // D-48: a hybrid form with a signature refuses a fill. A document has a signature when /Perms has /DocMDP or a
+    // signature field's /V resolves to a dictionary (spec 7.3), so P 2 and P 3 certifications, approval signatures, and
+    // document timestamps all count.
+    [Theory]
+    [InlineData("certified P 2", " /Perms << /DocMDP 20 0 R /UR3 30 0 R >>", false, "<< /Type /Sig /Reference [21 0 R] >>", "/P 2")]
+    [InlineData("certified P 3", " /Perms << /DocMDP 20 0 R /UR3 30 0 R >>", false, "<< /Type /Sig /Reference [21 0 R] >>", "/P 3")]
+    [InlineData("approval", " /Perms << /UR3 30 0 R >>", true, "<< /Type /Sig /Filter /Adobe.PPKLite /SubFilter /adbe.pkcs7.detached >>", "/P 2")]
+    [InlineData("document timestamp", " /Perms << /UR3 30 0 R >>", true, "<< /Type /DocTimeStamp /Filter /Adobe.PPKLite /SubFilter /ETSI.RFC3161 >>", "/P 2")]
+    public void signed_hybrid_form_refuses_a_fill_and_keeps_xfa_and_usage_rights(string name, string perms, bool signatureField, string signature, string docMdp)
+    {
+        byte[] pdf = Form(Packets, perms, widgets: true, signatureField, (20, signature), (21, "<< /TransformMethod /DocMDP /TransformParams << " + docMdp + " /V /1.2 >> >>"), (30, UsageRights), (31, FillInTransform));
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.True(document.AcroForm.IsHybridXfa, name);
+        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Other"] = "Grace" }));
+        Assert.Empty(document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
+        Assert.True(document.AcroForm.IsHybridXfa);
+        Assert.True(document.HasUsageRights);
+        Assert.Null(document.AcroForm.GetFields("Name")[0].Value);
+        document.SaveIncremental(stream);
+
+        Assert.Equal(pdf.Length, stream.Length);
+    }
+
+    // D-48: a signature field whose /V does not resolve is unsigned, and the /UR3 signature is not a signature, so the
+    // fill proceeds; it removes /XFA and, since FillIn does not grant deleting the XFA definition, /UR3 too.
+    [Theory]
+    [InlineData("usage rights only", false)]
+    [InlineData("signature field with a dangling /V", true)]
+    public void unsigned_hybrid_fill_removes_xfa_and_usage_rights(string name, bool danglingSignature)
+    {
+        byte[] pdf = Form(Packets, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: danglingSignature, (30, UsageRights), (31, FillInTransform));
+        byte[] filled = Save(pdf, null, document =>
+        {
+            Assert.True(document.HasUsageRights, name);
+            document.AcroForm.Fill("Name", "Ada");
+            Assert.False(document.AcroForm.IsHybridXfa);
+            Assert.False(document.HasUsageRights);
+        });
+
+        using var reopened = PdfDocument.Open(new MemoryStream(filled, writable: false), leaveOpen: true);
+        Assert.False(reopened.AcroForm.IsHybridXfa);
+        Assert.False(reopened.HasUsageRights);
+        Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
+    }
+
+    [Fact]
+    public void fill_of_a_form_without_xfa_keeps_usage_rights_that_grant_fill_in()
+    {
+        byte[] pdf = Form(string.Empty, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: false, (30, UsageRights), (31, FillInTransform));
+        byte[] filled = Save(pdf, null, document => document.AcroForm.Fill("Name", "Ada"));
+
+        using var reopened = PdfDocument.Open(new MemoryStream(filled, writable: false), leaveOpen: true);
+        Assert.True(reopened.HasUsageRights);
+        Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
+    }
+
+    // The signed check runs before Sign adds its own signature, so a fill and a signature of an unsigned hybrid form in
+    // one session both apply: the fill removes /XFA and /UR3 and the signature follows in the same save.
+    [Fact]
+    public void fill_then_sign_of_an_unsigned_hybrid_form_removes_xfa_and_usage_rights()
+    {
+        byte[] pdf = Form(Packets, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: false, (30, UsageRights), (31, FillInTransform));
+        using var source = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+        var destination = new MemoryStream();
+
+        document.AcroForm.Fill("Name", "Ada");
+        document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
+
+        byte[] signed = destination.ToArray();
+        Assert.True(signed.AsSpan(0, pdf.Length).SequenceEqual(pdf));
+        using var reopened = PdfDocument.Open(new MemoryStream(signed, writable: false), leaveOpen: true);
+        Assert.False(reopened.AcroForm.IsHybridXfa);
+        Assert.False(reopened.HasUsageRights);
+        Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
+        Assert.Single(reopened.AcroForm.Fields, field => field.FieldType == PdfFieldType.Signature);
     }
 
     [Theory]
@@ -198,8 +276,8 @@ public class XfaTests
         Assert.Equal(original.Length, stream.Length);
     }
 
-    // Plan C4: the fill re-encrypts the AcroForm dictionary without /XFA under each password and keeps /Encrypt and
-    // /ID; a user password without the fill bit refuses and keeps /XFA. qpdf and pypdf read the output with the password.
+    // Plan C4: the fill re-encrypts the AcroForm dictionary without /XFA, and the catalog without /UR3 (D-48), under each
+    // password and keeps /Encrypt and /ID; a user password without the fill bit refuses and keeps /XFA and /UR3. qpdf and pypdf read the output with the password.
     [Theory]
     [InlineData("aes-256", "user")]
     [InlineData("aes-256", "owner")]
@@ -212,6 +290,7 @@ public class XfaTests
         byte[] filled = Save(pdf, password, document =>
         {
             Assert.True(document.AcroForm.IsHybridXfa);
+            Assert.True(document.HasUsageRights);
             Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
         });
 
@@ -224,6 +303,7 @@ public class XfaTests
         using (var reopened = PdfDocument.Open(new MemoryStream(filled, writable: false), "user", leaveOpen: true))
         {
             Assert.False(reopened.AcroForm.IsHybridXfa);
+            Assert.False(reopened.HasUsageRights);
             Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
         }
 
@@ -238,6 +318,7 @@ public class XfaTests
             Assert.Null(CorpusManifest.Text(probe, "openError"));
             Assert.DoesNotContain("xfa", probe.GetProperty("features").EnumerateArray().Select(f => f.GetString()));
             Assert.Equal("Ada", CorpusManifest.Text(probe.GetProperty("fieldValues"), "Name"));
+            Assert.False(probe.GetProperty("usageRights").GetBoolean());
         }
         finally
         {
@@ -256,19 +337,19 @@ public class XfaTests
 
         Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Fill("Name", "Ada"));
         Assert.True(document.AcroForm.IsHybridXfa);
+        Assert.True(document.HasUsageRights);
         document.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
 
-    // Plan C4, measured: pyHanko approves or certifies (P 2) the W-9 hybrid form, and the library fills it. The earlier
-    // signature stays intact and valid, but pyHanko's difference analysis exempts no /XFA change in the AcroForm
-    // dictionary (ACROFORM_EXEMPT_STRICT_COMPARISON in pyHanko 0.38.0), so it reports the fill as modification OTHER and
-    // not permitted, under the certification and under the approval, which pyHanko holds to P 2.
+    // D-48 on a real form: pyHanko approves or certifies (P 2) the W-9 hybrid form. A fill would remove /XFA, which
+    // pyHanko 0.38.0's difference analysis does not permit after a signature (W-76 measured modification OTHER), so the
+    // fill throws, the source is unchanged, and pyHanko still finds the signature intact and valid.
     [Theory]
     [InlineData("approve")]
     [InlineData("certify-p2")]
-    public void pyhanko_reports_the_xfa_removal_after_a_signature_as_other(string mode)
+    public void pyhanko_signed_hybrid_corpus_form_refuses_a_fill(string mode)
     {
         CorpusEntry entry = CorpusManifest.Get("irs-fw9-2024-03");
         string directory = ExternalTool.TempDirectory();
@@ -284,22 +365,22 @@ public class XfaTests
             }
 
             byte[] signed = File.ReadAllBytes(signedPath);
-            byte[] filled = Save(signed, null, document =>
+            using (var stream = new MemoryStream())
             {
+                stream.Write(signed, 0, signed.Length);
+                using var document = PdfDocument.Open(stream, leaveOpen: true);
                 Assert.True(document.AcroForm.IsHybridXfa);
-                document.AcroForm.Fill("topmostSubform[0].Page1[0].f1_01[0]", "Ada");
-            });
-            string path = Path.Combine(directory, "filled.pdf");
-            File.WriteAllBytes(path, filled);
-            AssertQpdfCheck(path, null);
-            JsonElement probe = CorpusManifest.Probe(path).GetProperty(path);
-            Assert.DoesNotContain("xfa", probe.GetProperty("features").EnumerateArray().Select(f => f.GetString()));
+                Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill("topmostSubform[0].Page1[0].f1_01[0]", "Ada"));
+                Assert.True(document.HasUsageRights);
+                document.SaveIncremental(stream);
+                Assert.True(stream.ToArray().AsSpan().SequenceEqual(signed));
+            }
+
+            JsonElement probe = CorpusManifest.Probe(signedPath).GetProperty(signedPath);
+            Assert.Contains("xfa", probe.GetProperty("features").EnumerateArray().Select(f => f.GetString()));
             string earlier = mode == "approve" ? "Approve" : "Certify";
             JsonElement signature = probe.GetProperty("signatures").EnumerateArray().Single(s => CorpusManifest.Text(s, "field") == earlier);
             Assert.True(signature.GetProperty("intact").GetBoolean() && signature.GetProperty("valid").GetBoolean());
-            Assert.Equal("OTHER", CorpusManifest.Text(signature, "modification"));
-            Assert.False(signature.GetProperty("docmdpOk").GetBoolean());
-            Assert.Contains("/XFA", CorpusManifest.Text(signature, "suspicious") ?? string.Empty, StringComparison.Ordinal);
         }
         finally
         {
@@ -337,13 +418,15 @@ public class XfaTests
     private static byte[] EncryptedForm(StandardEncryptor crypt)
     {
         var builder = new PdfBuilder();
-        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [5 0 R] /XFA [" + crypt.Text("template", 1) + " 10 0 R] /DA " + crypt.Text("/Helv 0 Tf 0 g", 1) + " >> >>");
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [5 0 R] /XFA [" + crypt.Text("template", 1) + " 10 0 R] /DA " + crypt.Text("/Helv 0 Tf 0 g", 1) + " >> /Perms << /UR3 30 0 R >> >>");
         builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
         builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << >> /Annots [5 0 R] >>");
         builder.Indirect(4, "<< /Title " + crypt.Text("Secret", 4) + " >>");
         builder.Indirect(5, "<< /Subtype /Widget /FT /Tx /T " + crypt.Text("Name", 5) + " /Rect [72 700 240 720] /DA " + crypt.Text("/Helv 12 Tf 0 g", 5) + " /P 3 0 R >>");
         builder.StreamObject(10, string.Empty, crypt.Encrypt(Encoding.ASCII.GetBytes("<template xmlns=\"http://www.xfa.org/schema/xfa-template/2.5/\"/>"), 10, 0));
         builder.Indirect(20, crypt.Dictionary(null));
+        builder.Indirect(30, UsageRights);
+        builder.Indirect(31, FillInTransform);
         return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
     }
 
@@ -385,5 +468,15 @@ public class XfaTests
         using Process process = ExternalTool.Start(CorpusManifest.Qpdf(), args.ToArray());
         (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
         Assert.True(exitCode == 0 && !(stdout + stderr).Contains("WARNING"), "qpdf --check exited " + exitCode.ToString(CultureInfo.InvariantCulture) + Environment.NewLine + stderr + stdout);
+    }
+
+    private sealed class FixedProvider : IPdfSignatureProvider
+    {
+        public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
+
+        public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
+        {
+            return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
+        }
     }
 }

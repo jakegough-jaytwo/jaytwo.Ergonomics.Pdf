@@ -484,6 +484,13 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
+        // D-48: validators permit no /XFA change after a signature, and keeping /XFA would leave XFA-aware viewers
+        // showing stale data, so a signed hybrid form refuses the fill.
+        if (xfa == XfaKind.Hybrid && HasSignature(slots))
+        {
+            throw new PdfSignatureConflictException("The hybrid XFA form has a signature; a fill must remove /XFA, which validators report as a change the signature does not permit.");
+        }
+
         RequireFill();
         var byName = new Dictionary<string, List<FieldSlot>>(StringComparer.Ordinal);
         foreach (FieldSlot slot in slots)
@@ -516,13 +523,17 @@ internal sealed class PdfEngine : IDisposable
         _backup = new Dictionary<int, PdfObject?>();
         try
         {
-            ApplyUsageRights("Form", "FillIn");
-
-            // W4: XFA-aware viewers show the XFA data of a hybrid form, not the AcroForm values, so the first fill drops
-            // /XFA in the same revision. The packets stay in the file, unreferenced.
+            // W4: XFA-aware viewers show the XFA data of a hybrid form, not the AcroForm values, so the first fill of an
+            // unsigned hybrid form drops /XFA in the same revision. The packets stay in the file, unreferenced. FillIn
+            // grants filling fields, not deleting the XFA definition, so that fill also removes /UR3 (spec 7.3, D-48).
             if (xfa == XfaKind.Hybrid)
             {
+                ApplyUsageRights(null, null);
                 EnsureAcroForm().Remove("XFA");
+            }
+            else
+            {
+                ApplyUsageRights("Form", "FillIn");
             }
 
             foreach (FillPlan plan in plans)
@@ -2794,7 +2805,7 @@ internal sealed class PdfEngine : IDisposable
             return;
         }
 
-        if (HasSignature(perms))
+        if (HasSignature(CollectFields()))
         {
             return;
         }
@@ -2813,14 +2824,14 @@ internal sealed class PdfEngine : IDisposable
     // A document has a signature when /Perms has /DocMDP or a signature field has a /V that resolves to a dictionary,
     // the test Sign uses to refuse an already signed field. A /V that does not resolve is null (ISO 32000-1 7.3.10),
     // so that field is unsigned. The /UR3 usage-rights signature is not counted.
-    private bool HasSignature(PdfObject.Dict perms)
+    private bool HasSignature(List<FieldSlot> slots)
     {
-        if (perms.Get("DocMDP") != null)
+        if (ResolveMaybe(CatalogDict().Get("Perms")) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
         {
             return true;
         }
 
-        foreach (FieldSlot slot in CollectFields())
+        foreach (FieldSlot slot in slots)
         {
             if (slot.FieldType == PdfFieldType.Signature && HasSignatureDictionary(slot))
             {
