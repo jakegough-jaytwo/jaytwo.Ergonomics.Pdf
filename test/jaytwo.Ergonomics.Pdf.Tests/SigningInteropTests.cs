@@ -94,8 +94,54 @@ public class SigningInteropTests
         }
     }
 
-    [Fact]
-    public async Task pkcs11_signature_matches_pkcs1_and_pyhanko_and_pdfsig_trust_the_chain()
+    [Theory]
+    [MemberData(nameof(SigningAlgorithmTests.Combinations), MemberType = typeof(SigningAlgorithmTests))]
+    public void pyhanko_and_pdfsig_trust_every_key_and_digest(string keyKind, PdfDigestAlgorithm digestAlgorithm)
+    {
+        using var rootKey = RSA.Create(2048);
+        using X509Certificate2 root = CreateAuthority("Algorithm Root", rootKey, null);
+        using AsymmetricAlgorithm leafKey = TestKeys.Create(keyKind);
+        using X509Certificate2 leaf = CreateLeaf("Algorithm Leaf", leafKey, root);
+        var signer = new KeySigner(leafKey, leaf.RawData, new[] { root.RawData }, null);
+        byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, digestAlgorithm, null);
+        AssertVerifiersAccept(signed, root.RawData, null, keyKind, digestAlgorithm, "Algorithm Leaf");
+    }
+
+    // W-70: the RFC 3161 imprint is the SHA-256 of the DER-encoded ECDSA value the SignerInfo stores, whatever the signature's digest.
+    [Theory]
+    [InlineData(TestKeys.P256, PdfDigestAlgorithm.Sha256)]
+    [InlineData(TestKeys.P384, PdfDigestAlgorithm.Sha512)]
+    public void pyhanko_trusts_the_timestamp_on_an_ecdsa_signature(string keyKind, PdfDigestAlgorithm digestAlgorithm)
+    {
+        string openssl = OpenSslTimestampAuthority.Locate();
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            OpenSslTimestampAuthority.CreatePki(openssl, directory);
+            using var rootKey = RSA.Create(2048);
+            using X509Certificate2 root = CreateAuthority("Algorithm Root", rootKey, null);
+            using AsymmetricAlgorithm leafKey = TestKeys.Create(keyKind);
+            using X509Certificate2 leaf = CreateLeaf("Algorithm Leaf", leafKey, root);
+            var signer = new KeySigner(leafKey, leaf.RawData, new[] { root.RawData }, null);
+            byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, digestAlgorithm, new OpenSslTimestampAuthority(openssl, directory));
+            AssertVerifiersAccept(signed, root.RawData, "timestamp,tsa=" + Path.Combine(directory, "root.pem"), keyKind, digestAlgorithm, "Algorithm Leaf");
+            string report = Validate(signed, root.RawData, null, "entire", "timestamp,tsa=" + Path.Combine(directory, "root.pem"));
+            Assert.Contains("timestamp_intact=true", report, StringComparison.Ordinal);
+            Assert.Contains("timestamp_trusted=true", report, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // W-70: RSA through CKM_RSA_PKCS with a host-built DigestInfo, and P-256 and P-384 through CKM_ECDSA
+    // on the raw digest, which returns the P1363 r||s value. Each key signs with every digest.
+    [Theory]
+    [InlineData(TestKeys.Rsa)]
+    [InlineData(TestKeys.P256)]
+    [InlineData(TestKeys.P384)]
+    public async Task pkcs11_keys_sign_every_digest_and_pyhanko_and_pdfsig_trust_the_chain(string keyKind)
     {
         string libraryPath = LocatePkcs11();
         string directory = ExternalTool.TempDirectory();
@@ -119,52 +165,35 @@ public class SigningInteropTests
             ISlot slot = FindSlot(library, "pdf-test");
             using ISession session = slot.OpenSession(SessionType.ReadWrite);
             session.Login(CKU.CKU_USER, "12345678");
-            IObjectAttributeFactory attributes = session.Factories.ObjectAttributeFactory;
-            using IMechanism generate = session.Factories.MechanismFactory.Create(CKM.CKM_RSA_PKCS_KEY_PAIR_GEN);
-            session.GenerateKeyPair(
-                generate,
-                new List<IObjectAttribute>
-                {
-                    attributes.Create(CKA.CKA_TOKEN, true),
-                    attributes.Create(CKA.CKA_VERIFY, true),
-                    attributes.Create(CKA.CKA_MODULUS_BITS, 2048),
-                    attributes.Create(CKA.CKA_PUBLIC_EXPONENT, new byte[] { 0x01, 0x00, 0x01 }),
-                    attributes.Create(CKA.CKA_LABEL, "pdf"),
-                },
-                new List<IObjectAttribute>
-                {
-                    attributes.Create(CKA.CKA_TOKEN, true),
-                    attributes.Create(CKA.CKA_PRIVATE, true),
-                    attributes.Create(CKA.CKA_SENSITIVE, true),
-                    attributes.Create(CKA.CKA_SIGN, true),
-                    attributes.Create(CKA.CKA_LABEL, "pdf"),
-                },
-                out IObjectHandle publicKey,
-                out IObjectHandle privateKey);
-            byte[] modulus = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_MODULUS })[0].GetValueAsByteArray();
-            byte[] exponent = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_PUBLIC_EXPONENT })[0].GetValueAsByteArray();
-            var signer = new Pkcs11Signer(session, privateKey, modulus, exponent);
-            byte[] probe = TestCompat.Sha256(Encoding.ASCII.GetBytes("pkcs11-probe"));
-            using (var verifier = RSA.Create())
+            Pkcs11Signer signer = keyKind == TestKeys.Rsa ? GenerateRsa(session) : GenerateEcdsa(session, keyKind);
+            using AsymmetricAlgorithm publicKey = signer.PublicKey;
+            foreach (HashAlgorithmName name in new[] { HashAlgorithmName.SHA256, HashAlgorithmName.SHA384, HashAlgorithmName.SHA512 })
             {
-                verifier.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
-                Assert.True(verifier.VerifyHash(probe, await signer.SignHashAsync(probe, HashAlgorithmName.SHA256, CancellationToken.None), HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1));
+                byte[] probe;
+                using (var incremental = IncrementalHash.CreateHash(name))
+                {
+                    incremental.AppendData(Encoding.ASCII.GetBytes("pkcs11-probe"));
+                    probe = incremental.GetHashAndReset();
+                }
+
+                byte[] value = await signer.SignHashAsync(probe, name, CancellationToken.None);
+                Assert.True(publicKey is RSA rsa
+                    ? rsa.VerifyHash(probe, value, name, RSASignaturePadding.Pkcs1)
+                    : ((ECDsa)publicKey).VerifyHash(probe, value));
             }
 
             using var rootKey = RSA.Create(2048);
             using var intermediateKey = RSA.Create(2048);
             using X509Certificate2 root = CreateAuthority("PKCS11 Root", rootKey, null);
             using X509Certificate2 intermediate = CreateAuthority("PKCS11 Intermediate", intermediateKey, root);
-            using var leafPublic = RSA.Create();
-            leafPublic.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
-            using X509Certificate2 leaf = CreateLeaf("PKCS11 Leaf", leafPublic, intermediate);
+            using X509Certificate2 leaf = CreateLeaf("PKCS11 Leaf", publicKey, intermediate);
             signer.Certificate = leaf.RawData;
             signer.Chain = new[] { intermediate.RawData, root.RawData };
-            byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, null);
-            string report = Validate(signed, root.RawData, null, "entire", "chain");
-            Assert.Contains("intact=true", report, StringComparison.Ordinal);
-            Assert.Contains("trusted=true", report, StringComparison.Ordinal);
-            Assert.Contains("Signer Certificate Common Name: PKCS11 Leaf", PdfsigAccepts(signed, root.RawData, null, wholeFile: true));
+            foreach (PdfDigestAlgorithm digestAlgorithm in new[] { PdfDigestAlgorithm.Sha256, PdfDigestAlgorithm.Sha384, PdfDigestAlgorithm.Sha512 })
+            {
+                byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), signer, digestAlgorithm, null);
+                AssertVerifiersAccept(signed, root.RawData, "chain", keyKind, digestAlgorithm, "PKCS11 Leaf");
+            }
         }
         finally
         {
@@ -543,16 +572,16 @@ public class SigningInteropTests
         Validate(mismatched, certificate.RawData, null, "entire", "invalid");
     }
 
-    // W-14: pdfsig must accept the file's one signature as the library writes it today: adbe.pkcs7.detached, SHA-256,
+    // W-14: pdfsig must accept the file's one signature as the library writes it today: adbe.pkcs7.detached, SHA-256 unless named,
     // over exactly the /ByteRange in the file, valid, and trusted only when the root is configured.
-    private static List<string> PdfsigAccepts(byte[] signed, byte[]? root, string? password, bool wholeFile)
+    private static List<string> PdfsigAccepts(byte[] signed, byte[]? root, string? password, bool wholeFile, string signingHash = "SHA-256")
     {
         (int exitCode, string report) = Pdfsig.Verify(signed, root == null ? Array.Empty<byte[]>() : new[] { root }, password);
         List<List<string>> signatures = Pdfsig.Signatures(report);
         Assert.True(exitCode == 0 && signatures.Count == 1, report);
         List<string> signature = signatures[0];
         Assert.Contains("Signature Type: adbe.pkcs7.detached", signature);
-        Assert.Contains("Signing Hash Algorithm: SHA-256", signature);
+        Assert.Contains("Signing Hash Algorithm: " + signingHash, signature);
         Assert.Contains(Pdfsig.SignedRanges(signed), signature);
         Assert.Contains(wholeFile ? Pdfsig.WholeFile : Pdfsig.NotWholeFile, signature);
         Assert.Contains(Pdfsig.Valid, signature);
@@ -563,6 +592,34 @@ public class SigningInteropTests
     private static byte[] Sign(byte[] pdf, X509Certificate2 certificate, RSA key, IReadOnlyList<byte[]> chain, ITimestampAuthority? authority)
     {
         return Sign(pdf, new RsaSigner(key, certificate.RawData, chain), authority);
+    }
+
+    // W-70: pyHanko and pdfsig both report the digest, and pyHanko the signature mechanism, that the CMS names.
+    private static void AssertVerifiersAccept(byte[] signed, byte[] root, string? checks, string keyKind, PdfDigestAlgorithm digestAlgorithm, string commonName)
+    {
+        string bits = digestAlgorithm switch
+        {
+            PdfDigestAlgorithm.Sha256 => "256",
+            PdfDigestAlgorithm.Sha384 => "384",
+            _ => "512",
+        };
+        string report = Validate(signed, root, null, "entire", checks);
+        Assert.Contains("md_algorithm=sha" + bits + "\n", report.Replace("\r\n", "\n"), StringComparison.Ordinal);
+        Assert.Contains("mechanism=sha" + bits + (keyKind == TestKeys.Rsa ? "_rsa" : "_ecdsa") + "\n", report.Replace("\r\n", "\n"), StringComparison.Ordinal);
+        Assert.Contains("Signer Certificate Common Name: " + commonName, PdfsigAccepts(signed, root, null, wholeFile: true, "SHA-" + bits));
+    }
+
+    private static byte[] Sign(byte[] pdf, IPdfExternalSigner signer, PdfDigestAlgorithm digestAlgorithm, ITimestampAuthority? authority)
+    {
+        using var source = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+        var destination = new MemoryStream();
+        document.Sign(
+            destination,
+            new PdfSignatureOptions { ReservedContentsBytes = 32768, SigningTime = authority == null ? TestCompat.UnixEpoch : DateTimeOffset.UtcNow, DigestAlgorithm = digestAlgorithm },
+            new CmsDetachedSignatureProvider(signer, authority),
+            leaveOpen: true);
+        return destination.ToArray();
     }
 
     private static byte[] Sign(byte[] pdf, IPdfExternalSigner signer, ITimestampAuthority? authority)
@@ -764,6 +821,77 @@ public class SigningInteropTests
         return found!;
     }
 
+    private static Pkcs11Signer GenerateRsa(ISession session)
+    {
+        IObjectAttributeFactory attributes = session.Factories.ObjectAttributeFactory;
+        using IMechanism generate = session.Factories.MechanismFactory.Create(CKM.CKM_RSA_PKCS_KEY_PAIR_GEN);
+        session.GenerateKeyPair(
+            generate,
+            new List<IObjectAttribute>
+            {
+                attributes.Create(CKA.CKA_TOKEN, true),
+                attributes.Create(CKA.CKA_VERIFY, true),
+                attributes.Create(CKA.CKA_MODULUS_BITS, 2048),
+                attributes.Create(CKA.CKA_PUBLIC_EXPONENT, new byte[] { 0x01, 0x00, 0x01 }),
+                attributes.Create(CKA.CKA_LABEL, "pdf"),
+            },
+            PrivateKeyTemplate(attributes),
+            out IObjectHandle publicKey,
+            out IObjectHandle privateKey);
+        byte[] modulus = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_MODULUS })[0].GetValueAsByteArray();
+        byte[] exponent = session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_PUBLIC_EXPONENT })[0].GetValueAsByteArray();
+        var rsa = RSA.Create();
+        rsa.ImportParameters(new RSAParameters { Modulus = TrimInteger(modulus), Exponent = TrimInteger(exponent) });
+        return new Pkcs11Signer(session, privateKey, CKM.CKM_RSA_PKCS, rsa);
+    }
+
+    private static Pkcs11Signer GenerateEcdsa(ISession session, string keyKind)
+    {
+        bool p256 = keyKind == TestKeys.P256;
+        IObjectAttributeFactory attributes = session.Factories.ObjectAttributeFactory;
+        using IMechanism generate = session.Factories.MechanismFactory.Create(CKM.CKM_EC_KEY_PAIR_GEN);
+        session.GenerateKeyPair(
+            generate,
+            new List<IObjectAttribute>
+            {
+                attributes.Create(CKA.CKA_TOKEN, true),
+                attributes.Create(CKA.CKA_VERIFY, true),
+                attributes.Create(CKA.CKA_EC_PARAMS, DerCodec.Oid(p256 ? "1.2.840.10045.3.1.7" : "1.3.132.0.34")),
+                attributes.Create(CKA.CKA_LABEL, "pdf"),
+            },
+            PrivateKeyTemplate(attributes),
+            out IObjectHandle publicKey,
+            out IObjectHandle privateKey);
+
+        // CKA_EC_POINT is a DER OCTET STRING around the uncompressed point 04 || X || Y.
+        byte[] point = DerCodec.ReadTlv(session.GetAttributeValue(publicKey, new List<CKA> { CKA.CKA_EC_POINT })[0].GetValueAsByteArray()).Content;
+        int half = p256 ? 32 : 48;
+        Assert.Equal(1 + (half * 2), point.Length);
+        Assert.Equal(0x04, point[0]);
+        var x = new byte[half];
+        var y = new byte[half];
+        Buffer.BlockCopy(point, 1, x, 0, half);
+        Buffer.BlockCopy(point, 1 + half, y, 0, half);
+        var ecdsa = ECDsa.Create(new ECParameters
+        {
+            Curve = p256 ? ECCurve.NamedCurves.nistP256 : ECCurve.NamedCurves.nistP384,
+            Q = new ECPoint { X = x, Y = y },
+        });
+        return new Pkcs11Signer(session, privateKey, CKM.CKM_ECDSA, ecdsa);
+    }
+
+    private static List<IObjectAttribute> PrivateKeyTemplate(IObjectAttributeFactory attributes)
+    {
+        return new List<IObjectAttribute>
+        {
+            attributes.Create(CKA.CKA_TOKEN, true),
+            attributes.Create(CKA.CKA_PRIVATE, true),
+            attributes.Create(CKA.CKA_SENSITIVE, true),
+            attributes.Create(CKA.CKA_SIGN, true),
+            attributes.Create(CKA.CKA_LABEL, "pdf"),
+        };
+    }
+
     private static ISlot FindSlot(IPkcs11Library library, string label)
     {
         foreach (ISlot slot in library.GetSlotList(SlotsType.WithTokenPresent))
@@ -795,9 +923,9 @@ public class SigningInteropTests
         return withKey;
     }
 
-    private static X509Certificate2 CreateLeaf(string commonName, RSA key, X509Certificate2? issuer)
+    private static X509Certificate2 CreateLeaf(string commonName, AsymmetricAlgorithm key, X509Certificate2? issuer)
     {
-        var request = new CertificateRequest("CN=" + commonName, key, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        CertificateRequest request = TestKeys.Request("CN=" + commonName, key);
         request.CertificateExtensions.Add(new X509BasicConstraintsExtension(false, false, 0, true));
         request.CertificateExtensions.Add(new X509KeyUsageExtension(X509KeyUsageFlags.DigitalSignature | X509KeyUsageFlags.NonRepudiation, true));
         DateTimeOffset notBefore = DateTimeOffset.UtcNow.AddDays(-1);
@@ -806,7 +934,9 @@ public class SigningInteropTests
             return request.CreateSelfSigned(notBefore, DateTimeOffset.UtcNow.AddYears(1));
         }
 
-        return request.Create(issuer, notBefore, issuer.NotAfter.AddMinutes(-1), Serial());
+        // The issuers are RSA. Naming the generator lets an RSA issuer sign an ECDSA leaf.
+        using RSA issuerKey = issuer.GetRSAPrivateKey() ?? throw new InvalidOperationException("The issuer has no RSA private key.");
+        return request.Create(issuer.SubjectName, X509SignatureGenerator.CreateForRSA(issuerKey, RSASignaturePadding.Pkcs1), notBefore, issuer.NotAfter.AddMinutes(-1), Serial());
     }
 
     private static X509Certificate2 CreateTimestampAuthority(RSA key, X509Certificate2 issuer)
@@ -916,20 +1046,19 @@ public class SigningInteropTests
     {
         private readonly ISession _session;
         private readonly IObjectHandle _privateKey;
+        private readonly CKM _mechanism;
 
-        public Pkcs11Signer(ISession session, IObjectHandle privateKey, byte[] modulus, byte[] exponent)
+        public Pkcs11Signer(ISession session, IObjectHandle privateKey, CKM mechanism, AsymmetricAlgorithm publicKey)
         {
             _session = session;
             _privateKey = privateKey;
-            Modulus = modulus;
-            Exponent = exponent;
+            _mechanism = mechanism;
+            PublicKey = publicKey;
             CertificateDer = Array.Empty<byte>();
             Chain = Array.Empty<byte[]>();
         }
 
-        public byte[] Modulus { get; }
-
-        public byte[] Exponent { get; }
+        public AsymmetricAlgorithm PublicKey { get; }
 
         public byte[] Certificate { set => CertificateDer = value; }
 
@@ -939,13 +1068,20 @@ public class SigningInteropTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates => Chain;
 
+        // CKM_RSA_PKCS signs the DigestInfo the host builds. CKM_ECDSA signs the raw digest and returns r || s.
         public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
-            byte[] digestInfo = DerCodec.Sequence(
-                DerCodec.Sequence(DerCodec.Oid("2.16.840.1.101.3.4.2.1"), DerCodec.Null()),
-                DerCodec.OctetString(hash.ToArray()));
-            using IMechanism mechanism = _session.Factories.MechanismFactory.Create(CKM.CKM_RSA_PKCS);
-            return new ValueTask<byte[]>(_session.Sign(mechanism, _privateKey, digestInfo));
+            byte[] input = hash.ToArray();
+            if (_mechanism == CKM.CKM_RSA_PKCS)
+            {
+                string oid = hashAlgorithm == HashAlgorithmName.SHA512
+                    ? "2.16.840.1.101.3.4.2.3"
+                    : hashAlgorithm == HashAlgorithmName.SHA384 ? "2.16.840.1.101.3.4.2.2" : "2.16.840.1.101.3.4.2.1";
+                input = DerCodec.Sequence(DerCodec.Algorithm(oid), DerCodec.OctetString(input));
+            }
+
+            using IMechanism mechanism = _session.Factories.MechanismFactory.Create(_mechanism);
+            return new ValueTask<byte[]>(_session.Sign(mechanism, _privateKey, input));
         }
     }
 }

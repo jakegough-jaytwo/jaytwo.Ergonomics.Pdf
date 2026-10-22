@@ -81,6 +81,8 @@ def main() -> None:
     print("docmdp_ok=" + str(bool(status.docmdp_ok)).lower())
     print("modification=" + level)
     print("coverage=" + str(status.coverage))
+    print("md_algorithm=" + str(status.md_algorithm))
+    print("mechanism=" + str(status.pkcs7_signature_mechanism))
     for item in checks:
         if item.startswith("fieldmdp="):
             spec = signature.fieldmdp

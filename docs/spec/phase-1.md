@@ -97,8 +97,8 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | ID | Requirement | Status |
 | --- | --- | --- |
 | W14 | Sign through a host-implemented `IPdfExternalSigner`. The library never loads a PKCS#11 module. A new signature field is created, or an existing empty one is reused by name. | Exists |
-| W15 | **Key types.** RSA (PKCS#1 v1.5) and **ECDSA P-256 and P-384**. For ECDSA the signer returns the IEEE P1363 `r‖s` form that PKCS#11 `CKM_ECDSA` and .NET `ECDsa.SignHash` produce; the library DER-encodes it. | Change (ECDSA new) |
-| W16 | **Digests.** SHA-256 (default), **SHA-384, and SHA-512**. The signer receives the raw digest and the algorithm. | Change |
+| W15 | **Key types.** RSA (PKCS#1 v1.5) and **ECDSA P-256 and P-384**. For ECDSA the signer returns the IEEE P1363 `r‖s` form that PKCS#11 `CKM_ECDSA` and .NET `ECDsa.SignHash` produce; the library DER-encodes it. | Exists |
+| W16 | **Digests.** SHA-256 (default), **SHA-384, and SHA-512**. The signer receives the raw digest and the algorithm. | Exists |
 | W17 | **Formats.** `adbe.pkcs7.detached` (current) and **PAdES baseline B-B** (`ETSI.CAdES.detached`, ETSI EN 319 142-1): `signing-certificate-v2` signed attribute, no CMS `signing-time` attribute (the time is in `/M`). With a timestamp authority, the result is PAdES B-T. | Change (PAdES new) |
 | W18 | RFC 3161 signature timestamp as an unsigned attribute, and document timestamps as a separate revision, with the existing nonce, imprint, algorithm, and certificate checks. | Exists |
 | W19 | Failure never extends the output: signer, timestamp, size, and validation failures leave the destination unchanged. Signer exception details are not exposed. | Exists |
