@@ -1,0 +1,4 @@
+interface:
+  display_name: "Test Value Evidence"
+  short_description: "Prove tests detect the changed behavior"
+  default_prompt: "Use $test-value-evidence to assess whether these tests detect the identified change."

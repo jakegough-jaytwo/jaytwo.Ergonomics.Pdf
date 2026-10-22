@@ -11,6 +11,10 @@ Repository workflows are skills. Skill `<name>` is the file `.agents/skills/<nam
 - `pdf-change-verification` (`.agents/skills/pdf-change-verification/SKILL.md`): after runtime, test, build, or behavior-documentation changes, and for acceptance or qualification claims.
 - `pdf-fuzz-qualification` (`.agents/skills/pdf-fuzz-qualification/SKILL.md`): the fuzz harness, the smoke run, a G8 fuzz campaign, or triage of a fuzz finding.
 - `pdf-security-review` (`.agents/skills/pdf-security-review/SKILL.md`): only for an explicitly requested read-only audit or `QUALIFICATION.md` gate G8 evidence.
+- `csharp-refactoring` (`.agents/skills/csharp-refactoring/SKILL.md`): only for an explicitly behavior-preserving C# refactor such as a rename, move, extraction, inlining, consolidation, or split. It does not own an ordinary feature, defect fix, upgrade, test change, or formatting-only change.
+- `test-value-evidence` (`.agents/skills/test-value-evidence/SKILL.md`): only for change-specific test-value assessment or revision-bound red-green evidence when the user or work item requires it. It does not replace ordinary verification, audit the whole suite, or authorize a mutation campaign.
+
+The two general .NET skills supplement this repository's workflow. `pdf-task-workflow` still owns work-item execution, the applicable PDF domain skill still owns product behavior, and `pdf-change-verification` still owns required verification and evidence claims. Use `csharp-refactoring` before editing the structural operation it governs. Use `test-value-evidence` from within verification after the changed contract and relevant tests are identified.
 
 `.agents/skills/` is the only copy. Do not mirror it into `.claude/skills/`, `.cursor/skills/`, or `.grok/skills/`. Cursor scans `.claude/skills/` as well as `.agents/skills/`, so a mirror loads every skill twice.
 

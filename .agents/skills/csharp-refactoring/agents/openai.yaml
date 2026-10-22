@@ -1,0 +1,4 @@
+interface:
+  display_name: "C# Refactoring"
+  short_description: "Refactor C# without changing behavior"
+  default_prompt: "Use $csharp-refactoring to make this behavior-preserving C# structural change safely."

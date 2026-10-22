@@ -13,8 +13,12 @@ This repository uses one active agent with progressively disclosed skills. The a
 | `pdf-change-verification` | Tests, external-tool evidence, checkpoint validation, and qualification evidence. |
 | `pdf-security-review` | Explicit read-only security audits and gate G8 review evidence. |
 | `pdf-fuzz-qualification` | The fuzz harness, the fixed-seed smoke run, a G8 fuzz campaign, or triage of a fuzz finding. |
+| `csharp-refactoring` | Explicitly behavior-preserving C# structural changes; supplements the task and domain skills. |
+| `test-value-evidence` | Change-specific test-value assessment and revision-bound red-green evidence; supplements verification. |
 
 `AGENTS.md` contains short trigger rules because it is always loaded. Each skill contains only its workflow-specific instructions. The domain skills refer back to the charter instead of copying it.
+
+`csharp-refactoring` and `test-value-evidence` are vendored from [`dotnet/skills`](https://github.com/dotnet/skills) at commit `c848e7fffab05c594f9b954c6f3beb373d108447`. Their upstream instructions remain intact; repository-specific routing and precedence live in `AGENTS.md`.
 
 ## Tool compatibility
 
