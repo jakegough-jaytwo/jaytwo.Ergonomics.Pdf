@@ -112,10 +112,47 @@ internal sealed class PdfEngine : IDisposable
         var result = new List<PdfPage>(pages.Count);
         for (int i = 0; i < pages.Count; i++)
         {
-            result.Add(new PdfPage(i + 1, pages[i].MediaBox, pages[i].CropBox, pages[i].Rotate));
+            result.Add(new PdfPage(this, pages[i].ObjectId, i + 1, pages[i].MediaBox, pages[i].CropBox, pages[i].Rotate));
         }
 
         return result;
+    }
+
+    internal int SetPageRotation(int objectId, int rotation)
+    {
+        CheckDisposed();
+        if (rotation % 90 != 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(rotation), "Page rotation must be a multiple of 90 degrees.");
+        }
+
+        int normalized = rotation % 360;
+        if (normalized < 0)
+        {
+            normalized += 360;
+        }
+
+        using var release = ReleaseAfter();
+        if (Load(objectId) is not PdfObject.Dict page)
+        {
+            throw new PdfParseException(0, "The page object does not resolve to a dictionary.");
+        }
+
+        if (page.Get("Rotate") is PdfObject.Num && IntOf(page.Get("Rotate")) == normalized)
+        {
+            return normalized;
+        }
+
+        EnsureDocumentChange();
+        if (!AllowBreakingSignatures && HasSignature(CollectFields()))
+        {
+            throw new PdfSignatureConflictException("The document has a signature; page rotation changes page presentation, which validators report as a modification the signature does not permit. Set AllowBreakingSignatures to rotate anyway.");
+        }
+
+        RequireModify();
+        ApplyUsageRights(null, null);
+        ((PdfObject.Dict)EditAny(objectId)).Set("Rotate", PdfObject.Num.FromLong(normalized));
+        return normalized;
     }
 
     internal bool HasFields
@@ -177,7 +214,7 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    // Spec 7.2: flatten throws on a document with a signature unless the caller opts in.
+    // Spec 7.2: flatten and rotate throw on a document with a signature unless the caller opts in.
     internal bool AllowBreakingSignatures { get; set; }
 
     internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password)

@@ -73,7 +73,7 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 
 | ID | Requirement | Status |
 | --- | --- | --- |
-| W6 | **Rotate.** Set a page's rotation to 0, 90, 180, or 270 (other multiples of 90 are normalized). The value is written on the page object itself, overriding any inherited `/Rotate`. Field and box coordinates stay in user space and do not change. | New |
+| W6 | **Rotate.** Set a page's rotation to 0, 90, 180, or 270 (other multiples of 90 are normalized). The value is written on the page object itself, overriding any inherited `/Rotate`. Field and box coordinates stay in user space and do not change. | Exists |
 
 ### 6.3 Metadata
 
@@ -145,13 +145,13 @@ await doc.SignAsync(output, new PdfSignatureOptions
 - For each widget being flattened, the library appends drawing operators to its page that paint the widget's current normal appearance (`/AP /N`, selected by `/AS` for buttons) as a form XObject, placed by the algorithm in ISO 32000-1 12.5.5. The existing page content is wrapped in `q`…`Q` by adding streams to the `/Contents` array, so no content stream is decoded.
 - Widgets flagged `Hidden` or `NoView` are removed without being drawn.
 - Flattened widgets are removed from the page `/Annots`; flattened fields are removed from `/Fields` and their parents. When no fields remain, `/XFA` and `/NeedAppearances` are removed too.
-- A widget without a usable appearance (for example after a non-WinAnsi fill) makes flatten throw before changing anything.
+- A widget whose field shows a value but has no usable appearance (for example after a non-WinAnsi fill) makes flatten throw before changing anything. A widget whose field shows no value and has no usable appearance draws nothing and is removed.
 - Signed signature fields are never flattened. Unsigned signature fields are kept unless named (section 12, question 6).
 
 ### 7.2 Writes on signed or certified documents
 
 - Certification (DocMDP) rules stay as today: `P` 1 blocks every write and signing; `P` 2 and `P` 3 allow fills and signing; metadata, attachment, flatten, and rotate writes are blocked at every level. FieldMDP locks apply to fills and flatten.
-- On a document with any approval signature, **flatten and rotate throw** `PdfSignatureConflictException` unless the caller sets `AllowBreakingSignatures = true`, because both change page content and viewers will report the earlier signatures as modified. Fills, metadata, attachments, and new signatures stay allowed, as today, except a fill of a hybrid XFA form, which throws `PdfSignatureConflictException` on a document with any signature (W4).
+- On a document with any approval signature or document timestamp, **flatten and rotate throw** `PdfSignatureConflictException` unless the caller sets `AllowBreakingSignatures = true`, because both change page content and viewers will report the earlier signatures as modified. Fills, metadata, attachments, and new signatures stay allowed, as today, except a fill of a hybrid XFA form, which throws `PdfSignatureConflictException` on a document with any signature (W4).
 
 ### 7.3 Usage rights (Reader extensions)
 

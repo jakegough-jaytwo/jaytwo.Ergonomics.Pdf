@@ -12,7 +12,7 @@ using jaytwo.Ergonomics.Pdf.Signatures;
 namespace jaytwo.Ergonomics.Pdf;
 
 /// <summary>
-/// A seekable PDF opened for incremental metadata, attachment, form, and signature updates.
+/// A seekable PDF opened for incremental page, metadata, attachment, form, and signature updates.
 /// </summary>
 public sealed class PdfDocument : IDisposable
 {
@@ -50,7 +50,7 @@ public sealed class PdfDocument : IDisposable
     public int PageCount => _engine.PageCount;
 
     /// <summary>
-    /// Gets each page's media box, crop box, and rotation. Page content streams are not read.
+    /// Gets each page's media box, crop box, and settable rotation. Page content streams are not read.
     /// </summary>
     public IReadOnlyList<PdfPage> Pages => _engine.ListPages();
 
@@ -76,13 +76,13 @@ public sealed class PdfDocument : IDisposable
     public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
 
     /// <summary>
-    /// Gets or sets a value indicating whether <see cref="PdfAcroForm.Flatten()"/> may change a document that has a signature.
+    /// Gets or sets a value indicating whether page-content changes such as <see cref="PdfAcroForm.Flatten()"/> and page rotation may change a document that has a signature.
     /// </summary>
     /// <remarks>
-    /// Flattening changes page content, which no signature permits, so validators report every earlier signature, approval
-    /// or document timestamp, as modified. The earlier signatures' bytes stay a prefix of the file. Without this opt-in,
-    /// flatten throws <see cref="PdfSignatureConflictException"/> on such a document. A certified document stays locked
-    /// against flatten either way, and signed signature fields are never flattened.
+    /// Flattening and page rotation change page presentation, which no signature permits, so validators report every earlier
+    /// approval signature or document timestamp as modified. The earlier signatures' bytes stay a prefix of the file. Without
+    /// this opt-in, either operation throws <see cref="PdfSignatureConflictException"/> on such a document. A certified document
+    /// stays locked against both operations either way, and signed signature fields are never flattened.
     /// </remarks>
     public bool AllowBreakingSignatures
     {
