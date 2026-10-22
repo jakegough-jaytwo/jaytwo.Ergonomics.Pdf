@@ -10,24 +10,24 @@ Maintained through `pdf-task-workflow` and verified with `pdf-change-verificatio
 | 250 MiB attachment: add, extract | 8 MiB each | 0.30 MiB |
 | 500-page form: extraction, metadata edit, sign | 32 MiB each | 10.31 MiB |
 
-W-79 replaced the 250 MiB uncompressed attachment with the 1 GiB compressed one below; its row stays as the B-17 record.
+W-79 replaced the 250 MiB uncompressed attachment with the 1 GiB compressed one below, and the owner's W-79 approval superseded the 500-page budget of 32 MiB with 128 MiB. These rows stay as the B-17 record.
 
 ## W-79 workloads
 
-W-79 added the remaining G7 workloads and re-measured the B-17 ones in Release. Budgets marked *proposed* await the owner's approval and do not count toward G7 until approved.
+W-79 added the remaining G7 workloads and re-measured the B-17 ones in Release. The owner approved these budgets on 2026-10-22: `WorkloadMeter` measures total managed-heap growth, including uncollected garbage, so the budgets hold on every supported target under that measurement, Linux `net6.0` included. The 128 MiB budgets stay inside the D-20 ceilings. The owner reviewed the recorded evidence and did not rerun the workloads.
 
-| Workload (`LargeWorkloadTests`) | Budget | Max measured, Release |
+| Workload (`LargeWorkloadTests`) | Approved budget | Max measured, Release, every target |
 |---|---|---|
 | Dense 1 GiB PDF: inspect, metadata edit, sign | 16 MiB each (B-17) | 2.60 MiB |
-| Signed dense 1 GiB PDF: signature inspection, revision listing | 16 MiB each, *proposed* | 1.17 MiB |
-| 1 GiB compressed attachment: add and save, extract | 8 MiB each, *proposed* | 0.45 MiB |
-| 500-page form: extraction, metadata edit, sign | 32 MiB each (B-17) | 9.32 MiB |
-| 500-page form: bulk fill of 500 fields | 32 MiB, *proposed* | 12.29 MiB |
-| 1,000-page form: flatten of 2,000 fields | 64 MiB, *proposed* | 22.50 MiB |
-| Encrypted xref-stream 1 GiB PDF: inspect under the user and the owner password | 16 MiB each, *proposed* | 6.96 MiB |
-| Repeated open and dispose, repeated object-stream reads: retained heap after the warm-up cycle | 1 MiB growth, *proposed* | 0.34 MiB |
+| Signed dense 1 GiB PDF: signature inspection, revision listing | 16 MiB each | 1.17 MiB |
+| 1 GiB compressed attachment: add and save, extract | 8 MiB each | 0.45 MiB |
+| 500-page form: extraction, metadata edit, sign | 128 MiB each, superseding B-17's 32 MiB | 79.94 MiB |
+| 500-page form: bulk fill of 500 fields | 128 MiB | 65.06 MiB |
+| 1,000-page form: flatten of 2,000 fields | 128 MiB | 81.40 MiB |
+| Encrypted xref-stream 1 GiB PDF: inspect under the user and the owner password | 16 MiB each | 6.96 MiB |
+| Repeated open and dispose, repeated object-stream reads: retained heap after the warm-up cycle | 1 MiB growth | 0.34 MiB |
 
-The suite asserts the D-20 ceilings and the 1 MiB retained growth. The fixture budgets are checked against these isolated runs. "Max measured" covers every Windows and Linux run below except the Linux `net6.0` object-stream windows, which exceed the 500-page and flatten budgets (and the B-17 32 MiB) only because no collection runs inside those windows, as the Linux section shows. Which budgets apply to that target is the owner's decision, still open.
+The suite asserts the D-20 ceilings and the 1 MiB retained growth. The fixture budgets are checked against these isolated runs. "Max measured" covers every Windows and Linux run below; the 500-page and flatten maxima are the Linux `net6.0` windows, where no collection runs, as the Linux section shows. Every run is within its approved budget.
 
 ### Measurement
 
