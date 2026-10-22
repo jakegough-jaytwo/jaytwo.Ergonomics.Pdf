@@ -1,16 +1,15 @@
 # Next
 
-1. W-74
-2. W-75
-3. W-76
-4. W-47
-5. W-77
-6. W-78
-7. W-42
-8. W-50
-9. W-79
-10. W-80
-11. W-18
-12. W-81
+1. W-75
+2. W-76
+3. W-47
+4. W-77
+5. W-78
+6. W-42
+7. W-50
+8. W-79
+9. W-80
+10. W-18
+11. W-81
 
 Phase 1 queue in reset plan C2 order (`agents/reference/charter-reset-plan.md`).

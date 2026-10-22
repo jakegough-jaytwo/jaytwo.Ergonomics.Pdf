@@ -35,6 +35,10 @@ internal sealed class PdfEngine : IDisposable
     private const int FlagRichText = 1 << 25;
     private const int MaxRevisionFooterBytes = 64 * 1024;
 
+    // PDF versions in tenths, so 17 is PDF 1.7. ISO 32000-1 Table 28 defines the catalog /Version key at PDF 1.4.
+    private const int VersionKeyVersion = 14;
+    private const int MaxRaisedVersion = 17;
+
     private readonly Dictionary<int, XrefEntry> _xref = new Dictionary<int, XrefEntry>();
     private readonly Dictionary<int, PdfObject> _cache = new Dictionary<int, PdfObject>();
     private readonly Dictionary<int, Dictionary<int, PdfObject>> _objectStreams = new Dictionary<int, Dictionary<int, PdfObject>>();
@@ -65,6 +69,7 @@ internal sealed class PdfEngine : IDisposable
     private int _encryptId;
     private int _encryptGen;
     private int _objectStreamParseDepth;
+    private int _headerVersion;
 
     private PdfEngine(Stream stream, bool leaveOpen)
     {
@@ -253,6 +258,7 @@ internal sealed class PdfEngine : IDisposable
         else
         {
             info.Set(key, PdfTextCodec.Encode(value));
+            RaiseVersion(InfoKeyVersion(key));
         }
 
         SyncXmp(key, value);
@@ -278,6 +284,7 @@ internal sealed class PdfEngine : IDisposable
         else
         {
             info.Set("Trapped", new PdfObject.Name(value));
+            RaiseVersion(InfoKeyVersion("Trapped"));
         }
 
         TouchModDate();
@@ -312,6 +319,7 @@ internal sealed class PdfEngine : IDisposable
         else
         {
             info.Set(key, PdfTextCodec.Encode(PdfTextCodec.FormatDate(value.Value)));
+            RaiseVersion(InfoKeyVersion(key));
             xmp = PdfTextCodec.FormatXmpDate(value.Value);
         }
 
@@ -489,6 +497,9 @@ internal sealed class PdfEngine : IDisposable
             {
                 results[plan.Name] = ApplyFill(plan);
             }
+
+            // Widget /AP and /AS and AcroForm /NeedAppearances are PDF 1.2.
+            RaiseVersion(12);
         }
         catch
         {
@@ -937,6 +948,9 @@ internal sealed class PdfEngine : IDisposable
         // A replaced attachment keeps the key the tree held; WriteAttachments encodes a new one.
         slots.Add(new AttachmentSlot(name, previous?.SortKey ?? Array.Empty<byte>(), specId, options?.Description, options?.MimeType, length, streamId) { KeyInTree = previous != null });
         WriteAttachments(slots);
+
+        // /UF in the file specification and in /EF is PDF 1.7 (ISO 32000-1 Table 44); /AF and /AFRelationship raise nothing (spec 7.5).
+        RaiseVersion(17);
         return new PdfAttachment(this, name, options?.Description, options?.MimeType, length);
     }
 
@@ -1437,6 +1451,8 @@ internal sealed class PdfEngine : IDisposable
                 && (head[i + 5] == (byte)'1' || head[i + 5] == (byte)'2')
                 && head[i + 6] == (byte)'.')
             {
+                int minor = head[i + 7] >= (byte)'0' && head[i + 7] <= (byte)'9' ? head[i + 7] - '0' : 0;
+                _headerVersion = ((head[i + 5] - '0') * 10) + minor;
                 return;
             }
         }
@@ -2107,6 +2123,48 @@ internal sealed class PdfEngine : IDisposable
         return (PdfObject.Dict)EditAny(_rootId);
     }
 
+    // Spec 7.5: a write that emits a key ISO 32000-1 defines at a later version than the effective version raises the
+    // catalog /Version in the same revision, to at least the version of /Version itself and never past 1.7. An
+    // effective 1.7 or 2.0 is left alone. The header is never rewritten.
+    private void RaiseVersion(int required)
+    {
+        int effective = EffectiveVersion();
+        int target = Math.Min(Math.Max(required, VersionKeyVersion), MaxRaisedVersion);
+        if (required <= effective || target <= effective)
+        {
+            return;
+        }
+
+        EditCatalog().Set("Version", new PdfObject.Name("1." + (char)('0' + (target - 10))));
+    }
+
+    // ISO 32000-1 7.5.2 and 7.7.2: a catalog /Version later than the header is the version. A value that is not a
+    // version name, such as a string, declares nothing.
+    private int EffectiveVersion()
+    {
+        if (ResolveMaybe(CatalogDict().Get("Version")) is PdfObject.Name name
+            && name.Value.Length == 3
+            && name.Value[0] >= '1' && name.Value[0] <= '9'
+            && name.Value[1] == '.'
+            && name.Value[2] >= '0' && name.Value[2] <= '9')
+        {
+            return Math.Max(_headerVersion, ((name.Value[0] - '0') * 10) + (name.Value[2] - '0'));
+        }
+
+        return _headerVersion;
+    }
+
+    // ISO 32000-1 Table 317. Author, Creator, Producer, CreationDate, and custom keys are PDF 1.0.
+    private static int InfoKeyVersion(string key)
+    {
+        return key switch
+        {
+            "Title" or "Subject" or "Keywords" or "ModDate" => 11,
+            "Trapped" => 13,
+            _ => 10,
+        };
+    }
+
     private PdfObject.Dict? ReadInfo()
     {
         if (_inlineInfo != null && _infoId == null)
@@ -2154,6 +2212,7 @@ internal sealed class PdfEngine : IDisposable
             DateTimeOffset now = DateTimeOffset.UtcNow;
             PdfObject.Dict info = EditInfo();
             info.Set("ModDate", PdfTextCodec.Encode(PdfTextCodec.FormatDate(now)));
+            RaiseVersion(InfoKeyVersion("ModDate"));
             SyncXmp("ModDate", PdfTextCodec.FormatXmpDate(now));
         }
         finally
@@ -2230,6 +2289,7 @@ internal sealed class PdfEngine : IDisposable
         target.Set("Subtype", new PdfObject.Name("XML"));
         target.Set("Length", PdfObject.Num.FromLong(bytes.Length));
         target.Body = new PdfObject.MemoryBody(bytes);
+        RaiseVersion(14);
     }
 
     private List<PageInfo> GetPages()
@@ -3311,10 +3371,14 @@ internal sealed class PdfEngine : IDisposable
 
         nameDict.Set("EmbeddedFiles", tree);
         catalog.Set("AF", af);
+        RaiseVersion(14);
     }
 
     private void BuildSignature(PdfSignatureOptions options, DateTimeOffset? signingTime)
     {
+        // Signature fields and dictionaries and /SigFlags are PDF 1.3. ISO 32000-1 does not define /ETSI.CAdES.detached,
+        // /ETSI.RFC3161, or /DocTimeStamp, so they raise nothing (spec 7.5).
+        RaiseVersion(13);
         List<FieldSlot> existing = FindNamedFields(options.FieldName);
         if (existing.Count > 0)
         {
