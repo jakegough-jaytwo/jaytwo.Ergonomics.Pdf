@@ -75,12 +75,13 @@ internal sealed class PdfEngine : IDisposable
     private int _encryptGen;
     private int _objectStreamParseDepth;
     private int _headerVersion;
+    private long _decodedBytes;
 
-    private PdfEngine(Stream stream, bool leaveOpen)
+    private PdfEngine(Stream stream, bool leaveOpen, int cursorWindows)
     {
         _stream = stream;
         _leaveOpen = leaveOpen;
-        _cursor = new PdfCursor(stream);
+        _cursor = new PdfCursor(stream, cursorWindows);
         _length = stream.Length;
     }
 
@@ -94,6 +95,11 @@ internal sealed class PdfEngine : IDisposable
     }
 
     internal int RetainedObjectStreamCount => _objectStreams.Count;
+
+    // The bytes the engine has produced by decoding cross-reference, object, and other streams it reads whole.
+    internal long DecodedByteCount => _decodedBytes;
+
+    internal long CursorPeakRetainedBytes => _cursor.PeakRetainedBytes;
 
     internal PdfPermissions Permissions
     {
@@ -219,7 +225,13 @@ internal sealed class PdfEngine : IDisposable
 
     internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password)
     {
-        var engine = new PdfEngine(stream, leaveOpen);
+        return Open(stream, leaveOpen, password, PdfCursor.DefaultRetainedWindows);
+    }
+
+    // Open is not an operation lease, so it releases the cursor windows it filled itself.
+    internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password, int cursorWindows)
+    {
+        var engine = new PdfEngine(stream, leaveOpen, cursorWindows);
         try
         {
             engine.Initialize(password);
@@ -229,6 +241,10 @@ internal sealed class PdfEngine : IDisposable
         {
             engine.Dispose();
             throw;
+        }
+        finally
+        {
+            engine._cursor.Release();
         }
     }
 
@@ -2373,6 +2389,8 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfParseException(body.Offset, "The xref stream could not be decoded. " + ex.Message);
         }
 
+        _decodedBytes += decoded.Length;
+
         parser.ParseXrefEntries(dict, decoded, _xref, overwrite, budget);
     }
 
@@ -2540,6 +2558,13 @@ internal sealed class PdfEngine : IDisposable
     private ObjectStreamLease ReleaseAfter()
     {
         return new ObjectStreamLease(this);
+    }
+
+    // D-49: no source byte read in one public operation is served in another.
+    private void EndOperation()
+    {
+        _cursor.Release();
+        ReleaseCleanObjectStreams(null, null);
     }
 
     private void ReleaseCleanObjectStreams(int? loadingId, int? keepStreamId)
@@ -4537,7 +4562,7 @@ internal sealed class PdfEngine : IDisposable
     private void SwitchStream(Stream destination, bool leaveOpen)
     {
         long length = destination.Length;
-        var cursor = new PdfCursor(destination);
+        var cursor = new PdfCursor(destination, _cursor.RetainedWindows);
         if (!_leaveOpen)
         {
             _stream.Dispose();
@@ -4719,7 +4744,9 @@ internal sealed class PdfEngine : IDisposable
             return raw;
         }
 
-        return PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap);
+        byte[] decoded = PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap);
+        _decodedBytes += decoded.Length;
+        return decoded;
     }
 
     private byte[] ReadRange(long offset, int count)
@@ -5154,7 +5181,7 @@ internal sealed class PdfEngine : IDisposable
 
         public void Dispose()
         {
-            _engine.ReleaseCleanObjectStreams(null, null);
+            _engine.EndOperation();
         }
     }
 

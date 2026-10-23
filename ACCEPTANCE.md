@@ -32,6 +32,7 @@ These are the checks the test suite builds from. A change that breaks one of the
 - On a 1,000-page qpdf object-stream form with 2,000 fields, `Flatten` and its save keep the prefix and leave no field, and `qpdf --check` passes.
 - Twenty open, field and page read, and dispose cycles on the 500-page object-stream form, and twenty field reads on one open document, leave the managed heap retained after a full collection within 1 MiB of the heap after the first cycle.
 - A qpdf AES-256 copy of the dense 1 GiB file, with a cross-reference stream and object streams, opens under the user and the owner password and reports its pages, title, and fields while reading less than 16 MiB, so `/Encrypt` is found without a discovery scan.
+- Source I/O tripwires (D-49). On the G7 object-stream form windows, source bytes read, read calls, and decoded bytes stay within the thresholds recorded in `agents/evidence/qualification/memory-budgets.md`. The other G7 windows, and flatten and sign on the same form shape at 1,000 and 4,000 pages, are gated the same way. Within one public operation the source cursor serves a seek inside one of its eight most recently filled 64 KiB windows without reading, and a retained window is never served across public operations: not from `Open` to the first operation, and not after an operation that throws.
 
 ## Limits
 

@@ -83,6 +83,48 @@ The times above are the G7 baseline: one machine, one run each, not targets. A l
 
 ### Observations
 
-- Read amplification on object-stream forms (explained, not a defect). Signing the 493,069-byte filled 500-page form reads 70,035,458 source bytes, and flattening the 974,773-byte 1,000-page form reads 399,321,762. The engine keeps at most one clean object stream decoded (`PdfEngine.LoadFromObjectStream` and `ReleaseCleanObjectStreams`), so an operation that alternates between objects in different object streams decodes them again. That bounds memory to one object stream at the cost of repeated reads, which take 0.16 to 0.57 s here. Extraction walks in stream order and reads 3,023,178 bytes.
+- Read amplification on object-stream forms. Signing the 493,069-byte filled 500-page form read 70,035,458 source bytes, and flattening the 974,773-byte 1,000-page form read 399,321,762. W-79 attributed this to object-stream re-decoding. D-49's measurement superseded that: about 98% of the bytes were 64 KiB cursor windows refilled after a seek. W-108 fixed it; see "W-108 source I/O" below.
 - CI cost: in the Jenkins-equivalent run (Debug, coverage on), the compressed 1 GiB attachment test takes 4 min 53 s, against about 70 s in Release, because coverage instruments the per-byte Adler-32 loop. The other W-79 tests take 8 to 40 s each there.
 - Signature inspection and revision listing each read 8,753,949 bytes of the 1,073,951,670-byte signed dense file, about what opening and inspecting the unsigned file reads (8,602,607), so neither reads the signed ranges.
+
+## W-108 source I/O
+
+D-49 replaced the explanation of the object-stream read multiples above. `PdfCursor.Seek` discarded its 64 KiB window, so the next read refilled 64 KiB even when the target was a few hundred bytes already in the discarded window. W-108 keeps the cursor's most recently filled 64 KiB windows, least recently used first out, and serves a seek inside one without I/O. The engine releases them when each public operation returns, normally or by exception, and at the end of `Open`. A fill stays 64 KiB, and parse failures keep their exception types and offsets.
+
+### Window count
+
+The scaling cases and the 500-page and flatten workloads were run on `net10.0` in Release with 4, 8, and 16 windows. Eight windows (512 KiB) reach the plateau: 16 read exactly what 8 read in every window, and 4 read 2,955,628 bytes for the 1,000-page flatten against 2,693,484 with 8, and 10,881,378 against 10,815,842 at 4,000 pages. Sign, extraction, edit, and fill read the same with 4, 8, and 16. `PdfCursor.DefaultRetainedWindows` is 8, under the 1 MiB ceiling of 16.
+
+### Tripwires
+
+`LargeWorkloadTests` gates three deterministic numbers for each window: source bytes read and read calls on the source stream (`ProbeStream`), and bytes the engine produced by decoding cross-reference, object, and other streams it reads whole (`DecodedByteCount`). Streaming decodes, such as an extracted attachment's content, are the caller's reads and are not counted. Each threshold is the measured maximum over `net10.0`, `net8.0`, `net6.0`, and `net48` plus about 10%, rounded up to three significant figures. A change that raises a number updates its threshold in the same commit, with the reason. Wall-clock time is reported and not gated.
+
+The object-stream fixtures are written by `qpdf --deterministic-id`, the metadata edits set `ModificationDate` explicitly, the attachment carries fixed dates, and the dense fixture has a fixed `/ID`, so each output can be compared by hash with a run at another revision. That adds one Info write to each metadata-edit window, which is why the 500-page edit's base numbers below are higher than W-79's.
+
+### Measurement
+
+`make g7-workloads` and the scaling cases on 2026-10-22, Release, coverage off, each test in its own process, same machine and toolchain as W-79. Base is commit `aa50990` with the W-108 counters and tests and without the cursor change, in a scratch worktree. Change is the W-108 tree. Every output hash and signed-range hash matched base on every framework: 44 of 44. No window read more bytes, made more read calls, or decoded more bytes than at base. All 24 Windows workload runs and the four scaling runs passed with the gates in place.
+
+| Window | Source bytes read, base | Change | Read calls, base | Change | Decoded bytes | Threshold: bytes / calls / decoded |
+|---|---|---|---|---|---|---|
+| Dense inspect | 8,602,835 | 8,466,281 | 135 | 132 | 0 | 9,320,000 / 146 / 0 |
+| Dense metadata edit | 1,082,518,855 | 1,082,382,301 | 1,161 | 1,158 | 0 | 1,200,000,000 / 1,280 / 0 |
+| Dense sign | 2,156,314,922 | 2,156,242,045 | 263,350 | 263,347 | 0 | 2,380,000,000 / 290,000 / 0 |
+| Dense signature inspection | 8,754,633 | 8,611,346 | 143 | 137 | 0 | 9,480,000 / 151 / 0 |
+| Dense revision listing | 8,754,633 | 8,611,346 | 143 | 137 | 0 | 9,480,000 / 151 / 0 |
+| Compressed attachment add and save (carrier) | 1,321 | 1,177 | 6 | 5 | 0 | 1,300 / 6 / 0 |
+| Compressed attachment reopen and extract | 314,118,577 to 330,136,623 | 313,987,359 to 330,005,405 | 38,318 to 40,273 | 38,315 to 40,270 | 0 | 364,000,000 / 44,300 / 0 |
+| 500-page form extraction | 3,023,178 | 335,363 | 169 | 126 | 1,669,931 | 369,000 / 139 / 1,840,000 |
+| 500-page metadata edit | 3,560,932 | 873,117 | 347 | 304 | 4,044,221 | 961,000 / 335 / 4,450,000 |
+| 500-page bulk fill of 500 fields | 3,266,533 | 633,106 | 150 | 107 | 1,338,213 | 697,000 / 118 / 1,480,000 |
+| 500-page sign | 70,035,458 | 1,788,548 | 1,327 | 285 | 2,082,495 | 1,970,000 / 314 / 2,300,000 |
+| 1,000-page flatten | 399,321,762 | 2,693,526 | 6,386 | 312 | 4,100,912 | 2,970,000 / 344 / 4,520,000 |
+| Encrypted xref-stream inspect, each password | 407,438 | 144,840 | 21 | 15 | 94,865 | 160,000 / 17 / 105,000 |
+| Scaling: 1,000-page flatten | 399,321,720 | 2,693,484 | 6,386 | 312 | 4,100,863 | 2,970,000 / 344 / 4,520,000 |
+| Scaling: 1,000-page sign | 139,316,292 | 3,019,015 | 2,622 | 542 | 4,137,574 | 3,330,000 / 597 / 4,560,000 |
+| Scaling: 4,000-page flatten | 1,600,653,666 | 10,815,842 | 25,471 | 1,212 | 16,677,298 | 11,900,000 / 1,340 / 18,400,000 |
+| Scaling: 4,000-page sign | 555,753,529 | 12,066,873 | 10,427 | 2,131 | 16,748,949 | 13,300,000 / 2,350 / 18,500,000 |
+
+Ranges are across frameworks; the attachment's compressed size differs by runtime. Every other number is the same on all four. The scaling forms are 974,779 bytes (1,000 pages) and 3,922,614 bytes (4,000 pages) after the fill. Source bytes read for flatten and sign there fell by 97.8% to 99.3%: flatten from 410 to 2.8 times the file size and sign from 143 to 3.1 times, the same multiple at both sizes. Decoded bytes did not change anywhere. Base's owner-password encrypted window is from the first base run (`407,438` bytes, 21 calls); in the second, the user-password gate failed first, as base was expected to.
+
+Peak heap growth, MiB (`net10.0` / `net8.0` / `net6.0` / `net48`), change: dense inspect 2.00 / 1.99 / 2.04 / 2.03; dense edit 2.79 / 2.79 / 2.82 / 3.06; dense sign 2.98 / 2.98 / 3.02 / 3.04; signature inspection 1.67 / 1.67 / 1.69 / 1.71; revision listing 1.67 / 1.67 / 1.67 / 1.73; attachment add 0.25 / 0.25 / 0.32 / 0.26; extract 0.51 / 0.53 / 0.54 / 0.54; 500-page extraction 5.27 / 6.63 / 5.79 / 2.23; edit 7.45 / 8.11 / 9.40 / 9.47; fill 11.53 / 11.53 / 12.26 / 10.05; sign 6.34 / 6.57 / 7.58 / 5.15; 1,000-page flatten 21.10 / 22.25 / 21.92 / 21.22; encrypted inspect 4.45 / 3.84 / 3.83 / 4.39 (user) and 1.39 / 1.44 / 1.07 / 2.57 (owner). Each is within its approved fixture budget and D-20 ceiling. The dense windows grew by 0.4 to 0.9 MiB against base, inside their 16 MiB budgets, and their allocation grew by the same amount (dense inspect allocated 1.98 MiB against 1.11 MiB on `net10.0`). That is churn, not live memory: each public operation fills new windows after the previous operation's were released, and the cursor keeps one 64 KiB buffer between operations, as before. At most 512 KiB of windows is live at once. Times were within the W-79 baseline: 1,000-page flatten 0.51 / 0.37 / 0.33 / 0.58 s, 500-page sign 0.21 / 0.21 / 0.15 / 0.17 s.

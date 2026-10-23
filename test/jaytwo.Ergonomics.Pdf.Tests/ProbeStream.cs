@@ -16,6 +16,8 @@ internal sealed class ProbeStream : Stream
 
     public long BytesRead { get; private set; }
 
+    public int ReadCalls { get; private set; }
+
     public int MaxRequested { get; private set; }
 
     public bool ReadCalled { get; private set; }
@@ -44,6 +46,7 @@ internal sealed class ProbeStream : Stream
     public override int Read(byte[] buffer, int offset, int count)
     {
         ReadCalled = true;
+        ReadCalls++;
         MaxRequested = Math.Max(MaxRequested, count);
         if (!_allowRead)
         {

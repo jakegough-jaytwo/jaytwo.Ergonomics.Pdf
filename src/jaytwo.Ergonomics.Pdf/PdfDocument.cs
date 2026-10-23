@@ -92,6 +92,10 @@ public sealed class PdfDocument : IDisposable
 
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
+    internal long DecodedByteCount => _engine.DecodedByteCount;
+
+    internal long CursorPeakRetainedBytes => _engine.CursorPeakRetainedBytes;
+
     internal bool HasUsageRights => _engine.HasUsageRights;
 
     /// <summary>
@@ -232,5 +236,11 @@ public sealed class PdfDocument : IDisposable
     public void Dispose()
     {
         _engine.Dispose();
+    }
+
+    // W-108: opens with the given number of retained cursor windows; zero keeps none.
+    internal static PdfDocument OpenWithCursorWindows(Stream stream, bool leaveOpen, int cursorWindows)
+    {
+        return new PdfDocument(PdfEngine.Open(stream, leaveOpen, null, cursorWindows));
     }
 }
