@@ -9,6 +9,45 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class ObjectStreamCacheTests
 {
     [Fact]
+    public void object_stream_xref_index_must_match_the_header_position()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [10 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [10 0 R] >>");
+        byte[] data = ObjectStream(
+            out int first,
+            (10, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 72 16] /P 3 0 R >>"),
+            (11, "<< /Pad true >>"));
+        builder.StreamObject(20, "/Type /ObjStm /N 2 /First " + first.ToString(CultureInfo.InvariantCulture), data);
+        builder.Compressed(10, 20, 1);
+        builder.Compressed(11, 20, 0);
+        builder.AppendXrefStream(30, string.Empty);
+        using var document = PdfDocument.Open(new MemoryStream(builder.Snapshot(), writable: false), leaveOpen: true);
+
+        Assert.Throws<PdfParseException>(() => document.AcroForm.Fields);
+    }
+
+    [Fact]
+    public void duplicate_object_numbers_in_an_object_stream_are_rejected()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [10 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [10 0 R] >>");
+        byte[] data = ObjectStream(
+            out int first,
+            (10, "<< /Pad true >>"),
+            (10, "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 72 16] /P 3 0 R >>"));
+        builder.StreamObject(20, "/Type /ObjStm /N 2 /First " + first.ToString(CultureInfo.InvariantCulture), data);
+        builder.Compressed(10, 20, 0);
+        builder.AppendXrefStream(30, string.Empty);
+        using var document = PdfDocument.Open(new MemoryStream(builder.Snapshot(), writable: false), leaveOpen: true);
+
+        Assert.Throws<PdfParseException>(() => document.AcroForm.Fields);
+    }
+
+    [Fact]
     public void field_walk_releases_object_streams_and_rereads_them()
     {
         string[] names = { "A", "B", "C", "D" };

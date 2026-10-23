@@ -296,6 +296,103 @@ public class AsyncTests
         Assert.Equal(pdf, source.ToArray());
     }
 
+    [Theory]
+    [InlineData(false, false, false)]
+    [InlineData(false, false, true)]
+    [InlineData(false, true, false)]
+    [InlineData(false, true, true)]
+    [InlineData(true, false, false)]
+    [InlineData(true, false, true)]
+    [InlineData(true, true, false)]
+    [InlineData(true, true, true)]
+    public async Task a_length_failure_during_finalization_rolls_back_and_preserves_pending_edits(bool sign, bool useAsync, bool same)
+    {
+        using var key = RSA.Create(2048);
+        var signer = new DeferredSigner(key, Certificate(key));
+        byte[] pdf = Form();
+        byte[] expected = sign
+            ? await Sign(pdf, null, signer, same: false, useAsync: false)
+            : await Save(pdf, null, same: false, useAsync: false);
+        var source = new FinalizationFailingStream();
+        source.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+        document.AcroForm.Fill("Name", "Ada");
+        FinalizationFailingStream destination = same ? source : new FinalizationFailingStream();
+        destination.Arm();
+
+        Exception? failed = await Record.ExceptionAsync(() => Write(document, destination, sign ? signer : null, useAsync));
+
+        Assert.IsType<IOException>(failed);
+        Assert.Equal(same ? pdf.Length : 0, destination.RawLength);
+        if (same)
+        {
+            Assert.Equal(pdf, source.ToArray());
+        }
+
+        destination.Disarm();
+        using var retry = new MemoryStream();
+        await Write(document, retry, sign ? signer : null, useAsync);
+        Assert.Equal(expected, retry.ToArray());
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task a_source_dispose_failure_during_a_copy_only_save_rolls_back_the_destination(bool useAsync)
+    {
+        byte[] pdf = Form();
+        using var source = new DisposeFailingStream();
+        source.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(source, leaveOpen: false);
+        using var destination = new MemoryStream();
+
+        Exception? failed = await Record.ExceptionAsync(() => useAsync
+            ? document.SaveIncrementalAsync(destination, leaveOpen: true)
+            : SaveSynchronously(document, destination));
+
+        Assert.IsType<IOException>(failed);
+        Assert.Equal(0, destination.Length);
+        using var retry = new MemoryStream();
+        if (useAsync)
+        {
+            await document.SaveIncrementalAsync(retry, leaveOpen: true);
+        }
+        else
+        {
+            document.SaveIncremental(retry, leaveOpen: true);
+        }
+
+        Assert.Equal(pdf, retry.ToArray());
+    }
+
+    [Theory]
+    [InlineData(false, false)]
+    [InlineData(false, true)]
+    [InlineData(true, false)]
+    [InlineData(true, true)]
+    public async Task a_source_dispose_failure_during_finalization_rolls_back_and_preserves_pending_edits(bool sign, bool useAsync)
+    {
+        using var key = RSA.Create(2048);
+        var signer = new DeferredSigner(key, Certificate(key));
+        byte[] pdf = Form();
+        byte[] expected = sign
+            ? await Sign(pdf, null, signer, same: false, useAsync: false)
+            : await Save(pdf, null, same: false, useAsync: false);
+        using var source = new DisposeFailingStream();
+        source.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(source, leaveOpen: false);
+        document.AcroForm.Fill("Name", "Ada");
+        using var destination = new MemoryStream();
+
+        Exception? failed = await Record.ExceptionAsync(() => Write(document, destination, sign ? signer : null, useAsync));
+
+        Assert.IsType<IOException>(failed);
+        Assert.Equal(0, destination.Length);
+        using var retry = new MemoryStream();
+        await Write(document, retry, sign ? signer : null, useAsync);
+        Assert.Equal(expected, retry.ToArray());
+    }
+
     private static Task Write(PdfDocument document, Stream destination, IPdfExternalSigner? signer, bool useAsync)
     {
         if (signer == null)
@@ -315,6 +412,12 @@ public class AsyncTests
         }
 
         document.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
+        return Task.CompletedTask;
+    }
+
+    private static Task SaveSynchronously(PdfDocument document, Stream destination)
+    {
+        document.SaveIncremental(destination, leaveOpen: true);
         return Task.CompletedTask;
     }
 
@@ -597,6 +700,69 @@ public class AsyncTests
         {
             Write(buffer, offset, count);
             return Task.CompletedTask;
+        }
+    }
+
+    private sealed class FinalizationFailingStream : MemoryStream
+    {
+        private bool _armed;
+        private bool _wroteWhileArmed;
+
+        public override long Length => _armed && _wroteWhileArmed ? throw new IOException("The destination length failed during finalization.") : base.Length;
+
+        public long RawLength => base.Length;
+
+        public void Arm()
+        {
+            _armed = true;
+            _wroteWhileArmed = false;
+        }
+
+        public void Disarm()
+        {
+            _armed = false;
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            base.Write(buffer, offset, count);
+            _wroteWhileArmed |= _armed && count > 0;
+        }
+
+#if NETCOREAPP
+        public override void Write(ReadOnlySpan<byte> buffer)
+        {
+            base.Write(buffer);
+            _wroteWhileArmed |= _armed && buffer.Length > 0;
+        }
+#endif
+
+        public override void WriteByte(byte value)
+        {
+            base.WriteByte(value);
+            _wroteWhileArmed |= _armed;
+        }
+
+        public override Task WriteAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            Write(buffer, offset, count);
+            return Task.CompletedTask;
+        }
+    }
+
+    private sealed class DisposeFailingStream : MemoryStream
+    {
+        private bool _fail = true;
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && _fail)
+            {
+                _fail = false;
+                throw new IOException("The source failed during disposal.");
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

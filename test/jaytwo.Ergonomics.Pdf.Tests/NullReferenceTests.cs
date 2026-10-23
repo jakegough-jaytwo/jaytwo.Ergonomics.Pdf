@@ -137,6 +137,7 @@ public class NullReferenceTests
     [InlineData(" /Perms << /DocMDP 9 0 R >>", "<< /Type /Sig /Reference 99 0 R >>", "<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>")]
     [InlineData(" /Perms << /DocMDP 9 0 R >>", "<< /Type /Sig /Reference [99 0 R 10 0 R] >>", "<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>")]
     [InlineData(" /Perms << /DocMDP 9 0 R >>", "<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /DocMDP /TransformParams 99 0 R >>")]
+    [InlineData(" /Perms << /DocMDP 9 0 R >>", "<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /DocMDP /TransformParams null >>")]
     public void certification_that_resolves_to_null_still_blocks_fills_and_signing(string perms, string signature, string transform)
     {
         var builder = new PdfBuilder();
@@ -159,6 +160,8 @@ public class NullReferenceTests
     [InlineData("<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /FieldMDP /TransformParams 99 0 R >>")]
     [InlineData("<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /FieldMDP /TransformParams << /Action /Include /Fields 99 0 R /V /1.2 >> >>")]
     [InlineData("<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /FieldMDP /TransformParams << /Action /Include /Fields [99 0 R (Other)] /V /1.2 >> >>")]
+    [InlineData("<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /FieldMDP /TransformParams << /Action /Include /Fields null /V /1.2 >> >>")]
+    [InlineData("<< /Type /Sig /Reference [10 0 R] >>", "<< /TransformMethod /FieldMDP /TransformParams << /Action /Include /Fields [null (Other)] /V /1.2 >> >>")]
     public void field_lock_that_resolves_to_null_locks_the_field(string signature, string transform)
     {
         var builder = new PdfBuilder();

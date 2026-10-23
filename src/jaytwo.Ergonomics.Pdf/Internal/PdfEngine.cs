@@ -46,7 +46,7 @@ internal sealed class PdfEngine : IDisposable
 
     private readonly Dictionary<int, XrefEntry> _xref = new Dictionary<int, XrefEntry>();
     private readonly Dictionary<int, PdfObject> _cache = new Dictionary<int, PdfObject>();
-    private readonly Dictionary<int, Dictionary<int, PdfObject>> _objectStreams = new Dictionary<int, Dictionary<int, PdfObject>>();
+    private readonly Dictionary<int, List<PdfObject>> _objectStreams = new Dictionary<int, List<PdfObject>>();
     private readonly HashSet<int> _dirty = new HashSet<int>();
     private readonly HashSet<long> _loadedXrefs = new HashSet<long>();
     private readonly List<RevisionSection> _revisionSections = new List<RevisionSection>();
@@ -1854,14 +1854,13 @@ internal sealed class PdfEngine : IDisposable
                 try
                 {
                     await CopyPrefixAsync(destination, useAsync, cancellationToken).ConfigureAwait(false);
+                    SwitchStream(destination, leaveOpen);
                 }
                 catch
                 {
                     Truncate(destination, 0);
                     throw;
                 }
-
-                SwitchStream(destination, leaveOpen);
             }
 
             return;
@@ -2474,7 +2473,7 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject LoadFromObjectStream(int streamId, int index, int expectedId)
     {
-        if (!_objectStreams.TryGetValue(streamId, out Dictionary<int, PdfObject>? map))
+        if (!_objectStreams.TryGetValue(streamId, out List<PdfObject>? objects))
         {
             if (!_xref.TryGetValue(streamId, out XrefEntry entry) || entry.Type != 1)
             {
@@ -2482,25 +2481,26 @@ internal sealed class PdfEngine : IDisposable
             }
 
             ReleaseCleanObjectStreams(expectedId, null);
-            map = ParseObjectStream(streamId);
-            _objectStreams[streamId] = map;
+            objects = ParseObjectStream(streamId);
+            _objectStreams[streamId] = objects;
             ReleaseCleanObjectStreams(expectedId, streamId);
         }
 
-        if (!map.TryGetValue(expectedId, out PdfObject? obj))
+        if (index < 0 || index >= objects.Count)
         {
-            throw new PdfParseException(0, "Object " + expectedId.ToString(CultureInfo.InvariantCulture) + " was not found in object stream " + streamId.ToString(CultureInfo.InvariantCulture) + ".");
+            throw new PdfParseException(0, "Object stream index is outside the object stream.");
         }
 
-        if (index < 0)
+        PdfObject obj = objects[index];
+        if (obj.ObjectNumber != expectedId)
         {
-            throw new PdfParseException(0, "Object stream index is negative.");
+            throw new PdfParseException(0, "Object stream index " + index.ToString(CultureInfo.InvariantCulture) + " contains object " + obj.ObjectNumber.ToString(CultureInfo.InvariantCulture) + " instead of object " + expectedId.ToString(CultureInfo.InvariantCulture) + ".");
         }
 
         return obj.DeepClone();
     }
 
-    private Dictionary<int, PdfObject> ParseObjectStream(int streamId)
+    private List<PdfObject> ParseObjectStream(int streamId)
     {
         _objectStreamParseDepth++;
         try
@@ -2555,7 +2555,7 @@ internal sealed class PdfEngine : IDisposable
         }
 
         List<int>? drop = null;
-        foreach (KeyValuePair<int, Dictionary<int, PdfObject>> item in _objectStreams)
+        foreach (KeyValuePair<int, List<PdfObject>> item in _objectStreams)
         {
             if (keepStreamId != null && item.Key == keepStreamId.Value)
             {
@@ -2578,9 +2578,10 @@ internal sealed class PdfEngine : IDisposable
 
         foreach (int streamId in drop)
         {
-            Dictionary<int, PdfObject> map = _objectStreams[streamId];
-            foreach (int id in map.Keys)
+            List<PdfObject> objects = _objectStreams[streamId];
+            foreach (PdfObject obj in objects)
             {
+                int id = obj.ObjectNumber;
                 if (KeepCached(id, loadingId))
                 {
                     continue;
@@ -2593,11 +2594,11 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private bool ContainsDirtyObject(Dictionary<int, PdfObject> map)
+    private bool ContainsDirtyObject(List<PdfObject> objects)
     {
-        foreach (int id in map.Keys)
+        foreach (PdfObject obj in objects)
         {
-            if (_dirty.Contains(id))
+            if (_dirty.Contains(obj.ObjectNumber))
             {
                 return true;
             }
@@ -3550,13 +3551,23 @@ internal sealed class PdfEngine : IDisposable
     private int ReadPermission(PdfObject.Dict reference)
     {
         PdfObject? parameters = reference.Get("TransformParams");
+        if (parameters == null)
+        {
+            return 2;
+        }
+
         if (IsDangling(parameters))
         {
             return 1;
         }
 
         PdfObject.Dict? dict = parameters as PdfObject.Dict ?? ResolveMaybe(parameters) as PdfObject.Dict;
-        if (dict == null || dict.Get("P") == null)
+        if (dict == null)
+        {
+            return 1;
+        }
+
+        if (dict.Get("P") == null)
         {
             return 2;
         }
@@ -3632,34 +3643,44 @@ internal sealed class PdfEngine : IDisposable
     private bool FieldMdpBlocks(PdfObject.Dict reference, string fullName)
     {
         PdfObject? parameters = reference.Get("TransformParams");
-        if (IsDangling(parameters) || (ResolveMaybe(parameters) is PdfObject.Dict lockParameters && IsDangling(lockParameters.Get("Fields"))))
+        if (parameters == null || IsDangling(parameters))
         {
             return true;
         }
 
         PdfObject.Dict? dict = parameters as PdfObject.Dict ?? ResolveMaybe(parameters) as PdfObject.Dict;
-        string action = dict == null ? "All" : NameOf(dict.Get("Action")) ?? "All";
+        if (dict == null)
+        {
+            return true;
+        }
+
+        string action = NameOf(dict.Get("Action")) ?? "All";
         if (action == "All")
         {
             return true;
         }
 
-        var names = new HashSet<string>();
-        if (dict != null && ResolveMaybe(dict.Get("Fields")) is PdfObject.Arr fields)
+        PdfObject? fieldValues = dict.Get("Fields");
+        if (fieldValues == null || IsDangling(fieldValues) || ResolveMaybe(fieldValues) is not PdfObject.Arr fields)
         {
-            foreach (PdfObject field in fields.Items)
-            {
-                if (IsDangling(field))
-                {
-                    return true;
-                }
+            return true;
+        }
 
-                string? name = ValueText(field);
-                if (name != null)
-                {
-                    names.Add(name);
-                }
+        var names = new HashSet<string>();
+        foreach (PdfObject field in fields.Items)
+        {
+            if (IsDangling(field))
+            {
+                return true;
             }
+
+            string? name = ValueText(field);
+            if (name == null)
+            {
+                return true;
+            }
+
+            names.Add(name);
         }
 
         // ISO 32000-1 12.8.2.4: Include locks only the named fields; Exclude locks every field except them.
@@ -4483,8 +4504,27 @@ internal sealed class PdfEngine : IDisposable
         return layout;
     }
 
+    // The steps that can fail (the destination length and releasing an owned source) run before the engine records the
+    // revision, so a failure truncates the destination and leaves the pending edits for a retry.
     private void FinishWrite(Stream destination, bool leaveOpen, bool same, AppendixLayout layout)
     {
+        try
+        {
+            if (same)
+            {
+                _length = destination.Length;
+            }
+            else
+            {
+                SwitchStream(destination, leaveOpen);
+            }
+        }
+        catch
+        {
+            Truncate(destination, same ? _length : 0);
+            throw;
+        }
+
         foreach (WrittenObject item in layout.Objects)
         {
             _xref[item.Id] = new XrefEntry(1, item.Offset, item.Generation);
@@ -4492,17 +4532,12 @@ internal sealed class PdfEngine : IDisposable
 
         _startXref = layout.XrefOffset;
         _dirty.Clear();
-        if (same)
-        {
-            _length = destination.Length;
-            return;
-        }
-
-        SwitchStream(destination, leaveOpen);
     }
 
     private void SwitchStream(Stream destination, bool leaveOpen)
     {
+        long length = destination.Length;
+        var cursor = new PdfCursor(destination);
         if (!_leaveOpen)
         {
             _stream.Dispose();
@@ -4510,8 +4545,8 @@ internal sealed class PdfEngine : IDisposable
 
         _stream = destination;
         _leaveOpen = leaveOpen;
-        _length = destination.Length;
-        _cursor = new PdfCursor(_stream);
+        _length = length;
+        _cursor = cursor;
     }
 
     private void ValidateDestination(Stream destination)
@@ -4578,10 +4613,8 @@ internal sealed class PdfEngine : IDisposable
     {
         try
         {
-            if (destination.Length != length)
-            {
-                destination.SetLength(length);
-            }
+            destination.SetLength(length);
+            destination.Seek(length, SeekOrigin.Begin);
         }
         catch (Exception)
         {

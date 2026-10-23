@@ -11,6 +11,7 @@ namespace jaytwo.Ergonomics.Pdf.Signatures;
 internal static class CmsSignatureReader
 {
     private const int MaxDepth = 64;
+    private const int MaxCertificateChoices = 65536;
     private const string SignedDataOid = "1.2.840.113549.1.7.2";
     private const string TstInfoOid = "1.2.840.113549.1.9.16.1.4";
     private const string SigningTimeOid = "1.2.840.113549.1.9.5";
@@ -291,18 +292,10 @@ internal static class CmsSignatureReader
             Expect(Take(parts, ref index, this), 0x02);
             Expect(Take(parts, ref index, this), 0x31);
             Node encapsulated = Expect(Take(parts, ref index, this), 0x30);
-            var certificates = new List<byte[]>();
+            List<byte[]> certificates = new List<byte[]>();
             if (index < parts.Count && parts[index].Tag == 0xA0)
             {
-                foreach (Node choice in Children(parts[index]))
-                {
-                    // Only the plain Certificate choice is a certificate; the attribute and other choices are skipped.
-                    if (choice.Tag == 0x30)
-                    {
-                        certificates.Add(Copy(choice));
-                    }
-                }
-
+                certificates = ReadCertificates(parts[index]);
                 index++;
             }
 
@@ -607,6 +600,35 @@ internal static class CmsSignatureReader
             int leftEnd = whole ? left.End : left.ContentEnd;
             int rightEnd = whole ? right.End : right.ContentEnd;
             return leftData.AsSpan(leftStart, leftEnd - leftStart).SequenceEqual(rightData.AsSpan(rightStart, rightEnd - rightStart));
+        }
+
+        private List<byte[]> ReadCertificates(Node node)
+        {
+            if ((node.Tag & 0x20) == 0)
+            {
+                throw Fail("A constructed CMS value was expected.");
+            }
+
+            var certificates = new List<byte[]>();
+            int choices = 0;
+            int position = node.ContentStart;
+            while (position < node.ContentEnd)
+            {
+                if (++choices > MaxCertificateChoices)
+                {
+                    throw Fail("A CMS certificate set has more than 65536 choices.");
+                }
+
+                Node choice = Read(position, node.ContentEnd, 0);
+                if (choice.Tag == 0x30)
+                {
+                    certificates.Add(Copy(choice));
+                }
+
+                position = choice.End;
+            }
+
+            return certificates;
         }
 
         private int Digits(string text, ref int position, int count)

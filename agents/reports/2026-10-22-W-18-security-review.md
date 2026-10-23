@@ -74,3 +74,20 @@ The reviewer did not complete a dynamic proof because restore required unavailab
 ## Review result
 
 The fresh review found two Confirmed Critical findings under the mandated hostile-callback/response model, one Suspected High resource finding, and three Confirmed Medium findings. G8 cannot be recorded as having no unmitigated Critical or High issue until SR-1 and SR-2 receive an owner disposition and SR-3 is confirmed or mitigated.
+
+## Dispositions
+
+Recorded by the implementing context after the review. These dispositions are not part of the independent review.
+
+| Finding | Disposition | Regression |
+|---|---|---|
+| SR-1 | Open release blocker for G8 under the review model. The charter excludes signature validation and assigns signing to the trusted host contract, so the owner must decide whether to accept this as a documented limitation or to change that boundary. No validation was added. | Existing `SigningInteropTests` case that signs with another key. |
+| SR-2 | Open release blocker for G8 under the review model, on the same boundary as SR-1. The owner must decide. No validation was added. | Existing `SignatureTests` timestamp cases with an all-zero token signature. |
+| SR-3 | Confirmed by a deterministic allocation regression that failed on the pre-fix code, then fixed. The certificate set is now walked one choice at a time, so non-certificate choices no longer create a node each. It is capped at 65,536 choices, and a larger set throws `PdfParseException`. Mitigated; it no longer blocks G8. | `SignatureInspectionTests.non_certificate_choices_are_streamed_without_a_node_per_choice`, `certificate_choice_count_is_bounded`. |
+| SR-4 | Fixed. An object stream is held in header order. The xref index selects the member, and a member whose object number differs from the xref entry throws `PdfParseException`. A header that repeats an object number throws `PdfParseException`. | `ObjectStreamCacheTests.object_stream_xref_index_must_match_the_header_position`, `duplicate_object_numbers_in_an_object_stream_are_rejected`. |
+| SR-5 | Fixed. A direct `null` for DocMDP `/TransformParams` is treated as `P` 1. A direct `null` for FieldMDP `/TransformParams`, `/Fields`, or a `/Fields` entry locks the field, as an unresolved reference already did. An absent `/TransformParams` still means DocMDP `P` 2. | `NullReferenceTests` data rows for direct `null`. |
+| SR-6 | Fixed. The steps of finalization that can fail run before the engine records the revision. These steps are reading the destination length and, for a cross-stream write, disposing an owned source. A failure in either truncates the destination to its starting length and keeps the pending edits, and a retry writes the bytes an unfailed write would. The copy-only cross-stream save switches streams inside its rollback block. | `AsyncTests.a_length_failure_during_finalization_*`, `a_source_dispose_failure_during_finalization_*`, `a_source_dispose_failure_during_a_copy_only_save_*`. |
+
+Red baseline: in a scratch worktree at `e2d6176` (pre-fix product code) with only the four changed test files copied in, all 21 new regression cases failed on net10.0. The 10 cases in that selection that passed were the pre-existing rows of the same `NullReferenceTests` theories. After the fixes, the same 21 cases pass. The full suite then passed 4,309 of 4,309 on net10.0, net8.0, net6.0, and net48 on Windows.
+
+G8 review status: SR-3 through SR-6 are mitigated. SR-1 and SR-2 remain explicit release blockers pending the owner's disposition.

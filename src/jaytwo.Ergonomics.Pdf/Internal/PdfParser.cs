@@ -537,9 +537,10 @@ internal sealed class PdfParser
         return value;
     }
 
-    internal static Dictionary<int, PdfObject> ParseObjectStream(byte[] data, int count, int first)
+    internal static List<PdfObject> ParseObjectStream(byte[] data, int count, int first)
     {
-        var map = new Dictionary<int, PdfObject>();
+        var objects = new List<PdfObject>();
+        var ids = new HashSet<int>();
         var cursor = PdfCursor.FromBytes(data);
         var parser = new PdfParser(cursor, null, 0);
         long budget = ((long)data.Length * ObjectStreamReadFactor) + ObjectStreamReadSlack;
@@ -549,6 +550,11 @@ internal sealed class PdfParser
         {
             int id = ObjectStreamHeaderInteger(data, first, ref header);
             int offset = ObjectStreamHeaderInteger(data, first, ref header);
+            if (!ids.Add(id))
+            {
+                throw new PdfParseException(0, "Object stream header repeats object number " + id.ToString(CultureInfo.InvariantCulture) + ".");
+            }
+
             if (offset > data.Length - first)
             {
                 throw new PdfParseException(0, "Object stream header contains an invalid object number or offset.");
@@ -571,10 +577,10 @@ internal sealed class PdfParser
 
             value.ObjectNumber = id;
             value.Generation = 0;
-            map[id] = value;
+            objects.Add(value);
         }
 
-        return map;
+        return objects;
     }
 
     private static int ObjectStreamHeaderInteger(byte[] data, int end, ref int position)

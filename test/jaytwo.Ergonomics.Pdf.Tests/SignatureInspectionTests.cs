@@ -214,6 +214,32 @@ public class SignatureInspectionTests
         Assert.Throws<PdfParseException>(() => CmsSignatureReader.Read(contents, false, 0));
     }
 
+    [Fact]
+    public void non_certificate_choices_are_streamed_without_a_node_per_choice()
+    {
+        const int count = 65536;
+        byte[] choices = CertificateChoices(count);
+        byte[] contents = CmsWithCertificateChoices(choices);
+        Assert.Empty(CmsSignatureReader.Read(CmsWithCertificateChoices(CertificateChoices(1)), false, 0).Certificates);
+
+        long before = GC.GetAllocatedBytesForCurrentThread();
+        CmsSignatureReader.Result result = CmsSignatureReader.Read(contents, false, 0);
+        long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+        Assert.Empty(result.Certificates);
+        Assert.True(allocated < 512 * 1024, "Certificate-choice parsing allocated " + allocated.ToString() + " bytes.");
+    }
+
+    [Fact]
+    public void certificate_choice_count_is_bounded()
+    {
+        byte[] contents = CmsWithCertificateChoices(CertificateChoices(65537));
+
+        PdfParseException error = Assert.Throws<PdfParseException>(() => CmsSignatureReader.Read(contents, false, 0));
+
+        Assert.Contains("more than 65536 choices", error.Message, StringComparison.Ordinal);
+    }
+
     [Theory]
     [InlineData("tag")]
     [InlineData("padding")]
@@ -393,6 +419,35 @@ public class SignatureInspectionTests
             DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0),
             DerCodec.Set(Enumerable.Repeat(signerInfo, signerCount).ToArray()));
         return DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.2"), DerCodec.ExplicitContext(0, signedData));
+    }
+
+    private static byte[] CmsWithCertificateChoices(byte[] choices)
+    {
+        byte[] identifier = DerCodec.ReplaceTag(DerCodec.OctetString(new byte[] { 1 }), 0x80);
+        byte[] signerInfo = DerCodec.Sequence(
+            DerCodec.Integer(3),
+            identifier,
+            DerCodec.AlgorithmSha256(),
+            DerCodec.AlgorithmSha256WithRsa(),
+            DerCodec.OctetString(new byte[] { 1, 2, 3 }));
+        byte[] signedData = DerCodec.Sequence(
+            DerCodec.Integer(1),
+            DerCodec.Set(DerCodec.AlgorithmSha256()),
+            DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.1")),
+            DerCodec.ReplaceTag(DerCodec.Set(choices), 0xA0),
+            DerCodec.Set(signerInfo));
+        return DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.2"), DerCodec.ExplicitContext(0, signedData));
+    }
+
+    private static byte[] CertificateChoices(int count)
+    {
+        var choices = new byte[count * 2];
+        for (int i = 0; i < choices.Length; i += 2)
+        {
+            choices[i] = 0x05;
+        }
+
+        return choices;
     }
 
     private static byte[] SigningTimeAttribute(DateTimeOffset time)
