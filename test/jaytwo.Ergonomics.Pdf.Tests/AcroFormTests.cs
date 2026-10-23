@@ -430,6 +430,7 @@ public class AcroFormTests
     // LibreOffice copies /FT onto the widget kids of a field (corpus libreoffice-form). The value still belongs to the
     // field dictionary (ISO 32000-1 12.7.3.1), so a fill writes the parent's /V, and a stray /V on a widget kid is not read.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void widget_kids_with_field_entries_do_not_own_the_value()
     {
         var builder = new PdfBuilder();

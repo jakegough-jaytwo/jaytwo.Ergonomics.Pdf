@@ -37,6 +37,8 @@ public class SignatureInspectionInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void corpus_inspection_agrees_with_pyhanko_and_pdfsig(string id)
     {
@@ -51,6 +53,8 @@ public class SignatureInspectionInteropTests
 
     // The corpus has three signed fields. Each is pinned here so a corpus change cannot silently drop the coverage.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("gpo-bills-118hr815enr", "USGPOSignature", 1)]
     [InlineData("opm-of306-pyhanko-certified", "CorpusCertification", 2)]
     [InlineData("cms-40b-pyhanko-approved", "Signature-1", null)]
@@ -66,6 +70,7 @@ public class SignatureInspectionInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("pyhanko-signed.pdf")]
     [InlineData("pyhanko-sigfield.pdf")]
     public void pyhanko_fixture_inspection_agrees(string name)
@@ -74,6 +79,7 @@ public class SignatureInspectionInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(OwnSignatures))]
     public void own_signature_inspection_agrees(string keyKind, PdfDigestAlgorithm digestAlgorithm, PdfSignatureFormat format)
     {
@@ -101,6 +107,7 @@ public class SignatureInspectionInteropTests
 
     // A PAdES B-T signature with an OpenSSL token, then an OpenSSL document timestamp in a later revision.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void timestamp_tokens_and_document_timestamps_agree()
     {
         string openssl = OpenSslTimestampAuthority.Locate();
@@ -138,6 +145,7 @@ public class SignatureInspectionInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void signature_followed_by_a_metadata_revision_agrees()
     {
         using var key = RSA.Create(2048);
@@ -154,6 +162,7 @@ public class SignatureInspectionInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void signature_on_an_aes256_file_opened_with_the_user_password_agrees()
     {
         using var key = RSA.Create(2048);

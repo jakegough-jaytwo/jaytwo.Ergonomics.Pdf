@@ -118,6 +118,7 @@ public class FormDataTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void export_reports_one_value_per_terminal_field_as_pypdf_reads_it()
     {
         foreach (bool filled in new[] { false, true })
@@ -137,6 +138,7 @@ public class FormDataTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void export_round_trips_through_fill_in_both_directions()
     {
         foreach (bool fillBlank in new[] { true, false })
@@ -213,6 +215,7 @@ public class FormDataTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("user", false, true)]
     [InlineData("owner", false, true)]
     [InlineData("user", true, false)]

@@ -22,6 +22,7 @@ public class PageTests
         + "print(json.dumps({'direct': '/Rotate' in raw, 'rotation': int(raw['/Rotate']), 'parentRotation': int(parent['/Rotate']), 'mediaBox': rect(page.mediabox), 'cropBox': rect(page.cropbox), 'widgetRect': rect(widget['/Rect'])}))\n";
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void rotation_overrides_inheritance_and_independent_tools_see_unchanged_user_space_coordinates()
     {
         byte[] original = PageDocument(inheritedRotation: 90);
@@ -165,6 +166,7 @@ public class PageTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("256", "owner")]
     [InlineData("256", "user")]
     [InlineData("128-rc4", "owner")]
@@ -192,6 +194,7 @@ public class PageTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
     public void user_password_without_modify_refuses_and_the_owner_can_rotate()
     {
         byte[] pdf = QpdfEncrypt(PageDocument(inheritedRotation: 0), "256", "--modify-other=n");

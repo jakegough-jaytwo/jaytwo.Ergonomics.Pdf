@@ -54,6 +54,7 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void dense_gibibyte_pdf_is_inspected_edited_and_signed_within_budget()
     {
         string directory = ExternalTool.TempDirectory();
@@ -197,6 +198,8 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void large_attachment_is_added_and_extracted_through_file_streams_within_budget()
     {
         string directory = ExternalTool.TempDirectory();
@@ -281,6 +284,8 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void five_hundred_page_form_is_extracted_edited_and_signed_within_budget()
     {
         string directory = ExternalTool.TempDirectory();
@@ -423,6 +428,8 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void thousand_page_form_is_flattened_within_budget()
     {
         string directory = ExternalTool.TempDirectory();
@@ -491,6 +498,8 @@ public class LargeWorkloadTests
     // W-108: not a G7 workload. Flatten and sign on the G7 form shape at two sizes, so the source I/O gates show how
     // the operations scale. The heap is not measured here.
     [Theory]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     [InlineData(1000, 2970000, 344, 4520000, 3330000, 597, 4560000)]
     [InlineData(4000, 11900000, 1340, 18400000, 13300000, 2350, 18500000)]
     public void object_stream_form_flatten_and_sign_read_in_proportion_to_the_form(int pages, long flattenBytes, int flattenCalls, long flattenDecodedBytes, long signBytes, int signCalls, long signDecodedBytes)
@@ -558,6 +567,8 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void repeated_open_and_object_stream_reads_do_not_retain_memory()
     {
         string directory = ExternalTool.TempDirectory();
@@ -612,6 +623,8 @@ public class LargeWorkloadTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void encrypted_xref_stream_gibibyte_pdf_opens_without_a_discovery_scan()
     {
         string directory = ExternalTool.TempDirectory();

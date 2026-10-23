@@ -11,6 +11,8 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class DenseMemoryTests
 {
     [Fact]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void peak_managed_memory_does_not_follow_a_dense_file()
     {
         string directory = ExternalTool.TempDirectory();

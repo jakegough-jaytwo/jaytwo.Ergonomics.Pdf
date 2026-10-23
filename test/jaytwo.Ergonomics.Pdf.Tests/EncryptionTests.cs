@@ -421,6 +421,7 @@ public class EncryptionTests
     // W-75, plan C4: a compressed attachment's stream is Flate-encoded and then encrypted with the document's cipher,
     // and its /Params dates and /CheckSum are encrypted strings. pypdf 6.21.1 decrypts and reads them.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData(2, 40, "user")]
     [InlineData(3, 128, "owner")]
     [InlineData(4, 128, "user")]

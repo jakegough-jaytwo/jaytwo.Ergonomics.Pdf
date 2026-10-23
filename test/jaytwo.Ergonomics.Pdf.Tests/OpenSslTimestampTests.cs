@@ -10,6 +10,7 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class OpenSslTimestampTests
 {
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void openssl_tsa_document_timestamp_is_accepted_by_pyhanko_and_openssl_verify()
     {
         string openssl = OpenSslTimestampAuthority.Locate();
@@ -45,6 +46,7 @@ public class OpenSslTimestampTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void verifiers_reject_an_untrusted_root_and_a_tampered_byte()
     {
         string openssl = OpenSslTimestampAuthority.Locate();

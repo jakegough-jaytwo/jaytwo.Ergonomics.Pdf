@@ -41,6 +41,7 @@ public class InteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void qpdf_checks_built_incremental_filled_and_signed_pdfs()
     {
         string qpdf = ExternalTool.Locate("JAYTWO_QPDF", ExternalTool.Executable("qpdf"));
@@ -82,6 +83,7 @@ public class InteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pypdf_reads_an_info_edit_an_xmp_edit_and_exact_attachment_bytes()
     {
         string version = RunPython(null, "-c", "import pypdf; print(pypdf.__version__)").Trim();
@@ -169,13 +171,7 @@ public class InteropTests
             TestCompat.AddArgument(info, args[i]);
         }
 
-        Process? process = Process.Start(info);
-        if (process == null)
-        {
-            throw new InvalidOperationException(python + " did not start.");
-        }
-
-        using (process)
+        using (Process process = ExternalTool.Start(info))
         {
             if (input != null)
             {

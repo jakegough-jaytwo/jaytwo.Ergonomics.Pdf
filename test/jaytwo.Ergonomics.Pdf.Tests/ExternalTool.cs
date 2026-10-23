@@ -28,6 +28,7 @@ internal static class ExternalTool
 
     public static string Locate(string variable, string fileName)
     {
+        Lane.Refuse(fileName, "[Trait(Lane.Trait, Lane.Interop)] when the tool judges the result, else [Trait(Lane.Trait, Lane.External)]");
         string? configured = Environment.GetEnvironmentVariable(variable);
         if (!string.IsNullOrWhiteSpace(configured) && File.Exists(configured))
         {
@@ -94,6 +95,7 @@ internal static class ExternalTool
 
     public static Process Start(ProcessStartInfo info)
     {
+        Lane.Refuse(Path.GetFileName(info.FileName), "[Trait(Lane.Trait, Lane.Interop)] when the tool judges the result, else [Trait(Lane.Trait, Lane.External)]");
         Process? process = Process.Start(info);
         if (process == null)
         {

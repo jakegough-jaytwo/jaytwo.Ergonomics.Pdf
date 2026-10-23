@@ -39,6 +39,7 @@ public class CorpusTests
     public static IEnumerable<object[]> Ids => CorpusManifest.Ids();
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void library_reads_agree_with_the_independent_probe(string id)
     {
@@ -117,6 +118,8 @@ public class CorpusTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void metadata_revision_is_accepted_by_independent_tools_or_refused_as_documented(string id)
     {
@@ -159,6 +162,8 @@ public class CorpusTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void text_fill_is_accepted_by_independent_tools_or_refused_as_documented(string id)
     {
@@ -203,6 +208,8 @@ public class CorpusTests
     // Spec R6 and W2: the export agrees with pypdf's reading of every terminal field, and one bulk fill that changes
     // every field a caller can fill is accepted by qpdf, pypdf, and pyHanko, in the same shape as the export.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void form_export_agrees_with_pypdf_and_a_bulk_fill_is_accepted_by_independent_tools(string id)
     {
@@ -243,6 +250,8 @@ public class CorpusTests
     // original is a prefix, qpdf --check passes with no warnings, pypdf finds only the signature fields, the earlier
     // signatures stay intact and valid in pyHanko, and /UR3 stays only where a signature keeps /Perms unchanged.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void flatten_after_a_bulk_fill_is_accepted_by_independent_tools_or_refused_as_documented(string id)
     {

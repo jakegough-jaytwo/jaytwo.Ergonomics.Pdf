@@ -326,6 +326,7 @@ public class UsageRightsTests
     // earlier signature reports FORM_FILLING or LTA_UPDATES with docmdp_ok, and /UR3 stays. Before W-90, every write
     // that removed /UR3 made pyHanko report OTHER, ILLEGAL_MODIFICATIONS. The usage-rights signatures are synthesized.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(PyHankoModes))]
     public void pyhanko_accepts_every_write_after_a_signature_on_a_reader_extended_form(string mode)
     {
@@ -427,6 +428,7 @@ public class UsageRightsTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData(false)]
     [InlineData(true)]
     public void encrypted_document_applies_the_policy_after_the_permission_bits(bool revision6)
@@ -497,6 +499,8 @@ public class UsageRightsTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(ReaderExtended))]
     public void reader_extended_form_keeps_usage_rights_on_attachment_add_only_when_granted_or_signed(string id, bool grantsAttachmentEdits)
     {
@@ -522,6 +526,8 @@ public class UsageRightsTests
     // Every Reader-extended corpus form grants /Signature Modify, but no right grants a signature that creates a field,
     // so it removes /UR3 unless the form already has a signature.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(ReaderExtendedIds))]
     public void reader_extended_form_loses_usage_rights_when_signed_into_a_new_field_unless_already_signed(string id)
     {
@@ -532,6 +538,8 @@ public class UsageRightsTests
     // The Reader-extended corpus forms with an empty signature field, as pypdf 6.21.1 reads them. Each grants
     // /Signature Modify, so signing that field keeps /UR3.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("cms-40b", "Signature-1")]
     [InlineData("cms-40b", "Signature-2")]
     [InlineData("cms-40b-pyhanko-approved", "Signature-2")]
@@ -542,6 +550,8 @@ public class UsageRightsTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void irs_1040es_keeps_usage_rights_when_its_attachment_is_replaced_or_removed()
     {
         CorpusEntry entry = CorpusManifest.Get("irs-f1040es-2026");
@@ -577,6 +587,8 @@ public class UsageRightsTests
     // form, and a revision that changes a widget the structure tree references is unexplained (W-88), and an attachment
     // changes the catalog /Names and /AF (W-92). The writes that touch neither are accepted.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void signed_reader_extended_form_keeps_usage_rights_and_pyhanko_finds_no_perms_change()
     {
         CorpusEntry entry = CorpusManifest.Get("cms-40b-pyhanko-approved");
@@ -660,6 +672,7 @@ public class UsageRightsTests
     // after a signature, whoever writes it. A metadata write on the same bases is the control it accepts. The reason is
     // not pinned: pyHanko reports only its first objection.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void attachment_added_after_a_signature_leaves_it_intact_and_pyhanko_reports_other()
     {
         string openssl = OpenSslTimestampAuthority.Locate();

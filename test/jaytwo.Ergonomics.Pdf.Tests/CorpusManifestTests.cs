@@ -160,6 +160,7 @@ public class CorpusManifestTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void manifest_entries_are_distinct_and_match_their_files()
     {
         IReadOnlyList<CorpusEntry> entries = CorpusManifest.Entries;
@@ -176,6 +177,7 @@ public class CorpusManifestTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void every_fixture_pdf_has_a_manifest_entry()
     {
         string fixtures = Path.Combine(AppContext.BaseDirectory, "Fixtures");
@@ -272,6 +274,8 @@ public class CorpusManifestTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void independent_probe_agrees_with_every_manifest_entry()
     {
         // qpdf, pypdf, and pyHanko re-derive every recorded fact, so the manifest cannot drift from its files.

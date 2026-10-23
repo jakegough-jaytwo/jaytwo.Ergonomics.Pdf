@@ -19,6 +19,7 @@ public class AppearanceRenderTests
     private const int MaxAntialiasPixels = 48;
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void poppler_renders_generated_text_choice_checkbox_and_radio_appearances()
     {
         string poppler = LocatePoppler();
@@ -51,6 +52,7 @@ public class AppearanceRenderTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void poppler_fits_auto_sized_text_and_paints_widget_colors()
     {
         string poppler = LocatePoppler();
@@ -78,6 +80,7 @@ public class AppearanceRenderTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void poppler_checks_visibility_encoding_alignment_clipping_rotation_and_crop()
     {
         string poppler = LocatePoppler();
@@ -148,6 +151,8 @@ public class AppearanceRenderTests
     // Spec W4 (W-76): after a fill of a hybrid XFA corpus form removes /XFA, the generated appearance is drawn on the page.
     // Poppler ignores XFA either way, so this shows the AcroForm value that XFA-aware viewers now fall back to.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("irs-fw9-2024-03", "topmostSubform[0].Page1[0].f1_01[0]")]
     [InlineData("va-21-4138", "form1[0].#subform[0].International_Phone_Number[0]")]
     public void poppler_renders_the_fill_of_a_hybrid_xfa_corpus_form(string id, string field)
@@ -193,6 +198,7 @@ public class AppearanceRenderTests
     // /Rotate 90 page; a crop box offset; and appearance /Matrix and /BBox placement on a page whose media box does not
     // start at the origin.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("acroform")]
     [InlineData("matrix")]
     [InlineData("placement")]
@@ -210,6 +216,8 @@ public class AppearanceRenderTests
     // The same check on corpus forms after a fill of their first text fields: Acrobat, LiveCycle, and other producers'
     // appearance streams, check boxes, and radios, the I-9 appearances without /Subtype, and the hybrid W-9 and VA 21-4138.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("opm-of306")]
     [InlineData("faa-8710-1")]
     [InlineData("uscis-i9-2025")]

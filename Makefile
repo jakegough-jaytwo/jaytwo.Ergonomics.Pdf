@@ -52,6 +52,7 @@ task-check:
 agents-test:
 	${PYTHON} tools/agents/test_workflow.py
 	${PYTHON} tools/agents/test_quiet_run.py
+	${PYTHON} tools/agents/test_slowest_tests.py
 
 # W-102: agent verification with the full output in out/logs/<name>.log and only the exit status, per-framework test
 # counts, failing tests, build errors, fuzz result, and the log tail on failure on the console. Jenkins and the targets
@@ -60,11 +61,20 @@ agents-test:
 # TEST_PROJECT=./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests runs the lane alone.
 TEST_PROJECT?=$(if ${TEST_FRAMEWORK},./test/jaytwo.Ergonomics.Pdf.Tests,${BUILD_SLN})
 
+# W-122 (D-52): LANE=fast, the per-item default, leaves out tests by what they touch and sets JAYTWO_LANE, so a helper
+# that starts a tool, loads iText, or opens a corpus file refuses. It then lists its slowest tests, because large-data
+# and sweep tests have no helper that can refuse them.
+FAST_LANE_FILTER=Category!=Interop&Category!=External&Category!=Corpus&Category!=LargeData&Category!=Sweep
+FAST_LANE_RESULTS_DIR=${TOPDIR}/out/testResults/fast-lane
+QUIET_TEST_FILTER=$(if $(filter fast,${LANE}),$(if ${TEST_FILTER},(${TEST_FILTER})&)${FAST_LANE_FILTER},${TEST_FILTER})
+
 quiet-build:
 	${QUIET_RUN} --name build -- dotnet build "${BUILD_SLN}" --nologo $(if ${CONFIGURATION},-c ${CONFIGURATION})
 
 quiet-test:
-	${QUIET_RUN} --name test --tests -- dotnet test "${TEST_PROJECT}" --nologo -p:CollectCoverage=false 		$(if ${TEST_FRAMEWORK},-f ${TEST_FRAMEWORK}) $(if ${TEST_FILTER},--filter "${TEST_FILTER}")
+	$(if $(filter fast,${LANE}),rm -rf "${FAST_LANE_RESULTS_DIR}")
+	$(if $(filter fast,${LANE}),JAYTWO_LANE=fast) ${QUIET_RUN} --name test --tests -- dotnet test "${TEST_PROJECT}" --nologo -p:CollectCoverage=false 		$(if ${TEST_FRAMEWORK},-f ${TEST_FRAMEWORK}) $(if ${QUIET_TEST_FILTER},--filter "${QUIET_TEST_FILTER}") 		$(if $(filter fast,${LANE}),--results-directory "${FAST_LANE_RESULTS_DIR}" --logger "trx;LogFilePrefix=fast")
+	$(if $(filter fast,${LANE}),${PYTHON} tools/agents/slowest_tests.py "${FAST_LANE_RESULTS_DIR}")
 
 quiet-docker-test:
 	${QUIET_RUN} --name docker-test --tests -- $(MAKE) docker-builder docker-test

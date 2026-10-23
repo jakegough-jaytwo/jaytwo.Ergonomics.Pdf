@@ -17,7 +17,17 @@ internal static class CorpusManifest
 
     public static IReadOnlyList<CorpusEntry> Entries => _entries.Value;
 
-    public static string Directory => Path.Combine(AppContext.BaseDirectory, "Fixtures", "corpus");
+    public static string Directory
+    {
+        get
+        {
+            Lane.Refuse("The G2 corpus", "[Trait(Lane.Trait, Lane.Corpus)]");
+            return ManifestDirectory;
+        }
+    }
+
+    // Test discovery reads the manifest for theory data in every lane.
+    private static string ManifestDirectory => Path.Combine(AppContext.BaseDirectory, "Fixtures", "corpus");
 
     public static IEnumerable<object[]> Ids()
     {
@@ -85,7 +95,7 @@ internal static class CorpusManifest
 
     private static IReadOnlyList<CorpusEntry> Load()
     {
-        string path = Path.Combine(Directory, "manifest.json");
+        string path = Path.Combine(ManifestDirectory, "manifest.json");
         Assert.True(File.Exists(path), path);
         using JsonDocument document = JsonDocument.Parse(File.ReadAllBytes(path));
         JsonElement root = document.RootElement.Clone();

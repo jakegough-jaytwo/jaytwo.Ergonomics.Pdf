@@ -234,6 +234,8 @@ public class AttachmentTests
     // Real-world fixture (W-86): the IRS 1040-ES keys "Press Quality(1).joboptions" in UTF-16BE. qpdf 12.4.2 compares
     // keys as text, validates the order in --check, and finds a key by binary search; pypdf reads the tree in order.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void irs_1040es_attachment_added_after_its_utf16be_key_is_found_by_qpdf_and_pypdf()
     {
         CorpusEntry entry = CorpusManifest.Get("irs-f1040es-2026");
@@ -285,6 +287,7 @@ public class AttachmentTests
     // /CheckSum, which must be the MD5 of the uncompressed bytes (ISO 32000-1 Table 46). One attachment per
     // relationship, compressed and not, with a date in a zone other than UTC.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void relationship_dates_and_checksum_are_written_and_read_by_pypdf()
     {
         PdfAttachmentRelationship[] relationships = (PdfAttachmentRelationship[])Enum.GetValues(typeof(PdfAttachmentRelationship));
@@ -374,6 +377,8 @@ public class AttachmentTests
     // read twice, 64 KiB at a time: once at Add to measure /CheckSum and the compressed /Length, once by the save.
     // The library, qpdf 12.4.2, and pypdf 6.21.1 return the bytes exactly.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.LargeData)]
     public void compressed_attachment_round_trips_byte_for_byte_above_the_structural_cap()
     {
         const int size = 40 * 1024 * 1024;
@@ -428,6 +433,7 @@ public class AttachmentTests
 
     // Every byte value, and an empty file, through the zlib wrapper; compression stays off by default.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void compressed_small_and_empty_attachments_round_trip_and_compression_is_off_by_default()
     {
         byte[] every = Enumerable.Range(0, 256).Select(value => (byte)value).ToArray();
@@ -462,6 +468,7 @@ public class AttachmentTests
 
     // Spec W12 (W-75): the option sets /PageMode /UseAttachments; without it an existing /PageMode is kept.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void open_attachments_panel_sets_the_page_mode_that_pypdf_reads()
     {
         byte[] pdf = PdfBuilder.Basic(" /PageMode /UseOutlines", Resources).Finish();

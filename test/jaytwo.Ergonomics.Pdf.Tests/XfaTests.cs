@@ -50,6 +50,7 @@ public class XfaTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void corpus_hybrid_and_xfa_only_forms_are_classified()
     {
         foreach (CorpusEntry entry in CorpusManifest.Entries.Where(e => e.Open == "ok"))
@@ -257,6 +258,7 @@ public class XfaTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void corpus_xfa_only_form_refuses_a_fill_and_still_reads()
     {
         CorpusEntry entry = CorpusManifest.Get("grants-sf424-v4");
@@ -279,6 +281,7 @@ public class XfaTests
     // Plan C4: the fill re-encrypts the AcroForm dictionary without /XFA, and the catalog without /UR3 (D-48), under each
     // password and keeps /Encrypt and /ID; a user password without the fill bit refuses and keeps /XFA and /UR3. qpdf and pypdf read the output with the password.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("aes-256", "user")]
     [InlineData("aes-256", "owner")]
     [InlineData("rc4-128", "user")]
@@ -347,6 +350,8 @@ public class XfaTests
     // pyHanko 0.38.0's difference analysis does not permit after a signature (W-76 measured modification OTHER), so the
     // fill throws, the source is unchanged, and pyHanko still finds the signature intact and valid.
     [Theory]
+    [Trait(Lane.Trait, Lane.External)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("approve")]
     [InlineData("certify-p2")]
     public void pyhanko_signed_hybrid_corpus_form_refuses_a_fill(string mode)

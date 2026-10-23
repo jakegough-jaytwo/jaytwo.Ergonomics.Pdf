@@ -18,6 +18,7 @@ public class VersionTests
     private const string PasswordField = "<< /Subtype /Widget /FT /Tx /T (Secret) /Rect [72 600 300 620] /Ff 8192 /P 3 0 R >>";
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("1.4")]
     [InlineData("1.5")]
     [InlineData("1.6")]
@@ -34,6 +35,7 @@ public class VersionTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("1.7", "", null)]
     [InlineData("1.4", " /Version /1.7", "1.7")]
     [InlineData("1.7", " /Version /2.0", "2.0")]
@@ -48,6 +50,8 @@ public class VersionTests
 
     // Plan A2: a PDF/A-3 input keeps effective version 1.7 and /EmbeddedFiles still lists its file. No PDF/A claim is made.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void pdfa3_input_stays_at_1_7_and_keeps_its_embedded_file()
     {
         CorpusEntry entry = CorpusManifest.Get("libreoffice-hybrid-pdfa3");
@@ -78,6 +82,8 @@ public class VersionTests
     // /UseAttachments (PDF 1.6) keep the PDF/A-3 input at 1.7. pypdf 6.21.1 reads the relationship and the page mode.
     // No PDF/A conformance is claimed (spec W9).
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void pdfa3_input_with_relationship_dates_compression_and_page_mode_stays_at_1_7()
     {
         CorpusEntry entry = CorpusManifest.Get("libreoffice-hybrid-pdfa3");
@@ -121,6 +127,7 @@ public class VersionTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("1.3", "1.4")]
     [InlineData("1.4", null)]
     public void xmp_write_raises_a_file_before_1_4(string header, string? raised)
@@ -135,6 +142,7 @@ public class VersionTests
 
     // Title is PDF 1.1 and its XMP sync adds /Metadata, so a 1.0 file declares 1.4.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void info_edit_raises_a_1_0_file_to_1_4()
     {
         byte[] pdf = PdfBuilder.Basic(version: "1.0").Finish();
@@ -146,6 +154,7 @@ public class VersionTests
 
     // A fill needs only 1.2, but /Version is itself a PDF 1.4 key, so the raise declares 1.4.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("1.1", "1.4")]
     [InlineData("1.2", null)]
     public void fill_raises_a_file_before_1_2_to_1_4(string header, string? raised)
@@ -158,6 +167,7 @@ public class VersionTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void signing_a_1_2_file_raises_it_inside_the_signed_range()
     {
         byte[] pdf = FormDocument("1.2");
@@ -183,6 +193,7 @@ public class VersionTests
 
     // Plan C4: encrypted input under the owner and the user password keeps the prefix, /Encrypt, and /ID.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("owner")]
     [InlineData("user")]
     public void encrypted_input_is_raised_and_keeps_its_encryption(string password)

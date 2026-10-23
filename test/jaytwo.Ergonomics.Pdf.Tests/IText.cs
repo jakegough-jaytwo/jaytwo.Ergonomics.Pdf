@@ -21,6 +21,7 @@ internal static class IText
 
     public static ITextReading Read(byte[] pdf, string? password = null)
     {
+        Lane.Refuse("iText", "[Trait(Lane.Trait, Lane.Interop)]");
         var properties = new ReaderProperties();
         if (password != null)
         {

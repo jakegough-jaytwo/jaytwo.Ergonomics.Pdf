@@ -15,6 +15,7 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class FlattenTests
 {
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void flatten_paints_each_shown_appearance_and_removes_the_widgets_and_fields()
     {
         byte[] pdf = BuildForm(string.Empty, string.Empty);
@@ -55,6 +56,7 @@ public class FlattenTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void named_flatten_keeps_the_other_fields_and_removes_an_emptied_parent()
     {
         byte[] pdf = BuildForm(string.Empty, string.Empty);
@@ -122,6 +124,7 @@ public class FlattenTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void indirect_annots_and_contents_and_inherited_resources_are_kept_and_names_do_not_collide()
     {
         var builder = new PdfBuilder();
@@ -422,6 +425,7 @@ public class FlattenTests
     // and the user password, /Encrypt and /ID are kept, and qpdf and pypdf read the result. A user password without the
     // modify or the annotate bit refuses and changes nothing.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("256", "owner")]
     [InlineData("256", "user")]
     [InlineData("128-rc4", "owner")]
@@ -452,6 +456,7 @@ public class FlattenTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.External)]
     [InlineData("--modify-other=n")]
     [InlineData("--annotate=n")]
     public void user_password_without_modify_or_annotate_refuses(string restriction)

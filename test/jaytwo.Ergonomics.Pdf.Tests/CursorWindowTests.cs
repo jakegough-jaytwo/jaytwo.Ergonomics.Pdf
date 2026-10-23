@@ -49,6 +49,7 @@ public class CursorWindowTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Sweep)]
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(PdfCursor.DefaultRetainedWindows)]
@@ -132,6 +133,7 @@ public class CursorWindowTests
     // The spread fixture needs more than 16 windows, so the ceiling is reached; every result matches a cursor that
     // keeps no windows, and the retained windows never read more than it does.
     [Fact]
+    [Trait(Lane.Trait, Lane.Sweep)]
     public void every_lookup_in_a_different_region_stays_under_the_ceiling_and_matches_a_cursor_without_windows()
     {
         byte[] pdf = SpreadForm();
@@ -210,10 +212,12 @@ public class CursorWindowTests
     // Parse failures keep their exception types, offsets, and messages: every fixture, whole and truncated, walks
     // the same with retained windows as with none.
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
+    [Trait(Lane.Trait, Lane.Sweep)]
     public void fixtures_walk_the_same_with_and_without_retained_windows()
     {
         string fixtures = Path.Combine(AppContext.BaseDirectory, "Fixtures");
-        string[] files = Directory.GetFiles(fixtures, "*.pdf").Concat(Directory.GetFiles(Path.Combine(fixtures, "corpus"), "*.pdf")).OrderBy(file => file, StringComparer.Ordinal).ToArray();
+        string[] files = Directory.GetFiles(fixtures, "*.pdf").Concat(Directory.GetFiles(CorpusManifest.Directory, "*.pdf")).OrderBy(file => file, StringComparer.Ordinal).ToArray();
         Assert.NotEmpty(files);
         int failures = 0;
         foreach (string file in files)

@@ -45,7 +45,14 @@ internal sealed class CorpusEntry
 
     public JsonElement Probe => Element.GetProperty("probe");
 
-    public string FullPath => Path.Combine(AppContext.BaseDirectory, "Fixtures", File.Replace('/', Path.DirectorySeparatorChar));
+    public string FullPath
+    {
+        get
+        {
+            Lane.Refuse("The G2 corpus", "[Trait(Lane.Trait, Lane.Corpus)]");
+            return Path.Combine(AppContext.BaseDirectory, "Fixtures", File.Replace('/', Path.DirectorySeparatorChar));
+        }
+    }
 
     // The probe argument for this file: PATH[::PASSWORD][::FIELD=NAME].
     public string ProbeSpec(string path, string? field = null)

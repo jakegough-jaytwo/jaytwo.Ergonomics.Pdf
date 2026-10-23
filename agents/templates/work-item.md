@@ -34,7 +34,7 @@ Observable, testable outcomes.
 
 ## Evidence required
 
-The required evidence level and independent tool, if any.
+The required evidence level and independent tool, if any, and the verification: the fast lane by default (D-52). Name any test category, other framework, or full run the item needs, and why.
 
 ## Notes
 

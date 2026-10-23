@@ -25,6 +25,7 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class SigningInteropTests
 {
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_trusts_an_embedded_chain_from_the_root_alone()
     {
         using var rootKey = RSA.Create(2048);
@@ -46,6 +47,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_trusts_the_rfc3161_token_embedded_in_the_cms_signature()
     {
         using var signerKey = RSA.Create(2048);
@@ -95,6 +97,7 @@ public class SigningInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(SigningAlgorithmTests.Combinations), MemberType = typeof(SigningAlgorithmTests))]
     public void pyhanko_and_pdfsig_trust_every_key_and_digest(string keyKind, PdfDigestAlgorithm digestAlgorithm)
     {
@@ -109,6 +112,7 @@ public class SigningInteropTests
 
     // W-70: the RFC 3161 imprint is the SHA-256 of the DER-encoded ECDSA value the SignerInfo stores, whatever the signature's digest.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData(TestKeys.P256, PdfDigestAlgorithm.Sha256)]
     [InlineData(TestKeys.P384, PdfDigestAlgorithm.Sha512)]
     public void pyhanko_trusts_the_timestamp_on_an_ecdsa_signature(string keyKind, PdfDigestAlgorithm digestAlgorithm)
@@ -138,6 +142,7 @@ public class SigningInteropTests
     // W-71: every key and digest as PAdES baseline B-B. pyHanko trusts the signature and its signing-certificate-v2,
     // the EN 319 142-1 checklist in validate_signature.py passes, and pdfsig reports ETSI.CAdES.detached.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(SigningAlgorithmTests.Combinations), MemberType = typeof(SigningAlgorithmTests))]
     public void pyhanko_and_pdfsig_accept_pades_baseline_b_for_every_key_and_digest(string keyKind, PdfDigestAlgorithm digestAlgorithm)
     {
@@ -154,6 +159,7 @@ public class SigningInteropTests
     // W-71: with an OpenSSL RFC 3161 authority the signature is PAdES baseline B-T. pyHanko trusts the
     // signature-time-stamp under the TSA root, and the checklist finds exactly that one unsigned attribute.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData(TestKeys.Rsa, PdfDigestAlgorithm.Sha256)]
     [InlineData(TestKeys.P256, PdfDigestAlgorithm.Sha384)]
     public void pyhanko_and_pdfsig_accept_pades_baseline_t_with_an_openssl_timestamp(string keyKind, PdfDigestAlgorithm digestAlgorithm)
@@ -184,6 +190,7 @@ public class SigningInteropTests
     // W-70: RSA through CKM_RSA_PKCS with a host-built DigestInfo, and P-256 and P-384 through CKM_ECDSA
     // on the raw digest, which returns the P1363 r||s value. Each key signs with every digest.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData(TestKeys.Rsa)]
     [InlineData(TestKeys.P256)]
     [InlineData(TestKeys.P384)]
@@ -248,6 +255,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void integrity_stays_distinct_from_the_modification_policy()
     {
         string directory = ExternalTool.TempDirectory();
@@ -300,6 +308,7 @@ public class SigningInteropTests
     // stay a prefix, pyHanko finds it intact and valid and reports the change as beyond form filling, and pdfsig
     // verifies it over a range that no longer covers the file.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void opted_in_flatten_after_an_approval_signature_keeps_it_intact_and_verifiers_report_the_modification()
     {
         string directory = ExternalTool.TempDirectory();
@@ -351,6 +360,7 @@ public class SigningInteropTests
     // W-77 (spec 7.2): FieldMDP applies to flatten. With the opt-in, the Include [Locked] lock refuses a flatten of
     // Locked and of every field, and a flatten of Open keeps the signature intact and valid in pyHanko.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_fieldmdp_lock_refuses_a_flatten_of_the_locked_field()
     {
         string directory = ExternalTool.TempDirectory();
@@ -386,6 +396,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_fieldmdp_include_and_exclude_lock_the_same_fields_and_allowed_fills_keep_the_signature()
     {
         string directory = ExternalTool.TempDirectory();
@@ -465,6 +476,7 @@ public class SigningInteropTests
     // W-97: pyHanko encrypts the field names of its FieldMDP lock with the rest of the signature dictionary. The library
     // decrypts them, so the Include lock holds on an encrypted file, and pdfsig still verifies after the allowed fill.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_fieldmdp_lock_on_an_encrypted_file_holds_and_the_allowed_fill_keeps_the_signature()
     {
         string directory = ExternalTool.TempDirectory();
@@ -510,6 +522,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pdfsig_and_pyhanko_verify_new_and_existing_field_signatures_and_trust_the_chain_from_the_root()
     {
         using var rootKey = RSA.Create(2048);
@@ -541,6 +554,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pdfsig_and_pyhanko_verify_a_timestamped_signature_an_encrypted_file_and_a_later_revision()
     {
         string openssl = OpenSslTimestampAuthority.Locate();
@@ -584,6 +598,7 @@ public class SigningInteropTests
     // W-69: SignAsync, with a signer and an authority that complete asynchronously, writes what both verifiers
     // accept: a timestamped signature, and one on a qpdf AES-256 file under the user and the owner password.
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public async Task pdfsig_and_pyhanko_verify_signatures_from_sign_async()
     {
         string openssl = OpenSslTimestampAuthority.Locate();
@@ -627,6 +642,7 @@ public class SigningInteropTests
     // pdfsig verify the signature. The CMS signing time is the Unix epoch, so pdfsig reads /M.
     // W-71: the PAdES rows check the same strings and the EN 319 142-1 checklist under each password.
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [InlineData("40", "user-secret", PdfSignatureFormat.AdbePkcs7Detached)]
     [InlineData("128-rc4", "owner-secret", PdfSignatureFormat.AdbePkcs7Detached)]
     [InlineData("128-aes", "user-secret", PdfSignatureFormat.AdbePkcs7Detached)]
@@ -693,6 +709,7 @@ public class SigningInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pdfsig_and_pyhanko_reject_a_tampered_byte_and_a_signature_from_another_key()
     {
         using var key = RSA.Create(2048);

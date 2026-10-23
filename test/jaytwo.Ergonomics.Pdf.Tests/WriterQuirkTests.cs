@@ -72,6 +72,7 @@ public class WriterQuirkTests
 
     // Real-world fixture: Antenna House PDF Output Library 6.6 counts the LF before endstream in /Length.
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void irs_1040es_embedded_file_decodes_as_pypdf_decodes_it()
     {
         CorpusEntry entry = CorpusManifest.Get("irs-f1040es-2026");
@@ -89,6 +90,7 @@ public class WriterQuirkTests
     // Real-world fixture: Acrobat Distiller 6.0.1 does the same in the font programs of the IRS 2005 Form 5500. The
     // library never decodes a font, so the decoder is called directly on object 39's stream data.
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void irs_5500_font_program_whose_length_counts_the_lf_decodes()
     {
         byte[] file = File.ReadAllBytes(CorpusManifest.Get("irs-f5500-2005").FullPath);
@@ -155,6 +157,7 @@ public class WriterQuirkTests
 
     // Real-world fixture: Acrobat PDFMaker 15 for Word keys its accessibility report in UTF-16LE with no byte-order mark.
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void faa_8710_1_attachment_is_named_by_its_file_specification()
     {
         CorpusEntry entry = CorpusManifest.Get("faa-8710-1");
@@ -175,6 +178,7 @@ public class WriterQuirkTests
     // indefinite lengths on the outer CMS containers, where ISO 32000-1 12.8.3.3.1 requires DER (W-72). The expected
     // values are what pdfsig 26.08.0 and pyHanko 0.38.0 report for this file.
     [Fact]
+    [Trait(Lane.Trait, Lane.Corpus)]
     public void gpo_bill_signature_in_ber_is_inspected()
     {
         CorpusEntry entry = CorpusManifest.Get("gpo-bills-118hr815enr");

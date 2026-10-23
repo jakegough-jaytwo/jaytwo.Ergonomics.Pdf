@@ -17,6 +17,7 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 public class ForeignPdfTests
 {
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void qpdf_object_stream_is_read_revised_and_accepted()
     {
         byte[] original = ReadFixture("qpdf-object-streams.pdf");
@@ -38,6 +39,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void qpdf_encrypted_pdf_is_revised_signed_and_accepted()
     {
         byte[] original = ReadFixture("qpdf-encrypted.pdf");
@@ -63,6 +65,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void qpdf_attachment_survives_an_incremental_revision()
     {
         byte[] original = ReadFixture("qpdf-attachment.pdf");
@@ -75,6 +78,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void qpdf_rewrite_with_indirect_filters_is_read_and_decodes_as_qpdf_decodes_it()
     {
         // W-40: qpdf keeps the indirect /Filter and /DecodeParms of each attachment stream, moves the referenced names,
@@ -125,6 +129,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pypdf_form_fill_is_checked_by_qpdf()
     {
         byte[] original = ReadFixture("pypdf-acroform.pdf");
@@ -154,6 +159,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pypdf_free_undefined_and_stale_generation_references_are_null()
     {
         // pypdf writes the deleted field as a free entry. qpdf and pypdf both read the free, undefined, and
@@ -182,6 +188,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_signature_stays_intact_after_an_incremental_append()
     {
         byte[] original = ReadFixture("pyhanko-signed.pdf");
@@ -195,6 +202,7 @@ public class ForeignPdfTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void pyhanko_signature_field_is_signed_and_accepted()
     {
         byte[] original = ReadFixture("pyhanko-sigfield.pdf");
@@ -397,13 +405,7 @@ public class ForeignPdfTests
             TestCompat.AddArgument(info, args[i]);
         }
 
-        Process? process = Process.Start(info);
-        if (process == null)
-        {
-            throw new InvalidOperationException(fileName + " did not start.");
-        }
-
-        return process;
+        return ExternalTool.Start(info);
     }
 
     private sealed class RsaSigner : IPdfExternalSigner

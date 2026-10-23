@@ -45,6 +45,7 @@ public class ITextInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void itext_reads_info_xmp_attachment_and_rotation_edits()
     {
         byte[] attachment = { 0x00, 0x01, 0x02, 0x7F, 0x80, 0xFE, 0xFF, 0x42, 0x2D, 0x32, 0x33 };
@@ -66,6 +67,7 @@ public class ITextInteropTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void itext_reads_a_single_fill_a_bulk_fill_and_a_flatten()
     {
         byte[] source = Form();
@@ -90,6 +92,7 @@ public class ITextInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(SigningCases))]
     public void itext_verifies_signatures_and_the_first_signature_after_a_later_revision(string key, PdfSignatureFormat format)
     {
@@ -110,6 +113,7 @@ public class ITextInteropTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
     [MemberData(nameof(EncryptedCases))]
     public void itext_reads_fills_and_verifies_signatures_on_encrypted_files(string cipher, string password)
     {

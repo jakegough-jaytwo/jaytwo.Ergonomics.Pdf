@@ -18,6 +18,8 @@ public class RevisionTests
     public static IEnumerable<object[]> Ids => CorpusManifest.Ids();
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [MemberData(nameof(Ids))]
     public void corpus_revisions_agree_with_pyhanko(string id)
     {
@@ -31,6 +33,7 @@ public class RevisionTests
     }
 
     [Theory]
+    [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("frb-beige-book-2024-01", 1)]
     [InlineData("irs-fw9-2024-03", 2)]
     public void linearized_sections_are_one_logical_revision(string id, int revisions)
@@ -44,6 +47,7 @@ public class RevisionTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Interop)]
     public void signature_and_later_update_report_logical_revision_numbers()
     {
         byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf"));
