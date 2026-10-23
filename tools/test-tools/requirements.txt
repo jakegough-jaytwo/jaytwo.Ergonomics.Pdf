@@ -1,0 +1,5 @@
+# Python packages for the interop tests (D-51). Test-only; never runtime dependencies.
+# The Dockerfile base stage and tools/test-tools/install.ps1 both install from this file.
+pyHanko==0.38.0
+pyhanko-certvalidator==0.33.0
+pypdf==6.21.1

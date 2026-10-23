@@ -405,3 +405,6 @@ out/
 
 # Regenerated local repository visualization output.
 graphify-out/
+
+# W-119 (D-51): test tools installed by tools/test-tools/install.ps1.
+.tools/

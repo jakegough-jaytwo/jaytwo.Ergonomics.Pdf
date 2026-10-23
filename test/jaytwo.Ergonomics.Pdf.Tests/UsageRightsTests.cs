@@ -349,7 +349,7 @@ public class UsageRightsTests
                 }
             }
 
-            using (Process process = ExternalTool.Start("python", args.ToArray()))
+            using (Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray()))
             {
                 (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
                 Assert.True(exitCode == 0, stderr + stdout);
@@ -686,7 +686,7 @@ public class UsageRightsTests
                 bases.Add(name + "-stamped", "Stamp");
             }
 
-            using (Process process = ExternalTool.Start("python", args.ToArray()))
+            using (Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray()))
             {
                 (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
                 Assert.True(exitCode == 0, stderr + stdout);

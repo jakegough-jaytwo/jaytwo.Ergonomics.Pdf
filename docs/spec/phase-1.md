@@ -198,7 +198,7 @@ Files with no usable cross-reference, or with structurally invalid objects, thro
 
 ## 9. Platforms and dependencies
 
-- Targets `netstandard2.0`, `net6.0`, `net8.0`, and `net10.0` (D-40). `netstandard2.1` is dropped. Tests run on `net6.0`, `net8.0`, and `net10.0`, and on `net48` on Windows.
+- Targets `netstandard2.0`, `net6.0`, `net8.0`, and `net10.0` (D-40). `netstandard2.1` is dropped. Tests run on `net6.0`, `net8.0`, and `net10.0`, and on `net48` on Windows. The `netstandard2.0` build is also tested on `net8.0` (D-51).
 - Runtime dependencies: on `netstandard2.0` only, `System.Memory` and `Microsoft.Bcl.AsyncInterfaces` (which brings `System.Threading.Tasks.Extensions`, D-39). `net8.0` and `net10.0` have none. Any other runtime package is an owner decision.
 - Not thread-safe. One `PdfDocument` per operation.
 

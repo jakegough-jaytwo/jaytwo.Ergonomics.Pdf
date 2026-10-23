@@ -253,7 +253,7 @@ public class SigningInteropTests
         string directory = ExternalTool.TempDirectory();
         try
         {
-            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory);
+            RunChecked(ExternalTool.Python(), ExternalTool.Fixture("certify_samples.py"), directory);
             byte[] approval = File.ReadAllBytes(Path.Combine(directory, "approval.pdf"));
             byte[] locked = File.ReadAllBytes(Path.Combine(directory, "locked.pdf"));
             byte[] fillable = File.ReadAllBytes(Path.Combine(directory, "fillable.pdf"));
@@ -305,7 +305,7 @@ public class SigningInteropTests
         string directory = ExternalTool.TempDirectory();
         try
         {
-            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory);
+            RunChecked(ExternalTool.Python(), ExternalTool.Fixture("certify_samples.py"), directory);
             byte[] approval = File.ReadAllBytes(Path.Combine(directory, "approval.pdf"));
             foreach (string certified in new[] { "locked.pdf", "fillable.pdf" })
             {
@@ -356,7 +356,7 @@ public class SigningInteropTests
         string directory = ExternalTool.TempDirectory();
         try
         {
-            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
+            RunChecked(ExternalTool.Python(), ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
             byte[] include = File.ReadAllBytes(Path.Combine(directory, "fieldmdp-include.pdf"));
             byte[] flattened;
             using (var stream = new MemoryStream(include, writable: false))
@@ -391,7 +391,7 @@ public class SigningInteropTests
         string directory = ExternalTool.TempDirectory();
         try
         {
-            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
+            RunChecked(ExternalTool.Python(), ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp");
             string[] names = { "Locked", "Open", "Group.Child" };
             var samples = new Dictionary<string, string[]>
             {
@@ -470,7 +470,7 @@ public class SigningInteropTests
         string directory = ExternalTool.TempDirectory();
         try
         {
-            RunChecked("python", ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp-encrypted", CorpusManifest.Qpdf());
+            RunChecked(ExternalTool.Python(), ExternalTool.Fixture("certify_samples.py"), directory, "fieldmdp-encrypted", CorpusManifest.Qpdf());
             foreach (string sample in new[] { "fieldmdp-include-rc4.pdf", "fieldmdp-include-aes256.pdf" })
             {
                 byte[] pdf = File.ReadAllBytes(Path.Combine(directory, sample));
@@ -911,7 +911,7 @@ public class SigningInteropTests
 
     private static Process StartPython(params string[] args)
     {
-        return ExternalTool.Start("python", args);
+        return ExternalTool.Start(ExternalTool.Python(), args);
     }
 
     private static int ReadPort(Process process)

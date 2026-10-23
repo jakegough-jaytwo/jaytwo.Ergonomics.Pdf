@@ -135,4 +135,10 @@ PDF 1.0 through 1.7, the operations above, standard security revisions 2 through
 dotnet test jaytwo.Ergonomics.Pdf.sln
 ```
 
-The package targets `net10.0`, `net8.0`, `net6.0`, and `netstandard2.0`. `netstandard2.1` consumers use the `netstandard2.0` build. The `netstandard2.0` build depends on `System.Memory` and `Microsoft.Bcl.AsyncInterfaces`, which brings `System.Threading.Tasks.Extensions`. Acceptance criteria for the tests live in `ACCEPTANCE.md`.
+The interop tests check the library's output with external tools: qpdf, Poppler (including `pdfsig` with NSS), SoftHSM 2, OpenSSL 3, and Python with pyHanko and pypdf. A test fails when its tool is missing.
+
+- **Windows:** run `powershell -ExecutionPolicy Bypass -File tools/test-tools/install.ps1` once. It installs pinned, hash-checked copies of the tools into the git-ignored `.tools/` folder (about 1 GB) without administrator rights, and writes `.tools/test.runsettings`, which `dotnet test` and IDE test runners load. No environment variables or `PATH` changes are needed. Rerunning it after a pin changes updates only that tool. The tests need the .NET 6, 8, and 10 runtimes; the script reports any that are missing.
+- **Linux or any machine with Docker:** `make docker-builder docker-test` runs the suite in the image the `Dockerfile` builds, which has every tool.
+- Tools installed elsewhere can be named with the `JAYTWO_*` variables listed in `AGENTS.md`.
+
+The package targets `net10.0`, `net8.0`, `net6.0`, and `netstandard2.0`. The `netstandard2.0` build is tested on `net8.0` by `test/jaytwo.Ergonomics.Pdf.NetStandard.Tests` and on `net48` on Windows. `netstandard2.1` consumers use the `netstandard2.0` build. The `netstandard2.0` build depends on `System.Memory` and `Microsoft.Bcl.AsyncInterfaces`, which brings `System.Threading.Tasks.Extensions`. Acceptance criteria for the tests live in `ACCEPTANCE.md`.

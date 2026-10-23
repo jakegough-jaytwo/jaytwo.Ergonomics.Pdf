@@ -154,7 +154,7 @@ public class InteropTests
 
     private static string RunPython(string? input, params string[] args)
     {
-        string python = ExternalTool.Locate("JAYTWO_PYTHON", ExternalTool.Executable("python"));
+        string python = ExternalTool.Python();
         var info = new ProcessStartInfo
         {
             FileName = python,

@@ -358,7 +358,7 @@ public class XfaTests
             string unsigned = Path.Combine(directory, "unsigned.pdf");
             string signedPath = Path.Combine(directory, "signed.pdf");
             File.Copy(entry.FullPath, unsigned);
-            using (Process process = ExternalTool.Start("python", ExternalTool.Fixture("usage_rights_samples.py"), mode, unsigned, signedPath))
+            using (Process process = ExternalTool.Start(ExternalTool.Python(), ExternalTool.Fixture("usage_rights_samples.py"), mode, unsigned, signedPath))
             {
                 (int exitCode, string stdout, string stderr) = ExternalTool.Run(process);
                 Assert.True(exitCode == 0, stderr + stdout);

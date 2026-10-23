@@ -1,6 +1,6 @@
 BUILD_SLN=./jaytwo.Ergonomics.Pdf.sln
 BUILD_DIRS=./src/jaytwo.Ergonomics.Pdf
-BUILD_TEST_DIRS=./test/jaytwo.Ergonomics.Pdf.Tests
+BUILD_TEST_DIRS=./test/jaytwo.Ergonomics.Pdf.Tests:./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests
 ENABLE_COMPOSE_NETWORK=false
 
 NUGET_SOURCE_URL?=https://api.nuget.org/v3/index.json

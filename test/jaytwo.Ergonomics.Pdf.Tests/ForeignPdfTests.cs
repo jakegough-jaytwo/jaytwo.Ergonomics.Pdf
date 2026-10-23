@@ -300,7 +300,7 @@ public class ForeignPdfTests
 
             string script = Path.Combine(AppContext.BaseDirectory, "Fixtures", "validate_signature.py");
             using Process process = Start(
-                "python",
+                ExternalTool.Python(),
                 script,
                 pdfPath,
                 certificate == null ? "-" : certPath,

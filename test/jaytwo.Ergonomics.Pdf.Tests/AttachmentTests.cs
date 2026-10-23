@@ -584,7 +584,7 @@ public class AttachmentTests
             args.Add(password);
         }
 
-        using Process process = ExternalTool.Start("python", args.ToArray());
+        using Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray());
         using JsonDocument report = JsonDocument.Parse(ExternalTool.Output(process));
         return report.RootElement.Clone();
     }

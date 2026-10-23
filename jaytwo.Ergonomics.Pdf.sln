@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{07C2787E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jaytwo.Ergonomics.Pdf.Fuzz", "tools\fuzz\jaytwo.Ergonomics.Pdf.Fuzz.csproj", "{D61AB35A-87EF-4920-922B-7AE590F224E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "jaytwo.Ergonomics.Pdf.NetStandard.Tests", "test\jaytwo.Ergonomics.Pdf.NetStandard.Tests\jaytwo.Ergonomics.Pdf.NetStandard.Tests.csproj", "{71A078DE-C381-4B0D-9308-9748EB7CC215}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,18 @@ Global
 		{D61AB35A-87EF-4920-922B-7AE590F224E5}.Release|x64.Build.0 = Release|Any CPU
 		{D61AB35A-87EF-4920-922B-7AE590F224E5}.Release|x86.ActiveCfg = Release|Any CPU
 		{D61AB35A-87EF-4920-922B-7AE590F224E5}.Release|x86.Build.0 = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|x64.Build.0 = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Debug|x86.Build.0 = Debug|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|x64.ActiveCfg = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|x64.Build.0 = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|x86.ActiveCfg = Release|Any CPU
+		{71A078DE-C381-4B0D-9308-9748EB7CC215}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +83,6 @@ Global
 		{79129EA0-A19D-43D6-B0D6-697BCE166CCE} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{83A01571-74CD-4BDF-82CA-2DB92273114B} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 		{D61AB35A-87EF-4920-922B-7AE590F224E5} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{71A078DE-C381-4B0D-9308-9748EB7CC215} = {0C88DD14-F956-CE84-757C-A364CCF449FC}
 	EndGlobalSection
 EndGlobal

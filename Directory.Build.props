@@ -17,6 +17,11 @@
     <AdditionalFiles Include="$(MSBuildThisFileDirectory)stylecop.json" Link="stylecop.json" />
   </ItemGroup>
 
+  <!-- D-51: tools/test-tools/install.ps1 writes the JAYTWO_* tool paths here. dotnet test settings override it. -->
+  <PropertyGroup Condition="'$(RunSettingsFilePath)' == '' And Exists('$(MSBuildThisFileDirectory).tools/test.runsettings')">
+    <RunSettingsFilePath>$(MSBuildThisFileDirectory).tools/test.runsettings</RunSettingsFilePath>
+  </PropertyGroup>
+
   <PropertyGroup>
     <StyleCopTreatErrorsAsWarnings>true</StyleCopTreatErrorsAsWarnings>
     <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)stylecop.ruleset</CodeAnalysisRuleSet>

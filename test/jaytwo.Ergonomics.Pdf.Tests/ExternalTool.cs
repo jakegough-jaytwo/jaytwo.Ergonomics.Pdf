@@ -49,6 +49,11 @@ internal static class ExternalTool
         return found!;
     }
 
+    public static string Python()
+    {
+        return Locate("JAYTWO_PYTHON", Executable("python"));
+    }
+
     public static string? OnPath(string fileName)
     {
         string? path = Environment.GetEnvironmentVariable("PATH");

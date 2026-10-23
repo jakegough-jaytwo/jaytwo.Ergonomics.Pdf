@@ -49,7 +49,7 @@ internal static class CorpusManifest
     {
         var args = new List<string> { Path.Combine(Directory, "corpus_probe.py"), Qpdf() };
         args.AddRange(specs);
-        using Process process = ExternalTool.Start("python", args.ToArray());
+        using Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray());
         string output = ExternalTool.Output(process);
         using JsonDocument document = JsonDocument.Parse(output);
         return document.RootElement.Clone();

@@ -173,7 +173,7 @@ public class RevisionTests
             args.Add(password);
         }
 
-        using Process process = ExternalTool.Start("python", args.ToArray());
+        using Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray());
         return JsonDocument.Parse(ExternalTool.Output(process));
     }
 

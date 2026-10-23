@@ -275,7 +275,7 @@ public class PageTests
         {
             string path = Path.Combine(directory, "rotated.pdf");
             File.WriteAllBytes(path, pdf);
-            string python = ExternalTool.Locate("JAYTWO_PYTHON", ExternalTool.Executable("python"));
+            string python = ExternalTool.Python();
             using Process process = password == null
                 ? ExternalTool.Start(python, "-c", PypdfScript, path)
                 : ExternalTool.Start(python, "-c", PypdfScript, path, password);

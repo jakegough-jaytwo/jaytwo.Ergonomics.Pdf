@@ -133,7 +133,7 @@ public class OpenSslTimestampTests
         string pdfPath = Path.Combine(directory, "stamped.pdf");
         File.WriteAllBytes(pdfPath, pdf);
         using Process process = ExternalTool.Start(
-            "python",
+            ExternalTool.Python(),
             ExternalTool.Fixture("validate_doc_timestamp.py"),
             pdfPath,
             Path.Combine(directory, root));

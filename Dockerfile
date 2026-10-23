@@ -40,10 +40,10 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/* \
   && ln -sf libdl.so.2 "/usr/lib/$(uname -m)-linux-gnu/libdl.so"
 
-RUN pip install --no-cache-dir --break-system-packages \
-    pyHanko==0.38.0 \
-    pyhanko-certvalidator==0.33.0 \
-    pypdf==6.21.1
+# The Python pins are shared with tools/test-tools/install.ps1 (D-51).
+COPY tools/test-tools/requirements.txt /tmp/test-tools-requirements.txt
+RUN pip install --no-cache-dir --break-system-packages -r /tmp/test-tools-requirements.txt \
+  && rm /tmp/test-tools-requirements.txt
 
 ENV JAYTWO_PKCS11=/usr/lib/softhsm/libsofthsm2.so
 

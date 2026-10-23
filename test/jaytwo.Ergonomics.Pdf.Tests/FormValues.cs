@@ -28,7 +28,7 @@ internal static class FormValues
                 args.Add(password);
             }
 
-            using Process process = ExternalTool.Start("python", args.ToArray());
+            using Process process = ExternalTool.Start(ExternalTool.Python(), args.ToArray());
             using JsonDocument document = JsonDocument.Parse(ExternalTool.Output(process));
             return document.RootElement.EnumerateObject().ToDictionary(item => item.Name, item => item.Value.Clone(), StringComparer.Ordinal);
         }

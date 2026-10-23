@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Tests" />
+    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.NetStandard.Tests" />
     <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Fuzz" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" Link="README.md" />
   </ItemGroup>
