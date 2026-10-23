@@ -76,6 +76,7 @@ internal sealed class PdfEngine : IDisposable
     private int _objectStreamParseDepth;
     private int _headerVersion;
     private long _decodedBytes;
+    private SignatureState? _signatureState;
 
     private PdfEngine(Stream stream, bool leaveOpen, int cursorWindows)
     {
@@ -150,7 +151,7 @@ internal sealed class PdfEngine : IDisposable
         }
 
         EnsureDocumentChange();
-        if (!AllowBreakingSignatures && HasSignature(CollectFields()))
+        if (!AllowBreakingSignatures && HasSignature())
         {
             throw new PdfSignatureConflictException("The document has a signature; page rotation changes page presentation, which validators report as a modification the signature does not permit. Set AllowBreakingSignatures to rotate anyway.");
         }
@@ -547,7 +548,7 @@ internal sealed class PdfEngine : IDisposable
 
         // D-48: validators permit no /XFA change after a signature, and keeping /XFA would leave XFA-aware viewers
         // showing stale data, so a signed hybrid form refuses the fill.
-        if (xfa == XfaKind.Hybrid && HasSignature(slots))
+        if (xfa == XfaKind.Hybrid && HasSignature())
         {
             throw new PdfSignatureConflictException("The hybrid XFA form has a signature; a fill must remove /XFA, which validators report as a change the signature does not permit.");
         }
@@ -733,7 +734,7 @@ internal sealed class PdfEngine : IDisposable
             }
         }
 
-        if (!AllowBreakingSignatures && HasSignature(slots))
+        if (!AllowBreakingSignatures && HasSignature())
         {
             throw new PdfSignatureConflictException("The document has a signature; flatten changes page content, which validators report as a modification the signature does not permit. Set AllowBreakingSignatures to flatten anyway.");
         }
@@ -1990,6 +1991,7 @@ internal sealed class PdfEngine : IDisposable
         PdfObject.Arr? savedId = _id;
         int savedHelv = _helvId;
         bool savedSticky = _stickyNeedAppearances;
+        SignatureState? savedSignatureState = _signatureState;
         var savedDirty = new HashSet<int>(_dirty);
         _backup = new Dictionary<int, PdfObject?>();
         try
@@ -2003,6 +2005,7 @@ internal sealed class PdfEngine : IDisposable
                 ? null
                 : options.SigningTime ?? DateTimeOffset.UtcNow;
             BuildSignature(options, signingTime);
+            _signatureState = null;
 
             // The estimate above runs before BuildSignature dirties a reused field. The bounded
             // buffer is the exact guard: it throws before the destination is touched.
@@ -2074,6 +2077,7 @@ internal sealed class PdfEngine : IDisposable
         catch
         {
             Restore(savedSize, savedInfo, savedInfoGen, savedId, savedHelv, savedSticky, savedDirty);
+            _signatureState = savedSignatureState;
             throw;
         }
     }
@@ -3387,7 +3391,7 @@ internal sealed class PdfEngine : IDisposable
             return;
         }
 
-        if (HasSignature(CollectFields()))
+        if (HasSignature())
         {
             return;
         }
@@ -3406,22 +3410,9 @@ internal sealed class PdfEngine : IDisposable
     // A document has a signature when /Perms has /DocMDP or a signature field has a /V that resolves to a dictionary,
     // the test Sign uses to refuse an already signed field. A /V that does not resolve is null (ISO 32000-1 7.3.10),
     // so that field is unsigned. The /UR3 usage-rights signature is not counted.
-    private bool HasSignature(List<FieldSlot> slots)
+    private bool HasSignature()
     {
-        if (ResolveMaybe(CatalogDict().Get("Perms")) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
-        {
-            return true;
-        }
-
-        foreach (FieldSlot slot in slots)
-        {
-            if (slot.FieldType == PdfFieldType.Signature && HasSignatureDictionary(slot))
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return GetSignatureState().HasSignature;
     }
 
     private bool UsageRightsGrant(PdfObject usageRights, string category, string right)
@@ -3483,22 +3474,17 @@ internal sealed class PdfEngine : IDisposable
 
     private int CertificationLevel()
     {
-        return CertificationLevel(CollectFields());
+        return GetSignatureState().CertificationLevel;
     }
 
     private int CertificationLevel(List<FieldSlot> slots)
     {
-        int level = 0;
-        PdfObject? permsValue = CatalogDict().Get("Perms");
-        if (IsDangling(permsValue))
+        if (_signatureState != null)
         {
-            Restrict(ref level, 1);
-        }
-        else if (ResolveMaybe(permsValue) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
-        {
-            Restrict(ref level, PermissionOf(perms.Get("DocMDP")));
+            return _signatureState.CertificationLevel;
         }
 
+        SignatureState state = CreateSignatureState();
         foreach (FieldSlot slot in slots)
         {
             if (slot.FieldType != PdfFieldType.Signature)
@@ -3506,20 +3492,123 @@ internal sealed class PdfEngine : IDisposable
                 continue;
             }
 
-            if (Load(slot.ValueObjectId) is not PdfObject.Dict field)
+            if (HasSignatureDictionary(slot))
             {
-                continue;
+                state.HasSignature = true;
             }
 
-            if (ResolveMaybe(field.Get("V")) is not PdfObject.Dict signature)
+            if (Load(slot.ValueObjectId) is PdfObject.Dict field
+                && ResolveMaybe(field.Get("V")) is PdfObject.Dict signature)
             {
-                continue;
+                int level = state.CertificationLevel;
+                Restrict(ref level, PermissionOnSignature(signature, "DocMDP"));
+                state.CertificationLevel = level;
             }
-
-            Restrict(ref level, PermissionOnSignature(signature, "DocMDP"));
         }
 
-        return level;
+        _signatureState = state;
+        return state.CertificationLevel;
+    }
+
+    private SignatureState GetSignatureState()
+    {
+        if (_signatureState != null)
+        {
+            return _signatureState;
+        }
+
+        SignatureState state = CreateSignatureState();
+        PdfObject.Dict catalog = CatalogDict();
+        if (ResolveMaybe(catalog.Get("AcroForm")) is PdfObject.Dict acro
+            && ResolveMaybe(acro.Get("Fields")) is PdfObject.Arr fields)
+        {
+            var seen = new HashSet<int>();
+            foreach (PdfObject field in fields.Items)
+            {
+                if (field is PdfObject.Ref reference && Resolve(reference) is PdfObject.Dict dict)
+                {
+                    WalkSignatures(dict, reference.ObjectId, null, 0, state, seen, 0);
+                }
+            }
+        }
+
+        _signatureState = state;
+        return state;
+    }
+
+    private SignatureState CreateSignatureState()
+    {
+        var state = new SignatureState();
+        PdfObject? permsValue = CatalogDict().Get("Perms");
+        if (IsDangling(permsValue))
+        {
+            int level = state.CertificationLevel;
+            Restrict(ref level, 1);
+            state.CertificationLevel = level;
+        }
+        else if (ResolveMaybe(permsValue) is PdfObject.Dict perms && perms.Get("DocMDP") != null)
+        {
+            state.HasSignature = true;
+            int level = state.CertificationLevel;
+            Restrict(ref level, PermissionOf(perms.Get("DocMDP")));
+            state.CertificationLevel = level;
+        }
+
+        return state;
+    }
+
+    private void WalkSignatures(
+        PdfObject.Dict field,
+        int fieldId,
+        string? inheritedType,
+        int inheritedValueOwner,
+        SignatureState state,
+        HashSet<int> seen,
+        int depth)
+    {
+        if (!seen.Add(fieldId))
+        {
+            throw new PdfParseException(0, "The field tree contains a cycle.");
+        }
+
+        if (depth > MaxTraversalDepth)
+        {
+            throw new PdfParseException(0, "The field tree is too deep.");
+        }
+
+        bool isField = inheritedValueOwner == 0 || field.Get("T") != null;
+        string? fieldType = NameOf(field.Get("FT")) ?? inheritedType;
+        int valueOwner = isField ? fieldId : inheritedValueOwner;
+        if (ResolveMaybe(field.Get("Kids")) is PdfObject.Arr kids && kids.Items.Count > 0)
+        {
+            foreach (PdfObject kid in kids.Items)
+            {
+                if (kid is PdfObject.Ref reference && Resolve(reference) is PdfObject.Dict child)
+                {
+                    WalkSignatures(child, reference.ObjectId, fieldType, valueOwner, state, seen, depth + 1);
+                }
+            }
+
+            return;
+        }
+
+        bool widget = NameOf(field.Get("Subtype")) == "Widget" || field.Get("Rect") != null;
+        if (!widget || fieldType != "Sig")
+        {
+            return;
+        }
+
+        if (Load(valueOwner) is PdfObject.Dict owner && ResolveMaybe(owner.Get("V")) is PdfObject.Dict signature)
+        {
+            state.HasSignature = true;
+            int level = state.CertificationLevel;
+            Restrict(ref level, PermissionOnSignature(signature, "DocMDP"));
+            state.CertificationLevel = level;
+        }
+        else if (NearestFieldValue(fieldId) is PdfObject.Dict)
+        {
+            state.HasSignature = true;
+        }
     }
 
     private int PermissionOf(PdfObject? value)
@@ -5276,6 +5365,13 @@ internal sealed class PdfEngine : IDisposable
         public int ValueOwner { get; }
 
         public PdfObject? Opt { get; }
+    }
+
+    private sealed class SignatureState
+    {
+        public bool HasSignature { get; set; }
+
+        public int CertificationLevel { get; set; }
     }
 
     private sealed class FieldSlot

@@ -378,6 +378,35 @@ public class SignatureTests
         Assert.True(Regex.Matches(saved, "00112233445566778899AABBCCDDEEFF").Count >= 4);
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void cached_signature_state_resets_after_a_signature_revision(bool documentTimestamp)
+    {
+        byte[] pdf = TextField();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        document.Metadata.Title = "Primes the unsigned cache";
+
+        PdfSignatureOptions options;
+        IPdfSignatureProvider provider;
+        if (documentTimestamp)
+        {
+            options = new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 };
+            provider = new DocTimeStampSignatureProvider(new RecordingAuthority());
+        }
+        else
+        {
+            options = new PdfSignatureOptions { ReservedContentsBytes = 32 };
+            provider = new FixedProvider();
+        }
+
+        document.Sign(stream, options, provider);
+
+        Assert.Throws<PdfSignatureConflictException>(() => document.Pages[0].Rotation = 90);
+    }
+
     [Fact]
     public void missing_id_is_created_only_when_signing()
     {

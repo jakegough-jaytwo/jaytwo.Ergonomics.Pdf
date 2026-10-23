@@ -75,3 +75,16 @@ Run on 2026-10-22, tree at `3df78e1` with the W-111 changes. Windows 11 IoT Ente
 - iText's time includes its own work beyond this library's. Its metadata edit also updates `/Producer` and `/ModDate`, and its signature dictionary and CMS layout differ. This library's cross-stream saves copy the source through the counted stream, and iText copies it too.
 - The attachment workloads use cross-stream saves for both libraries, where G7 uses a same-stream save.
 - Signature inspection and revision listing are not compared. iText's `SignatureUtil` parses and hashes for verification, and its revision count covers signatures only.
+
+## W-114 signature-state walk
+
+Measured on 2026-10-22 in the repository Ubuntu builder image with .NET 10.0.13 and qpdf 12.3.2. A detached `a844155` baseline and the W-114 tree ran `FixtureSetup.prepare` and the two named `ErgonomicsWorkloads` in separate processes. Each row had one cold and four warm passes; the table reports the fastest warm pass, the largest sampled heap growth, and the last pass's allocation.
+
+| Workload | Revision | Warm, s | Peak heap growth, MiB | Allocated, MiB | Source bytes read |
+|---|---|---:|---:|---:|---:|
+| 500-page form: metadata edit | `a844155` | 0.350 | 10.02 | 127.39 | 756,009 |
+| 500-page form: metadata edit | W-114 | 0.051 | 6.44 | 20.64 | 447,304 |
+| 500-page form: sign | `a844155` | 0.293 | 8.36 | 104.15 | 1,333,274 |
+| 500-page form: sign | W-114 | 0.208 | 8.24 | 78.90 | 1,192,407 |
+
+The metadata edit allocates 83.8% less and stays below W-114's 30 MiB limit. Signing allocates 24.2% less. These are resource measurements; signature integrity, revision coverage, and trust remain established by the unchanged signing interoperability tests, not by this comparison.

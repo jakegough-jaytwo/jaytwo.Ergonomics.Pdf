@@ -136,3 +136,18 @@ Peak heap growth, MiB (`net10.0` / `net8.0` / `net6.0` / `net48`), change: dense
 Peak heap growth, MiB (`net10.0` / `net8.0` / `net6.0`): dense inspect 1.99 / 1.99 / 2.06; dense edit 2.80 / 2.80 / 2.86; dense sign 2.97 / 2.98 / 3.04; signature inspection 1.67 / 1.67 / 1.69; revision listing 1.67 / 1.67 / 1.67; attachment add 0.32 / 0.36 / 0.46; extract 0.52 / 0.54 / 0.57; 500-page extraction 7.37 / 7.27 / 68.81; edit 9.03 / 9.65 / 80.94; fill 11.53 / 11.55 / 65.00; sign 7.63 / 7.73 / 79.65; 1,000-page flatten 21.02 / 21.22 / 82.01; encrypted inspect 5.86 / 5.83 / 6.75 (user) and 5.96 / 5.80 / 7.01 (owner). The `net6.0` object-stream peaks are the uncollected garbage described under W-79's Linux section, not live memory. The largest, 82.01 MiB for the flatten, is within its 128 MiB budget and 0.61 MiB above W-79's 81.40 MiB.
 
 `make quiet-docker-test` (Debug, coverage on) passed 4323/4323 on each of `net10.0`, `net8.0`, and `net6.0`, and the fuzz smoke run passed.
+
+## W-114 signature-state walk
+
+The focused `net10.0` 500-page G7 workload ran on 2026-10-22 in the repository Ubuntu builder image after the signature-only cache change. It passed with the D-49 thresholds unchanged. Output hashes and the signed-range hash matched the W-108 evidence above.
+
+| Window | Peak heap growth, MiB | Allocated, MiB | Source bytes | Read calls | Decoded bytes | Existing threshold: bytes / calls / decoded |
+|---|---:|---:|---:|---:|---:|---:|
+| 500-page form extraction | 7.93 | 69.23 | 335,363 | 126 | 1,669,931 | 369,000 / 139 / 1,840,000 |
+| 500-page metadata edit | 6.41 | 20.70 | 447,304 | 41 | 479,677 | 961,000 / 335 / 4,450,000 |
+| 500-page bulk fill of 500 fields | 11.13 | 60.95 | 633,106 | 107 | 1,338,213 | 697,000 / 118 / 1,480,000 |
+| 500-page sign | 7.33 | 68.66 | 1,651,417 | 241 | 1,494,125 | 1,970,000 / 314 / 2,300,000 |
+
+The extraction and fill tripwires equal the W-108 Linux values. Metadata edit and sign are lower because certification and signature detection no longer construct page and annotation indexes.
+
+The final `make quiet-docker-test` checkpoint passed 4,339/4,339 tests on each of `net10.0`, `net8.0`, and `net6.0`; the fixed-seed fuzz smoke run also passed.

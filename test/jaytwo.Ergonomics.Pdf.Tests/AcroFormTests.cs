@@ -192,6 +192,42 @@ public class AcroFormTests
     }
 
     [Fact]
+    public void signature_field_reference_certification_blocks_writes_without_catalog_perms()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R] >>");
+        builder.Indirect(4, "<< /Subtype /Widget /FT /Sig /T (Certification) /V 9 0 R /Rect [0 0 10 10] /P 3 0 R >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
+        builder.Indirect(10, "<< /TransformMethod /DocMDP /TransformParams << /P 1 /V /1.2 >> >>");
+        using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+
+        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Blocked");
+        Assert.Throws<PdfCertificationLockedException>(() => document.Attachments.Add("blocked.txt", new MemoryStream(new byte[] { 1 }), leaveOpen: false));
+    }
+
+    [Fact]
+    public void refused_write_keeps_the_cached_certification_answer()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Perms << /DocMDP 9 0 R >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
+        builder.Indirect(10, "<< /TransformMethod /DocMDP /TransformParams << /P 1 /V /1.2 >> >>");
+        byte[] pdf = builder.Finish();
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "First");
+        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Second");
+        document.SaveIncremental();
+        Assert.Equal(pdf, stream.ToArray());
+    }
+
+    [Fact]
     public void fieldmdp_all_blocks_a_fill_and_still_allows_a_read()
     {
         var builder = new PdfBuilder();
