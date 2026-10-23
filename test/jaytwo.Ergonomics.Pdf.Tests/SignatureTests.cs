@@ -242,6 +242,8 @@ public class SignatureTests
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
+    // W-120: the elapsed time is taken when the library's task completes. This method resumes on xUnit's test
+    // context, which waits for a free test thread, so its own resumption can lag the cancellation by tens of seconds.
     [Fact]
     public async Task caller_cancellation_of_timestamp_headers_is_not_reported_as_a_timeout()
     {
@@ -249,17 +251,19 @@ public class SignatureTests
         var client = new HttpClient(handler) { Timeout = TimeSpan.FromSeconds(30) };
         var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"));
         using var cancellation = new CancellationTokenSource();
-        Task<Exception> pending = Record.ExceptionAsync(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, cancellation.Token));
+        Task<byte[]> exchange = authority.GetTimeStampTokenAsync(new byte[] { 1 }, cancellation.Token).AsTask();
         Assert.True(handler.Started.Wait(TimeSpan.FromSeconds(10)));
-        var watch = Stopwatch.StartNew();
+        var watch = new Stopwatch();
+        Task<TimeSpan> ended = exchange.ContinueWith(_ => watch.Elapsed, TaskContinuationOptions.ExecuteSynchronously);
+        watch.Start();
 
         cancellation.Cancel();
 
-        OperationCanceledException canceled = Assert.IsAssignableFrom<OperationCanceledException>(await pending);
+        OperationCanceledException canceled = Assert.IsAssignableFrom<OperationCanceledException>(await Record.ExceptionAsync(() => exchange));
         Assert.Equal(cancellation.Token, canceled.CancellationToken);
         Assert.False(canceled is TaskCanceledException);
         Assert.False(canceled.InnerException is TimeoutException);
-        Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
+        Assert.InRange(await ended, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
     // The HttpClient deadline is far past the caller's, so finishing well before it shows the caller's cancellation
