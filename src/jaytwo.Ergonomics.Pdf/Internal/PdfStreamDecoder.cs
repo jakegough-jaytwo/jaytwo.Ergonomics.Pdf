@@ -801,15 +801,18 @@ internal static class PdfStreamDecoder
         private readonly Stream _source;
         private readonly byte[] _hold = new byte[4];
         private readonly byte[] _swap = new byte[4];
-        private readonly byte[] _incoming = new byte[8192];
+        private readonly byte[] _incoming;
         private readonly byte[] _tail = new byte[TailLength];
         private int _tailCount;
         private bool _primed;
         private bool _exhausted;
 
+        // W-115: a seekable source with fewer than 8 KiB left gets a buffer of what is left, and at least 64 bytes. A read
+        // asks for no more than the source still holds, so each read returns the bytes it would with 8 KiB.
         public ZlibPayloadStream(Stream source)
         {
             _source = source;
+            _incoming = new byte[source.CanSeek ? (int)Math.Max(64, Math.Min(8192, source.Length - source.Position)) : 8192];
         }
 
         public override bool CanRead => true;

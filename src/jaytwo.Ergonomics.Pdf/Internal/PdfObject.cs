@@ -16,7 +16,18 @@ internal abstract class PdfObject
 
     internal sealed class Dict : PdfObject
     {
-        private readonly List<(string Key, PdfObject Value)> _items = new List<(string, PdfObject)>();
+        private readonly List<(string Key, PdfObject Value)> _items;
+
+        public Dict()
+        {
+            _items = new List<(string, PdfObject)>();
+        }
+
+        // W-115: the parser and DeepClone know the entry count, so the list is made at its final size.
+        public Dict(int capacity)
+        {
+            _items = new List<(string, PdfObject)>(capacity);
+        }
 
         public StreamBody? Body { get; set; }
 
@@ -78,7 +89,7 @@ internal abstract class PdfObject
 
         public override PdfObject DeepClone()
         {
-            var clone = new Dict();
+            var clone = new Dict(_items.Count);
             foreach (var item in _items)
             {
                 clone._items.Add((item.Key, item.Value.DeepClone()));
@@ -98,11 +109,16 @@ internal abstract class PdfObject
             Items = new List<PdfObject>();
         }
 
+        public Arr(int capacity)
+        {
+            Items = new List<PdfObject>(capacity);
+        }
+
         public List<PdfObject> Items { get; }
 
         public override PdfObject DeepClone()
         {
-            var clone = new Arr();
+            var clone = new Arr(Items.Count);
             foreach (var item in Items)
             {
                 clone.Items.Add(item.DeepClone());

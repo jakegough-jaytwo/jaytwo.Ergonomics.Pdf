@@ -30,6 +30,7 @@ internal sealed class PdfParser
     internal const int ObjectStreamReadFactor = 4;
 
     private const int ObjectStreamReadSlack = 64 * 1024;
+    private const int ObjectStreamPresizeLimit = 1024;
     private const int IndexedDictionaryThreshold = 16;
     private const int MaxCommentDepth = 256;
 
@@ -39,6 +40,10 @@ internal sealed class PdfParser
     private readonly Stack<Token> _pushback = new Stack<Token>();
     private readonly int _stringCap;
     private readonly int _containerCap;
+    private readonly List<List<(string Key, PdfObject Value)>> _dictionaryScratch = new List<List<(string Key, PdfObject Value)>>();
+    private readonly List<List<PdfObject>> _arrayScratch = new List<List<PdfObject>>();
+    private byte[] _token = Array.Empty<byte>();
+    private char[] _chars = Array.Empty<char>();
 
     public PdfParser(PdfCursor cursor, Func<PdfObject.Ref, PdfObject>? resolve, long baseOffset)
         : this(cursor, resolve, baseOffset, PdfStreamDecoder.StructuralCap, MaxContainerEntries)
@@ -118,7 +123,8 @@ internal sealed class PdfParser
 
         if (token.Kind == TokenKind.ArrayStart)
         {
-            var array = new PdfObject.Arr();
+            // W-115: as with a dictionary, the entries collect in this depth's list and the array is made at its final size.
+            List<PdfObject> items = Scratch(_arrayScratch, depth);
             while (true)
             {
                 Token next = PeekToken();
@@ -133,14 +139,17 @@ internal sealed class PdfParser
                     throw Error("Array ended at EOF.");
                 }
 
-                if (array.Items.Count >= _containerCap)
+                if (items.Count >= _containerCap)
                 {
                     throw new PdfObjectTooLargeException("A PDF array has more than " + _containerCap.ToString(CultureInfo.InvariantCulture) + " entries.");
                 }
 
-                array.Items.Add(ParseValue(depth + 1));
+                items.Add(ParseValue(depth + 1));
             }
 
+            var array = new PdfObject.Arr(items.Count);
+            array.Items.AddRange(items);
+            items.Clear();
             return array;
         }
 
@@ -539,8 +548,11 @@ internal sealed class PdfParser
 
     internal static List<PdfObject> ParseObjectStream(byte[] data, int count, int first)
     {
-        var objects = new List<PdfObject>();
-        var ids = new HashSet<int>();
+        // W-115: /N sizes the list, up to a bound so a header that overstates it cannot reserve more. Writers list object
+        // numbers in ascending order, so the set that finds a repeat is made only when a number is not above the last.
+        var objects = new List<PdfObject>(Math.Min(count, ObjectStreamPresizeLimit));
+        HashSet<int>? ids = null;
+        int lastId = -1;
         var cursor = PdfCursor.FromBytes(data);
         var parser = new PdfParser(cursor, null, 0);
         long budget = ((long)data.Length * ObjectStreamReadFactor) + ObjectStreamReadSlack;
@@ -550,9 +562,28 @@ internal sealed class PdfParser
         {
             int id = ObjectStreamHeaderInteger(data, first, ref header);
             int offset = ObjectStreamHeaderInteger(data, first, ref header);
-            if (!ids.Add(id))
+            if (ids == null && id > lastId)
             {
-                throw new PdfParseException(0, "Object stream header repeats object number " + id.ToString(CultureInfo.InvariantCulture) + ".");
+                lastId = id;
+            }
+            else
+            {
+                // The earlier pairs are read again from the header, which they have already passed.
+                if (ids == null)
+                {
+                    ids = new HashSet<int>();
+                    int reread = 0;
+                    for (int earlier = 0; earlier < i; earlier++)
+                    {
+                        ids.Add(ObjectStreamHeaderInteger(data, first, ref reread));
+                        ObjectStreamHeaderInteger(data, first, ref reread);
+                    }
+                }
+
+                if (!ids.Add(id))
+                {
+                    throw new PdfParseException(0, "Object stream header repeats object number " + id.ToString(CultureInfo.InvariantCulture) + ".");
+                }
             }
 
             if (offset > data.Length - first)
@@ -619,9 +650,11 @@ internal sealed class PdfParser
         return b == 11 || IsWhitespace(b);
     }
 
+    // W-115: a dictionary's entries collect in a list this parser keeps for that nesting depth, so the dictionary is
+    // made once at its final size. A repeated key keeps its first position and takes the last value.
     private PdfObject.Dict ParseDictionary(int depth)
     {
-        var dict = new PdfObject.Dict();
+        List<(string Key, PdfObject Value)> items = Scratch(_dictionaryScratch, depth);
         Dictionary<string, int>? positions = null;
         int entries = 0;
         while (true)
@@ -643,33 +676,66 @@ internal sealed class PdfParser
             }
 
             PdfObject value = ParseValue(depth + 1);
-            if (positions == null && dict.Items.Count < IndexedDictionaryThreshold)
+            if (positions == null && items.Count < IndexedDictionaryThreshold)
             {
-                dict.Set(token.Text, value);
+                int existing = items.Count - 1;
+                while (existing >= 0 && items[existing].Key != token.Text)
+                {
+                    existing--;
+                }
+
+                if (existing >= 0)
+                {
+                    items[existing] = (token.Text, value);
+                }
+                else
+                {
+                    items.Add((token.Text, value));
+                }
+
                 continue;
             }
 
             if (positions == null)
             {
                 positions = new Dictionary<string, int>(StringComparer.Ordinal);
-                for (int i = 0; i < dict.Items.Count; i++)
+                for (int i = 0; i < items.Count; i++)
                 {
-                    positions[dict.Items[i].Key] = i;
+                    positions[items[i].Key] = i;
                 }
             }
 
             if (positions.TryGetValue(token.Text, out int at))
             {
-                dict.ReplaceAt(at, value);
+                items[at] = (items[at].Key, value);
             }
             else
             {
-                positions.Add(token.Text, dict.Items.Count);
-                dict.Append(token.Text, value);
+                positions.Add(token.Text, items.Count);
+                items.Add((token.Text, value));
             }
         }
 
+        var dict = new PdfObject.Dict(items.Count);
+        foreach ((string key, PdfObject value) in items)
+        {
+            dict.Append(key, value);
+        }
+
+        items.Clear();
         return dict;
+    }
+
+    private static List<T> Scratch<T>(List<List<T>> byDepth, int depth)
+    {
+        while (byDepth.Count <= depth)
+        {
+            byDepth.Add(new List<T>());
+        }
+
+        List<T> scratch = byDepth[depth];
+        scratch.Clear();
+        return scratch;
     }
 
     private long ResolveLength(PdfObject.Dict dict)
@@ -933,9 +999,9 @@ internal sealed class PdfParser
     private Token ReadRealNumber(long start)
     {
         _cursor.Seek(start);
-        var text = new StringBuilder();
+        int length = 0;
         int first = _cursor.ReadByte();
-        text.Append((char)first);
+        AppendTokenByte(ref length, first);
         bool digits = first >= '0' && first <= '9';
         bool decimalPoint = first == '.';
         while (true)
@@ -943,10 +1009,10 @@ internal sealed class PdfParser
             int b = _cursor.PeekByte();
             if ((b == '.' && !decimalPoint) || (b >= '0' && b <= '9'))
             {
-                CheckTokenLength(text.Length, "number");
+                CheckTokenLength(length, "number");
                 decimalPoint |= b == '.';
                 digits |= b != '.';
-                text.Append((char)_cursor.ReadByte());
+                AppendTokenByte(ref length, _cursor.ReadByte());
                 continue;
             }
 
@@ -958,19 +1024,34 @@ internal sealed class PdfParser
             throw Error("Invalid number.");
         }
 
-        string value = text.ToString();
-        if (!double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double number))
+        if (_chars.Length < length)
+        {
+            _chars = new char[Math.Max(32, length)];
+        }
+
+        for (int i = 0; i < length; i++)
+        {
+            _chars[i] = (char)_token[i];
+        }
+
+#if NETSTANDARD2_0
+        bool parsed = double.TryParse(new string(_chars, 0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out double number);
+#else
+        bool parsed = double.TryParse(_chars.AsSpan(0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out double number);
+#endif
+        if (!parsed)
         {
             throw Error("Real number is invalid.");
         }
 
-        return new Token(TokenKind.Real, value, Array.Empty<byte>(), 0, number);
+        // W-115: a real token's text is never read, so the parser builds none.
+        return new Token(TokenKind.Real, string.Empty, Array.Empty<byte>(), 0, number);
     }
 
     private Token ReadKeyword(int first)
     {
-        var text = new StringBuilder();
-        text.Append((char)first);
+        int length = 0;
+        AppendTokenByte(ref length, first);
         while (true)
         {
             int b = _cursor.PeekByte();
@@ -979,16 +1060,28 @@ internal sealed class PdfParser
                 break;
             }
 
-            CheckTokenLength(text.Length, "keyword");
-            text.Append((char)_cursor.ReadByte());
+            CheckTokenLength(length, "keyword");
+            AppendTokenByte(ref length, _cursor.ReadByte());
         }
 
-        return new Token(TokenKind.Keyword, text.ToString(), Array.Empty<byte>(), 0, 0);
+        return new Token(TokenKind.Keyword, PdfCommonTokens.Find(_token, length) ?? Latin1(_token, length), Array.Empty<byte>(), 0, 0);
+    }
+
+    // Each byte becomes the character with that code, as a keyword always has.
+    private static string Latin1(byte[] bytes, int length)
+    {
+        var chars = new char[length];
+        for (int i = 0; i < length; i++)
+        {
+            chars[i] = (char)bytes[i];
+        }
+
+        return new string(chars);
     }
 
     private string ReadName()
     {
-        var raw = new List<byte>();
+        int length = 0;
         while (true)
         {
             int b = _cursor.PeekByte();
@@ -997,34 +1090,53 @@ internal sealed class PdfParser
                 break;
             }
 
-            CheckTokenLength(raw.Count, "name");
-            raw.Add((byte)_cursor.ReadByte());
+            CheckTokenLength(length, "name");
+            AppendTokenByte(ref length, _cursor.ReadByte());
         }
 
-        var decoded = new List<byte>();
-        for (int i = 0; i < raw.Count; i++)
+        // Escapes decode in place: each one shortens the name, so the write index never passes the read index.
+        int decoded = 0;
+        for (int i = 0; i < length; i++)
         {
-            if (raw[i] == (byte)'#' && i + 2 < raw.Count)
+            if (_token[i] == (byte)'#' && i + 2 < length)
             {
-                decoded.Add((byte)((Hex(raw[i + 1]) << 4) | Hex(raw[i + 2])));
+                _token[decoded++] = (byte)((Hex(_token[i + 1]) << 4) | Hex(_token[i + 2]));
                 i += 2;
             }
             else
             {
-                decoded.Add(raw[i]);
+                _token[decoded++] = _token[i];
             }
         }
 
-        return Encoding.UTF8.GetString(decoded.ToArray());
+        return PdfCommonTokens.Find(_token, decoded) ?? Encoding.UTF8.GetString(_token, 0, decoded);
+    }
+
+    // W-115: one buffer per parser holds the bytes of the token being read, so a token allocates only its value.
+    private void AppendTokenByte(ref int length, int value)
+    {
+        if (length == _token.Length)
+        {
+            Array.Resize(ref _token, Math.Max(32, _token.Length * 2));
+        }
+
+        _token[length++] = (byte)value;
+    }
+
+    private byte[] TokenBytes(int length)
+    {
+        var bytes = new byte[length];
+        Buffer.BlockCopy(_token, 0, bytes, 0, length);
+        return bytes;
     }
 
     private byte[] ReadLiteralString()
     {
-        var output = new List<byte>();
+        int length = 0;
         int depth = 1;
         while (depth > 0)
         {
-            if (output.Count > _stringCap)
+            if (length > _stringCap)
             {
                 throw new PdfObjectTooLargeException("Literal string exceeded the structural cap.");
             }
@@ -1072,11 +1184,11 @@ internal sealed class PdfParser
                         value = (value * 8) + (_cursor.ReadByte() - '0');
                     }
 
-                    output.Add((byte)value);
+                    AppendTokenByte(ref length, (byte)value);
                     continue;
                 }
 
-                output.Add(escaped switch
+                AppendTokenByte(ref length, escaped switch
                 {
                     'n' => (byte)'\n',
                     'r' => (byte)'\r',
@@ -1091,7 +1203,7 @@ internal sealed class PdfParser
             if (b == '(')
             {
                 depth++;
-                output.Add((byte)b);
+                AppendTokenByte(ref length, (byte)b);
                 continue;
             }
 
@@ -1103,7 +1215,7 @@ internal sealed class PdfParser
                     break;
                 }
 
-                output.Add((byte)b);
+                AppendTokenByte(ref length, (byte)b);
                 continue;
             }
 
@@ -1114,19 +1226,19 @@ internal sealed class PdfParser
                     _cursor.ReadByte();
                 }
 
-                output.Add((byte)'\n');
+                AppendTokenByte(ref length, (byte)'\n');
                 continue;
             }
 
-            output.Add((byte)b);
+            AppendTokenByte(ref length, (byte)b);
         }
 
-        return output.ToArray();
+        return TokenBytes(length);
     }
 
     private byte[] ReadHexString()
     {
-        var output = new List<byte>();
+        int length = 0;
         int high = -1;
         while (true)
         {
@@ -1153,27 +1265,27 @@ internal sealed class PdfParser
             }
             else
             {
-                if (output.Count >= _stringCap)
+                if (length >= _stringCap)
                 {
                     throw new PdfObjectTooLargeException("Hex string exceeded the structural cap.");
                 }
 
-                output.Add((byte)((high << 4) | nibble));
+                AppendTokenByte(ref length, (byte)((high << 4) | nibble));
                 high = -1;
             }
         }
 
         if (high >= 0)
         {
-            if (output.Count >= _stringCap)
+            if (length >= _stringCap)
             {
                 throw new PdfObjectTooLargeException("Hex string exceeded the structural cap.");
             }
 
-            output.Add((byte)(high << 4));
+            AppendTokenByte(ref length, (byte)(high << 4));
         }
 
-        return output.ToArray();
+        return TokenBytes(length);
     }
 
     private static void CheckTokenLength(int length, string kind)

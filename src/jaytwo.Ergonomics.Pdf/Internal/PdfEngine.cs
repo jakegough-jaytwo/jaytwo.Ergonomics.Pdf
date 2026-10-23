@@ -2653,17 +2653,29 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject Resolve(PdfObject value)
     {
-        var seen = new HashSet<int>();
+        // W-115: nearly every value is direct or one reference from one, so the set is made at a chain's second reference.
+        bool followed = false;
+        int firstId = 0;
+        HashSet<int>? seen = null;
         while (value is PdfObject.Ref reference)
         {
-            if (!seen.Add(reference.ObjectId))
+            if (!followed)
             {
-                throw new PdfParseException(0, "Cyclic indirect object reference.");
+                followed = true;
+                firstId = reference.ObjectId;
             }
-
-            if (seen.Count > MaxTraversalDepth)
+            else
             {
-                throw new PdfParseException(0, "Indirect object reference chain is too deep.");
+                seen ??= new HashSet<int> { firstId };
+                if (!seen.Add(reference.ObjectId))
+                {
+                    throw new PdfParseException(0, "Cyclic indirect object reference.");
+                }
+
+                if (seen.Count > MaxTraversalDepth)
+                {
+                    throw new PdfParseException(0, "Indirect object reference chain is too deep.");
+                }
             }
 
             if (!IsLive(reference))

@@ -88,3 +88,19 @@ Measured on 2026-10-22 in the repository Ubuntu builder image with .NET 10.0.13 
 | 500-page form: sign | W-114 | 0.208 | 8.24 | 78.90 | 1,192,407 |
 
 The metadata edit allocates 83.8% less and stays below W-114's 30 MiB limit. Signing allocates 24.2% less. These are resource measurements; signature integrity, revision coverage, and trust remain established by the unchanged signing interoperability tests, not by this comparison.
+
+## W-115 parser allocation
+
+Measured on 2026-10-22 on the Windows machine above, .NET SDK 10.0.402 and runtime 10.0.13, qpdf 12.4.2. `make compare-itext` ran on the W-115 tree, all 28 tests passing. Base is `12c17fa` (W-114) in a scratch worktree: after the full run, its five form workloads ran in their own processes against the same fixtures. Each row had one cold and four warm passes and reports the last pass's allocation. Decoded bytes for form extraction are 1,669,931 at both revisions.
+
+| Workload | Allocated, MiB: `12c17fa` / W-115 / iText 9.8.0 | W-115 / base |
+|---|---:|---:|
+| 500-page form: extraction | 68.40 / 22.21 / 12.33 | 32.5% |
+| 500-page form: metadata edit | 20.64 / 7.64 / 1.47 | 37.0% |
+| 500-page form: bulk fill of 500 fields | 61.23 / 23.64 / 161.51 | 38.6% |
+| 500-page form: sign | 78.90 / 27.00 / 19.98 | 34.2% |
+| 1,000-page form: flatten of 2,000 fields | 208.55 / 76.81 / 576.05 (full rewrite) | 36.8% |
+
+Allocation per decoded byte on form extraction fell from 42.95 to 13.95 bytes, 32.5% of base, against W-115's limit of half. Extraction still allocates 1.8 times iText's; sign 1.35 times; metadata edit 5.2 times.
+
+Warm times on this machine were noisier than in the W-111 run, so timing was compared by alternating base and W-115 processes three times. The W-115 best warm pass was lower in every pair: flatten 0.378, 0.455, and 0.411 s at base against 0.295, 0.353, and 0.279 s; sign 0.227, 0.248, and 0.266 s against 0.213, 0.205, and 0.226 s. In the full run, W-115's warm extraction was 0.119 s against iText's 0.077 s and base's 0.139 s in its own run. The dense, attachment, and encrypted rows were not rerun at base here; their source bytes, read calls, and output hashes are compared with base in the W-115 G7 runs (`memory-budgets.md`), where they are identical.

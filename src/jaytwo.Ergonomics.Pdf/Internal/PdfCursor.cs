@@ -48,10 +48,11 @@ internal sealed class PdfCursor
         _window = Array.Empty<byte>();
     }
 
+    // W-115: the buffer is the window, so a cursor over a decoded object stream copies nothing.
     private PdfCursor(byte[] buffer)
     {
         _buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
-        _window = new byte[WindowSize];
+        _window = buffer;
     }
 
     public long Length => _buffer?.Length ?? _stream!.Length;
@@ -163,9 +164,8 @@ internal sealed class PdfCursor
                 return;
             }
 
-            int count = (int)Math.Min(_window.Length, _buffer.Length - _next);
-            Buffer.BlockCopy(_buffer, (int)_next, _window, 0, count);
-            _windowLength = count;
+            _windowIndex = (int)_next;
+            _windowLength = _buffer.Length;
             return;
         }
 

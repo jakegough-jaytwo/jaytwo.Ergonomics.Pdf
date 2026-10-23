@@ -151,3 +151,21 @@ The focused `net10.0` 500-page G7 workload ran on 2026-10-22 in the repository U
 The extraction and fill tripwires equal the W-108 Linux values. Metadata edit and sign are lower because certification and signature detection no longer construct page and annotation indexes.
 
 The final `make quiet-docker-test` checkpoint passed 4,339/4,339 tests on each of `net10.0`, `net8.0`, and `net6.0`; the fixed-seed fuzz smoke run also passed.
+
+## W-115 parser allocation
+
+`make g7-workloads` and the scaling cases (`net10.0`) ran on Windows on 2026-10-22, Release, coverage off, each test in its own process, at base `12c17fa` (W-114) in a scratch worktree and at the W-115 tree, with the same machine and toolchain as W-108. All 24 workload runs and both scaling cases passed at each revision with the D-49 thresholds unchanged. All 32 output and signed-range hashes, and all 60 source-byte, read-call, and decoded-byte figures, are identical between the revisions on `net10.0`, `net8.0`, `net6.0`, and `net48`.
+
+Allocated per window, MiB, base / W-115 (`net10.0`; `net48` in parentheses):
+
+| Window | Allocated | Largest peak heap growth across the four frameworks |
+|---|---:|---:|
+| 500-page form extraction | 68.54 / 22.36 (73.08 / 24.66) | 6.60 / 6.16 |
+| 500-page metadata edit | 20.70 / 7.71 (22.18 / 8.56) | 6.43 / 5.34 |
+| 500-page bulk fill of 500 fields | 61.65 / 24.41 (65.01 / 25.98) | 11.03 / 9.52 |
+| 500-page sign | 68.65 / 23.82 (73.06 / 25.98) | 8.39 / 6.49 |
+| 1,000-page flatten | 197.93 / 74.33 (211.29 / 81.55) | 21.39 / 15.83 |
+| Dense inspect | 1.98 / 1.49 (2.03 / 1.54) | 2.04 / 1.56 |
+| Encrypted xref-stream inspect, owner password | 7.21 / 4.12 (7.55 / 4.57) | 2.13 / 4.58 |
+
+No window allocated more at W-115 on any framework. Peak heap growth is sampled and depends on when collections land, so single runs moved both ways. The largest peak fell for every form and dense window. It rose for encrypted xref-stream inspect, to at most 4.58 MiB against its 16 MiB budget: that window now allocates less than a collection's worth, so its peak equals its allocation. That is garbage, not live memory.
