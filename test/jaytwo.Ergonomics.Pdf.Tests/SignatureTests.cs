@@ -212,6 +212,20 @@ public class SignatureTests
         Assert.InRange(watch.Elapsed, TimeSpan.Zero, TimeSpan.FromSeconds(10));
     }
 
+    // W-98: the library's deadline source never fires, as when a loaded thread pool has not yet run its callback, so
+    // HttpClient's own timer cancels the headers first. On .NET Framework that exception has no inner exception. The
+    // message is the library's, which shows the library classified the timeout rather than passing HttpClient's on.
+    [Fact]
+    public async Task header_timeout_is_classified_when_http_client_cancels_before_the_deadline_fires()
+    {
+        var client = new HttpClient(new StallingHandler()) { Timeout = TimeSpan.FromMilliseconds(500) };
+        var authority = new HttpTimestampAuthority(client, new Uri("https://tsa.example/stamp"), _ => new CancellationTokenSource());
+
+        TaskCanceledException canceled = await Assert.ThrowsAsync<TaskCanceledException>(async () => await authority.GetTimeStampTokenAsync(new byte[] { 1 }, CancellationToken.None));
+        Assert.IsType<TimeoutException>(canceled.InnerException);
+        Assert.StartsWith("The timestamp request was canceled because", canceled.Message, StringComparison.Ordinal);
+    }
+
     [Fact]
     public async Task cancel_pending_timestamp_requests_is_not_reported_as_a_timeout()
     {

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -17,6 +18,7 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
 
     private readonly HttpClient _httpClient;
     private readonly Uri _endpoint;
+    private readonly Func<TimeSpan, CancellationTokenSource> _armDeadline;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HttpTimestampAuthority"/> class.
@@ -24,9 +26,17 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
     /// <param name="httpClient">The client that sends the request. The caller owns its lifetime.</param>
     /// <param name="endpoint">The timestamp authority URL.</param>
     public HttpTimestampAuthority(HttpClient httpClient, Uri endpoint)
+        : this(httpClient, endpoint, deadline => new CancellationTokenSource(deadline))
+    {
+    }
+
+    // W-98: tests pass a source that never fires, standing in for a deadline callback that a loaded thread pool has
+    // not run yet, so HttpClient's own timer cancels the request first.
+    internal HttpTimestampAuthority(HttpClient httpClient, Uri endpoint, Func<TimeSpan, CancellationTokenSource> armDeadline)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         _endpoint = endpoint ?? throw new ArgumentNullException(nameof(endpoint));
+        _armDeadline = armDeadline;
     }
 
     /// <summary>
@@ -109,12 +119,19 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
         return token.Full;
     }
 
+    private static bool IsPast(Stopwatch elapsed, TimeSpan deadline)
+    {
+        return deadline != Timeout.InfiniteTimeSpan && elapsed.Elapsed >= deadline;
+    }
+
     private async Task<byte[]> ExchangeAsync(byte[] timeStampReqDer, CancellationToken cancellationToken)
     {
         // This token owns the deadline for both response headers and the body. It is armed just
-        // ahead of HttpClient's framework-specific timer so .NET Framework cannot win the timer
-        // race with an unidentifiable bare cancellation. CancelPendingRequests does not set it.
-        using CancellationTokenSource timeout = CreateDeadline();
+        // ahead of HttpClient's framework-specific timer, so it normally fires first.
+        // CancelPendingRequests does not set it.
+        TimeSpan deadline = Deadline();
+        Stopwatch elapsed = Stopwatch.StartNew();
+        using CancellationTokenSource timeout = deadline == Timeout.InfiniteTimeSpan ? new CancellationTokenSource() : _armDeadline(deadline);
         using CancellationTokenSource linked = CancellationTokenSource.CreateLinkedTokenSource(timeout.Token, cancellationToken);
         try
         {
@@ -126,10 +143,11 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
             // reports the linked token, so the caller's cancellation is restated with its own token.
             throw new OperationCanceledException("The timestamp request was canceled.", exception, cancellationToken);
         }
-        catch (Exception exception) when (!(exception is PdfTimestampException) && timeout.IsCancellationRequested)
+        catch (Exception exception) when (!(exception is PdfTimestampException) && (timeout.IsCancellationRequested || IsPast(elapsed, deadline)))
         {
-            // HttpClient's timeout exception differs by framework. Normalize only cancellation
-            // caused by our deadline; unrelated cancellation keeps its original exception.
+            // HttpClient's timeout exception differs by framework; on .NET Framework it has no inner
+            // exception. A loaded thread pool can run HttpClient's timer callback before this deadline's,
+            // so the clock decides too. Unrelated cancellation before the deadline keeps its exception.
             string message = "The timestamp request was canceled because the configured HttpClient.Timeout of "
                 + _httpClient.Timeout.TotalSeconds.ToString(System.Globalization.CultureInfo.InvariantCulture)
                 + " seconds elapsed.";
@@ -155,15 +173,16 @@ public sealed class HttpTimestampAuthority : ITimestampAuthority
         return await ReadCappedAsync(response.Content, timeout).ConfigureAwait(false);
     }
 
-    private CancellationTokenSource CreateDeadline()
+    private TimeSpan Deadline()
     {
         if (_httpClient.Timeout == Timeout.InfiniteTimeSpan)
         {
-            return new CancellationTokenSource();
+            return Timeout.InfiniteTimeSpan;
         }
 
+        // From a 160 ms timeout up, the lead also covers the 15.6 ms tick of .NET Framework timers, so
+        // HttpClient's timer cannot fire before the clock shows this deadline has passed.
         double leadMilliseconds = Math.Min(50, _httpClient.Timeout.TotalMilliseconds / 10);
-        TimeSpan deadline = _httpClient.Timeout - TimeSpan.FromMilliseconds(leadMilliseconds);
-        return new CancellationTokenSource(deadline);
+        return _httpClient.Timeout - TimeSpan.FromMilliseconds(leadMilliseconds);
     }
 }
