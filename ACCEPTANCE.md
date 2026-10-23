@@ -147,3 +147,21 @@ These fixtures are written by pypdf, qpdf, and pyHanko, then committed. The libr
 - Byte-range integrity and the modification policy are separate results. Changing one byte inside a signed revision makes pyHanko report the signature not intact. A metadata append after an approval signature stays intact and valid; pyHanko reports the change as `LTA_UPDATES` and allows it. A pyHanko certification with `P` 1 blocks a fill and a metadata write. A certification with `P` 2 allows a fill, blocks metadata, and pyHanko then reports the signature intact with modification level `FORM_FILLING` and an accepting DocMDP result.
 - Poppler extracts `Ada` and `Blue` from a pypdf form after those appearances are generated, and its 72 dpi raster of the text, choice, check box, and radio rectangles changes. The unfilled file does not contain `Ada`, and `Blue` is already present.
 - Opening a dense file larger than 32 MiB, including one qpdf rewrote with an object stream, and saving a metadata change allocates under 8 MiB. The allocation for a 32 MiB file stays within 3 MiB of the allocation for an 8 MiB file of the same shape. The sampled managed-heap peak stays under 8 MiB.
+
+## iText
+
+iText Core 9.8.0 reads this library's output (W-112). A read for which iText had to rebuild the cross-reference table fails, because that is iText recovering from a file it could not parse.
+
+- On built files with a classic cross-reference table:
+  - iText reads an Info title, an XMP packet, an attachment's exact bytes, and a page rotation.
+  - It reads a single fill and a 10-page bulk fill, and finds no fields after a flatten.
+  - `PdfPKCS7.VerifySignatureIntegrityAndAuthenticity` accepts RSA 2048, P-256, and P-384 signatures in `adbe.pkcs7.detached` and PAdES B-B, each covering the whole file, and accepts each as intact after a later metadata revision that it no longer covers.
+  - On qpdf AES-256 and 128-bit RC4 files, under the user and the owner password, iText reads a fill and verifies a signature.
+- On every corpus file that opens and whose last cross-reference section is a classic table, iText reads the output of the corpus metadata revision, text fill, bulk fill, and flatten:
+  - the page count;
+  - the distinct terminal field names this library reads;
+  - the filled value pypdf reads;
+  - each earlier signature, as intact.
+
+  iText names a kid whose `/T` is empty with a trailing period (the LibreOffice radio groups), and the comparison drops it.
+- Known gap (W-117): iText 9.8.0 cannot open this library's incremental output on a file whose last cross-reference section is a stream. That is 14 of the 40 corpus files that open, among them the IRS 1040-ES and W-9, VA 21-4138, CMS-40B, OPM OF-306, USCIS I-9, and Grants.gov SF-424 forms. The corpus check finds those sources from their last cross-reference section and skips only them.

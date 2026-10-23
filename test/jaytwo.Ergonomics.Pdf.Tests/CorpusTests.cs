@@ -17,6 +17,25 @@ public class CorpusTests
 {
     private const string RevisedTitle = "Corpus revision";
 
+    // W-117: the sources whose last cross-reference section is a stream, which the iText check skips.
+    private static readonly HashSet<string> _iTextSkipped = new HashSet<string>(StringComparer.Ordinal)
+    {
+        "cms-40b",
+        "cms-40b-pyhanko-approved",
+        "faa-8710-1",
+        "frb-beige-book-2024-01",
+        "grants-sf424-v4",
+        "inkscape-network",
+        "irs-f1040es-2026",
+        "irs-fw9-2024-03",
+        "nist-sp1271",
+        "opm-of306",
+        "opm-of306-pyhanko-certified",
+        "qpdf-object-streams",
+        "uscis-i9-2025",
+        "va-21-4138",
+    };
+
     public static IEnumerable<object[]> Ids => CorpusManifest.Ids();
 
     [Theory]
@@ -281,6 +300,7 @@ public class CorpusTests
         Assert.True(flattened.AsSpan(0, original.Length).SequenceEqual(original), id + ": the original is not a prefix");
         FormValues.AssertQpdfCheck(flattened, entry.Password);
         Assert.All(FormValues.Pypdf(flattened, entry.Password).Values, field => Assert.Equal("signature", field.GetProperty("kind").GetString()));
+        CheckWithIText(entry, original, flattened, null, null);
 
         string directory = ExternalTool.TempDirectory();
         try
@@ -349,10 +369,45 @@ public class CorpusTests
                 Assert.True(match.GetProperty("intact").GetBoolean(), entry.Id + ": signature " + name + " is not intact after the write");
                 Assert.True(match.GetProperty("valid").GetBoolean(), entry.Id + ": signature " + name + " is not valid after the write");
             }
+
+            CheckWithIText(entry, original, output, field, field == null ? null : CorpusManifest.Text(after.GetProperty("fieldValues"), field));
         }
         finally
         {
             Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    // W-112: iText reads every corpus output too: the pages, the distinct terminal field names this library reads, a
+    // filled value as pypdf reads it, and each earlier signature still verifies. iText names a kid whose /T is empty
+    // with a trailing period (LibreOffice radio groups), so that period is dropped. A source whose last section is a
+    // cross-reference stream is skipped: iText cannot read this library's classic append to it until W-117.
+    private static void CheckWithIText(CorpusEntry entry, byte[] original, byte[] output, string? field, string? value)
+    {
+        Assert.True(IText.ReadsAppendsTo(original) != _iTextSkipped.Contains(entry.Id), entry.Id + ": the iText skip list does not match the last cross-reference section");
+        if (_iTextSkipped.Contains(entry.Id))
+        {
+            return;
+        }
+
+        ITextReading reading = IText.Read(output, entry.Password);
+        Assert.Equal(entry.Probe.GetProperty("pages").GetInt32(), reading.Pages);
+        using (PdfDocument document = PdfDocument.Open(new MemoryStream(output, writable: false), entry.Password))
+        {
+            string[] expected = document.AcroForm.Fields.Select(f => f.FullName).Distinct(StringComparer.Ordinal).OrderBy(n => n, StringComparer.Ordinal).ToArray();
+            string[] actual = reading.Fields.Keys.Select(n => n.EndsWith(".", StringComparison.Ordinal) ? n.Substring(0, n.Length - 1) : n).Distinct(StringComparer.Ordinal).OrderBy(n => n, StringComparer.Ordinal).ToArray();
+            Assert.Equal(expected, actual);
+        }
+
+        if (field != null)
+        {
+            Assert.Equal(value, reading.Fields[field]);
+        }
+
+        foreach (JsonElement signature in entry.Probe.GetProperty("signatures").EnumerateArray())
+        {
+            string name = CorpusManifest.Text(signature, "field")!;
+            Assert.True(reading.Signatures.TryGetValue(name, out ITextSignature? read) && read.Intact, entry.Id + ": iText " + IText.Version + " does not verify signature " + name + " after the write");
         }
     }
 
