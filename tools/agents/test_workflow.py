@@ -146,6 +146,13 @@ class WorkflowTests(unittest.TestCase):
         self.assertIsNone(owner)
         self.assertEqual([], errors)
 
+    def test_decision_record_change_passes_without_active_item(self):
+        head = [_record("W-1", "done", ["x/"]), _record("W-2", "proposed", [])]
+        paths = ["agents/decisions/D-1.md", "agents/work-items/W-2.md", "agents/state/current.md"]
+        owner, errors = workflow.resolve_owner(head, head, paths)
+        self.assertIsNone(owner)
+        self.assertEqual([], errors)
+
     def test_work_without_owner_fails(self):
         head = [_record("W-1", "done", ["x/"])]
         owner, errors = workflow.resolve_owner(head, head, ["agents/work-items/W-1.md", "x/a.txt"])
@@ -220,6 +227,13 @@ class StagedIndexTests(unittest.TestCase):
         self._git("add", ".")
         errors = workflow.task_check(self.root)
         self.assertTrue(any("more than one active work item" in error for error in errors))
+
+    def test_new_decision_with_item_citing_it_passes_without_owner(self):
+        self._write("agents/decisions/D-1.md", '---\nid: D-1\ntitle: "Test decision"\nstatus: accepted\n---\n\n# D-1. Test decision\n')
+        self._write("agents/work-items/W-2.md", _item_text("W-2", "proposed", []).replace("decisions: []", "decisions:\n  - D-1"))
+        self._write("agents/state/current.md", "# Next\n\n1. W-1\n2. W-2\n")
+        self._git("add", ".")
+        self.assertEqual([], workflow.task_check(self.root))
 
     def test_no_staged_paths_fails(self):
         self.assertEqual(["task-check: no staged paths"], workflow.task_check(self.root))

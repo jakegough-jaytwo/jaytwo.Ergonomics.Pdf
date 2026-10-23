@@ -23,6 +23,8 @@ Statuses are `proposed`, `ready`, `active`, `waiting`, `done`, and `cancelled`. 
 6. Record observed results in the item's Notes or Closeout. Put only reusable cross-task evidence in `agents/evidence/`. Write `agents/reports/<yyyy-mm-dd>-<item-id>.md` only when qualification evidence or the user requires a report.
 7. Stage the whole transaction, activation included, run `make task-check`, and commit with the item ID as the subject prefix.
 
+Commit planning records (work items, decisions, `agents/state/current.md`) as a record-only transaction as soon as they are consistent. The queue in `agents/state/current.md` authorizes starting the next item without asking. If `task-check` rejects a commit that only touches planning records, treat it as a defect in the check and fix the check under a work item, rather than adding an item to route around it.
+
 ## Done
 
 An item is done when:

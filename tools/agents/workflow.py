@@ -289,7 +289,7 @@ def split_records(texts: dict[str, str]) -> tuple[list[Record], list[Record], st
 
 
 def is_record_path(path: str) -> bool:
-    return path == CURRENT_PATH or re.fullmatch(r"agents/work-items/[^/]+\.md", path) is not None
+    return path == CURRENT_PATH or re.fullmatch(r"agents/(work-items|decisions)/[^/]+\.md", path) is not None
 
 
 def _owns_transaction(before: str | list[str] | None, after: str | list[str] | None) -> bool:
