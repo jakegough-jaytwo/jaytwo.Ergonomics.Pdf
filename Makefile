@@ -56,11 +56,15 @@ agents-test:
 # W-102: agent verification with the full output in out/logs/<name>.log and only the exit status, per-framework test
 # counts, failing tests, build errors, fuzz result, and the log tail on failure on the console. Jenkins and the targets
 # they wrap keep their output. TEST_FRAMEWORK and TEST_FILTER narrow quiet-test, which runs without coverage.
+# TEST_FRAMEWORK selects the main test project, because the netstandard2.0 lane targets net8.0 only (D-51);
+# TEST_PROJECT=./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests runs the lane alone.
+TEST_PROJECT?=$(if ${TEST_FRAMEWORK},./test/jaytwo.Ergonomics.Pdf.Tests,${BUILD_SLN})
+
 quiet-build:
 	${QUIET_RUN} --name build -- dotnet build "${BUILD_SLN}" --nologo $(if ${CONFIGURATION},-c ${CONFIGURATION})
 
 quiet-test:
-	${QUIET_RUN} --name test --tests -- dotnet test "${BUILD_SLN}" --nologo -p:CollectCoverage=false 		$(if ${TEST_FRAMEWORK},-f ${TEST_FRAMEWORK}) $(if ${TEST_FILTER},--filter "${TEST_FILTER}")
+	${QUIET_RUN} --name test --tests -- dotnet test "${TEST_PROJECT}" --nologo -p:CollectCoverage=false 		$(if ${TEST_FRAMEWORK},-f ${TEST_FRAMEWORK}) $(if ${TEST_FILTER},--filter "${TEST_FILTER}")
 
 quiet-docker-test:
 	${QUIET_RUN} --name docker-test --tests -- $(MAKE) docker-builder docker-test
