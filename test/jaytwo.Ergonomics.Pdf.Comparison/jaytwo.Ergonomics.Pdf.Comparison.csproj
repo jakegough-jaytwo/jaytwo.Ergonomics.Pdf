@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- W-111: G7 workloads measured against iText. Not in jaytwo.Ergonomics.Pdf.sln, so CI never restores the
+       AGPL iText packages; run it with `make compare-itext`. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <!-- Coverage instrumentation would distort the timings. -->
+    <CollectCoverage>false</CollectCoverage>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="itext" Version="9.8.0" />
+    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.8.0" />
+  </ItemGroup>
+
+  <!-- The fixtures and the meter are the G7 test project's, so both libraries see the same bytes and the same counters. -->
+  <ItemGroup>
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ExternalTool.cs" Link="Shared\ExternalTool.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\G7Fixtures.cs" Link="Shared\G7Fixtures.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\TestCompat.cs" Link="Shared\TestCompat.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\WorkloadMeter.cs" Link="Shared\WorkloadMeter.cs" />
+  </ItemGroup>
+
+</Project>

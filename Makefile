@@ -88,6 +88,29 @@ g7-workloads:
 		grep -E 'peak heap growth|retained after warm-up|Assert\.' "$$log" | sed 's/^[[:space:]]*/  /'; \
 	done; done; exit $$status
 
+# W-111: the G7 workloads through this library and through iText, each test in its own Release process, so the heap
+# counter and the peak working set see one workload. The comparison project is outside the solution, so CI never
+# restores iText. FixtureSetup.prepare rewrites the fixtures first, in a process of its own, into JAYTWO_COMPARISON_DIR
+# (default: a temp directory). Each run's full output is out/logs/compare-<test>.log; the console gets the table.
+COMPARISON_PROJECT=./test/jaytwo.Ergonomics.Pdf.Comparison
+COMPARISON_WORKLOADS=dense_inspect dense_metadata_edit dense_sign attachment_add attachment_extract form_extraction \
+	form_metadata_edit form_bulk_fill form_sign flatten encrypted_inspect_user encrypted_inspect_owner
+COMPARISON_TESTS=$(foreach workload,${COMPARISON_WORKLOADS},ErgonomicsWorkloads.${workload} ITextWorkloads.${workload}) \
+	ITextWorkloads.dense_inspect_from_stream ITextWorkloads.dense_sign_in_memory
+
+compare-itext:
+	dotnet build "${COMPARISON_PROJECT}" --nologo -c Release
+	mkdir -p out/logs
+	status=0; for test in FixtureSetup.prepare ${COMPARISON_TESTS}; do \
+		log="out/logs/compare-$$test.log"; \
+		dotnet test "${COMPARISON_PROJECT}" --nologo --no-build -c Release \
+			--filter "FullyQualifiedName=jaytwo.Ergonomics.Pdf.Comparison.$$test" \
+			--logger "console;verbosity=detailed" > "$$log" 2>&1 && result=PASS || { result=FAIL; status=1; }; \
+		echo "$$test: $$result"; \
+	done; \
+	${PYTHON} tools/comparison/report.py $(foreach test,${COMPARISON_TESTS},out/logs/compare-${test}.log) || status=1; \
+	exit $$status
+
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"
 	rm -rf "${BUILD_TEST_COVERAGE_DIR}"
