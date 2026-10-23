@@ -13,8 +13,10 @@ namespace jaytwo.Ergonomics.Pdf.Tests;
 // with the rest of the suite, other tests held xUnit's eight test threads and the thread pool long enough to delay the
 // library's continuations and the test's own resumption by seconds to minutes, so they run in a collection of their own,
 // after the parallel tests. Each takes the elapsed time when the library's task completes, not when the method resumes.
+// make unit-test also runs them after the other framework hosts finish (W-123).
 [CollectionDefinition(nameof(HttpTimestampTimeoutTests), DisableParallelization = true)]
 [Collection(nameof(HttpTimestampTimeoutTests))]
+[Trait(Lane.Trait, Lane.Clock)]
 public class HttpTimestampTimeoutTests
 {
     [Fact]

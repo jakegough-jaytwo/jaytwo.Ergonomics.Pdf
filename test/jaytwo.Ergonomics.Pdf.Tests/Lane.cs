@@ -24,6 +24,10 @@ internal static class Lane
     // Repeats an operation across every offset, failure point, or fixture.
     public const string Sweep = "Sweep";
 
+    // Asserts on elapsed wall-clock time. make unit-test runs these after the parallel framework runs, one host at a
+    // time, because other hosts' load moves the clock (W-123). They stay in the fast lane.
+    public const string Clock = "Clock";
+
     public static bool IsFast => Environment.GetEnvironmentVariable("JAYTWO_LANE") == "fast";
 
     public static void Refuse(string resource, string traits)

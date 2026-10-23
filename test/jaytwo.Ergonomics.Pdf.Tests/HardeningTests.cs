@@ -54,6 +54,7 @@ public class HardeningTests
     }
 
     [Fact]
+    [Trait(Lane.Trait, Lane.Clock)]
     public void dictionary_with_many_distinct_keys_is_parsed_without_a_per_key_scan()
     {
         const int keys = 150000;

@@ -125,17 +125,44 @@ compare-itext:
 	${PYTHON} tools/comparison/report.py $(foreach test,${COMPARISON_TESTS},out/logs/compare-${test}.log) || status=1; \
 	exit $$status
 
+# W-123 (D-52): after an intended change to the bytes the library writes, rewrite the output-identity texts from net10.0
+# and review their diff. Every other target must then agree with them.
+output-identity-record:
+	JAYTWO_RECORD_OUTPUT_IDENTITY=1 dotnet test ./test/jaytwo.Ergonomics.Pdf.Tests --nologo -f net10.0 -p:CollectCoverage=false \
+		--filter "FullyQualifiedName~OutputIdentityTests"
+
+# W-123 (D-52): Interop tests run on INTEROP_FRAMEWORK only. The library appends the same revision on every target, and
+# OutputIdentityTests checks that on each of them, so the other frameworks and the netstandard2.0 lane leave Interop
+# out. One build, then one test run per framework in parallel, as a multi-targeted dotnet test would, each with its own
+# filter, TRX file, and log. Clock tests assert on elapsed time, which the other hosts' load moves, so they run after
+# the parallel runs, one host at a time, with their own coverage output. A failure in any run fails the target.
+INTEROP_FRAMEWORK=net10.0
+UNIT_TEST_FRAMEWORKS?=net10.0 net8.0 net6.0 $(if $(filter Windows_NT,${OS}),net48)
+MAIN_TEST_DIR=./test/jaytwo.Ergonomics.Pdf.Tests
+UNIT_TEST_RUNS=$(foreach framework,${UNIT_TEST_FRAMEWORKS},${MAIN_TEST_DIR}@${framework}) ./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests@net8.0
+
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"
 	rm -rf "${BUILD_TEST_COVERAGE_DIR}"
-	for dir in $$(echo "${BUILD_TEST_DIRS}" | tr ':' '\n'); do \
-		[ -n "$$dir" ] \
-			&& cd "${TOPDIR}" \
-			&& cd "$$dir" \
-			&& dotnet test \
-				--results-directory "${BUILD_TEST_RESULTS_DIR}" \
-				--logger "trx;LogFileName=$$(basename $$dir).trx"; \
-	done
+	dotnet build "${BUILD_SLN}"
+	mkdir -p "${BUILD_TEST_RESULTS_DIR}"
+	status=0; pids=; for run in ${UNIT_TEST_RUNS}; do \
+		dir=$${run%@*}; framework=$${run#*@}; name=$$(basename $$dir)-$$framework; filter='Category!=Clock&Category!=Interop'; \
+		if [ "$$dir" = "${MAIN_TEST_DIR}" ] && [ "$$framework" = "${INTEROP_FRAMEWORK}" ]; then filter='Category!=Clock'; fi; \
+		dotnet test "$$dir" --no-build -f $$framework --filter "$$filter" \
+			--results-directory "${BUILD_TEST_RESULTS_DIR}" --logger "trx;LogFileName=$$name.trx" \
+			> "${BUILD_TEST_RESULTS_DIR}/$$name.log" 2>&1 & pids="$$pids $$!"; \
+	done; \
+	for pid in $$pids; do wait $$pid || status=1; done; \
+	for run in ${UNIT_TEST_RUNS}; do \
+		dir=$${run%@*}; framework=$${run#*@}; name=$$(basename $$dir)-$$framework-clock; \
+		dotnet test "$$dir" --no-build -f $$framework --filter Category=Clock \
+			-p:CoverletOutput="${BUILD_TEST_COVERAGE_DIR}/clock/$$name/" \
+			--results-directory "${BUILD_TEST_RESULTS_DIR}" --logger "trx;LogFileName=$$name.trx" \
+			> "${BUILD_TEST_RESULTS_DIR}/$$name.log" 2>&1 || status=1; \
+	done; \
+	for log in "${BUILD_TEST_RESULTS_DIR}"/*.log; do echo "== $$log"; cat "$$log"; done; \
+	exit $$status
 	dotnet tool run reportgenerator \
 		"-reports:${BUILD_TEST_COVERAGE_DIR}/**/*.cobertura.xml" \
 		"-targetdir:${BUILD_TEST_COVERAGE_DIR}/" \
