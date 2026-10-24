@@ -147,6 +147,38 @@ await PdfWorkflow.From(input)
 
 Workflow methods describe intent. `SaveAsync` opens the source, validates and orders the operations, creates one editor session, applies compatible operations, and writes the result. Signing is added to this workflow only in Phase 4.
 
+### 4.3 Random-access source contract
+
+Phase 1 settles these semantics before implementing `IPdfSource`:
+
+- A source represents one stable logical snapshot. Its length and bytes do not change during a document's lifetime. A remote adapter uses a version, generation, ETag, or equivalent precondition when its backing store can change; it fails instead of silently mixing versions.
+- Reads address absolute `long` offsets and may return fewer bytes than requested. A zero-byte read means end of source; engine helpers that require an exact range continue reading or report truncation.
+- Reads provide genuine asynchronous I/O and observe cancellation. Cancellation does not publish partially parsed document state.
+- Ownership is explicit at every open entry point. A borrowed source remains the caller's responsibility; an owned source is disposed with the document. The caller must not mutate or dispose a source while a document or editor is using it.
+- Phase 1 does not require concurrent reads from one source. Documents and editors remain non-thread-safe, and the engine serializes its reads. A later use case may add controlled prefetch without changing the basic source contract.
+- Sharing one source among documents is allowed only when the source implementation documents that lifetime and access pattern as safe. The core does not infer shareability.
+- The engine may coalesce neighboring reads and keep a bounded cache. Those optimizations sit above storage adapters so the parser does not acquire S3-, Azure-, HTTP-, or filesystem-specific behavior.
+
+The signing path relies on the same snapshot invariant: the bytes used to construct output and calculate a digest must come from the same logical source version.
+
+### 4.4 Validation, writing, and commit guarantees
+
+The API distinguishes three failure classes instead of promising universal atomic output:
+
+1. **Validation failure.** Workflow shape, incompatible operations, options, and other deterministically detectable errors are rejected before destination writing starts.
+2. **Processing failure.** Malformed objects, source changes, cryptographic failures, and other conditions discovered while reading or preparing output may occur after execution starts. The engine prepares as much as practical before touching the destination.
+3. **Output failure.** A destination can fail after accepting bytes. No API claims atomicity that the destination cannot provide.
+
+For a seekable, truncatable destination, the engine records its original length and attempts to restore that length after a failure, preserving the current rollback behavior. Failure of the destination itself can also prevent rollback, so this is a documented best-effort guarantee rather than transactional storage.
+
+Stream overloads state their required capabilities and partial-output behavior. An operation that requires rollback may reject a destination that cannot support it. File conveniences may write a temporary sibling and replace the target after success. Future object-storage adapters may use an unpublished multipart upload or another destination-specific commit mechanism. Those publication guarantees belong to the destination adapter, not to an arbitrary `Stream`.
+
+### 4.5 Loading and editor entry points
+
+Read-only does not mean eagerly materialized. Opening reads the structural index needed to navigate the file; pages, fields, attachments, signatures, revisions, and related objects remain lazy where practical. Inspection must preserve the existing sparse working-set guarantees.
+
+`document.Edit()` is the primary editor model because it makes inspection, ownership, and the source snapshot explicit. Phase 1 may also evaluate `PdfDocumentEditor.OpenAsync(...)` as a convenience for edit-only callers. If added, it is a factory over the same document/editor lifecycle and invariants, not a second editing architecture.
+
 ## 5. Migration rules
 
 1. Preserve behavior before improving it. A move or namespace change keeps the existing tests and output-identity fixtures green.
@@ -159,6 +191,7 @@ Workflow methods describe intent. `SaveAsync` opens the source, validates and or
 8. Signing output and independent-verifier results must remain unchanged during the move unless a confirmed defect requires a separately approved behavior change.
 9. The current qualification evidence is historical input, not automatically fresh evidence for the new project and API revisions.
 10. No package is released while the dependency graph contains an unpublished engine package.
+11. Password permission bits, DocMDP and FieldMDP certification restrictions, and cryptographic enforcement are separate mechanisms. APIs, tests, and documentation do not collapse them into one generic permission result.
 
 ## 6. Phase 0: align authority and stop the old release plan
 
@@ -168,7 +201,7 @@ The repository's binding instructions describe the reset consistently before str
 
 ### Work
 
-1. Propose exact updates to `AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and affected skills and decisions for owner approval.
+1. Propose the minimum exact updates to `AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and affected skills and decisions needed to remove contradictions, for owner approval. Do not turn Phase 0 into a general documentation rewrite.
 2. Replace the one-library product charter with the two-library responsibility split.
 3. Define the new phase numbering and distinguish migrated existing capability from new phase work.
 4. Suspend the current 1.0 release and package qualification track.
@@ -192,8 +225,8 @@ The repository's binding instructions describe the reset consistently before str
 1. **Create and enforce the project boundary.** Add `src/jaytwo.Pdf/jaytwo.Pdf.csproj`, mark it non-packable, add it to the solution, and make Ergonomics reference it. Move engine implementation and engine-owned public types into the project and `jaytwo.Pdf` namespaces. Leave no reverse reference.
 2. **Move engine tests.** Establish `test/jaytwo.Pdf.Tests`. Move parser, writer, forms, metadata, attachments, encryption, revisions, signing, corpus, interop, scale, output-identity, and hardening tests. Point the fuzz project at `jaytwo.Pdf`.
 3. **Separate inspection and editing.** Make `PdfDocument` read-only. Introduce `PdfDocumentEditor`, move all mutations and save/sign operations to it, and preserve all-or-nothing validation and rollback behavior.
-4. **Establish random-access I/O.** Introduce `IPdfSource`, its seekable-stream adapter, async open and read paths, cancellation, partial-read rules, consistency requirements, and explicit ownership. Keep synchronous stream conveniences where they are honest and useful.
-5. **Stabilize semantic core APIs.** Retain strong page, geometry, field, widget, attachment, metadata, revision, permission, and signature models. Keep the raw object model internal.
+4. **Establish random-access I/O.** Introduce `IPdfSource`, its seekable-stream adapter, async open and read paths, cancellation, partial-read rules, stable-snapshot checks, serialized access, bounded coalescing and caching, and explicit ownership. Keep synchronous stream conveniences where they are honest and useful.
+5. **Stabilize semantic core APIs.** Retain strong page, geometry, field, widget, attachment, metadata, revision, permission, and signature models. Keep the raw object model internal and inspection lazy where practical.
 6. **Resolve foundational compatibility defects.** Do W-117 and W-99 in the engine context rather than in the old architecture.
 7. **Re-establish the fast verification baseline.** Build every target and run focused plus proportionate regression tests. Re-record output identity where a namespace or API-only change cannot affect bytes; investigate any byte change rather than accepting it mechanically.
 
@@ -208,7 +241,8 @@ Move signing code and tests as-is. Changes required for namespaces, project refe
 - Engine tests and fuzz targets compile against `jaytwo.Pdf`.
 - Existing shipped behaviors pass their focused tests, and representative output-identity and independent-tool checks still pass.
 - `PdfDocument` is inspection-only and `PdfDocumentEditor` owns changes and output.
-- Stream input works through `IPdfSource`; async opening and reads observe cancellation and bounded-memory rules.
+- Stream input works through `IPdfSource`; async opening and reads observe cancellation, stable-snapshot, partial-read, ownership, and bounded-memory rules.
+- Destination APIs state their validation, rollback, and commit guarantees without claiming atomicity an arbitrary destination cannot provide.
 - W-117 and W-99 have their approved dispositions.
 
 ## 8. Phase 2: ergonomic workflows
@@ -224,7 +258,7 @@ Move signing code and tests as-is. Changes required for namespaces, project refe
 - fill and export forms, flatten, update metadata, add or remove attachments, and rotate pages;
 - offer stream and file conveniences, with cancellation on I/O operations;
 - normalize options and defaults;
-- reject incompatible workflows before output begins;
+- reject deterministically detectable workflow and option conflicts before output begins;
 - order operations and execute them through one `PdfDocumentEditor` session;
 - provide friendly errors without hiding the underlying failure category;
 - add read shortcuts only where they reduce real ceremony.
@@ -241,7 +275,7 @@ W-80 belongs at the end of this phase so fill and flatten rendering is checked t
 
 - Common non-signing workflows are shorter than their direct-core equivalents and add real defaults or safeguards.
 - Every workflow executes exclusively through public `jaytwo.Pdf` APIs.
-- Multiple compatible operations produce the intended minimal set of revisions.
+- A compatible set of ordinary document mutations produces one incremental revision. A signature or document timestamp adds the separate revision its PDF semantics require.
 - Invalid workflows fail before changing the destination.
 - Poppler and MuPDF cover the agreed fill and flatten rendering cases.
 
@@ -283,6 +317,8 @@ The engine can create a new PDF from selected pages of existing PDFs, and Ergono
 ### Outcome
 
 Signing is integrated into the final core/editor/workflow architecture, and new signing investment resumes from the already validated baseline.
+
+Core signing has remained available since Phase 1. The owner deliberately deferred its Ergonomics workflow and all further signing investment until after document assembly; Phase 4 does not recover removed functionality.
 
 ### Scope
 
@@ -337,6 +373,7 @@ Completed work remains part of the repository history and a source of tests, imp
 | A second engine emerges in Ergonomics | One-way project reference, boundary tests, and prohibition on PDF implementation code in Ergonomics |
 | `PdfEngine` is rewritten merely because it is large | Extract only around the source, document/editor, and operation seams required by the target design |
 | Async source work increases allocation or I/O amplification | Define partial-read and caching rules, preserve sparse probes, and measure representative large files |
+| An API overpromises transactional output | Separate validation, processing, and output failures; require destination capabilities explicitly and use destination-specific commit mechanisms where available |
 | Signing regresses during migration | Move signing tests with the implementation; preserve output identity and independent-verifier checks; freeze enhancements |
 | The workflow becomes a fluent mirror of the core | Require each workflow API to add composition, defaults, validation, ordering, or convenience |
 | Assembly expands into a general toolkit | Keep Phase 3 limited to page import, selection, and combination with explicit document-structure policies |
@@ -350,12 +387,13 @@ The architectural reset is complete when:
 1. `jaytwo.Pdf` is the sole PDF engine and can be used independently as a project reference.
 2. `jaytwo.Ergonomics.Pdf` contains only workflows, defaults, ordering, convenience, and friendly task-level errors.
 3. The dependency direction is enforced in projects and tests.
-4. The engine has a read-only document, explicit editor, random-access source abstraction, async I/O, cancellation, and explicit ownership.
+4. The engine has a read-only and lazily loaded document, explicit editor, stable-snapshot random-access source abstraction, async I/O, cancellation, and explicit ownership.
 5. Every valuable existing capability and regression test has an explicit home; none was silently discarded.
 6. Existing signing remains functional without new signing scope before Phase 4.
 7. Ergonomics provides genuinely simpler non-signing workflows.
 8. Document assembly is complete before signing work resumes.
 9. Protected repository guidance and the work-item queue agree with the new architecture and phase order.
 10. Packaging remains intentionally blocked until a separate owner decision establishes how both projects ship.
+11. Source consistency and destination commit guarantees are explicit, testable, and no stronger than their adapters can provide.
 
 At that point the repository is back on the intended path. Subsequent phases add capability to the new architecture rather than extending the architecture being replaced.
