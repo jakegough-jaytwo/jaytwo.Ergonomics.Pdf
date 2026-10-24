@@ -17,25 +17,6 @@ public class CorpusTests
 {
     private const string RevisedTitle = "Corpus revision";
 
-    // W-117: the sources whose last cross-reference section is a stream, which the iText check skips.
-    private static readonly HashSet<string> _iTextSkipped = new HashSet<string>(StringComparer.Ordinal)
-    {
-        "cms-40b",
-        "cms-40b-pyhanko-approved",
-        "faa-8710-1",
-        "frb-beige-book-2024-01",
-        "grants-sf424-v4",
-        "inkscape-network",
-        "irs-f1040es-2026",
-        "irs-fw9-2024-03",
-        "nist-sp1271",
-        "opm-of306",
-        "opm-of306-pyhanko-certified",
-        "qpdf-object-streams",
-        "uscis-i9-2025",
-        "va-21-4138",
-    };
-
     public static IEnumerable<object[]> Ids => CorpusManifest.Ids();
 
     [Theory]
@@ -394,23 +375,20 @@ public class CorpusTests
 
     // W-112: iText reads every corpus output too: the pages, the distinct terminal field names this library reads, a
     // filled value as pypdf reads it, and each earlier signature still verifies. iText names a kid whose /T is empty
-    // with a trailing period (LibreOffice radio groups), so that period is dropped. A source whose last section is a
-    // cross-reference stream is skipped: iText cannot read this library's classic append to it until W-117.
+    // with a trailing period (LibreOffice radio groups), so that period is dropped. Since W-117 this includes the sources
+    // whose last section is a cross-reference stream: the update is one too (D-56).
     private static void CheckWithIText(CorpusEntry entry, byte[] original, byte[] output, string? field, string? value)
     {
-        Assert.True(IText.ReadsAppendsTo(original) != _iTextSkipped.Contains(entry.Id), entry.Id + ": the iText skip list does not match the last cross-reference section");
-        if (_iTextSkipped.Contains(entry.Id))
-        {
-            return;
-        }
-
+        Assert.True(IText.EndsInClassicXref(original) == IText.EndsInClassicXref(output), entry.Id + ": the update's cross-reference format differs from its source's");
         ITextReading reading = IText.Read(output, entry.Password);
         Assert.Equal(entry.Probe.GetProperty("pages").GetInt32(), reading.Pages);
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(output, writable: false), entry.Password))
         {
             string[] expected = document.AcroForm.Fields.Select(f => f.FullName).Distinct(StringComparer.Ordinal).OrderBy(n => n, StringComparer.Ordinal).ToArray();
             string[] actual = reading.Fields.Keys.Select(n => n.EndsWith(".", StringComparison.Ordinal) ? n.Substring(0, n.Length - 1) : n).Distinct(StringComparer.Ordinal).OrderBy(n => n, StringComparer.Ordinal).ToArray();
-            Assert.Equal(expected, actual);
+            Assert.True(
+                expected.SequenceEqual(actual),
+                entry.Id + ": field names only this library reads: " + string.Join(" | ", expected.Except(actual)) + "; only iText reads: " + string.Join(" | ", actual.Except(expected)));
         }
 
         if (field != null)

@@ -33,7 +33,7 @@ These hold for every Phase 1 operation.
 - `Open` reads the header and the last cross-reference section chain. Other bytes are read only when an operation needs the objects in them. A page content stream is never decoded.
 - Working memory is the cross-reference map plus the objects an operation touches. It does not grow with page count, image size, or attachment size. Existing budgets (D-20) carry forward; each new operation in section 6 gets a budget before it is qualified.
 - Output is either appended to the opened stream or copied, then appended, to an empty destination stream with a 1 MiB buffer.
-- Writes use classic cross-reference tables. Saving fails with `PdfTooLargeForClassicXrefException` before writing anything when an offset would pass 9,999,999,999 bytes (about 9.3 GiB). Reading has no such limit.
+- An update writes a classic cross-reference table when the section at the source's `startxref` is a classic table, a hybrid file's included, and a cross-reference stream when that section is one (D-56). It never writes an object stream. Saving fails with `PdfTooLargeForClassicXrefException` before writing anything when an offset would pass 9,999,999,999 bytes (about 9.3 GiB). Reading has no such limit.
 - Decompression caps (32 MiB and 64 MiB) and structural limits stay as documented in `README.md`.
 
 ## 5. Reads

@@ -18,7 +18,7 @@ Tolerance that a cited PDF rule requires is conformance. Example: ISO 32000-1 7.
 
 - Offsets are `long`. A preamble before `%PDF-` shifts every offset (header within the first 1024 bytes).
 - Every offset, length, count, and index taken from the file is checked before use. `checked` arithmetic or explicit bounds, never a silent wrap.
-- Classic-xref output cannot exceed `MaxClassicOffset`; refuse with `PdfTooLargeForClassicXrefException` before writing.
+- An update's offsets cannot exceed `MaxClassicOffset`, in either cross-reference format; refuse with `PdfTooLargeForClassicXrefException` before writing.
 
 ## Objects and streams
 

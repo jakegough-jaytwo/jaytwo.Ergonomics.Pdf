@@ -53,6 +53,9 @@ internal sealed class PdfObjectStore : IDisposable
 
     internal long StartXref { get; set; }
 
+    // D-56: the section at startxref is a cross-reference stream, so an update appends one too.
+    internal bool AppendsXrefStream { get; set; }
+
     internal int Size { get; set; }
 
     internal int RootId { get; set; }

@@ -120,6 +120,11 @@ internal sealed class PdfDocumentLoader
         }
 
         bool classic = await IsClassicXrefAsync(offset, useAsync, cancellationToken).ConfigureAwait(false);
+        if (offset == _store.StartXref)
+        {
+            _store.AppendsXrefStream = !classic;
+        }
+
         _store.Cursor.Seek(offset);
         var parser = new PdfParser(_store.Cursor, _store.ResolveAsync, 0, useAsync, cancellationToken);
         int budget = PdfXrefReader.EntryBudget(_store.Length);

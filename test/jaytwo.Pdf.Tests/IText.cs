@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using iText.Forms.Fields;
@@ -49,9 +50,9 @@ internal static class IText
             Signatures(document));
     }
 
-    // W-117: iText reads an incremental update only after a classic cross-reference table. This is true when the
-    // section at the file's last startxref is one, as it is on a classic or hybrid file.
-    public static bool ReadsAppendsTo(byte[] pdf)
+    // True when the section at the file's last startxref is a classic table, as on a classic or hybrid file. iText reads
+    // an update only in the format of the section before it, so the library matches it (W-117, D-56).
+    public static bool EndsInClassicXref(byte[] pdf)
     {
         int tail = Math.Max(0, pdf.Length - 1024);
         string end = TestCompat.Latin1.GetString(pdf, tail, pdf.Length - tail);
@@ -71,9 +72,12 @@ internal static class IText
             return fields;
         }
 
+        // A field is terminal when none of its kids has a /T, the rule form_values.py follows (ISO 32000-1 12.7.3.1).
+        // iText counts a kid without /T as a child field when it carries a field key such as /DA, as some widgets on the
+        // USCIS I-9 and FAA 8710-1 do, and lists no name for it.
         foreach (KeyValuePair<string, PdfFormField> pair in form.GetAllFormFields())
         {
-            if (pair.Value.GetChildFormFields().Count == 0)
+            if (pair.Value.GetChildFormFields().All(child => string.IsNullOrEmpty(child.GetPartialFieldName()?.ToUnicodeString())))
             {
                 fields[pair.Key] = pair.Value.GetValueAsString();
             }
