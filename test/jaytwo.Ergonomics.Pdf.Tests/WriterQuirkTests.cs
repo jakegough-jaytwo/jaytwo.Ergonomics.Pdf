@@ -4,8 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using jaytwo.Ergonomics.Pdf.Attachments;
-using jaytwo.Ergonomics.Pdf.Internal;
+using jaytwo.Pdf.Attachments;
+using jaytwo.Pdf.Internal;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

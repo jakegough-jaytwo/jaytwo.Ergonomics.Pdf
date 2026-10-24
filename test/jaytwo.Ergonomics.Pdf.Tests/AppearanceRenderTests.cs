@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using jaytwo.Ergonomics.Pdf.AcroForm;
+using jaytwo.Pdf.AcroForm;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

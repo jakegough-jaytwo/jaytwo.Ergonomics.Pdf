@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using jaytwo.Ergonomics.Pdf.AcroForm;
-using jaytwo.Ergonomics.Pdf.Attachments;
+using jaytwo.Pdf.AcroForm;
+using jaytwo.Pdf.Attachments;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
+    <ProjectReference Include="..\..\src\jaytwo.Pdf\jaytwo.Pdf.csproj" />
   </ItemGroup>
 
   <ItemGroup>

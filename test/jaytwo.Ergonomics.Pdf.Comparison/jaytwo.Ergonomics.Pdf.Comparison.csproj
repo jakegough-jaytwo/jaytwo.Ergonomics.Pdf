@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
+    <ProjectReference Include="..\..\src\jaytwo.Pdf\jaytwo.Pdf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +22,7 @@
   <ItemGroup>
     <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ExternalTool.cs" Link="Shared\ExternalTool.cs" />
     <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\G7Fixtures.cs" Link="Shared\G7Fixtures.cs" />
+    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
     <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
     <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
     <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\TestCompat.cs" Link="Shared\TestCompat.cs" />

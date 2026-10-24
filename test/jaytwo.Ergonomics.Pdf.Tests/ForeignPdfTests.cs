@@ -8,8 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using jaytwo.Ergonomics.Pdf.AcroForm;
-using jaytwo.Ergonomics.Pdf.Signatures;
+using jaytwo.Pdf.AcroForm;
+using jaytwo.Pdf.Signatures;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using jaytwo.Ergonomics.Pdf.Internal;
+using jaytwo.Pdf.Internal;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

@@ -25,7 +25,7 @@ mkdir -p "$OUT/logs"
 
 # Release build, no coverage collection; SharpFuzz instruments only the library.
 dotnet publish "$ROOT/tools/fuzz/jaytwo.Ergonomics.Pdf.Fuzz.csproj" -c Release -o "$OUT/bin" -nologo -v q
-sharpfuzz "$OUT/bin/jaytwo.Ergonomics.Pdf.dll"
+sharpfuzz "$OUT/bin/jaytwo.Pdf.dll"
 
 rm -rf "$OUT/seeds"
 dotnet "$OUT/bin/jaytwo.Ergonomics.Pdf.Fuzz.dll" seeds "$OUT/seeds"

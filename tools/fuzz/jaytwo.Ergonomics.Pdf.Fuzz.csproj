@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
+    <ProjectReference Include="..\..\src\jaytwo.Pdf\jaytwo.Pdf.csproj" />
     <PackageReference Include="SharpFuzz" Version="2.3.0" />
   </ItemGroup>
 

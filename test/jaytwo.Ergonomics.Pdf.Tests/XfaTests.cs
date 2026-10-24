@@ -8,7 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using jaytwo.Ergonomics.Pdf.AcroForm;
+using jaytwo.Pdf.AcroForm;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;

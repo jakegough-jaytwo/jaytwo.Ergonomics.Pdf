@@ -226,8 +226,11 @@ nuget-check:
 		fi; \
 	done
 
+# D-54: jaytwo.Pdf is not packable while the release track is suspended, so the jaytwo.Ergonomics.Pdf package depends
+# on a package that does not exist. pack and nuget-check still run; nothing is pushed until the owner adopts packaging.
 nuget-push: nuget-check
 nuget-push:
+	@echo "nuget-push is disabled: the release track is suspended and jaytwo.Pdf is not packaged (D-54)." >&2; exit 1
 	PACKED_NUPKG_FILES="$(call getNupkgFiles)"; \
 	for nupkg in $$PACKED_NUPKG_FILES; do \
 		if [ -n "$$nupkg" ]; then \

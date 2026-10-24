@@ -20,15 +20,11 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
-    <PackageReference Include="System.Memory" Version="4.5.5" />
+  <ItemGroup>
+    <ProjectReference Include="..\jaytwo.Pdf\jaytwo.Pdf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Tests" />
-    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.NetStandard.Tests" />
-    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Fuzz" />
     <None Include="..\..\README.md" Pack="true" PackagePath="" Link="README.md" />
   </ItemGroup>
 

@@ -5,11 +5,12 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml.Linq;
-using jaytwo.Ergonomics.Pdf.AcroForm;
-using jaytwo.Ergonomics.Pdf.Attachments;
-using jaytwo.Ergonomics.Pdf.Internal;
-using jaytwo.Ergonomics.Pdf.Metadata;
-using jaytwo.Ergonomics.Pdf.Signatures;
+using jaytwo.Pdf;
+using jaytwo.Pdf.AcroForm;
+using jaytwo.Pdf.Attachments;
+using jaytwo.Pdf.Internal;
+using jaytwo.Pdf.Metadata;
+using jaytwo.Pdf.Signatures;
 
 namespace jaytwo.Ergonomics.Pdf.Fuzz;
 

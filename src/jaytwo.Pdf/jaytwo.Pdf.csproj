@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- D-54: the PDF engine. Not a package while the release track is suspended. -->
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net8.0;net6.0;netstandard2.0</TargetFrameworks>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <IsPackable>false</IsPackable>
+    <Description>Stream-native PDF engine: parsing, incremental writing, AcroForm, metadata, attachments, password-based RC4 and AES encryption, and signatures.</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Tests" />
+    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.NetStandard.Tests" />
+    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Fuzz" />
+  </ItemGroup>
+
+</Project>
