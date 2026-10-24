@@ -38,6 +38,9 @@
     <Content Include="$(TestSources)Fixtures\corpus\*.pdf;$(TestSources)Fixtures\corpus\*.py;$(TestSources)Fixtures\corpus\manifest.json" Link="Fixtures\corpus\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="$(TestSources)Fixtures\defects\*.pdf;$(TestSources)Fixtures\defects\fixtures.json" Link="Fixtures\defects\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="$(TestSources)Fixtures\output-identity\*.txt" Link="Fixtures\output-identity\%(Filename)%(Extension)">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

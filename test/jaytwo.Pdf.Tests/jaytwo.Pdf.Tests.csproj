@@ -41,6 +41,9 @@
     <Content Include="Fixtures\corpus\*.pdf;Fixtures\corpus\*.py;Fixtures\corpus\manifest.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Fixtures\defects\*.pdf;Fixtures\defects\fixtures.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Fixtures\output-identity\*.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

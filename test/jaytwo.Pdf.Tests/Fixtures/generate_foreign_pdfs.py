@@ -311,7 +311,10 @@ def main() -> None:
     )
     note.unlink()
     write_form(root / "pypdf-acroform.pdf")
-    write_unsigned_p(root / "pypdf-acroform.pdf", root)
+    # D-59: defect fixtures are in defects/, outside the G2 corpus; defects/fixtures.json records them.
+    defects = root / "defects"
+    defects.mkdir(exist_ok=True)
+    write_unsigned_p(root / "pypdf-acroform.pdf", defects)
     write_dangling(root / "pypdf-dangling.pdf")
     key_path, cert_path = write_signing_key(root)
     try:
@@ -320,7 +323,7 @@ def main() -> None:
     finally:
         key_path.unlink(missing_ok=True)
         cert_path.unlink(missing_ok=True)
-    for pdf in sorted(root.glob("*.pdf")):
+    for pdf in sorted(root.glob("*.pdf")) + sorted(defects.glob("*.pdf")):
         command = [qpdf, "--check", str(pdf)]
         if pdf.name == "qpdf-encrypted.pdf" or pdf.name.startswith("pypdf-unsigned-p-"):
             command = [qpdf, "--password=user-secret", "--check", str(pdf)]

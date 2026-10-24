@@ -1,0 +1,197 @@
+{
+  "description": "Defect and writer-quirk fixtures (D-59). They are not G2 corpus files. Each names the tests that use it; those tests rerun the validators with the installed tools. A result is pass, fail, not-run, or unsupported, and an unsupported result names the tool version and the reason.",
+  "fixtures": [
+    {
+      "file": "pypdf-unsigned-p-r2.pdf",
+      "sha256": "aed1bcef29c8f491c58191bfd94ad9491af63dcedb23ffebd934a9201b856a73",
+      "workItem": "W-99",
+      "decision": "D-57",
+      "producer": {
+        "name": "pypdf",
+        "version": "6.21.1"
+      },
+      "command": "python generate_foreign_pdfs.py (write_unsigned_p, RC4-40)",
+      "exercises": "Standard security revision 2 whose /P pypdf writes as the unsigned 32-bit 4294966244 for -1052 (print, annotate, and fill allowed; modify, copy, and assemble refused), with passwords user-secret and owner-secret.",
+      "tests": [
+        "ForeignPdfTests.pypdf_unsigned_permissions_file_is_filled_signed_and_accepted",
+        "WriterQuirkTests.pypdf_unsigned_permissions_read_as_qpdf_reads_them"
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "result": "pass",
+          "property": "qpdf --check of the filled and signed output under the opening password"
+        },
+        {
+          "tool": "pypdf",
+          "result": "pass",
+          "property": "the filled field value in the signed output"
+        },
+        {
+          "tool": "pdfsig",
+          "result": "pass",
+          "property": "the signature is valid and covers the whole file"
+        },
+        {
+          "tool": "pyHanko",
+          "result": "pass",
+          "property": "signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ]
+    },
+    {
+      "file": "pypdf-unsigned-p-r3.pdf",
+      "sha256": "da2fe7c93a6f3338fd8fe2ff5a23a0253b6dc0f22eb444ae0beec9645bdd0931",
+      "workItem": "W-99",
+      "decision": "D-57",
+      "producer": {
+        "name": "pypdf",
+        "version": "6.21.1"
+      },
+      "command": "python generate_foreign_pdfs.py (write_unsigned_p, RC4-128)",
+      "exercises": "Standard security revision 3 whose /P pypdf writes as the unsigned 32-bit 4294966244 for -1052 (print, annotate, and fill allowed; modify, copy, and assemble refused), with passwords user-secret and owner-secret.",
+      "tests": [
+        "ForeignPdfTests.pypdf_unsigned_permissions_file_is_filled_signed_and_accepted",
+        "WriterQuirkTests.pypdf_unsigned_permissions_read_as_qpdf_reads_them"
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "result": "pass",
+          "property": "qpdf --check of the filled and signed output under the opening password"
+        },
+        {
+          "tool": "pypdf",
+          "result": "pass",
+          "property": "the filled field value in the signed output"
+        },
+        {
+          "tool": "pdfsig",
+          "result": "pass",
+          "property": "the signature is valid and covers the whole file"
+        },
+        {
+          "tool": "pyHanko",
+          "result": "pass",
+          "property": "signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ]
+    },
+    {
+      "file": "pypdf-unsigned-p-r4.pdf",
+      "sha256": "9c07c3a5c86a11dc4ddac65a9631da10a8691e8fab5932126b88c05e21f51218",
+      "workItem": "W-99",
+      "decision": "D-57",
+      "producer": {
+        "name": "pypdf",
+        "version": "6.21.1"
+      },
+      "command": "python generate_foreign_pdfs.py (write_unsigned_p, AES-128)",
+      "exercises": "Standard security revision 4 whose /P pypdf writes as the unsigned 32-bit 4294966244 for -1052 (print, annotate, and fill allowed; modify, copy, and assemble refused), with passwords user-secret and owner-secret.",
+      "tests": [
+        "ForeignPdfTests.pypdf_unsigned_permissions_file_is_filled_signed_and_accepted",
+        "WriterQuirkTests.pypdf_unsigned_permissions_read_as_qpdf_reads_them"
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "result": "pass",
+          "property": "qpdf --check of the filled and signed output under the opening password"
+        },
+        {
+          "tool": "pypdf",
+          "result": "pass",
+          "property": "the filled field value in the signed output"
+        },
+        {
+          "tool": "pdfsig",
+          "result": "pass",
+          "property": "the signature is valid and covers the whole file"
+        },
+        {
+          "tool": "pyHanko",
+          "result": "pass",
+          "property": "signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ]
+    },
+    {
+      "file": "pypdf-unsigned-p-r5.pdf",
+      "sha256": "c27993c22394edeaee813d63df36bdf1feb0843ed60d12209c21dfefff2b3e4e",
+      "workItem": "W-99",
+      "decision": "D-57",
+      "producer": {
+        "name": "pypdf",
+        "version": "6.21.1"
+      },
+      "command": "python generate_foreign_pdfs.py (write_unsigned_p, AES-256-R5)",
+      "exercises": "Standard security revision 5 whose /P pypdf writes as the unsigned 32-bit 4294966244 for -1052 (print, annotate, and fill allowed; modify, copy, and assemble refused), with passwords user-secret and owner-secret.",
+      "tests": [
+        "ForeignPdfTests.pypdf_unsigned_permissions_file_is_filled_signed_and_accepted",
+        "WriterQuirkTests.pypdf_unsigned_permissions_read_as_qpdf_reads_them"
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "result": "pass",
+          "property": "qpdf --check of the filled and signed output under the opening password"
+        },
+        {
+          "tool": "pypdf",
+          "result": "pass",
+          "property": "the filled field value in the signed output"
+        },
+        {
+          "tool": "pdfsig",
+          "result": "pass",
+          "property": "the signature is valid and covers the whole file"
+        },
+        {
+          "tool": "pyHanko",
+          "version": "0.38.0",
+          "result": "unsupported",
+          "property": "signature byte-range integrity and cryptographic validity (no trust)",
+          "reason": "pyHanko 0.38.0 cannot open a standard security revision 5 file; pdfsig alone verifies the signature."
+        }
+      ]
+    },
+    {
+      "file": "pypdf-unsigned-p-r6.pdf",
+      "sha256": "5c669a32b13de7fc77f70e0882d44574f3d824a70c4bee61b8a4d3a4570c5b08",
+      "workItem": "W-99",
+      "decision": "D-57",
+      "producer": {
+        "name": "pypdf",
+        "version": "6.21.1"
+      },
+      "command": "python generate_foreign_pdfs.py (write_unsigned_p, AES-256)",
+      "exercises": "Standard security revision 6 whose /P pypdf writes as the unsigned 32-bit 4294966244 for -1052 (print, annotate, and fill allowed; modify, copy, and assemble refused), with passwords user-secret and owner-secret.",
+      "tests": [
+        "ForeignPdfTests.pypdf_unsigned_permissions_file_is_filled_signed_and_accepted",
+        "WriterQuirkTests.pypdf_unsigned_permissions_read_as_qpdf_reads_them"
+      ],
+      "validators": [
+        {
+          "tool": "qpdf",
+          "result": "pass",
+          "property": "qpdf --check of the filled and signed output under the opening password"
+        },
+        {
+          "tool": "pypdf",
+          "result": "pass",
+          "property": "the filled field value in the signed output"
+        },
+        {
+          "tool": "pdfsig",
+          "result": "pass",
+          "property": "the signature is valid and covers the whole file"
+        },
+        {
+          "tool": "pyHanko",
+          "result": "pass",
+          "property": "signature byte-range integrity and cryptographic validity (no trust)"
+        }
+      ]
+    }
+  ]
+}

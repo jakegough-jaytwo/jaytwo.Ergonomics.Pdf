@@ -176,17 +176,38 @@ public class CorpusManifestTests
         }
     }
 
+    // D-59: the G2 corpus is Fixtures/*.pdf and Fixtures/corpus/*.pdf, and each has an entry. A defect fixture is in
+    // Fixtures/defects/, which DefectFixtureTests checks, and is never a corpus entry. This lists files and opens none,
+    // so it runs in the fast lane, where a fixture is added.
     [Fact]
-    [Trait(Lane.Trait, Lane.Corpus)]
     public void every_fixture_pdf_has_a_manifest_entry()
     {
         string fixtures = Path.Combine(AppContext.BaseDirectory, "Fixtures");
         var listed = new HashSet<string>(CorpusManifest.Entries.Select(e => e.File), StringComparer.OrdinalIgnoreCase);
-        var files = Directory.GetFiles(fixtures, "*.pdf").Select(Path.GetFileName)
-            .Concat(Directory.GetFiles(CorpusManifest.Directory, "*.pdf").Select(path => "corpus/" + Path.GetFileName(path)))
-            .ToList();
-        string[] orphans = files.Where(file => !listed.Contains(file!)).Select(file => file!).ToArray();
-        Assert.True(orphans.Length == 0, "No manifest entry: " + string.Join(", ", orphans));
+        var problems = new List<string>();
+        foreach (string path in Directory.GetFiles(fixtures, "*.pdf", SearchOption.AllDirectories))
+        {
+            string file = path.Substring(fixtures.Length + 1).Replace('\\', '/');
+            int slash = file.LastIndexOf('/');
+            string directory = slash < 0 ? string.Empty : file.Substring(0, slash);
+            if (directory == DefectFixtures.DirectoryName)
+            {
+                if (listed.Contains(file))
+                {
+                    problems.Add(file + ": a defect fixture is not a corpus entry");
+                }
+            }
+            else if (directory.Length > 0 && directory != "corpus")
+            {
+                problems.Add(file + ": a fixture PDF is in Fixtures, Fixtures/corpus, or Fixtures/" + DefectFixtures.DirectoryName);
+            }
+            else if (!listed.Contains(file))
+            {
+                problems.Add(file + ": no manifest entry");
+            }
+        }
+
+        Assert.True(problems.Count == 0, string.Join(Environment.NewLine, problems));
     }
 
     [Fact]

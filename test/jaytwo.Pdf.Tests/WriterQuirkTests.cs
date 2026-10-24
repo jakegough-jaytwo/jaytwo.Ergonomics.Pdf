@@ -224,7 +224,7 @@ public class WriterQuirkTests
     [InlineData(6, "owner-secret")]
     public void pypdf_unsigned_permissions_read_as_qpdf_reads_them(int revision, string password)
     {
-        byte[] pdf = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "pypdf-unsigned-p-r" + revision.ToString(CultureInfo.InvariantCulture) + ".pdf"));
+        byte[] pdf = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "defects", "pypdf-unsigned-p-r" + revision.ToString(CultureInfo.InvariantCulture) + ".pdf"));
         Assert.Contains("/P 4294966244", TestCompat.Latin1.GetString(pdf), StringComparison.Ordinal);
         bool owner = password == "owner-secret";
         using var stream = new MemoryStream();

@@ -229,16 +229,16 @@ public class ForeignPdfTests
     // authenticate any revision 5 file, qpdf's own included, so pdfsig alone verifies that revision.
     [Theory]
     [Trait(Lane.Trait, Lane.Interop)]
-    [InlineData("pypdf-unsigned-p-r2.pdf", "user-secret")]
-    [InlineData("pypdf-unsigned-p-r2.pdf", "owner-secret")]
-    [InlineData("pypdf-unsigned-p-r3.pdf", "user-secret")]
-    [InlineData("pypdf-unsigned-p-r3.pdf", "owner-secret")]
-    [InlineData("pypdf-unsigned-p-r4.pdf", "user-secret")]
-    [InlineData("pypdf-unsigned-p-r4.pdf", "owner-secret")]
-    [InlineData("pypdf-unsigned-p-r5.pdf", "user-secret")]
-    [InlineData("pypdf-unsigned-p-r5.pdf", "owner-secret")]
-    [InlineData("pypdf-unsigned-p-r6.pdf", "user-secret")]
-    [InlineData("pypdf-unsigned-p-r6.pdf", "owner-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r2.pdf", "user-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r2.pdf", "owner-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r3.pdf", "user-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r3.pdf", "owner-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r4.pdf", "user-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r4.pdf", "owner-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r5.pdf", "user-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r5.pdf", "owner-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r6.pdf", "user-secret")]
+    [InlineData("defects/pypdf-unsigned-p-r6.pdf", "owner-secret")]
     public void pypdf_unsigned_permissions_file_is_filled_signed_and_accepted(string fixture, string password)
     {
         byte[] original = ReadFixture(fixture);
@@ -262,7 +262,7 @@ public class ForeignPdfTests
         List<string> signature = Assert.Single(Pdfsig.Signatures(report));
         Assert.Contains(Pdfsig.Valid, signature);
         Assert.Contains(Pdfsig.WholeFile, signature);
-        if (fixture != "pypdf-unsigned-p-r5.pdf")
+        if (fixture != "defects/pypdf-unsigned-p-r5.pdf")
         {
             Validate(signed, certificate, password, "entire");
         }
