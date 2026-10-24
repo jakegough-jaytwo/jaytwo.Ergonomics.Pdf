@@ -95,7 +95,7 @@ public sealed class PdfDocument : IDisposable
 
     internal long CursorPeakRetainedBytes => _engine.CursorPeakRetainedBytes;
 
-    internal PdfWorkCounters WorkCounters => _engine.WorkCounters;
+    internal PdfWorkCounters? WorkCounters => _engine.WorkCounters;
 
     internal bool HasUsageRights => _engine.HasUsageRights;
 

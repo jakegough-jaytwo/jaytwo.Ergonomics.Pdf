@@ -80,7 +80,7 @@ internal sealed class PdfObjectStore : IDisposable
 
     internal long DecodedBytes { get; set; }
 
-    internal PdfWorkCounters Work { get; } = new PdfWorkCounters();
+    internal PdfWorkCounters? Work { get; } = PdfWorkCounters.ForNewDocument();
 
     internal int RetainedObjectStreamCount => _objectStreams.Count;
 
@@ -160,7 +160,7 @@ internal sealed class PdfObjectStore : IDisposable
         }
 
         _loadingObjects.Add(id);
-        Work.ObjectLoads++;
+        Work?.CountObjectLoad();
         try
         {
             PdfObject obj;
@@ -231,7 +231,7 @@ internal sealed class PdfObjectStore : IDisposable
     private async ValueTask<List<PdfObject>> ParseObjectStreamAsync(int streamId, bool useAsync, CancellationToken cancellationToken)
     {
         _objectStreamParseDepth++;
-        Work.ObjectStreamParses++;
+        Work?.CountObjectStreamParse();
         try
         {
             if (await LoadAsync(streamId, useAsync, cancellationToken).ConfigureAwait(false) is not PdfObject.Dict dict)
@@ -325,12 +325,12 @@ internal sealed class PdfObjectStore : IDisposable
 
                 if (Cache.Remove(id))
                 {
-                    Work.CachedObjectEvictions++;
+                    Work?.CountCachedObjectEviction();
                 }
             }
 
             _objectStreams.Remove(streamId);
-            Work.ObjectStreamEvictions++;
+            Work?.CountObjectStreamEviction();
         }
     }
 
@@ -380,7 +380,7 @@ internal sealed class PdfObjectStore : IDisposable
         HashSet<int>? seen = null;
         while (value is PdfObject.Ref reference)
         {
-            Work.ReferenceResolutions++;
+            Work?.CountReferenceResolution();
             if (!followed)
             {
                 followed = true;

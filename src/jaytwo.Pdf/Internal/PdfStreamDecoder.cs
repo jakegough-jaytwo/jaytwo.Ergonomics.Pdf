@@ -21,11 +21,7 @@ internal static class PdfStreamDecoder
         {
             PdfObject.Dict? parm = i < parms.Count ? parms[i] : null;
             current = DecodeOne(current, filters[i], parm, maxBytes);
-            if (work != null)
-            {
-                work.FilterStageDecodes++;
-                work.FilterStageBytes += current.Length;
-            }
+            work?.CountFilterStage(current.Length);
         }
 
         if (current.Length > maxBytes)

@@ -56,7 +56,7 @@ internal sealed class PdfEngine : IDisposable
 
     internal long CursorPeakRetainedBytes => _store.Cursor.PeakRetainedBytes;
 
-    internal PdfWorkCounters WorkCounters => _store.Work;
+    internal PdfWorkCounters? WorkCounters => _store.Work;
 
     internal PdfPermissions Permissions
     {

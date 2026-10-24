@@ -35,8 +35,8 @@ public class WorkCounterTests
         }
 
         builder.AppendXrefStream(30, string.Empty);
-        using var document = PdfDocument.Open(new MemoryStream(builder.Snapshot(), writable: false), leaveOpen: true);
-        PdfWorkCounters work = document.WorkCounters;
+        using PdfDocument document = OpenCounted(builder.Snapshot());
+        PdfWorkCounters work = document.WorkCounters!;
         long openStages = work.FilterStageDecodes;
         long openStageBytes = work.FilterStageBytes;
         long openLoads = work.ObjectLoads;
@@ -63,6 +63,37 @@ public class WorkCounterTests
         Assert.Equal(8, work.FieldNodeVisits);
         Assert.Equal(4, work.ObjectLoads - openLoads - firstWalkLoads);
         Assert.True(work.ReferenceResolutions > resolutions);
+    }
+
+    // W-169: counting is opt-in. A document opened outside a Collect scope, before or after one, has no counters.
+    [Fact]
+    public void documents_opened_without_opting_in_have_no_counters()
+    {
+        byte[] pdf = PdfBuilder.Basic().Finish();
+        using (var before = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
+        {
+            Assert.Equal(1, before.Pages.Count);
+            Assert.Null(before.WorkCounters);
+        }
+
+        using (PdfWorkCounters.Collect())
+        using (var inside = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
+        {
+            Assert.Equal(1, inside.Pages.Count);
+            Assert.Equal(2, inside.WorkCounters!.PageNodeVisits);
+        }
+
+        using var after = PdfDocument.Open(new MemoryStream(pdf, writable: false));
+        Assert.Equal(1, after.Pages.Count);
+        Assert.Null(after.WorkCounters);
+    }
+
+    private static PdfDocument OpenCounted(byte[] pdf)
+    {
+        using (PdfWorkCounters.Collect())
+        {
+            return PdfDocument.Open(new MemoryStream(pdf, writable: false), leaveOpen: true);
+        }
     }
 
     private static byte[] ObjectStream(out int first, params (int Id, string Body)[] objects)

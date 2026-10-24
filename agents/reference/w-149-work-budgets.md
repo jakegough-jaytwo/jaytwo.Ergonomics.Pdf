@@ -1,6 +1,6 @@
 # Work budgets: baseline measurements and amplification analysis
 
-Input to the W-149 decision on cumulative work budgets. W-167 wrote this report. It records:
+Input to the W-149 decision on cumulative work budgets. W-167 wrote this report, and W-169 corrected it after the owner's review. It records:
 
 - **Measured** results: counts observed on existing benign fixtures, from the commands in section 2.
 - **Analysis**: amplification paths read from the code. They are not measured yet. W-168 owns the purpose-built adversarial fixtures that measure them.
@@ -9,7 +9,7 @@ This report proposes no strategy. W-149 cannot decide until W-168 adds adversari
 
 ## 1. Instruments
 
-`jaytwo.Pdf` keeps a per-document `PdfWorkCounters` (internal, read by the tests through `PdfDocument.WorkCounters`). Counting changes no behavior. The counters run from `Open` and are never reset.
+`jaytwo.Pdf` can keep a per-document `PdfWorkCounters`, internal and read by the tests through `PdfDocument.WorkCounters`. Counting is opt-in (W-169): a document has counters only when it opens inside a `PdfWorkCounters.Collect()` scope. An ordinary document has none, and each counting site only tests for null. Counting changes no behavior. The counters run from `Open` and are never reset.
 
 | Counter | Counts |
 | --- | --- |
@@ -24,7 +24,7 @@ The tests measure source I/O with `ProbeStream` (bytes and read calls on the sou
 
 ## 2. Reproduction
 
-Environment: Windows 11 IoT Enterprise LTSC 2024, .NET SDK 10.0.402, `net10.0`, Release, qpdf from `.tools/` (`tools/test-tools/install.ps1`). Revision: the W-167 commit, whose parent is `86a10da`.
+Environment: Windows 11 IoT Enterprise LTSC 2024, .NET SDK 10.0.402, `net10.0`, Release, qpdf from `.tools/` (`tools/test-tools/install.ps1`). Revisions: the W-167 commit, whose parent is `86a10da`, and the W-169 commit. W-169 re-ran the baseline with opt-in counting. Every count matched, except two signed corpus files: `gpo-bills-118hr815enr` and `pyhanko-signed` each make one more read call, about 4 to 37 KB more source bytes, because W-170 re-reads each signature dictionary to locate its `/Contents`. The tables keep the W-167 values.
 
 ```sh
 dotnet test test/jaytwo.Pdf.Tests -f net10.0 -c Release --nologo -p:CollectCoverage=false \
@@ -89,25 +89,41 @@ The object-stream count is the number of `/Type /ObjStm` dictionaries in the fil
 ### 3.4 Findings from the measurements
 
 1. **Object streams are re-decoded inside a single operation, and real files show it most.** The D-49 release decodes an object stream again each time a walk returns to it. On the G7 shape, a field walk parses each object stream 3.6 times (581 parses over 161 streams), flatten 7.0 times, and sign 5.0 times. Two real government forms reach 15 to 16 times. `faa-8710-1` decodes 7.6 MB, 18.6 times its file length, for one round of reads. The absolute cost is small: at most 0.46 s and 87 MiB allocated on the corpus.
-2. **Operations share no work.** "fields twice" costs exactly twice "fields" in every counter, because D-49 releases clean object streams when each public operation returns.
-3. **The work scales linearly with the form.** From 1,000 to 4,000 pages, the decode, parse, eviction, load, and visit counters grow by 3.9 to 4.0 times. Source bytes grow by 2.5 to 4.1 times, because one cursor window serves neighbouring objects. Per page, the counts hold steady: about 0.15 object-stream parses for a field walk, and 3 field visits plus 1 page visit per walk.
-4. **No benign structural stream uses a filter chain.** Stage bytes equal final decoded bytes in every row. So the corpus never exercises intermediate-stage work, and `DecodedByteCount` would not show it if a file did.
+2. **Operations share no work.** Listing the fields twice on one open document roughly doubles the walk's traversal and decoding: 1,161 object-stream parses against 581, and 24,000 field visits against 12,000. The open's own work is paid once, so the totals are a little under twice the one-listing row (17,126,765 decoded bytes, not 17,281,560). This is because D-49 releases clean object streams when each public operation returns.
+3. **This fixture family scales in proportion to its size.** For the G7 form shape only, from 1,000 to 4,000 pages, the decode, parse, eviction, load, and visit counters grow by 3.9 to 4.0 times. Source bytes grow by 2.5 to 4.1 times, because one cursor window serves neighbouring objects. Per page, the counts hold steady: about 0.15 object-stream parses for a field walk, and 3 field visits plus 1 page visit per walk. That is an observation about one generated family, not a bound for arbitrary PDFs.
+4. **The examined benign files use no filter chain on a structural stream.** Stage bytes equal final decoded bytes in every row of the G7 fixtures and the G2 corpus. So these files never exercise intermediate-stage work, and `DecodedByteCount` would not show it if a file did. The synthetic `WorkCounterTests` fixture does use a chain, `/ASCIIHexDecode /FlateDecode`, to check the stage counter. Other real files may use chains.
 5. **Traversal is bounded by the structure.** Page visits are one per page-tree node per walk (4,011 = 4,000 pages + 10 intermediate nodes + the root). Flatten and sign walk the page tree twice. The field walk visits each field node once. Object loads exceed the object count because evicted objects are loaded again (20,011 cached evictions for a 4,000-page field walk).
-6. **Memory stays well inside the D-20 budgets.** The largest peak heap growth is 55.4 MiB (4,000-page flatten), against a 512 MiB traversal budget. Retained object streams stay at one or fewer (`ObjectStreamCacheTests`).
+6. **Observed managed heap growth is small.** The largest peak heap growth measured is 55.4 MiB (4,000-page flatten). `WorkloadMeter` samples the managed heap, so this is not the engine's accounted structural allocation, not native or process memory, and not a guarantee of the D-20 budgets for other inputs. Retained object streams stay at one or fewer (`ObjectStreamCacheTests`).
 7. **Source I/O follows the re-decoding.** On the G7 shape, read-only operations read 34 to 89% of the file. On real forms, every re-decode reads the object stream's raw bytes again, unless a retained cursor window still holds them. `faa-8710-1` reads 2.37 MB from a 409 KB file (5.8 times), and `uscis-i9-2025` reads 3.8 times its length. Saves and signatures read the whole file at least once, because the cross-stream save copies the prefix, and signing reads it again for the digest.
 
 ## 4. Analysis: amplification paths (not measured; W-168)
 
-Each bound below comes from reading the code. The counters in section 1 can measure each one, but no fixture in this report exercises them.
+Each expression below comes from reading the code. They are illustrative amplification expressions, not proven worst-case bounds. The counters in section 1 can measure the paths they cover, but no fixture in this report exercises them.
+
+Three quantities differ, and the central finding is that the first and third can stay bounded while the second grows large:
+
+| Quantity | Meaning | What bounds it today |
+| --- | --- | --- |
+| Unique objects | Size of the structural map | The entry budget: one entry per 8 file bytes, at most 2,097,152 |
+| Object loads and decodes | Cumulative work of one operation | Nothing at operation level. Each unit has a cap, and one object or object stream can be loaded or decoded many times. |
+| Retained decoded objects | Memory held at a moment | D-49: at most one clean object stream, plus dirty and pinned objects |
 
 | Path | Code | Per-unit cap | What bounds the repetition | Theoretical work per operation |
 | --- | --- | --- | --- | --- |
-| A. Object-stream re-decode after a release | `PdfObjectStore.LoadFromObjectStreamAsync`, `ReleaseCleanObjectStreams` (D-49) | 32 MiB decoded per object stream (`StructuralCap`) | The number of object-stream switches in one walk. The only limit is the number of objects the walk loads, at most the entry budget (2,097,152). | Switches × up to 32 MiB. Benign files reach 16 decodes per stream (3.4). |
+| A. Object-stream re-decode after a release | `PdfObjectStore.LoadFromObjectStreamAsync`, `ReleaseCleanObjectStreams` (D-49) | 32 MiB decoded per object stream (`StructuralCap`) | The number of object-stream switches in one walk. No operation-level limit applies. The entry budget bounds unique objects, not loads or switches, because a walk can return to an evicted object or stream. | Switches × up to 32 MiB. Benign files reach 16 decodes per stream (3.4). |
 | B. Filter chains | `PdfStreamDecoder.Decode` | The cap applies to each stage's output, not to the chain | Filter array length, up to `PdfParser.MaxContainerEntries` (1,048,576) | Stages × cap for each stream read whole. Only stage bytes see it. |
 | C. Cross-reference sections at open | `PdfDocumentLoader.LoadXrefAsync`, `ReadXrefStreamAsync` | 64 MiB per stage (`XrefCap`). The stream is decoded before its entries are checked against the entry budget. | `/Prev` chain depth, up to 256 (`MaxTraversalDepth`) | Up to 256 sections × chain stages × 64 MiB |
 | D. A combined with B | as above | | | Multiplicative: switches × stages × 32 MiB |
 | E. Tree walks and reference chains | `PdfPageTree.WalkPages`, `PdfFieldTree.WalkField`, `PdfObjectStore.ResolveAsync` | Visited sets reject shared nodes and cycles. Depth and chain length are at most 256. | One or two walks per operation, as measured | Linear in the object count. It matters only through path A, because each load after an eviction can decode a stream. |
 | F. Repeated public calls | callers | Each call is isolated (D-49) | The caller | Linear in the number of calls, which is the caller's choice |
+| G. Predictor processing | `PdfStreamDecoder.Unpredict` | Row width below `int.MaxValue`; the output follows the filter output | Rows × row width, with an output copy | Work and allocation beyond what stage bytes count, for large `/Columns` and `/Colors` |
+| H. LZW and RunLength decoding | `LzwDecodeStream`, `RunLengthDecodeStream`, `ReadAll` | The cap counts output bytes | Input bytes and decoder iterations, with buffer growth in `ReadAll` | Work and allocation the output-byte cap does not measure directly |
+| I. Deep parsing and nested containers | `PdfParser`, `PdfLexer` | 1,048,576 entries per container; 64 KiB per token; the parse depth | Nesting, and the number of containers per object | Token and allocation work that the object-traversal limits do not bound |
+| J. Form appearance and widget processing | `PdfFormAppearances`, `PdfFlattener` | Per field: the WinAnsi Helvetica subset | Widgets per page, value length, resources shared per widget | Appearance and resource work with no large stream decode |
+
+Some work is expected, not amplification. Signing hashes the whole document, a cross-stream save copies the prefix, and attachment extraction streams the payload. That work is linear in the legitimate input or output, and a cumulative budget should account for it separately from repeated work on the same structures (paths A, B, D, and E through A).
+
+Paths G to J are added from the owner's review (W-169). W-168 measures them with A to D.
 
 Paths A to D have caps on each unit and none on the operation as a whole. That is the gap W-149 names. A "material" verdict on any path needs W-168's measurements at production-sized inputs.
 
@@ -122,11 +138,11 @@ Paths A to D have caps on each unit and none on the operation as a whole. That i
 | `PdfWorkflow.ExportFormValuesAsync` | The open; once before the export | The synchronous `Export` |
 | `PdfWorkflowBuilder.SaveAsync`, `AppendToSourceAsync` | Entry, the open, and the engine save above; once more before a file save is published | `Apply`: every queued fill, flatten, rotation, metadata, and attachment step, synchronously |
 
-Cancellation latency is not measured: no benign operation here lasts more than 1.52 s. W-168 measures it on fixtures that keep an operation running inside a path with no checkpoint.
+Cancellation latency is not measured: no benign operation here lasts more than 1.52 s. W-168 measures it on fixtures that keep an operation running inside a path with no checkpoint. It records the time from the cancellation request to the operation's return, separately from the operation's total work. An async signature is not evidence that an operation can be interrupted; W-149's strategy needs cooperative checkpoints in the expensive loops. Cancellation responsiveness and cumulative work limits are measured and decided as separate dimensions.
 
 ## 6. What the baseline means for W-149 (preliminary, not a decision)
 
 - **Counter scope and reset boundary.** Every public engine operation already takes the D-49 lease (`ReleaseAfter`). That makes the lease a natural place to start and reset an operation's counters, and it keeps operations isolated. Per document, the existing counters only ever grow.
-- **Headroom.** The largest benign per-operation stage-byte total is 16.7 MB (4,000-page flatten). Benign per-operation re-decoding reaches 16 times per object stream on real forms. Any limit must leave that room at the production sizes the D-20 workloads name.
+- **Headroom.** The largest benign per-operation stage-byte total observed is 16.7 MB (4,000-page flatten). Benign per-operation re-decoding reaches 16 times per object stream on real forms. Any limit must leave that room at the production sizes the D-20 workloads name.
 - **Cache.** The benign evidence does not justify an operation-local cache. Re-decoding costs at most 0.46 s and 87 MiB allocated on the corpus, and a cache would trade retained memory against D-49. Whether adversarial path A justifies one, or a bound on re-decoding, waits for W-168.
 - **Cancellation.** Any budget strategy has to choose whether the synchronous read and edit APIs get a checkpoint, or whether a work limit replaces cancellation inside them.

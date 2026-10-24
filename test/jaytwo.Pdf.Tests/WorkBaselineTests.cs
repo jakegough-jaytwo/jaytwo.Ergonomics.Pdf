@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -123,7 +123,7 @@ public class WorkBaselineTests
             WorkloadMeter.Sample sample = WorkloadMeter.Measure(() =>
             {
                 probe = new ProbeStream(new MemoryStream(pdf, writable: false));
-                using var document = PdfDocument.Open(probe, entry.Password, leaveOpen: true);
+                using var document = OpenCounted(() => PdfDocument.Open(probe, entry.Password, leaveOpen: true));
                 Try(failures, "pages", () => _ = document.Pages.Count);
                 Try(failures, "metadata", () => _ = document.Metadata.Title);
                 Try(failures, "fields", () => _ = document.AcroForm.Fields.Count);
@@ -138,7 +138,7 @@ public class WorkBaselineTests
                 });
                 Try(failures, "signatures", () => _ = document.Signatures.Count);
                 Try(failures, "revisions", () => _ = document.Revisions.Count);
-                work = document.WorkCounters;
+                work = document.WorkCounters!;
                 decoded = document.DecodedByteCount;
             });
             string label = entry.Id + " (" + pdf.Length.ToString(CultureInfo.InvariantCulture) + " bytes, " + streams.ToString(CultureInfo.InvariantCulture) + " object streams)";
@@ -191,6 +191,15 @@ public class WorkBaselineTests
             sample.Elapsed.TotalSeconds.ToString("0.00", CultureInfo.InvariantCulture));
     }
 
+    // W-169: counting is opt-in, so each measured document opens inside a Collect scope.
+    private static PdfDocument OpenCounted(Func<PdfDocument> open)
+    {
+        using (PdfWorkCounters.Collect())
+        {
+            return open();
+        }
+    }
+
     private static string N(long value)
     {
         return value.ToString(CultureInfo.InvariantCulture);
@@ -235,9 +244,9 @@ public class WorkBaselineTests
             using var file = OpenRead(path);
             using var output = CreateFile(outputPath);
             probe = new ProbeStream(file);
-            using var document = PdfDocument.Open(probe, leaveOpen: true);
+            using var document = OpenCounted(() => PdfDocument.Open(probe, leaveOpen: true));
             operation(document, output);
-            work = document.WorkCounters;
+            work = document.WorkCounters!;
             decoded = document.DecodedByteCount;
         });
         File.Delete(outputPath);
