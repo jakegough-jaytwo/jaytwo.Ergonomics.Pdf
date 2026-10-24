@@ -41,11 +41,9 @@ BASE_FIELDS = {
 }
 EXECUTABLE_SECTIONS = {
     "Problem",
-    "Why now",
     "Scope and exclusions",
     "Acceptance criteria",
     "Evidence required",
-    "Notes",
     "Closeout",
 }
 

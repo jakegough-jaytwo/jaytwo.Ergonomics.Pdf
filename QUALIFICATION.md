@@ -35,6 +35,8 @@ Evidence expires when the relevant production code, test oracle, fixture, tool c
 
 `pdf-change-verification` maintains the evidence inventory and its freshness check. The release-gate summary is generated from that inventory; it is not maintained as a second board.
 
+This inventory is maintained while qualifying a release or executing an explicit qualification work item. Routine feature and defect work records its own focused verification in the work item and does not refresh gate status, generate a report, or rerun qualification evidence unless the owner requests it.
+
 ## 4. G1: Documented support boundaries
 
 `README.md` carries a support matrix for shipped behavior. It separates read compatibility from modification compatibility; opening a signed PDF does not establish that the library can safely modify it. It names supported PDF versions and structures, encryption, field types and appearances, signing algorithms and formats, metadata and attachment operations, resource limits, every tolerated writer quirk, and what is unsupported. It states that no PDF/A conformance is claimed.
