@@ -4,9 +4,17 @@ W-141, 2026-10-24. For the owner's approval. It answers the nine questions in W-
 
 Input: an outside expert answered the W-141 brief without access to the code. This proposal adopts most of that answer. It changes five points, and the engine's actual behavior settles three of the expert's open points. Section 1 lists both.
 
-## 0. What the owner decides
+## 0. Status
 
-Approve or change each item in section 2, the requirement rows in section 3, and the choices in section 5. Sections 1 and 4 support them.
+2026-10-24: The owner approved the five choices in section 5 and the direction of section 2, with these clarifications:
+
+- Page numbers are positive. A number above the page count is rejected before output.
+- A MIME type the caller supplies always applies. Extensions match without regard to case, and no operating-system MIME database is used.
+- The workflow never disposes a borrowed stream or `IPdfSource`, even after a failure or cancellation. It disposes the adapters it creates without closing the resource beneath them.
+- Once a terminal call has begun, the builder rejects mutation and any further or concurrent execution, including after a failure or cancellation.
+- Only the last declared value of each field reaches the bulk fill. Other operations replay in declaration order with engine semantics: no normalization, no suppressed exceptions, and no inferred final state. A conflict detectable without reading the document fails before writing.
+
+Section 3 has been revised to match: F2, F3, F5, F6, F8, F9, and F12. The reviewer who approved did not see the row wording, so the wording of F1 to F16 still needs the owner's approval before it goes into `docs/spec/phase-1.md`. One point needs the owner's ruling: F5 merges flatten requests into one engine call, just as fills are merged. That is the only exception to replaying operations in order.
 
 ## 1. Review of the expert's answer against the engine
 
@@ -52,17 +60,17 @@ For a new `docs/spec/phase-1.md` section 6.7, "Workflows (`jaytwo.Ergonomics.Pdf
 | ID | Requirement | Item |
 | --- | --- | --- |
 | F1 | **Deferred description.** `PdfWorkflow.From` (a `Stream` or an `IPdfSource`) and `FromFile` (a path) bind one input, with an optional password. Neither they nor any operation method reads the input, attachment content, or a destination. Arguments are copied when described, so later changes to a caller's collection or options do not affect the workflow. | W-142 |
-| F2 | **Ownership.** The workflow never disposes a caller-supplied stream or source: the input, attachment content, or a destination. A file it opens from a path is opened during the run and closed after it, on success, failure, and cancellation. | W-142 |
-| F3 | **One run.** A workflow runs once. A second terminal call throws `InvalidOperationException`, whether the first call succeeded, failed, or was canceled. | W-142 |
+| F2 | **Ownership.** The workflow never disposes a caller-supplied stream or `IPdfSource` (the input, attachment content, or a destination), including after a failure or cancellation. It disposes the engine objects and adapters it creates without closing the borrowed resource beneath them. A file it opens from a path is opened during the run and closed after it, on success, failure, and cancellation. | W-142 |
+| F3 | **One run.** A workflow runs once. Once a terminal call has begun, another terminal call or operation method throws `InvalidOperationException`, whether the run succeeded, failed, or was canceled, and including a call made concurrently with the run. | W-142 |
 | F4 | **One session, one revision.** A run opens the input once, applies every operation through one `PdfDocumentEditor`, and saves once. Non-signing operations add at most one revision, and its bytes equal the direct-engine sequence documented for the workflow. | W-142 |
-| F5 | **Order.** Fills apply before flattening, whatever the declaration order. Repeated fills of a field keep the last value, and all fills reach the engine as one all-or-nothing bulk fill. Other operations apply in declaration order. | W-143 |
-| F6 | **Forms.** Fill one field or many. Flatten every field or named fields; flattening every field subsumes named flattens. | W-143 |
+| F5 | **Order.** Form operations run first. All fills reach the engine as one all-or-nothing bulk fill, which holds only the last declared value of each field. All flatten requests then reach the engine as one flatten: every field when any request names none, otherwise the union of the named fields. Every other operation is then replayed on the editor in declaration order, with the engine's semantics for each call. The workflow does not combine, drop, or reorder those operations, infer a final state, or suppress an engine exception. | W-143 |
+| F6 | **Forms.** Fill one field or many. Flatten every field or named fields. | W-143 |
 | F7 | **Metadata.** Set or clear the title, author, subject, keywords, creator, and producer. A property that is not assigned is unchanged; one assigned `null` is removed. | W-142 |
-| F8 | **Attachments.** Add from a readable seekable stream, read from its position when described, or from a file path, and remove by name. A path attachment with no MIME type gets one from a fixed extension table, or none. | W-144 |
-| F9 | **Rotation.** Set a page's rotation, rotate a page by an angle, or rotate every page by an angle, in multiples of 90. Relative rotations compose with the page's current rotation. Another angle is rejected when described. A page outside the document is rejected before output. | W-144 |
+| F8 | **Attachments.** Add from a readable seekable stream, read from its position when described, or from a file path, and remove by name. A MIME type the caller supplies always applies. Otherwise a path attachment's extension, matched without regard to case, sets it from this table: `.xml` `text/xml`, `.json` `application/json`, `.pdf` `application/pdf`, `.csv` `text/csv`, `.txt` `text/plain`. Any other extension leaves it unspecified. No operating-system MIME database is used. | W-144 |
+| F9 | **Rotation.** Set a page's rotation, rotate a page by an angle, or rotate every page by an angle, in multiples of 90. Pages are numbered from 1, as `PdfPage.Number` is. A page number below 1 or an angle that is not a multiple of 90 is rejected when described. A page number above the page count is rejected before output. Relative rotations accumulate in declaration order. | W-144 |
 | F10 | **Signed documents.** Flatten and rotation on a document with an approval signature or a document timestamp require `AllowBreakingExistingSignatures()`. It does not relax certification, FieldMDP, or password permissions. | W-143, W-144 |
 | F11 | **Outputs.** `Save` to a stream writes the input bytes and the revision to an empty writable seekable stream; with no changes it writes a copy. `Save` to a path stages a temporary sibling and publishes it only after success. An existing file is replaced only with `Overwrite`, and a path equal to the input path is rejected before the input opens. `AppendToSource` appends to the bound stream or file and writes nothing when nothing changed; it is not offered for an `IPdfSource`. Non-seekable destinations are rejected. | W-142 |
-| F12 | **Failure.** Argument and workflow-shape errors are thrown before the input opens. Engine exceptions propagate unchanged. No destination is written until every operation has been applied to the editor. After a later failure, a stream destination is restored to its starting length (best effort, as the engine does), and a path destination is left as it was, with the temporary file removed. | W-142 |
+| F12 | **Failure.** Argument errors, workflow-shape errors, and conflicts detectable without reading the document are thrown before the input opens. Engine exceptions propagate unchanged. No destination is written until every operation has been applied to the editor. After a later failure, a stream destination is restored to its starting length (best effort, as the engine does), and a path destination is left as it was, with the temporary file removed. | W-142 |
 | F13 | **Result.** A run returns whether a revision was appended, the output length, and the appearance disposition of each filled field's final value. | W-142, W-143 |
 | F14 | **Sync and async.** Every terminal call has a synchronous and an asynchronous form; the asynchronous form takes a `CancellationToken`. Synchronous source reads during an asynchronous run are documented (W20, W-138). | W-142 |
 | F15 | **Memory.** A run never buffers a whole PDF or attachment. Its source reads and working set match the direct-engine sequence, plus a constant. | W-142, W-146 |
@@ -122,7 +130,7 @@ public sealed class PdfWorkflowResult
 
 ## 5. Choices for the owner
 
-Each has a recommendation. The rest of the proposal assumes the recommendation.
+The owner approved each recommendation on 2026-10-24.
 
 1. **Page numbering.** Recommended: 1-based `pageNumber`, matching `PdfPage.Number` and `PdfPageEditor.Number` and how callers name pages. Alternative: the expert's 0-based `pageIndex`, matching `editor.Pages[i]`.
 2. **The MIME table for `AttachFile`.** Recommended: a closed table of `.xml` `text/xml` (the type Factur-X and ZUGFeRD specify for their XML), `.json` `application/json`, `.pdf` `application/pdf`, `.csv` `text/csv`, and `.txt` `text/plain`. Any other extension gets no MIME type. Alternative: no inference.
