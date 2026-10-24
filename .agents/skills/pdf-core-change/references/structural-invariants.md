@@ -12,7 +12,7 @@ Tolerance that a cited PDF rule requires is conformance. Example: ISO 32000-1 7.
 - `/Prev` chains: newest entry wins and cycles are rejected. Within a hybrid section, at any depth of the chain, the classic table is searched first, then its `/XRefStm`, then `/Prev` (ISO 32000-1 7.5.8.4; B-41).
 - Trailer inheritance: `/Root`, `/Info`, `/Encrypt`, and `/ID` come from the newest trailer that has them.
 - Generations, free entries, and the generation-65535 head of the free list.
-- Classic subsection bounds and row endings (CRLF, LF, SP LF, SP CR). `MaxXrefEntries`, `MaxXrefStreamObjects`, and `XrefEntryBudget` bound the allocation by what the file can actually hold. Never allocate an array of `/Size`.
+- Classic subsection bounds and row endings (CRLF, LF, SP LF, SP CR). `PdfXrefReader.MaxEntries`, `PdfXrefReader.MaxStreamObjects`, and `PdfXrefReader.EntryBudget` bound the allocation by what the file can actually hold. Never allocate an array of `/Size`.
 
 ## Offsets and arithmetic
 
