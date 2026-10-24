@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -190,6 +191,61 @@ public class MetadataTests
         Assert.Equal(packet, copy.ToArray());
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void utf8_and_utf16_xmp_packets_read_and_edit(bool utf16)
+    {
+        string packet = "<?xml version=\"1.0\" encoding=\"" + (utf16 ? "utf-16" : "utf-8") + "\"?>"
+            + "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">"
+            + "<rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\"><dc:title>Old</dc:title>"
+            + "</rdf:Description></rdf:RDF></x:xmpmeta>";
+        byte[] bytes = utf16 ? Encoding.Unicode.GetPreamble().Concat(Encoding.Unicode.GetBytes(packet)).ToArray() : Encoding.UTF8.GetBytes(packet);
+        using var stream = XmpDocument(bytes);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var opened = document.Metadata.OpenXmp();
+            Assert.Equal(bytes, ReadAll(opened));
+            using var editor = document.Edit();
+            editor.Metadata.Title = "Updated";
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        using var updated = again.Metadata.OpenXmp();
+        Assert.Contains("Updated", Encoding.UTF8.GetString(ReadAll(updated)), StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void dtd_is_rejected_without_resolving_an_external_resource()
+    {
+        byte[] packet = Encoding.UTF8.GetBytes("<?xml version=\"1.0\"?><!DOCTYPE xmp SYSTEM \"file:///this-resource-must-not-be-opened\"><xmp/>");
+        using var stream = XmpDocument(packet);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        PdfXmpException error = Assert.Throws<PdfXmpException>(() => document.Metadata.OpenXmp());
+
+        Assert.Equal("XMP is not well-formed XML.", error.Message);
+    }
+
+    [Fact]
+    public void refused_xmp_packet_does_not_dirty_the_document()
+    {
+        byte[] pdf = Titled("Old");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
+        byte[] oversized = new byte[XmpEditor.MaxDocumentBytes + 1];
+
+        PdfXmpException error = Assert.Throws<PdfXmpException>(() => editor.Metadata.SetXmp(oversized));
+        editor.SaveIncremental(stream);
+
+        Assert.Equal("XMP exceeds the 32 MiB document limit.", error.Message);
+        Assert.Equal(pdf.Length, stream.Length);
+        Assert.False(document.Metadata.HasXmp);
+    }
+
     [Fact]
     public void trapped_is_a_name_and_info_dates_round_trip_as_text()
     {
@@ -251,6 +307,26 @@ public class MetadataTests
         PdfBuilder builder = PdfBuilder.Basic();
         builder.Indirect(4, "<< /Title (" + title + ") >>");
         return builder.Finish("/Info 4 0 R");
+    }
+
+    private static MemoryStream XmpDocument(byte[] packet)
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Metadata 4 0 R >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.StreamObject(4, "/Type /Metadata /Subtype /XML", packet);
+        byte[] pdf = builder.Finish();
+        var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        return stream;
+    }
+
+    private static byte[] ReadAll(Stream stream)
+    {
+        using var copy = new MemoryStream();
+        stream.CopyTo(copy);
+        return copy.ToArray();
     }
 
     private static int Count(byte[] haystack, byte[] needle)

@@ -9,6 +9,8 @@ namespace jaytwo.Pdf.Metadata;
 
 internal static class XmpEditor
 {
+    internal const int MaxDocumentBytes = 32 * 1024 * 1024;
+
     private static readonly XNamespace Dc = "http://purl.org/dc/elements/1.1/";
     private static readonly XNamespace Pdf = "http://ns.adobe.com/pdf/1.3/";
     private static readonly XNamespace Xmp = "http://ns.adobe.com/xap/1.0/";
@@ -19,8 +21,20 @@ internal static class XmpEditor
     {
         try
         {
+            if (utf8.Length > MaxDocumentBytes)
+            {
+                throw new XmlException("XMP exceeds the 32 MiB document limit.");
+            }
+
             using var stream = new MemoryStream(utf8, false);
-            using var reader = new StreamReader(stream, Encoding.UTF8, detectEncodingFromByteOrderMarks: true);
+            var settings = new XmlReaderSettings
+            {
+                DtdProcessing = DtdProcessing.Prohibit,
+                MaxCharactersFromEntities = 0,
+                MaxCharactersInDocument = MaxDocumentBytes,
+                XmlResolver = null,
+            };
+            using var reader = XmlReader.Create(stream, settings);
             document = XDocument.Load(reader, LoadOptions.PreserveWhitespace);
             error = null;
             return true;

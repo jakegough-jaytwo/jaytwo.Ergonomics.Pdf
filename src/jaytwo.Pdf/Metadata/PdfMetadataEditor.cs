@@ -114,6 +114,7 @@ public sealed class PdfMetadataEditor
     /// Replaces the metadata stream with the supplied packet bytes.
     /// </summary>
     /// <param name="utf8Packet">The XMP packet.</param>
+    /// <exception cref="PdfXmpException">The packet is malformed, contains a DTD, or exceeds 32 MiB.</exception>
     public void SetXmp(ReadOnlySpan<byte> utf8Packet)
     {
         _editor.Engine.SetXmp(utf8Packet);

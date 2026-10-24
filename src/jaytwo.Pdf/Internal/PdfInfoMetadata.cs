@@ -180,11 +180,21 @@ internal sealed class PdfInfoMetadata
     {
         _store.CheckDisposed();
         using var release = _store.ReleaseAfter();
+        if (utf8Packet.Length > XmpEditor.MaxDocumentBytes)
+        {
+            throw new PdfXmpException("XMP exceeds the 32 MiB document limit.");
+        }
+
+        var copy = new byte[utf8Packet.Length];
+        utf8Packet.CopyTo(copy);
+        if (!XmpEditor.TryParse(copy, out _, out Exception? error))
+        {
+            throw new PdfXmpException("XMP is not well-formed XML.", error);
+        }
+
         _gate.EnsureDocumentChange();
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
-        var copy = new byte[utf8Packet.Length];
-        utf8Packet.CopyTo(copy);
         WriteXmp(copy);
     }
 
