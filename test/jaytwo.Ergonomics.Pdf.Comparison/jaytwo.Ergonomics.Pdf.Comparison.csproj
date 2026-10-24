@@ -20,13 +20,13 @@
 
   <!-- The fixtures and the meter are the G7 test project's, so both libraries see the same bytes and the same counters. -->
   <ItemGroup>
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ExternalTool.cs" Link="Shared\ExternalTool.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\G7Fixtures.cs" Link="Shared\G7Fixtures.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\TestCompat.cs" Link="Shared\TestCompat.cs" />
-    <Compile Include="..\jaytwo.Ergonomics.Pdf.Tests\WorkloadMeter.cs" Link="Shared\WorkloadMeter.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\ExternalTool.cs" Link="Shared\ExternalTool.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\G7Fixtures.cs" Link="Shared\G7Fixtures.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\TestCompat.cs" Link="Shared\TestCompat.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\WorkloadMeter.cs" Link="Shared\WorkloadMeter.cs" />
   </ItemGroup>
 
 </Project>

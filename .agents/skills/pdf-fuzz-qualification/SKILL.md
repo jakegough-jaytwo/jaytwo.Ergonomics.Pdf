@@ -11,7 +11,7 @@ Fuzzing produces G8 evidence. It does not prove security, and elapsed CPU time i
 
 - The harness and runners live under `tools/` (D-28). Skill folders hold workflow only.
 - Seeds and minimized regression inputs live with the harness, never in this skill.
-- Confirmed findings become deterministic tests in `test/jaytwo.Ergonomics.Pdf.Tests`.
+- Confirmed findings become deterministic tests in `test/jaytwo.Pdf.Tests`.
 - Campaign records live in `agents/reports/` using `references/campaign-record.md`.
 
 ## Targets

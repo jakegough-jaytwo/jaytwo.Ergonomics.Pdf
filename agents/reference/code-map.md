@@ -17,7 +17,8 @@ Maintained through `pdf-task-workflow`. As of 2026-10-18. Paths are under `src/j
 | Attachments | `pdf-core-change` | `Attachments/` |
 | AcroForm | `pdf-acroform-change` | `AcroForm/`, including `AppearanceBuilder.cs` |
 | Signatures and timestamps | `pdf-signing-change` | `Signatures/` |
-| Tests | `pdf-change-verification` | `test/jaytwo.Ergonomics.Pdf.Tests/` |
-| Foreign fixtures and helpers | `pdf-change-verification` | `test/jaytwo.Ergonomics.Pdf.Tests/Fixtures/`: generator scripts, `tsa_server.py`, `validate_signature.py`, committed PDFs |
+| Engine tests | `pdf-change-verification` | `test/jaytwo.Pdf.Tests/` and its `netstandard2.0` lane `test/jaytwo.Pdf.NetStandard.Tests/` |
+| Workflow tests (public API only) | `pdf-change-verification` | `test/jaytwo.Ergonomics.Pdf.Tests/` |
+| Foreign fixtures and helpers | `pdf-change-verification` | `test/jaytwo.Pdf.Tests/Fixtures/`: generator scripts, `tsa_server.py`, `validate_signature.py`, committed PDFs |
 
 Target frameworks: the library builds `net8.0`, `net6.0`, `netstandard2.1`, and `netstandard2.0`, all intentionally under D-13. The test project runs on `net8.0`, `net6.0`, and Windows-only `net48`; `net48` consumes the `netstandard2.0` library. Test-only packages are `Pkcs11Interop` and, on `net8.0`, `System.Security.Cryptography.Pkcs`.

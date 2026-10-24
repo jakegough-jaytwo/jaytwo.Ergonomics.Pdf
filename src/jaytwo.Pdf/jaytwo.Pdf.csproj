@@ -19,8 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Tests" />
-    <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.NetStandard.Tests" />
+    <InternalsVisibleTo Include="jaytwo.Pdf.Tests" />
+    <InternalsVisibleTo Include="jaytwo.Pdf.NetStandard.Tests" />
     <InternalsVisibleTo Include="jaytwo.Ergonomics.Pdf.Fuzz" />
   </ItemGroup>
 

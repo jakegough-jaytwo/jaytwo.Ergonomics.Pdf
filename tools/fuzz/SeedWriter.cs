@@ -5,7 +5,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
-using jaytwo.Ergonomics.Pdf.Tests;
+using jaytwo.Pdf.Tests;
 
 namespace jaytwo.Ergonomics.Pdf.Fuzz;
 
@@ -25,7 +25,7 @@ internal static class SeedWriter
         }
 
         var documents = new List<byte[]>();
-        string fixtures = Path.Combine(repositoryRoot, "test", "jaytwo.Ergonomics.Pdf.Tests", "Fixtures");
+        string fixtures = Path.Combine(repositoryRoot, "test", "jaytwo.Pdf.Tests", "Fixtures");
         foreach (string path in Sorted(Directory.GetFiles(fixtures, "*.pdf")))
         {
             documents.Add(File.ReadAllBytes(path));

@@ -1,6 +1,6 @@
 BUILD_SLN=./jaytwo.Ergonomics.Pdf.sln
 BUILD_DIRS=./src/jaytwo.Ergonomics.Pdf
-BUILD_TEST_DIRS=./test/jaytwo.Ergonomics.Pdf.Tests:./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests
+BUILD_TEST_DIRS=./test/jaytwo.Pdf.Tests:./test/jaytwo.Pdf.NetStandard.Tests:./test/jaytwo.Ergonomics.Pdf.Tests
 ENABLE_COMPOSE_NETWORK=false
 
 NUGET_SOURCE_URL?=https://api.nuget.org/v3/index.json
@@ -65,9 +65,10 @@ agents-test:
 # W-102: agent verification with the full output in out/logs/<name>.log and only the exit status, per-framework test
 # counts, failing tests, build errors, fuzz result, and the log tail on failure on the console. Jenkins and the targets
 # they wrap keep their output. TEST_FRAMEWORK and TEST_FILTER narrow quiet-test, which runs without coverage.
-# TEST_FRAMEWORK selects the main test project, because the netstandard2.0 lane targets net8.0 only (D-51);
-# TEST_PROJECT=./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests runs the lane alone.
-TEST_PROJECT?=$(if ${TEST_FRAMEWORK},./test/jaytwo.Ergonomics.Pdf.Tests,${BUILD_SLN})
+# TEST_FRAMEWORK selects the engine test project, because the netstandard2.0 lane targets net8.0 only (D-51);
+# TEST_PROJECT=./test/jaytwo.Pdf.NetStandard.Tests runs the lane alone, and TEST_PROJECT=./test/jaytwo.Ergonomics.Pdf.Tests
+# the Ergonomics tests.
+TEST_PROJECT?=$(if ${TEST_FRAMEWORK},${MAIN_TEST_DIR},${BUILD_SLN})
 
 # W-122 (D-52): LANE=fast, the per-item default, leaves out tests by what they touch and sets JAYTWO_LANE, so a helper
 # that starts a tool, loads iText, or opens a corpus file refuses. It then lists its slowest tests, because large-data
@@ -103,8 +104,8 @@ g7-workloads:
 	mkdir -p out/logs
 	status=0; for framework in ${G7_FRAMEWORKS}; do for workload in ${G7_WORKLOADS}; do \
 		log="out/logs/g7-$$framework-$$workload.log"; \
-		dotnet test "${BUILD_TEST_DIRS}" --nologo --no-build -c Release -f $$framework -p:CollectCoverage=false \
-			--filter "FullyQualifiedName=jaytwo.Ergonomics.Pdf.Tests.LargeWorkloadTests.$$workload" \
+		dotnet test "${MAIN_TEST_DIR}" --nologo --no-build -c Release -f $$framework -p:CollectCoverage=false \
+			--filter "FullyQualifiedName=jaytwo.Pdf.Tests.LargeWorkloadTests.$$workload" \
 			--logger "console;verbosity=detailed" > "$$log" 2>&1 && result=PASS || { result=FAIL; status=1; }; \
 		echo "$$framework $$workload: $$result"; \
 		grep -E 'peak heap growth|retained after warm-up|Assert\.' "$$log" | sed 's/^[[:space:]]*/  /'; \
@@ -136,7 +137,7 @@ compare-itext:
 # W-123 (D-52): after an intended change to the bytes the library writes, rewrite the output-identity texts from net10.0
 # and review their diff. Every other target must then agree with them.
 output-identity-record:
-	JAYTWO_RECORD_OUTPUT_IDENTITY=1 dotnet test ./test/jaytwo.Ergonomics.Pdf.Tests --nologo -f net10.0 -p:CollectCoverage=false \
+	JAYTWO_RECORD_OUTPUT_IDENTITY=1 dotnet test "${MAIN_TEST_DIR}" --nologo -f net10.0 -p:CollectCoverage=false \
 		--filter "FullyQualifiedName~OutputIdentityTests"
 
 # W-123 (D-52): Interop tests run on INTEROP_FRAMEWORK only. The library appends the same revision on every target, and
@@ -146,8 +147,12 @@ output-identity-record:
 # the parallel runs, one host at a time, with their own coverage output. A failure in any run fails the target.
 INTEROP_FRAMEWORK=net10.0
 UNIT_TEST_FRAMEWORKS?=net10.0 net8.0 net6.0 $(if $(filter Windows_NT,${OS}),net48)
-MAIN_TEST_DIR=./test/jaytwo.Ergonomics.Pdf.Tests
-UNIT_TEST_RUNS=$(foreach framework,${UNIT_TEST_FRAMEWORKS},${MAIN_TEST_DIR}@${framework}) ./test/jaytwo.Ergonomics.Pdf.NetStandard.Tests@net8.0
+# W-130 (D-54): engine tests, which may use jaytwo.Pdf internals, are in MAIN_TEST_DIR and its netstandard2.0 lane;
+# public workflow tests are in ERGONOMICS_TEST_DIR.
+MAIN_TEST_DIR=./test/jaytwo.Pdf.Tests
+ERGONOMICS_TEST_DIR=./test/jaytwo.Ergonomics.Pdf.Tests
+UNIT_TEST_RUNS=$(foreach framework,${UNIT_TEST_FRAMEWORKS},${MAIN_TEST_DIR}@${framework} ${ERGONOMICS_TEST_DIR}@${framework}) \
+	./test/jaytwo.Pdf.NetStandard.Tests@net8.0
 
 unit-test:
 	rm -rf "${BUILD_TEST_RESULTS_DIR}"

@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    D-51: the jaytwo.Pdf.Tests sources on net8.0 against the engine's netstandard2.0 build. Every other
+    modern test host loads the engine build for its own framework, so without this project only net48 on Windows
+    runs the netstandard2.0 build. Keep the package references and fixtures in step with jaytwo.Pdf.Tests.
+  -->
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <TestSources>..\jaytwo.Pdf.Tests\</TestSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\jaytwo.Pdf\jaytwo.Pdf.csproj" SetTargetFramework="TargetFramework=netstandard2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Restore takes the library's net8.0 dependencies, which are none; the netstandard2.0 build needs its own. -->
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="itext" Version="9.8.0" />
+    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.8.0" />
+    <PackageReference Include="Pkcs11Interop" Version="5.3.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(TestSources)**\*.cs" Exclude="$(TestSources)bin\**;$(TestSources)obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="$(TestSources)Fixtures\*.pdf;$(TestSources)Fixtures\*.py" Link="Fixtures\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(TestSources)Fixtures\corpus\*.pdf;$(TestSources)Fixtures\corpus\*.py;$(TestSources)Fixtures\corpus\manifest.json" Link="Fixtures\corpus\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(TestSources)Fixtures\output-identity\*.txt" Link="Fixtures\output-identity\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

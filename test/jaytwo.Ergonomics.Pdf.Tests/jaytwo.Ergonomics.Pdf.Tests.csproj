@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- D-54: public workflow behavior only. Engine tests, which may use jaytwo.Pdf internals, are in jaytwo.Pdf.Tests. -->
   <PropertyGroup>
     <TargetFrameworks>net10.0;net8.0;net6.0</TargetFrameworks>
     <!-- net48 needs the .NET Framework test host, so it runs on Windows only. The Linux CI image has no Mono. -->
@@ -7,43 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\jaytwo.Pdf\jaytwo.Pdf.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <!-- W-112: iText Core as an independent reader in the compatibility tests. AGPL; test-only. -->
-    <PackageReference Include="itext" Version="9.8.0" />
-    <PackageReference Include="itext.bouncy-castle-adapter" Version="9.8.0" />
-    <PackageReference Include="Pkcs11Interop" Version="5.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'net10.0'" />
-  </ItemGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-  </PropertyGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <Reference Include="System.Net.Http" />
-    <!-- The G2 corpus manifest is JSON; System.Text.Json is in the box on the other targets. -->
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
-    <!-- The .NET Framework test host redirects Unsafe to 6.0.0.0; ship that version so the redirect resolves. -->
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Fixtures\*.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\*.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\corpus\*.pdf;Fixtures\corpus\*.py;Fixtures\corpus\manifest.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\output-identity\*.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
   </ItemGroup>
 
 </Project>

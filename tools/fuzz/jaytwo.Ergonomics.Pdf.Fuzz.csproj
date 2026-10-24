@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\test\jaytwo.Ergonomics.Pdf.Tests\PdfBuilder.cs" Link="Linked\PdfBuilder.cs" />
-    <Compile Include="..\..\test\jaytwo.Ergonomics.Pdf.Tests\TestCompat.cs" Link="Linked\TestCompat.cs" />
+    <Compile Include="..\..\test\jaytwo.Pdf.Tests\PdfBuilder.cs" Link="Linked\PdfBuilder.cs" />
+    <Compile Include="..\..\test\jaytwo.Pdf.Tests\TestCompat.cs" Link="Linked\TestCompat.cs" />
   </ItemGroup>
 
 </Project>

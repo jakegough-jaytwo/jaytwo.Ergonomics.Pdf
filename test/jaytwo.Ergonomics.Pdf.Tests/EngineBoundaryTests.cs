@@ -1,4 +1,5 @@
 using System;
+using jaytwo.Pdf;
 using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
