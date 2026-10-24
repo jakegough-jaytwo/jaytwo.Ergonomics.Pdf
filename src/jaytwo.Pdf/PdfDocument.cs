@@ -53,23 +53,30 @@ public sealed class PdfDocument : IDisposable
     /// <summary>
     /// Gets the number of pages.
     /// </summary>
+    /// <remarks>Each access walks the page tree again.</remarks>
     public int PageCount => _engine.PageCount;
 
     /// <summary>
     /// Gets each page's media box, crop box, and rotation. Page content streams are not read.
     /// </summary>
+    /// <remarks>Each access reads the document again, pending edits included, and returns a new list; keep the list rather than reading the property in a loop.</remarks>
     public IReadOnlyList<PdfPage> Pages => _engine.ListPages();
 
     /// <summary>
     /// Gets what the user password may do. An unencrypted document allows every operation.
     /// The owner password is not limited by these bits.
     /// </summary>
+    /// <remarks>
+    /// These are the standard security handler's permission bits only. A certification signature's DocMDP level is
+    /// reported separately by <see cref="PdfSignatureInfo.CertificationLevel"/>, and the editor enforces both.
+    /// </remarks>
     public PdfPermissions Permissions => _engine.Permissions;
 
     /// <summary>
     /// Gets every signature field, signed or not, with what its signature dictionary and CMS value say (spec R9).
     /// Nothing is validated, and the signed byte range is not read.
     /// </summary>
+    /// <remarks>Each access reads the document again, pending edits included, and returns a new list; keep the list rather than reading the property in a loop.</remarks>
     /// <exception cref="PdfParseException">A signature's <c>/ByteRange</c>, <c>/M</c>, or CMS <c>/Contents</c> does not parse.</exception>
     public IReadOnlyList<PdfSignatureInfo> Signatures => _engine.ListSignatures();
 
@@ -78,6 +85,7 @@ public sealed class PdfDocument : IDisposable
     /// cross-reference sections are one revision. Signature coverage is reported from <c>/ByteRange</c>, not validated,
     /// and the signed byte ranges are not read.
     /// </summary>
+    /// <remarks>Each access reads the document again, pending edits included, and returns a new list; keep the list rather than reading the property in a loop.</remarks>
     /// <exception cref="PdfParseException">A revision footer or a signature <c>/ByteRange</c> does not parse.</exception>
     public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
 

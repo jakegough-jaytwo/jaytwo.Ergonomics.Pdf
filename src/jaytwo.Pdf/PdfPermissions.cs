@@ -4,6 +4,10 @@ namespace jaytwo.Pdf;
 /// What the user password may do. An unencrypted document allows every operation.
 /// The owner password is not limited by these values, and opening with it does not change them.
 /// </summary>
+/// <remarks>
+/// Only the password permission bits are reported here. DocMDP and FieldMDP restrictions from signatures are separate:
+/// <see cref="Signatures.PdfSignatureInfo.CertificationLevel"/> reports a certification's DocMDP level.
+/// </remarks>
 public sealed class PdfPermissions
 {
     private const int PrintBit = 3;

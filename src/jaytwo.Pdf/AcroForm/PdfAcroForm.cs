@@ -48,6 +48,7 @@ public sealed class PdfAcroForm
     /// <summary>
     /// Gets the widgets in the form.
     /// </summary>
+    /// <remarks>Each access reads the document again, pending edits included, and returns a new list; keep the list rather than reading the property in a loop.</remarks>
     public IReadOnlyList<PdfField> Fields => _engine.ListFields();
 
     /// <summary>

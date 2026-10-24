@@ -8,6 +8,10 @@ namespace jaytwo.Pdf.Attachments;
 /// <summary>
 /// The document's embedded files. <see cref="PdfAttachmentCollectionEditor"/> adds and removes them.
 /// </summary>
+/// <remarks>
+/// The collection is a live view: <see cref="Count"/>, each indexer, and each enumeration read the embedded-files
+/// name tree again, pending edits included. Enumerate once, or copy the attachments to a list, rather than indexing in a loop.
+/// </remarks>
 public sealed class PdfAttachmentCollection : IReadOnlyList<PdfAttachment>
 {
     private readonly PdfEngine _engine;
