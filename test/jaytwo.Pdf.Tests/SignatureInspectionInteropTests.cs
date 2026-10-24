@@ -63,7 +63,7 @@ public class SignatureInspectionInteropTests
         CorpusEntry entry = CorpusManifest.Get(id);
         IReadOnlyList<PdfSignatureInfo> signatures = AssertReadersAgree(File.ReadAllBytes(entry.FullPath), entry.Password);
 
-        PdfSignatureInfo signature = Assert.Single(signatures, s => s.IsSigned);
+        PdfSignatureInfo signature = Assert.Single(signatures, s => s.HasSignatureDictionary);
         Assert.Equal(fieldName, signature.FieldName);
         Assert.Equal(certificationLevel, signature.CertificationLevel);
         Assert.NotNull(signature.SignerCertificate);
@@ -133,7 +133,7 @@ public class SignatureInspectionInteropTests
             Assert.Equal(2, signatures.Count);
             Assert.NotNull(signatures[0].TimestampTime);
             Assert.True(signatures[0].HasLaterRevisions);
-            Assert.Equal(signed.Length, signatures[0].SignedRevisionEnd);
+            Assert.Equal(signed.Length, signatures[0].ByteRangeEnd);
             Assert.Equal("ETSI.RFC3161", signatures[1].SubFilter);
             Assert.NotNull(signatures[1].TimestampTime);
             Assert.False(signatures[1].HasLaterRevisions);
@@ -194,8 +194,8 @@ public class SignatureInspectionInteropTests
         JsonElement root = report.RootElement;
         Assert.Equal(
             root.GetProperty("fields").EnumerateArray().Select(f => (f.GetProperty("name").GetString(), f.GetProperty("signed").GetBoolean())).ToArray(),
-            signatures.Select(s => ((string?)s.FieldName, s.IsSigned)).ToArray());
-        foreach (PdfSignatureInfo signature in signatures.Where(s => s.IsSigned))
+            signatures.Select(s => ((string?)s.FieldName, s.HasSignatureDictionary)).ToArray());
+        foreach (PdfSignatureInfo signature in signatures.Where(s => s.HasSignatureDictionary))
         {
             AssertPyhankoAgrees(root.GetProperty("signatures").GetProperty(signature.FieldName), signature);
         }
@@ -225,6 +225,9 @@ public class SignatureInspectionInteropTests
         Assert.True(CorpusManifest.Text(expected, "contactInfo") == actual.ContactInfo, field + "contactInfo");
         PdfByteRange range = actual.ByteRange ?? throw new InvalidOperationException(field + "no /ByteRange");
         Assert.Equal(expected.GetProperty("byteRange").EnumerateArray().Select(x => x.GetInt64()).ToArray(), new[] { range.Offset0, range.Length0, range.Offset1, range.Length1 });
+
+        // W-150: every signature pyHanko reads has a /ByteRange that starts the file and brackets a hex string.
+        Assert.True(actual.ByteRangeStatus == PdfByteRangeStatus.WellFormed, field + "byteRangeStatus " + actual.ByteRangeStatus);
         Assert.True(expected.GetProperty("laterRevisions").GetBoolean() == actual.HasLaterRevisions, field + "laterRevisions");
         JsonElement level = expected.GetProperty("certificationLevel");
         Assert.Equal(level.ValueKind == JsonValueKind.Null ? null : level.GetInt32(), actual.CertificationLevel);
@@ -242,7 +245,7 @@ public class SignatureInspectionInteropTests
             PdfSignatureInfo signature = signatures[i];
             List<string> lines = reported[i];
             Assert.Contains("Signature Field Name: " + signature.FieldName, lines);
-            if (!signature.IsSigned)
+            if (!signature.HasSignatureDictionary)
             {
                 Assert.DoesNotContain(lines, line => line.StartsWith("Signature Type:", StringComparison.Ordinal));
                 continue;

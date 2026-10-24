@@ -58,7 +58,7 @@ internal sealed class PdfSignatureInspector
             }
             else
             {
-                list.Add(new PdfSignatureInfo(slot.FullName, false, null, null, Array.Empty<byte[]>(), null, null, null, null, null, null, null, null, null, null, false, null, null));
+                list.Add(new PdfSignatureInfo(slot.FullName, false, null, null, Array.Empty<byte[]>(), null, null, null, null, null, null, null, null, null, PdfByteRangeStatus.Missing, null, false, null, null));
             }
         }
 
@@ -154,10 +154,18 @@ internal sealed class PdfSignatureInspector
         int count = (int)Math.Min(MaxRevisionFooterBytes, _store.Length - sectionEnd);
         byte[] footer = _store.ReadRange(sectionEnd, count);
         byte[] startXref = Encoding.ASCII.GetBytes("startxref");
-        int marker = IndexOf(footer, startXref, 0);
-        if (marker < 0 || !PdfDocumentLoader.TryParseStartXref(footer, marker + startXref.Length, out _))
+
+        // ISO 32000-1 7.5.5 and 7.5.8.1: the section's own footer follows it, after white space only. A footer found
+        // further on belongs to a later revision, so a section without one does not borrow it (W-150).
+        int marker = 0;
+        while (marker < footer.Length && footer[marker] is 0 or 9 or 10 or 12 or 13 or 32)
         {
-            throw new PdfParseException(sectionEnd, "The cross-reference section has no valid startxref / %%EOF footer within 64 KiB.");
+            marker++;
+        }
+
+        if (!StartsWith(footer, startXref, marker) || !PdfDocumentLoader.TryParseStartXref(footer, marker + startXref.Length, out _))
+        {
+            throw new PdfParseException(sectionEnd, "The cross-reference section is not followed by its own startxref / %%EOF footer.");
         }
 
         byte[] eof = Encoding.ASCII.GetBytes("%%EOF");
@@ -209,6 +217,7 @@ internal sealed class PdfSignatureInspector
             SignatureText(signature.Get("Location")),
             SignatureText(signature.Get("ContactInfo")),
             byteRange,
+            ByteRangeStatusOf(byteRange),
             byteRange is PdfByteRange numbered && revisionNumbers.TryGetValue(numbered.Offset1 + numbered.Length1, out int revisionNumber) ? revisionNumber : null,
             byteRange is PdfByteRange signed && _store.StartXref >= signed.Offset1 + signed.Length1,
             cms?.TimestampTime,
@@ -247,9 +256,61 @@ internal sealed class PdfSignatureInspector
         return new PdfByteRange(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 
+    // W-150, ISO 32000-1 12.8.1: the first range starts the file, the gap between the ranges is the /Contents hex string
+    // with its delimiters, and both ranges lie inside the file. The checks follow the order of PdfByteRangeStatus. Only the
+    // two delimiter bytes are read; they sit in the gap, outside the signed bytes.
+    private PdfByteRangeStatus ByteRangeStatusOf(PdfByteRange? byteRange)
+    {
+        if (byteRange is not PdfByteRange range)
+        {
+            return PdfByteRangeStatus.Missing;
+        }
+
+        if (range.Offset0 != 0)
+        {
+            return PdfByteRangeStatus.NotFromFileStart;
+        }
+
+        long gapStart = range.Length0;
+        if (gapStart > _store.Length || range.Offset1 + range.Length1 > _store.Length)
+        {
+            return PdfByteRangeStatus.PastEndOfFile;
+        }
+
+        if (range.Offset1 - gapStart < 2)
+        {
+            return PdfByteRangeStatus.Overlapping;
+        }
+
+        if (_store.ReadRange(gapStart, 1)[0] != (byte)'<' || _store.ReadRange(range.Offset1 - 1, 1)[0] != (byte)'>')
+        {
+            return PdfByteRangeStatus.GapNotHexString;
+        }
+
+        return PdfByteRangeStatus.WellFormed;
+    }
+
     private string? SignatureText(PdfObject? value)
     {
         return _store.ResolveMaybe(value) is PdfObject.Str text ? PdfTextCodec.Decode(text.Raw) : null;
+    }
+
+    private static bool StartsWith(byte[] data, byte[] needle, int start)
+    {
+        if (start + needle.Length > data.Length)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < needle.Length; i++)
+        {
+            if (data[start + i] != needle[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private static int IndexOf(byte[] data, byte[] needle, int start)

@@ -152,10 +152,10 @@ public class LargeWorkloadTests
                 signaturesProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signaturesProbe, leaveOpen: true);
                 PdfSignatureInfo signature = Assert.Single(document.Signatures);
-                Assert.True(signature.IsSigned);
+                Assert.True(signature.HasSignatureDictionary);
                 Assert.Equal("G7", signature.Reason);
-                Assert.Equal(signedLength, signature.SignedRevisionEnd);
-                Assert.Equal(3, signature.SignedRevisionNumber);
+                Assert.Equal(signedLength, signature.ByteRangeEnd);
+                Assert.Equal(3, signature.ByteRangeRevisionNumber);
                 Assert.NotNull(signature.SignerCertificate);
                 signaturesDecoded = document.DecodedByteCount;
             });
@@ -171,7 +171,7 @@ public class LargeWorkloadTests
                 IReadOnlyList<PdfRevision> listed = document.Revisions;
                 Assert.Equal(3, listed.Count);
                 Assert.Equal(new[] { sourceLength, editedLength, signedLength }, new[] { listed[0].EndOffset, listed[1].EndOffset, listed[2].EndOffset });
-                Assert.Equal(new[] { false, false, true }, new[] { listed[0].IsCoveredBySignature, listed[1].IsCoveredBySignature, listed[2].IsCoveredBySignature });
+                Assert.Equal(new[] { false, false, true }, new[] { listed[0].EndsAtSignatureByteRange, listed[1].EndsAtSignatureByteRange, listed[2].EndsAtSignatureByteRange });
                 revisionsDecoded = document.DecodedByteCount;
             });
             Report("dense revision listing", revisions, SimpleBudget, revisionsProbe!, revisionsDecoded);
@@ -410,7 +410,7 @@ public class LargeWorkloadTests
                     Assert.Equal("Filled " + page.ToString(CultureInfo.InvariantCulture), fields[(page - 1) * 2].Value);
                 }
 
-                Assert.Equal(signedLength, Assert.Single(document.Signatures).SignedRevisionEnd);
+                Assert.Equal(signedLength, Assert.Single(document.Signatures).ByteRangeEnd);
             }
 
             using (Process process = ExternalTool.Start(qpdf, "--check", signedPath))

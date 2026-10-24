@@ -73,8 +73,8 @@ public class RevisionTests
             revision => AssertRevision(revision, 2, signed.Length, true),
             revision => AssertRevision(revision, 3, revised.Length, false));
         PdfSignatureInfo signature = Assert.Single(opened.Signatures);
-        Assert.Equal(2, signature.SignedRevisionNumber);
-        Assert.Equal(signed.Length, signature.SignedRevisionEnd);
+        Assert.Equal(2, signature.ByteRangeRevisionNumber);
+        Assert.Equal(signed.Length, signature.ByteRangeEnd);
 
         string directory = ExternalTool.TempDirectory();
         try
@@ -138,6 +138,30 @@ public class RevisionTests
         Assert.Equal(1, document.PageCount);
     }
 
+    // W-150: a revision whose cross-reference section has no footer of its own must not borrow the next revision's.
+    [Fact]
+    public void historical_section_without_its_own_footer_blocks_revision_listing()
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        long baseXref = builder.Length;
+        byte[] original = builder.Finish();
+        int footer = LastIndexOf(original, Encoding.ASCII.GetBytes("startxref"));
+        using var output = new MemoryStream();
+        output.Write(original, 0, footer);
+        long objectOffset = output.Length;
+        WriteAscii(output, "4 0 obj\n<< >>\nendobj\n");
+        long xref = output.Length;
+        WriteAscii(output, "xref\n4 1\n" + objectOffset.ToString("D10", CultureInfo.InvariantCulture) + " 00000 n\r\n"
+            + "trailer\n<< /Size 5 /Root 1 0 R /Prev " + baseXref.ToString(CultureInfo.InvariantCulture) + " >>\nstartxref\n"
+            + xref.ToString(CultureInfo.InvariantCulture) + "\n%%EOF\n");
+
+        using var source = new MemoryStream(output.ToArray(), writable: false);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+
+        Assert.Throws<PdfParseException>(() => document.Revisions);
+        Assert.Equal(1, document.PageCount);
+    }
+
     private static void AssertReadersAgree(string path, string? password)
     {
         IReadOnlyList<PdfRevision> revisions;
@@ -163,10 +187,10 @@ public class RevisionTests
         }
 
         JsonElement signatureRevisions = report.RootElement.GetProperty("signatureRevisions");
-        foreach (PdfSignatureInfo signature in signatures.Where(item => item.IsSigned))
+        foreach (PdfSignatureInfo signature in signatures.Where(item => item.HasSignatureDictionary))
         {
             JsonElement number = signatureRevisions.GetProperty(signature.FieldName);
-            Assert.Equal(number.ValueKind == JsonValueKind.Null ? null : number.GetInt32(), signature.SignedRevisionNumber);
+            Assert.Equal(number.ValueKind == JsonValueKind.Null ? null : number.GetInt32(), signature.ByteRangeRevisionNumber);
         }
     }
 
@@ -196,7 +220,7 @@ public class RevisionTests
     {
         Assert.Equal(number, revision.Number);
         Assert.Equal(endOffset, revision.EndOffset);
-        Assert.Equal(covered, revision.IsCoveredBySignature);
+        Assert.Equal(covered, revision.EndsAtSignatureByteRange);
     }
 
     private static int LastIndexOf(byte[] data, byte[] value)

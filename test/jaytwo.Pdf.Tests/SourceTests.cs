@@ -327,7 +327,8 @@ public class SourceTests
             file.Write(row, 0, row.Length);
         }
 
-        Ascii("\nendstream\nendobj\n");
+        // W-150: each revision ends with its own footer, so the older one does not take the newer one's.
+        Ascii("\nendstream\nendobj\nstartxref\n" + older.ToString(CultureInfo.InvariantCulture) + "\n%%EOF\n");
         long newer = file.Length;
         byte[] newerRows = Row(2, 11, 0).Concat(Row(1, offsets[11], 0)).Concat(Row(1, newer, 0)).ToArray();
         Ascii("12 0 obj\n<< /Type /XRef /Size 13 /W [1 4 2] /Index [10 3] /Root 1 0 R /Prev " + older.ToString(CultureInfo.InvariantCulture)

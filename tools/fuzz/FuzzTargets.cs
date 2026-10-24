@@ -326,9 +326,9 @@ internal static class FuzzTargets
 
         foreach (PdfSignatureInfo signature in document.Signatures)
         {
-            _ = (signature.FieldName, signature.IsSigned, signature.SubFilter, signature.SignerCertificate, signature.Certificates.Count, signature.DigestAlgorithm);
+            _ = (signature.FieldName, signature.HasSignatureDictionary, signature.SubFilter, signature.SignerCertificate, signature.Certificates.Count, signature.DigestAlgorithm);
             _ = (signature.SignatureAlgorithmOid, signature.SigningTime, signature.CmsSigningTime, signature.Name, signature.Reason, signature.Location);
-            _ = (signature.ContactInfo, signature.ByteRange, signature.SignedRevisionEnd, signature.HasLaterRevisions, signature.TimestampTime, signature.CertificationLevel);
+            _ = (signature.ContactInfo, signature.ByteRange, signature.ByteRangeEnd, signature.HasLaterRevisions, signature.TimestampTime, signature.CertificationLevel);
         }
     }
 

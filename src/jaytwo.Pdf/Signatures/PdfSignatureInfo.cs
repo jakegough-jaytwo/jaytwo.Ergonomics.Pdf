@@ -7,13 +7,15 @@ namespace jaytwo.Pdf.Signatures;
 /// <summary>
 /// One signature field and what its signature dictionary and CMS value say about the signature (spec R9).
 /// Nothing here is validated: the signature is not verified, the certificates are not checked for trust or revocation,
-/// and the signed byte range is not read.
+/// and the bytes the byte range covers are not read. Field population (<see cref="HasSignatureDictionary"/>), the
+/// structure of the byte range (<see cref="ByteRangeStatus"/>), and the revision it claims (<see cref="ByteRangeRevisionNumber"/>)
+/// are separate facts; none implies another or a valid signature.
 /// </summary>
 public sealed class PdfSignatureInfo
 {
     internal PdfSignatureInfo(
         string fieldName,
-        bool isSigned,
+        bool hasSignatureDictionary,
         string? subFilter,
         byte[]? signerCertificate,
         IReadOnlyList<byte[]> certificates,
@@ -26,13 +28,14 @@ public sealed class PdfSignatureInfo
         string? location,
         string? contactInfo,
         PdfByteRange? byteRange,
-        int? signedRevisionNumber,
+        PdfByteRangeStatus byteRangeStatus,
+        int? byteRangeRevisionNumber,
         bool hasLaterRevisions,
         DateTimeOffset? timestampTime,
         int? certificationLevel)
     {
         FieldName = fieldName;
-        IsSigned = isSigned;
+        HasSignatureDictionary = hasSignatureDictionary;
         SubFilter = subFilter;
         SignerCertificate = signerCertificate;
         Certificates = certificates ?? throw new ArgumentNullException(nameof(certificates));
@@ -54,7 +57,8 @@ public sealed class PdfSignatureInfo
         Location = location;
         ContactInfo = contactInfo;
         ByteRange = byteRange;
-        SignedRevisionNumber = signedRevisionNumber;
+        ByteRangeStatus = byteRangeStatus;
+        ByteRangeRevisionNumber = byteRangeRevisionNumber;
         HasLaterRevisions = hasLaterRevisions;
         TimestampTime = timestampTime;
         CertificationLevel = certificationLevel;
@@ -66,10 +70,11 @@ public sealed class PdfSignatureInfo
     public string FieldName { get; }
 
     /// <summary>
-    /// Gets a value indicating whether the field's <c>/V</c> resolves to a signature dictionary.
-    /// When false, every other property is null, empty, or false.
+    /// Gets a value indicating whether the field's <c>/V</c> resolves to a dictionary, so the field holds a signature
+    /// dictionary. It says the field is populated, not that the dictionary is complete or the signature valid.
+    /// When false, every other property is null, empty, or false, and <see cref="ByteRangeStatus"/> is <see cref="PdfByteRangeStatus.Missing"/>.
     /// </summary>
-    public bool IsSigned { get; }
+    public bool HasSignatureDictionary { get; }
 
     /// <summary>
     /// Gets the <c>/SubFilter</c> name without the slash, such as <c>adbe.pkcs7.detached</c>, <c>ETSI.CAdES.detached</c>,
@@ -137,25 +142,34 @@ public sealed class PdfSignatureInfo
     public string? ContactInfo { get; }
 
     /// <summary>
-    /// Gets <c>/ByteRange</c>: the two signed ranges, with the <c>/Contents</c> value between them.
+    /// Gets <c>/ByteRange</c> as the signature dictionary states it: the two ranges it claims to sign, with the
+    /// <c>/Contents</c> value meant to sit between them. Null when the dictionary has none.
     /// </summary>
     public PdfByteRange? ByteRange { get; }
 
     /// <summary>
-    /// Gets the end of the second signed range, which is the offset where the revision the signature signs ends.
+    /// Gets how <see cref="ByteRange"/> sits in the file: whether it starts at offset 0, stays inside the file, keeps its
+    /// ranges in order, and leaves a gap delimited as a hex string. Only the two gap delimiter bytes are read.
     /// </summary>
-    public long? SignedRevisionEnd => ByteRange is PdfByteRange range ? range.Offset1 + range.Length1 : null;
+    public PdfByteRangeStatus ByteRangeStatus { get; }
 
     /// <summary>
-    /// Gets the 1-based logical revision whose end offset matches <see cref="SignedRevisionEnd"/>, or null when no listed
-    /// revision ends there. A linearized file's main and first-page cross-reference sections count as one revision.
+    /// Gets the end of the second range of <see cref="ByteRange"/>: the offset where the bytes the signature claims to
+    /// sign end. Null when there is no <c>/ByteRange</c>.
     /// </summary>
-    public int? SignedRevisionNumber { get; }
+    public long? ByteRangeEnd => ByteRange is PdfByteRange range ? range.Offset1 + range.Length1 : null;
 
     /// <summary>
-    /// Gets a value indicating whether the newest cross-reference section starts at or after <see cref="SignedRevisionEnd"/>,
-    /// so a later incremental update follows the signed revision. Bytes after the signed range that add no cross-reference
-    /// section are not a revision.
+    /// Gets the 1-based logical revision whose end offset equals <see cref="ByteRangeEnd"/>, or null when no listed
+    /// revision ends there. This is the revision the byte range claims; it is reported whatever <see cref="ByteRangeStatus"/>
+    /// says. A linearized file's main and first-page cross-reference sections count as one revision.
+    /// </summary>
+    public int? ByteRangeRevisionNumber { get; }
+
+    /// <summary>
+    /// Gets a value indicating whether the newest cross-reference section starts at or after <see cref="ByteRangeEnd"/>,
+    /// so a later incremental update follows the bytes the byte range claims. Bytes after that end that add no
+    /// cross-reference section are not a revision. It does not say whether the update is permitted.
     /// </summary>
     public bool HasLaterRevisions { get; }
 

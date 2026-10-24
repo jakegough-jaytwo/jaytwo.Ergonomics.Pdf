@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -26,14 +27,15 @@ public class SignatureInspectionTests
         PdfSignatureInfo signature = Assert.Single(document.Signatures);
 
         Assert.Equal("ExistingSig", signature.FieldName);
-        Assert.False(signature.IsSigned);
+        Assert.False(signature.HasSignatureDictionary);
         Assert.Null(signature.SubFilter);
         Assert.Null(signature.SignerCertificate);
         Assert.Empty(signature.Certificates);
         Assert.Null(signature.DigestAlgorithm);
         Assert.Null(signature.SigningTime);
         Assert.Null(signature.ByteRange);
-        Assert.Null(signature.SignedRevisionEnd);
+        Assert.Null(signature.ByteRangeEnd);
+        Assert.Equal(PdfByteRangeStatus.Missing, signature.ByteRangeStatus);
         Assert.False(signature.HasLaterRevisions);
         Assert.Null(signature.TimestampTime);
         Assert.Null(signature.CertificationLevel);
@@ -61,7 +63,7 @@ public class SignatureInspectionTests
         PdfSignatureInfo signature = Assert.Single(document.Signatures);
 
         Assert.Equal("Signature1", signature.FieldName);
-        Assert.True(signature.IsSigned);
+        Assert.True(signature.HasSignatureDictionary);
         Assert.Equal("adbe.pkcs7.detached", signature.SubFilter);
         Assert.Equal(leaf.RawData, signature.SignerCertificate);
         Assert.Equal(new[] { leaf.RawData, root.RawData }.OrderBy(Convert.ToBase64String), signature.Certificates.OrderBy(Convert.ToBase64String));
@@ -76,7 +78,9 @@ public class SignatureInspectionTests
         Assert.Equal("Denver", signature.Location);
         Assert.Equal("signer@example.test", signature.ContactInfo);
         Assert.Equal(provider.Range, signature.ByteRange);
-        Assert.Equal(signed.Length, signature.SignedRevisionEnd);
+        Assert.Equal(signed.Length, signature.ByteRangeEnd);
+        Assert.Equal(PdfByteRangeStatus.WellFormed, signature.ByteRangeStatus);
+        Assert.Equal(2, signature.ByteRangeRevisionNumber);
         Assert.False(signature.HasLaterRevisions);
         Assert.Null(signature.TimestampTime);
         Assert.Null(signature.CertificationLevel);
@@ -99,12 +103,12 @@ public class SignatureInspectionTests
 
             PdfSignatureInfo signature = Assert.Single(document.Signatures);
             Assert.True(signature.HasLaterRevisions);
-            Assert.Equal(signed.Length, signature.SignedRevisionEnd);
+            Assert.Equal(signed.Length, signature.ByteRangeEnd);
         }
 
         using var reopened = PdfDocument.Open(stream, leaveOpen: true);
         Assert.True(reopened.Signatures[0].HasLaterRevisions);
-        Assert.Equal(signed.Length, reopened.Signatures[0].SignedRevisionEnd);
+        Assert.Equal(signed.Length, reopened.Signatures[0].ByteRangeEnd);
     }
 
     [Fact]
@@ -278,7 +282,7 @@ public class SignatureInspectionTests
         Assert.Equal(new[] { "Approval", "Empty" }, signatures.Select(s => s.FieldName));
         Assert.Equal(3, document.AcroForm.Fields.Count);
         PdfSignatureInfo approval = signatures[0];
-        Assert.True(approval.IsSigned);
+        Assert.True(approval.HasSignatureDictionary);
         Assert.Equal("adbe.x509.rsa_sha1", approval.SubFilter);
         Assert.Null(approval.SignerCertificate);
         Assert.Empty(approval.Certificates);
@@ -286,10 +290,10 @@ public class SignatureInspectionTests
         Assert.Equal(new DateTimeOffset(2024, 1, 2, 3, 4, 5, TimeSpan.Zero), approval.SigningTime);
         Assert.Equal("Checked", approval.Reason);
         Assert.Equal(new PdfByteRange(0, 10, 20, 30), approval.ByteRange);
-        Assert.Equal(50, approval.SignedRevisionEnd);
+        Assert.Equal(50, approval.ByteRangeEnd);
         Assert.True(approval.HasLaterRevisions);
         Assert.Equal(3, approval.CertificationLevel);
-        Assert.False(signatures[1].IsSigned);
+        Assert.False(signatures[1].HasSignatureDictionary);
     }
 
     [Theory]
@@ -307,6 +311,57 @@ public class SignatureInspectionTests
 
         Assert.Throws<PdfParseException>(() => document.Signatures);
         Assert.Equal(3, document.AcroForm.Fields.Count);
+    }
+
+    // W-150: structural /ByteRange outcomes, reported beside field population and the claimed revision. The sub-filter is
+    // not CMS, so the made-up /Contents is not parsed.
+    [Theory]
+    [InlineData("", PdfByteRangeStatus.Missing)]
+    [InlineData("/ByteRange [1 10 20 30]", PdfByteRangeStatus.NotFromFileStart)]
+    [InlineData("/ByteRange [0 10 20 999999]", PdfByteRangeStatus.PastEndOfFile)]
+    [InlineData("/ByteRange [0 999999 1000001 1]", PdfByteRangeStatus.PastEndOfFile)]
+    [InlineData("/ByteRange [0 20 10 30]", PdfByteRangeStatus.Overlapping)]
+    [InlineData("/ByteRange [0 10 11 30]", PdfByteRangeStatus.Overlapping)]
+    [InlineData("/ByteRange [0 10 20 30]", PdfByteRangeStatus.GapNotHexString)]
+    public void byte_range_structure_is_reported_separately(string byteRange, PdfByteRangeStatus expected)
+    {
+        using var stream = new MemoryStream(SignatureFieldFile("/SubFilter /adbe.x509.rsa_sha1 /Contents <0102> " + byteRange), writable: false);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        PdfSignatureInfo signature = document.Signatures[0];
+
+        Assert.True(signature.HasSignatureDictionary);
+        Assert.Equal(expected, signature.ByteRangeStatus);
+        Assert.Null(signature.ByteRangeRevisionNumber);
+        Assert.All(document.Revisions, revision => Assert.False(revision.EndsAtSignatureByteRange));
+        Assert.Equal(PdfByteRangeStatus.Missing, document.Signatures[1].ByteRangeStatus);
+    }
+
+    // A /ByteRange around the /Contents string is well formed. Ending at the file's end claims the one revision; ending one
+    // byte short claims none, and the structure is still well formed.
+    [Theory]
+    [InlineData(0, 1)]
+    [InlineData(1, null)]
+    public void well_formed_byte_range_claims_the_revision_it_ends_at(int shortBy, int? revision)
+    {
+        byte[] pdf = SignatureFieldFile("/SubFilter /adbe.x509.rsa_sha1 /Contents <0102> /ByteRange [0000000000 0000000000 0000000000 0000000000]");
+        string text = Encoding.ASCII.GetString(pdf);
+        int gapStart = text.IndexOf("<0102>", StringComparison.Ordinal);
+        int gapEnd = gapStart + "<0102>".Length;
+        string range = gapStart.ToString("D10", CultureInfo.InvariantCulture) + " " + gapEnd.ToString("D10", CultureInfo.InvariantCulture) + " " + (pdf.Length - gapEnd - shortBy).ToString("D10", CultureInfo.InvariantCulture);
+        int placeholder = text.IndexOf("[0000000000 ", StringComparison.Ordinal) + 1;
+        byte[] patched = Encoding.ASCII.GetBytes("0000000000 " + range);
+        Buffer.BlockCopy(patched, 0, pdf, placeholder, patched.Length);
+        using var stream = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        PdfSignatureInfo signature = document.Signatures[0];
+
+        Assert.Equal(PdfByteRangeStatus.WellFormed, signature.ByteRangeStatus);
+        Assert.Equal(pdf.Length - shortBy, signature.ByteRangeEnd);
+        Assert.Equal(revision, signature.ByteRangeRevisionNumber);
+        Assert.False(signature.HasLaterRevisions);
+        Assert.Equal(revision != null, Assert.Single(document.Revisions).EndsAtSignatureByteRange);
     }
 
     [Fact]
@@ -336,17 +391,18 @@ public class SignatureInspectionTests
             Assert.Equal(certificate.RawData, signature.SignerCertificate);
             Assert.Equal(fixedProvider.Range, signature.ByteRange);
             Assert.True(signature.ByteRange!.Value.Length0 > 1L << 30);
-            Assert.Equal(sparse.Length, signature.SignedRevisionEnd);
-            Assert.Equal(2, signature.SignedRevisionNumber);
+            Assert.Equal(sparse.Length, signature.ByteRangeEnd);
+            Assert.Equal(PdfByteRangeStatus.WellFormed, signature.ByteRangeStatus);
+            Assert.Equal(2, signature.ByteRangeRevisionNumber);
             Assert.False(signature.HasLaterRevisions);
             Assert.Collection(
                 document.Revisions,
-                revision => Assert.False(revision.IsCoveredBySignature),
+                revision => Assert.False(revision.EndsAtSignatureByteRange),
                 revision =>
                 {
                     Assert.Equal(2, revision.Number);
                     Assert.Equal(sparse.Length, revision.EndOffset);
-                    Assert.True(revision.IsCoveredBySignature);
+                    Assert.True(revision.EndsAtSignatureByteRange);
                 });
         }
 

@@ -5,11 +5,11 @@ namespace jaytwo.Pdf;
 /// </summary>
 public sealed class PdfRevision
 {
-    internal PdfRevision(int number, long endOffset, bool isCoveredBySignature)
+    internal PdfRevision(int number, long endOffset, bool endsAtSignatureByteRange)
     {
         Number = number;
         EndOffset = endOffset;
-        IsCoveredBySignature = isCoveredBySignature;
+        EndsAtSignatureByteRange = endsAtSignatureByteRange;
     }
 
     /// <summary>
@@ -23,8 +23,8 @@ public sealed class PdfRevision
     public long EndOffset { get; }
 
     /// <summary>
-    /// Gets a value indicating whether a signature field's <c>/ByteRange</c> ends at this revision's end offset.
-    /// The signature and its byte range are not validated.
+    /// Gets a value indicating whether a signature field's <c>/ByteRange</c> ends at exactly this revision's end offset.
+    /// It is an offset match only: the byte range's structure, the signature, and the covered bytes are not checked.
     /// </summary>
-    public bool IsCoveredBySignature { get; }
+    public bool EndsAtSignatureByteRange { get; }
 }
