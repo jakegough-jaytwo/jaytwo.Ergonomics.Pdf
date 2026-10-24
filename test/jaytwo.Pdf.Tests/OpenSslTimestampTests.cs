@@ -87,8 +87,9 @@ public class OpenSslTimestampTests
     {
         using var source = new MemoryStream(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
-        document.Sign(
+        editor.Sign(
             destination,
             new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 16384 },
             new DocTimeStampSignatureProvider(authority),

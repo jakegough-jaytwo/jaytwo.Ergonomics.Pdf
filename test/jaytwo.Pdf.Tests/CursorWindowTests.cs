@@ -119,11 +119,12 @@ public class CursorWindowTests
         var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal("Alpha", Assert.Single(document.AcroForm.Fields).Value);
 
-        document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["name"] = "Saved" });
-        document.Metadata.Title = "Saved title";
-        document.SaveIncremental();
+        editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["name"] = "Saved" });
+        editor.Metadata.Title = "Saved title";
+        editor.SaveIncremental();
 
         Assert.True(stream.Length > pdf.Length);
         Assert.Equal("Saved", Assert.Single(document.AcroForm.Fields).Value);
@@ -142,7 +143,9 @@ public class CursorWindowTests
         var retainedProbe = new ProbeStream(new MemoryStream(pdf, writable: false));
         var plainProbe = new ProbeStream(new MemoryStream(pdf, writable: false));
         using var retained = PdfDocument.OpenWithCursorWindows(retainedProbe, leaveOpen: true, PdfCursor.DefaultRetainedWindows);
+        using var retainedEditor = retained.Edit();
         using var plain = PdfDocument.OpenWithCursorWindows(plainProbe, leaveOpen: true, 0);
+        using var plainEditor = plain.Edit();
 
         string expected = Walk(plain);
         Assert.Equal(expected, Walk(retained));
@@ -159,12 +162,12 @@ public class CursorWindowTests
             values["f" + i.ToString(CultureInfo.InvariantCulture)] = "filled " + i.ToString(CultureInfo.InvariantCulture);
         }
 
-        retained.AcroForm.Fill(values);
-        plain.AcroForm.Fill(values);
+        retainedEditor.AcroForm.Fill(values);
+        plainEditor.AcroForm.Fill(values);
         var retainedOutput = new MemoryStream();
         var plainOutput = new MemoryStream();
-        retained.SaveIncremental(retainedOutput, leaveOpen: true);
-        plain.SaveIncremental(plainOutput, leaveOpen: true);
+        retainedEditor.SaveIncremental(retainedOutput, leaveOpen: true);
+        plainEditor.SaveIncremental(plainOutput, leaveOpen: true);
         Assert.Equal(plainOutput.ToArray(), retainedOutput.ToArray());
     }
 
@@ -306,8 +309,9 @@ public class CursorWindowTests
         source.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
-            document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["name"] = "Alpha" });
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["name"] = "Alpha" });
+            editor.SaveIncremental();
         }
 
         Assert.True(new ReadOnlySpan<byte>(source.GetBuffer(), 0, pdf.Length).IndexOf(Encoding.ASCII.GetBytes("Alpha")) < 0);

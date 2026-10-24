@@ -51,12 +51,12 @@ public class ITextInteropTests
         byte[] attachment = { 0x00, 0x01, 0x02, 0x7F, 0x80, 0xFE, 0xFF, 0x42, 0x2D, 0x32, 0x33 };
         byte[] source = PdfBuilder.Basic(pageExtra: " /Resources << >>").Finish();
         using var content = new MemoryStream(attachment, writable: false);
-        byte[] output = Edit(source, null, document =>
+        byte[] output = Edit(source, null, editor =>
         {
-            document.Metadata.Title = "InfoEdited";
-            document.Metadata.SetXmp(Encoding.UTF8.GetBytes(XmpPacket));
-            document.Attachments.Add("notes.bin", content, leaveOpen: true);
-            document.Pages[0].Rotation = 90;
+            editor.Metadata.Title = "InfoEdited";
+            editor.Metadata.SetXmp(Encoding.UTF8.GetBytes(XmpPacket));
+            editor.Attachments.Add("notes.bin", content, leaveOpen: true);
+            editor.Pages[0].Rotation = 90;
         });
 
         ITextReading reading = IText.Read(output);
@@ -72,12 +72,12 @@ public class ITextInteropTests
     {
         byte[] source = Form();
         Assert.True(IText.ReadsAppendsTo(source));
-        byte[] single = Edit(source, null, document => document.AcroForm.Fill("page1.name", "Ada"));
+        byte[] single = Edit(source, null, editor => editor.AcroForm.Fill("page1.name", "Ada"));
         ITextReading singleReading = IText.Read(single);
         Assert.Equal("Ada", singleReading.Fields["page1.name"]);
         Assert.Equal("Name 2", singleReading.Fields["page2.name"]);
 
-        byte[] bulk = Edit(source, null, document => document.AcroForm.Fill(G7Fixtures.TextValues(FormPages)));
+        byte[] bulk = Edit(source, null, editor => editor.AcroForm.Fill(G7Fixtures.TextValues(FormPages)));
         ITextReading bulkReading = IText.Read(bulk);
         Assert.Equal(FormPages * 2, bulkReading.Fields.Count);
         for (int page = 1; page <= FormPages; page++)
@@ -85,7 +85,7 @@ public class ITextInteropTests
             Assert.Equal("Filled " + page.ToString(System.Globalization.CultureInfo.InvariantCulture), bulkReading.Fields["page" + page.ToString(System.Globalization.CultureInfo.InvariantCulture) + ".name"]);
         }
 
-        byte[] flattened = Edit(bulk, null, document => document.AcroForm.Flatten());
+        byte[] flattened = Edit(bulk, null, editor => editor.AcroForm.Flatten());
         ITextReading flatReading = IText.Read(flattened);
         Assert.Equal(FormPages, flatReading.Pages);
         Assert.Empty(flatReading.Fields);
@@ -104,7 +104,7 @@ public class ITextInteropTests
         Assert.True(signature.CoversWholeDocument);
         Assert.Equal("W-112", signature.Reason);
 
-        byte[] revised = Edit(signed, null, document => document.Metadata.Title = "After signing");
+        byte[] revised = Edit(signed, null, editor => editor.Metadata.Title = "After signing");
         ITextReading reading = IText.Read(revised);
         Assert.Equal("After signing", reading.Title);
         ITextSignature earlier = Assert.Single(reading.Signatures).Value;
@@ -119,7 +119,7 @@ public class ITextInteropTests
     {
         byte[] source = QpdfEncrypt(Form(), cipher);
         Assert.True(IText.ReadsAppendsTo(source), cipher + ": qpdf wrote a cross-reference stream");
-        byte[] filled = Edit(source, password, document => document.AcroForm.Fill("page1.name", "Ada"));
+        byte[] filled = Edit(source, password, editor => editor.AcroForm.Fill("page1.name", "Ada"));
         Assert.Equal("Ada", IText.Read(filled, password).Fields["page1.name"]);
 
         using AsymmetricAlgorithm signingKey = TestKeys.Create(TestKeys.Rsa);
@@ -148,13 +148,14 @@ public class ITextInteropTests
         }
     }
 
-    private static byte[] Edit(byte[] pdf, string? password, Action<PdfDocument> edit)
+    private static byte[] Edit(byte[] pdf, string? password, Action<PdfDocumentEditor> edit)
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
-        edit(document);
+        using var editor = document.Edit();
+        edit(editor);
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         byte[] output = destination.ToArray();
         Assert.True(output.AsSpan(0, pdf.Length).SequenceEqual(pdf), "the original is not a prefix");
         return output;
@@ -164,9 +165,10 @@ public class ITextInteropTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
         var options = new PdfSignatureOptions { Reason = "W-112", Format = format };
-        document.Sign(destination, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);
+        editor.Sign(destination, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);
         return destination.ToArray();
     }
 

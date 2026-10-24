@@ -17,11 +17,12 @@ public class MetadataTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "héllo 日本語";
-            document.Metadata.Subject = "Subject";
-            document.Metadata.Keywords = "alpha beta";
-            document.Metadata["Department"] = "Forms";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "héllo 日本語";
+            editor.Metadata.Subject = "Subject";
+            editor.Metadata.Keywords = "alpha beta";
+            editor.Metadata["Department"] = "Forms";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -77,9 +78,10 @@ public class MetadataTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.ModificationDate = stamp;
-            document.Metadata.Title = "New";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.ModificationDate = stamp;
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
         }
 
         using var again = PdfDocument.Open(stream, leaveOpen: true);
@@ -96,9 +98,10 @@ public class MetadataTests
             stream.Write(created, 0, created.Length);
             using (var document = PdfDocument.Open(stream, leaveOpen: true))
             {
+                using var editor = document.Edit();
                 Assert.False(document.Metadata.HasXmp);
-                document.Metadata.Title = "Created";
-                document.SaveIncremental(stream);
+                editor.Metadata.Title = "Created";
+                editor.SaveIncremental(stream);
             }
 
             using var again = PdfDocument.Open(stream, leaveOpen: true);
@@ -125,8 +128,9 @@ public class MetadataTests
         xmpStream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(xmpStream, leaveOpen: true))
         {
-            document.Metadata.Title = "Updated";
-            document.SaveIncremental(xmpStream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "Updated";
+            editor.SaveIncremental(xmpStream);
         }
 
         using var updated = PdfDocument.Open(xmpStream, leaveOpen: true);
@@ -151,10 +155,11 @@ public class MetadataTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.Metadata.HasXmp);
             Assert.Throws<PdfXmpException>(() => document.Metadata.OpenXmp());
-            document.Metadata.Title = "New";
-            document.SaveIncremental(stream);
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -173,8 +178,9 @@ public class MetadataTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.SetXmp(packet);
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.SetXmp(packet);
+            editor.SaveIncremental(stream);
         }
 
         using var again = PdfDocument.Open(stream, leaveOpen: true);
@@ -194,13 +200,14 @@ public class MetadataTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("False", document.Metadata["Trapped"]);
             Assert.Equal("D:20200101120000Z", document.Metadata["ModDate"]);
-            Assert.Throws<ArgumentException>(() => document.Metadata["Trapped"] = "Maybe");
-            document.Metadata["Trapped"] = "True";
-            document.Metadata["ModDate"] = "D:20200102030405-05'00'";
-            document.Metadata["Title"] = "Later";
-            document.SaveIncremental();
+            Assert.Throws<ArgumentException>(() => editor.Metadata["Trapped"] = "Maybe");
+            editor.Metadata["Trapped"] = "True";
+            editor.Metadata["ModDate"] = "D:20200102030405-05'00'";
+            editor.Metadata["Title"] = "Later";
+            editor.SaveIncremental();
         }
 
         using var again = PdfDocument.Open(stream, leaveOpen: true);
@@ -221,8 +228,9 @@ public class MetadataTests
         DateTimeOffset before = DateTimeOffset.UtcNow.AddSeconds(-1);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "New";
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental();
         }
 
         DateTimeOffset after = DateTimeOffset.UtcNow.AddSeconds(1);

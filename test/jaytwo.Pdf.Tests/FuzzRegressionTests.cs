@@ -76,8 +76,9 @@ public class FuzzRegressionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "New";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -148,9 +149,10 @@ public class FuzzRegressionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Null(document.Metadata.Title);
-            document.Metadata.Title = "New";
-            document.SaveIncremental(stream);
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
         }
 
         using var again = PdfDocument.Open(new MemoryStream(stream.ToArray()));
@@ -169,9 +171,10 @@ public class FuzzRegressionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Empty(document.Attachments);
-            document.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("hi")));
-            document.SaveIncremental(stream);
+            editor.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("hi")));
+            editor.SaveIncremental(stream);
         }
 
         using var again = PdfDocument.Open(new MemoryStream(stream.ToArray()));

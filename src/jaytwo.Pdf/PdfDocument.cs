@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 using jaytwo.Pdf.AcroForm;
 using jaytwo.Pdf.Attachments;
 using jaytwo.Pdf.Internal;
@@ -12,14 +10,20 @@ using jaytwo.Pdf.Signatures;
 namespace jaytwo.Pdf;
 
 /// <summary>
-/// A seekable PDF opened for incremental page, metadata, attachment, form, and signature updates.
+/// A seekable PDF opened for inspection. Pages, fields, attachments, signatures, and revisions are read when asked for.
 /// </summary>
+/// <remarks>
+/// The document does not change itself. <see cref="Edit"/> returns the <see cref="PdfDocumentEditor"/> that makes page,
+/// metadata, attachment, and form changes and writes them as incremental updates and signatures.
+/// </remarks>
 public sealed class PdfDocument : IDisposable
 {
     private readonly PdfEngine _engine;
     private readonly PdfMetadata _metadata;
     private readonly PdfAttachmentCollection _attachments;
     private readonly PdfAcroForm _form;
+    private PdfDocumentEditor? _editor;
+    private bool _disposed;
 
     private PdfDocument(PdfEngine engine)
     {
@@ -50,7 +54,7 @@ public sealed class PdfDocument : IDisposable
     public int PageCount => _engine.PageCount;
 
     /// <summary>
-    /// Gets each page's media box, crop box, and settable rotation. Page content streams are not read.
+    /// Gets each page's media box, crop box, and rotation. Page content streams are not read.
     /// </summary>
     public IReadOnlyList<PdfPage> Pages => _engine.ListPages();
 
@@ -74,21 +78,6 @@ public sealed class PdfDocument : IDisposable
     /// </summary>
     /// <exception cref="PdfParseException">A revision footer or a signature <c>/ByteRange</c> does not parse.</exception>
     public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
-
-    /// <summary>
-    /// Gets or sets a value indicating whether page-content changes such as <see cref="PdfAcroForm.Flatten()"/> and page rotation may change a document that has a signature.
-    /// </summary>
-    /// <remarks>
-    /// Flattening and page rotation change page presentation, which no signature permits, so validators report every earlier
-    /// approval signature or document timestamp as modified. The earlier signatures' bytes stay a prefix of the file. Without
-    /// this opt-in, either operation throws <see cref="PdfSignatureConflictException"/> on such a document. A certified document
-    /// stays locked against both operations either way, and signed signature fields are never flattened.
-    /// </remarks>
-    public bool AllowBreakingSignatures
-    {
-        get => _engine.AllowBreakingSignatures;
-        set => _engine.AllowBreakingSignatures = value;
-    }
 
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
@@ -132,109 +121,38 @@ public sealed class PdfDocument : IDisposable
     }
 
     /// <summary>
-    /// Appends one incremental update to the stream passed to <see cref="Open(Stream, bool)"/>.
+    /// Starts an editor for this document. Every change, save, and signature goes through it.
     /// </summary>
-    public void SaveIncremental()
+    /// <remarks>
+    /// A document has at most one open editor. Disposing the editor ends it without saving, and another can then start.
+    /// The document's reads show the editor's changes, saved or pending.
+    /// </remarks>
+    /// <returns>The editor.</returns>
+    /// <exception cref="InvalidOperationException">An editor of this document is still open.</exception>
+    /// <exception cref="ObjectDisposedException">The document is disposed.</exception>
+    public PdfDocumentEditor Edit()
     {
-        _engine.SaveIncremental();
+        if (_disposed)
+        {
+            throw new ObjectDisposedException(nameof(PdfDocument));
+        }
+
+        if (_editor != null)
+        {
+            throw new InvalidOperationException("An editor of this document is still open. Dispose it before starting another.");
+        }
+
+        _engine.AllowBreakingSignatures = false;
+        _editor = new PdfDocumentEditor(this, _engine);
+        return _editor;
     }
 
     /// <summary>
-    /// Appends one incremental update containing the pending edits.
-    /// </summary>
-    /// <param name="destination">The same stream, or an empty writable stream that receives a copy plus the update.</param>
-    /// <param name="leaveOpen">When <paramref name="destination"/> is a different stream, controls whether the document owns it.</param>
-    public void SaveIncremental(Stream destination, bool leaveOpen = false)
-    {
-        _engine.SaveIncremental(destination, leaveOpen);
-    }
-
-    /// <summary>
-    /// Appends one incremental update to the stream passed to <see cref="Open(Stream, bool)"/>.
-    /// It produces the same bytes as <see cref="SaveIncremental()"/>.
-    /// </summary>
-    /// <param name="cancellationToken">Observed before the update is written.</param>
-    /// <returns>A task that completes when the update is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The stream is unchanged, and the pending edits remain.</exception>
-    public Task SaveIncrementalAsync(CancellationToken cancellationToken = default)
-    {
-        return _engine.SaveIncrementalAsync(cancellationToken);
-    }
-
-    /// <summary>
-    /// Appends one incremental update containing the pending edits. It produces the same bytes as <see cref="SaveIncremental(Stream, bool)"/>.
-    /// A different destination receives the copy with asynchronous reads and writes; the update itself is serialized synchronously.
-    /// </summary>
-    /// <param name="destination">The same stream, or an empty writable stream that receives a copy plus the update.</param>
-    /// <param name="leaveOpen">When <paramref name="destination"/> is a different stream, controls whether the document owns it.</param>
-    /// <param name="cancellationToken">Observed before the write and between the 1 MiB blocks of the copy.</param>
-    /// <returns>A task that completes when the update is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The destination is truncated to its starting length, and the pending edits remain.</exception>
-    public Task SaveIncrementalAsync(Stream destination, bool leaveOpen = false, CancellationToken cancellationToken = default)
-    {
-        return _engine.SaveIncrementalAsync(destination, leaveOpen, cancellationToken);
-    }
-
-    /// <summary>
-    /// Appends one incremental signature revision to the stream passed to <see cref="Open(Stream, bool)"/>, including any pending edits.
-    /// The provider is called with <see cref="CancellationToken.None"/>, and this method waits for it.
-    /// </summary>
-    /// <param name="options">Signature field, page, and reserved contents size.</param>
-    /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
-    public void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)
-    {
-        _engine.Sign(options, provider);
-    }
-
-    /// <summary>
-    /// Appends one incremental signature revision, including any pending edits.
-    /// The provider is called with <see cref="CancellationToken.None"/>, and this method waits for it.
-    /// </summary>
-    /// <param name="destination">The same stream, or an empty writable stream.</param>
-    /// <param name="options">Signature field, page, and reserved contents size.</param>
-    /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
-    /// <param name="leaveOpen">When <paramref name="destination"/> is a different stream, controls whether the document owns it.</param>
-    public void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen = false)
-    {
-        _engine.Sign(destination, options, provider, leaveOpen);
-    }
-
-    /// <summary>
-    /// Appends one incremental signature revision to the stream passed to <see cref="Open(Stream, bool)"/>, including any pending edits.
-    /// It produces the same bytes as <see cref="Sign(PdfSignatureOptions, IPdfSignatureProvider)"/> for the same provider output.
-    /// </summary>
-    /// <param name="options">Signature field, page, and reserved contents size.</param>
-    /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
-    /// <param name="cancellationToken">Passed to the provider, which passes it to the signer and the timestamp authority, and observed before the revision is written.</param>
-    /// <returns>A task that completes when the revision is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The stream is unchanged, and the document is as it was before the call.</exception>
-    public Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken = default)
-    {
-        return _engine.SignAsync(options, provider, cancellationToken);
-    }
-
-    /// <summary>
-    /// Appends one incremental signature revision, including any pending edits.
-    /// It produces the same bytes as <see cref="Sign(Stream, PdfSignatureOptions, IPdfSignatureProvider, bool)"/> for the same provider output.
-    /// A different destination receives the copy and the revision with asynchronous reads and writes.
-    /// </summary>
-    /// <param name="destination">The same stream, or an empty writable stream.</param>
-    /// <param name="options">Signature field, page, and reserved contents size.</param>
-    /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
-    /// <param name="leaveOpen">When <paramref name="destination"/> is a different stream, controls whether the document owns it.</param>
-    /// <param name="cancellationToken">Passed to the provider, and observed before the write and between the 1 MiB blocks of the copy.</param>
-    /// <returns>A task that completes when the revision is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The destination is truncated to its starting length, and the document is as it was before the call.</exception>
-    public Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen = false, CancellationToken cancellationToken = default)
-    {
-        return _engine.SignAsync(destination, options, provider, leaveOpen, cancellationToken);
-    }
-
-    /// <summary>
-    /// Releases the document. Pending edits are not saved.
+    /// Releases the document. Pending changes are not saved, and an open editor can no longer be used.
     /// </summary>
     public void Dispose()
     {
+        _disposed = true;
         _engine.Dispose();
     }
 
@@ -242,5 +160,13 @@ public sealed class PdfDocument : IDisposable
     internal static PdfDocument OpenWithCursorWindows(Stream stream, bool leaveOpen, int cursorWindows)
     {
         return new PdfDocument(PdfEngine.Open(stream, leaveOpen, null, cursorWindows));
+    }
+
+    internal void EndEdit(PdfDocumentEditor editor)
+    {
+        if (ReferenceEquals(_editor, editor))
+        {
+            _editor = null;
+        }
     }
 }

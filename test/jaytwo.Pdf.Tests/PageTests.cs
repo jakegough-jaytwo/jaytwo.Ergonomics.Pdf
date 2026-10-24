@@ -30,19 +30,24 @@ public class PageTests
         stream.Write(original, 0, original.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             PdfPage page = Assert.Single(document.Pages);
             PdfFieldSnapshot before = FieldSnapshot(document);
             Assert.Equal(90, page.Rotation);
             Assert.Equal(new PdfRect(10, 20, 210, 320), page.MediaBox);
             Assert.Equal(new PdfRect(20, 30, 180, 280), page.CropBox);
 
-            page.Rotation = -180;
+            PdfPageEditor pageEditor = Assert.Single(editor.Pages);
+            Assert.Equal(1, pageEditor.Number);
+            Assert.Equal(90, pageEditor.Rotation);
 
-            Assert.Equal(180, page.Rotation);
+            pageEditor.Rotation = -180;
+
+            Assert.Equal(180, pageEditor.Rotation);
             Assert.Equal(180, Assert.Single(document.Pages).Rotation);
             Assert.Equal(before, FieldSnapshot(document));
             Assert.Equal(180, document.AcroForm.Fields[0].PageRotation);
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -78,8 +83,9 @@ public class PageTests
     public void rotation_normalizes_every_multiple_of_ninety(int value, int expected)
     {
         using var document = PdfDocument.Open(new MemoryStream(PageDocument(inheritedRotation: 90)), leaveOpen: true);
+        using var editor = document.Edit();
 
-        document.Pages[0].Rotation = value;
+        editor.Pages[0].Rotation = value;
 
         Assert.Equal(expected, document.Pages[0].Rotation);
     }
@@ -91,10 +97,11 @@ public class PageTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => document.Pages[0].Rotation = 45);
-        document.Pages[0].Rotation = 450;
-        document.SaveIncremental();
+        Assert.Throws<ArgumentOutOfRangeException>(() => editor.Pages[0].Rotation = 45);
+        editor.Pages[0].Rotation = 450;
+        editor.SaveIncremental();
 
         Assert.Equal(pdf.Length, stream.Length);
         Assert.Equal(90, document.Pages[0].Rotation);
@@ -117,10 +124,11 @@ public class PageTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        document.AllowBreakingSignatures = true;
+        using var editor = document.Edit();
+        editor.AllowBreakingSignatures = true;
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.Pages[0].Rotation = 90);
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Pages[0].Rotation = 90);
+        AssertUnchanged(editor, stream, pdf);
     }
 
     [Theory]
@@ -132,15 +140,16 @@ public class PageTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.True(document.HasUsageRights);
-        Assert.Throws<PdfSignatureConflictException>(() => document.Pages[0].Rotation = 90);
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<PdfSignatureConflictException>(() => editor.Pages[0].Rotation = 90);
+        AssertUnchanged(editor, stream, pdf);
 
-        document.AllowBreakingSignatures = true;
-        document.Pages[0].Rotation = 90;
+        editor.AllowBreakingSignatures = true;
+        editor.Pages[0].Rotation = 90;
         Assert.True(document.HasUsageRights);
-        document.SaveIncremental();
+        editor.SaveIncremental();
 
         Assert.True(stream.ToArray().AsSpan(0, pdf.Length).SequenceEqual(pdf));
         Assert.Equal(90, document.Pages[0].Rotation);
@@ -158,9 +167,10 @@ public class PageTests
                 (9, "<< /TransformMethod /UR3 /TransformParams << /V /2.2 /Document [/FullSave] >> >>"),
             });
         using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.True(document.HasUsageRights);
-        document.Pages[0].Rotation = 90;
+        editor.Pages[0].Rotation = 90;
 
         Assert.False(document.HasUsageRights);
     }
@@ -178,8 +188,9 @@ public class PageTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
-            document.Pages[0].Rotation = 270;
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Pages[0].Rotation = 270;
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -202,14 +213,16 @@ public class PageTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
-            Assert.Throws<PdfEncryptionRestrictedException>(() => document.Pages[0].Rotation = 90);
-            AssertUnchanged(document, stream, pdf);
+            using var editor = document.Edit();
+            Assert.Throws<PdfEncryptionRestrictedException>(() => editor.Pages[0].Rotation = 90);
+            AssertUnchanged(editor, stream, pdf);
         }
 
         using (var document = PdfDocument.Open(stream, "owner", leaveOpen: true))
         {
-            document.Pages[0].Rotation = 90;
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Pages[0].Rotation = 90;
+            editor.SaveIncremental();
         }
 
         Assert.True(stream.Length > pdf.Length);
@@ -265,9 +278,9 @@ public class PageTests
             });
     }
 
-    private static void AssertUnchanged(PdfDocument document, MemoryStream stream, byte[] pdf)
+    private static void AssertUnchanged(PdfDocumentEditor editor, MemoryStream stream, byte[] pdf)
     {
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.Equal(pdf.Length, stream.Length);
     }
 

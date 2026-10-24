@@ -92,9 +92,10 @@ public class SignatureInspectionTests
         stream.Write(signed, 0, signed.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.False(document.Signatures[0].HasLaterRevisions);
-            document.Metadata.Title = "Later";
-            document.SaveIncremental();
+            editor.Metadata.Title = "Later";
+            editor.SaveIncremental();
 
             PdfSignatureInfo signature = Assert.Single(document.Signatures);
             Assert.True(signature.HasLaterRevisions);
@@ -324,7 +325,8 @@ public class SignatureInspectionTests
         var fixedProvider = new FixedProvider(capture.Contents);
         using (var document = PdfDocument.Open(sparse, leaveOpen: true))
         {
-            document.Sign(sparse, new PdfSignatureOptions { ReservedContentsBytes = capture.Contents.Length }, fixedProvider);
+            using var editor = document.Edit();
+            editor.Sign(sparse, new PdfSignatureOptions { ReservedContentsBytes = capture.Contents.Length }, fixedProvider);
         }
 
         long before = sparse.BytesRead;
@@ -367,8 +369,9 @@ public class SignatureInspectionTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
-        document.Sign(destination, options, provider, leaveOpen: true);
+        editor.Sign(destination, options, provider, leaveOpen: true);
         return destination.ToArray();
     }
 

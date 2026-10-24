@@ -6,7 +6,7 @@ using jaytwo.Pdf.Internal;
 namespace jaytwo.Pdf.Metadata;
 
 /// <summary>
-/// Document information and XMP metadata.
+/// Document information and XMP metadata. <see cref="PdfMetadataEditor"/> changes them.
 /// </summary>
 public sealed class PdfMetadata
 {
@@ -18,76 +18,44 @@ public sealed class PdfMetadata
     }
 
     /// <summary>
-    /// Gets or sets the document title.
+    /// Gets the document title.
     /// </summary>
-    public string? Title
-    {
-        get => _engine.GetInfoText("Title");
-        set => _engine.SetInfoText("Title", value);
-    }
+    public string? Title => _engine.GetInfoText("Title");
 
     /// <summary>
-    /// Gets or sets the document author.
+    /// Gets the document author.
     /// </summary>
-    public string? Author
-    {
-        get => _engine.GetInfoText("Author");
-        set => _engine.SetInfoText("Author", value);
-    }
+    public string? Author => _engine.GetInfoText("Author");
 
     /// <summary>
-    /// Gets or sets the document subject.
+    /// Gets the document subject.
     /// </summary>
-    public string? Subject
-    {
-        get => _engine.GetInfoText("Subject");
-        set => _engine.SetInfoText("Subject", value);
-    }
+    public string? Subject => _engine.GetInfoText("Subject");
 
     /// <summary>
-    /// Gets or sets the document keywords.
+    /// Gets the document keywords.
     /// </summary>
-    public string? Keywords
-    {
-        get => _engine.GetInfoText("Keywords");
-        set => _engine.SetInfoText("Keywords", value);
-    }
+    public string? Keywords => _engine.GetInfoText("Keywords");
 
     /// <summary>
-    /// Gets or sets the creating application.
+    /// Gets the creating application.
     /// </summary>
-    public string? Creator
-    {
-        get => _engine.GetInfoText("Creator");
-        set => _engine.SetInfoText("Creator", value);
-    }
+    public string? Creator => _engine.GetInfoText("Creator");
 
     /// <summary>
-    /// Gets or sets the producing application.
+    /// Gets the producing application.
     /// </summary>
-    public string? Producer
-    {
-        get => _engine.GetInfoText("Producer");
-        set => _engine.SetInfoText("Producer", value);
-    }
+    public string? Producer => _engine.GetInfoText("Producer");
 
     /// <summary>
-    /// Gets or sets the creation date.
+    /// Gets the creation date.
     /// </summary>
-    public DateTimeOffset? CreationDate
-    {
-        get => _engine.GetInfoDate("CreationDate");
-        set => _engine.SetInfoDate("CreationDate", value, false);
-    }
+    public DateTimeOffset? CreationDate => _engine.GetInfoDate("CreationDate");
 
     /// <summary>
-    /// Gets or sets the modification date. Setting this value keeps later edits from replacing it.
+    /// Gets the modification date.
     /// </summary>
-    public DateTimeOffset? ModificationDate
-    {
-        get => _engine.GetInfoDate("ModDate");
-        set => _engine.SetInfoDate("ModDate", value, true);
-    }
+    public DateTimeOffset? ModificationDate => _engine.GetInfoDate("ModDate");
 
     /// <summary>
     /// Gets the keys in the document information dictionary.
@@ -100,13 +68,12 @@ public sealed class PdfMetadata
     public bool HasXmp => _engine.HasXmp;
 
     /// <summary>
-    /// Gets or sets a document information value by its PDF key.
+    /// Gets a document information value by its PDF key.
     /// </summary>
     /// <param name="key">The information dictionary key, such as Title or a private key.</param>
     /// <returns>The text value, or <see langword="null"/> when the key is absent.</returns>
     /// <remarks>
     /// CreationDate and ModDate are PDF date strings such as <c>D:20200101120000Z</c>. Trapped is the name True, False, or Unknown.
-    /// Setting a standard text key also updates the matching XMP property when the packet is well formed.
     /// </remarks>
     public string? this[string key]
     {
@@ -119,8 +86,6 @@ public sealed class PdfMetadata
 
             return _engine.GetInfoText(key);
         }
-
-        set => _engine.SetInfo(key, value);
     }
 
     /// <summary>
@@ -130,14 +95,5 @@ public sealed class PdfMetadata
     public Stream OpenXmp()
     {
         return _engine.OpenXmp();
-    }
-
-    /// <summary>
-    /// Replaces the metadata stream with the supplied packet bytes.
-    /// </summary>
-    /// <param name="utf8Packet">The XMP packet.</param>
-    public void SetXmp(ReadOnlySpan<byte> utf8Packet)
-    {
-        _engine.SetXmp(utf8Packet);
     }
 }

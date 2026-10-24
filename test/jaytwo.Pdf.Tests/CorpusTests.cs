@@ -133,11 +133,12 @@ public class CorpusTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
         Exception? error = Record.Exception(() =>
         {
-            document.Metadata.Title = RevisedTitle;
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.Metadata.Title = RevisedTitle;
+            editor.SaveIncremental(destination, leaveOpen: true);
         });
         if (entry.Revise != "ok")
         {
@@ -179,12 +180,13 @@ public class CorpusTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
         PdfAppearanceDisposition disposition = default;
         Exception? error = Record.Exception(() =>
         {
-            disposition = document.AcroForm.Fill(field, value);
-            document.SaveIncremental(destination, leaveOpen: true);
+            disposition = editor.AcroForm.Fill(field, value);
+            editor.SaveIncremental(destination, leaveOpen: true);
         });
         if (!Enum.TryParse(result, out PdfAppearanceDisposition expected))
         {
@@ -222,6 +224,7 @@ public class CorpusTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         IReadOnlyDictionary<string, PdfFieldValue> before = document.AcroForm.Export();
         FormValues.AssertAgree(before, FormValues.Pypdf(original, entry.Password), id + " before");
         Dictionary<string, PdfFieldValue> values = ChangedValues(document.AcroForm.Fields, before);
@@ -231,8 +234,8 @@ public class CorpusTests
         }
 
         var destination = new MemoryStream();
-        document.AcroForm.Fill(values);
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.AcroForm.Fill(values);
+        editor.SaveIncremental(destination, leaveOpen: true);
 
         byte[] revised = destination.ToArray();
         CheckOutput(entry, original, revised, null, out JsonElement after);
@@ -264,6 +267,7 @@ public class CorpusTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         string? refusal = null;
         if (document.AcroForm.IsXfaOnly)
         {
@@ -280,7 +284,8 @@ public class CorpusTests
             Dictionary<string, PdfFieldValue> values = ChangedValues(document.AcroForm.Fields, document.AcroForm.Export());
             using (var trial = PdfDocument.Open(new MemoryStream(original, writable: false), entry.Password))
             {
-                foreach (KeyValuePair<string, PdfAppearanceDisposition> result in trial.AcroForm.Fill(values))
+                using var trialEditor = trial.Edit();
+                foreach (KeyValuePair<string, PdfAppearanceDisposition> result in trialEditor.AcroForm.Fill(values))
                 {
                     if (result.Value == PdfAppearanceDisposition.NeedsViewer)
                     {
@@ -289,13 +294,13 @@ public class CorpusTests
                 }
             }
 
-            document.AcroForm.Fill(values);
+            editor.AcroForm.Fill(values);
             refusal = document.AcroForm.NeedAppearances ? nameof(PdfUnsupportedFormException) : null;
         }
 
-        document.AllowBreakingSignatures = true;
+        editor.AllowBreakingSignatures = true;
         var destination = new MemoryStream();
-        Exception? error = Record.Exception(() => document.AcroForm.Flatten());
+        Exception? error = Record.Exception(() => editor.AcroForm.Flatten());
         if (refusal != null)
         {
             Assert.True(error != null, id + ": the flatten succeeded, but " + refusal + " was expected");
@@ -304,7 +309,7 @@ public class CorpusTests
         }
 
         Assert.Null(error);
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         byte[] flattened = destination.ToArray();
         Assert.True(flattened.AsSpan(0, original.Length).SequenceEqual(original), id + ": the original is not a prefix");
         FormValues.AssertQpdfCheck(flattened, entry.Password);

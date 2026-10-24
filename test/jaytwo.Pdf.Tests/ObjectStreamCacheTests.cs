@@ -76,6 +76,7 @@ public class ObjectStreamCacheTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             IReadOnlyList<PdfField> fields = document.AcroForm.Fields;
             Assert.Equal(4, fields.Count);
             Assert.True(document.RetainedObjectStreamCount <= 1);
@@ -91,14 +92,14 @@ public class ObjectStreamCacheTests
             Assert.Equal("Gamma", Assert.Single(again, field => field.FullName == "C").Value);
             Assert.Equal("Delta", Assert.Single(again, field => field.FullName == "D").Value);
 
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("A", "Edited"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("A", "Edited"));
             Assert.Equal("Edited", Value(document, "A"));
             Assert.Equal("Beta", Value(document, "B"));
             Assert.Equal("Gamma", Value(document, "C"));
             Assert.Equal("Delta", Value(document, "D"));
             Assert.True(document.RetainedObjectStreamCount <= 1);
 
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
             Assert.Equal("Edited", Value(document, "A"));
             Assert.True(document.RetainedObjectStreamCount <= 1);
         }

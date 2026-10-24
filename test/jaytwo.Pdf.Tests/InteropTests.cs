@@ -125,12 +125,13 @@ public class InteropTests
         byte[] pdf = BasicPdf();
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Metadata.Title = "InfoEdited";
-        document.Metadata.SetXmp(Encoding.UTF8.GetBytes(XmpPacket));
+        using var editor = document.Edit();
+        editor.Metadata.Title = "InfoEdited";
+        editor.Metadata.SetXmp(Encoding.UTF8.GetBytes(XmpPacket));
         using var content = new MemoryStream(attachment, writable: false);
-        document.Attachments.Add("notes.bin", content, leaveOpen: true);
+        editor.Attachments.Add("notes.bin", content, leaveOpen: true);
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         return destination.ToArray();
     }
 
@@ -211,9 +212,10 @@ public class InteropTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Metadata.Title = title;
+        using var editor = document.Edit();
+        editor.Metadata.Title = title;
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         return destination.ToArray();
     }
 
@@ -224,8 +226,9 @@ public class InteropTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", value));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", value));
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();
@@ -248,7 +251,8 @@ public class InteropTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new SilentProvider());
+            using var editor = document.Edit();
+            editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new SilentProvider());
         }
 
         return stream.ToArray();

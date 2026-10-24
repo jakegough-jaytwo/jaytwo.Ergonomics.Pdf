@@ -23,11 +23,12 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("Secret", document.Metadata.Title);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            document.Metadata.Title = "Updated";
-            document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
-            document.SaveIncremental(stream);
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            editor.Metadata.Title = "Updated";
+            editor.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -73,9 +74,10 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "caf\u00e9", leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            document.Metadata.Title = "Updated";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            editor.Metadata.Title = "Updated";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -151,11 +153,12 @@ public class EncryptionTests
         byte[] pdf = Document(revision6: false, string.Empty, "owner", StandardEncryptor.FillOnly(), textField: true);
 
         using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.False(document.Permissions.CanModify);
         Assert.True(document.Permissions.CanFillForms);
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfEncryptionRestrictedException>(() => document.Metadata.Title = "Nope");
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfEncryptionRestrictedException>(() => editor.Metadata.Title = "Nope");
     }
 
     [Fact]
@@ -186,18 +189,20 @@ public class EncryptionTests
     {
         byte[] pdf = Document(revision6, "user", "owner", StandardEncryptor.FillOnly(), textField: true);
         using var user = PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true);
+        using var userEditor = user.Edit();
 
-        Assert.Equal(PdfAppearanceDisposition.Generated, user.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfEncryptionRestrictedException>(() => user.Metadata.Title = "Nope");
-        Assert.Throws<PdfEncryptionRestrictedException>(() => user.Attachments.Add("a.bin", new MemoryStream(new byte[] { 1 }), leaveOpen: true));
-        Assert.Throws<PdfEncryptionRestrictedException>(() => user.Sign(new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider()));
+        Assert.Equal(PdfAppearanceDisposition.Generated, userEditor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfEncryptionRestrictedException>(() => userEditor.Metadata.Title = "Nope");
+        Assert.Throws<PdfEncryptionRestrictedException>(() => userEditor.Attachments.Add("a.bin", new MemoryStream(new byte[] { 1 }), leaveOpen: true));
+        Assert.Throws<PdfEncryptionRestrictedException>(() => userEditor.Sign(new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider()));
 
         var ownerStream = new MemoryStream();
         ownerStream.Write(pdf, 0, pdf.Length);
         using (var owner = PdfDocument.Open(ownerStream, "owner", leaveOpen: true))
         {
-            owner.Metadata.Title = "Owner";
-            owner.SaveIncremental();
+            using var ownerEditor = owner.Edit();
+            ownerEditor.Metadata.Title = "Owner";
+            ownerEditor.SaveIncremental();
         }
 
         using var saved = PdfDocument.Open(ownerStream, "user", leaveOpen: true);
@@ -233,19 +238,21 @@ public class EncryptionTests
         {
             byte[] pdf = Encrypted(KindFor(revision), bits, textField: false);
             using var user = PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true);
+            using var userEditor = user.Edit();
             using var owner = PdfDocument.Open(new MemoryStream(pdf), "owner", leaveOpen: true);
+            using var ownerEditor = owner.Edit();
             AssertPermissions(name, user.Permissions, print, high, modify, copy, annotate, fill, assemble, access);
             AssertPermissions(name + " owner", owner.Permissions, print, high, modify, copy, annotate, fill, assemble, access);
             if (fillAllowed)
             {
-                Assert.Throws<PdfFieldNotFoundException>(() => user.AcroForm.Fill("Name", "Ada"));
+                Assert.Throws<PdfFieldNotFoundException>(() => userEditor.AcroForm.Fill("Name", "Ada"));
             }
             else
             {
-                Assert.Throws<PdfEncryptionRestrictedException>(() => user.AcroForm.Fill("Name", "Ada"));
+                Assert.Throws<PdfEncryptionRestrictedException>(() => userEditor.AcroForm.Fill("Name", "Ada"));
             }
 
-            owner.Metadata.Title = name;
+            ownerEditor.Metadata.Title = name;
         }
     }
 
@@ -273,7 +280,8 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 new PdfSignatureOptions
                 {
                     ReservedContentsBytes = 32,
@@ -337,7 +345,8 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "owner", leaveOpen: true))
         {
-            document.Sign(new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 }, new TimeStampProvider());
+            using var editor = document.Edit();
+            editor.Sign(new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 }, new TimeStampProvider());
         }
 
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
@@ -370,9 +379,10 @@ public class EncryptionTests
         byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
 
         using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false), "user");
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Locked", "Ada"));
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Open", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Locked", "Ada"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Open", "Ada"));
     }
 
     // W-97: a signature dictionary the library writes again, here a direct /UR3 in the catalog that an attachment
@@ -395,9 +405,10 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.HasUsageRights);
-            document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
-            document.SaveIncremental(stream);
+            editor.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
@@ -442,14 +453,15 @@ public class EncryptionTests
         var destination = new MemoryStream();
         using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false), password))
         {
-            document.Attachments.Add("invoice.xml", new MemoryStream(content), options: new PdfAttachmentOptions
+            using var editor = document.Edit();
+            editor.Attachments.Add("invoice.xml", new MemoryStream(content), options: new PdfAttachmentOptions
             {
                 Relationship = PdfAttachmentRelationship.Alternative,
                 CreationDate = created,
                 ModificationDate = created,
                 Compress = true,
             });
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         byte[] saved = destination.ToArray();
@@ -509,9 +521,10 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
-            document.Metadata.Title = "Visible";
-            document.Attachments.Add("open.bin", new MemoryStream(Encoding.ASCII.GetBytes("CLEARTEXT")), leaveOpen: true);
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "Visible";
+            editor.Attachments.Add("open.bin", new MemoryStream(Encoding.ASCII.GetBytes("CLEARTEXT")), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);
@@ -618,12 +631,13 @@ public class EncryptionTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, "user", leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.False(document.Permissions.CanAnnotate);
         Assert.False(document.Permissions.CanFillForms);
         long length = stream.Length;
-        Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Fill("Name", "Ada"));
-        document.SaveIncremental();
+        Assert.Throws<PdfEncryptionRestrictedException>(() => editor.AcroForm.Fill("Name", "Ada"));
+        editor.SaveIncremental();
         Assert.Equal(length, stream.Length);
     }
 
@@ -649,11 +663,12 @@ public class EncryptionTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("Secret", document.Metadata.Title);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            document.Metadata.Title = "Updated";
-            document.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
-            document.SaveIncremental(stream);
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            editor.Metadata.Title = "Updated";
+            editor.Attachments.Add("notes.bin", new MemoryStream(new byte[] { 0, 127, 255 }), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();

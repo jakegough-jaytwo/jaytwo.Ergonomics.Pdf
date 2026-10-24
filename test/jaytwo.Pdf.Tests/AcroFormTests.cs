@@ -83,12 +83,13 @@ public class AcroFormTests
         builder.Indirect(5, "<< /Subtype /Widget /Parent 4 0 R /Rect [10 10 30 30] /AP << /N << /Off null /0 null >> >> /P 3 0 R >>");
         builder.Indirect(6, "<< /Subtype /Widget /Parent 4 0 R /Rect [40 10 60 30] /AP << /N << /Off null /1 null >> >> /P 3 0 R >>");
         using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+        using var editor = document.Edit();
 
         var fields = document.AcroForm.GetFields("Color");
         Assert.Equal("0", fields[0].ExportValue);
         Assert.Equal("1", fields[1].ExportValue);
         Assert.True(fields[1].IsChecked);
-        Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, document.AcroForm.Fill("Color", "0"));
+        Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, editor.AcroForm.Fill("Color", "0"));
     }
 
     [Fact]
@@ -109,25 +110,26 @@ public class AcroFormTests
         long length = stream.Length;
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.False(Field(document, "Agree").IsChecked);
             Assert.False(Field(document, "Bare").IsChecked);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
             Assert.False(document.AcroForm.NeedAppearances);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Notes", "one\ntwo"));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", "too-long!"));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Secret", "nope"));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Sig", "nope"));
-            Assert.Throws<PdfFieldReadOnlyException>(() => document.AcroForm.Fill("Locked", "nope"));
-            Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Fill("Missing", "nope"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Notes", "one\ntwo"));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", "too-long!"));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Secret", "nope"));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Sig", "nope"));
+            Assert.Throws<PdfFieldReadOnlyException>(() => editor.AcroForm.Fill("Locked", "nope"));
+            Assert.Throws<PdfFieldNotFoundException>(() => editor.AcroForm.Fill("Missing", "nope"));
             Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.GetFields("Missing"));
             Assert.Equal("Name", document.AcroForm.GetFields("Name")[0].PartialName);
-            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, document.AcroForm.Fill("Comb", "AB"));
-            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, document.AcroForm.Fill("Name", "日本語"));
+            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, editor.AcroForm.Fill("Comb", "AB"));
+            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, editor.AcroForm.Fill("Name", "日本語"));
             Assert.True(document.AcroForm.NeedAppearances);
-            Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, document.AcroForm.Fill("Agree", true));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Bare", true));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Choice", "Yes"));
-            document.SaveIncremental(stream);
+            Assert.Equal(PdfAppearanceDisposition.ExistingAppearanceSelected, editor.AcroForm.Fill("Agree", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Bare", true));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Choice", "Yes"));
+            editor.SaveIncremental(stream);
         }
 
         Assert.True(stream.Length > length);
@@ -151,9 +153,10 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", "abcd"));
-        document.SaveIncremental(stream);
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", "abcd"));
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -165,10 +168,11 @@ public class AcroFormTests
             new[] { "<< /Subtype /Widget /FT /Tx /T (Name) /Rect [0 0 10 10] /P 3 0 R >>" },
             " /Perms << /DocMDP 9 0 R >>");
         using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.Equal("Name", document.AcroForm.Fields[0].FullName);
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfCertificationLockedException>(() => document.Sign(new MemoryStream(), new PdfSignatureOptions(), new FixedProvider()));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Sign(new MemoryStream(), new PdfSignatureOptions(), new FixedProvider()));
     }
 
     [Fact]
@@ -185,10 +189,11 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Nope");
-        document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "Nope");
+        editor.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
     }
 
     [Fact]
@@ -202,9 +207,10 @@ public class AcroFormTests
         builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
         builder.Indirect(10, "<< /TransformMethod /DocMDP /TransformParams << /P 1 /V /1.2 >> >>");
         using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Blocked");
-        Assert.Throws<PdfCertificationLockedException>(() => document.Attachments.Add("blocked.txt", new MemoryStream(new byte[] { 1 }), leaveOpen: false));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "Blocked");
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Attachments.Add("blocked.txt", new MemoryStream(new byte[] { 1 }), leaveOpen: false));
     }
 
     [Fact]
@@ -220,10 +226,11 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "First");
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Second");
-        document.SaveIncremental();
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "First");
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "Second");
+        editor.SaveIncremental();
         Assert.Equal(pdf, stream.ToArray());
     }
 
@@ -239,18 +246,20 @@ public class AcroFormTests
         builder.Indirect(9, "<< /Type /Sig /Reference [10 0 R] >>");
         builder.Indirect(10, "<< /TransformMethod /FieldMDP /TransformParams << /Action /All /V /1.2 >> >>");
         using var document = PdfDocument.Open(new MemoryStream(builder.Finish()), leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.Equal("Name", document.AcroForm.GetFields("Name")[0].FullName);
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
     }
 
     [Fact]
     public void fieldmdp_include_locks_only_the_named_fields()
     {
         using var document = PdfDocument.Open(new MemoryStream(FieldMdpForm("/Include /Fields [(Locked)]")), leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Locked", "Ada"));
-        document.AcroForm.Fill("Open", "Ada");
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Locked", "Ada"));
+        editor.AcroForm.Fill("Open", "Ada");
         Assert.Equal("Ada", document.AcroForm.GetFields("Open")[0].Value);
     }
 
@@ -258,9 +267,10 @@ public class AcroFormTests
     public void fieldmdp_exclude_locks_every_field_except_the_named_fields()
     {
         using var document = PdfDocument.Open(new MemoryStream(FieldMdpForm("/Exclude /Fields [(Open)]")), leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Locked", "Ada"));
-        document.AcroForm.Fill("Open", "Ada");
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Locked", "Ada"));
+        editor.AcroForm.Fill("Open", "Ada");
         Assert.Equal("Ada", document.AcroForm.GetFields("Open")[0].Value);
     }
 
@@ -277,10 +287,11 @@ public class AcroFormTests
     public void fieldmdp_matches_fully_qualified_field_names_only(string actionAndFields, bool lockedLocked, bool openLocked, bool childLocked)
     {
         using var document = PdfDocument.Open(new MemoryStream(NestedFieldMdpForm(actionAndFields, certified: false)), leaveOpen: true);
+        using var editor = document.Edit();
 
-        AssertFill(document, "Locked", lockedLocked);
-        AssertFill(document, "Open", openLocked);
-        AssertFill(document, "Group.Child", childLocked);
+        AssertFill(document, editor, "Locked", lockedLocked);
+        AssertFill(document, editor, "Open", openLocked);
+        AssertFill(document, editor, "Group.Child", childLocked);
     }
 
     [Theory]
@@ -290,12 +301,13 @@ public class AcroFormTests
     public void docmdp_form_fill_permission_with_fieldmdp_applies_both(string actionAndFields, bool lockedLocked, bool openLocked, bool childLocked)
     {
         using var document = PdfDocument.Open(new MemoryStream(NestedFieldMdpForm(actionAndFields, certified: true)), leaveOpen: true);
+        using var editor = document.Edit();
 
-        AssertFill(document, "Locked", lockedLocked);
-        AssertFill(document, "Open", openLocked);
-        AssertFill(document, "Group.Child", childLocked);
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Nope");
-        document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+        AssertFill(document, editor, "Locked", lockedLocked);
+        AssertFill(document, editor, "Open", openLocked);
+        AssertFill(document, editor, "Group.Child", childLocked);
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "Nope");
+        editor.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
     }
 
     [Fact]
@@ -361,17 +373,18 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Agree", "x"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Agree", PdfFieldValue.None));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Agree", new[] { "Yes" }));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Color", true));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Color", new[] { "Red" }));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Choice", true));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", true));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", PdfFieldValue.None));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", new[] { "Yes" }));
-        document.SaveIncremental();
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Agree", "x"));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Agree", PdfFieldValue.None));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Agree", new[] { "Yes" }));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Color", true));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Color", new[] { "Red" }));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Choice", true));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", true));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", PdfFieldValue.None));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", new[] { "Yes" }));
+        editor.SaveIncremental();
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -388,6 +401,7 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             PdfField choice = Field(document, "Choice");
             Assert.True(choice.Required);
             Assert.False(choice.Editable);
@@ -403,17 +417,17 @@ public class AcroFormTests
             Assert.Equal(new[] { "A", "C" }, multi.SelectedValues);
 
             long length = stream.Length;
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Choice", "No"));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Pair", "Alpha"));
-            Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Choice", new[] { "Red", "Blue" }));
-            document.SaveIncremental();
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Choice", "No"));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Pair", "Alpha"));
+            Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Choice", new[] { "Red", "Blue" }));
+            editor.SaveIncremental();
             Assert.Equal(length, stream.Length);
 
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Choice", "Blue"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Pair", "b"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Editable", "custom"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Multi", "B"));
-            document.SaveIncremental();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Choice", "Blue"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Pair", "b"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Editable", "custom"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Multi", "B"));
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -450,10 +464,11 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("FTL", document.AcroForm.GetFields("Service")[1].Value);
             Assert.Equal(new[] { "Old", "Old" }, new[] { document.AcroForm.GetFields("Name")[0].Value, document.AcroForm.GetFields("Name")[1].Value });
-            document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Service"] = "LTL", ["Name"] = "Ada" });
-            document.SaveIncremental();
+            editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Service"] = "LTL", ["Name"] = "Ada" });
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -475,8 +490,9 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("List", "B"));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("List", "B"));
+            editor.SaveIncremental(stream);
         }
 
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)(stream.Length - pdf.Length));
@@ -493,11 +509,12 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.Empty(Field(document, "Choice").Options);
         Assert.False(Field(document, "Choice").Editable);
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Choice", "Yes"));
-        document.SaveIncremental(stream);
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Choice", "Yes"));
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -640,8 +657,9 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Bare", true));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Bare", true));
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -669,10 +687,11 @@ public class AcroFormTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        PdfFieldValueException error = Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Agree", true));
+        PdfFieldValueException error = Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Agree", true));
         Assert.Contains("different on-state", error.Message, StringComparison.Ordinal);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -685,8 +704,9 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Color", "Red"));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Color", "Red"));
+            editor.SaveIncremental(stream);
         }
 
         string appendix = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)(stream.Length - pdf.Length));
@@ -731,16 +751,16 @@ public class AcroFormTests
         return builder.Finish();
     }
 
-    private static void AssertFill(PdfDocument document, string fullName, bool locked)
+    private static void AssertFill(PdfDocument document, PdfDocumentEditor editor, string fullName, bool locked)
     {
         if (locked)
         {
-            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill(fullName, "Ada"));
+            Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill(fullName, "Ada"));
             Assert.Null(document.AcroForm.GetFields(fullName)[0].Value);
         }
         else
         {
-            document.AcroForm.Fill(fullName, "Ada");
+            editor.AcroForm.Fill(fullName, "Ada");
             Assert.Equal("Ada", document.AcroForm.GetFields(fullName)[0].Value);
         }
     }
@@ -804,8 +824,9 @@ public class AcroFormTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill(name, value));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill(name, value));
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();

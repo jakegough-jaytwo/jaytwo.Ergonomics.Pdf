@@ -44,9 +44,10 @@ public class IndirectFilterTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal(Plain, ReadAll(document.Attachments["notes.bin"].Open()));
-            document.Metadata.Title = "Revised";
-            document.SaveIncremental(stream);
+            editor.Metadata.Title = "Revised";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();

@@ -70,9 +70,10 @@ internal static class ComparisonFixtures
             using var pdf = OpenRead(Carrier());
             using var content = OpenRead(Payload());
             using var document = PdfDocument.Open(pdf, leaveOpen: true);
-            document.Attachments.Add(AttachmentName, content, leaveOpen: true, AttachmentOptions());
+            using var editor = document.Edit();
+            editor.Attachments.Add(AttachmentName, content, leaveOpen: true, AttachmentOptions());
             using var destination = CreateFile(path);
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         });
     }
 
@@ -172,9 +173,10 @@ internal static class ComparisonFixtures
         using (var file = OpenRead(source))
         using (var document = PdfDocument.Open(file, leaveOpen: true))
         {
-            document.AcroForm.Fill(G7Fixtures.TextValues(pages));
+            using var editor = document.Edit();
+            editor.AcroForm.Fill(G7Fixtures.TextValues(pages));
             using var destination = CreateFile(filled);
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         G7Fixtures.ObjectStreamCopy(filled, path);

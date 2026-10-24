@@ -59,8 +59,9 @@ public class RevisionTests
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         using (var destination = new MemoryStream())
         {
-            document.Metadata.Title = "After signature";
-            document.SaveIncremental(destination, leaveOpen: true);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "After signature";
+            editor.SaveIncremental(destination, leaveOpen: true);
             revised = destination.ToArray();
         }
 
@@ -185,8 +186,9 @@ public class RevisionTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         using var destination = new MemoryStream();
-        document.Sign(destination, new PdfSignatureOptions(), provider, leaveOpen: true);
+        editor.Sign(destination, new PdfSignatureOptions(), provider, leaveOpen: true);
         return destination.ToArray();
     }
 

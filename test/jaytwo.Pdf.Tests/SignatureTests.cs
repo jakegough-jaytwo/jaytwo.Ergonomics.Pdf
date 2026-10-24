@@ -196,10 +196,11 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "One";
-            document.SaveIncremental(stream);
-            document.Metadata.Author = "Two";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "One";
+            editor.SaveIncremental(stream);
+            editor.Metadata.Author = "Two";
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -223,9 +224,10 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "Signed";
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 128, SigningTime = TestCompat.UnixEpoch }, new FixedProvider());
+            using var editor = document.Edit();
+            editor.Metadata.Title = "Signed";
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 128, SigningTime = TestCompat.UnixEpoch }, new FixedProvider());
         }
 
         Assert.Equal(2, StartXrefs(stream.ToArray()).Count);
@@ -244,8 +246,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 64 }, hasher);
-            Assert.Throws<PdfSignatureTooLargeException>(() => document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 8 }, new FixedProvider { Payload = new byte[32] }));
+            using var editor = document.Edit();
+            editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 64 }, hasher);
+            Assert.Throws<PdfSignatureTooLargeException>(() => editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 8 }, new FixedProvider { Payload = new byte[32] }));
         }
 
         byte[] saved = stream.ToArray();
@@ -274,8 +277,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, new PdfSignatureOptions { FieldName = "Signature1", ReservedContentsBytes = 32 }, new FixedProvider());
-            document.Sign(stream, new PdfSignatureOptions { FieldName = "Signature2", ReservedContentsBytes = 32 }, new FixedProvider());
+            using var editor = document.Edit();
+            editor.Sign(stream, new PdfSignatureOptions { FieldName = "Signature1", ReservedContentsBytes = 32 }, new FixedProvider());
+            editor.Sign(stream, new PdfSignatureOptions { FieldName = "Signature2", ReservedContentsBytes = 32 }, new FixedProvider());
         }
 
         string saved = Encoding.ASCII.GetString(stream.ToArray());
@@ -293,7 +297,8 @@ public class SignatureTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        document.Metadata.Title = "Primes the unsigned cache";
+        using var editor = document.Edit();
+        editor.Metadata.Title = "Primes the unsigned cache";
 
         PdfSignatureOptions options;
         IPdfSignatureProvider provider;
@@ -308,9 +313,9 @@ public class SignatureTests
             provider = new FixedProvider();
         }
 
-        document.Sign(stream, options, provider);
+        editor.Sign(stream, options, provider);
 
-        Assert.Throws<PdfSignatureConflictException>(() => document.Pages[0].Rotation = 90);
+        Assert.Throws<PdfSignatureConflictException>(() => editor.Pages[0].Rotation = 90);
     }
 
     [Fact]
@@ -321,11 +326,12 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Metadata.Title = "New";
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
             string afterInfo = Encoding.ASCII.GetString(stream.ToArray());
             Assert.DoesNotContain("/ID", afterInfo, StringComparison.Ordinal);
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+            editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
         }
 
         Assert.Contains("/ID", Encoding.ASCII.GetString(stream.ToArray()), StringComparison.Ordinal);
@@ -339,9 +345,10 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        document.AcroForm.Fill("Name", "日本語");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "日本語");
 
-        Assert.Throws<PdfSignException>(() => document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
+        Assert.Throws<PdfSignException>(() => editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
         Assert.Equal(length, stream.Length);
     }
 
@@ -354,7 +361,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 },
                 new DocTimeStampSignatureProvider(authority));
@@ -385,13 +393,14 @@ public class SignatureTests
         long length = stream.Length;
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Throws<PdfSignException>(() => document.Sign(
+            using var editor = document.Edit();
+            Assert.Throws<PdfSignException>(() => editor.Sign(
                 new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 32 },
                 new FixedProvider()));
             Assert.Equal(length, stream.Length);
-            document.AcroForm.Fill("Name", "Ada");
-            document.SaveIncremental();
-            document.Sign(new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+            editor.AcroForm.Fill("Name", "Ada");
+            editor.SaveIncremental();
+            editor.Sign(new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
         }
 
         Assert.True(stream.Length > length);
@@ -401,8 +410,9 @@ public class SignatureTests
 
         var readOnly = new MemoryStream(pdf, writable: false);
         using var locked = PdfDocument.Open(readOnly, leaveOpen: true);
-        Assert.Throws<ArgumentException>(() => locked.SaveIncremental());
-        Assert.Throws<ArgumentException>(() => locked.Sign(new PdfSignatureOptions(), new FixedProvider()));
+        using var lockedEditor = locked.Edit();
+        Assert.Throws<ArgumentException>(() => lockedEditor.SaveIncremental());
+        Assert.Throws<ArgumentException>(() => lockedEditor.Sign(new PdfSignatureOptions(), new FixedProvider()));
     }
 
     [Fact]
@@ -414,7 +424,8 @@ public class SignatureTests
         var destination = new MemoryStream();
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 destination,
                 new PdfSignatureOptions { ReservedContentsBytes = 32 },
                 new FixedProvider(),
@@ -440,7 +451,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
                 new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)));
@@ -487,7 +499,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = TestCompat.UnixEpoch },
                 new CmsDetachedSignatureProvider(signer, authority));
@@ -528,8 +541,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal(1, document.AcroForm.Fields.Count);
-            document.Sign(
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions
                 {
@@ -543,7 +557,7 @@ public class SignatureTests
             PdfField signed = Assert.Single(document.AcroForm.Fields);
             Assert.Equal(new PdfRect(10, 20, 110, 40), signed.Rect);
             long length = stream.Length;
-            Assert.Throws<PdfSignException>(() => document.Sign(
+            Assert.Throws<PdfSignException>(() => editor.Sign(
                 stream,
                 new PdfSignatureOptions { FieldName = "SignHere", ReservedContentsBytes = 32 },
                 new FixedProvider()));
@@ -577,7 +591,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, new PdfSignatureOptions { FieldName = "SignHere", ReservedContentsBytes = 32 }, new FixedProvider());
+            using var editor = document.Edit();
+            editor.Sign(stream, new PdfSignatureOptions { FieldName = "SignHere", ReservedContentsBytes = 32 }, new FixedProvider());
             Assert.Equal(1, document.AcroForm.Fields.Count);
         }
 
@@ -603,7 +618,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions
                 {
@@ -614,7 +630,7 @@ public class SignatureTests
                 },
                 new FixedProvider());
             long length = stream.Length;
-            Assert.Throws<PdfSignException>(() => document.Sign(
+            Assert.Throws<PdfSignException>(() => editor.Sign(
                 stream,
                 new PdfSignatureOptions { FieldName = "SignHere", ReservedContentsBytes = 32 },
                 new FixedProvider()));
@@ -639,8 +655,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfSignException>(() => document.Sign(
+        Assert.Throws<PdfSignException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { FieldName = "Name", ReservedContentsBytes = 32 },
             new FixedProvider()));
@@ -655,8 +672,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfFieldReadOnlyException>(() => document.Sign(
+        Assert.Throws<PdfFieldReadOnlyException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { FieldName = "SignHere", ReservedContentsBytes = 32 },
             new FixedProvider()));
@@ -671,8 +689,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
-            document.Sign(
+            using var editor = document.Edit();
+            editor.Sign(stream, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider());
+            editor.Sign(
                 stream,
                 new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 4096 },
                 new DocTimeStampSignatureProvider(new RecordingAuthority()));
@@ -772,6 +791,7 @@ public class SignatureTests
             using var stream = new MemoryStream();
             stream.Write(pdf, 0, pdf.Length);
             using var document = PdfDocument.Open(stream, leaveOpen: true);
+            using var editor = document.Edit();
             var authority = new ChainAuthority(EssForm.V2DefaultHashWithIssuerSerial, TimestampCertificates.Tsa, Array.Empty<byte[]>());
 
             // The CMS reservation fits the leaf and the 256-byte signature value, so only the token overflows it.
@@ -780,7 +800,7 @@ public class SignatureTests
                 ? new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = reserved }
                 : new PdfSignatureOptions { ReservedContentsBytes = reserved, SigningTime = TestCompat.UnixEpoch };
 
-            PdfSignatureTooLargeException tooLarge = Assert.Throws<PdfSignatureTooLargeException>(() => document.Sign(stream, options, TimestampProvider(authority, documentTimestamp, null)));
+            PdfSignatureTooLargeException tooLarge = Assert.Throws<PdfSignatureTooLargeException>(() => editor.Sign(stream, options, TimestampProvider(authority, documentTimestamp, null)));
 
             Assert.Equal(reserved, tooLarge.ReservedBytes);
             Assert.True(tooLarge.ActualBytes > reserved);
@@ -800,8 +820,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<CryptographicException>(() => document.Sign(
+        Assert.Throws<CryptographicException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
@@ -828,7 +849,8 @@ public class SignatureTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, password, leaveOpen: true);
-        CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
+        using var editor = document.Edit();
+        CryptographicException exception = Assert.Throws<CryptographicException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
@@ -850,8 +872,9 @@ public class SignatureTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        CryptographicException exception = Assert.Throws<CryptographicException>(() => document.Sign(
+        CryptographicException exception = Assert.Throws<CryptographicException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new LeakySigner(certificate.RawData, sentinel, sentinelKey))));
@@ -875,8 +898,9 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfTimestampException>(() => document.Sign(
+        Assert.Throws<PdfTimestampException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { ReservedContentsBytes = 16384, SigningTime = TestCompat.UnixEpoch },
             new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new ThrowingAuthority())));
@@ -942,7 +966,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, SignerBoundOptions(8192), new CmsDetachedSignatureProvider(signer));
+            using var editor = document.Edit();
+            editor.Sign(stream, SignerBoundOptions(8192), new CmsDetachedSignatureProvider(signer));
         }
 
         Assert.True(stream.Length > pdf.Length);
@@ -966,7 +991,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, SignerBoundOptions(reserved), new CmsDetachedSignatureProvider(signer));
+            using var editor = document.Edit();
+            editor.Sign(stream, SignerBoundOptions(reserved), new CmsDetachedSignatureProvider(signer));
         }
 
         Assert.Equal(1, reads);
@@ -1065,7 +1091,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, SignerBoundOptions(tooLarge.ActualBytes), new CmsDetachedSignatureProvider(create()));
+            using var editor = document.Edit();
+            editor.Sign(stream, SignerBoundOptions(tooLarge.ActualBytes), new CmsDetachedSignatureProvider(create()));
         }
 
         Match contents = Regex.Match(Encoding.ASCII.GetString(stream.ToArray()), @"/Contents\s*<([0-9A-Fa-f]+)>");
@@ -1126,23 +1153,24 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            using var editor = document.Edit();
+            PdfSignException same = Assert.Throws<PdfSignException>(() => editor.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
             Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
             AssertPrefix(pdf, stream.ToArray(), pdf.Length);
 
             using (var destination = new MemoryStream())
             {
-                PdfSignException cross = Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
+                PdfSignException cross = Assert.Throws<PdfSignException>(() => editor.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
                 Assert.Equal(same.Message, cross.Message);
                 Assert.Equal(0, destination.Length);
                 AssertPrefix(pdf, stream.ToArray(), pdf.Length);
             }
 
-            PdfSignException again = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            PdfSignException again = Assert.Throws<PdfSignException>(() => editor.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
             Assert.Equal(same.Message, again.Message);
             AssertPrefix(pdf, stream.ToArray(), pdf.Length);
 
-            document.Sign(stream, AppendixOptions("Other"), new FixedProvider());
+            editor.Sign(stream, AppendixOptions("Other"), new FixedProvider());
         }
 
         byte[] saved = stream.ToArray();
@@ -1166,7 +1194,8 @@ public class SignatureTests
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         using (var destination = new MemoryStream())
         {
-            document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true);
+            using var editor = document.Edit();
+            editor.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true);
             overhead = destination.Length - probed.Length - probe;
         }
 
@@ -1176,7 +1205,8 @@ public class SignatureTests
             stream.Write(fits, 0, fits.Length);
             using (var document = PdfDocument.Open(stream, leaveOpen: true))
             {
-                document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider());
+                using var editor = document.Edit();
+                editor.Sign(stream, AppendixOptions("SignHere"), new FixedProvider());
             }
 
             AssertPrefix(fits, stream.ToArray(), fits.Length + (long)cap);
@@ -1187,11 +1217,12 @@ public class SignatureTests
         {
             stream.Write(over, 0, over.Length);
             using var document = PdfDocument.Open(stream, leaveOpen: true);
-            PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
+            using var editor = document.Edit();
+            PdfSignException same = Assert.Throws<PdfSignException>(() => editor.Sign(stream, AppendixOptions("SignHere"), new FixedProvider()));
             Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
             AssertPrefix(over, stream.ToArray(), over.Length);
             using var destination = new MemoryStream();
-            Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
+            Assert.Throws<PdfSignException>(() => editor.Sign(destination, AppendixOptions("SignHere"), new FixedProvider(), leaveOpen: true));
             Assert.Equal(0, destination.Length);
             AssertPrefix(over, stream.ToArray(), over.Length);
         }
@@ -1214,12 +1245,13 @@ public class SignatureTests
         using var source = new MemoryStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Attachments.Add("big.bin", new MemoryStream(content), leaveOpen: false);
-        PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(source, AppendixOptions("Signature1"), new FixedProvider()));
+        using var editor = document.Edit();
+        editor.Attachments.Add("big.bin", new MemoryStream(content), leaveOpen: false);
+        PdfSignException same = Assert.Throws<PdfSignException>(() => editor.Sign(source, AppendixOptions("Signature1"), new FixedProvider()));
         Assert.Equal("The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign.", same.Message);
         AssertPrefix(pdf, source.ToArray(), pdf.Length);
         using var destination = new MemoryStream();
-        Assert.Throws<PdfSignException>(() => document.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true));
+        Assert.Throws<PdfSignException>(() => editor.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true));
         Assert.Equal(0, destination.Length);
         AssertPrefix(pdf, source.ToArray(), pdf.Length);
     }
@@ -1288,13 +1320,14 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         PdfSignatureOptions options;
         IPdfSignatureProvider provider;
         if (documentTimestamp)
         {
             options = new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 8192 };
             provider = new DocTimeStampSignatureProvider(new FaultAuthority(fault));
-            PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
+            PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => editor.Sign(stream, options, provider));
             Assert.Contains(phrase, rejected.Message, StringComparison.Ordinal);
             Assert.Equal(length, stream.Length);
             return;
@@ -1305,7 +1338,7 @@ public class SignatureTests
         using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
         options = new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch };
         provider = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new FaultAuthority(fault));
-        PdfTimestampException exception = Assert.Throws<PdfTimestampException>(() => document.Sign(stream, options, provider));
+        PdfTimestampException exception = Assert.Throws<PdfTimestampException>(() => editor.Sign(stream, options, provider));
         Assert.Contains(phrase, exception.Message, StringComparison.Ordinal);
         Assert.Equal(length, stream.Length);
     }
@@ -1349,12 +1382,13 @@ public class SignatureTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        TException same = Assert.Throws<TException>(() => document.Sign(stream, options, createProvider()));
+        TException same = Assert.Throws<TException>(() => editor.Sign(stream, options, createProvider()));
         Assert.Equal(pdf, stream.ToArray());
 
         using var destination = new MemoryStream();
-        TException cross = Assert.Throws<TException>(() => document.Sign(destination, options, createProvider(), leaveOpen: true));
+        TException cross = Assert.Throws<TException>(() => editor.Sign(destination, options, createProvider(), leaveOpen: true));
         Assert.Equal(0, destination.Length);
         Assert.Equal(pdf, stream.ToArray());
         Assert.Equal(same.Message, cross.Message);
@@ -1367,7 +1401,8 @@ public class SignatureTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Sign(stream, options, TimestampProvider(authority, documentTimestamp, signerChain));
+            using var editor = document.Edit();
+            editor.Sign(stream, options, TimestampProvider(authority, documentTimestamp, signerChain));
         }
 
         return stream.ToArray();
@@ -1409,9 +1444,10 @@ public class SignatureTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         var authority = new HttpTimestampAuthority(new HttpClient(handler), new Uri("https://tsa.example/stamp"));
 
-        PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => document.Sign(
+        PdfTimestampException rejected = Assert.Throws<PdfTimestampException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp, ReservedContentsBytes = 1024 },
             new DocTimeStampSignatureProvider(authority)));
@@ -1703,14 +1739,15 @@ public class SignatureTests
         using var destination = new MemoryStream();
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
-            document.Attachments.Add("big.bin", new MemoryStream(new byte[attachmentLength]), leaveOpen: false);
+            using var editor = document.Edit();
+            editor.Attachments.Add("big.bin", new MemoryStream(new byte[attachmentLength]), leaveOpen: false);
             if (same)
             {
-                document.Sign(source, AppendixOptions("Signature1"), new FixedProvider());
+                editor.Sign(source, AppendixOptions("Signature1"), new FixedProvider());
             }
             else
             {
-                document.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true);
+                editor.Sign(destination, AppendixOptions("Signature1"), new FixedProvider(), leaveOpen: true);
             }
         }
 

@@ -86,10 +86,11 @@ public class DenseMemoryTests
         using (var source = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("Dense", document.Metadata.Title);
-            document.Metadata.Title = "Touched";
+            editor.Metadata.Title = "Touched";
             using var destination = new FileStream(destinationPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None);
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         done.Set();

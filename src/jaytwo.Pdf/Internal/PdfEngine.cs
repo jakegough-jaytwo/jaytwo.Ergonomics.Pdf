@@ -119,7 +119,7 @@ internal sealed class PdfEngine : IDisposable
         var result = new List<PdfPage>(pages.Count);
         for (int i = 0; i < pages.Count; i++)
         {
-            result.Add(new PdfPage(this, pages[i].ObjectId, i + 1, pages[i].MediaBox, pages[i].CropBox, pages[i].Rotate));
+            result.Add(new PdfPage(pages[i].ObjectId, i + 1, pages[i].MediaBox, pages[i].CropBox, pages[i].Rotate));
         }
 
         return result;

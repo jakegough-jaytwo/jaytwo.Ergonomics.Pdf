@@ -32,13 +32,15 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("b.bin", probe, leaveOpen: true, new PdfAttachmentOptions { Description = "beta", MimeType = "application/octet-stream" });
-            document.Attachments.Add("a.bin", new MemoryStream(second), leaveOpen: true);
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            editor.Attachments.Add("b.bin", probe, leaveOpen: true, new PdfAttachmentOptions { Description = "beta", MimeType = "application/octet-stream" });
+            editor.Attachments.Add("a.bin", new MemoryStream(second), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         Assert.True(probe.MaxRequested <= 65536);
         using var again = PdfDocument.Open(stream, leaveOpen: true);
+        using var againEditor = again.Edit();
         Assert.Equal(2, again.Attachments.Count);
         Assert.Equal("a.bin", again.Attachments[0].Name);
         Assert.Equal("b.bin", again.Attachments[1].Name);
@@ -58,12 +60,13 @@ public class AttachmentTests
             Assert.Equal(second, copy.ToArray());
         }
 
-        again.Attachments.Remove("a.bin");
-        again.SaveIncremental(stream);
+        againEditor.Attachments.Remove("a.bin");
+        againEditor.SaveIncremental(stream);
         using var removed = PdfDocument.Open(stream, leaveOpen: true);
+        using var removedEditor = removed.Edit();
         Assert.Single(removed.Attachments);
         Assert.Equal("b.bin", removed.Attachments[0].Name);
-        Assert.Throws<PdfAttachmentNotFoundException>(() => removed.Attachments.Remove("missing.bin"));
+        Assert.Throws<PdfAttachmentNotFoundException>(() => removedEditor.Attachments.Remove("missing.bin"));
     }
 
     [Fact]
@@ -104,9 +107,10 @@ public class AttachmentTests
     {
         byte[] pdf = PdfBuilder.Basic().Finish();
         using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        using var editor = document.Edit();
         var probe = new ProbeStream(new MemoryStream(new byte[] { 1 }), allowRead: false);
 
-        Assert.Throws<ArgumentException>(() => document.Attachments.Add("a.bin", probe));
+        Assert.Throws<ArgumentException>(() => editor.Attachments.Add("a.bin", probe));
     }
 
     // ISO 32000-1 7.9.6 compares name-tree keys byte by byte and requires one self-consistent key encoding (W-86).
@@ -119,8 +123,9 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("usage.txt", new MemoryStream(Encoding.ASCII.GetBytes("added")));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("usage.txt", new MemoryStream(Encoding.ASCII.GetBytes("added")));
+            editor.SaveIncremental();
         }
 
         string keys = WrittenKeys(stream, pdf.Length);
@@ -142,14 +147,16 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("z.txt", new MemoryStream(new byte[] { 1 }));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("z.txt", new MemoryStream(new byte[] { 1 }));
+            editor.SaveIncremental();
         }
 
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("Bericht Ä.txt", new MemoryStream(new byte[] { 2 }));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("Bericht Ä.txt", new MemoryStream(new byte[] { 2 }));
+            editor.SaveIncremental();
         }
 
         string keys = WrittenKeys(stream, pdf.Length);
@@ -169,9 +176,10 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("Résumé.txt", new MemoryStream(Encoding.ASCII.GetBytes("added")));
-            document.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("Résumé.txt", new MemoryStream(Encoding.ASCII.GetBytes("added")));
+            editor.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")));
+            editor.SaveIncremental();
         }
 
         string keys = WrittenKeys(stream, pdf.Length);
@@ -199,8 +207,9 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("b.txt", new MemoryStream(new byte[] { 1 }));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("b.txt", new MemoryStream(new byte[] { 1 }));
+            editor.SaveIncremental();
         }
 
         string keys = WrittenKeys(stream, pdf.Length);
@@ -220,8 +229,9 @@ public class AttachmentTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            document.Attachments.Add("A日本.txt", new MemoryStream(new byte[] { 1 }));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            editor.Attachments.Add("A日本.txt", new MemoryStream(new byte[] { 1 }));
+            editor.SaveIncremental();
         }
 
         string keys = WrittenKeys(stream, pdf.Length);
@@ -246,8 +256,9 @@ public class AttachmentTests
         var destination = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(original, writable: false), entry.Password))
         {
-            document.Attachments.Add(added, new MemoryStream(content));
-            document.SaveIncremental(destination, leaveOpen: true);
+            using var editor = document.Edit();
+            editor.Attachments.Add(added, new MemoryStream(content));
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         byte[] output = destination.ToArray();
@@ -300,12 +311,13 @@ public class AttachmentTests
         DateTimeOffset before = Seconds(DateTimeOffset.UtcNow);
         using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
+            using var editor = document.Edit();
             for (int i = 0; i < relationships.Length; i++)
             {
                 string name = relationships[i] + ".bin";
                 byte[] content = Enumerable.Range(0, 1000 + i).Select(value => (byte)(value * (i + 3))).ToArray();
                 contents[name] = content;
-                PdfAttachment added = document.Attachments.Add(name, new MemoryStream(content), options: new PdfAttachmentOptions
+                PdfAttachment added = editor.Attachments.Add(name, new MemoryStream(content), options: new PdfAttachmentOptions
                 {
                     Relationship = relationships[i],
                     CreationDate = created,
@@ -317,8 +329,8 @@ public class AttachmentTests
             }
 
             contents["default.txt"] = Encoding.ASCII.GetBytes("no options");
-            document.Attachments.Add("default.txt", new MemoryStream(contents["default.txt"]));
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.Attachments.Add("default.txt", new MemoryStream(contents["default.txt"]));
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         DateTimeOffset after = DateTimeOffset.UtcNow;
@@ -404,9 +416,10 @@ public class AttachmentTests
         var destination = new MemoryStream();
         using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
-            document.Attachments.Add("large.bin", probe, leaveOpen: true, new PdfAttachmentOptions { Compress = true });
+            using var editor = document.Edit();
+            editor.Attachments.Add("large.bin", probe, leaveOpen: true, new PdfAttachmentOptions { Compress = true });
             Assert.Equal(size, probe.BytesRead);
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         Assert.Equal(2L * size, probe.BytesRead);
@@ -441,10 +454,11 @@ public class AttachmentTests
         var destination = new MemoryStream();
         using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
-            document.Attachments.Add("every.bin", new MemoryStream(every), options: new PdfAttachmentOptions { Compress = true });
-            document.Attachments.Add("empty.bin", new MemoryStream(), options: new PdfAttachmentOptions { Compress = true });
-            document.Attachments.Add("plain.bin", new MemoryStream(every));
-            document.SaveIncremental(destination, leaveOpen: true);
+            using var editor = document.Edit();
+            editor.Attachments.Add("every.bin", new MemoryStream(every), options: new PdfAttachmentOptions { Compress = true });
+            editor.Attachments.Add("empty.bin", new MemoryStream(), options: new PdfAttachmentOptions { Compress = true });
+            editor.Attachments.Add("plain.bin", new MemoryStream(every));
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         byte[] output = destination.ToArray();
@@ -472,8 +486,8 @@ public class AttachmentTests
     public void open_attachments_panel_sets_the_page_mode_that_pypdf_reads()
     {
         byte[] pdf = PdfBuilder.Basic(" /PageMode /UseOutlines", Resources).Finish();
-        byte[] kept = Save(pdf, document => document.Attachments.Add("a.txt", new MemoryStream(new byte[] { 1 })));
-        byte[] opened = Save(pdf, document => document.Attachments.Add("a.txt", new MemoryStream(new byte[] { 1 }), options: new PdfAttachmentOptions { OpenAttachmentsPanel = true }));
+        byte[] kept = Save(pdf, editor => editor.Attachments.Add("a.txt", new MemoryStream(new byte[] { 1 })));
+        byte[] opened = Save(pdf, editor => editor.Attachments.Add("a.txt", new MemoryStream(new byte[] { 1 }), options: new PdfAttachmentOptions { OpenAttachmentsPanel = true }));
 
         Assert.Contains("/PageMode /UseOutlines", Encoding.ASCII.GetString(kept, pdf.Length, kept.Length - pdf.Length), StringComparison.Ordinal);
         Assert.DoesNotContain("/UseAttachments", Encoding.ASCII.GetString(kept, pdf.Length, kept.Length - pdf.Length), StringComparison.Ordinal);
@@ -506,7 +520,8 @@ public class AttachmentTests
         source.Write(pdf, 0, pdf.Length);
         var destination = new MemoryStream();
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Attachments.Add("changed.bin", content, leaveOpen: true, new PdfAttachmentOptions { Compress = compress });
+        using var editor = document.Edit();
+        editor.Attachments.Add("changed.bin", content, leaveOpen: true, new PdfAttachmentOptions { Compress = compress });
         if (shorten)
         {
             content.SetLength(4000);
@@ -519,11 +534,11 @@ public class AttachmentTests
 
         if (sameStream)
         {
-            Assert.Throws<InvalidOperationException>(() => document.SaveIncremental());
+            Assert.Throws<InvalidOperationException>(() => editor.SaveIncremental());
         }
         else
         {
-            Assert.Throws<InvalidOperationException>(() => document.SaveIncremental(destination, leaveOpen: true));
+            Assert.Throws<InvalidOperationException>(() => editor.SaveIncremental(destination, leaveOpen: true));
         }
 
         Assert.Equal(pdf, source.ToArray());
@@ -573,12 +588,13 @@ public class AttachmentTests
         var source = new MemoryStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var content = new ProbeStream(new MemoryStream(new byte[] { 1 }));
 
-        Assert.Throws<ArgumentOutOfRangeException>(() => document.Attachments.Add("a.bin", content, leaveOpen: true, new PdfAttachmentOptions { Relationship = (PdfAttachmentRelationship)99 }));
+        Assert.Throws<ArgumentOutOfRangeException>(() => editor.Attachments.Add("a.bin", content, leaveOpen: true, new PdfAttachmentOptions { Relationship = (PdfAttachmentRelationship)99 }));
         Assert.False(content.ReadCalled);
         Assert.Empty(document.Attachments);
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.Equal(pdf, source.ToArray());
     }
 
@@ -596,13 +612,14 @@ public class AttachmentTests
         return report.RootElement.Clone();
     }
 
-    private static byte[] Save(byte[] pdf, Action<PdfDocument> write)
+    private static byte[] Save(byte[] pdf, Action<PdfDocumentEditor> write)
     {
         var destination = new MemoryStream();
         using (var document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
-            write(document);
-            document.SaveIncremental(destination, leaveOpen: true);
+            using var editor = document.Edit();
+            write(editor);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         byte[] output = destination.ToArray();

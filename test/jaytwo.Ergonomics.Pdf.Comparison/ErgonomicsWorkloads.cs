@@ -59,9 +59,10 @@ public class ErgonomicsWorkloads
                 using var content = ComparisonFixtures.OpenRead(payload);
                 var probe = new ProbeStream(file);
                 using var document = PdfDocument.Open(probe, leaveOpen: true);
-                document.Attachments.Add(ComparisonFixtures.AttachmentName, content, leaveOpen: true, ComparisonFixtures.AttachmentOptions());
+                using var editor = document.Edit();
+                editor.Attachments.Add(ComparisonFixtures.AttachmentName, content, leaveOpen: true, ComparisonFixtures.AttachmentOptions());
                 using var destination = ComparisonFixtures.CreateFile(output);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 return probe.BytesRead;
             },
             () => OutputCheck.Attached(source, output, payload));
@@ -140,10 +141,11 @@ public class ErgonomicsWorkloads
                 using var file = ComparisonFixtures.OpenRead(source);
                 var probe = new ProbeStream(file);
                 using var document = PdfDocument.Open(probe, leaveOpen: true);
-                IReadOnlyDictionary<string, PdfAppearanceDisposition> filled = document.AcroForm.Fill(G7Fixtures.TextValues(ComparisonFixtures.FormPages));
+                using var editor = document.Edit();
+                IReadOnlyDictionary<string, PdfAppearanceDisposition> filled = editor.AcroForm.Fill(G7Fixtures.TextValues(ComparisonFixtures.FormPages));
                 Assert.Equal(ComparisonFixtures.FormPages, filled.Count);
                 using var destination = ComparisonFixtures.CreateFile(output);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 return probe.BytesRead;
             },
             () => OutputCheck.Filled(source, output, ComparisonFixtures.FormPages));
@@ -171,9 +173,10 @@ public class ErgonomicsWorkloads
                 using var file = ComparisonFixtures.OpenRead(source);
                 var probe = new ProbeStream(file);
                 using var document = PdfDocument.Open(probe, leaveOpen: true);
-                document.AcroForm.Flatten();
+                using var editor = document.Edit();
+                editor.AcroForm.Flatten();
                 using var destination = ComparisonFixtures.CreateFile(output);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 return probe.BytesRead;
             },
             () => OutputCheck.Flattened(source, output, ComparisonFixtures.FlattenPages, incremental: true));
@@ -217,10 +220,11 @@ public class ErgonomicsWorkloads
         using var file = ComparisonFixtures.OpenRead(source);
         var probe = new ProbeStream(file);
         using var document = PdfDocument.Open(probe, leaveOpen: true);
-        document.Metadata.Title = title;
-        document.Metadata.ModificationDate = ComparisonFixtures.FixedDate;
+        using var editor = document.Edit();
+        editor.Metadata.Title = title;
+        editor.Metadata.ModificationDate = ComparisonFixtures.FixedDate;
         using var destination = ComparisonFixtures.CreateFile(output);
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         return probe.BytesRead;
     }
 
@@ -229,9 +233,10 @@ public class ErgonomicsWorkloads
         using var file = ComparisonFixtures.OpenRead(source);
         var probe = new ProbeStream(file);
         using var document = PdfDocument.Open(probe, leaveOpen: true);
+        using var editor = document.Edit();
         using var destination = ComparisonFixtures.CreateFile(output);
         var options = new PdfSignatureOptions { Reason = "G7", SigningTime = ComparisonFixtures.FixedDate };
-        document.Sign(destination, options, new CmsDetachedSignatureProvider(new ErgonomicsRsaSigner()), leaveOpen: true);
+        editor.Sign(destination, options, new CmsDetachedSignatureProvider(new ErgonomicsRsaSigner()), leaveOpen: true);
         return probe.BytesRead;
     }
 

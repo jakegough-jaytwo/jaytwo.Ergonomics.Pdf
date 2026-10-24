@@ -25,19 +25,19 @@ public sealed class PdfAttachmentOptions
 
     /// <summary>
     /// Gets the file creation date stored in /Params /CreationDate, to the second. When it is
-    /// <see langword="null"/>, the time of <see cref="PdfAttachmentCollection.Add"/> is stored.
+    /// <see langword="null"/>, the time of <see cref="PdfAttachmentCollectionEditor.Add"/> is stored.
     /// </summary>
     public DateTimeOffset? CreationDate { get; init; }
 
     /// <summary>
     /// Gets the file modification date stored in /Params /ModDate, to the second. When it is
-    /// <see langword="null"/>, the time of <see cref="PdfAttachmentCollection.Add"/> is stored.
+    /// <see langword="null"/>, the time of <see cref="PdfAttachmentCollectionEditor.Add"/> is stored.
     /// </summary>
     public DateTimeOffset? ModificationDate { get; init; }
 
     /// <summary>
     /// Gets a value indicating whether the content is written Flate-encoded. The content is compressed while it is
-    /// streamed, in constant memory, once to measure it during <see cref="PdfAttachmentCollection.Add"/> and again
+    /// streamed, in constant memory, once to measure it during <see cref="PdfAttachmentCollectionEditor.Add"/> and again
     /// when the document is saved. The default is <see langword="false"/>.
     /// </summary>
     public bool Compress { get; init; }

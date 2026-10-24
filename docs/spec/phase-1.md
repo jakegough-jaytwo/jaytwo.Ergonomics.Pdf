@@ -55,7 +55,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
 | R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | Exists |
 | R13 | **Random-access source.** Open from an `IPdfSource` or a seekable-`Stream` adapter, synchronously or with `OpenAsync` and a `CancellationToken`. The source is one stable snapshot read at absolute `long` offsets; reads may be partial, a zero-byte read is end of source, and the engine serializes its reads. Ownership is explicit at every open entry point. Cancellation publishes no partially parsed document state. A source change detected during use fails instead of mixing versions (`reset-plan.md` section 4.3). | New |
-| R14 | **Inspection and editing.** `PdfDocument` is read-only and lazily loaded. `PdfDocument.Edit()` returns a `PdfDocumentEditor`; every write in section 6, and every save and signature, is an editor operation. | Change |
+| R14 | **Inspection and editing.** `PdfDocument` is read-only and lazily loaded. `PdfDocument.Edit()` returns a `PdfDocumentEditor`; every write in section 6, and every save and signature, is an editor operation. | Exists |
 
 ## 6. Incremental writes
 

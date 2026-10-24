@@ -153,9 +153,10 @@ public class SignatureInspectionInteropTests
         byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture("pypdf-base.pdf")), null, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), new PdfSignatureOptions());
         using var source = new MemoryStream(signed, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Metadata.Title = "Revised";
+        using var editor = document.Edit();
+        editor.Metadata.Title = "Revised";
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
 
         PdfSignatureInfo signature = Assert.Single(AssertReadersAgree(destination.ToArray(), null));
         Assert.True(signature.HasLaterRevisions);
@@ -298,8 +299,9 @@ public class SignatureInspectionInteropTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
-        document.Sign(destination, options, provider, leaveOpen: true);
+        editor.Sign(destination, options, provider, leaveOpen: true);
         return destination.ToArray();
     }
 

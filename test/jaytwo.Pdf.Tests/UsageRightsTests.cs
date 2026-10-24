@@ -100,29 +100,29 @@ public class UsageRightsTests
 
     private static readonly Dictionary<string, PolicyWrite> Writes = new[]
     {
-        Write("fill text", FillIn, document => document.AcroForm.Fill("Name", "Ada")),
-        Write("fill check box", FillIn, document => document.AcroForm.Fill("Agree", true)),
-        Write("fill radio, generated", FillIn, document => document.AcroForm.Fill("Pick", "One")),
-        Write("fill radio, existing state", FillIn, document => document.AcroForm.Fill("Size", "Small")),
-        Write("fill choice", FillIn, document => document.AcroForm.Fill("Color", new[] { "Red" })),
-        Write("bulk fill", FillIn, document => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Agree"] = true, ["Pick"] = "One", ["Size"] = "Small", ["Color"] = new[] { "Red" } })),
-        Write("metadata title", null, document => document.Metadata.Title = "Usage rights"),
-        Write("metadata date", null, document => document.Metadata.CreationDate = new DateTimeOffset(2026, 10, 20, 0, 0, 0, TimeSpan.Zero)),
-        Write("metadata trapped", null, document => document.Metadata["Trapped"] = "True"),
-        Write("metadata XMP", null, document => document.Metadata.SetXmp(Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>"))),
-        Write("attachment add", Create, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")))),
+        Write("fill text", FillIn, editor => editor.AcroForm.Fill("Name", "Ada")),
+        Write("fill check box", FillIn, editor => editor.AcroForm.Fill("Agree", true)),
+        Write("fill radio, generated", FillIn, editor => editor.AcroForm.Fill("Pick", "One")),
+        Write("fill radio, existing state", FillIn, editor => editor.AcroForm.Fill("Size", "Small")),
+        Write("fill choice", FillIn, editor => editor.AcroForm.Fill("Color", new[] { "Red" })),
+        Write("bulk fill", FillIn, editor => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Agree"] = true, ["Pick"] = "One", ["Size"] = "Small", ["Color"] = new[] { "Red" } })),
+        Write("metadata title", null, editor => editor.Metadata.Title = "Usage rights"),
+        Write("metadata date", null, editor => editor.Metadata.CreationDate = new DateTimeOffset(2026, 10, 20, 0, 0, 0, TimeSpan.Zero)),
+        Write("metadata trapped", null, editor => editor.Metadata["Trapped"] = "True"),
+        Write("metadata XMP", null, editor => editor.Metadata.SetXmp(Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>"))),
+        Write("attachment add", Create, editor => editor.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")))),
 
         // W-75: the relationship, dates, checksum, and compression are part of the embedded file /EF Create grants.
         // No UR3 right covers the catalog /PageMode, so opening the attachments panel is a write no transform grants.
-        Write("attachment add, relationship, dates, compressed", Create, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions
+        Write("attachment add, relationship, dates, compressed", Create, editor => editor.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions
         {
             Relationship = PdfAttachmentRelationship.Data,
             CreationDate = new DateTimeOffset(2026, 10, 21, 0, 0, 0, TimeSpan.Zero),
             Compress = true,
         })),
-        Write("attachment add, open attachments panel", null, document => document.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions { OpenAttachmentsPanel = true })),
-        Write("attachment replace", Modify, document => document.Attachments.Add("old.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")))),
-        Write("attachment remove", Delete, document => document.Attachments.Remove("old.txt")),
+        Write("attachment add, open attachments panel", null, editor => editor.Attachments.Add("new.txt", new MemoryStream(Encoding.ASCII.GetBytes("new")), options: new PdfAttachmentOptions { OpenAttachmentsPanel = true })),
+        Write("attachment replace", Modify, editor => editor.Attachments.Add("old.txt", new MemoryStream(Encoding.ASCII.GetBytes("replaced")))),
+        Write("attachment remove", Delete, editor => editor.Attachments.Remove("old.txt")),
         Sign("sign, existing empty field", SignField, PdfSignatureKind.CmsDetached, "Signer"),
         Sign("sign, new field", null, PdfSignatureKind.CmsDetached, null),
         Sign("sign, new named field", null, PdfSignatureKind.CmsDetached, "Fresh"),
@@ -162,10 +162,11 @@ public class UsageRightsTests
         byte[] original = Document(policy, Unsigned);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
 
         var destination = new MemoryStream();
-        write.Run(document, destination);
+        write.Run(editor, destination);
 
         bool kept = policy.HasUsageRights && write.Right != null && policy.Grants.Contains(write.Right);
         byte[] output = destination.ToArray();
@@ -193,18 +194,19 @@ public class UsageRightsTests
         byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
 
         var destination = new MemoryStream();
         if (signedBy.StartsWith("certified", StringComparison.Ordinal) && !write.CertificationAllows)
         {
-            Assert.Throws<PdfCertificationLockedException>(() => write.Run(document, destination));
+            Assert.Throws<PdfCertificationLockedException>(() => write.Run(editor, destination));
             Assert.Equal(0, destination.Length);
             Assert.Equal(policy.HasUsageRights, document.HasUsageRights);
             return;
         }
 
-        write.Run(document, destination);
+        write.Run(editor, destination);
         byte[] output = destination.ToArray();
         Assert.True(output.Length > original.Length);
         Assert.True(output.AsSpan(0, original.Length).SequenceEqual(original), "the original is not a prefix");
@@ -229,14 +231,15 @@ public class UsageRightsTests
         byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         Assert.Equal(policy.HasUsageRights && (signed || policy.Grants.Contains(FillIn)), document.HasUsageRights);
-        document.Metadata.Title = "Usage rights";
-        document.AcroForm.Fill("Name", "Grace");
+        editor.Metadata.Title = "Usage rights";
+        editor.AcroForm.Fill("Name", "Grace");
         Assert.Equal(policy.HasUsageRights && signed, document.HasUsageRights);
 
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         byte[] output = destination.ToArray();
         Assert.Equal(1, Count(Encoding.ASCII.GetString(output, original.Length, output.Length - original.Length), "%%EOF"));
         using var reopened = PdfDocument.Open(new MemoryStream(output, writable: false));
@@ -254,35 +257,36 @@ public class UsageRightsTests
         byte[] original = Document(policy, signedBy);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Fill("Missing", "Ada"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", true));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Size", "Large"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Color", new[] { "Green" }));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Size"] = "Large" }));
-        Assert.Throws<ArgumentException>(() => document.Metadata["Trapped"] = "Maybe");
-        Assert.Throws<PdfAttachmentNotFoundException>(() => document.Attachments.Remove("missing.txt"));
+        Assert.Throws<PdfFieldNotFoundException>(() => editor.AcroForm.Fill("Missing", "Ada"));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", true));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Size", "Large"));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Color", new[] { "Green" }));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Size"] = "Large" }));
+        Assert.Throws<ArgumentException>(() => editor.Metadata["Trapped"] = "Maybe");
+        Assert.Throws<PdfAttachmentNotFoundException>(() => editor.Attachments.Remove("missing.txt"));
         Assert.True(document.HasUsageRights);
 
         // A sign refused by the existing-field checks, or failed by the provider, in a new or an existing field. The
         // field Signed has a signature dictionary only on a signed document.
         var failed = new MemoryStream();
-        Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Name", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
-        Assert.Throws<PdfFieldReadOnlyException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Locked", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        Assert.Throws<PdfSignException>(() => editor.Sign(failed, new PdfSignatureOptions { FieldName = "Name", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+        Assert.Throws<PdfFieldReadOnlyException>(() => editor.Sign(failed, new PdfSignatureOptions { FieldName = "Locked", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
         if (signedBy != Unsigned)
         {
-            Assert.Throws<PdfSignException>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signed", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
+            Assert.Throws<PdfSignException>(() => editor.Sign(failed, new PdfSignatureOptions { FieldName = "Signed", ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true));
         }
 
         Assert.True(document.HasUsageRights);
-        Assert.ThrowsAny<Exception>(() => document.Sign(failed, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
+        Assert.ThrowsAny<Exception>(() => editor.Sign(failed, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
         Assert.True(document.HasUsageRights);
-        Assert.ThrowsAny<Exception>(() => document.Sign(failed, new PdfSignatureOptions { FieldName = "Signer", ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
+        Assert.ThrowsAny<Exception>(() => editor.Sign(failed, new PdfSignatureOptions { FieldName = "Signer", ReservedContentsBytes = 64 }, new FixedProvider { Fail = true }, leaveOpen: true));
         Assert.Equal(0, failed.Length);
         Assert.True(document.HasUsageRights);
 
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         Assert.Equal(original, destination.ToArray());
     }
 
@@ -303,22 +307,24 @@ public class UsageRightsTests
         // DocMDP P 2 refuses metadata and attachment writes before the policy runs, so /UR3 stays.
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
-        Assert.Throws<PdfCertificationLockedException>(() => document.Metadata.Title = "Nope");
-        Assert.Throws<PdfCertificationLockedException>(() => document.Attachments.Add("new.txt", new MemoryStream(new byte[] { 1 })));
+        using var editor = document.Edit();
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Metadata.Title = "Nope");
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Attachments.Add("new.txt", new MemoryStream(new byte[] { 1 })));
         Assert.True(document.HasUsageRights);
 
         // P 2 allows a fill and a signature into a new field, which no right grants; neither changes /Perms.
-        document.AcroForm.Fill("Name", "Ada");
+        editor.AcroForm.Fill("Name", "Ada");
         Assert.True(document.HasUsageRights);
         var destination = new MemoryStream();
-        document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
+        editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
 
         byte[] output = destination.ToArray();
         Assert.DoesNotContain("\n9 0 obj", Encoding.ASCII.GetString(output, original.Length, output.Length - original.Length), StringComparison.Ordinal);
         using var reopened = PdfDocument.Open(new MemoryStream(output, writable: false));
+        using var reopenedEditor = reopened.Edit();
         Assert.True(reopened.HasUsageRights);
         Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
-        Assert.Throws<PdfCertificationLockedException>(() => reopened.Metadata.Title = "Still certified");
+        Assert.Throws<PdfCertificationLockedException>(() => reopenedEditor.Metadata.Title = "Still certified");
     }
 
     // W-88 rebuilt (W-90): pyHanko signs a Reader-extended form (certified at P 2 or P 3, or approved) in a new field,
@@ -360,34 +366,35 @@ public class UsageRightsTests
             var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
             var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));
-            var writes = new Dictionary<string, Action<PdfDocument, Stream>>
+            var writes = new Dictionary<string, Action<PdfDocumentEditor, Stream>>
             {
-                ["fill"] = (document, destination) =>
+                ["fill"] = (editor, destination) =>
                 {
-                    document.AcroForm.Fill("Name", "Ada");
-                    document.SaveIncremental(destination, leaveOpen: true);
+                    editor.AcroForm.Fill("Name", "Ada");
+                    editor.SaveIncremental(destination, leaveOpen: true);
                 },
-                ["sign, existing field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true),
-                ["sign, new field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
-                ["fill, then sign existing field"] = (document, destination) =>
+                ["sign, existing field"] = (editor, destination) => editor.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true),
+                ["sign, new field"] = (editor, destination) => editor.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
+                ["fill, then sign existing field"] = (editor, destination) =>
                 {
-                    document.AcroForm.Fill("Name", "Ada");
-                    document.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true);
+                    editor.AcroForm.Fill("Name", "Ada");
+                    editor.Sign(destination, new PdfSignatureOptions { FieldName = "Signer" }, cms, leaveOpen: true);
                 },
-                ["document timestamp, existing field"] = (document, destination) => document.Sign(destination, Timestamp("Signer"), stamp, leaveOpen: true),
-                ["document timestamp, new field"] = (document, destination) => document.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
+                ["document timestamp, existing field"] = (editor, destination) => editor.Sign(destination, Timestamp("Signer"), stamp, leaveOpen: true),
+                ["document timestamp, new field"] = (editor, destination) => editor.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
             };
 
             var outputs = new Dictionary<string, (string Label, bool AddsSignature)>();
             foreach (string form in forms)
             {
                 byte[] signed = File.ReadAllBytes(Path.Combine(directory, form + "-signed.pdf"));
-                foreach (KeyValuePair<string, Action<PdfDocument, Stream>> write in writes)
+                foreach (KeyValuePair<string, Action<PdfDocumentEditor, Stream>> write in writes)
                 {
                     using var source = new MemoryStream(signed, writable: false);
                     using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+                    using var editor = document.Edit();
                     var destination = new MemoryStream();
-                    write.Value(document, destination);
+                    write.Value(editor, destination);
                     byte[] output = destination.ToArray();
                     Assert.True(output.AsSpan(0, signed.Length).SequenceEqual(signed), form + ", " + write.Key + ": the original is not a prefix");
                     string path = Path.Combine(directory, "output-" + outputs.Count.ToString(CultureInfo.InvariantCulture) + ".pdf");
@@ -450,18 +457,20 @@ public class UsageRightsTests
         var filled = new MemoryStream();
         using (var user = PdfDocument.Open(new MemoryStream(original, writable: false), "user"))
         {
-            Assert.Throws<PdfEncryptionRestrictedException>(() => user.Metadata.Title = "Nope");
+            using var userEditor = user.Edit();
+            Assert.Throws<PdfEncryptionRestrictedException>(() => userEditor.Metadata.Title = "Nope");
             Assert.True(user.HasUsageRights);
-            user.AcroForm.Fill("Name", "Ada");
-            user.SaveIncremental(filled, leaveOpen: true);
+            userEditor.AcroForm.Fill("Name", "Ada");
+            userEditor.SaveIncremental(filled, leaveOpen: true);
         }
 
         // The owner password may modify: the metadata write removes /UR3 in the same revision.
         var revised = new MemoryStream();
         using (var owner = PdfDocument.Open(new MemoryStream(original, writable: false), "owner"))
         {
-            owner.Metadata.Title = "Usage rights";
-            owner.SaveIncremental(revised, leaveOpen: true);
+            using var ownerEditor = owner.Edit();
+            ownerEditor.Metadata.Title = "Usage rights";
+            ownerEditor.SaveIncremental(revised, leaveOpen: true);
         }
 
         using (var reopened = PdfDocument.Open(new MemoryStream(filled.ToArray(), writable: false), "user"))
@@ -510,11 +519,12 @@ public class UsageRightsTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         // The IRS 1040-ES keys its attachment "Press Quality(1).joboptions" in UTF-16BE. This name sorts after it as text,
         // so qpdf --check passes only when the new key is UTF-16BE too (W-86).
-        document.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
+        editor.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
 
         JsonElement after = CheckOutput(entry, original, destination.ToArray());
         Assert.Equal(kept, after.GetProperty("usageRights").GetBoolean());
@@ -561,17 +571,19 @@ public class UsageRightsTests
         var replaced = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(original, writable: false), entry.Password))
         {
-            document.Attachments.Add(name, new MemoryStream(Encoding.ASCII.GetBytes("replaced")));
+            using var editor = document.Edit();
+            editor.Attachments.Add(name, new MemoryStream(Encoding.ASCII.GetBytes("replaced")));
             Assert.True(document.HasUsageRights);
-            document.SaveIncremental(replaced, leaveOpen: true);
+            editor.SaveIncremental(replaced, leaveOpen: true);
         }
 
         var removed = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(original, writable: false), entry.Password))
         {
-            document.Attachments.Remove(name);
+            using var editor = document.Edit();
+            editor.Attachments.Remove(name);
             Assert.True(document.HasUsageRights);
-            document.SaveIncremental(removed, leaveOpen: true);
+            editor.SaveIncremental(removed, leaveOpen: true);
         }
 
         Assert.True(CheckOutput(entry, original, replaced.ToArray()).GetProperty("usageRights").GetBoolean());
@@ -603,37 +615,38 @@ public class UsageRightsTests
             var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
             var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));
-            var writes = new Dictionary<string, Action<PdfDocument, Stream>>
+            var writes = new Dictionary<string, Action<PdfDocumentEditor, Stream>>
             {
-                ["fill"] = (document, destination) =>
+                ["fill"] = (editor, destination) =>
                 {
-                    document.AcroForm.Fill("1-2", "Ada");
-                    document.SaveIncremental(destination, leaveOpen: true);
+                    editor.AcroForm.Fill("1-2", "Ada");
+                    editor.SaveIncremental(destination, leaveOpen: true);
                 },
-                ["metadata"] = (document, destination) =>
+                ["metadata"] = (editor, destination) =>
                 {
-                    document.Metadata.Title = "Usage rights";
-                    document.SaveIncremental(destination, leaveOpen: true);
+                    editor.Metadata.Title = "Usage rights";
+                    editor.SaveIncremental(destination, leaveOpen: true);
                 },
-                ["attachment add"] = (document, destination) =>
+                ["attachment add"] = (editor, destination) =>
                 {
-                    document.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
-                    document.SaveIncremental(destination, leaveOpen: true);
+                    editor.Attachments.Add("usage-rights.txt", new MemoryStream(Encoding.ASCII.GetBytes("usage rights")));
+                    editor.SaveIncremental(destination, leaveOpen: true);
                 },
-                ["sign, existing field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Signature-2" }, cms, leaveOpen: true),
-                ["sign, new field"] = (document, destination) => document.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
-                ["document timestamp, existing field"] = (document, destination) => document.Sign(destination, Timestamp("Signature-2"), stamp, leaveOpen: true),
-                ["document timestamp, new field"] = (document, destination) => document.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
+                ["sign, existing field"] = (editor, destination) => editor.Sign(destination, new PdfSignatureOptions { FieldName = "Signature-2" }, cms, leaveOpen: true),
+                ["sign, new field"] = (editor, destination) => editor.Sign(destination, new PdfSignatureOptions { FieldName = "Fresh" }, cms, leaveOpen: true),
+                ["document timestamp, existing field"] = (editor, destination) => editor.Sign(destination, Timestamp("Signature-2"), stamp, leaveOpen: true),
+                ["document timestamp, new field"] = (editor, destination) => editor.Sign(destination, Timestamp("Stamp"), stamp, leaveOpen: true),
             };
             var accepted = new HashSet<string> { "metadata", "sign, new field", "document timestamp, new field" };
 
             var outputs = new Dictionary<string, string>();
-            foreach (KeyValuePair<string, Action<PdfDocument, Stream>> write in writes)
+            foreach (KeyValuePair<string, Action<PdfDocumentEditor, Stream>> write in writes)
             {
                 using var source = new MemoryStream(original, writable: false);
                 using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
+                using var editor = document.Edit();
                 var destination = new MemoryStream();
-                write.Value(document, destination);
+                write.Value(editor, destination);
                 byte[] output = destination.ToArray();
                 Assert.True(output.AsSpan(0, original.Length).SequenceEqual(original), write.Key + ": the original is not a prefix");
                 string path = Path.Combine(directory, "output-" + outputs.Count.ToString(CultureInfo.InvariantCulture) + ".pdf");
@@ -693,8 +706,9 @@ public class UsageRightsTests
                 bases.Add(name + "-approved", "Approve");
 
                 using PdfDocument document = PdfDocument.Open(new MemoryStream(form, writable: false));
+                using var editor = document.Edit();
                 var stamped = new MemoryStream();
-                document.Sign(stamped, Timestamp("Stamp"), stamp, leaveOpen: true);
+                editor.Sign(stamped, Timestamp("Stamp"), stamp, leaveOpen: true);
                 File.WriteAllBytes(Path.Combine(directory, name + "-stamped.pdf"), stamped.ToArray());
                 bases.Add(name + "-stamped", "Stamp");
             }
@@ -705,23 +719,24 @@ public class UsageRightsTests
                 Assert.True(exitCode == 0, stderr + stdout);
             }
 
-            var writes = new Dictionary<string, Action<PdfDocument>>
+            var writes = new Dictionary<string, Action<PdfDocumentEditor>>
             {
-                ["attachment add"] = document => document.Attachments.Add("invoice.xml", new MemoryStream(Encoding.ASCII.GetBytes("<Invoice/>"))),
-                ["metadata"] = document => document.Metadata.Title = "Signed",
+                ["attachment add"] = editor => editor.Attachments.Add("invoice.xml", new MemoryStream(Encoding.ASCII.GetBytes("<Invoice/>"))),
+                ["metadata"] = editor => editor.Metadata.Title = "Signed",
             };
 
             var outputs = new Dictionary<string, (string Label, string Earlier, bool Attachment)>();
             foreach (KeyValuePair<string, string> signedBase in bases)
             {
                 byte[] signed = File.ReadAllBytes(Path.Combine(directory, signedBase.Key + ".pdf"));
-                foreach (KeyValuePair<string, Action<PdfDocument>> write in writes)
+                foreach (KeyValuePair<string, Action<PdfDocumentEditor>> write in writes)
                 {
                     using var source = new MemoryStream(signed, writable: false);
                     using PdfDocument document = PdfDocument.Open(source, leaveOpen: true);
-                    write.Value(document);
+                    using var editor = document.Edit();
+                    write.Value(editor);
                     var destination = new MemoryStream();
-                    document.SaveIncremental(destination, leaveOpen: true);
+                    editor.SaveIncremental(destination, leaveOpen: true);
                     byte[] output = destination.ToArray();
                     string label = signedBase.Key + ", " + write.Key;
                     Assert.True(output.AsSpan(0, signed.Length).SequenceEqual(signed), label + ": the signed file is not a prefix");
@@ -767,6 +782,7 @@ public class UsageRightsTests
         byte[] original = File.ReadAllBytes(entry.FullPath);
         using var source = new MemoryStream(original, writable: false);
         using PdfDocument document = PdfDocument.Open(source, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.True(document.HasUsageRights);
         if (field != null)
         {
@@ -777,7 +793,7 @@ public class UsageRightsTests
         var request = new CertificateRequest("CN=Usage Rights", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
         using X509Certificate2 certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
         var destination = new MemoryStream();
-        document.Sign(destination, new PdfSignatureOptions { FieldName = field }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)), leaveOpen: true);
+        editor.Sign(destination, new PdfSignatureOptions { FieldName = field }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)), leaveOpen: true);
 
         JsonElement after = CheckOutput(entry, original, destination.ToArray());
         Assert.Equal(keepsUsageRights, after.GetProperty("usageRights").GetBoolean());
@@ -1013,21 +1029,21 @@ public class UsageRightsTests
     }
 
     // DocMDP P 2 and P 3 allow fills and signing, and refuse metadata and attachment writes.
-    private static PolicyWrite Write(string name, string? right, Action<PdfDocument> edit)
+    private static PolicyWrite Write(string name, string? right, Action<PdfDocumentEditor> edit)
     {
-        return new PolicyWrite(name, right, right == FillIn, (document, destination) =>
+        return new PolicyWrite(name, right, right == FillIn, (editor, destination) =>
         {
-            edit(document);
-            document.SaveIncremental(destination, leaveOpen: true);
+            edit(editor);
+            editor.SaveIncremental(destination, leaveOpen: true);
         });
     }
 
     private static PolicyWrite Sign(string name, string? right, PdfSignatureKind kind, string? fieldName)
     {
-        return new PolicyWrite(name, right, true, (document, destination) =>
+        return new PolicyWrite(name, right, true, (editor, destination) =>
         {
             var options = new PdfSignatureOptions { Kind = kind, FieldName = fieldName, ReservedContentsBytes = 64 };
-            document.Sign(destination, options, new FixedProvider { Kind = kind }, leaveOpen: true);
+            editor.Sign(destination, options, new FixedProvider { Kind = kind }, leaveOpen: true);
             using var reopened = PdfDocument.Open(new MemoryStream(((MemoryStream)destination).ToArray(), writable: false));
             Assert.Equal(fieldName == "Signer" ? 3 : 4, reopened.AcroForm.Fields.Count(field => field.FieldType == PdfFieldType.Signature));
         });
@@ -1086,7 +1102,7 @@ public class UsageRightsTests
 
     private sealed class PolicyWrite
     {
-        public PolicyWrite(string name, string? right, bool certificationAllows, Action<PdfDocument, Stream> run)
+        public PolicyWrite(string name, string? right, bool certificationAllows, Action<PdfDocumentEditor, Stream> run)
         {
             Name = name;
             Right = right;
@@ -1100,7 +1116,7 @@ public class UsageRightsTests
 
         public bool CertificationAllows { get; }
 
-        public Action<PdfDocument, Stream> Run { get; }
+        public Action<PdfDocumentEditor, Stream> Run { get; }
     }
 
     private sealed class FixedProvider : IPdfSignatureProvider

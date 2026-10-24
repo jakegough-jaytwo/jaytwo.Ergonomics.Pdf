@@ -25,7 +25,7 @@ public class VersionTests
     public void attachment_add_raises_an_earlier_file_to_1_7(string header)
     {
         byte[] pdf = PdfBuilder.Basic(version: header).Finish();
-        byte[] output = Save(pdf, document => document.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("alpha"))));
+        byte[] output = Save(pdf, editor => editor.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("alpha"))));
 
         Assert.Equal("%PDF-" + header, Encoding.ASCII.GetString(output, 0, 8));
         Assert.Equal("1.7", AppendedVersion(output, pdf.Length));
@@ -42,7 +42,7 @@ public class VersionTests
     public void attachment_add_leaves_an_effective_1_7_or_later_alone(string header, string catalogExtra, string? kept)
     {
         byte[] pdf = PdfBuilder.Basic(catalogExtra, version: header).Finish();
-        byte[] output = Save(pdf, document => document.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("alpha"))));
+        byte[] output = Save(pdf, editor => editor.Attachments.Add("a.txt", new MemoryStream(Encoding.ASCII.GetBytes("alpha"))));
 
         Assert.Equal(kept, AppendedVersion(output, pdf.Length));
         Assert.Equal(kept ?? header, PdfInfoVersion(output));
@@ -63,7 +63,7 @@ public class VersionTests
         }
 
         Assert.NotEmpty(before);
-        byte[] output = Save(pdf, document => document.Attachments.Add("invoice.xml", new MemoryStream(Encoding.ASCII.GetBytes("<invoice/>"))));
+        byte[] output = Save(pdf, editor => editor.Attachments.Add("invoice.xml", new MemoryStream(Encoding.ASCII.GetBytes("<invoice/>"))));
 
         Assert.Null(AppendedVersion(output, pdf.Length));
         Assert.Equal("1.7", PdfInfoVersion(output));
@@ -94,7 +94,7 @@ public class VersionTests
             before = document.Attachments.Select(attachment => attachment.Name).ToArray();
         }
 
-        byte[] output = Save(pdf, document => document.Attachments.Add("factur-x.xml", new MemoryStream(Encoding.ASCII.GetBytes("<rsm:CrossIndustryInvoice/>")), options: new PdfAttachmentOptions
+        byte[] output = Save(pdf, editor => editor.Attachments.Add("factur-x.xml", new MemoryStream(Encoding.ASCII.GetBytes("<rsm:CrossIndustryInvoice/>")), options: new PdfAttachmentOptions
         {
             MimeType = "text/xml",
             Relationship = PdfAttachmentRelationship.Alternative,
@@ -134,7 +134,7 @@ public class VersionTests
     {
         byte[] pdf = PdfBuilder.Basic(version: header).Finish();
         byte[] packet = Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>");
-        byte[] output = Save(pdf, document => document.Metadata.SetXmp(packet));
+        byte[] output = Save(pdf, editor => editor.Metadata.SetXmp(packet));
 
         Assert.Equal(raised, AppendedVersion(output, pdf.Length));
         Assert.Equal(raised ?? header, PdfInfoVersion(output));
@@ -146,7 +146,7 @@ public class VersionTests
     public void info_edit_raises_a_1_0_file_to_1_4()
     {
         byte[] pdf = PdfBuilder.Basic(version: "1.0").Finish();
-        byte[] output = Save(pdf, document => document.Metadata.Title = "Raised");
+        byte[] output = Save(pdf, editor => editor.Metadata.Title = "Raised");
 
         Assert.Equal("1.4", AppendedVersion(output, pdf.Length));
         Assert.Equal("1.4", PdfInfoVersion(output));
@@ -174,7 +174,8 @@ public class VersionTests
         var destination = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
-            document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
+            using var editor = document.Edit();
+            editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
         }
 
         byte[] output = destination.ToArray();
@@ -201,7 +202,7 @@ public class VersionTests
         var crypt = new StandardEncryptor(StandardEncryptor.Kind.Revision3, "user", "owner", -4, encryptMetadata: true, 128);
         byte[] pdf = EncryptedDocument(crypt);
         byte[] content = Encoding.ASCII.GetBytes("secret attachment");
-        byte[] output = Save(pdf, document => document.Attachments.Add("a.txt", new MemoryStream(content)), password);
+        byte[] output = Save(pdf, editor => editor.Attachments.Add("a.txt", new MemoryStream(content)), password);
 
         Assert.Equal("1.7", AppendedVersion(output, pdf.Length));
         Assert.Equal("1.7", PdfInfoVersion(output, password == "owner" ? "-opw" : "-upw", password));
@@ -243,8 +244,9 @@ public class VersionTests
         var saved = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(pdf, writable: false)))
         {
-            Assert.Throws<PdfSignatureTooLargeException>(() => document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 8 }, new FixedProvider { Payload = new byte[32] }, leaveOpen: true));
-            document.SaveIncremental(saved, leaveOpen: true);
+            using var editor = document.Edit();
+            Assert.Throws<PdfSignatureTooLargeException>(() => editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 8 }, new FixedProvider { Payload = new byte[32] }, leaveOpen: true));
+            editor.SaveIncremental(saved, leaveOpen: true);
         }
 
         Assert.Equal(0, destination.Length);
@@ -268,13 +270,14 @@ public class VersionTests
     }
 
     // Opens a copy, applies the edit, and saves incrementally to a new stream; the original bytes must stay a prefix.
-    private static byte[] Save(byte[] pdf, Action<PdfDocument> edit, string? password = null)
+    private static byte[] Save(byte[] pdf, Action<PdfDocumentEditor> edit, string? password = null)
     {
         var destination = new MemoryStream();
         using (PdfDocument document = PdfDocument.Open(new MemoryStream(pdf, writable: false), password))
         {
-            edit(document);
-            document.SaveIncremental(destination, leaveOpen: true);
+            using var editor = document.Edit();
+            edit(editor);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         byte[] output = destination.ToArray();

@@ -25,9 +25,10 @@ public class ScaleTests
         byte[] pdf = builder.Finish("/Info 5 0 R");
         var source = new ProbeStream(new MemoryStream(pdf));
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.Metadata.Title = "Copied";
+        using var editor = document.Edit();
+        editor.Metadata.Title = "Copied";
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
 
         Assert.True(source.MaxRequested <= 1024 * 1024);
         Assert.True(source.BytesRead < (pdf.Length * 2L) + (1024 * 1024));
@@ -35,7 +36,7 @@ public class ScaleTests
         using var copy = PdfDocument.Open(destination, leaveOpen: true);
         Assert.Equal("Copied", copy.Metadata.Title);
         var occupied = new MemoryStream(new byte[] { 1 });
-        Assert.Throws<PdfException>(() => document.SaveIncremental(occupied));
+        Assert.Throws<PdfException>(() => editor.SaveIncremental(occupied));
         Assert.Equal(1, occupied.Length);
     }
 
@@ -51,15 +52,16 @@ public class ScaleTests
         var provider = new SilentProvider();
         using (var document = PdfDocument.Open(sparse, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("Huge", document.Metadata.Title);
             Assert.Equal(1, document.PageCount);
-            document.Metadata.Title = "Changed";
+            editor.Metadata.Title = "Changed";
             long beforeMetadata = sparse.Length;
-            document.SaveIncremental(sparse);
+            editor.SaveIncremental(sparse);
             long metadataAppendix = sparse.Length - beforeMetadata;
             _output.WriteLine("metadata appendix " + metadataAppendix.ToString());
             Assert.True(metadataAppendix < (8 * 1024));
-            document.Sign(sparse, new PdfSignatureOptions { ReservedContentsBytes = 64 }, provider);
+            editor.Sign(sparse, new PdfSignatureOptions { ReservedContentsBytes = 64 }, provider);
         }
 
         Assert.False(sparse.TouchedHole);
@@ -79,11 +81,12 @@ public class ScaleTests
         (byte[] head, byte[] tail) = builder.Split(tailOffset, "/Info 4 0 R");
         var sparse = new SparsePdfStream(head, tail, tailOffset);
         using var document = PdfDocument.Open(sparse, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal("TooBig", document.Metadata.Title);
-        document.Metadata.Title = "Nope";
+        editor.Metadata.Title = "Nope";
         var destination = new MemoryStream();
 
-        Assert.Throws<PdfTooLargeForClassicXrefException>(() => document.SaveIncremental(destination));
+        Assert.Throws<PdfTooLargeForClassicXrefException>(() => editor.SaveIncremental(destination));
 
         Assert.Equal(0, destination.Length);
         Assert.Equal(length, sparse.Length);

@@ -23,12 +23,13 @@ public class FlattenTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            FillForm(document);
-            document.AcroForm.Flatten();
+            using var editor = document.Edit();
+            FillForm(editor);
+            editor.AcroForm.Flatten();
             Assert.False(document.AcroForm.HasFields);
             Assert.Empty(document.AcroForm.Fields);
             Assert.False(document.AcroForm.NeedAppearances);
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -64,12 +65,13 @@ public class FlattenTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            FillForm(document);
-            document.AcroForm.Flatten(new[] { "Group.Child", "Agree" });
+            using var editor = document.Edit();
+            FillForm(editor);
+            editor.AcroForm.Flatten(new[] { "Group.Child", "Agree" });
             string[] remaining = document.AcroForm.Fields.Select(field => field.FullName).Distinct().OrderBy(name => name, StringComparer.Ordinal).ToArray();
             Assert.Equal(new[] { "Empty", "Hidden", "Name", "Nowhere", "Station" }, remaining);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Grace"));
-            document.SaveIncremental();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Grace"));
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -101,7 +103,7 @@ public class FlattenTests
         builder.StreamObject(7, "/Subtype /Form /BBox [0 0 100 40]", Encoding.ASCII.GetBytes("0 g 0 0 100 40 re f"));
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten());
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten());
 
         Assert.Contains("q 1 0 0 1 140 90 cm /FlatAP0 Do Q", appendix, StringComparison.Ordinal);
         Assert.Contains("q 0.5 0 0 0.5 300 300 cm /FlatAP1 Do Q", appendix, StringComparison.Ordinal);
@@ -118,7 +120,7 @@ public class FlattenTests
         builder.StreamObject(5, "/BBox [0 0 100 20]", Encoding.ASCII.GetBytes("0 g 0 0 100 20 re f"));
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten());
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten());
 
         Assert.Matches(@"5 0 obj\n<<\n/BBox \[0 0 100 20\]\n/Length 19\n/Subtype /Form\n>>\nstream\n0 g 0 0 100 20 re f\nendstream", appendix);
     }
@@ -143,7 +145,7 @@ public class FlattenTests
         builder.Indirect(14, "<< /Subtype /Link /Rect [0 0 1 1] >>");
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten(), out byte[] saved);
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten(), out byte[] saved);
 
         Assert.Matches(@"10 0 obj\n\[14 0 R\]", appendix);
         Assert.Matches(@"13 0 obj\n\[\]", appendix);
@@ -172,7 +174,7 @@ public class FlattenTests
         builder.Indirect(6, "<< /Type /OCG /Name (Layer) >>");
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten());
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten());
 
         Assert.Contains("/OC /FlatOC1 BDC\nq 1 0 0 1 10 10 cm /FlatAP0 Do Q\nEMC\n", appendix, StringComparison.Ordinal);
         Assert.Matches(@"/Properties <<\s*/FlatOC1 6 0 R", appendix);
@@ -192,7 +194,7 @@ public class FlattenTests
         builder.StreamObject(8, "/Subtype /Form /BBox [0 0 20 20]", Encoding.ASCII.GetBytes("0.5 g 2 2 16 16 re S"));
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten());
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten());
 
         // On and Lone (no /AS, one state) paint /Yes; Off has no /Off appearance and paints nothing.
         Assert.Contains("q 1 0 0 1 10 10 cm /FlatAP0 Do Q\nq 1 0 0 1 70 10 cm /FlatAP0 Do Q\n", appendix, StringComparison.Ordinal);
@@ -213,7 +215,7 @@ public class FlattenTests
         builder.StreamObject(9, string.Empty, Encoding.ASCII.GetBytes("0 g"));
         byte[] pdf = builder.Finish();
 
-        string appendix = FlattenAppendix(pdf, document => document.AcroForm.Flatten());
+        string appendix = FlattenAppendix(pdf, editor => editor.AcroForm.Flatten());
 
         Assert.DoesNotContain(" Do ", appendix, StringComparison.Ordinal);
         Assert.Contains("/Contents 9 0 R", appendix, StringComparison.Ordinal);
@@ -227,10 +229,11 @@ public class FlattenTests
         byte[] pdf = BuildForm(string.Empty, string.Empty, signatureField: true);
         using (var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true))
         {
-            FillForm(document);
-            document.AcroForm.Flatten();
+            using var editor = document.Edit();
+            FillForm(editor);
+            editor.AcroForm.Flatten();
             Assert.Equal("Sig", Assert.Single(document.AcroForm.Fields).FullName);
-            document.AcroForm.Flatten(new[] { "Sig" });
+            editor.AcroForm.Flatten(new[] { "Sig" });
             Assert.Empty(document.AcroForm.Fields);
         }
     }
@@ -242,13 +245,14 @@ public class FlattenTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<ArgumentNullException>(() => document.AcroForm.Flatten(null!));
-        Assert.Throws<ArgumentException>(() => document.AcroForm.Flatten(new[] { "Name", null! }));
-        Assert.Throws<ArgumentException>(() => document.AcroForm.Flatten(new[] { "Name", "Name" }));
-        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Flatten(new[] { "Name", "Missing" }));
-        document.AcroForm.Flatten(Array.Empty<string>());
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<ArgumentNullException>(() => editor.AcroForm.Flatten(null!));
+        Assert.Throws<ArgumentException>(() => editor.AcroForm.Flatten(new[] { "Name", null! }));
+        Assert.Throws<ArgumentException>(() => editor.AcroForm.Flatten(new[] { "Name", "Name" }));
+        Assert.Throws<PdfFieldNotFoundException>(() => editor.AcroForm.Flatten(new[] { "Name", "Missing" }));
+        editor.AcroForm.Flatten(Array.Empty<string>());
+        AssertUnchanged(editor, stream, pdf);
     }
 
     [Fact]
@@ -257,10 +261,11 @@ public class FlattenTests
         byte[] pdf = BuildForm(string.Empty, string.Empty);
         using (var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, document.AcroForm.Fill("Group.Child", "中"));
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.NeedsViewer, editor.AcroForm.Fill("Group.Child", "中"));
             Assert.True(document.AcroForm.NeedAppearances);
-            Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Flatten(new[] { "Name" }));
+            Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Flatten(new[] { "Name" }));
             Assert.Equal(7, document.AcroForm.Fields.Select(field => field.FullName).Distinct().Count());
         }
 
@@ -275,9 +280,10 @@ public class FlattenTests
         using var bareStream = new MemoryStream();
         bareStream.Write(bare, 0, bare.Length);
         using var bareDocument = PdfDocument.Open(bareStream, leaveOpen: true);
-        Assert.Throws<PdfUnsupportedFormException>(() => bareDocument.AcroForm.Flatten(new[] { "Bare" }));
-        Assert.Throws<PdfUnsupportedFormException>(() => bareDocument.AcroForm.Flatten(new[] { "Box" }));
-        AssertUnchanged(bareDocument, bareStream, bare);
+        using var bareEditor = bareDocument.Edit();
+        Assert.Throws<PdfUnsupportedFormException>(() => bareEditor.AcroForm.Flatten(new[] { "Bare" }));
+        Assert.Throws<PdfUnsupportedFormException>(() => bareEditor.AcroForm.Flatten(new[] { "Box" }));
+        AssertUnchanged(bareEditor, bareStream, bare);
     }
 
     // An appearance without a /BBox, or that is an image, is not a form XObject (ISO 32000-1 Table 95), and viewers draw
@@ -298,12 +304,13 @@ public class FlattenTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Flatten());
-        AssertUnchanged(document, stream, pdf);
-        document.AcroForm.Flatten(new[] { "NoBox", "Image" });
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Flatten());
+        AssertUnchanged(editor, stream, pdf);
+        editor.AcroForm.Flatten(new[] { "NoBox", "Image" });
         Assert.Equal("Valued", Assert.Single(document.AcroForm.Fields).FullName);
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.DoesNotContain(" Do ", Appendix(stream.ToArray(), pdf.Length), StringComparison.Ordinal);
     }
 
@@ -320,9 +327,10 @@ public class FlattenTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Flatten());
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Flatten());
+        AssertUnchanged(editor, stream, pdf);
     }
 
     [Theory]
@@ -335,11 +343,12 @@ public class FlattenTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
-        document.AllowBreakingSignatures = true;
+        using var editor = document.Edit();
+        editor.AllowBreakingSignatures = true;
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten());
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten(new[] { "Name" }));
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Flatten());
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Flatten(new[] { "Name" }));
+        AssertUnchanged(editor, stream, pdf);
     }
 
     [Fact]
@@ -349,16 +358,17 @@ public class FlattenTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Flatten(new[] { "Agree" }));
-        document.AllowBreakingSignatures = true;
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten(new[] { "Name" }));
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Flatten());
-        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Flatten(new[] { "Sig" }));
-        AssertUnchanged(document, stream, pdf);
+        Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Flatten(new[] { "Agree" }));
+        editor.AllowBreakingSignatures = true;
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Flatten(new[] { "Name" }));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Flatten());
+        Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Flatten(new[] { "Sig" }));
+        AssertUnchanged(editor, stream, pdf);
 
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
-        document.AcroForm.Flatten(new[] { "Agree" });
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Agree", true));
+        editor.AcroForm.Flatten(new[] { "Agree" });
         Assert.DoesNotContain(document.AcroForm.Fields, field => field.FullName == "Agree");
         Assert.Contains(document.AcroForm.Fields, field => field.FullName == "Sig");
     }
@@ -371,16 +381,18 @@ public class FlattenTests
         {
             stream.Write(xfaOnly, 0, xfaOnly.Length);
             using var document = PdfDocument.Open(stream, leaveOpen: true);
+            using var editor = document.Edit();
             Assert.True(document.AcroForm.IsXfaOnly);
-            Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Flatten());
-            AssertUnchanged(document, stream, xfaOnly);
+            Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Flatten());
+            AssertUnchanged(editor, stream, xfaOnly);
         }
 
         byte[] hybrid = BuildForm(string.Empty, string.Empty, xfa: true);
         using (var document = PdfDocument.Open(new MemoryStream(hybrid), leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.AcroForm.IsHybridXfa);
-            document.AcroForm.Flatten(new[] { "Empty" });
+            editor.AcroForm.Flatten(new[] { "Empty" });
             Assert.False(document.AcroForm.IsHybridXfa);
             Assert.Contains(document.AcroForm.Fields, field => field.FullName == "Name");
         }
@@ -391,10 +403,11 @@ public class FlattenTests
         {
             stream.Write(signed, 0, signed.Length);
             using var document = PdfDocument.Open(stream, leaveOpen: true);
-            Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Flatten(new[] { "Empty" }));
-            AssertUnchanged(document, stream, signed);
-            document.AllowBreakingSignatures = true;
-            document.AcroForm.Flatten(new[] { "Empty" });
+            using var editor = document.Edit();
+            Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Flatten(new[] { "Empty" }));
+            AssertUnchanged(editor, stream, signed);
+            editor.AllowBreakingSignatures = true;
+            editor.AcroForm.Flatten(new[] { "Empty" });
             Assert.False(document.AcroForm.IsHybridXfa);
         }
     }
@@ -407,16 +420,18 @@ public class FlattenTests
         byte[] unsigned = BuildForm(ur3, string.Empty, usageRights: rights);
         using (var document = PdfDocument.Open(new MemoryStream(unsigned), leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.HasUsageRights);
-            document.AcroForm.Flatten(new[] { "Empty" });
+            editor.AcroForm.Flatten(new[] { "Empty" });
             Assert.False(document.HasUsageRights);
         }
 
         byte[] signed = BuildForm(ur3, "<< /Type /Sig >>", signatureField: true, usageRights: rights);
         using (var document = PdfDocument.Open(new MemoryStream(signed), leaveOpen: true))
         {
-            document.AllowBreakingSignatures = true;
-            document.AcroForm.Flatten(new[] { "Empty" });
+            using var editor = document.Edit();
+            editor.AllowBreakingSignatures = true;
+            editor.AcroForm.Flatten(new[] { "Empty" });
             Assert.True(document.HasUsageRights);
         }
     }
@@ -437,9 +452,10 @@ public class FlattenTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
-            FillForm(document);
-            document.AcroForm.Flatten();
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            FillForm(editor);
+            editor.AcroForm.Flatten();
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -466,13 +482,15 @@ public class FlattenTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
-            Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Flatten());
-            AssertUnchanged(document, stream, pdf);
+            using var editor = document.Edit();
+            Assert.Throws<PdfEncryptionRestrictedException>(() => editor.AcroForm.Flatten());
+            AssertUnchanged(editor, stream, pdf);
         }
 
         using (var document = PdfDocument.Open(stream, "owner", leaveOpen: true))
         {
-            document.AcroForm.Flatten();
+            using var editor = document.Edit();
+            editor.AcroForm.Flatten();
             Assert.False(document.AcroForm.HasFields);
         }
     }
@@ -509,10 +527,11 @@ public class FlattenTests
         (byte[] head, byte[] tail) = builder.Split(builder.Length + 2000000, string.Empty);
         var sparse = new SparsePdfStream(head, tail, head.Length + 2000000);
         using var document = PdfDocument.Open(sparse, leaveOpen: true);
+        using var editor = document.Edit();
 
-        document.AcroForm.Flatten();
+        editor.AcroForm.Flatten();
         Assert.False(document.AcroForm.HasFields);
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.False(sparse.TouchedHole);
     }
 
@@ -554,9 +573,9 @@ public class FlattenTests
         return builder.Finish();
     }
 
-    private static void FillForm(PdfDocument document)
+    private static void FillForm(PdfDocumentEditor editor)
     {
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>
         {
             ["Name"] = "Ada Lovelace",
             ["Agree"] = true,
@@ -565,19 +584,20 @@ public class FlattenTests
         }).Values.Distinct().Single());
     }
 
-    private static string FlattenAppendix(byte[] pdf, Action<PdfDocument> flatten)
+    private static string FlattenAppendix(byte[] pdf, Action<PdfDocumentEditor> flatten)
     {
         return FlattenAppendix(pdf, flatten, out _);
     }
 
-    private static string FlattenAppendix(byte[] pdf, Action<PdfDocument> flatten, out byte[] saved)
+    private static string FlattenAppendix(byte[] pdf, Action<PdfDocumentEditor> flatten, out byte[] saved)
     {
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            flatten(document);
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            flatten(editor);
+            editor.SaveIncremental();
         }
 
         saved = stream.ToArray();
@@ -591,9 +611,9 @@ public class FlattenTests
     }
 
     // A refused flatten leaves the document clean, so a save writes nothing.
-    private static void AssertUnchanged(PdfDocument document, MemoryStream stream, byte[] pdf)
+    private static void AssertUnchanged(PdfDocumentEditor editor, MemoryStream stream, byte[] pdf)
     {
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.Equal(pdf.Length, stream.Length);
     }
 

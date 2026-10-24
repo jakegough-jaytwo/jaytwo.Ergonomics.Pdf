@@ -38,7 +38,7 @@ public interface IPdfExternalSigner
     /// </summary>
     /// <param name="hash">The raw digest: 32 bytes for SHA-256, 48 for SHA-384, 64 for SHA-512. Do not hash it again; a mechanism such as <c>CKM_SHA256_RSA_PKCS</c> or <c>CKM_ECDSA_SHA256</c> would.</param>
     /// <param name="hashAlgorithm">The digest algorithm from <see cref="PdfSignatureOptions.DigestAlgorithm"/>: <see cref="HashAlgorithmName.SHA256"/>, <see cref="HashAlgorithmName.SHA384"/>, or <see cref="HashAlgorithmName.SHA512"/>.</param>
-    /// <param name="cancellationToken">Canceled when the caller of <see cref="PdfDocument.SignAsync(PdfSignatureOptions, IPdfSignatureProvider, CancellationToken)"/> cancels. <see cref="PdfDocument.Sign(PdfSignatureOptions, IPdfSignatureProvider)"/> passes <see cref="CancellationToken.None"/> and waits for the result.</param>
+    /// <param name="cancellationToken">Canceled when the caller of <see cref="PdfDocumentEditor.SignAsync(PdfSignatureOptions, IPdfSignatureProvider, CancellationToken)"/> cancels. <see cref="PdfDocumentEditor.Sign(PdfSignatureOptions, IPdfSignatureProvider)"/> passes <see cref="CancellationToken.None"/> and waits for the result.</param>
     /// <returns>The RSA signature, or the P1363 ECDSA signature.</returns>
     ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken);
 }

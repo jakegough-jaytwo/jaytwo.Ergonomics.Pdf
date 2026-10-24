@@ -357,11 +357,12 @@ public class HardeningTests
 
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal("Secret", document.Metadata.Title);
             Assert.Equal(original, ReadAll(document.Attachments["notes.bin"].Open()));
-            document.Metadata.Title = "Updated";
-            document.Attachments.Add("added.bin", new MemoryStream(added), leaveOpen: true);
-            document.SaveIncremental(stream);
+            editor.Metadata.Title = "Updated";
+            editor.Attachments.Add("added.bin", new MemoryStream(added), leaveOpen: true);
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -509,6 +510,7 @@ public class HardeningTests
         using var source = new MemoryStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         if (opens)
         {
             Assert.Equal((2 * levels) + 1, document.PageCount);
@@ -517,7 +519,7 @@ public class HardeningTests
 
         Assert.Throws<PdfParseException>(() => _ = document.PageCount);
         using var destination = new MemoryStream();
-        PdfParseException error = Assert.Throws<PdfParseException>(() => document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedContents(), leaveOpen: true));
+        PdfParseException error = Assert.Throws<PdfParseException>(() => editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedContents(), leaveOpen: true));
 
         Assert.Contains("too deep", error.Message, StringComparison.Ordinal);
         Assert.Equal(0, destination.Length);

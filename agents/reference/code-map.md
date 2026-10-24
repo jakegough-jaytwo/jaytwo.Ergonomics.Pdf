@@ -2,20 +2,20 @@
 
 Migrated from `agents/archive/state-v1/status.md` under D-33; D-36 and W-56 record its removal, and its pre-removal state is [squashed].
 
-Maintained through `pdf-task-workflow`. As of 2026-10-18. Paths are under `src/jaytwo.Ergonomics.Pdf/` unless noted.
+Maintained through `pdf-task-workflow`. As of 2026-10-23. Paths are under `src/jaytwo.Pdf/` unless noted.
 
 | Area | Primary skill | Where it lives |
 |---|---|---|
-| Public entry points | `pdf-task-workflow` plus the affected domain skill | `PdfDocument.cs`, `PdfPage.cs`, `PdfRect.cs`, `PdfPermissions.cs`, root exception types |
+| Public entry points | `pdf-task-workflow` plus the affected domain skill | `PdfDocument.cs` (inspection), `PdfDocumentEditor.cs` (changes, saves, signatures), `PdfPage.cs`, `PdfPageEditor.cs`, `PdfRect.cs`, `PdfPermissions.cs`, root exception types |
 | Engine and integration | Affected domain skill; `pdf-change-verification` checks integration | `Internal/PdfEngine.cs`, about 3,650 lines. Fills, metadata, attachments, encryption gates, DocMDP, and `Sign` meet here. |
 | Parser, xref, object model | `pdf-core-change` | `Internal/PdfParser.cs`, `Internal/PdfObject.cs`, `Internal/PdfCursor.cs`, `Internal/XrefEntry.cs` |
 | Filters | `pdf-core-change` | `Internal/PdfStreamDecoder.cs` |
 | Standard security | `pdf-core-change` | `Internal/PdfSecurity.cs` |
 | Writer and stream plumbing | `pdf-core-change` | `Internal/PdfSerializer.cs`, `Internal/PdfSliceStream.cs`, `Internal/SplicedStream.cs` |
 | Text encodings | `pdf-core-change` | `Internal/PdfTextCodec.cs` |
-| Metadata | `pdf-core-change` | `Metadata/` |
-| Attachments | `pdf-core-change` | `Attachments/` |
-| AcroForm | `pdf-acroform-change` | `AcroForm/`, including `AppearanceBuilder.cs` |
+| Metadata | `pdf-core-change` | `Metadata/`; `PdfMetadataEditor.cs` writes |
+| Attachments | `pdf-core-change` | `Attachments/`; `PdfAttachmentCollectionEditor.cs` writes |
+| AcroForm | `pdf-acroform-change` | `AcroForm/`, including `AppearanceBuilder.cs`; `PdfAcroFormEditor.cs` fills and flattens |
 | Signatures and timestamps | `pdf-signing-change` | `Signatures/` |
 | Engine tests | `pdf-change-verification` | `test/jaytwo.Pdf.Tests/` and its `netstandard2.0` lane `test/jaytwo.Pdf.NetStandard.Tests/` |
 | Workflow tests (public API only) | `pdf-change-verification` | `test/jaytwo.Ergonomics.Pdf.Tests/` |

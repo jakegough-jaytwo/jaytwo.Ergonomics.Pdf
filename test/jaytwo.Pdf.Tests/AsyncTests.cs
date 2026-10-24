@@ -73,9 +73,10 @@ public class AsyncTests
         byte[] pdf = Rc4Form(-4 & ~32);
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, "user", leaveOpen: true);
+        using var editor = document.Edit();
         using var destination = new MemoryStream();
 
-        await Assert.ThrowsAsync<PdfEncryptionRestrictedException>(() => document.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key))), leaveOpen: true));
+        await Assert.ThrowsAsync<PdfEncryptionRestrictedException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key))), leaveOpen: true));
 
         Assert.Equal(0, destination.Length);
         Assert.Equal(pdf, source.ToArray());
@@ -95,30 +96,32 @@ public class AsyncTests
         using (var source = new MemoryStream(pdf))
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
-            document.AcroForm.Fill("Name", "Ada");
+            using var editor = document.Edit();
+            editor.AcroForm.Fill("Name", "Ada");
             var destination = new MemoryStream();
-            OperationCanceledException save = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SaveIncrementalAsync(destination, true, canceled.Token));
+            OperationCanceledException save = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SaveIncrementalAsync(destination, true, canceled.Token));
             Assert.Equal(canceled.Token, save.CancellationToken);
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SaveIncrementalAsync(canceled.Token));
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SaveIncrementalAsync(canceled.Token));
             Assert.Equal(0, destination.Length);
             Assert.Equal(pdf, source.ToArray());
 
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
             Assert.Equal(expectedSave, destination.ToArray());
         }
 
         using (var source = new MemoryStream(pdf))
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
-            document.AcroForm.Fill("Name", "Ada");
+            using var editor = document.Edit();
+            editor.AcroForm.Fill("Name", "Ada");
             var destination = new MemoryStream();
-            OperationCanceledException sign = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, canceled.Token));
+            OperationCanceledException sign = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, canceled.Token));
             Assert.Equal(canceled.Token, sign.CancellationToken);
-            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SignAsync(Options(), new CmsDetachedSignatureProvider(signer), canceled.Token));
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(Options(), new CmsDetachedSignatureProvider(signer), canceled.Token));
             Assert.Equal(0, destination.Length);
             Assert.Equal(pdf, source.ToArray());
 
-            document.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
+            editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
             Assert.Equal(expectedSign, destination.ToArray());
         }
     }
@@ -135,12 +138,13 @@ public class AsyncTests
         byte[] expected = await Sign(pdf, null, signer, same: false, useAsync: false);
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         var destination = new MemoryStream();
         using var cancellation = new CancellationTokenSource();
         var stalling = new StallingSigner(certificate, cancellation, hostThrowsSecret);
 
-        OperationCanceledException canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(stalling), true, cancellation.Token));
+        OperationCanceledException canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(stalling), true, cancellation.Token));
 
         Assert.Equal(typeof(OperationCanceledException), canceled.GetType());
         Assert.Equal(cancellation.Token, canceled.CancellationToken);
@@ -150,7 +154,7 @@ public class AsyncTests
         Assert.Equal(0, destination.Length);
         Assert.Equal(pdf, source.ToArray());
 
-        document.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
+        editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
         Assert.Equal(expected, destination.ToArray());
     }
 
@@ -163,6 +167,7 @@ public class AsyncTests
         byte[] pdf = Form();
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
         using var cancellation = new CancellationTokenSource();
         var authority = new StallingAuthority(cancellation);
@@ -171,7 +176,7 @@ public class AsyncTests
             : new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key)), authority);
         PdfSignatureOptions options = Options(provider.Kind);
 
-        OperationCanceledException canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => document.SignAsync(destination, options, provider, true, cancellation.Token));
+        OperationCanceledException canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(destination, options, provider, true, cancellation.Token));
 
         Assert.True(authority.Called);
         Assert.Equal(typeof(OperationCanceledException), canceled.GetType());
@@ -193,6 +198,7 @@ public class AsyncTests
         byte[] pdf = Form();
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
         var authority = new LeakyAuthority(asPdfTimestampException);
         IPdfSignatureProvider provider = documentTimestamp
@@ -200,7 +206,7 @@ public class AsyncTests
             : new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key)), authority);
         PdfSignatureOptions options = Options(provider.Kind);
 
-        PdfTimestampException failed = Assert.Throws<PdfTimestampException>(() => document.Sign(destination, options, provider, leaveOpen: true));
+        PdfTimestampException failed = Assert.Throws<PdfTimestampException>(() => editor.Sign(destination, options, provider, leaveOpen: true));
 
         Assert.True(authority.Called);
         Assert.Equal("The timestamp authority failed.", failed.Message);
@@ -224,13 +230,14 @@ public class AsyncTests
             : await Save(pdf, null, same: false, useAsync: false);
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         using var cancellation = new CancellationTokenSource();
         var destination = new CancelingDestination(cancellation);
 
         Task pending = sign
-            ? document.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, cancellation.Token)
-            : document.SaveIncrementalAsync(destination, true, cancellation.Token);
+            ? editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, cancellation.Token)
+            : editor.SaveIncrementalAsync(destination, true, cancellation.Token);
         await Assert.ThrowsAnyAsync<OperationCanceledException>(() => pending);
 
         Assert.Equal(1, destination.AsyncWrites);
@@ -240,11 +247,11 @@ public class AsyncTests
         var retry = new MemoryStream();
         if (sign)
         {
-            document.Sign(retry, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
+            editor.Sign(retry, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
         }
         else
         {
-            document.SaveIncremental(retry, leaveOpen: true);
+            editor.SaveIncremental(retry, leaveOpen: true);
         }
 
         Assert.Equal(expected, retry.ToArray());
@@ -262,10 +269,11 @@ public class AsyncTests
         byte[] pdf = Large();
         using var source = new MemoryStream(pdf);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         var destination = new FailingStream(1024 * 1024, armed: true);
 
-        Exception? failed = await Record.ExceptionAsync(() => Write(document, destination, sign ? signer : null, useAsync));
+        Exception? failed = await Record.ExceptionAsync(() => Write(editor, destination, sign ? signer : null, useAsync));
 
         Assert.IsType<IOException>(failed);
         Assert.True(destination.Failed);
@@ -286,10 +294,11 @@ public class AsyncTests
         var source = new FailingStream(64, armed: false);
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         source.Arm();
 
-        Exception? failed = await Record.ExceptionAsync(() => Write(document, source, sign ? signer : null, useAsync));
+        Exception? failed = await Record.ExceptionAsync(() => Write(editor, source, sign ? signer : null, useAsync));
 
         Assert.IsType<IOException>(failed);
         Assert.True(source.Failed);
@@ -316,11 +325,12 @@ public class AsyncTests
         var source = new FinalizationFailingStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         FinalizationFailingStream destination = same ? source : new FinalizationFailingStream();
         destination.Arm();
 
-        Exception? failed = await Record.ExceptionAsync(() => Write(document, destination, sign ? signer : null, useAsync));
+        Exception? failed = await Record.ExceptionAsync(() => Write(editor, destination, sign ? signer : null, useAsync));
 
         Assert.IsType<IOException>(failed);
         Assert.Equal(same ? pdf.Length : 0, destination.RawLength);
@@ -331,7 +341,7 @@ public class AsyncTests
 
         destination.Disarm();
         using var retry = new MemoryStream();
-        await Write(document, retry, sign ? signer : null, useAsync);
+        await Write(editor, retry, sign ? signer : null, useAsync);
         Assert.Equal(expected, retry.ToArray());
     }
 
@@ -344,22 +354,23 @@ public class AsyncTests
         using var source = new DisposeFailingStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: false);
+        using var editor = document.Edit();
         using var destination = new MemoryStream();
 
         Exception? failed = await Record.ExceptionAsync(() => useAsync
-            ? document.SaveIncrementalAsync(destination, leaveOpen: true)
-            : SaveSynchronously(document, destination));
+            ? editor.SaveIncrementalAsync(destination, leaveOpen: true)
+            : SaveSynchronously(editor, destination));
 
         Assert.IsType<IOException>(failed);
         Assert.Equal(0, destination.Length);
         using var retry = new MemoryStream();
         if (useAsync)
         {
-            await document.SaveIncrementalAsync(retry, leaveOpen: true);
+            await editor.SaveIncrementalAsync(retry, leaveOpen: true);
         }
         else
         {
-            document.SaveIncremental(retry, leaveOpen: true);
+            editor.SaveIncremental(retry, leaveOpen: true);
         }
 
         Assert.Equal(pdf, retry.ToArray());
@@ -381,43 +392,44 @@ public class AsyncTests
         using var source = new DisposeFailingStream();
         source.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(source, leaveOpen: false);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         using var destination = new MemoryStream();
 
-        Exception? failed = await Record.ExceptionAsync(() => Write(document, destination, sign ? signer : null, useAsync));
+        Exception? failed = await Record.ExceptionAsync(() => Write(editor, destination, sign ? signer : null, useAsync));
 
         Assert.IsType<IOException>(failed);
         Assert.Equal(0, destination.Length);
         using var retry = new MemoryStream();
-        await Write(document, retry, sign ? signer : null, useAsync);
+        await Write(editor, retry, sign ? signer : null, useAsync);
         Assert.Equal(expected, retry.ToArray());
     }
 
-    private static Task Write(PdfDocument document, Stream destination, IPdfExternalSigner? signer, bool useAsync)
+    private static Task Write(PdfDocumentEditor editor, Stream destination, IPdfExternalSigner? signer, bool useAsync)
     {
         if (signer == null)
         {
             if (useAsync)
             {
-                return document.SaveIncrementalAsync(destination, true, CancellationToken.None);
+                return editor.SaveIncrementalAsync(destination, true, CancellationToken.None);
             }
 
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
             return Task.CompletedTask;
         }
 
         if (useAsync)
         {
-            return document.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, CancellationToken.None);
+            return editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, CancellationToken.None);
         }
 
-        document.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
+        editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);
         return Task.CompletedTask;
     }
 
-    private static Task SaveSynchronously(PdfDocument document, Stream destination)
+    private static Task SaveSynchronously(PdfDocumentEditor editor, Stream destination)
     {
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         return Task.CompletedTask;
     }
 
@@ -428,22 +440,23 @@ public class AsyncTests
         source.Write(pdf, 0, pdf.Length);
         using var destination = new MemoryStream();
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         if (same && useAsync)
         {
-            await document.SaveIncrementalAsync();
+            await editor.SaveIncrementalAsync();
         }
         else if (same)
         {
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
         else if (useAsync)
         {
-            await document.SaveIncrementalAsync(destination, leaveOpen: true);
+            await editor.SaveIncrementalAsync(destination, leaveOpen: true);
         }
         else
         {
-            document.SaveIncremental(destination, leaveOpen: true);
+            editor.SaveIncremental(destination, leaveOpen: true);
         }
 
         return same ? source.ToArray() : destination.ToArray();
@@ -456,23 +469,24 @@ public class AsyncTests
         source.Write(pdf, 0, pdf.Length);
         using var destination = new MemoryStream();
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
-        document.AcroForm.Fill("Name", "Ada");
+        using var editor = document.Edit();
+        editor.AcroForm.Fill("Name", "Ada");
         var provider = new CmsDetachedSignatureProvider(signer);
         if (same && useAsync)
         {
-            await document.SignAsync(Options(), provider);
+            await editor.SignAsync(Options(), provider);
         }
         else if (same)
         {
-            document.Sign(Options(), provider);
+            editor.Sign(Options(), provider);
         }
         else if (useAsync)
         {
-            await document.SignAsync(destination, Options(), provider, leaveOpen: true);
+            await editor.SignAsync(destination, Options(), provider, leaveOpen: true);
         }
         else
         {
-            document.Sign(destination, Options(), provider, leaveOpen: true);
+            editor.Sign(destination, Options(), provider, leaveOpen: true);
         }
 
         return same ? source.ToArray() : destination.ToArray();

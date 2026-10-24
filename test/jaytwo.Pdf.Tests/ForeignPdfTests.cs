@@ -137,10 +137,11 @@ public class ForeignPdfTests
         stream.Write(original, 0, original.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Agree", true));
             Assert.False(document.AcroForm.NeedAppearances);
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -169,11 +170,12 @@ public class ForeignPdfTests
         stream.Write(original, 0, original.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             PdfField field = Assert.Single(document.AcroForm.Fields);
             Assert.Equal("Name", field.FullName);
             Assert.Equal(1, field.PageNumber);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            document.SaveIncremental(stream);
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -226,10 +228,11 @@ public class ForeignPdfTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal(expectedTitle, document.Metadata.Title);
-        document.Metadata.Title = title;
+        editor.Metadata.Title = title;
         var destination = new MemoryStream();
-        document.SaveIncremental(destination, leaveOpen: true);
+        editor.SaveIncremental(destination, leaveOpen: true);
         return destination.ToArray();
     }
 
@@ -244,14 +247,15 @@ public class ForeignPdfTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, password, leaveOpen: true);
+        using var editor = document.Edit();
         Assert.Equal(expectedTitle, document.Metadata.Title);
         if (title != null)
         {
-            document.Metadata.Title = title;
+            editor.Metadata.Title = title;
         }
 
         var destination = new MemoryStream();
-        document.Sign(
+        editor.Sign(
             destination,
             new PdfSignatureOptions
             {

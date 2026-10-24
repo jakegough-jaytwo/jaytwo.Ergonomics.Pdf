@@ -69,6 +69,7 @@ public class FormDataTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         var values = new List<KeyValuePair<string, PdfFieldValue>>
         {
             new KeyValuePair<string, PdfFieldValue>("Name", "Grace"),
@@ -81,11 +82,11 @@ public class FormDataTests
         values.RemoveAll(item => item.Key == name);
         values.Add(new KeyValuePair<string, PdfFieldValue>(name, value));
 
-        Exception thrown = Assert.ThrowsAny<PdfException>(() => document.AcroForm.Fill(values));
+        Exception thrown = Assert.ThrowsAny<PdfException>(() => editor.AcroForm.Fill(values));
         Assert.IsType(error, thrown);
         Assert.Equal(Blank, document.AcroForm.Export());
         Assert.False(document.AcroForm.NeedAppearances);
-        document.SaveIncremental();
+        editor.SaveIncremental();
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -97,22 +98,23 @@ public class FormDataTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<ArgumentNullException>(() => document.AcroForm.Fill(null!));
-        Assert.Throws<ArgumentNullException>(() => document.AcroForm.Fill(null!, "Ada"));
-        Assert.Throws<ArgumentException>(() => document.AcroForm.Fill(new[]
+        Assert.Throws<ArgumentNullException>(() => editor.AcroForm.Fill(null!));
+        Assert.Throws<ArgumentNullException>(() => editor.AcroForm.Fill(null!, "Ada"));
+        Assert.Throws<ArgumentException>(() => editor.AcroForm.Fill(new[]
         {
             new KeyValuePair<string, PdfFieldValue>("Name", "Ada"),
             new KeyValuePair<string, PdfFieldValue>(null!, "Ada"),
         }));
-        Assert.Throws<ArgumentException>(() => document.AcroForm.Fill(new[]
+        Assert.Throws<ArgumentException>(() => editor.AcroForm.Fill(new[]
         {
             new KeyValuePair<string, PdfFieldValue>("Name", "Ada"),
             new KeyValuePair<string, PdfFieldValue>("Name", "Grace"),
         }));
         Assert.Throws<ArgumentException>(() => PdfFieldValue.FromList(new[] { "A", null! }));
-        Assert.Empty(document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
-        document.SaveIncremental();
+        Assert.Empty(editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
+        editor.SaveIncremental();
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -158,13 +160,14 @@ public class FormDataTests
             Assert.Equal(source, data);
             using (var document = PdfDocument.Open(stream, leaveOpen: true))
             {
-                IReadOnlyDictionary<string, PdfAppearanceDisposition> result = document.AcroForm.Fill(data.Where(item => !readOnly.Contains(item.Key)));
+                using var editor = document.Edit();
+                IReadOnlyDictionary<string, PdfAppearanceDisposition> result = editor.AcroForm.Fill(data.Where(item => !readOnly.Contains(item.Key)));
 
                 Assert.Equal(data.Count - 1, result.Count);
                 Assert.DoesNotContain(PdfAppearanceDisposition.NeedsViewer, result.Values);
                 Assert.False(document.AcroForm.NeedAppearances);
                 Assert.Equal(source, document.AcroForm.Export());
-                document.SaveIncremental();
+                editor.SaveIncremental();
             }
 
             byte[] saved = stream.ToArray();
@@ -189,8 +192,9 @@ public class FormDataTests
         IReadOnlyDictionary<string, PdfAppearanceDisposition> bulkResult;
         using (var document = PdfDocument.Open(bulk, leaveOpen: true))
         {
-            bulkResult = document.AcroForm.Fill(values);
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            bulkResult = editor.AcroForm.Fill(values);
+            editor.SaveIncremental();
         }
 
         var single = new MemoryStream();
@@ -198,12 +202,13 @@ public class FormDataTests
         var singleResult = new Dictionary<string, PdfAppearanceDisposition>();
         using (var document = PdfDocument.Open(single, leaveOpen: true))
         {
+            using var editor = document.Edit();
             foreach (KeyValuePair<string, PdfFieldValue> item in values)
             {
-                singleResult[item.Key] = document.AcroForm.Fill(item.Key, item.Value);
+                singleResult[item.Key] = editor.AcroForm.Fill(item.Key, item.Value);
             }
 
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
 
         Assert.Equal(singleResult, bulkResult);
@@ -229,17 +234,18 @@ public class FormDataTests
         var values = new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Agree"] = true, ["Color"] = "Blue" };
         using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
+            using var editor = document.Edit();
             if (!allowed)
             {
-                Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Fill(values));
-                document.SaveIncremental();
+                Assert.Throws<PdfEncryptionRestrictedException>(() => editor.AcroForm.Fill(values));
+                editor.SaveIncremental();
                 Assert.Equal(pdf.Length, stream.Length);
                 return;
             }
 
-            IReadOnlyDictionary<string, PdfAppearanceDisposition> result = document.AcroForm.Fill(values);
+            IReadOnlyDictionary<string, PdfAppearanceDisposition> result = editor.AcroForm.Fill(values);
             Assert.All(result.Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
 
         byte[] saved = stream.ToArray();
@@ -273,19 +279,20 @@ public class FormDataTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         var values = new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["City"] = "Paris" };
 
         if (allowed)
         {
-            Assert.Equal(2, document.AcroForm.Fill(values).Count);
+            Assert.Equal(2, editor.AcroForm.Fill(values).Count);
             Assert.Equal(values, document.AcroForm.Export());
-            document.SaveIncremental();
+            editor.SaveIncremental();
             Assert.True(stream.Length > pdf.Length);
         }
         else
         {
-            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill(values));
-            document.SaveIncremental();
+            Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill(values));
+            editor.SaveIncremental();
             Assert.Equal(pdf.Length, stream.Length);
         }
     }
@@ -306,12 +313,13 @@ public class FormDataTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Open"] = "Ada", ["Locked"] = "Ada" }));
-        document.SaveIncremental();
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Open"] = "Ada", ["Locked"] = "Ada" }));
+        editor.SaveIncremental();
         Assert.Equal(pdf.Length, stream.Length);
 
-        document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Open"] = "Ada" });
+        editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Open"] = "Ada" });
         Assert.Equal("Ada", document.AcroForm.Export()["Open"].Text);
         Assert.Equal(string.Empty, document.AcroForm.Export()["Locked"].Text);
     }
@@ -359,17 +367,18 @@ public class FormDataTests
         var sparse = new SparsePdfStream(head, tail, head.Length + 2000000);
         using (var document = PdfDocument.Open(sparse, leaveOpen: true))
         {
+            using var editor = document.Edit();
             var values = new Dictionary<string, PdfFieldValue>();
             for (int field = 0; field < Fields; field++)
             {
                 values["F" + field.ToString()] = "Value " + field.ToString();
             }
 
-            IReadOnlyDictionary<string, PdfAppearanceDisposition> result = document.AcroForm.Fill(values);
+            IReadOnlyDictionary<string, PdfAppearanceDisposition> result = editor.AcroForm.Fill(values);
 
             Assert.Equal(Fields, result.Count);
             Assert.All(result.Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
-            document.SaveIncremental(sparse);
+            editor.SaveIncremental(sparse);
         }
 
         Assert.False(sparse.TouchedHole);
@@ -396,20 +405,21 @@ public class FormDataTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
         var values = new List<KeyValuePair<string, PdfFieldValue>>
         {
             new KeyValuePair<string, PdfFieldValue>("Agree", true),
             new KeyValuePair<string, PdfFieldValue>("Name", "Ada"),
         };
 
-        Assert.Throws<PdfParseException>(() => document.AcroForm.Fill(values));
+        Assert.Throws<PdfParseException>(() => editor.AcroForm.Fill(values));
         Assert.False(document.AcroForm.Export()["Agree"].Boolean);
         Assert.Equal(string.Empty, document.AcroForm.Export()["Name"].Text);
-        document.SaveIncremental();
+        editor.SaveIncremental();
         Assert.Equal(pdf.Length, stream.Length);
 
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
-        document.SaveIncremental();
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Agree", true));
+        editor.SaveIncremental();
         Assert.True(stream.Length > pdf.Length);
     }
 

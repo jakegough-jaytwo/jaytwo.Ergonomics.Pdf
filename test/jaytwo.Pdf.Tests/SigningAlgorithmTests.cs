@@ -256,8 +256,9 @@ public class SigningAlgorithmTests
     {
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         using var destination = new MemoryStream();
-        document.Sign(
+        editor.Sign(
             destination,
             new PdfSignatureOptions { DigestAlgorithm = digestAlgorithm, SigningTime = TestCompat.UnixEpoch },
             provider,
@@ -271,12 +272,13 @@ public class SigningAlgorithmTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        PdfSignException same = Assert.Throws<PdfSignException>(() => document.Sign(stream, options, createProvider()));
+        PdfSignException same = Assert.Throws<PdfSignException>(() => editor.Sign(stream, options, createProvider()));
         Assert.Equal(pdf, stream.ToArray());
 
         using var destination = new MemoryStream();
-        PdfSignException cross = Assert.Throws<PdfSignException>(() => document.Sign(destination, options, createProvider(), leaveOpen: true));
+        PdfSignException cross = Assert.Throws<PdfSignException>(() => editor.Sign(destination, options, createProvider(), leaveOpen: true));
         Assert.Equal(0, destination.Length);
         Assert.Equal(pdf, stream.ToArray());
         Assert.Equal(same.Message, cross.Message);

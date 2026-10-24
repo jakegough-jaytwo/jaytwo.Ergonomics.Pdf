@@ -71,26 +71,27 @@ public class OutputIdentityTests
         stream.Write(original, 0, original.Length);
         using (var document = scenario == "rc4-fill" ? PdfDocument.Open(stream, "user", leaveOpen: true) : PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             switch (scenario)
             {
                 case "metadata":
-                    document.Metadata.Title = "Identité";
-                    document.Metadata["Department"] = "Billing (East)";
+                    editor.Metadata.Title = "Identité";
+                    editor.Metadata["Department"] = "Billing (East)";
                     break;
                 case "fill":
                 case "rc4-fill":
-                    Fill(document);
+                    Fill(editor);
                     break;
                 case "flatten":
-                    Fill(document);
-                    document.AcroForm.Flatten();
+                    Fill(editor);
+                    editor.AcroForm.Flatten();
                     break;
                 case "rotate":
-                    document.Pages[0].Rotation = 90;
+                    editor.Pages[0].Rotation = 90;
                     break;
                 case "attachment":
                     byte[] content = Enumerable.Range(0, 3000).Select(value => (byte)(value % 7 == 0 ? value : 0x41)).ToArray();
-                    document.Attachments.Add("invoice.xml", new MemoryStream(content), options: new PdfAttachmentOptions
+                    editor.Attachments.Add("invoice.xml", new MemoryStream(content), options: new PdfAttachmentOptions
                     {
                         Relationship = PdfAttachmentRelationship.Alternative,
                         CreationDate = FixedTime,
@@ -111,7 +112,7 @@ public class OutputIdentityTests
                             Location = "Desk 4",
                             SigningTime = FixedTime,
                         };
-                        document.Sign(stream, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);
+                        editor.Sign(stream, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);
                     }
 
                     return stream.ToArray();
@@ -119,18 +120,18 @@ public class OutputIdentityTests
                     throw new ArgumentOutOfRangeException(nameof(scenario), scenario, null);
             }
 
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();
     }
 
-    private static void Fill(PdfDocument document)
+    private static void Fill(PdfDocumentEditor editor)
     {
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Fit", "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"));
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Centered", "Café • (1/3)"));
-        Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Choice", "Beta"));
-        document.AcroForm.Fill("Agree", true);
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Fit", "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Centered", "Café • (1/3)"));
+        Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Choice", "Beta"));
+        editor.AcroForm.Fill("Agree", true);
     }
 
     // A text field sized to its content, a centered field with colors and a border, a combo box, and a check box,

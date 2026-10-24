@@ -164,11 +164,12 @@ public class AppearanceRenderTests
         PdfField widget;
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.AcroForm.IsHybridXfa);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill(field, "Zephyr"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill(field, "Zephyr"));
             Assert.False(document.AcroForm.IsHybridXfa);
             widget = Assert.Single(document.AcroForm.GetFields(field));
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
         }
 
         Assert.Equal(1, widget.PageNumber);
@@ -234,6 +235,7 @@ public class AppearanceRenderTests
         var values = new Dictionary<string, PdfFieldValue>(StringComparer.Ordinal);
         using (var document = PdfDocument.Open(new MemoryStream(original), leaveOpen: true))
         {
+            using var editor = document.Edit();
             foreach (PdfField field in document.AcroForm.Fields)
             {
                 if (values.Count < 6 && field.FieldType == PdfFieldType.Text && !field.ReadOnly && field.MaxLength is null or >= 5 && !values.ContainsKey(field.FullName))
@@ -243,7 +245,7 @@ public class AppearanceRenderTests
             }
 
             // A comb or rich-text field gets no generated appearance and would set /NeedAppearances, which flatten refuses.
-            foreach (KeyValuePair<string, PdfAppearanceDisposition> result in document.AcroForm.Fill(values))
+            foreach (KeyValuePair<string, PdfAppearanceDisposition> result in editor.AcroForm.Fill(values))
             {
                 if (result.Value != PdfAppearanceDisposition.Generated)
                 {
@@ -255,8 +257,9 @@ public class AppearanceRenderTests
         Assert.NotEmpty(values);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.All(document.AcroForm.Fill(values).Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
-            document.SaveIncremental();
+            using var editor = document.Edit();
+            Assert.All(editor.AcroForm.Fill(values).Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
+            editor.SaveIncremental();
         }
 
         AssertFlattenRendersAsFilled(stream.ToArray(), values.Values.First().Text);
@@ -270,10 +273,11 @@ public class AppearanceRenderTests
         int pages;
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             pages = document.PageCount;
-            document.AcroForm.Flatten();
+            editor.AcroForm.Flatten();
             Assert.Equal(0, document.AcroForm.Fields.Count(field => field.FieldType != PdfFieldType.Signature));
-            document.SaveIncremental();
+            editor.SaveIncremental();
         }
 
         byte[] flattened = stream.ToArray();
@@ -356,12 +360,13 @@ public class AppearanceRenderTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Agree", true));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Color", "Blue"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Station", "Yes"));
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Agree", true));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Color", "Blue"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Station", "Yes"));
             Assert.False(document.AcroForm.NeedAppearances);
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();
@@ -568,9 +573,10 @@ public class AppearanceRenderTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Fit", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Color", "Color"));
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Fit", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Color", "Color"));
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();
@@ -582,22 +588,23 @@ public class AppearanceRenderTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Seen", "Seen"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Cafe", "Caf\u00e9"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Mark", "A\u2022B"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Left", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Center", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Right", "Align"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Long", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Clip", "WIDEMARK"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Small", "Small"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Large", "Large"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Wide", "Wide"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Tall", "One\nTwo\nThree"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Turn", "Rotated"));
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Crop", "Cropped"));
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Seen", "Seen"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Cafe", "Caf\u00e9"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Mark", "A\u2022B"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Left", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Center", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Right", "Align"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Long", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Clip", "WIDEMARK"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Small", "Small"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Large", "Large"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Wide", "Wide"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Tall", "One\nTwo\nThree"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Turn", "Rotated"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Crop", "Cropped"));
             Assert.False(document.AcroForm.NeedAppearances);
-            document.SaveIncremental(stream);
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();

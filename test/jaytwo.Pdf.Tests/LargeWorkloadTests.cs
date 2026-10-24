@@ -100,10 +100,11 @@ public class LargeWorkloadTests
                 using var file = OpenRead(sourcePath);
                 editProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(editProbe, leaveOpen: true);
-                document.Metadata.Title = "Dense GiB edited";
-                document.Metadata.ModificationDate = FixedDate;
+                using var editor = document.Edit();
+                editor.Metadata.Title = "Dense GiB edited";
+                editor.Metadata.ModificationDate = FixedDate;
                 using var destination = CreateFile(editedPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 editDecoded = document.DecodedByteCount;
             });
             Report("dense metadata edit", edit, SimpleBudget, editProbe!, editDecoded);
@@ -122,9 +123,10 @@ public class LargeWorkloadTests
                 using var file = OpenRead(editedPath);
                 signProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signProbe, leaveOpen: true);
+                using var editor = document.Edit();
                 Assert.Equal("Dense GiB edited", document.Metadata.Title);
                 using var destination = CreateFile(signedPath);
-                document.Sign(destination, new PdfSignatureOptions { Reason = "G7", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
+                editor.Sign(destination, new PdfSignatureOptions { Reason = "G7", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
                 signDecoded = document.DecodedByteCount;
             });
             Report("dense sign", sign, SimpleBudget, signProbe!, signDecoded);
@@ -231,8 +233,9 @@ public class LargeWorkloadTests
                 addProbe = new ProbeStream(content);
                 carrierProbe = new ProbeStream(pdf);
                 using var document = PdfDocument.Open(carrierProbe, leaveOpen: true);
-                document.Attachments.Add("payload.csv", addProbe, leaveOpen: true, new PdfAttachmentOptions { Description = "G7 payload", MimeType = "text/csv", Compress = true, CreationDate = FixedDate, ModificationDate = FixedDate });
-                document.SaveIncremental();
+                using var editor = document.Edit();
+                editor.Attachments.Add("payload.csv", addProbe, leaveOpen: true, new PdfAttachmentOptions { Description = "G7 payload", MimeType = "text/csv", Compress = true, CreationDate = FixedDate, ModificationDate = FixedDate });
+                editor.SaveIncremental();
                 addDecoded = document.DecodedByteCount;
             });
             Report("compressed attachment add and save", add, SimpleBudget, carrierProbe!, addDecoded);
@@ -340,11 +343,12 @@ public class LargeWorkloadTests
                 using var file = OpenRead(sourcePath);
                 editProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(editProbe, leaveOpen: true);
-                document.Metadata.Title = "Five Hundred edited";
-                document.Metadata.Subject = "G7";
-                document.Metadata.ModificationDate = FixedDate;
+                using var editor = document.Edit();
+                editor.Metadata.Title = "Five Hundred edited";
+                editor.Metadata.Subject = "G7";
+                editor.Metadata.ModificationDate = FixedDate;
                 using var destination = CreateFile(editedPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 editDecoded = document.DecodedByteCount;
             });
             Report("500-page metadata edit", edit, SimpleBudget, editProbe!, editDecoded);
@@ -360,11 +364,12 @@ public class LargeWorkloadTests
                 using var file = OpenRead(editedPath);
                 fillProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(fillProbe, leaveOpen: true);
-                IReadOnlyDictionary<string, PdfAppearanceDisposition> filled = document.AcroForm.Fill(G7Fixtures.TextValues(FormPages));
+                using var editor = document.Edit();
+                IReadOnlyDictionary<string, PdfAppearanceDisposition> filled = editor.AcroForm.Fill(G7Fixtures.TextValues(FormPages));
                 Assert.Equal(FormPages, filled.Count);
                 Assert.All(filled.Values, disposition => Assert.Equal(PdfAppearanceDisposition.Generated, disposition));
                 using var destination = CreateFile(filledPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 fillDecoded = document.DecodedByteCount;
             });
             Report("500-page bulk fill of 500 fields", fill, SimpleBudget, fillProbe!, fillDecoded);
@@ -382,8 +387,9 @@ public class LargeWorkloadTests
                 using var file = OpenRead(filledPath);
                 signProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signProbe, leaveOpen: true);
+                using var editor = document.Edit();
                 using var destination = CreateFile(signedPath);
-                document.Sign(destination, new PdfSignatureOptions { Reason = "G7", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
+                editor.Sign(destination, new PdfSignatureOptions { Reason = "G7", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
                 signDecoded = document.DecodedByteCount;
             });
             Report("500-page sign", sign, SimpleBudget, signProbe!, signDecoded);
@@ -447,9 +453,10 @@ public class LargeWorkloadTests
             using (var file = OpenRead(sourcePath))
             using (var document = PdfDocument.Open(file, leaveOpen: true))
             {
-                document.AcroForm.Fill(G7Fixtures.TextValues(FlattenPages));
+                using var editor = document.Edit();
+                editor.AcroForm.Fill(G7Fixtures.TextValues(FlattenPages));
                 using var destination = CreateFile(filledPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
             }
 
             long filledLength = new FileInfo(filledPath).Length;
@@ -462,9 +469,10 @@ public class LargeWorkloadTests
                 using var file = OpenRead(filledPath);
                 flattenProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(flattenProbe, leaveOpen: true);
-                document.AcroForm.Flatten();
+                using var editor = document.Edit();
+                editor.AcroForm.Flatten();
                 using var destination = CreateFile(flattenedPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 flattenDecoded = document.DecodedByteCount;
             });
             Report("1,000-page flatten", flatten, TraversalBudget, flattenProbe!, flattenDecoded);
@@ -517,9 +525,10 @@ public class LargeWorkloadTests
             using (var file = OpenRead(sourcePath))
             using (var document = PdfDocument.Open(file, leaveOpen: true))
             {
-                document.AcroForm.Fill(G7Fixtures.TextValues(pages));
+                using var editor = document.Edit();
+                editor.AcroForm.Fill(G7Fixtures.TextValues(pages));
                 using var destination = CreateFile(filledPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
             }
 
             long filledLength = new FileInfo(filledPath).Length;
@@ -532,9 +541,10 @@ public class LargeWorkloadTests
             {
                 flattenProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(flattenProbe, leaveOpen: true);
-                document.AcroForm.Flatten();
+                using var editor = document.Edit();
+                editor.AcroForm.Flatten();
                 using var destination = CreateFile(flattenedPath);
-                document.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(destination, leaveOpen: true);
                 flattenDecoded = document.DecodedByteCount;
             }
 
@@ -549,8 +559,9 @@ public class LargeWorkloadTests
             {
                 signProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signProbe, leaveOpen: true);
+                using var editor = document.Edit();
                 using var destination = CreateFile(signedPath);
-                document.Sign(destination, new PdfSignatureOptions { Reason = "W-108", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
+                editor.Sign(destination, new PdfSignatureOptions { Reason = "W-108", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);
                 signDecoded = document.DecodedByteCount;
             }
 

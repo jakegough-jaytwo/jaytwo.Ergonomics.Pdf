@@ -93,9 +93,10 @@ internal static class FuzzTargets
         try
         {
             using PdfDocument document = PdfDocument.Open(new MemoryStream(data, false), null);
-            Mutate(document);
+            using var editor = document.Edit();
+            Mutate(document, editor);
             var output = new MemoryStream();
-            document.SaveIncremental(output, leaveOpen: true);
+            editor.SaveIncremental(output, leaveOpen: true);
             saved = output.ToArray();
         }
         catch (PdfException)
@@ -107,10 +108,11 @@ internal static class FuzzTargets
         try
         {
             using PdfDocument reopened = PdfDocument.Open(new MemoryStream(saved, false), null);
+            using var reopenedEditor = reopened.Edit();
             ReadAll(reopened);
             var signed = new MemoryStream();
             var options = new PdfSignatureOptions { Rect = new PdfRect(10, 10, 110, 40), Reason = "fuzz" };
-            reopened.Sign(signed, options, new CmsDetachedSignatureProvider(Signer.Value), leaveOpen: true);
+            reopenedEditor.Sign(signed, options, new CmsDetachedSignatureProvider(Signer.Value), leaveOpen: true);
             RequirePrefix(saved, signed.ToArray(), "Sign");
         }
         catch (PdfException)
@@ -333,11 +335,11 @@ internal static class FuzzTargets
     /// <summary>
     /// Applies one of each mutation. Each runs on its own so a refusal does not hide the later ones.
     /// </summary>
-    private static void Mutate(PdfDocument document)
+    private static void Mutate(PdfDocument document, PdfDocumentEditor editor)
     {
-        PdfAcroForm form = document.AcroForm;
+        PdfAcroFormEditor form = editor.AcroForm;
         IReadOnlyList<PdfField> fields = Array.Empty<PdfField>();
-        Try(() => fields = form.Fields);
+        Try(() => fields = document.AcroForm.Fields);
         bool text = false;
         bool check = false;
         bool radio = false;
@@ -366,12 +368,12 @@ internal static class FuzzTargets
             }
         }
 
-        Try(() => document.Metadata.Title = "fuzz");
-        Try(() => document.Metadata.SetXmp(Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>")));
-        Try(() => document.Attachments.Add("fuzz.txt", new MemoryStream(Encoding.ASCII.GetBytes("fuzz"))));
+        Try(() => editor.Metadata.Title = "fuzz");
+        Try(() => editor.Metadata.SetXmp(Encoding.UTF8.GetBytes("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"/>")));
+        Try(() => editor.Attachments.Add("fuzz.txt", new MemoryStream(Encoding.ASCII.GetBytes("fuzz"))));
         if (document.Attachments.Count > 1)
         {
-            Try(() => document.Attachments.Remove(document.Attachments[0].Name));
+            Try(() => editor.Attachments.Remove(document.Attachments[0].Name));
         }
     }
 

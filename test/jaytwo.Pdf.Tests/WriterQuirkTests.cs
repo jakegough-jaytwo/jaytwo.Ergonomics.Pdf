@@ -120,6 +120,7 @@ public class WriterQuirkTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Equal(new[] { "unicode-name.txt", "plain.txt" }, document.Attachments.Select(a => a.Name).ToArray());
             using (Stream content = document.Attachments["unicode-name.txt"].Open())
             {
@@ -127,8 +128,8 @@ public class WriterQuirkTests
             }
 
             // A later write keeps the original key bytes.
-            document.Attachments.Add("added.txt", new MemoryStream(new byte[] { 1, 2, 3 }), leaveOpen: false);
-            document.SaveIncremental();
+            editor.Attachments.Add("added.txt", new MemoryStream(new byte[] { 1, 2, 3 }), leaveOpen: false);
+            editor.SaveIncremental();
         }
 
         string appended = Encoding.ASCII.GetString(stream.ToArray(), pdf.Length, (int)stream.Length - pdf.Length);

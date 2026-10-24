@@ -70,9 +70,10 @@ public class NullReferenceTests
         using var stream = Writable(pdf);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Null(document.Metadata.Title);
-            document.Metadata.Title = "Fresh";
-            document.SaveIncremental(stream);
+            editor.Metadata.Title = "Fresh";
+            editor.SaveIncremental(stream);
         }
 
         Assert.DoesNotContain("\n4 0 obj", Appendix(stream, pdf), StringComparison.Ordinal);
@@ -91,8 +92,9 @@ public class NullReferenceTests
         using var destination = new MemoryStream();
         using (var document = PdfDocument.Open(source, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.Empty(document.AcroForm.Fields);
-            document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
+            editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
         }
 
         string appendix = Appendix(destination, pdf);
@@ -148,10 +150,11 @@ public class NullReferenceTests
         builder.Indirect(9, signature);
         builder.Indirect(10, transform);
         using var document = Open(builder.Finish());
+        using var editor = document.Edit();
 
         Assert.Equal("Name", Assert.Single(document.AcroForm.Fields).FullName);
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfCertificationLockedException>(() => document.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.Sign(new MemoryStream(), new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider()));
     }
 
     [Theory]
@@ -173,8 +176,9 @@ public class NullReferenceTests
         builder.Indirect(9, signature);
         builder.Indirect(10, transform);
         using var document = Open(builder.Finish());
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
         Assert.Null(document.AcroForm.GetFields("Name")[0].Value);
     }
 

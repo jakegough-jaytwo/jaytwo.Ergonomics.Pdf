@@ -74,12 +74,13 @@ public class XfaTests
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
+            using var editor = document.Edit();
             Assert.True(document.AcroForm.IsHybridXfa);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
             Assert.False(document.AcroForm.IsHybridXfa);
             Assert.False(document.AcroForm.IsXfaOnly);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Grace"));
-            document.SaveIncremental(stream);
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Grace"));
+            editor.SaveIncremental(stream);
         }
 
         byte[] saved = stream.ToArray();
@@ -96,13 +97,13 @@ public class XfaTests
     public void bulk_fill_removes_xfa_and_writes_the_same_revision_as_single_fills()
     {
         byte[] pdf = Form(Packets, string.Empty, widgets: true);
-        byte[] single = Save(pdf, null, document =>
+        byte[] single = Save(pdf, null, (document, editor) =>
         {
-            document.AcroForm.Fill("Name", "Ada");
-            document.AcroForm.Fill("Other", "Grace");
+            editor.AcroForm.Fill("Name", "Ada");
+            editor.AcroForm.Fill("Other", "Grace");
         });
-        byte[] bulk = Save(pdf, null, document =>
-            document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Other"] = "Grace" }));
+        byte[] bulk = Save(pdf, null, (_, editor) =>
+            editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Other"] = "Grace" }));
 
         Assert.Equal(single, bulk);
         using var reopened = PdfDocument.Open(new MemoryStream(bulk, writable: false), leaveOpen: true);
@@ -118,14 +119,15 @@ public class XfaTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Fill("Missing", "Ada"));
-        Assert.Throws<PdfFieldValueException>(() => document.AcroForm.Fill("Name", true));
-        Assert.Throws<PdfFieldReadOnlyException>(() => document.AcroForm.Fill("Locked", "Ada"));
-        Assert.Throws<PdfFieldNotFoundException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Missing"] = "Ada" }));
-        Assert.Empty(document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
+        Assert.Throws<PdfFieldNotFoundException>(() => editor.AcroForm.Fill("Missing", "Ada"));
+        Assert.Throws<PdfFieldValueException>(() => editor.AcroForm.Fill("Name", true));
+        Assert.Throws<PdfFieldReadOnlyException>(() => editor.AcroForm.Fill("Locked", "Ada"));
+        Assert.Throws<PdfFieldNotFoundException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Missing"] = "Ada" }));
+        Assert.Empty(editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
         Assert.True(document.AcroForm.IsHybridXfa);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -137,7 +139,8 @@ public class XfaTests
         byte[] locked = Form(Packets, " /Perms << /DocMDP 20 0 R >>", widgets: true, signatureField: false, (20, "<< /Type /Sig /Reference [21 0 R] >>"), (21, "<< /TransformMethod /DocMDP /TransformParams << /P 1 /V /1.2 >> >>"));
         using (var document = PdfDocument.Open(new MemoryStream(locked, writable: false), leaveOpen: true))
         {
-            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
+            using var editor = document.Edit();
+            Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
             Assert.True(document.AcroForm.IsHybridXfa);
         }
 
@@ -145,7 +148,8 @@ public class XfaTests
         byte[] fieldLocked = Form(Packets, string.Empty, widgets: true, signatureField: true, (20, "<< /Type /Sig /Reference [21 0 R] >>"), (21, "<< /TransformMethod /FieldMDP /TransformParams << /Action /All /V /1.2 >> >>"));
         using (var document = PdfDocument.Open(new MemoryStream(fieldLocked, writable: false), leaveOpen: true))
         {
-            Assert.Throws<PdfCertificationLockedException>(() => document.AcroForm.Fill("Name", "Ada"));
+            using var editor = document.Edit();
+            Assert.Throws<PdfCertificationLockedException>(() => editor.AcroForm.Fill("Name", "Ada"));
             Assert.True(document.AcroForm.IsHybridXfa);
         }
     }
@@ -164,15 +168,16 @@ public class XfaTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.True(document.AcroForm.IsHybridXfa, name);
-        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Other"] = "Grace" }));
-        Assert.Empty(document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
+        Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Other"] = "Grace" }));
+        Assert.Empty(editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
         Assert.True(document.AcroForm.IsHybridXfa);
         Assert.True(document.HasUsageRights);
         Assert.Null(document.AcroForm.GetFields("Name")[0].Value);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -185,10 +190,10 @@ public class XfaTests
     public void unsigned_hybrid_fill_removes_xfa_and_usage_rights(string name, bool danglingSignature)
     {
         byte[] pdf = Form(Packets, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: danglingSignature, (30, UsageRights), (31, FillInTransform));
-        byte[] filled = Save(pdf, null, document =>
+        byte[] filled = Save(pdf, null, (document, editor) =>
         {
             Assert.True(document.HasUsageRights, name);
-            document.AcroForm.Fill("Name", "Ada");
+            editor.AcroForm.Fill("Name", "Ada");
             Assert.False(document.AcroForm.IsHybridXfa);
             Assert.False(document.HasUsageRights);
         });
@@ -203,7 +208,7 @@ public class XfaTests
     public void fill_of_a_form_without_xfa_keeps_usage_rights_that_grant_fill_in()
     {
         byte[] pdf = Form(string.Empty, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: false, (30, UsageRights), (31, FillInTransform));
-        byte[] filled = Save(pdf, null, document => document.AcroForm.Fill("Name", "Ada"));
+        byte[] filled = Save(pdf, null, (_, editor) => editor.AcroForm.Fill("Name", "Ada"));
 
         using var reopened = PdfDocument.Open(new MemoryStream(filled, writable: false), leaveOpen: true);
         Assert.True(reopened.HasUsageRights);
@@ -218,10 +223,11 @@ public class XfaTests
         byte[] pdf = Form(Packets, " /Perms << /UR3 30 0 R >>", widgets: true, signatureField: false, (30, UsageRights), (31, FillInTransform));
         using var source = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(source, leaveOpen: true);
+        using var editor = document.Edit();
         var destination = new MemoryStream();
 
-        document.AcroForm.Fill("Name", "Ada");
-        document.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
+        editor.AcroForm.Fill("Name", "Ada");
+        editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 32 }, new FixedProvider(), leaveOpen: true);
 
         byte[] signed = destination.ToArray();
         Assert.True(signed.AsSpan(0, pdf.Length).SequenceEqual(pdf));
@@ -241,18 +247,19 @@ public class XfaTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
 
         Assert.True(document.AcroForm.IsXfaOnly);
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Fill("Name", "Ada"));
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Fill("Missing", "Ada"));
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada" }));
-        Assert.Empty(document.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Fill("Missing", "Ada"));
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada" }));
+        Assert.Empty(editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>()));
         Assert.True(document.AcroForm.IsXfaOnly);
         Assert.Equal(1, document.PageCount);
         Assert.Equal(widgets ? 3 : 0, document.AcroForm.Fields.Count);
         Assert.Equal(widgets ? 3 : 0, document.AcroForm.Export().Count);
         Assert.Equal("XFA", document.Metadata.Title);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -266,14 +273,15 @@ public class XfaTests
         using var stream = new MemoryStream();
         stream.Write(original, 0, original.Length);
         using var document = PdfDocument.Open(stream, entry.Password, leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Fill("form1[0].Name[0]", "Ada"));
-        Assert.Throws<PdfUnsupportedFormException>(() => document.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["form1[0].Name[0]"] = "Ada" }));
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Fill("form1[0].Name[0]", "Ada"));
+        Assert.Throws<PdfUnsupportedFormException>(() => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["form1[0].Name[0]"] = "Ada" }));
         Assert.Empty(document.AcroForm.Fields);
         Assert.Empty(document.AcroForm.Export());
         Assert.Equal(entry.Probe.GetProperty("pages").GetInt32(), document.PageCount);
         Assert.True(document.HasUsageRights);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(original.Length, stream.Length);
     }
@@ -290,11 +298,11 @@ public class XfaTests
     {
         StandardEncryptor.Kind kind = cipher == "aes-256" ? StandardEncryptor.Kind.Revision6 : StandardEncryptor.Kind.Revision3;
         byte[] pdf = EncryptedForm(new StandardEncryptor(kind, "user", "owner", StandardEncryptor.FillOnly(), encryptMetadata: true));
-        byte[] filled = Save(pdf, password, document =>
+        byte[] filled = Save(pdf, password, (document, editor) =>
         {
             Assert.True(document.AcroForm.IsHybridXfa);
             Assert.True(document.HasUsageRights);
-            Assert.Equal(PdfAppearanceDisposition.Generated, document.AcroForm.Fill("Name", "Ada"));
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
         });
 
         Assert.True(filled.AsSpan(0, pdf.Length).SequenceEqual(pdf));
@@ -337,11 +345,12 @@ public class XfaTests
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using var document = PdfDocument.Open(stream, "user", leaveOpen: true);
+        using var editor = document.Edit();
 
-        Assert.Throws<PdfEncryptionRestrictedException>(() => document.AcroForm.Fill("Name", "Ada"));
+        Assert.Throws<PdfEncryptionRestrictedException>(() => editor.AcroForm.Fill("Name", "Ada"));
         Assert.True(document.AcroForm.IsHybridXfa);
         Assert.True(document.HasUsageRights);
-        document.SaveIncremental(stream);
+        editor.SaveIncremental(stream);
 
         Assert.Equal(pdf.Length, stream.Length);
     }
@@ -374,10 +383,11 @@ public class XfaTests
             {
                 stream.Write(signed, 0, signed.Length);
                 using var document = PdfDocument.Open(stream, leaveOpen: true);
+                using var editor = document.Edit();
                 Assert.True(document.AcroForm.IsHybridXfa);
-                Assert.Throws<PdfSignatureConflictException>(() => document.AcroForm.Fill("topmostSubform[0].Page1[0].f1_01[0]", "Ada"));
+                Assert.Throws<PdfSignatureConflictException>(() => editor.AcroForm.Fill("topmostSubform[0].Page1[0].f1_01[0]", "Ada"));
                 Assert.True(document.HasUsageRights);
-                document.SaveIncremental(stream);
+                editor.SaveIncremental(stream);
                 Assert.True(stream.ToArray().AsSpan().SequenceEqual(signed));
             }
 
@@ -435,14 +445,15 @@ public class XfaTests
         return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
     }
 
-    private static byte[] Save(byte[] pdf, string? password, Action<PdfDocument> write)
+    private static byte[] Save(byte[] pdf, string? password, Action<PdfDocument, PdfDocumentEditor> write)
     {
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
         {
-            write(document);
-            document.SaveIncremental(stream);
+            using var editor = document.Edit();
+            write(document, editor);
+            editor.SaveIncremental(stream);
         }
 
         return stream.ToArray();
