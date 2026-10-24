@@ -329,7 +329,7 @@ internal sealed class PdfDocumentLoader
         byte[] decoded;
         try
         {
-            decoded = PdfStreamDecoder.Decode(raw, filters, parms, PdfStreamDecoder.XrefCap);
+            decoded = PdfStreamDecoder.Decode(raw, filters, parms, PdfStreamDecoder.XrefCap, _store.Work);
         }
         catch (PdfParseException ex)
         {

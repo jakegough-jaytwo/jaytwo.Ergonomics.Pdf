@@ -14,13 +14,18 @@ internal static class PdfStreamDecoder
     // The DecodeParms keys the decoder reads. Only these are resolved when indirect.
     internal static readonly string[] DecoderParameters = { "Predictor", "Colors", "BitsPerComponent", "Columns", "EarlyChange" };
 
-    public static byte[] Decode(byte[] data, IReadOnlyList<string> filters, IReadOnlyList<PdfObject.Dict?> parms, int maxBytes)
+    public static byte[] Decode(byte[] data, IReadOnlyList<string> filters, IReadOnlyList<PdfObject.Dict?> parms, int maxBytes, PdfWorkCounters? work = null)
     {
         byte[] current = data;
         for (int i = 0; i < filters.Count; i++)
         {
             PdfObject.Dict? parm = i < parms.Count ? parms[i] : null;
             current = DecodeOne(current, filters[i], parm, maxBytes);
+            if (work != null)
+            {
+                work.FilterStageDecodes++;
+                work.FilterStageBytes += current.Length;
+            }
         }
 
         if (current.Length > maxBytes)

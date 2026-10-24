@@ -82,6 +82,7 @@ internal sealed class PdfPageTree
 
     private void WalkPages(PdfObject.Dict node, int id, PdfRect media, PdfRect? crop, int rotate, List<PageInfo> pages, HashSet<int> seen, int depth)
     {
+        _store.Work.PageNodeVisits++;
         if (!seen.Add(id))
         {
             throw new PdfParseException(0, "The page tree contains a cycle.");

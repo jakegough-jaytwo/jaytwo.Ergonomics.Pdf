@@ -80,6 +80,8 @@ internal sealed class PdfObjectStore : IDisposable
 
     internal long DecodedBytes { get; set; }
 
+    internal PdfWorkCounters Work { get; } = new PdfWorkCounters();
+
     internal int RetainedObjectStreamCount => _objectStreams.Count;
 
     public void Dispose()
@@ -158,6 +160,7 @@ internal sealed class PdfObjectStore : IDisposable
         }
 
         _loadingObjects.Add(id);
+        Work.ObjectLoads++;
         try
         {
             PdfObject obj;
@@ -228,6 +231,7 @@ internal sealed class PdfObjectStore : IDisposable
     private async ValueTask<List<PdfObject>> ParseObjectStreamAsync(int streamId, bool useAsync, CancellationToken cancellationToken)
     {
         _objectStreamParseDepth++;
+        Work.ObjectStreamParses++;
         try
         {
             if (await LoadAsync(streamId, useAsync, cancellationToken).ConfigureAwait(false) is not PdfObject.Dict dict)
@@ -319,10 +323,14 @@ internal sealed class PdfObjectStore : IDisposable
                     continue;
                 }
 
-                Cache.Remove(id);
+                if (Cache.Remove(id))
+                {
+                    Work.CachedObjectEvictions++;
+                }
             }
 
             _objectStreams.Remove(streamId);
+            Work.ObjectStreamEvictions++;
         }
     }
 
@@ -372,6 +380,7 @@ internal sealed class PdfObjectStore : IDisposable
         HashSet<int>? seen = null;
         while (value is PdfObject.Ref reference)
         {
+            Work.ReferenceResolutions++;
             if (!followed)
             {
                 followed = true;
@@ -668,7 +677,7 @@ internal sealed class PdfObjectStore : IDisposable
             await PreloadDecodeParmsAsync(dict, cancellationToken).ConfigureAwait(false);
         }
 
-        byte[] decoded = PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap);
+        byte[] decoded = PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap, Work);
         DecodedBytes += decoded.Length;
         return decoded;
     }

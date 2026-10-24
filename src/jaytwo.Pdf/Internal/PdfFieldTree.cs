@@ -205,6 +205,7 @@ internal sealed class PdfFieldTree
         HashSet<int> seen,
         int depth)
     {
+        _store.Work.FieldNodeVisits++;
         if (!seen.Add(fieldId))
         {
             throw new PdfParseException(0, "The field tree contains a cycle.");
