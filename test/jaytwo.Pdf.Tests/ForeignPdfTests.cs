@@ -224,6 +224,50 @@ public class ForeignPdfTests
         Validate(signed, certificate, null, "entire");
     }
 
+    // W-99, D-57: pypdf writes /P as the unsigned 32-bit value. Under either password the library fills and signs in
+    // one revision, and qpdf, pypdf, pdfsig, and pyHanko read the result. pyHanko 0.38.0 cannot
+    // authenticate any revision 5 file, qpdf's own included, so pdfsig alone verifies that revision.
+    [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [InlineData("pypdf-unsigned-p-r2.pdf", "user-secret")]
+    [InlineData("pypdf-unsigned-p-r2.pdf", "owner-secret")]
+    [InlineData("pypdf-unsigned-p-r3.pdf", "user-secret")]
+    [InlineData("pypdf-unsigned-p-r3.pdf", "owner-secret")]
+    [InlineData("pypdf-unsigned-p-r4.pdf", "user-secret")]
+    [InlineData("pypdf-unsigned-p-r4.pdf", "owner-secret")]
+    [InlineData("pypdf-unsigned-p-r5.pdf", "user-secret")]
+    [InlineData("pypdf-unsigned-p-r5.pdf", "owner-secret")]
+    [InlineData("pypdf-unsigned-p-r6.pdf", "user-secret")]
+    [InlineData("pypdf-unsigned-p-r6.pdf", "owner-secret")]
+    public void pypdf_unsigned_permissions_file_is_filled_signed_and_accepted(string fixture, string password)
+    {
+        byte[] original = ReadFixture(fixture);
+        using var rsa = RSA.Create(2048);
+        using X509Certificate2 certificate = CreateCertificate(rsa);
+        byte[] signed;
+        using (var source = new MemoryStream(original, writable: false))
+        using (var document = PdfDocument.Open(source, password, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill("Name", "Ada"));
+            signed = SignTo(editor, certificate, rsa, null);
+        }
+
+        AssertPrefix(signed, original);
+        Check(signed, password);
+        Assert.Equal("Ada", FormValues.Pypdf(signed, password)["Name"].GetProperty("value").GetString());
+        // Pdfsig.Verify passes -upw; the output keeps the source's encryption whichever password signed it.
+        (int exitCode, string report) = Pdfsig.Verify(signed, new[] { certificate.RawData }, "user-secret");
+        Assert.True(exitCode == 0, report);
+        List<string> signature = Assert.Single(Pdfsig.Signatures(report));
+        Assert.Contains(Pdfsig.Valid, signature);
+        Assert.Contains(Pdfsig.WholeFile, signature);
+        if (fixture != "pypdf-unsigned-p-r5.pdf")
+        {
+            Validate(signed, certificate, password, "entire");
+        }
+    }
+
     private static byte[] ReviseTitle(byte[] pdf, string? password, string expectedTitle, string title)
     {
         using var source = new MemoryStream(pdf, writable: false);
@@ -254,6 +298,11 @@ public class ForeignPdfTests
             editor.Metadata.Title = title;
         }
 
+        return SignTo(editor, certificate, rsa, fieldName);
+    }
+
+    private static byte[] SignTo(PdfDocumentEditor editor, X509Certificate2 certificate, RSA rsa, string? fieldName)
+    {
         var destination = new MemoryStream();
         editor.Sign(
             destination,

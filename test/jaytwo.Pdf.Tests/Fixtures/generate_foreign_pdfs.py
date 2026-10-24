@@ -191,6 +191,35 @@ def write_dangling(path: Path) -> None:
         writer.write(handle)
 
 
+# Print, annotate, and fill allowed; modify, copy, and assemble refused (W-99). pypdf writes /P as the unsigned
+# 32-bit value, 4294966244, on every revision.
+UNSIGNED_P_FLAGS = -1052
+UNSIGNED_P_ALGORITHMS = {
+    2: "RC4-40",
+    3: "RC4-128",
+    4: "AES-128",
+    5: "AES-256-R5",
+    6: "AES-256",
+}
+
+
+def write_unsigned_p(form: Path, directory: Path) -> None:
+    for revision, algorithm in UNSIGNED_P_ALGORITHMS.items():
+        writer = PdfWriter(clone_from=str(form))
+        writer.encrypt(
+            "user-secret",
+            "owner-secret",
+            permissions_flag=UNSIGNED_P_FLAGS,
+            algorithm=algorithm,
+        )
+        path = directory / f"pypdf-unsigned-p-r{revision}.pdf"
+        with path.open("wb") as handle:
+            writer.write(handle)
+        data = path.read_bytes()
+        if b"/P 4294966244" not in data or f"/R {revision}".encode("ascii") not in data:
+            sys.exit(f"pypdf no longer writes an unsigned /P for {algorithm}.")
+
+
 def write_signing_key(directory: Path) -> tuple[Path, Path]:
     key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     name = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "pyHanko fixture")])
@@ -282,6 +311,7 @@ def main() -> None:
     )
     note.unlink()
     write_form(root / "pypdf-acroform.pdf")
+    write_unsigned_p(root / "pypdf-acroform.pdf", root)
     write_dangling(root / "pypdf-dangling.pdf")
     key_path, cert_path = write_signing_key(root)
     try:
@@ -292,7 +322,7 @@ def main() -> None:
         cert_path.unlink(missing_ok=True)
     for pdf in sorted(root.glob("*.pdf")):
         command = [qpdf, "--check", str(pdf)]
-        if pdf.name == "qpdf-encrypted.pdf":
+        if pdf.name == "qpdf-encrypted.pdf" or pdf.name.startswith("pypdf-unsigned-p-"):
             command = [qpdf, "--password=user-secret", "--check", str(pdf)]
         subprocess.check_call(command)
         print(pdf.name, pdf.stat().st_size)

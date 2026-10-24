@@ -1035,20 +1035,23 @@ internal sealed class PdfSecurity
         return dict.Get("EncryptMetadata") is not PdfObject.Bool flag || flag.Value;
     }
 
+    // ISO 32000-1 Table 21 writes /P as a signed 32-bit integer. Writer quirk (D-57): pypdf writes the same bits
+    // unsigned, for example 4294967292 for -4, so a value from 2^31 to 2^32 - 1 is read as those 32 bits. Anything else
+    // outside the signed range is refused.
     private static int ReadPermissions(PdfObject.Dict dict)
     {
-        if (dict.Get("P") is not PdfObject.Num number)
+        if (dict.Get("P") is not PdfObject.Num number || !number.IsInteger)
         {
             throw Unsupported();
         }
 
-        int value = ReadNumber(number);
-        if (!number.IsInteger || number.LongValue != value)
+        long value = number.LongValue;
+        if (value < int.MinValue || value > uint.MaxValue)
         {
             throw Unsupported();
         }
 
-        return value;
+        return unchecked((int)(uint)value);
     }
 
     private static int ReadInt(PdfObject.Dict dict, string key)

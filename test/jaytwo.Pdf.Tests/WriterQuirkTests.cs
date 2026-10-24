@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -205,6 +207,141 @@ public class WriterQuirkTests
         Assert.Equal("Government Publishing Office", signature.Name);
         Assert.Null(signature.TimestampTime);
         Assert.Equal(1, signature.CertificationLevel);
+    }
+
+    // Real-world fixtures: pypdf 6.21.1 writes /P as the unsigned 32-bit value on every revision (D-57), here 4294966244
+    // for the bits qpdf 12.3.2 reports as P = -1052: print, annotate, and fill, but not modify, copy, or assemble.
+    [Theory]
+    [InlineData(2, "user-secret")]
+    [InlineData(2, "owner-secret")]
+    [InlineData(3, "user-secret")]
+    [InlineData(3, "owner-secret")]
+    [InlineData(4, "user-secret")]
+    [InlineData(4, "owner-secret")]
+    [InlineData(5, "user-secret")]
+    [InlineData(5, "owner-secret")]
+    [InlineData(6, "user-secret")]
+    [InlineData(6, "owner-secret")]
+    public void pypdf_unsigned_permissions_read_as_qpdf_reads_them(int revision, string password)
+    {
+        byte[] pdf = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "pypdf-unsigned-p-r" + revision.ToString(CultureInfo.InvariantCulture) + ".pdf"));
+        Assert.Contains("/P 4294966244", TestCompat.Latin1.GetString(pdf), StringComparison.Ordinal);
+        bool owner = password == "owner-secret";
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using (var document = PdfDocument.Open(stream, password, leaveOpen: true))
+        {
+            Assert.Equal("print,high-quality,annotate,fill" + (revision >= 3 ? ",accessibility" : string.Empty), Describe(document.Permissions));
+            using var editor = document.Edit();
+            if (owner)
+            {
+                editor.Metadata.Title = "Owner";
+            }
+            else
+            {
+                Assert.Throws<PdfEncryptionRestrictedException>(() => editor.Metadata.Title = "Refused");
+            }
+
+            editor.AcroForm.Fill("Name", "Ada");
+            editor.SaveIncremental(stream);
+        }
+
+        Assert.True(stream.ToArray().AsSpan(0, pdf.Length).SequenceEqual(pdf));
+        using var reopened = PdfDocument.Open(stream, password, leaveOpen: true);
+        Assert.Equal("Ada", reopened.AcroForm.GetFields("Name")[0].Value);
+        Assert.Equal(owner ? "Owner" : null, reopened.Metadata.Title);
+    }
+
+    // The 32 bits drive the revision 2 to 4 file key and the revision 5 and 6 /Perms check, so a wrong reading of the
+    // unsigned value fails the password. The ends of the unsigned range open as their signed spelling does.
+    [Theory]
+    [InlineData(2, int.MinValue)]
+    [InlineData(2, -1)]
+    [InlineData(3, int.MinValue)]
+    [InlineData(3, -1)]
+    [InlineData(4, int.MinValue)]
+    [InlineData(4, -1)]
+    [InlineData(5, int.MinValue)]
+    [InlineData(5, -1)]
+    [InlineData(6, int.MinValue)]
+    [InlineData(6, -1)]
+    public void unsigned_permissions_are_the_same_32_bits(int revision, int permissions)
+    {
+        var crypt = new StandardEncryptor(KindFor(revision), "user", "owner", permissions, encryptMetadata: true);
+        string signed = crypt.Dictionary(null);
+        string unsigned = signed.Replace(
+            " /P " + permissions.ToString(CultureInfo.InvariantCulture) + " ",
+            " /P " + unchecked((uint)permissions).ToString(CultureInfo.InvariantCulture) + " ");
+        Assert.NotEqual(signed, unsigned);
+
+        foreach (string password in new[] { "user", "owner" })
+        {
+            using var expected = PdfDocument.Open(new MemoryStream(EncryptedDocument(crypt, signed)), password, leaveOpen: true);
+            using var actual = PdfDocument.Open(new MemoryStream(EncryptedDocument(crypt, unsigned)), password, leaveOpen: true);
+            Assert.Equal("Secret", actual.Metadata.Title);
+            Assert.Equal(Describe(expected.Permissions), Describe(actual.Permissions));
+        }
+    }
+
+    [Theory]
+    [InlineData("4294967296")]
+    [InlineData("-2147483649")]
+    [InlineData("4294967292.0")]
+    [InlineData("(4294967292)")]
+    public void permissions_outside_32_bits_are_refused(string value)
+    {
+        var crypt = new StandardEncryptor(StandardEncryptor.Kind.Revision6, "user", "owner", -4, encryptMetadata: true);
+        string dictionary = crypt.Dictionary(null);
+        Assert.Contains(" /P -4 ", dictionary, StringComparison.Ordinal);
+        byte[] pdf = EncryptedDocument(crypt, dictionary.Replace(" /P -4 ", " /P " + value + " "));
+
+        PdfEncryptedException error = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
+        Assert.Equal("This encryption is not supported.", error.Message);
+    }
+
+    private static byte[] EncryptedDocument(StandardEncryptor crypt, string encrypt)
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(4, "<< /Title " + crypt.Text("Secret", 4) + " >>");
+        builder.Indirect(20, encrypt);
+        return builder.Finish("/Info 4 0 R /Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+    }
+
+    private static StandardEncryptor.Kind KindFor(int revision)
+    {
+        return revision switch
+        {
+            2 => StandardEncryptor.Kind.Revision2,
+            3 => StandardEncryptor.Kind.Revision3,
+            4 => StandardEncryptor.Kind.Revision4Aes,
+            5 => StandardEncryptor.Kind.Revision5,
+            _ => StandardEncryptor.Kind.Revision6,
+        };
+    }
+
+    private static string Describe(PdfPermissions permissions)
+    {
+        var granted = new List<string>();
+        Add(permissions.CanPrint, "print");
+        Add(permissions.CanPrintHighQuality, "high-quality");
+        Add(permissions.CanModify, "modify");
+        Add(permissions.CanCopy, "copy");
+        Add(permissions.CanAnnotate, "annotate");
+        Add(permissions.CanFillForms, "fill");
+        Add(permissions.CanAssemble, "assemble");
+        Add(permissions.CanExtractForAccessibility, "accessibility");
+        return string.Join(",", granted);
+
+        void Add(bool allowed, string name)
+        {
+            if (allowed)
+            {
+                granted.Add(name);
+            }
+        }
     }
 
     private static byte[] FlateAttachment(byte[] data)
