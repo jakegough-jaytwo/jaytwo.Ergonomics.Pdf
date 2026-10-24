@@ -12,7 +12,7 @@ internal static class PdfStreamDecoder
     public const int XrefCap = 64 * 1024 * 1024;
 
     // The DecodeParms keys the decoder reads. Only these are resolved when indirect.
-    private static readonly string[] DecoderParameters = { "Predictor", "Colors", "BitsPerComponent", "Columns", "EarlyChange" };
+    internal static readonly string[] DecoderParameters = { "Predictor", "Colors", "BitsPerComponent", "Columns", "EarlyChange" };
 
     public static byte[] Decode(byte[] data, IReadOnlyList<string> filters, IReadOnlyList<PdfObject.Dict?> parms, int maxBytes)
     {

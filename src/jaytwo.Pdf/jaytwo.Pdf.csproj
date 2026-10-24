@@ -13,6 +13,12 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
 
+  <!-- D-55: the parser's async-shaped methods complete inline on the synchronous path. An unoptimized build makes every
+       state machine a heap object, so the engine is always optimized and the allocation budgets measure what ships. -->
+  <PropertyGroup>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
     <PackageReference Include="System.Memory" Version="4.5.5" />

@@ -25,7 +25,7 @@ public class CursorWindowTests
     {
         byte[] data = Pattern(300 * 1024);
         var probe = new ProbeStream(new MemoryStream(data, writable: false));
-        var cursor = new PdfCursor(probe);
+        var cursor = new PdfCursor(new PdfStreamSource(probe, leaveOpen: true));
 
         cursor.Seek(1000);
         Assert.Equal(data[1000], cursor.ReadByte());
@@ -58,8 +58,8 @@ public class CursorWindowTests
     {
         byte[] data = Pattern((2 * 1024 * 1024) + 777);
         var probe = new ProbeStream(new MemoryStream(data, writable: false));
-        var cursor = new PdfCursor(probe, windows);
-        var reference = new PdfCursor(new MemoryStream(data, writable: false), 0);
+        var cursor = new PdfCursor(new PdfStreamSource(probe, leaveOpen: true), windows);
+        var reference = new PdfCursor(new PdfStreamSource(new MemoryStream(data, writable: false), leaveOpen: false), 0);
         var random = new Random(108);
         for (int step = 0; step < 1500; step++)
         {
@@ -100,13 +100,16 @@ public class CursorWindowTests
         var stream = new MemoryStream();
         byte[] head = Encoding.ASCII.GetBytes("0123456789");
         stream.Write(head, 0, head.Length);
-        var cursor = new PdfCursor(stream);
+        var source = new PdfStreamSource(stream, leaveOpen: true);
+        var cursor = new PdfCursor(source);
         cursor.Seek(0);
         Assert.Equal("0123456789", ReadToEnd(cursor));
 
+        // The document's own append, which it accepts into the snapshot.
         byte[] tail = Encoding.ASCII.GetBytes("abcdef");
         stream.Seek(0, SeekOrigin.End);
         stream.Write(tail, 0, tail.Length);
+        source.AcceptAppend();
         cursor.Seek(5);
 
         Assert.Equal("56789abcdef", ReadToEnd(cursor));

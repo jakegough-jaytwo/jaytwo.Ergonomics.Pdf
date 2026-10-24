@@ -2,10 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Pdf.Internal;
 
 // Parses PDF values and indirect objects from the lexer's tokens. A stream object's data is located, not read.
+// D-55: one async-shaped implementation; the synchronous members run it with useAsync false.
 internal sealed class PdfParser
 {
     // An array or dictionary holds at most this many entries. Dictionary keys count even when repeated.
@@ -15,47 +18,76 @@ internal sealed class PdfParser
 
     private readonly PdfLexer _lexer;
     private readonly PdfCursor _cursor;
-    private readonly Func<PdfObject.Ref, PdfObject>? _resolve;
+    private readonly PdfResolver? _resolve;
+    private readonly bool _useAsync;
+    private readonly CancellationToken _cancellationToken;
     private readonly long _baseOffset;
     private readonly int _containerCap;
     private readonly List<List<(string Key, PdfObject Value)>> _dictionaryScratch = new List<List<(string Key, PdfObject Value)>>();
     private readonly List<List<PdfObject>> _arrayScratch = new List<List<PdfObject>>();
 
-    public PdfParser(PdfCursor cursor, Func<PdfObject.Ref, PdfObject>? resolve, long baseOffset)
-        : this(cursor, resolve, baseOffset, PdfStreamDecoder.StructuralCap, MaxContainerEntries)
+    public PdfParser(PdfCursor cursor, PdfResolver? resolve, long baseOffset)
+        : this(cursor, resolve, baseOffset, false, CancellationToken.None)
+    {
+    }
+
+    public PdfParser(PdfCursor cursor, PdfResolver? resolve, long baseOffset, bool useAsync, CancellationToken cancellationToken)
+        : this(cursor, resolve, baseOffset, PdfStreamDecoder.StructuralCap, MaxContainerEntries, useAsync, cancellationToken)
     {
     }
 
     // Tests pass smaller caps, the way the stream decoder takes a caller cap, so each branch is checked with a small input.
-    internal PdfParser(PdfCursor cursor, Func<PdfObject.Ref, PdfObject>? resolve, long baseOffset, int stringCap, int containerCap)
+    internal PdfParser(PdfCursor cursor, PdfResolver? resolve, long baseOffset, int stringCap, int containerCap)
+        : this(cursor, resolve, baseOffset, stringCap, containerCap, false, CancellationToken.None)
     {
-        _lexer = new PdfLexer(cursor, baseOffset, stringCap);
+    }
+
+    private PdfParser(PdfCursor cursor, PdfResolver? resolve, long baseOffset, int stringCap, int containerCap, bool useAsync, CancellationToken cancellationToken)
+    {
+        _lexer = new PdfLexer(cursor, baseOffset, stringCap, useAsync, cancellationToken);
         _cursor = cursor;
         _resolve = resolve;
         _baseOffset = baseOffset;
         _containerCap = containerCap;
+        _useAsync = useAsync;
+        _cancellationToken = cancellationToken;
     }
 
     public PdfLexer Lexer => _lexer;
 
     public PdfObject ParseValue(int depth = 0)
     {
+        return PdfSync.Result(ParseValueAsync(depth));
+    }
+
+    public PdfObject ParseIndirect(int expectedNumber)
+    {
+        return PdfSync.Result(ParseIndirectAsync(expectedNumber));
+    }
+
+    internal bool NextIsKeyword(string keyword)
+    {
+        return PdfSync.Result(_lexer.PeekKeywordAsync(keyword));
+    }
+
+    public async ValueTask<PdfObject> ParseValueAsync(int depth = 0)
+    {
         if (depth > 256)
         {
             throw Error("PDF object nesting is too deep.");
         }
 
-        PdfToken token = _lexer.Next();
+        PdfToken token = await _lexer.NextAsync().ConfigureAwait(false);
         if (token.Kind == PdfTokenKind.Integer)
         {
-            PdfToken second = _lexer.Peek();
+            PdfToken second = await _lexer.PeekAsync().ConfigureAwait(false);
             if (second.Kind == PdfTokenKind.Integer)
             {
-                _lexer.Next();
-                PdfToken third = _lexer.Peek();
+                await _lexer.NextAsync().ConfigureAwait(false);
+                PdfToken third = await _lexer.PeekAsync().ConfigureAwait(false);
                 if (third.Kind == PdfTokenKind.Keyword && third.Text == "R")
                 {
-                    _lexer.Next();
+                    await _lexer.NextAsync().ConfigureAwait(false);
                     return new PdfObject.Ref(CheckedInt(token.Integer), CheckedInt(second.Integer));
                 }
 
@@ -105,10 +137,10 @@ internal sealed class PdfParser
             List<PdfObject> items = Scratch(_arrayScratch, depth);
             while (true)
             {
-                PdfToken next = _lexer.Peek();
+                PdfToken next = await _lexer.PeekAsync().ConfigureAwait(false);
                 if (next.Kind == PdfTokenKind.ArrayEnd)
                 {
-                    _lexer.Next();
+                    await _lexer.NextAsync().ConfigureAwait(false);
                     break;
                 }
 
@@ -122,7 +154,7 @@ internal sealed class PdfParser
                     throw new PdfObjectTooLargeException("A PDF array has more than " + _containerCap.ToString(CultureInfo.InvariantCulture) + " entries.");
                 }
 
-                items.Add(ParseValue(depth + 1));
+                items.Add(await ParseValueAsync(depth + 1).ConfigureAwait(false));
             }
 
             var array = new PdfObject.Arr(items.Count);
@@ -133,17 +165,17 @@ internal sealed class PdfParser
 
         if (token.Kind == PdfTokenKind.DictStart)
         {
-            return ParseDictionary(depth);
+            return await ParseDictionaryAsync(depth).ConfigureAwait(false);
         }
 
         throw Error("Unexpected token '" + token.Text + "'.");
     }
 
-    public PdfObject ParseIndirect(int expectedNumber)
+    public async ValueTask<PdfObject> ParseIndirectAsync(int expectedNumber)
     {
-        PdfToken number = _lexer.Next();
-        PdfToken generation = _lexer.Next();
-        PdfToken obj = _lexer.Next();
+        PdfToken number = await _lexer.NextAsync().ConfigureAwait(false);
+        PdfToken generation = await _lexer.NextAsync().ConfigureAwait(false);
+        PdfToken obj = await _lexer.NextAsync().ConfigureAwait(false);
         if (number.Kind != PdfTokenKind.Integer || generation.Kind != PdfTokenKind.Integer || obj.Kind != PdfTokenKind.Keyword || obj.Text != "obj")
         {
             throw Error("Indirect object header was expected.");
@@ -154,16 +186,16 @@ internal sealed class PdfParser
             throw Error("Object number " + number.Integer.ToString(CultureInfo.InvariantCulture) + " does not match xref entry " + expectedNumber.ToString(CultureInfo.InvariantCulture) + ".");
         }
 
-        PdfObject value = ParseValue();
-        if (value is PdfObject.Dict dict && _lexer.PeekKeyword("stream"))
+        PdfObject value = await ParseValueAsync().ConfigureAwait(false);
+        if (value is PdfObject.Dict dict && await _lexer.PeekKeywordAsync("stream").ConfigureAwait(false))
         {
-            _lexer.Next();
-            ConsumeStreamEol();
-            long length = ResolveLength(dict);
+            await _lexer.NextAsync().ConfigureAwait(false);
+            await ConsumeStreamEolAsync().ConfigureAwait(false);
+            long length = await ResolveLengthAsync(dict).ConfigureAwait(false);
             long dataOffset = _cursor.Position;
             _cursor.Skip(length);
-            SkipOneEol();
-            PdfToken endStream = _lexer.Next();
+            await SkipOneEolAsync().ConfigureAwait(false);
+            PdfToken endStream = await _lexer.NextAsync().ConfigureAwait(false);
             if (endStream.Kind != PdfTokenKind.Keyword || endStream.Text != "endstream")
             {
                 throw Error("endstream was expected after the stream data.");
@@ -172,7 +204,7 @@ internal sealed class PdfParser
             dict.Body = new PdfObject.FileBody(_baseOffset + dataOffset, length);
         }
 
-        PdfToken endObj = _lexer.Next();
+        PdfToken endObj = await _lexer.NextAsync().ConfigureAwait(false);
         if (endObj.Kind != PdfTokenKind.Keyword || endObj.Text != "endobj")
         {
             throw Error("endobj was expected.");
@@ -183,21 +215,16 @@ internal sealed class PdfParser
         return value;
     }
 
-    internal bool NextIsKeyword(string keyword)
-    {
-        return _lexer.PeekKeyword(keyword);
-    }
-
     // W-115: a dictionary's entries collect in a list this parser keeps for that nesting depth, so the dictionary is
     // made once at its final size. A repeated key keeps its first position and takes the last value.
-    private PdfObject.Dict ParseDictionary(int depth)
+    private async ValueTask<PdfObject.Dict> ParseDictionaryAsync(int depth)
     {
         List<(string Key, PdfObject Value)> items = Scratch(_dictionaryScratch, depth);
         Dictionary<string, int>? positions = null;
         int entries = 0;
         while (true)
         {
-            PdfToken token = _lexer.Next();
+            PdfToken token = await _lexer.NextAsync().ConfigureAwait(false);
             if (token.Kind == PdfTokenKind.DictEnd)
             {
                 break;
@@ -213,7 +240,7 @@ internal sealed class PdfParser
                 throw new PdfObjectTooLargeException("A PDF dictionary has more than " + _containerCap.ToString(CultureInfo.InvariantCulture) + " entries.");
             }
 
-            PdfObject value = ParseValue(depth + 1);
+            PdfObject value = await ParseValueAsync(depth + 1).ConfigureAwait(false);
             if (positions == null && items.Count < IndexedDictionaryThreshold)
             {
                 int existing = items.Count - 1;
@@ -276,7 +303,7 @@ internal sealed class PdfParser
         return scratch;
     }
 
-    private long ResolveLength(PdfObject.Dict dict)
+    private async ValueTask<long> ResolveLengthAsync(PdfObject.Dict dict)
     {
         PdfObject? length = dict.Get("Length") ?? throw Error("Stream is missing /Length.");
         if (length is PdfObject.Ref reference)
@@ -289,7 +316,7 @@ internal sealed class PdfParser
             long saved = _cursor.Position;
             try
             {
-                length = _resolve(reference);
+                length = await _resolve(reference, _useAsync, _cancellationToken).ConfigureAwait(false);
             }
             finally
             {
@@ -305,14 +332,14 @@ internal sealed class PdfParser
         throw Error("Stream /Length is not a number.");
     }
 
-    private void ConsumeStreamEol()
+    private async ValueTask ConsumeStreamEolAsync()
     {
-        int first = _cursor.ReadByte();
+        int first = await _lexer.ReadByteAsync().ConfigureAwait(false);
         if (first == '\r')
         {
-            if (_cursor.PeekByte() == '\n')
+            if (await _lexer.PeekByteAsync().ConfigureAwait(false) == '\n')
             {
-                _cursor.ReadByte();
+                await _lexer.ReadByteAsync().ConfigureAwait(false);
             }
 
             return;
@@ -326,20 +353,20 @@ internal sealed class PdfParser
         throw Error("stream keyword must be followed by EOL.");
     }
 
-    private void SkipOneEol()
+    private async ValueTask SkipOneEolAsync()
     {
-        int peek = _cursor.PeekByte();
+        int peek = await _lexer.PeekByteAsync().ConfigureAwait(false);
         if (peek == '\r')
         {
-            _cursor.ReadByte();
-            if (_cursor.PeekByte() == '\n')
+            await _lexer.ReadByteAsync().ConfigureAwait(false);
+            if (await _lexer.PeekByteAsync().ConfigureAwait(false) == '\n')
             {
-                _cursor.ReadByte();
+                await _lexer.ReadByteAsync().ConfigureAwait(false);
             }
         }
         else if (peek == '\n')
         {
-            _cursor.ReadByte();
+            await _lexer.ReadByteAsync().ConfigureAwait(false);
         }
     }
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace jaytwo.Pdf.Internal;
 
@@ -22,10 +23,10 @@ internal static class PdfXrefReader
 
     // Reads a classic xref section straight into the merged map, with no per-section copy, the way an xref stream is read.
     // Each subsection header is range-checked before its rows are read, and every new object counts against the budget.
-    public static PdfObject.Dict ParseClassic(PdfParser parser, Dictionary<int, XrefEntry> target, bool overwrite, int budget)
+    public static async ValueTask<PdfObject.Dict> ParseClassicAsync(PdfParser parser, Dictionary<int, XrefEntry> target, bool overwrite, int budget)
     {
         PdfLexer lexer = parser.Lexer;
-        PdfToken keyword = lexer.Next();
+        PdfToken keyword = await lexer.NextAsync().ConfigureAwait(false);
         if (keyword.Kind != PdfTokenKind.Keyword || keyword.Text != "xref")
         {
             throw lexer.Error("xref keyword was expected.");
@@ -34,10 +35,10 @@ internal static class PdfXrefReader
         var row = new byte[18];
         while (true)
         {
-            PdfToken token = lexer.Peek();
+            PdfToken token = await lexer.PeekAsync().ConfigureAwait(false);
             if (token.Kind == PdfTokenKind.Keyword && token.Text == "trailer")
             {
-                lexer.Next();
+                await lexer.NextAsync().ConfigureAwait(false);
                 break;
             }
 
@@ -46,8 +47,8 @@ internal static class PdfXrefReader
                 throw lexer.Error("Xref subsection or trailer was expected.");
             }
 
-            long start = lexer.Next().Integer;
-            PdfToken countToken = lexer.Next();
+            long start = (await lexer.NextAsync().ConfigureAwait(false)).Integer;
+            PdfToken countToken = await lexer.NextAsync().ConfigureAwait(false);
             if (countToken.Kind != PdfTokenKind.Integer)
             {
                 throw lexer.Error("Xref subsection count was expected.");
@@ -59,14 +60,14 @@ internal static class PdfXrefReader
                 throw lexer.Error("Xref subsection exceeds the object number range.");
             }
 
-            lexer.SkipWhitespace();
+            await lexer.SkipWhitespaceAsync().ConfigureAwait(false);
             for (int i = 0; i < count; i++)
             {
-                MergeEntry(target, (int)start + i, ReadClassicEntry(lexer, row), overwrite, budget);
+                MergeEntry(target, (int)start + i, await ReadClassicEntryAsync(lexer, row).ConfigureAwait(false), overwrite, budget);
             }
         }
 
-        PdfObject trailer = parser.ParseValue();
+        PdfObject trailer = await parser.ParseValueAsync().ConfigureAwait(false);
         if (trailer is not PdfObject.Dict trailerDict)
         {
             throw lexer.Error("Trailer dictionary was expected.");
@@ -75,12 +76,11 @@ internal static class PdfXrefReader
         return trailerDict;
     }
 
-    private static XrefEntry ReadClassicEntry(PdfLexer lexer, byte[] row)
+    private static async ValueTask<XrefEntry> ReadClassicEntryAsync(PdfLexer lexer, byte[] row)
     {
-        PdfCursor cursor = lexer.Cursor;
         for (int i = 0; i < 18; i++)
         {
-            int b = cursor.ReadByte();
+            int b = await lexer.ReadByteAsync().ConfigureAwait(false);
             if (b < 0)
             {
                 throw lexer.Error("Truncated xref entry.");
@@ -89,10 +89,10 @@ internal static class PdfXrefReader
             row[i] = (byte)b;
         }
 
-        int eol = cursor.ReadByte();
+        int eol = await lexer.ReadByteAsync().ConfigureAwait(false);
         if (eol == ' ')
         {
-            int second = cursor.ReadByte();
+            int second = await lexer.ReadByteAsync().ConfigureAwait(false);
             if (second != '\n' && second != '\r')
             {
                 throw lexer.Error("Xref entry must end in CRLF, LF, SP LF, or SP CR.");
@@ -100,7 +100,7 @@ internal static class PdfXrefReader
         }
         else if (eol == '\r')
         {
-            int second = cursor.ReadByte();
+            int second = await lexer.ReadByteAsync().ConfigureAwait(false);
             if (second != '\n')
             {
                 throw lexer.Error("Xref entry must end in CRLF, LF, SP LF, or SP CR.");

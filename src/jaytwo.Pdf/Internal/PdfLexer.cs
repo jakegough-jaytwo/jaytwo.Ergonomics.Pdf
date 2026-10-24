@@ -3,10 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Pdf.Internal;
 
-// Reads the tokens of ISO 32000-1 7.2 from a cursor, with a pushback for the parser's lookahead.
+// Reads the tokens of ISO 32000-1 7.2 from a cursor, with a pushback for the parser's lookahead. D-55: the reading
+// methods are async in shape; with useAsync false every await completes inline.
 internal sealed class PdfLexer
 {
     // A name, number, or keyword token is at most this many bytes. Real tokens are a few dozen bytes.
@@ -17,37 +20,41 @@ internal sealed class PdfLexer
     private readonly PdfCursor _cursor;
     private readonly long _baseOffset;
     private readonly int _stringCap;
+    private readonly bool _useAsync;
+    private readonly CancellationToken _cancellationToken;
     private readonly Stack<PdfToken> _pushback = new Stack<PdfToken>();
     private byte[] _token = Array.Empty<byte>();
     private char[] _chars = Array.Empty<char>();
 
-    public PdfLexer(PdfCursor cursor, long baseOffset, int stringCap)
+    public PdfLexer(PdfCursor cursor, long baseOffset, int stringCap, bool useAsync, CancellationToken cancellationToken)
     {
         _cursor = cursor;
         _baseOffset = baseOffset;
         _stringCap = stringCap;
+        _useAsync = useAsync;
+        _cancellationToken = cancellationToken;
     }
 
     public PdfCursor Cursor => _cursor;
 
-    public PdfToken Peek()
+    public async ValueTask<PdfToken> PeekAsync()
     {
         if (_pushback.Count == 0)
         {
-            _pushback.Push(ReadToken());
+            _pushback.Push(await ReadTokenAsync().ConfigureAwait(false));
         }
 
         return _pushback.Peek();
     }
 
-    public PdfToken Next()
+    public ValueTask<PdfToken> NextAsync()
     {
         if (_pushback.Count > 0)
         {
-            return _pushback.Pop();
+            return new ValueTask<PdfToken>(_pushback.Pop());
         }
 
-        return ReadToken();
+        return ReadTokenAsync();
     }
 
     public void PushBack(PdfToken token)
@@ -60,24 +67,35 @@ internal sealed class PdfLexer
         _pushback.Clear();
     }
 
-    public bool PeekKeyword(string keyword)
+    public async ValueTask<bool> PeekKeywordAsync(string keyword)
     {
-        PdfToken token = Peek();
+        PdfToken token = await PeekAsync().ConfigureAwait(false);
         return token.Kind == PdfTokenKind.Keyword && token.Text == keyword;
     }
 
-    public void SkipWhitespace()
+    public async ValueTask SkipWhitespaceAsync()
     {
         while (true)
         {
-            int b = _cursor.PeekByte();
+            int b = await PeekByteAsync().ConfigureAwait(false);
             if (b < 0 || !IsWhitespace(b))
             {
                 return;
             }
 
-            _cursor.ReadByte();
+            await ReadByteAsync().ConfigureAwait(false);
         }
+    }
+
+    // Raw bytes, for the stream keyword's line end and classic cross-reference rows.
+    public ValueTask<int> ReadByteAsync()
+    {
+        return _cursor.ReadByteAsync(_useAsync, _cancellationToken);
+    }
+
+    public ValueTask<int> PeekByteAsync()
+    {
+        return _cursor.PeekByteAsync(_useAsync, _cancellationToken);
     }
 
     public PdfParseException Error(string message)
@@ -90,14 +108,14 @@ internal sealed class PdfLexer
         return b is 0 or 9 or 10 or 12 or 13 or 32;
     }
 
-    private PdfToken ReadToken()
+    private async ValueTask<PdfToken> ReadTokenAsync()
     {
         int commentDepth = 0;
         int b;
         while (true)
         {
-            SkipWhitespace();
-            b = _cursor.ReadByte();
+            await SkipWhitespaceAsync().ConfigureAwait(false);
+            b = await ReadByteAsync().ConfigureAwait(false);
             if (b != '%')
             {
                 break;
@@ -112,7 +130,7 @@ internal sealed class PdfLexer
             int c;
             do
             {
-                c = _cursor.ReadByte();
+                c = await ReadByteAsync().ConfigureAwait(false);
             }
             while (c >= 0 && c != '\n' && c != '\r');
         }
@@ -134,20 +152,20 @@ internal sealed class PdfLexer
 
         if (b == '<')
         {
-            if (_cursor.PeekByte() == '<')
+            if (await PeekByteAsync().ConfigureAwait(false) == '<')
             {
-                _cursor.ReadByte();
+                await ReadByteAsync().ConfigureAwait(false);
                 return new PdfToken(PdfTokenKind.DictStart, "<<", Array.Empty<byte>(), 0, 0);
             }
 
-            return new PdfToken(PdfTokenKind.HexString, string.Empty, ReadHexString(), 0, 0);
+            return new PdfToken(PdfTokenKind.HexString, string.Empty, await ReadHexStringAsync().ConfigureAwait(false), 0, 0);
         }
 
         if (b == '>')
         {
-            if (_cursor.PeekByte() == '>')
+            if (await PeekByteAsync().ConfigureAwait(false) == '>')
             {
-                _cursor.ReadByte();
+                await ReadByteAsync().ConfigureAwait(false);
                 return new PdfToken(PdfTokenKind.DictEnd, ">>", Array.Empty<byte>(), 0, 0);
             }
 
@@ -156,30 +174,30 @@ internal sealed class PdfLexer
 
         if (b == '(')
         {
-            return new PdfToken(PdfTokenKind.LiteralString, string.Empty, ReadLiteralString(), 0, 0);
+            return new PdfToken(PdfTokenKind.LiteralString, string.Empty, await ReadLiteralStringAsync().ConfigureAwait(false), 0, 0);
         }
 
         if (b == '/')
         {
-            return new PdfToken(PdfTokenKind.Name, ReadName(), Array.Empty<byte>(), 0, 0);
+            return new PdfToken(PdfTokenKind.Name, await ReadNameAsync().ConfigureAwait(false), Array.Empty<byte>(), 0, 0);
         }
 
         if (b == '+' || b == '-' || b == '.' || (b >= '0' && b <= '9'))
         {
-            return ReadNumber(b);
+            return await ReadNumberAsync(b).ConfigureAwait(false);
         }
 
-        return ReadKeyword(b);
+        return await ReadKeywordAsync(b).ConfigureAwait(false);
     }
 
-    private PdfToken ReadNumber(int first)
+    private async ValueTask<PdfToken> ReadNumberAsync(int first)
     {
         long start = _cursor.Position - 1;
         bool negative = first == '-';
         bool digits = first >= '0' && first <= '9';
         if (first == '.')
         {
-            return ReadRealNumber(start);
+            return await ReadRealNumberAsync(start).ConfigureAwait(false);
         }
 
         long limit = negative ? long.MinValue : -long.MaxValue;
@@ -189,10 +207,10 @@ internal sealed class PdfLexer
         int length = 1;
         while (true)
         {
-            int b = _cursor.PeekByte();
+            int b = await PeekByteAsync().ConfigureAwait(false);
             if (b == '.')
             {
-                return ReadRealNumber(start);
+                return await ReadRealNumberAsync(start).ConfigureAwait(false);
             }
 
             if (b < '0' || b > '9')
@@ -202,7 +220,7 @@ internal sealed class PdfLexer
 
             CheckTokenLength(length, "number");
             length++;
-            _cursor.ReadByte();
+            await ReadByteAsync().ConfigureAwait(false);
             digits = true;
             if (!overflow)
             {
@@ -240,23 +258,24 @@ internal sealed class PdfLexer
         return new PdfToken(PdfTokenKind.Integer, string.Empty, Array.Empty<byte>(), integer, integer);
     }
 
-    private PdfToken ReadRealNumber(long start)
+    private async ValueTask<PdfToken> ReadRealNumberAsync(long start)
     {
         _cursor.Seek(start);
         int length = 0;
-        int first = _cursor.ReadByte();
+        int first = await ReadByteAsync().ConfigureAwait(false);
         AppendTokenByte(ref length, first);
         bool digits = first >= '0' && first <= '9';
         bool decimalPoint = first == '.';
         while (true)
         {
-            int b = _cursor.PeekByte();
+            int b = await PeekByteAsync().ConfigureAwait(false);
             if ((b == '.' && !decimalPoint) || (b >= '0' && b <= '9'))
             {
                 CheckTokenLength(length, "number");
                 decimalPoint |= b == '.';
                 digits |= b != '.';
-                AppendTokenByte(ref length, _cursor.ReadByte());
+                int next = await ReadByteAsync().ConfigureAwait(false);
+                AppendTokenByte(ref length, next);
                 continue;
             }
 
@@ -278,12 +297,7 @@ internal sealed class PdfLexer
             _chars[i] = (char)_token[i];
         }
 
-#if NETSTANDARD2_0
-        bool parsed = double.TryParse(new string(_chars, 0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out double number);
-#else
-        bool parsed = double.TryParse(_chars.AsSpan(0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out double number);
-#endif
-        if (!parsed)
+        if (!TryParseReal(length, out double number))
         {
             throw Error("Real number is invalid.");
         }
@@ -292,20 +306,30 @@ internal sealed class PdfLexer
         return new PdfToken(PdfTokenKind.Real, string.Empty, Array.Empty<byte>(), 0, number);
     }
 
-    private PdfToken ReadKeyword(int first)
+    private bool TryParseReal(int length, out double number)
+    {
+#if NETSTANDARD2_0
+        return double.TryParse(new string(_chars, 0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out number);
+#else
+        return double.TryParse(_chars.AsSpan(0, length), NumberStyles.Float, CultureInfo.InvariantCulture, out number);
+#endif
+    }
+
+    private async ValueTask<PdfToken> ReadKeywordAsync(int first)
     {
         int length = 0;
         AppendTokenByte(ref length, first);
         while (true)
         {
-            int b = _cursor.PeekByte();
+            int b = await PeekByteAsync().ConfigureAwait(false);
             if (b < 0 || IsWhitespace(b) || IsDelimiter(b))
             {
                 break;
             }
 
             CheckTokenLength(length, "keyword");
-            AppendTokenByte(ref length, _cursor.ReadByte());
+            int next = await ReadByteAsync().ConfigureAwait(false);
+            AppendTokenByte(ref length, next);
         }
 
         return new PdfToken(PdfTokenKind.Keyword, PdfCommonTokens.Find(_token, length) ?? Latin1(_token, length), Array.Empty<byte>(), 0, 0);
@@ -323,19 +347,20 @@ internal sealed class PdfLexer
         return new string(chars);
     }
 
-    private string ReadName()
+    private async ValueTask<string> ReadNameAsync()
     {
         int length = 0;
         while (true)
         {
-            int b = _cursor.PeekByte();
+            int b = await PeekByteAsync().ConfigureAwait(false);
             if (b < 0 || IsWhitespace(b) || IsDelimiter(b))
             {
                 break;
             }
 
             CheckTokenLength(length, "name");
-            AppendTokenByte(ref length, _cursor.ReadByte());
+            int next = await ReadByteAsync().ConfigureAwait(false);
+            AppendTokenByte(ref length, next);
         }
 
         // Escapes decode in place: each one shortens the name, so the write index never passes the read index.
@@ -374,7 +399,7 @@ internal sealed class PdfLexer
         return bytes;
     }
 
-    private byte[] ReadLiteralString()
+    private async ValueTask<byte[]> ReadLiteralStringAsync()
     {
         int length = 0;
         int depth = 1;
@@ -385,7 +410,7 @@ internal sealed class PdfLexer
                 throw new PdfObjectTooLargeException("Literal string exceeded the structural cap.");
             }
 
-            int b = _cursor.ReadByte();
+            int b = await ReadByteAsync().ConfigureAwait(false);
             if (b < 0)
             {
                 throw Error("Literal string ended at EOF.");
@@ -393,7 +418,7 @@ internal sealed class PdfLexer
 
             if (b == '\\')
             {
-                int escaped = _cursor.ReadByte();
+                int escaped = await ReadByteAsync().ConfigureAwait(false);
                 if (escaped < 0)
                 {
                     throw Error("Literal string escape ended at EOF.");
@@ -406,9 +431,9 @@ internal sealed class PdfLexer
 
                 if (escaped == '\r')
                 {
-                    if (_cursor.PeekByte() == '\n')
+                    if (await PeekByteAsync().ConfigureAwait(false) == '\n')
                     {
-                        _cursor.ReadByte();
+                        await ReadByteAsync().ConfigureAwait(false);
                     }
 
                     continue;
@@ -419,13 +444,13 @@ internal sealed class PdfLexer
                     int value = escaped - '0';
                     for (int i = 0; i < 2; i++)
                     {
-                        int peek = _cursor.PeekByte();
+                        int peek = await PeekByteAsync().ConfigureAwait(false);
                         if (peek < '0' || peek > '7')
                         {
                             break;
                         }
 
-                        value = (value * 8) + (_cursor.ReadByte() - '0');
+                        value = (value * 8) + (await ReadByteAsync().ConfigureAwait(false) - '0');
                     }
 
                     AppendTokenByte(ref length, (byte)value);
@@ -465,9 +490,9 @@ internal sealed class PdfLexer
 
             if (b == '\r')
             {
-                if (_cursor.PeekByte() == '\n')
+                if (await PeekByteAsync().ConfigureAwait(false) == '\n')
                 {
-                    _cursor.ReadByte();
+                    await ReadByteAsync().ConfigureAwait(false);
                 }
 
                 AppendTokenByte(ref length, (byte)'\n');
@@ -480,13 +505,13 @@ internal sealed class PdfLexer
         return TokenBytes(length);
     }
 
-    private byte[] ReadHexString()
+    private async ValueTask<byte[]> ReadHexStringAsync()
     {
         int length = 0;
         int high = -1;
         while (true)
         {
-            int b = _cursor.ReadByte();
+            int b = await ReadByteAsync().ConfigureAwait(false);
             if (b < 0)
             {
                 throw Error("Hex string ended at EOF.");

@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Pdf.Internal;
 
-// D-49: a stream cursor keeps its most recently filled 64 KiB windows, least recently used first out, and serves a
+// D-49: a source cursor keeps its most recently filled 64 KiB windows, least recently used first out, and serves a
 // position inside one of them without I/O. The engine calls Release when each public operation returns, so no
-// source byte read in one operation is served in another.
+// source byte read in one operation is served in another. These windows are the bounded cache and read coalescing
+// above the source (spec R13): a fill reads one 64 KiB window, so neighboring small reads cost one source read.
+// D-55: a byte in the current window is returned without a state machine; only a fill awaits the source.
 internal sealed class PdfCursor
 {
     internal const int WindowSize = 65536;
@@ -16,7 +19,7 @@ internal sealed class PdfCursor
 
     private const int MaxRetainedWindows = 16;
 
-    private readonly Stream? _stream;
+    private readonly IPdfSource? _source;
     private readonly byte[]? _buffer;
     private readonly int _retainedWindows;
 
@@ -25,25 +28,24 @@ internal sealed class PdfCursor
     private Window? _spare;
     private byte[] _window;
     private long _next;
-    private int _unread = -1;
     private int _windowIndex;
     private int _windowLength;
     private long _peakRetainedBytes;
 
-    public PdfCursor(Stream stream)
-        : this(stream, DefaultRetainedWindows)
+    public PdfCursor(IPdfSource source)
+        : this(source, DefaultRetainedWindows)
     {
     }
 
     // Zero retained windows refills on every seek.
-    public PdfCursor(Stream stream, int retainedWindows)
+    public PdfCursor(IPdfSource source, int retainedWindows)
     {
         if (retainedWindows < 0 || retainedWindows > MaxRetainedWindows)
         {
             throw new ArgumentOutOfRangeException(nameof(retainedWindows));
         }
 
-        _stream = stream ?? throw new ArgumentNullException(nameof(stream));
+        _source = source ?? throw new ArgumentNullException(nameof(source));
         _retainedWindows = retainedWindows;
         _window = Array.Empty<byte>();
     }
@@ -55,9 +57,9 @@ internal sealed class PdfCursor
         _window = buffer;
     }
 
-    public long Length => _buffer?.Length ?? _stream!.Length;
+    public long Length => _buffer?.Length ?? _source!.Length;
 
-    public long Position => _unread >= 0 ? _next - 1 : _next;
+    public long Position => _next;
 
     public int RetainedWindows => _retainedWindows;
 
@@ -76,7 +78,6 @@ internal sealed class PdfCursor
             throw new PdfParseException(position, "Seek offset is negative.");
         }
 
-        _unread = -1;
         _next = position;
         _windowIndex = 0;
         _windowLength = 0;
@@ -85,12 +86,6 @@ internal sealed class PdfCursor
     // Drops the retained windows and keeps one buffer for the next fill. The position is unchanged.
     public void Release()
     {
-        if (_unread >= 0)
-        {
-            _unread = -1;
-            _next--;
-        }
-
         _windowIndex = 0;
         _windowLength = 0;
         if (_windows.Count > 0)
@@ -102,35 +97,33 @@ internal sealed class PdfCursor
 
     public int PeekByte()
     {
-        int value = ReadByte();
-        if (value >= 0)
-        {
-            Unread(value);
-        }
-
-        return value;
+        return PdfSync.Result(PeekByteAsync(false, CancellationToken.None));
     }
 
     public int ReadByte()
     {
-        if (_unread >= 0)
+        return PdfSync.Result(ReadByteAsync(false, CancellationToken.None));
+    }
+
+    public ValueTask<int> PeekByteAsync(bool useAsync, CancellationToken cancellationToken)
+    {
+        if (_windowIndex < _windowLength)
         {
-            int value = _unread;
-            _unread = -1;
-            return value;
+            return new ValueTask<int>(_window[_windowIndex]);
         }
 
-        if (_windowIndex >= _windowLength)
+        return PeekAfterFillAsync(useAsync, cancellationToken);
+    }
+
+    public ValueTask<int> ReadByteAsync(bool useAsync, CancellationToken cancellationToken)
+    {
+        if (_windowIndex < _windowLength)
         {
-            Fill();
-            if (_windowIndex >= _windowLength)
-            {
-                return -1;
-            }
+            _next++;
+            return new ValueTask<int>(_window[_windowIndex++]);
         }
 
-        _next++;
-        return _window[_windowIndex++];
+        return ReadAfterFillAsync(useAsync, cancellationToken);
     }
 
     public void Skip(long count)
@@ -143,17 +136,31 @@ internal sealed class PdfCursor
         Seek(Position + count);
     }
 
-    private void Unread(int value)
+    // A source may return fewer bytes than asked; the window is then shorter and the next fill continues after it.
+    private static int ReadWindow(IPdfSource source, long start, byte[] data)
     {
-        if (_unread >= 0)
-        {
-            throw new InvalidOperationException("Only one unread byte is supported.");
-        }
-
-        _unread = value;
+        return source.Read(start, new Span<byte>(data, 0, WindowSize));
     }
 
-    private void Fill()
+    private async ValueTask<int> PeekAfterFillAsync(bool useAsync, CancellationToken cancellationToken)
+    {
+        await FillAsync(useAsync, cancellationToken).ConfigureAwait(false);
+        return _windowIndex < _windowLength ? _window[_windowIndex] : -1;
+    }
+
+    private async ValueTask<int> ReadAfterFillAsync(bool useAsync, CancellationToken cancellationToken)
+    {
+        await FillAsync(useAsync, cancellationToken).ConfigureAwait(false);
+        if (_windowIndex >= _windowLength)
+        {
+            return -1;
+        }
+
+        _next++;
+        return _window[_windowIndex++];
+    }
+
+    private async ValueTask FillAsync(bool useAsync, CancellationToken cancellationToken)
     {
         _windowIndex = 0;
         _windowLength = 0;
@@ -187,14 +194,14 @@ internal sealed class PdfCursor
             }
         }
 
-        // Past the end reads as EOF, as in the buffer path. Some streams, such as MemoryStream, refuse such a seek.
-        // The length is read again on every fill, so a window that ended at an earlier end is not taken as EOF
-        // after the document appends to its own source.
-        if (_next >= _stream!.Length)
+        // Past the end reads as EOF, as in the buffer path. The length is read again on every fill, so a window that
+        // ended at an earlier end is not taken as EOF after the document appends to its own source.
+        if (_next >= _source!.Length)
         {
             return;
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
         Window window;
         if (_retainedWindows > 0 && _windows.Count >= _retainedWindows)
         {
@@ -211,9 +218,12 @@ internal sealed class PdfCursor
             window = new Window(new byte[WindowSize]);
         }
 
-        _stream.Seek(_next, SeekOrigin.Begin);
-        window.Start = _next;
-        window.Length = _stream.Read(window.Data, 0, WindowSize);
+        long start = _next;
+        int length = useAsync
+            ? await _source.ReadAsync(start, new Memory<byte>(window.Data, 0, WindowSize), cancellationToken).ConfigureAwait(false)
+            : ReadWindow(_source, start, window.Data);
+        window.Start = start;
+        window.Length = length;
         if (window.Length > 0 && _retainedWindows > 0)
         {
             _windows.Add(window);

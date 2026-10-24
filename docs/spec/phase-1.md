@@ -54,7 +54,7 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R10 | **Revision listing.** List revisions in order with the end offset of each and whether a signature covers it. A linearized file's first-page cross-reference section and its main section are one revision, not two. Only cross-reference sections and trailers are read. | Exists |
 | R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
 | R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | Exists |
-| R13 | **Random-access source.** Open from an `IPdfSource` or a seekable-`Stream` adapter, synchronously or with `OpenAsync` and a `CancellationToken`. The source is one stable snapshot read at absolute `long` offsets; reads may be partial, a zero-byte read is end of source, and the engine serializes its reads. Ownership is explicit at every open entry point. Cancellation publishes no partially parsed document state. A source change detected during use fails instead of mixing versions (`reset-plan.md` section 4.3). | New |
+| R13 | **Random-access source.** Open from an `IPdfSource` or a seekable-`Stream` adapter, synchronously or with `OpenAsync` and a `CancellationToken`. The source is one stable snapshot read at absolute `long` offsets; reads may be partial, a zero-byte read is end of source, and the engine serializes its reads. Ownership is explicit at every open entry point. Cancellation publishes no partially parsed document state. A source change detected during use fails instead of mixing versions (`reset-plan.md` section 4.3). | Exists |
 | R14 | **Inspection and editing.** `PdfDocument` is read-only and lazily loaded. `PdfDocument.Edit()` returns a `PdfDocumentEditor`; every write in section 6, and every save and signature, is an editor operation. | Exists |
 
 ## 6. Incremental writes
@@ -104,7 +104,7 @@ All writes are made through a `PdfDocumentEditor` (R14) and are pending until it
 | W17 | **Formats.** `adbe.pkcs7.detached` (current) and **PAdES baseline B-B** (`ETSI.CAdES.detached`, ETSI EN 319 142-1): `signing-certificate-v2` signed attribute, no CMS `signing-time` attribute (the time is in `/M`). With a timestamp authority, the result is PAdES B-T. | Exists |
 | W18 | RFC 3161 signature timestamp as an unsigned attribute, and document timestamps as a separate revision, with the existing nonce, imprint, algorithm, and certificate checks. | Exists |
 | W19 | Failure never extends the output: signer, timestamp, size, and validation failures leave the destination unchanged. Signer exception details are not exposed. | Exists |
-| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. Asynchronous save and sign exist beside the synchronous methods, and opening and source reads are asynchronous too (R13). Synchronous conveniences remain where they do not hide blocking remote I/O. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | Change |
+| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. Asynchronous save and sign exist beside the synchronous methods, and opening and source reads are asynchronous too (R13). Synchronous conveniences remain where they do not hide blocking remote I/O. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | Exists |
 
 ### 6.6 API
 

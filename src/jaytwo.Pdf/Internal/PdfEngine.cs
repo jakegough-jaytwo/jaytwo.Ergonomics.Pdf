@@ -52,9 +52,9 @@ internal sealed class PdfEngine : IDisposable
     private readonly List<RevisionSection> _revisionSections = new List<RevisionSection>();
     private readonly HashSet<int> _loadingObjects = new HashSet<int>();
     private readonly List<Stream> _ownedStreams = new List<Stream>();
-    private Stream _stream;
+    private IPdfSource _source;
     private PdfCursor _cursor;
-    private bool _leaveOpen;
+    private bool _ownsSource;
     private bool _disposed;
     private long _length;
     private long _startXref;
@@ -78,12 +78,12 @@ internal sealed class PdfEngine : IDisposable
     private long _decodedBytes;
     private SignatureState? _signatureState;
 
-    private PdfEngine(Stream stream, bool leaveOpen, int cursorWindows)
+    private PdfEngine(IPdfSource source, bool ownsSource, int cursorWindows)
     {
-        _stream = stream;
-        _leaveOpen = leaveOpen;
-        _cursor = new PdfCursor(stream, cursorWindows);
-        _length = stream.Length;
+        _source = source;
+        _ownsSource = ownsSource;
+        _cursor = new PdfCursor(source, cursorWindows);
+        _length = source.Length;
     }
 
     internal int PageCount
@@ -224,18 +224,24 @@ internal sealed class PdfEngine : IDisposable
     // Spec 7.2: flatten and rotate throw on a document with a signature unless the caller opts in.
     internal bool AllowBreakingSignatures { get; set; }
 
-    internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password)
+    internal static PdfEngine Open(IPdfSource source, bool ownsSource, string? password, int cursorWindows)
     {
-        return Open(stream, leaveOpen, password, PdfCursor.DefaultRetainedWindows);
+        return PdfSync.Result(OpenAsync(source, ownsSource, password, cursorWindows, false, CancellationToken.None));
     }
 
-    // Open is not an operation lease, so it releases the cursor windows it filled itself.
-    internal static PdfEngine Open(Stream stream, bool leaveOpen, string? password, int cursorWindows)
+    internal static ValueTask<PdfEngine> OpenAsync(IPdfSource source, bool ownsSource, string? password, int cursorWindows, CancellationToken cancellationToken)
     {
-        var engine = new PdfEngine(stream, leaveOpen, cursorWindows);
+        return OpenAsync(source, ownsSource, password, cursorWindows, true, cancellationToken);
+    }
+
+    // Open is not an operation lease, so it releases the cursor windows it filled itself. A failed or canceled open
+    // disposes the engine it built, so no partially parsed state is published; an owned source is disposed with it.
+    private static async ValueTask<PdfEngine> OpenAsync(IPdfSource source, bool ownsSource, string? password, int cursorWindows, bool useAsync, CancellationToken cancellationToken)
+    {
+        var engine = new PdfEngine(source, ownsSource, cursorWindows);
         try
         {
-            engine.Initialize(password);
+            await engine.InitializeAsync(password, useAsync, cancellationToken).ConfigureAwait(false);
             return engine;
         }
         catch
@@ -262,9 +268,9 @@ internal sealed class PdfEngine : IDisposable
             owned.Dispose();
         }
 
-        if (!_leaveOpen)
+        if (_ownsSource)
         {
-            _stream.Dispose();
+            _source.Dispose();
         }
     }
 
@@ -1811,7 +1817,7 @@ internal sealed class PdfEngine : IDisposable
     internal void SaveIncremental()
     {
         using var release = ReleaseAfter();
-        SaveIncremental(_stream, _leaveOpen);
+        SaveIncremental(SourceStream(), true);
     }
 
     internal void SaveIncremental(Stream destination, bool leaveOpen)
@@ -1821,7 +1827,7 @@ internal sealed class PdfEngine : IDisposable
 
     internal Task SaveIncrementalAsync(CancellationToken cancellationToken)
     {
-        return SaveIncrementalAsync(_stream, _leaveOpen, true, cancellationToken);
+        return SaveIncrementalAsync(SourceStream(), true, true, cancellationToken);
     }
 
     internal Task SaveIncrementalAsync(Stream destination, bool leaveOpen, CancellationToken cancellationToken)
@@ -1832,7 +1838,7 @@ internal sealed class PdfEngine : IDisposable
     internal void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)
     {
         using var release = ReleaseAfter();
-        Sign(_stream, options, provider, _leaveOpen);
+        Sign(SourceStream(), options, provider, true);
     }
 
     internal void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen)
@@ -1842,7 +1848,7 @@ internal sealed class PdfEngine : IDisposable
 
     internal Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken)
     {
-        return SignAsync(_stream, options, provider, _leaveOpen, true, cancellationToken);
+        return SignAsync(SourceStream(), options, provider, true, true, cancellationToken);
     }
 
     internal Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen, CancellationToken cancellationToken)
@@ -1863,7 +1869,7 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfTooLargeForClassicXrefException();
         }
 
-        bool same = ReferenceEquals(destination, _stream);
+        bool same = IsSourceStream(destination);
         if (_dirty.Count == 0)
         {
             if (!same)
@@ -1885,6 +1891,7 @@ internal sealed class PdfEngine : IDisposable
 
         EnsureAppendAllowed();
         AppendixLayout layout;
+        using var appending = BeginAppend(same);
         try
         {
             if (!same)
@@ -2044,7 +2051,8 @@ internal sealed class PdfEngine : IDisposable
             encoded.CopyTo(0, hex, 0, encoded.Length);
             PatchAscii(buffer, layout.Contents.HexPosition, new string(hex));
             cancellationToken.ThrowIfCancellationRequested();
-            bool same = ReferenceEquals(destination, _stream);
+            bool same = IsSourceStream(destination);
+            using var appending = BeginAppend(same);
             try
             {
                 if (!same)
@@ -2082,16 +2090,16 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private void Initialize(string? password)
+    private async ValueTask InitializeAsync(string? password, bool useAsync, CancellationToken cancellationToken)
     {
         if (_length < 8)
         {
             throw new PdfParseException(0, "The stream is too small to be a PDF.");
         }
 
-        EnsureHeader();
-        _startXref = FindStartXref();
-        LoadXref(_startXref, true, true, true, new HashSet<long>(), password);
+        await EnsureHeaderAsync(useAsync, cancellationToken).ConfigureAwait(false);
+        _startXref = await FindStartXrefAsync(useAsync, cancellationToken).ConfigureAwait(false);
+        await LoadXrefAsync(_startXref, true, true, true, new HashSet<long>(), password, useAsync, cancellationToken).ConfigureAwait(false);
         if (_rootId == 0)
         {
             throw new PdfParseException(_startXref, "The trailer has no /Root.");
@@ -2106,10 +2114,10 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private void EnsureHeader()
+    private async ValueTask EnsureHeaderAsync(bool useAsync, CancellationToken cancellationToken)
     {
         int count = (int)Math.Min(1024, _length);
-        byte[] head = ReadRange(0, count);
+        byte[] head = await ReadRangeAsync(0, count, useAsync, cancellationToken).ConfigureAwait(false);
         for (int i = 0; i < head.Length - 7; i++)
         {
             if (head[i] == (byte)'%'
@@ -2129,13 +2137,13 @@ internal sealed class PdfEngine : IDisposable
         throw new PdfParseException(0, "A %PDF-1. or %PDF-2. header was not found in the first 1024 bytes.");
     }
 
-    private long FindStartXref()
+    private async ValueTask<long> FindStartXrefAsync(bool useAsync, CancellationToken cancellationToken)
     {
         foreach (long window in new long[] { 65536, 1024 * 1024 })
         {
             long size = Math.Min(window, _length);
             long start = _length - size;
-            byte[] tail = ReadRange(start, (int)size);
+            byte[] tail = await ReadRangeAsync(start, (int)size, useAsync, cancellationToken).ConfigureAwait(false);
             byte[] needle = Encoding.ASCII.GetBytes("startxref");
             int index = tail.Length;
             while (true)
@@ -2163,8 +2171,9 @@ internal sealed class PdfEngine : IDisposable
         throw new PdfParseException(_length, "startxref was not found.");
     }
 
-    private void LoadXref(long offset, bool overwrite, bool recordTrailer, bool recordRevision, HashSet<long> stack, string? password)
+    private async ValueTask LoadXrefAsync(long offset, bool overwrite, bool recordTrailer, bool recordRevision, HashSet<long> stack, string? password, bool useAsync, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (!stack.Add(offset))
         {
             throw new PdfParseException(offset, "Cyclic /Prev chain.");
@@ -2181,9 +2190,9 @@ internal sealed class PdfEngine : IDisposable
             return;
         }
 
-        bool classic = IsClassicXref(offset);
+        bool classic = await IsClassicXrefAsync(offset, useAsync, cancellationToken).ConfigureAwait(false);
         _cursor.Seek(offset);
-        var parser = new PdfParser(_cursor, Resolve, 0);
+        var parser = new PdfParser(_cursor, ResolveAsync, 0, useAsync, cancellationToken);
         int budget = PdfXrefReader.EntryBudget(_length);
         PdfObject.Dict trailer;
         long sectionEnd;
@@ -2192,13 +2201,13 @@ internal sealed class PdfEngine : IDisposable
         {
             // The table is merged as it is read, before its /XRefStm stream and before /Prev, the search order of
             // ISO 32000-1 7.5.8.4. A /Prev chain never holds a second copy of the map.
-            trailer = PdfXrefReader.ParseClassic(parser, _xref, overwrite, budget);
+            trailer = await PdfXrefReader.ParseClassicAsync(parser, _xref, overwrite, budget).ConfigureAwait(false);
             sectionEnd = _cursor.Position;
-            pendingEncrypt = !TryEnsureSecurity(trailer, _xref, password);
+            pendingEncrypt = !await TryEnsureSecurityAsync(trailer, _xref, password, useAsync, cancellationToken).ConfigureAwait(false);
         }
         else
         {
-            PdfObject obj = parser.ParseIndirect(-1);
+            PdfObject obj = await parser.ParseIndirectAsync(-1).ConfigureAwait(false);
             if (obj is not PdfObject.Dict streamDict || streamDict.Body == null)
             {
                 throw new PdfParseException(offset, "Xref stream object was expected.");
@@ -2206,14 +2215,14 @@ internal sealed class PdfEngine : IDisposable
 
             sectionEnd = _cursor.Position;
             // A stream section is merged as it is read, so a /Prev chain never holds a second copy of the map.
-            ReadXrefStream(streamDict, overwrite, budget);
-            pendingEncrypt = !TryEnsureSecurity(streamDict, _xref, password);
+            await ReadXrefStreamAsync(streamDict, overwrite, budget, useAsync, cancellationToken).ConfigureAwait(false);
+            pendingEncrypt = !await TryEnsureSecurityAsync(streamDict, _xref, password, useAsync, cancellationToken).ConfigureAwait(false);
             trailer = streamDict;
         }
 
         if (classic && LongOrNull(trailer.Get("XRefStm")) is long streamOffset)
         {
-            LoadXref(streamOffset, false, false, false, stack, password);
+            await LoadXrefAsync(streamOffset, false, false, false, stack, password, useAsync, cancellationToken).ConfigureAwait(false);
         }
 
         long? previous = LongOrNull(trailer.Get("Prev"));
@@ -2235,11 +2244,11 @@ internal sealed class PdfEngine : IDisposable
         _loadedXrefs.Add(offset);
         if (previous is long previousOffset)
         {
-            LoadXref(previousOffset, false, _rootId == 0, true, stack, password);
+            await LoadXrefAsync(previousOffset, false, _rootId == 0, true, stack, password, useAsync, cancellationToken).ConfigureAwait(false);
         }
 
         bool chainComplete = stack.Count == 1;
-        if (pendingEncrypt && !TryEnsureSecurity(trailer, _xref, password) && chainComplete)
+        if (pendingEncrypt && !await TryEnsureSecurityAsync(trailer, _xref, password, useAsync, cancellationToken).ConfigureAwait(false) && chainComplete)
         {
             throw new PdfParseException(offset, "The encryption dictionary is not an uncompressed object in the cross-reference table.");
         }
@@ -2285,7 +2294,7 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private bool TryEnsureSecurity(PdfObject.Dict trailer, Dictionary<int, XrefEntry> entries, string? password)
+    private async ValueTask<bool> TryEnsureSecurityAsync(PdfObject.Dict trailer, Dictionary<int, XrefEntry> entries, string? password, bool useAsync, CancellationToken cancellationToken)
     {
         if (_security != null || _encryptId != 0)
         {
@@ -2309,7 +2318,7 @@ internal sealed class PdfEngine : IDisposable
 
         _encryptId = reference.ObjectId;
         _encryptGen = reference.GenerationNumber;
-        PdfObject.Dict encrypt = ParseEncryptDictionary(encryptOffset, reference.ObjectId);
+        PdfObject.Dict encrypt = await ParseEncryptDictionaryAsync(encryptOffset, reference.ObjectId, useAsync, cancellationToken).ConfigureAwait(false);
         _cache[reference.ObjectId] = encrypt;
         if (!PdfSecurity.IsSupportedRevision(encrypt))
         {
@@ -2353,11 +2362,11 @@ internal sealed class PdfEngine : IDisposable
         return true;
     }
 
-    private PdfObject.Dict ParseEncryptDictionary(long offset, int id)
+    private async ValueTask<PdfObject.Dict> ParseEncryptDictionaryAsync(long offset, int id, bool useAsync, CancellationToken cancellationToken)
     {
         _cursor.Seek(offset);
-        var parser = new PdfParser(_cursor, null, 0);
-        if (parser.ParseIndirect(id) is not PdfObject.Dict dict)
+        var parser = new PdfParser(_cursor, null, 0, useAsync, cancellationToken);
+        if (await parser.ParseIndirectAsync(id).ConfigureAwait(false) is not PdfObject.Dict dict)
         {
             throw new PdfParseException(offset, "The encryption dictionary is not a dictionary.");
         }
@@ -2365,7 +2374,7 @@ internal sealed class PdfEngine : IDisposable
         return dict;
     }
 
-    private void ReadXrefStream(PdfObject.Dict dict, bool overwrite, int budget)
+    private async ValueTask ReadXrefStreamAsync(PdfObject.Dict dict, bool overwrite, int budget, bool useAsync, CancellationToken cancellationToken)
     {
         if (dict.Body is not PdfObject.FileBody body)
         {
@@ -2377,7 +2386,7 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfObjectTooLargeException("The xref stream is larger than " + PdfStreamDecoder.XrefCap.ToString(CultureInfo.InvariantCulture) + " bytes.");
         }
 
-        byte[] raw = ReadRange(body.Offset, (int)body.Length);
+        byte[] raw = await ReadRangeAsync(body.Offset, (int)body.Length, useAsync, cancellationToken).ConfigureAwait(false);
 
         // ISO 32000-1 7.5.8.2: an xref stream's /Filter and /DecodeParms are direct, so no resolver is passed.
         List<string> filters = PdfStreamDecoder.FiltersOf(dict);
@@ -2402,7 +2411,7 @@ internal sealed class PdfEngine : IDisposable
     {
         if (_security == null || !_security.EncryptsStream(dict))
         {
-            return new PdfSliceStream(_stream, file.Offset, file.Length);
+            return new PdfSliceStream(_source, file.Offset, file.Length);
         }
 
         if (_security.UsesInitializationVector(dict))
@@ -2413,11 +2422,11 @@ internal sealed class PdfEngine : IDisposable
             }
 
             byte[] initialization = ReadRange(file.Offset, 16);
-            var rest = new PdfSliceStream(_stream, file.Offset + 16, file.Length - 16);
+            var rest = new PdfSliceStream(_source, file.Offset + 16, file.Length - 16);
             return _security.OpenDecrypted(rest, initialization, dict);
         }
 
-        return _security.OpenDecrypted(new PdfSliceStream(_stream, file.Offset, file.Length), dict);
+        return _security.OpenDecrypted(new PdfSliceStream(_source, file.Offset, file.Length), dict);
     }
 
     private static byte[] FileId(PdfObject.Dict trailer)
@@ -2433,6 +2442,18 @@ internal sealed class PdfEngine : IDisposable
     }
 
     private PdfObject Load(int id)
+    {
+        if (_cache.TryGetValue(id, out PdfObject? cached))
+        {
+            return cached;
+        }
+
+        return PdfSync.Result(LoadAsync(id, false, CancellationToken.None));
+    }
+
+    // D-55: the one load path. The synchronous Load runs it with useAsync false; opening runs it asynchronously when a
+    // cross-reference stream's /Length is indirect.
+    private async ValueTask<PdfObject> LoadAsync(int id, bool useAsync, CancellationToken cancellationToken)
     {
         if (_cache.TryGetValue(id, out PdfObject? cached))
         {
@@ -2461,12 +2482,12 @@ internal sealed class PdfEngine : IDisposable
             if (entry.Type == 1)
             {
                 _cursor.Seek(entry.Field1);
-                var parser = new PdfParser(_cursor, Resolve, 0);
-                obj = parser.ParseIndirect(id);
+                var parser = new PdfParser(_cursor, ResolveAsync, 0, useAsync, cancellationToken);
+                obj = await parser.ParseIndirectAsync(id).ConfigureAwait(false);
             }
             else if (entry.Type == 2)
             {
-                obj = LoadFromObjectStream((int)entry.Field1, entry.Field2, id);
+                obj = await LoadFromObjectStreamAsync((int)entry.Field1, entry.Field2, id, useAsync, cancellationToken).ConfigureAwait(false);
             }
             else
             {
@@ -2493,7 +2514,7 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
-    private PdfObject LoadFromObjectStream(int streamId, int index, int expectedId)
+    private async ValueTask<PdfObject> LoadFromObjectStreamAsync(int streamId, int index, int expectedId, bool useAsync, CancellationToken cancellationToken)
     {
         if (!_objectStreams.TryGetValue(streamId, out List<PdfObject>? objects))
         {
@@ -2503,7 +2524,7 @@ internal sealed class PdfEngine : IDisposable
             }
 
             ReleaseCleanObjectStreams(expectedId, null);
-            objects = ParseObjectStream(streamId);
+            objects = await ParseObjectStreamAsync(streamId, useAsync, cancellationToken).ConfigureAwait(false);
             _objectStreams[streamId] = objects;
             ReleaseCleanObjectStreams(expectedId, streamId);
         }
@@ -2522,12 +2543,12 @@ internal sealed class PdfEngine : IDisposable
         return obj.DeepClone();
     }
 
-    private List<PdfObject> ParseObjectStream(int streamId)
+    private async ValueTask<List<PdfObject>> ParseObjectStreamAsync(int streamId, bool useAsync, CancellationToken cancellationToken)
     {
         _objectStreamParseDepth++;
         try
         {
-            if (Load(streamId) is not PdfObject.Dict dict)
+            if (await LoadAsync(streamId, useAsync, cancellationToken).ConfigureAwait(false) is not PdfObject.Dict dict)
             {
                 throw new PdfParseException(0, "Object stream is not a dictionary.");
             }
@@ -2545,7 +2566,7 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(0, "Object stream /N pairs do not fit before /First.");
             }
 
-            byte[] data = ReadDecoded(dict, PdfStreamDecoder.StructuralCap);
+            byte[] data = await ReadDecodedAsync(dict, PdfStreamDecoder.StructuralCap, useAsync, cancellationToken).ConfigureAwait(false);
             if (first < 0 || first > data.Length)
             {
                 throw new PdfParseException(0, "Object stream /First is outside the stream.");
@@ -2653,6 +2674,16 @@ internal sealed class PdfEngine : IDisposable
 
     private PdfObject Resolve(PdfObject value)
     {
+        if (value is not PdfObject.Ref)
+        {
+            return value;
+        }
+
+        return PdfSync.Result(ResolveAsync(value, false, CancellationToken.None));
+    }
+
+    private async ValueTask<PdfObject> ResolveAsync(PdfObject value, bool useAsync, CancellationToken cancellationToken)
+    {
         // W-115: nearly every value is direct or one reference from one, so the set is made at a chain's second reference.
         bool followed = false;
         int firstId = 0;
@@ -2683,7 +2714,7 @@ internal sealed class PdfEngine : IDisposable
                 return PdfObject.NullObj.Instance;
             }
 
-            value = Load(reference.ObjectId);
+            value = await LoadAsync(reference.ObjectId, useAsync, cancellationToken).ConfigureAwait(false);
         }
 
         return value;
@@ -4638,7 +4669,9 @@ internal sealed class PdfEngine : IDisposable
         {
             if (same)
             {
-                _length = destination.Length;
+                var source = (PdfStreamSource)_source;
+                source.AcceptAppend();
+                _length = source.Length;
             }
             else
             {
@@ -4660,19 +4693,40 @@ internal sealed class PdfEngine : IDisposable
         _dirty.Clear();
     }
 
+    // The destination becomes the document's source, a new snapshot the document owns; leaveOpen keeps its stream open.
     private void SwitchStream(Stream destination, bool leaveOpen)
     {
-        long length = destination.Length;
-        var cursor = new PdfCursor(destination, _cursor.RetainedWindows);
-        if (!_leaveOpen)
+        var source = new PdfStreamSource(destination, leaveOpen);
+        var cursor = new PdfCursor(source, _cursor.RetainedWindows);
+        if (_ownsSource)
         {
-            _stream.Dispose();
+            _source.Dispose();
         }
 
-        _stream = destination;
-        _leaveOpen = leaveOpen;
-        _length = length;
+        _source = source;
+        _ownsSource = true;
+        _length = source.Length;
         _cursor = cursor;
+    }
+
+    private bool IsSourceStream(Stream destination)
+    {
+        return _source is PdfStreamSource source && ReferenceEquals(destination, source.Stream);
+    }
+
+    // A save or signature with no destination appends to the stream the document was opened from.
+    private Stream SourceStream()
+    {
+        CheckDisposed();
+        return _source is PdfStreamSource source
+            ? source.Stream
+            : throw new InvalidOperationException("A document opened from an IPdfSource has no stream to append to. Save to a destination stream.");
+    }
+
+    // While the document appends to its own source, reads of the prefix accept the longer stream.
+    private AppendScope BeginAppend(bool same)
+    {
+        return new AppendScope(same ? (PdfStreamSource)_source : null);
     }
 
     private void ValidateDestination(Stream destination)
@@ -4687,13 +4741,9 @@ internal sealed class PdfEngine : IDisposable
             throw new ArgumentException("The destination must be a writable seekable stream.", nameof(destination));
         }
 
-        if (ReferenceEquals(destination, _stream))
+        if (IsSourceStream(destination))
         {
-            if (_stream.Length != _length)
-            {
-                throw new PdfException("The source stream length changed under the document.");
-            }
-
+            ((PdfStreamSource)_source).CheckUnchanged();
             return;
         }
 
@@ -4705,16 +4755,16 @@ internal sealed class PdfEngine : IDisposable
 
     private async Task CopyPrefixAsync(Stream destination, bool useAsync, CancellationToken cancellationToken)
     {
-        _stream.Seek(0, SeekOrigin.Begin);
         var buffer = new byte[1024 * 1024];
         long remaining = _length;
         while (remaining > 0)
         {
             cancellationToken.ThrowIfCancellationRequested();
             int count = (int)Math.Min(buffer.Length, remaining);
+            long position = _length - remaining;
             int read = useAsync
-                ? await _stream.ReadAsync(buffer, 0, count, cancellationToken).ConfigureAwait(false)
-                : _stream.Read(buffer, 0, count);
+                ? await _source.ReadAsync(position, new Memory<byte>(buffer, 0, count), cancellationToken).ConfigureAwait(false)
+                : _source.Read(position, new Span<byte>(buffer, 0, count));
             if (read == 0)
             {
                 throw new EndOfStreamException("The PDF stream ended before its declared length.");
@@ -4756,8 +4806,7 @@ internal sealed class PdfEngine : IDisposable
         while (remaining > 0)
         {
             int count = (int)Math.Min(buffer.Length, remaining);
-            _stream.Seek(readAt, SeekOrigin.Begin);
-            int read = _stream.Read(buffer, 0, count);
+            int read = _source.Read(readAt, new Span<byte>(buffer, 0, count));
             if (read == 0)
             {
                 throw new EndOfStreamException("A PDF stream object ended early.");
@@ -4780,15 +4829,15 @@ internal sealed class PdfEngine : IDisposable
             return false;
         }
 
-        _stream.Seek(_length - 1, SeekOrigin.Begin);
-        return _stream.ReadByte() != '\n';
+        var last = new byte[1];
+        return _source.Read(_length - 1, last) == 0 || last[0] != '\n';
     }
 
     private Stream OpenSigned(MemoryStream appendix, long lessThan, long gap)
     {
         return new SplicedStream(new[]
         {
-            new SplicedStream.Piece(_stream, 0, _length),
+            new SplicedStream.Piece(new PdfSliceStream(_source, 0, _length), 0, _length),
             new SplicedStream.Piece(appendix, 0, lessThan),
             new SplicedStream.Piece(appendix, lessThan + gap, appendix.Length - lessThan - gap),
         });
@@ -4803,7 +4852,7 @@ internal sealed class PdfEngine : IDisposable
 
         if (dict.Body is PdfObject.ExternalBody external)
         {
-            return new PdfSliceStream(external.Source, external.Start, external.ContentLength);
+            return new PdfSliceStream(PdfStreamSource.Borrow(external.Source), external.Start, external.ContentLength);
         }
 
         if (dict.Body is not PdfObject.FileBody file)
@@ -4817,6 +4866,11 @@ internal sealed class PdfEngine : IDisposable
     }
 
     private byte[] ReadDecoded(PdfObject.Dict dict, int cap)
+    {
+        return PdfSync.Result(ReadDecodedAsync(dict, cap, false, CancellationToken.None));
+    }
+
+    private async ValueTask<byte[]> ReadDecodedAsync(PdfObject.Dict dict, int cap, bool useAsync, CancellationToken cancellationToken)
     {
         if (dict.Body is PdfObject.MemoryBody memory)
         {
@@ -4833,10 +4887,15 @@ internal sealed class PdfEngine : IDisposable
             throw new PdfObjectTooLargeException("The stream is larger than " + cap.ToString(CultureInfo.InvariantCulture) + " bytes.");
         }
 
-        byte[] raw = ReadRange(file.Offset, (int)file.Length);
+        byte[] raw = await ReadRangeAsync(file.Offset, (int)file.Length, useAsync, cancellationToken).ConfigureAwait(false);
         if (_security != null && _security.EncryptsStream(dict))
         {
             raw = _security.Decrypt(raw, dict);
+        }
+
+        if (useAsync)
+        {
+            await PreloadFiltersAsync(dict, cancellationToken).ConfigureAwait(false);
         }
 
         List<string> filters = PdfStreamDecoder.FiltersOf(dict, Resolve);
@@ -4845,19 +4904,78 @@ internal sealed class PdfEngine : IDisposable
             return raw;
         }
 
+        if (useAsync)
+        {
+            await PreloadDecodeParmsAsync(dict, cancellationToken).ConfigureAwait(false);
+        }
+
         byte[] decoded = PdfStreamDecoder.Decode(raw, filters, PdfStreamDecoder.ParmsOf(dict, filters.Count, Resolve), cap);
         _decodedBytes += decoded.Length;
         return decoded;
     }
 
+    // D-55: the decoder resolves /Filter and its entries synchronously, so an asynchronous read loads them first and the
+    // decoder's resolver then finds them cached.
+    private async ValueTask PreloadFiltersAsync(PdfObject.Dict dict, CancellationToken cancellationToken)
+    {
+        if (await ResolvePresentAsync(dict.Get("Filter"), cancellationToken).ConfigureAwait(false) is PdfObject.Arr filters)
+        {
+            foreach (PdfObject item in filters.Items)
+            {
+                await ResolveAsync(item, true, cancellationToken).ConfigureAwait(false);
+            }
+        }
+    }
+
+    // The same for /DecodeParms, its entries, and the parameter values the decoder reads.
+    private async ValueTask PreloadDecodeParmsAsync(PdfObject.Dict dict, CancellationToken cancellationToken)
+    {
+        PdfObject? parms = await ResolvePresentAsync(dict.Get("DecodeParms"), cancellationToken).ConfigureAwait(false);
+        if (parms is PdfObject.Arr array)
+        {
+            foreach (PdfObject item in array.Items)
+            {
+                if (await ResolveAsync(item, true, cancellationToken).ConfigureAwait(false) is PdfObject.Dict entry)
+                {
+                    await PreloadParametersAsync(entry, cancellationToken).ConfigureAwait(false);
+                }
+            }
+        }
+        else if (parms is PdfObject.Dict one)
+        {
+            await PreloadParametersAsync(one, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private async ValueTask PreloadParametersAsync(PdfObject.Dict parms, CancellationToken cancellationToken)
+    {
+        foreach (string key in PdfStreamDecoder.DecoderParameters)
+        {
+            await ResolvePresentAsync(parms.Get(key), cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private async ValueTask<PdfObject?> ResolvePresentAsync(PdfObject? value, CancellationToken cancellationToken)
+    {
+        return value == null ? null : await ResolveAsync(value, true, cancellationToken).ConfigureAwait(false);
+    }
+
     private byte[] ReadRange(long offset, int count)
+    {
+        return PdfSync.Result(ReadRangeAsync(offset, count, false, CancellationToken.None));
+    }
+
+    // A source read may be partial, so the range is read until it is whole or the source ends.
+    private async ValueTask<byte[]> ReadRangeAsync(long offset, int count, bool useAsync, CancellationToken cancellationToken)
     {
         var buffer = new byte[count];
         int readTotal = 0;
         while (readTotal < count)
         {
-            _stream.Seek(offset + readTotal, SeekOrigin.Begin);
-            int read = _stream.Read(buffer, readTotal, Math.Min(65536, count - readTotal));
+            int chunk = Math.Min(65536, count - readTotal);
+            int read = useAsync
+                ? await _source.ReadAsync(offset + readTotal, new Memory<byte>(buffer, readTotal, chunk), cancellationToken).ConfigureAwait(false)
+                : _source.Read(offset + readTotal, new Span<byte>(buffer, readTotal, chunk));
             if (read == 0)
             {
                 throw new PdfParseException(offset, "Unexpected end of file.");
@@ -4869,12 +4987,12 @@ internal sealed class PdfEngine : IDisposable
         return buffer;
     }
 
-    private bool IsClassicXref(long offset)
+    private async ValueTask<bool> IsClassicXrefAsync(long offset, bool useAsync, CancellationToken cancellationToken)
     {
         _cursor.Seek(offset);
         while (true)
         {
-            int value = _cursor.PeekByte();
+            int value = await _cursor.PeekByteAsync(useAsync, cancellationToken).ConfigureAwait(false);
             if (value < 0)
             {
                 _cursor.Seek(offset);
@@ -4883,10 +5001,10 @@ internal sealed class PdfEngine : IDisposable
 
             if (value == '%')
             {
-                _cursor.ReadByte();
+                await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false);
                 while (true)
                 {
-                    int comment = _cursor.ReadByte();
+                    int comment = await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false);
                     if (comment < 0 || comment == '\n' || comment == '\r')
                     {
                         break;
@@ -4898,14 +5016,14 @@ internal sealed class PdfEngine : IDisposable
 
             if (value is 0 or 9 or 10 or 12 or 13 or 32)
             {
-                _cursor.ReadByte();
+                await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false);
                 continue;
             }
 
             break;
         }
 
-        bool match = _cursor.ReadByte() == 'x' && _cursor.ReadByte() == 'r' && _cursor.ReadByte() == 'e' && _cursor.ReadByte() == 'f';
+        bool match = await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false) == 'x' && await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false) == 'r' && await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false) == 'e' && await _cursor.ReadByteAsync(useAsync, cancellationToken).ConfigureAwait(false) == 'f';
         _cursor.Seek(offset);
         return match;
     }
@@ -5283,6 +5401,28 @@ internal sealed class PdfEngine : IDisposable
         public void Dispose()
         {
             _engine.EndOperation();
+        }
+    }
+
+    private readonly struct AppendScope : IDisposable
+    {
+        private readonly PdfStreamSource? _source;
+
+        public AppendScope(PdfStreamSource? source)
+        {
+            _source = source;
+            if (source != null)
+            {
+                source.Appending = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_source != null)
+            {
+                _source.Appending = false;
+            }
         }
     }
 
