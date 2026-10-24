@@ -63,7 +63,7 @@ public class SignatureInspectionInteropTests
         CorpusEntry entry = CorpusManifest.Get(id);
         IReadOnlyList<PdfSignatureInfo> signatures = AssertReadersAgree(File.ReadAllBytes(entry.FullPath), entry.Password);
 
-        PdfSignatureInfo signature = Assert.Single(signatures, s => s.HasSignatureDictionary);
+        PdfSignatureInfo signature = Assert.Single(signatures, s => s.HasSignatureValueDictionary);
         Assert.Equal(fieldName, signature.FieldName);
         Assert.Equal(certificationLevel, signature.CertificationLevel);
         Assert.NotNull(signature.SignerCertificate);
@@ -194,8 +194,8 @@ public class SignatureInspectionInteropTests
         JsonElement root = report.RootElement;
         Assert.Equal(
             root.GetProperty("fields").EnumerateArray().Select(f => (f.GetProperty("name").GetString(), f.GetProperty("signed").GetBoolean())).ToArray(),
-            signatures.Select(s => ((string?)s.FieldName, s.HasSignatureDictionary)).ToArray());
-        foreach (PdfSignatureInfo signature in signatures.Where(s => s.HasSignatureDictionary))
+            signatures.Select(s => ((string?)s.FieldName, s.HasSignatureValueDictionary)).ToArray());
+        foreach (PdfSignatureInfo signature in signatures.Where(s => s.HasSignatureValueDictionary))
         {
             AssertPyhankoAgrees(root.GetProperty("signatures").GetProperty(signature.FieldName), signature);
         }
@@ -245,7 +245,7 @@ public class SignatureInspectionInteropTests
             PdfSignatureInfo signature = signatures[i];
             List<string> lines = reported[i];
             Assert.Contains("Signature Field Name: " + signature.FieldName, lines);
-            if (!signature.HasSignatureDictionary)
+            if (!signature.HasSignatureValueDictionary)
             {
                 Assert.DoesNotContain(lines, line => line.StartsWith("Signature Type:", StringComparison.Ordinal));
                 continue;

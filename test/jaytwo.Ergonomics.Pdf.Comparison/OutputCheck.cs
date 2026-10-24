@@ -66,7 +66,7 @@ internal static class OutputCheck
         using (var document = PdfDocument.Open(file, leaveOpen: true))
         {
             PdfSignatureInfo signature = Assert.Single(document.Signatures);
-            Assert.True(signature.HasSignatureDictionary);
+            Assert.True(signature.HasSignatureValueDictionary);
             Assert.Equal("G7", signature.Reason);
             Assert.Equal(length, signature.ByteRangeEnd);
         }

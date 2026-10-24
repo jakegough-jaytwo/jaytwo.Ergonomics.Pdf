@@ -152,7 +152,7 @@ public class LargeWorkloadTests
                 signaturesProbe = new ProbeStream(file);
                 using var document = PdfDocument.Open(signaturesProbe, leaveOpen: true);
                 PdfSignatureInfo signature = Assert.Single(document.Signatures);
-                Assert.True(signature.HasSignatureDictionary);
+                Assert.True(signature.HasSignatureValueDictionary);
                 Assert.Equal("G7", signature.Reason);
                 Assert.Equal(signedLength, signature.ByteRangeEnd);
                 Assert.Equal(3, signature.ByteRangeRevisionNumber);

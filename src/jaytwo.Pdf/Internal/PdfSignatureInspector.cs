@@ -99,10 +99,14 @@ internal sealed class PdfSignatureInspector
         var sections = new List<RevisionSection>(_store.RevisionSections);
         sections.Reverse();
         var ends = new List<long>(sections.Count);
+        bool linearized = sections.Count > 1 && sections[1].Offset < sections[0].Offset;
         for (int i = 0; i < sections.Count; i++)
         {
-            long end = RevisionEnd(sections[i].EndOfSection);
-            bool linearizedFirstPageSection = i == 1 && sections[i].Offset < sections[i - 1].Offset;
+            // W-170: a footer names the section it follows. In a linearized file the main section's footer names the
+            // first-page section, and the first-page section's own startxref is not checked (ISO 32000-1 F.3).
+            bool linearizedFirstPageSection = linearized && i == 1;
+            long? named = linearized && i == 0 ? sections[1].Offset : linearizedFirstPageSection ? null : sections[i].Offset;
+            long end = RevisionEnd(sections[i].EndOfSection, named);
             if (linearizedFirstPageSection)
             {
                 ends[0] = Math.Max(ends[0], end);
@@ -144,7 +148,7 @@ internal sealed class PdfSignatureInspector
         return ends;
     }
 
-    private long RevisionEnd(long sectionEnd)
+    private long RevisionEnd(long sectionEnd, long? namedSection)
     {
         if (sectionEnd < 0 || sectionEnd >= _store.Length)
         {
@@ -155,17 +159,18 @@ internal sealed class PdfSignatureInspector
         byte[] footer = _store.ReadRange(sectionEnd, count);
         byte[] startXref = Encoding.ASCII.GetBytes("startxref");
 
-        // ISO 32000-1 7.5.5 and 7.5.8.1: the section's own footer follows it, after white space only. A footer found
-        // further on belongs to a later revision, so a section without one does not borrow it (W-150).
-        int marker = 0;
-        while (marker < footer.Length && footer[marker] is 0 or 9 or 10 or 12 or 13 or 32)
-        {
-            marker++;
-        }
-
-        if (!StartsWith(footer, startXref, marker) || !PdfDocumentLoader.TryParseStartXref(footer, marker + startXref.Length, out _))
+        // ISO 32000-1 7.5.5 and 7.5.8.1: the section's own footer follows it, after white space and comments (7.2.3).
+        // A footer found further on belongs to a later revision, so a section without one does not borrow it (W-150),
+        // and a footer that names another section is not this one's (W-170).
+        int marker = SkipWhiteSpaceAndComments(footer, 0);
+        if (!StartsWith(footer, startXref, marker) || !PdfDocumentLoader.TryParseStartXref(footer, marker + startXref.Length, out long named))
         {
             throw new PdfParseException(sectionEnd, "The cross-reference section is not followed by its own startxref / %%EOF footer.");
+        }
+
+        if (namedSection is long expected && named != expected)
+        {
+            throw new PdfParseException(sectionEnd, "The footer after the cross-reference section names another section.");
         }
 
         byte[] eof = Encoding.ASCII.GetBytes("%%EOF");
@@ -217,7 +222,7 @@ internal sealed class PdfSignatureInspector
             SignatureText(signature.Get("Location")),
             SignatureText(signature.Get("ContactInfo")),
             byteRange,
-            ByteRangeStatusOf(byteRange),
+            ByteRangeStatusOf(byteRange, offset),
             byteRange is PdfByteRange numbered && revisionNumbers.TryGetValue(numbered.Offset1 + numbered.Length1, out int revisionNumber) ? revisionNumber : null,
             byteRange is PdfByteRange signed && _store.StartXref >= signed.Offset1 + signed.Length1,
             cms?.TimestampTime,
@@ -256,10 +261,10 @@ internal sealed class PdfSignatureInspector
         return new PdfByteRange(numbers[0], numbers[1], numbers[2], numbers[3]);
     }
 
-    // W-150, ISO 32000-1 12.8.1: the first range starts the file, the gap between the ranges is the /Contents hex string
-    // with its delimiters, and both ranges lie inside the file. The checks follow the order of PdfByteRangeStatus. Only the
-    // two delimiter bytes are read; they sit in the gap, outside the signed bytes.
-    private PdfByteRangeStatus ByteRangeStatusOf(PdfByteRange? byteRange)
+    // W-150 and W-170, ISO 32000-1 12.8.1: the first range starts the file, neither range is empty, both lie inside the
+    // file in order, and the gap between them is exactly the signature dictionary's own /Contents hex string as written.
+    // The checks follow the order of PdfByteRangeStatus. Only the signature dictionary is read again, never the signed bytes.
+    private PdfByteRangeStatus ByteRangeStatusOf(PdfByteRange? byteRange, long signatureOffset)
     {
         if (byteRange is not PdfByteRange range)
         {
@@ -269,6 +274,11 @@ internal sealed class PdfSignatureInspector
         if (range.Offset0 != 0)
         {
             return PdfByteRangeStatus.NotFromFileStart;
+        }
+
+        if (range.Length0 == 0 || range.Length1 == 0)
+        {
+            return PdfByteRangeStatus.EmptyRange;
         }
 
         long gapStart = range.Length0;
@@ -282,17 +292,107 @@ internal sealed class PdfSignatureInspector
             return PdfByteRangeStatus.Overlapping;
         }
 
-        if (_store.ReadRange(gapStart, 1)[0] != (byte)'<' || _store.ReadRange(range.Offset1 - 1, 1)[0] != (byte)'>')
+        if (ContentsSpan(signatureOffset) is not (long start, long end) || start != gapStart || end != range.Offset1)
         {
-            return PdfByteRangeStatus.GapNotHexString;
+            return PdfByteRangeStatus.GapNotContents;
         }
 
         return PdfByteRangeStatus.WellFormed;
     }
 
+    // The source offsets where the uncompressed signature dictionary's /Contents hex string starts and ends, read
+    // lexically from the file. Null when the dictionary is in an object stream (offset 0) or /Contents is not a hex
+    // string written directly in it.
+    private (long Start, long End)? ContentsSpan(long signatureOffset)
+    {
+        if (signatureOffset <= 0)
+        {
+            return null;
+        }
+
+        PdfCursor cursor = _store.Cursor;
+        cursor.Seek(signatureOffset);
+        var parser = new PdfParser(cursor, null, 0);
+        PdfLexer lexer = parser.Lexer;
+        if (PdfSync.Result(lexer.NextAsync()).Kind != PdfTokenKind.Integer
+            || PdfSync.Result(lexer.NextAsync()).Kind != PdfTokenKind.Integer
+            || PdfSync.Result(lexer.NextAsync()) is not { Kind: PdfTokenKind.Keyword, Text: "obj" }
+            || PdfSync.Result(lexer.NextAsync()).Kind != PdfTokenKind.DictStart)
+        {
+            return null;
+        }
+
+        while (true)
+        {
+            PdfToken key = PdfSync.Result(lexer.NextAsync());
+            if (key.Kind != PdfTokenKind.Name)
+            {
+                return null;
+            }
+
+            SkipWhiteSpaceAndComments(lexer);
+            long start = cursor.Position;
+            bool hex = PdfSync.Result(lexer.PeekByteAsync()) == '<';
+            PdfObject value = parser.ParseValue();
+            if (key.Text == "Contents")
+            {
+                return hex && value is PdfObject.Str ? (start, cursor.Position) : null;
+            }
+        }
+    }
+
+    private static void SkipWhiteSpaceAndComments(PdfLexer lexer)
+    {
+        while (true)
+        {
+            int b = PdfSync.Result(lexer.PeekByteAsync());
+            if (b == '%')
+            {
+                while (b >= 0 && b is not (10 or 13))
+                {
+                    PdfSync.Result(lexer.ReadByteAsync());
+                    b = PdfSync.Result(lexer.PeekByteAsync());
+                }
+            }
+            else if (b >= 0 && PdfLexer.IsWhitespace(b))
+            {
+                PdfSync.Result(lexer.ReadByteAsync());
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
     private string? SignatureText(PdfObject? value)
     {
         return _store.ResolveMaybe(value) is PdfObject.Str text ? PdfTextCodec.Decode(text.Raw) : null;
+    }
+
+    // A comment runs from % to the end of the line, and its line end is white space.
+    private static int SkipWhiteSpaceAndComments(byte[] data, int index)
+    {
+        while (index < data.Length)
+        {
+            if (PdfLexer.IsWhitespace(data[index]))
+            {
+                index++;
+            }
+            else if (data[index] == (byte)'%')
+            {
+                while (index < data.Length && data[index] is not (10 or 13))
+                {
+                    index++;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return index;
     }
 
     private static bool StartsWith(byte[] data, byte[] needle, int start)

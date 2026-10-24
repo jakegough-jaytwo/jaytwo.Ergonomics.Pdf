@@ -27,7 +27,7 @@ public class SignatureInspectionTests
         PdfSignatureInfo signature = Assert.Single(document.Signatures);
 
         Assert.Equal("ExistingSig", signature.FieldName);
-        Assert.False(signature.HasSignatureDictionary);
+        Assert.False(signature.HasSignatureValueDictionary);
         Assert.Null(signature.SubFilter);
         Assert.Null(signature.SignerCertificate);
         Assert.Empty(signature.Certificates);
@@ -63,7 +63,7 @@ public class SignatureInspectionTests
         PdfSignatureInfo signature = Assert.Single(document.Signatures);
 
         Assert.Equal("Signature1", signature.FieldName);
-        Assert.True(signature.HasSignatureDictionary);
+        Assert.True(signature.HasSignatureValueDictionary);
         Assert.Equal("adbe.pkcs7.detached", signature.SubFilter);
         Assert.Equal(leaf.RawData, signature.SignerCertificate);
         Assert.Equal(new[] { leaf.RawData, root.RawData }.OrderBy(Convert.ToBase64String), signature.Certificates.OrderBy(Convert.ToBase64String));
@@ -282,7 +282,7 @@ public class SignatureInspectionTests
         Assert.Equal(new[] { "Approval", "Empty" }, signatures.Select(s => s.FieldName));
         Assert.Equal(3, document.AcroForm.Fields.Count);
         PdfSignatureInfo approval = signatures[0];
-        Assert.True(approval.HasSignatureDictionary);
+        Assert.True(approval.HasSignatureValueDictionary);
         Assert.Equal("adbe.x509.rsa_sha1", approval.SubFilter);
         Assert.Null(approval.SignerCertificate);
         Assert.Empty(approval.Certificates);
@@ -293,7 +293,7 @@ public class SignatureInspectionTests
         Assert.Equal(50, approval.ByteRangeEnd);
         Assert.True(approval.HasLaterRevisions);
         Assert.Equal(3, approval.CertificationLevel);
-        Assert.False(signatures[1].HasSignatureDictionary);
+        Assert.False(signatures[1].HasSignatureValueDictionary);
     }
 
     [Theory]
@@ -318,11 +318,14 @@ public class SignatureInspectionTests
     [Theory]
     [InlineData("", PdfByteRangeStatus.Missing)]
     [InlineData("/ByteRange [1 10 20 30]", PdfByteRangeStatus.NotFromFileStart)]
+    [InlineData("/ByteRange [0 0 20 30]", PdfByteRangeStatus.EmptyRange)]
+    [InlineData("/ByteRange [0 10 20 0]", PdfByteRangeStatus.EmptyRange)]
+    [InlineData("/ByteRange [0 10 999999 0]", PdfByteRangeStatus.EmptyRange)]
     [InlineData("/ByteRange [0 10 20 999999]", PdfByteRangeStatus.PastEndOfFile)]
     [InlineData("/ByteRange [0 999999 1000001 1]", PdfByteRangeStatus.PastEndOfFile)]
     [InlineData("/ByteRange [0 20 10 30]", PdfByteRangeStatus.Overlapping)]
     [InlineData("/ByteRange [0 10 11 30]", PdfByteRangeStatus.Overlapping)]
-    [InlineData("/ByteRange [0 10 20 30]", PdfByteRangeStatus.GapNotHexString)]
+    [InlineData("/ByteRange [0 10 20 30]", PdfByteRangeStatus.GapNotContents)]
     public void byte_range_structure_is_reported_separately(string byteRange, PdfByteRangeStatus expected)
     {
         using var stream = new MemoryStream(SignatureFieldFile("/SubFilter /adbe.x509.rsa_sha1 /Contents <0102> " + byteRange), writable: false);
@@ -330,7 +333,7 @@ public class SignatureInspectionTests
 
         PdfSignatureInfo signature = document.Signatures[0];
 
-        Assert.True(signature.HasSignatureDictionary);
+        Assert.True(signature.HasSignatureValueDictionary);
         Assert.Equal(expected, signature.ByteRangeStatus);
         Assert.Null(signature.ByteRangeRevisionNumber);
         Assert.All(document.Revisions, revision => Assert.False(revision.EndsAtSignatureByteRange));
@@ -344,14 +347,7 @@ public class SignatureInspectionTests
     [InlineData(1, null)]
     public void well_formed_byte_range_claims_the_revision_it_ends_at(int shortBy, int? revision)
     {
-        byte[] pdf = SignatureFieldFile("/SubFilter /adbe.x509.rsa_sha1 /Contents <0102> /ByteRange [0000000000 0000000000 0000000000 0000000000]");
-        string text = Encoding.ASCII.GetString(pdf);
-        int gapStart = text.IndexOf("<0102>", StringComparison.Ordinal);
-        int gapEnd = gapStart + "<0102>".Length;
-        string range = gapStart.ToString("D10", CultureInfo.InvariantCulture) + " " + gapEnd.ToString("D10", CultureInfo.InvariantCulture) + " " + (pdf.Length - gapEnd - shortBy).ToString("D10", CultureInfo.InvariantCulture);
-        int placeholder = text.IndexOf("[0000000000 ", StringComparison.Ordinal) + 1;
-        byte[] patched = Encoding.ASCII.GetBytes("0000000000 " + range);
-        Buffer.BlockCopy(patched, 0, pdf, placeholder, patched.Length);
+        byte[] pdf = ByteRangeAround("/Contents <0102>", "<0102>", shortBy);
         using var stream = new MemoryStream(pdf, writable: false);
         using var document = PdfDocument.Open(stream, leaveOpen: true);
 
@@ -362,6 +358,25 @@ public class SignatureInspectionTests
         Assert.Equal(revision, signature.ByteRangeRevisionNumber);
         Assert.False(signature.HasLaterRevisions);
         Assert.Equal(revision != null, Assert.Single(document.Revisions).EndsAtSignatureByteRange);
+    }
+
+    // W-170: a gap around another hex string in the same dictionary, or around /Contents written with a comment and
+    // padding inside it, is judged by where /Contents itself is written.
+    [Theory]
+    [InlineData("/Cert <0304> /Contents <0102>", "<0304>", PdfByteRangeStatus.GapNotContents)]
+    [InlineData("/Contents <0304> /Cert <0102>", "<0102>", PdfByteRangeStatus.GapNotContents)]
+    [InlineData("/Contents (literal) /Cert <0102>", "<0102>", PdfByteRangeStatus.GapNotContents)]
+    [InlineData("/Contents % a comment\n<01 02>", "<01 02>", PdfByteRangeStatus.WellFormed)]
+    public void the_gap_must_be_the_dictionarys_own_contents(string entries, string gap, PdfByteRangeStatus expected)
+    {
+        byte[] pdf = ByteRangeAround(entries, gap, 0);
+        using var stream = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+
+        PdfSignatureInfo signature = document.Signatures[0];
+
+        Assert.Equal(expected, signature.ByteRangeStatus);
+        Assert.Equal(1, signature.ByteRangeRevisionNumber);
     }
 
     [Fact]
@@ -408,6 +423,21 @@ public class SignatureInspectionTests
 
         Assert.False(sparse.TouchedHole);
         Assert.True(sparse.BytesRead - before < 2 * 1024 * 1024);
+    }
+
+    // The signature field file with a /ByteRange whose gap is the first occurrence of `gap`, ending `shortBy` bytes before
+    // the file ends. The non-CMS sub-filter keeps the made-up values unparsed.
+    private static byte[] ByteRangeAround(string entries, string gap, int shortBy)
+    {
+        byte[] pdf = SignatureFieldFile("/SubFilter /adbe.x509.rsa_sha1 " + entries + " /ByteRange [0000000000 0000000000 0000000000 0000000000]");
+        string text = Encoding.ASCII.GetString(pdf);
+        int gapStart = text.IndexOf(gap, StringComparison.Ordinal);
+        int gapEnd = gapStart + gap.Length;
+        string range = gapStart.ToString("D10", CultureInfo.InvariantCulture) + " " + gapEnd.ToString("D10", CultureInfo.InvariantCulture) + " " + (pdf.Length - gapEnd - shortBy).ToString("D10", CultureInfo.InvariantCulture);
+        int placeholder = text.IndexOf("[0000000000 ", StringComparison.Ordinal) + 1;
+        byte[] patched = Encoding.ASCII.GetBytes("0000000000 " + range);
+        Buffer.BlockCopy(patched, 0, pdf, placeholder, patched.Length);
+        return pdf;
     }
 
     private static byte[] SignatureFieldFile(string signatureEntries)

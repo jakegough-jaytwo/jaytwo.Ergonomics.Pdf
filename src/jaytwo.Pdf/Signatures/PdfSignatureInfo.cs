@@ -6,16 +6,20 @@ namespace jaytwo.Pdf.Signatures;
 
 /// <summary>
 /// One signature field and what its signature dictionary and CMS value say about the signature (spec R9).
-/// Nothing here is validated: the signature is not verified, the certificates are not checked for trust or revocation,
-/// and the bytes the byte range covers are not read. Field population (<see cref="HasSignatureDictionary"/>), the
-/// structure of the byte range (<see cref="ByteRangeStatus"/>), and the revision it claims (<see cref="ByteRangeRevisionNumber"/>)
-/// are separate facts; none implies another or a valid signature.
+/// Field population (<see cref="HasSignatureValueDictionary"/>), the structure of the byte range (<see cref="ByteRangeStatus"/>),
+/// and the revision it claims (<see cref="ByteRangeRevisionNumber"/>) are separate facts; none implies another.
 /// </summary>
+/// <remarks>
+/// Inspection is structural. It does not verify the CMS signature value or the signed digest, the signer's identity or
+/// certificate trust, revocation, a time-stamp token, PAdES conformance, or whether a later change was permitted, and
+/// it does not read the bytes the byte range covers. A signature can be reported in full, with a well-formed byte
+/// range, and still be invalid. Whether the signature dictionary itself lies inside the signed ranges is not checked.
+/// </remarks>
 public sealed class PdfSignatureInfo
 {
     internal PdfSignatureInfo(
         string fieldName,
-        bool hasSignatureDictionary,
+        bool hasSignatureValueDictionary,
         string? subFilter,
         byte[]? signerCertificate,
         IReadOnlyList<byte[]> certificates,
@@ -35,7 +39,7 @@ public sealed class PdfSignatureInfo
         int? certificationLevel)
     {
         FieldName = fieldName;
-        HasSignatureDictionary = hasSignatureDictionary;
+        HasSignatureValueDictionary = hasSignatureValueDictionary;
         SubFilter = subFilter;
         SignerCertificate = signerCertificate;
         Certificates = certificates ?? throw new ArgumentNullException(nameof(certificates));
@@ -74,7 +78,7 @@ public sealed class PdfSignatureInfo
     /// dictionary. It says the field is populated, not that the dictionary is complete or the signature valid.
     /// When false, every other property is null, empty, or false, and <see cref="ByteRangeStatus"/> is <see cref="PdfByteRangeStatus.Missing"/>.
     /// </summary>
-    public bool HasSignatureDictionary { get; }
+    public bool HasSignatureValueDictionary { get; }
 
     /// <summary>
     /// Gets the <c>/SubFilter</c> name without the slash, such as <c>adbe.pkcs7.detached</c>, <c>ETSI.CAdES.detached</c>,

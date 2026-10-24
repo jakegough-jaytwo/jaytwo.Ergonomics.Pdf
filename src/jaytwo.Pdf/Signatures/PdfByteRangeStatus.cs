@@ -19,6 +19,11 @@ public enum PdfByteRangeStatus
     NotFromFileStart,
 
     /// <summary>
+    /// The first or the second range has length 0. A signed revision has bytes on both sides of its <c>/Contents</c> value.
+    /// </summary>
+    EmptyRange,
+
+    /// <summary>
     /// The first range, or the second range, ends past the end of the file.
     /// </summary>
     PastEndOfFile,
@@ -29,12 +34,16 @@ public enum PdfByteRangeStatus
     Overlapping,
 
     /// <summary>
-    /// The gap between the ranges does not start with <c>&lt;</c> and end with <c>&gt;</c>, so it is not a hex string such as <c>/Contents</c>.
+    /// The gap between the ranges is not exactly the signature dictionary's own <c>/Contents</c> hex string as the file
+    /// writes it, from its <c>&lt;</c> to its <c>&gt;</c>. A signature dictionary stored in an object stream reports this,
+    /// because its <c>/Contents</c> has no place in the file that a gap could match.
     /// </summary>
-    GapNotHexString,
+    GapNotContents,
 
     /// <summary>
-    /// The first range starts at offset 0, both ranges are inside the file in order, and the gap between them is delimited as a hex string.
+    /// The first range starts at offset 0, neither range is empty, both are inside the file in order, and the gap between
+    /// them is exactly the signature dictionary's <c>/Contents</c> hex string. This is structure only: the signed bytes
+    /// are not hashed and the signature is not verified.
     /// </summary>
     WellFormed,
 }

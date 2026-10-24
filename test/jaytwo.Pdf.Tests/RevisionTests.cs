@@ -162,6 +162,55 @@ public class RevisionTests
         Assert.Equal(1, document.PageCount);
     }
 
+    // W-170, ISO 32000-1 7.2.3: a comment is white space, so one between a section and its footer is allowed.
+    [Fact]
+    public void comment_before_a_historical_footer_is_white_space()
+    {
+        (byte[] pdf, long baseEnd) = TwoRevisions(footer => "% written by a tool\r\n" + footer);
+
+        using var source = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+
+        Assert.Collection(
+            document.Revisions,
+            revision => AssertRevision(revision, 1, baseEnd, false),
+            revision => AssertRevision(revision, 2, pdf.Length, false));
+    }
+
+    // W-170: the footer's offset must name the section it follows; one that names another section is not its footer.
+    [Fact]
+    public void historical_footer_that_names_another_section_blocks_revision_listing()
+    {
+        (byte[] pdf, _) = TwoRevisions(footer => "startxref\n9\n%%EOF\n");
+
+        using var source = new MemoryStream(pdf, writable: false);
+        using var document = PdfDocument.Open(source, leaveOpen: true);
+
+        Assert.Throws<PdfParseException>(() => document.Revisions);
+        Assert.Equal(1, document.PageCount);
+    }
+
+    // A base revision whose footer the caller rewrites, then a classic update with its own footer.
+    private static (byte[] Pdf, long BaseEnd) TwoRevisions(Func<string, string> rewriteBaseFooter)
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        long baseXref = builder.Length;
+        byte[] original = builder.Finish();
+        int footerAt = LastIndexOf(original, Encoding.ASCII.GetBytes("startxref"));
+        string footer = Encoding.ASCII.GetString(original, footerAt, original.Length - footerAt);
+        using var output = new MemoryStream();
+        output.Write(original, 0, footerAt);
+        WriteAscii(output, rewriteBaseFooter(footer));
+        long baseEnd = output.Length;
+        long objectOffset = output.Length;
+        WriteAscii(output, "4 0 obj\n<< >>\nendobj\n");
+        long xref = output.Length;
+        WriteAscii(output, "xref\n4 1\n" + objectOffset.ToString("D10", CultureInfo.InvariantCulture) + " 00000 n\r\n"
+            + "trailer\n<< /Size 5 /Root 1 0 R /Prev " + baseXref.ToString(CultureInfo.InvariantCulture) + " >>\nstartxref\n"
+            + xref.ToString(CultureInfo.InvariantCulture) + "\n%%EOF\n");
+        return (output.ToArray(), baseEnd);
+    }
+
     private static void AssertReadersAgree(string path, string? password)
     {
         IReadOnlyList<PdfRevision> revisions;
@@ -187,7 +236,7 @@ public class RevisionTests
         }
 
         JsonElement signatureRevisions = report.RootElement.GetProperty("signatureRevisions");
-        foreach (PdfSignatureInfo signature in signatures.Where(item => item.HasSignatureDictionary))
+        foreach (PdfSignatureInfo signature in signatures.Where(item => item.HasSignatureValueDictionary))
         {
             JsonElement number = signatureRevisions.GetProperty(signature.FieldName);
             Assert.Equal(number.ValueKind == JsonValueKind.Null ? null : number.GetInt32(), signature.ByteRangeRevisionNumber);
