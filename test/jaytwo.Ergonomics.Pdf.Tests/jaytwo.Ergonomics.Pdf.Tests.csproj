@@ -11,4 +11,23 @@
     <ProjectReference Include="..\..\src\jaytwo.Ergonomics.Pdf\jaytwo.Ergonomics.Pdf.csproj" />
   </ItemGroup>
 
+  <!-- W-142: engine test helpers that use only the public jaytwo.Pdf API. TestCompat.cs here stands in for theirs. -->
+  <ItemGroup>
+    <Compile Include="..\jaytwo.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\StandardEncryptor.cs" Link="Shared\StandardEncryptor.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\TestPdfSource.cs" Link="Shared\TestPdfSource.cs" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <!-- The .NET Framework test host redirects Unsafe to 6.0.0.0; ship that version so the redirect resolves. -->
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>

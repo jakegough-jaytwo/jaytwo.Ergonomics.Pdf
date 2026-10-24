@@ -16,6 +16,7 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 6. Inspect existing signatures: signer and embedded certificates, algorithms, claimed times, byte ranges, later revisions, time-stamp times, and certification level. Nothing is validated.
 7. List logical revisions with their end offsets and signature coverage, including linearized files.
 8. Open a seekable stream or a random-access `IPdfSource` snapshot, synchronously or asynchronously with cancellation.
+9. Run a workflow with `jaytwo.Ergonomics.Pdf`: describe document information changes to an existing PDF, then apply them as one incremental revision to a stream, to a file through a temporary sibling, or to the source itself (see **Workflows**).
 
 Everything else in this README describes what ships today.
 
@@ -131,6 +132,27 @@ Pass the password to `Open(stream, password)` when the file requires one. `Open(
 `Pages` reports each page number, media box, crop box, and rotation, which is enough to place a signature rectangle. Set the editor's `Pages[n].Rotation` to rotate a page in 90-degree increments. Every rectangle and box is PDF user space as the file stores it: the origin is the bottom-left corner, y increases upward, and one unit is 1/72 inch. Nothing is translated to a top-left or on-screen system, and changing rotation does not change those coordinates. `/UserUnit` is not applied, so on a page that declares it, one unit is that multiple of 1/72 inch. `Sign` reuses an existing empty signature field named by `FieldName` and keeps its `/Rect` and `/P`. A null `FieldName` creates `SignatureN`. Signing that field again throws `PdfSignException`. A name that is not a signature field throws `PdfSignException`. `AcroForm.GetFields` looks a field up by its dotted name. Check boxes and radios expose `IsChecked`, so the on-state name does not have to be guessed. For buttons, `ExportValue` and `SetRadio` use that appearance on-state name; a button `/Opt` array is not mapped to another public value. Choice fields expose `/Opt` as `Options`; `SetChoice` writes those export values, and a multi-select value is a PDF array. `Metadata["Key"]` reads the information dictionary, including private keys, and the editor's `Metadata["Key"]` writes it. `Trapped` stays a name (`True`, `False`, or `Unknown`). Attachments can be opened by name. `Signatures` and `Revisions` report structural claims, not validation: `SigningTime` is the signer's claim, `IsCoveredBySignature` only matches a `/ByteRange` end offset, and `HasLaterRevisions` says only that an update follows the signed revision, not whether that update is permitted.
 
 PDF 1.0 through 1.7, the operations above, standard security revisions 2 through 6, and the caps above. A file past a cap throws before the destination grows. This is not a promise that every conforming PDF can be modified.
+
+### Workflows
+
+`jaytwo.Ergonomics.Pdf` describes changes to one existing PDF and runs them through one `jaytwo.Pdf` editor, so the caller does not manage a document, an editor, or a temporary file. Document information is the first workflow operation.
+
+```csharp
+using jaytwo.Ergonomics.Pdf;
+
+PdfWorkflowResult result = await PdfWorkflow.FromFile("order.pdf")
+    .WithTitle("Executed Order")
+    .WithMetadata(new PdfMetadataChanges { Author = "Contracts", Keywords = null })
+    .SaveAsync("order-final.pdf", new PdfFileSaveOptions { Overwrite = true }, cancellationToken);
+```
+
+`PdfWorkflow.From` binds a readable seekable stream or an `IPdfSource`, and `FromFile` binds a path, with an optional password in `PdfWorkflowOpenOptions`. Neither they nor `WithTitle` and `WithMetadata` read anything; the input is opened by the terminal call. `PdfMetadataChanges` changes only the properties its initializer assigns: the title, author, subject, keywords, creator, and producer. An assigned `null` removes the entry, and an unassigned property keeps its value. Operations apply in the order described, in one revision, and the original bytes stay a prefix.
+
+The terminal calls are `Save` to a stream, `Save` to a path, and `AppendToSource`, each with an asynchronous form that takes a `CancellationToken`. `Save` to a stream needs an empty writable seekable stream other than the input, and with no changes it writes a copy. `AppendToSource` appends to the bound stream or file, writes nothing when nothing changed, and is refused for an `IPdfSource` or a stream that is not writable. In an asynchronous run, opening and copying read asynchronously, but applying the operations and preparing the revision still read the input synchronously. `PdfWorkflowResult` reports `Modified` and `OutputLength`.
+
+A workflow runs once. After a terminal call begins, whether it succeeds, fails, is canceled, or rejects its own arguments, every further terminal call and operation method throws `InvalidOperationException`. Of two concurrent terminal calls, exactly one runs. The workflow never disposes a stream or source the caller passed, and it closes a file it opened from a path when the run ends. Argument errors are thrown before the input opens: an unusable destination stream, a destination path that is the input, a missing destination directory, or an existing file without `Overwrite`. Engine exceptions, such as `PdfEncryptionRestrictedException` for a metadata write that the user password does not permit, propagate unchanged. Nothing is written until every operation has been applied, and after a failure a stream destination is left at its starting length.
+
+`Save` to a path writes `.<name>.<random>.tmp` beside the destination, flushes it to disk unless `FlushToDisk` is false, and then moves it into place. After a failure or cancellation, the temporary file is deleted and the destination is left as it was. An existing destination is replaced only with `Overwrite`. A destination that may be the input is refused: one whose full path is the input's (ignoring case on Windows and macOS, and resolving a symbolic link in the last segment on .NET 6 and later), and, when replacing, an existing file with the input's length and last-write time. That also refuses a copy whose timestamps were copied. These checks are best-effort safeguards, not proof of file identity. On Unix, a destination that is a symbolic link is replaced as a link, and its target is unchanged. Other hard links to a replaced file keep its old content, and on Windows replacing a hard link to the open input fails. The destination directory is not flushed, and no power-loss durability is claimed.
 
 ## Build
 
