@@ -40,6 +40,7 @@ $Msys2Pin = @{
 $Msys2Packages = @(
     'mingw-w64-ucrt-x86_64-nss',
     'mingw-w64-ucrt-x86_64-openssl',
+    'mingw-w64-ucrt-x86_64-mupdf-tools',
     'mingw-w64-ucrt-x86_64-poppler',
     'mingw-w64-ucrt-x86_64-qpdf'
 )
@@ -143,7 +144,7 @@ if (-not [Environment]::Is64BitOperatingSystem -or $env:OS -ne 'Windows_NT') {
 New-Item -ItemType Directory -Force $ToolsDirectory | Out-Null
 $ToolsDirectory = (Resolve-Path $ToolsDirectory).Path
 
-# MSYS2: Poppler (pdftotext, pdftoppm, pdfinfo, and pdfsig with NSS), NSS certutil, qpdf, and OpenSSL.
+# MSYS2: Poppler (pdftotext, pdftoppm, pdfinfo, and pdfsig with NSS), NSS certutil, MuPDF mutool, qpdf, and OpenSSL.
 $msys64 = Join-Path $ToolsDirectory 'msys64'
 $bash = Join-Path $msys64 'usr\bin\bash.exe'
 $msysEnvironment = @{ MSYSTEM = 'UCRT64'; CHERE_INVOKING = '1'; MSYS2_PATH_TYPE = 'minimal' }
@@ -220,6 +221,7 @@ $ucrtBin = Join-Path $msys64 'ucrt64\bin'
 $softhsmLibrary = Find-One $softhsm 'softhsm2-x64.dll'
 $variables = [ordered]@{
     JAYTWO_CERTUTIL = Join-Path $ucrtBin 'certutil.exe'
+    JAYTWO_MUTOOL = Join-Path $ucrtBin 'mutool.exe'
     JAYTWO_OPENSSL = Join-Path $ucrtBin 'openssl.exe'
     JAYTWO_PDFINFO = Join-Path $ucrtBin 'pdfinfo.exe'
     JAYTWO_PDFSIG = Join-Path $ucrtBin 'pdfsig.exe'
@@ -256,6 +258,7 @@ Set-Content -Encoding utf8 -Path $runSettings -Value $lines
 $versions = @()
 $versions += (Get-FirstLine $variables.JAYTWO_QPDF '--version')
 $versions += 'poppler ' + (Get-FirstLine $variables.JAYTWO_PDFINFO '-v')
+$versions += 'mupdf ' + (Get-FirstLine $variables.JAYTWO_MUTOOL '-v')
 $versions += (Get-FirstLine $variables.JAYTWO_OPENSSL 'version')
 $versions += (Get-FirstLine $python '--version')
 $versions += (Invoke-Native $uvExe @('pip', 'list', '--python', $python) $uvEnvironment | Select-String -Pattern '^(pyhanko|pyhanko-certvalidator|pypdf) ' | ForEach-Object { $_.Line })

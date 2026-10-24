@@ -29,6 +29,7 @@ FROM dotnet-sdk AS base
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     libnss3-tools \
+    mupdf-tools \
     openssl \
     poppler-utils \
     python-is-python3 \

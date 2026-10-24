@@ -172,7 +172,7 @@ A workflow runs once. After a terminal call begins, whether it succeeds, fails, 
 dotnet test jaytwo.Ergonomics.Pdf.sln
 ```
 
-The interop tests check the library's output with external tools: qpdf, Poppler (including `pdfsig` with NSS), SoftHSM 2, OpenSSL 3, and Python with pyHanko and pypdf. A test fails when its tool is missing. `make unit-test` runs the interop tests on `net10.0` only, because the library writes the same bytes on every target; a test on every target checks that. `make quiet-test LANE=fast` leaves out the tests that need tools, the corpus, or large data.
+The interop tests check the library's output with external tools: qpdf, Poppler (including `pdfsig` with NSS), MuPDF `mutool`, SoftHSM 2, OpenSSL 3, and Python with pyHanko and pypdf. A test fails when its tool is missing. `make unit-test` runs the interop tests on `net10.0` only, because the library writes the same bytes on every target; a test on every target checks that. `make quiet-test LANE=fast` leaves out the tests that need tools, the corpus, or large data.
 
 - **Windows:** run `powershell -ExecutionPolicy Bypass -File tools/test-tools/install.ps1` once. It installs pinned, hash-checked copies of the tools into the git-ignored `.tools/` folder (about 1 GB) without administrator rights, and writes `.tools/test.runsettings`, which `dotnet test` and IDE test runners load. No environment variables or `PATH` changes are needed. Rerunning it after a pin changes updates only that tool. The tests need the .NET 6, 8, and 10 runtimes; the script reports any that are missing.
 - **Linux or any machine with Docker:** `make docker-builder docker-test` runs the suite in the image the `Dockerfile` builds, which has every tool.

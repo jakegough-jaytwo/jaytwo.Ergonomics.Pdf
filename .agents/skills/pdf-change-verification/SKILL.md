@@ -16,7 +16,7 @@ Use these terms precisely:
 - **Independently validated:** an implementation written elsewhere accepted or verified the named property; record the tool, its version, and the property.
 - **Production-qualified:** every applicable gate in `QUALIFICATION.md` passed.
 
-The same agent running qpdf, pyHanko, pypdf, Poppler, SoftHSM, or OpenSSL can gather independent-tool evidence. It is not an independent human or fresh-context review.
+The same agent running qpdf, pyHanko, pypdf, Poppler, MuPDF, SoftHSM, or OpenSSL can gather independent-tool evidence. It is not an independent human or fresh-context review.
 
 Claim a test passed only when you ran it and have the output. Counting test declarations is an inventory, not a result.
 

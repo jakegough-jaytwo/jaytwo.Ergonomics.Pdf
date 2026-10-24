@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using jaytwo.Pdf.AcroForm;
 using Xunit;
 
@@ -13,138 +11,38 @@ namespace jaytwo.Pdf.Tests;
 
 public class AppearanceRenderTests
 {
-    // Poppler paints a widget appearance and the same form XObject drawn by Do with the same placement, but its glyph
+    // A renderer paints a widget appearance and the same form XObject drawn by Do with the same placement, but its glyph
     // anti-aliasing can differ in a few pixels: 22 pixels of the 4.5-point text the fill generates on page 5 of the FAA
-    // 8710-1, with the text in the same place. A misplaced or missing appearance changes far more.
+    // 8710-1 in Poppler, with the text in the same place. A misplaced or missing appearance changes far more.
     private const int MaxAntialiasPixels = 48;
 
     [Fact]
     [Trait(Lane.Trait, Lane.Interop)]
-    public void poppler_renders_generated_text_choice_checkbox_and_radio_appearances()
+    public void renderers_render_generated_text_choice_checkbox_and_radio_appearances()
     {
-        string poppler = LocatePoppler();
-        byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-acroform.pdf"));
-        byte[] filled = Fill(original);
-        string directory = ExternalTool.TempDirectory();
-        try
+        foreach (RenderTool tool in RenderTool.All())
         {
-            string beforePath = Path.Combine(directory, "before.pdf");
-            string afterPath = Path.Combine(directory, "after.pdf");
-            File.WriteAllBytes(beforePath, original);
-            File.WriteAllBytes(afterPath, filled);
-            string beforeText = PdfToText(poppler, beforePath);
-            string afterText = PdfToText(poppler, afterPath);
-            Assert.DoesNotContain("Ada", beforeText, StringComparison.Ordinal);
-            Assert.Contains("Ada", afterText, StringComparison.Ordinal);
-            Assert.Contains("Blue", afterText, StringComparison.Ordinal);
-
-            byte[] beforeRaster = Raster(poppler, directory, "before", beforePath);
-            byte[] afterRaster = Raster(poppler, directory, "after", afterPath);
-            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 300, 700, 724) > 20);
-            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 220, 620, 644) > 20);
-            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 90, 660, 678) > 20);
-            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 98, 580, 598) > 10);
-        }
-        finally
-        {
-            Directory.Delete(directory, recursive: true);
+            AssertGeneratedAppearancesRender(tool);
         }
     }
 
     [Fact]
     [Trait(Lane.Trait, Lane.Interop)]
-    public void poppler_fits_auto_sized_text_and_paints_widget_colors()
+    public void renderers_fit_auto_sized_text_and_paint_widget_colors()
     {
-        string poppler = LocatePoppler();
-        byte[] original = BuildAutoSizeAndColorForm();
-        byte[] filled = FillAutoSizeAndColorForm(original);
-        string directory = ExternalTool.TempDirectory();
-        try
+        foreach (RenderTool tool in RenderTool.All())
         {
-            string path = Path.Combine(directory, "auto-size-and-color.pdf");
-            File.WriteAllBytes(path, filled);
-            List<PlacedWord> words = ReadWords(PdfToBBox(poppler, path));
-            PlacedWord fitted = Assert.Single(words, word => word.Text == "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            Assert.InRange(fitted.XMin, 40, 44);
-            Assert.InRange(fitted.XMax, 130, 180);
-
-            RasterPages(poppler, directory, "auto-size-and-color", path);
-            byte[] raster = ReadRaster(directory, "auto-size-and-color", 1);
-            Assert.True(CountDominantColor(raster, 320, 350, 74, 88, 0) > 200, "red background");
-            Assert.True(CountDominantColor(raster, 220, 360, 68, 72, 2) > 100, "blue border");
-        }
-        finally
-        {
-            Directory.Delete(directory, recursive: true);
+            AssertAutoSizeAndColorsRender(tool);
         }
     }
 
     [Fact]
     [Trait(Lane.Trait, Lane.Interop)]
-    public void poppler_checks_visibility_encoding_alignment_clipping_rotation_and_crop()
+    public void renderers_check_visibility_encoding_alignment_clipping_rotation_and_crop()
     {
-        string poppler = LocatePoppler();
-        byte[] blank = BuildMatrix();
-        byte[] filled = FillMatrix(blank);
-        string directory = ExternalTool.TempDirectory();
-        try
+        foreach (RenderTool tool in RenderTool.All())
         {
-            string beforePath = Path.Combine(directory, "matrix-before.pdf");
-            string afterPath = Path.Combine(directory, "matrix-after.pdf");
-            File.WriteAllBytes(beforePath, blank);
-            File.WriteAllBytes(afterPath, filled);
-            string beforeText = PdfToText(poppler, beforePath);
-            string afterText = PdfToText(poppler, afterPath);
-            Assert.DoesNotContain("Seen", beforeText, StringComparison.Ordinal);
-            Assert.Contains("Seen", afterText, StringComparison.Ordinal);
-            Assert.Contains("Caf\u00e9", afterText, StringComparison.Ordinal);
-            Assert.Contains("A\u2022B", afterText, StringComparison.Ordinal);
-            Assert.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZ", afterText, StringComparison.Ordinal);
-            Assert.Contains("One", afterText, StringComparison.Ordinal);
-            Assert.Contains("Two", afterText, StringComparison.Ordinal);
-            Assert.Contains("Three", afterText, StringComparison.Ordinal);
-            Assert.Contains("Rotated", afterText, StringComparison.Ordinal);
-            Assert.Contains("Cropped", afterText, StringComparison.Ordinal);
-
-            string bbox = PdfToBBox(poppler, afterPath);
-            List<PlacedWord> words = ReadWords(bbox);
-            PlacedWord[] aligned = words.Where(word => word.Text == "Align").OrderBy(word => word.XMin).ToArray();
-            Assert.Equal(3, aligned.Length);
-            Assert.InRange(aligned[0].XMin, 30, 60);
-            Assert.InRange(aligned[1].XMin, 174, 180);
-            Assert.InRange(aligned[2].XMin, 280, 340);
-            PlacedWord small = Assert.Single(words, word => word.Text == "Small");
-            PlacedWord large = Assert.Single(words, word => word.Text == "Large");
-            double smallHeight = Math.Abs(small.YMax - small.YMin);
-            double largeHeight = Math.Abs(large.YMax - large.YMin);
-            Assert.True(largeHeight > smallHeight * 1.5, "font box " + smallHeight.ToString(CultureInfo.InvariantCulture) + " " + largeHeight.ToString(CultureInfo.InvariantCulture));
-            PlacedWord wide = Assert.Single(words, word => word.Text == "Wide");
-            Assert.True(wide.XMax - wide.XMin < 80, "wide word span");
-
-            RasterPages(poppler, directory, "before", beforePath);
-            RasterPages(poppler, directory, "after", afterPath);
-            byte[] beforePage = ReadRaster(directory, "before", 1);
-            byte[] afterPage = ReadRaster(directory, "after", 1);
-            Assert.True(ChangedPixels(beforePage, afterPage, 72, 280, 700, 724) > 10);
-            Assert.True(DarkPixels(afterPage, 44, 86, 412, 428) > 10, "clipped field has no ink");
-            Assert.Equal(0, DarkPixels(afterPage, 94, 140, 410, 430));
-
-            (int turnWidth, int turnHeight, _) = ReadPpm(ReadRaster(directory, "after", 2));
-            Assert.Equal(792, turnWidth);
-            Assert.Equal(612, turnHeight);
-            Assert.True(CountDark(ReadRaster(directory, "before", 2)) < 5);
-            Assert.True(CountDark(ReadRaster(directory, "after", 2)) > 20);
-
-            byte[] crop = ReadRaster(directory, "after", 3);
-            (int cropWidth, int cropHeight, _) = ReadPpm(crop);
-            Assert.Equal(400, cropWidth);
-            Assert.Equal(540, cropHeight);
-            int cropInk = LeftmostDark(crop);
-            Assert.InRange(cropInk, 30, 70);
-        }
-        finally
-        {
-            Directory.Delete(directory, recursive: true);
+            AssertMatrixRenders(tool);
         }
     }
 
@@ -155,42 +53,11 @@ public class AppearanceRenderTests
     [Trait(Lane.Trait, Lane.Corpus)]
     [InlineData("irs-fw9-2024-03", "topmostSubform[0].Page1[0].f1_01[0]")]
     [InlineData("va-21-4138", "form1[0].#subform[0].International_Phone_Number[0]")]
-    public void poppler_renders_the_fill_of_a_hybrid_xfa_corpus_form(string id, string field)
+    public void renderers_render_the_fill_of_a_hybrid_xfa_corpus_form(string id, string field)
     {
-        string poppler = LocatePoppler();
-        byte[] original = File.ReadAllBytes(CorpusManifest.Get(id).FullPath);
-        using var stream = new MemoryStream();
-        stream.Write(original, 0, original.Length);
-        PdfField widget;
-        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        foreach (RenderTool tool in RenderTool.All())
         {
-            using var editor = document.Edit();
-            Assert.True(document.AcroForm.IsHybridXfa);
-            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill(field, "Zephyr"));
-            Assert.False(document.AcroForm.IsHybridXfa);
-            widget = Assert.Single(document.AcroForm.GetFields(field));
-            editor.SaveIncremental(stream);
-        }
-
-        Assert.Equal(1, widget.PageNumber);
-        string directory = ExternalTool.TempDirectory();
-        try
-        {
-            string beforePath = Path.Combine(directory, "before.pdf");
-            string afterPath = Path.Combine(directory, "after.pdf");
-            File.WriteAllBytes(beforePath, original);
-            File.WriteAllBytes(afterPath, stream.ToArray());
-            Assert.DoesNotContain("Zephyr", PdfToText(poppler, beforePath), StringComparison.Ordinal);
-            Assert.Contains("Zephyr", PdfToText(poppler, afterPath), StringComparison.Ordinal);
-
-            byte[] beforeRaster = Raster(poppler, directory, "before", beforePath);
-            byte[] afterRaster = Raster(poppler, directory, "after", afterPath);
-            PdfRect rect = widget.Rect;
-            Assert.True(ChangedPixels(beforeRaster, afterRaster, (int)rect.Llx, (int)Math.Ceiling(rect.Urx), (int)rect.Lly, (int)Math.Ceiling(rect.Ury)) > 20);
-        }
-        finally
-        {
-            Directory.Delete(directory, recursive: true);
+            AssertHybridFillRenders(tool, id, field);
         }
     }
 
@@ -203,7 +70,7 @@ public class AppearanceRenderTests
     [InlineData("acroform")]
     [InlineData("matrix")]
     [InlineData("placement")]
-    public void poppler_renders_the_flattened_form_as_the_filled_form(string form)
+    public void renderers_render_the_flattened_form_as_the_filled_form(string form)
     {
         byte[] filled = form switch
         {
@@ -227,7 +94,7 @@ public class AppearanceRenderTests
     [InlineData("cms-40b")]
     [InlineData("irs-f1040es-2026")]
     [InlineData("libreoffice-form")]
-    public void poppler_renders_a_flattened_corpus_form_as_the_filled_form(string id)
+    public void renderers_render_a_flattened_corpus_form_as_the_filled_form(string id)
     {
         byte[] original = File.ReadAllBytes(CorpusManifest.Get(id).FullPath);
         using var stream = new MemoryStream();
@@ -265,9 +132,174 @@ public class AppearanceRenderTests
         AssertFlattenRendersAsFilled(stream.ToArray(), values.Values.First().Text);
     }
 
+    private static void AssertGeneratedAppearancesRender(RenderTool tool)
+    {
+        byte[] original = File.ReadAllBytes(ExternalTool.Fixture("pypdf-acroform.pdf"));
+        byte[] filled = Fill(original);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string beforePath = Path.Combine(directory, "before.pdf");
+            string afterPath = Path.Combine(directory, "after.pdf");
+            File.WriteAllBytes(beforePath, original);
+            File.WriteAllBytes(afterPath, filled);
+            string beforeText = tool.Text(beforePath);
+            string afterText = tool.Text(afterPath);
+            Assert.DoesNotContain("Ada", beforeText, StringComparison.Ordinal);
+            Assert.Contains("Ada", afterText, StringComparison.Ordinal);
+            Assert.Contains("Blue", afterText, StringComparison.Ordinal);
+
+            byte[] beforeRaster = tool.FirstPage(directory, "before", beforePath);
+            byte[] afterRaster = tool.FirstPage(directory, "after", afterPath);
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 300, 700, 724) > 20);
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 220, 620, 644) > 20);
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 90, 660, 678) > 20);
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, 72, 98, 580, 598) > 10);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static void AssertAutoSizeAndColorsRender(RenderTool tool)
+    {
+        byte[] original = BuildAutoSizeAndColorForm();
+        byte[] filled = FillAutoSizeAndColorForm(original);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string path = Path.Combine(directory, "auto-size-and-color.pdf");
+            File.WriteAllBytes(path, filled);
+            List<RenderTool.Word> words = tool.Words(path);
+            RenderTool.Word fitted = Assert.Single(words, word => word.Text == "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+            Assert.InRange(fitted.XMin, 40, 44);
+            Assert.InRange(fitted.XMax, 130, 180);
+
+            tool.RasterPages(directory, "auto-size-and-color", path);
+            byte[] raster = tool.ReadRaster(directory, "auto-size-and-color", 1, 1);
+            Assert.True(CountDominantColor(raster, 320, 350, 74, 88, 0) > 200, "red background");
+            Assert.True(CountDominantColor(raster, 220, 360, 68, 72, 2) > 100, "blue border");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static void AssertMatrixRenders(RenderTool tool)
+    {
+        byte[] blank = BuildMatrix();
+        byte[] filled = FillMatrix(blank);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string beforePath = Path.Combine(directory, "matrix-before.pdf");
+            string afterPath = Path.Combine(directory, "matrix-after.pdf");
+            File.WriteAllBytes(beforePath, blank);
+            File.WriteAllBytes(afterPath, filled);
+            string beforeText = tool.Text(beforePath);
+            string afterText = tool.Text(afterPath);
+            Assert.DoesNotContain("Seen", beforeText, StringComparison.Ordinal);
+            Assert.Contains("Seen", afterText, StringComparison.Ordinal);
+            Assert.Contains("Caf\u00e9", afterText, StringComparison.Ordinal);
+            Assert.Contains("A\u2022B", afterText, StringComparison.Ordinal);
+            Assert.Contains("ABCDEFGHIJKLMNOPQRSTUVWXYZ", afterText, StringComparison.Ordinal);
+            Assert.Contains("One", afterText, StringComparison.Ordinal);
+            Assert.Contains("Two", afterText, StringComparison.Ordinal);
+            Assert.Contains("Three", afterText, StringComparison.Ordinal);
+            Assert.Contains("Rotated", afterText, StringComparison.Ordinal);
+            Assert.Contains("Cropped", afterText, StringComparison.Ordinal);
+
+            List<RenderTool.Word> words = tool.Words(afterPath);
+            RenderTool.Word[] aligned = words.Where(word => word.Text == "Align").OrderBy(word => word.XMin).ToArray();
+            Assert.Equal(3, aligned.Length);
+            Assert.InRange(aligned[0].XMin, 30, 60);
+            Assert.InRange(aligned[1].XMin, 174, 180);
+            Assert.InRange(aligned[2].XMin, 280, 340);
+            RenderTool.Word small = Assert.Single(words, word => word.Text == "Small");
+            RenderTool.Word large = Assert.Single(words, word => word.Text == "Large");
+            double smallHeight = Math.Abs(small.YMax - small.YMin);
+            double largeHeight = Math.Abs(large.YMax - large.YMin);
+            Assert.True(largeHeight > smallHeight * 1.5, "font box " + smallHeight.ToString(CultureInfo.InvariantCulture) + " " + largeHeight.ToString(CultureInfo.InvariantCulture));
+            RenderTool.Word wide = Assert.Single(words, word => word.Text == "Wide");
+            Assert.True(wide.XMax - wide.XMin < 80, "wide word span");
+
+            tool.RasterPages(directory, "before", beforePath);
+            tool.RasterPages(directory, "after", afterPath);
+            byte[] beforePage = tool.ReadRaster(directory, "before", 1, 3);
+            byte[] afterPage = tool.ReadRaster(directory, "after", 1, 3);
+            Assert.True(ChangedPixels(beforePage, afterPage, 72, 280, 700, 724) > 10);
+            Assert.True(DarkPixels(afterPage, 44, 86, 412, 428) > 10, "clipped field has no ink");
+            Assert.Equal(0, DarkPixels(afterPage, 94, 140, 410, 430));
+
+            (int turnWidth, int turnHeight, _) = ReadPpm(tool.ReadRaster(directory, "after", 2, 3));
+            Assert.Equal(792, turnWidth);
+            Assert.Equal(612, turnHeight);
+            Assert.True(CountDark(tool.ReadRaster(directory, "before", 2, 3)) < 5);
+            Assert.True(CountDark(tool.ReadRaster(directory, "after", 2, 3)) > 20);
+
+            byte[] crop = tool.ReadRaster(directory, "after", 3, 3);
+            (int cropWidth, int cropHeight, _) = ReadPpm(crop);
+            Assert.Equal(400, cropWidth);
+            Assert.Equal(540, cropHeight);
+            int cropInk = LeftmostDark(crop);
+            Assert.InRange(cropInk, 30, 70);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static void AssertHybridFillRenders(RenderTool tool, string id, string field)
+    {
+        byte[] original = File.ReadAllBytes(CorpusManifest.Get(id).FullPath);
+        using var stream = new MemoryStream();
+        stream.Write(original, 0, original.Length);
+        PdfField widget;
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            Assert.True(document.AcroForm.IsHybridXfa);
+            Assert.Equal(PdfAppearanceDisposition.Generated, editor.AcroForm.Fill(field, "Zephyr"));
+            Assert.False(document.AcroForm.IsHybridXfa);
+            widget = Assert.Single(document.AcroForm.GetFields(field));
+            editor.SaveIncremental(stream);
+        }
+
+        Assert.Equal(1, widget.PageNumber);
+        string directory = ExternalTool.TempDirectory();
+        try
+        {
+            string beforePath = Path.Combine(directory, "before.pdf");
+            string afterPath = Path.Combine(directory, "after.pdf");
+            File.WriteAllBytes(beforePath, original);
+            File.WriteAllBytes(afterPath, stream.ToArray());
+            Assert.DoesNotContain("Zephyr", tool.Text(beforePath), StringComparison.Ordinal);
+            Assert.Contains("Zephyr", tool.Text(afterPath), StringComparison.Ordinal);
+
+            byte[] beforeRaster = tool.FirstPage(directory, "before", beforePath);
+            byte[] afterRaster = tool.FirstPage(directory, "after", afterPath);
+            PdfRect rect = widget.Rect;
+            Assert.True(ChangedPixels(beforeRaster, afterRaster, (int)rect.Llx, (int)Math.Ceiling(rect.Urx), (int)rect.Lly, (int)Math.Ceiling(rect.Ury)) > 20);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static void AssertFlattenRendersAsFilled(byte[] filled, string? expectedText)
     {
-        string poppler = LocatePoppler();
+        foreach (RenderTool tool in RenderTool.All())
+        {
+            AssertFlattenRendersAsFilled(tool, filled, expectedText);
+        }
+    }
+
+    private static void AssertFlattenRendersAsFilled(RenderTool tool, byte[] filled, string? expectedText)
+    {
         using var stream = new MemoryStream();
         stream.Write(filled, 0, filled.Length);
         int pages;
@@ -292,28 +324,28 @@ public class AppearanceRenderTests
             File.WriteAllBytes(flattenedPath, flattened);
             if (expectedText != null)
             {
-                Assert.Contains(expectedText, PdfToText(poppler, flattenedPath), StringComparison.Ordinal);
+                Assert.Contains(expectedText, tool.Text(flattenedPath), StringComparison.Ordinal);
             }
 
-            RasterPages(poppler, directory, "filled", filledPath);
-            RasterPages(poppler, directory, "flattened", flattenedPath, "-hide-annotations");
+            tool.RasterPages(directory, "filled", filledPath);
+            tool.RasterPages(directory, "flattened", flattenedPath, hideAnnotations: true);
             int inked = 0;
             for (int page = 1; page <= pages; page++)
             {
-                string name = PageRaster(directory, "filled", page, pages);
+                string name = tool.PageRaster(directory, "filled", page, pages);
                 byte[] before = File.ReadAllBytes(name);
-                byte[] after = File.ReadAllBytes(PageRaster(directory, "flattened", page, pages));
+                byte[] after = File.ReadAllBytes(tool.PageRaster(directory, "flattened", page, pages));
                 (int width, int height, _) = ReadPpm(before);
                 Assert.Equal(width, ReadPpm(after).Width);
                 Assert.Equal(height, ReadPpm(after).Height);
-                int changed = ChangedPixels(before, after, 0, width, 0, height);
+                int changed = ChangedPixels(before, after, 0, width, 0, height, tool.PixelTolerance);
                 Assert.True(changed <= MaxAntialiasPixels, "page " + page.ToString(CultureInfo.InvariantCulture) + ": " + changed.ToString(CultureInfo.InvariantCulture) + " pixels differ");
                 inked += CountDark(after);
             }
 
             Assert.True(inked > 0);
-            string[] filledWords = ReadWords(PdfToBBox(poppler, filledPath)).Select(WordKey).ToArray();
-            string[] flattenedWords = ReadWords(PdfToBBox(poppler, flattenedPath)).Select(WordKey).ToArray();
+            string[] filledWords = tool.Words(filledPath).Select(WordKey).ToArray();
+            string[] flattenedWords = tool.Words(flattenedPath).Select(WordKey).ToArray();
             Assert.Equal(filledWords, flattenedWords);
         }
         finally
@@ -323,16 +355,9 @@ public class AppearanceRenderTests
     }
 
     // A word and its box to a tenth of a point, as pdftotext -bbox reports it.
-    private static string WordKey(PlacedWord word)
+    private static string WordKey(RenderTool.Word word)
     {
         return word.Text + "@" + string.Join(",", new[] { word.XMin, word.YMin, word.XMax, word.YMax }.Select(value => Math.Round(value, 1).ToString("0.0", CultureInfo.InvariantCulture)));
-    }
-
-    // pdftoppm pads the page number to the width of the page count.
-    private static string PageRaster(string directory, string name, int page, int pages)
-    {
-        string number = page.ToString(CultureInfo.InvariantCulture).PadLeft(pages.ToString(CultureInfo.InvariantCulture).Length, '0');
-        return Path.Combine(directory, name + "-" + number + ".ppm");
     }
 
     // Appearances drawn under a /Matrix that rotates them, a /BBox that does not start at the origin, a /Rect given with
@@ -372,37 +397,7 @@ public class AppearanceRenderTests
         return stream.ToArray();
     }
 
-    private static string LocatePoppler()
-    {
-        string? directory = Environment.GetEnvironmentVariable("JAYTWO_POPPLER");
-        if (!string.IsNullOrWhiteSpace(directory))
-        {
-            string candidate = Path.Combine(directory, ExternalTool.Executable("pdftotext"));
-            if (File.Exists(candidate))
-            {
-                return directory;
-            }
-        }
-
-        string located = ExternalTool.Locate("JAYTWO_PDFTOTEXT", ExternalTool.Executable("pdftotext"));
-        return Path.GetDirectoryName(located) ?? located;
-    }
-
-    private static string PdfToText(string poppler, string pdf)
-    {
-        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftotext")), "-layout", pdf, "-");
-        return ExternalTool.Output(process);
-    }
-
-    private static byte[] Raster(string poppler, string directory, string name, string pdf)
-    {
-        string prefix = Path.Combine(directory, name);
-        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), "-r", "72", pdf, prefix);
-        ExternalTool.Output(process);
-        return File.ReadAllBytes(prefix + "-1.ppm");
-    }
-
-    private static int ChangedPixels(byte[] before, byte[] after, int x0, int x1, int pdfY0, int pdfY1)
+    private static int ChangedPixels(byte[] before, byte[] after, int x0, int x1, int pdfY0, int pdfY1, int tolerance = 0)
     {
         (int width, int height, int offset) = ReadPpm(before);
         int y0 = height - pdfY1;
@@ -413,7 +408,7 @@ public class AppearanceRenderTests
             for (int x = x0; x < x1; x++)
             {
                 int pixel = offset + (((y * width) + x) * 3);
-                if (before[pixel] != after[pixel] || before[pixel + 1] != after[pixel + 1] || before[pixel + 2] != after[pixel + 2])
+                if (Math.Abs(before[pixel] - after[pixel]) > tolerance || Math.Abs(before[pixel + 1] - after[pixel + 1]) > tolerance || Math.Abs(before[pixel + 2] - after[pixel + 2]) > tolerance)
                 {
                     changed++;
                 }
@@ -464,27 +459,6 @@ public class AppearanceRenderTests
         }
 
         return value;
-    }
-
-    private static Process Start(string poppler, string fileName, params string[] args)
-    {
-        var info = new ProcessStartInfo
-        {
-            FileName = fileName,
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            StandardOutputEncoding = Encoding.UTF8,
-            StandardErrorEncoding = Encoding.UTF8,
-            UseShellExecute = false,
-            CreateNoWindow = true,
-        };
-        info.Environment["PATH"] = poppler + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH");
-        for (int i = 0; i < args.Length; i++)
-        {
-            TestCompat.AddArgument(info, args[i]);
-        }
-
-        return ExternalTool.Start(info);
     }
 
     private static byte[] BuildMatrix()
@@ -610,44 +584,6 @@ public class AppearanceRenderTests
         return stream.ToArray();
     }
 
-    private static string PdfToBBox(string poppler, string pdf)
-    {
-        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftotext")), "-bbox", pdf, "-");
-        return ExternalTool.Output(process);
-    }
-
-    private static void RasterPages(string poppler, string directory, string name, string pdf, params string[] options)
-    {
-        string prefix = Path.Combine(directory, name);
-        var args = new List<string> { "-cropbox", "-r", "72" };
-        args.AddRange(options);
-        args.Add(pdf);
-        args.Add(prefix);
-        using Process process = Start(poppler, Path.Combine(poppler, ExternalTool.Executable("pdftoppm")), args.ToArray());
-        ExternalTool.Output(process);
-    }
-
-    private static byte[] ReadRaster(string directory, string name, int page)
-    {
-        return File.ReadAllBytes(Path.Combine(directory, name + "-" + page.ToString(CultureInfo.InvariantCulture) + ".ppm"));
-    }
-
-    private static List<PlacedWord> ReadWords(string bbox)
-    {
-        var words = new List<PlacedWord>();
-        foreach (Match match in Regex.Matches(bbox, "<word xMin=\"([^\"]+)\" yMin=\"([^\"]+)\" xMax=\"([^\"]+)\" yMax=\"([^\"]+)\">([^<]*)</word>"))
-        {
-            words.Add(new PlacedWord(
-                match.Groups[5].Value,
-                double.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture),
-                double.Parse(match.Groups[2].Value, CultureInfo.InvariantCulture),
-                double.Parse(match.Groups[3].Value, CultureInfo.InvariantCulture),
-                double.Parse(match.Groups[4].Value, CultureInfo.InvariantCulture)));
-        }
-
-        return words;
-    }
-
     private static int DarkPixels(byte[] ppm, int x0, int x1, int y0, int y1)
     {
         (int width, int height, int offset) = ReadPpm(ppm);
@@ -710,27 +646,5 @@ public class AppearanceRenderTests
         }
 
         return -1;
-    }
-
-    private readonly struct PlacedWord
-    {
-        public PlacedWord(string text, double xMin, double yMin, double xMax, double yMax)
-        {
-            Text = text;
-            XMin = xMin;
-            YMin = yMin;
-            XMax = xMax;
-            YMax = yMax;
-        }
-
-        public string Text { get; }
-
-        public double XMin { get; }
-
-        public double YMin { get; }
-
-        public double XMax { get; }
-
-        public double YMax { get; }
     }
 }
