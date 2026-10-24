@@ -13,7 +13,15 @@ BUILD_PACKED_DIR=${TOPDIR}/out/packed
 PYTHON?=python
 QUIET_RUN=${PYTHON} tools/agents/quiet_run.py
 
-DOCKER_TAG?=$(call getDockerTag,$(BUILD_SLN))
+# W-118: a make invocation that does not set DOCKER_TAG gets its own image and container names, from the time and a
+# process ID, so overlapping Docker runs neither take each other's container nor retag each other's image. Jenkins
+# sets DOCKER_TAG. docker-run and docker-fuzz-campaign remove a generated tag's images when they finish; a caller that
+# sets DOCKER_TAG keeps them, to run them again from another make invocation.
+ifeq ($(origin DOCKER_TAG),undefined)
+DOCKER_RUN_ID:=$(shell echo "$$(date +'%Y%m%d%H%M%S')_$$$$")
+DOCKER_TAG=$(call getDockerTag,$(BUILD_SLN))__${DOCKER_RUN_ID}
+DOCKER_TAG_GENERATED=true
+endif
 DOCKER_BASE_TAG?=${DOCKER_TAG}__base
 DOCKER_BUILDER_TAG?=${DOCKER_TAG}__builder
 DOCKER_BUILDER_CONTAINER?=${DOCKER_BUILDER_TAG}
@@ -183,9 +191,11 @@ FUZZ_WORKERS?=7
 FUZZ_TARGETS?=open:60 edit:60 object:60 objstm:60 decode:60 der:60 tsr:60 xmp:60
 docker-fuzz-campaign:
 	docker build -t ${DOCKER_TAG}__fuzz . --target fuzz
-	docker run --rm -v "${TOPDIR}/out/fuzz:/out" \
+	EXIT_CODE=0; docker run --rm -v "${TOPDIR}/out/fuzz:/out" \
 		-e COMMIT=$$(git rev-parse HEAD) -e DIRTY=$$(git status --porcelain | grep -q . && echo yes || echo no) \
-		${DOCKER_TAG}__fuzz sh tools/fuzz/run-campaign.sh /out ${FUZZ_WORKERS} ${FUZZ_TARGETS}
+		${DOCKER_TAG}__fuzz sh tools/fuzz/run-campaign.sh /out ${FUZZ_WORKERS} ${FUZZ_TARGETS} || EXIT_CODE=$$?; \
+	$(if ${DOCKER_TAG_GENERATED},docker rmi ${DOCKER_TAG}__fuzz > /dev/null || true;) \
+	exit $$EXIT_CODE
 
 pack:
 	rm -rf "${BUILD_PACKED_DIR}";
@@ -255,10 +265,14 @@ docker-builder:
 docker: docker-builder
 	docker build -t ${DOCKER_TAG} . --pull
 
+# W-118: the container is created first, so a failed create, such as a name conflict, fails the target before it copies
+# or removes a container that is not its own.
 docker-run:
-	docker run --name ${DOCKER_BUILDER_CONTAINER} ${DOCKER_BUILDER_TAG} make ${DOCKER_RUN_MAKE_TARGETS} || EXIT_CODE=$$? ; \
+	docker create --name ${DOCKER_BUILDER_CONTAINER} ${DOCKER_BUILDER_TAG} make ${DOCKER_RUN_MAKE_TARGETS}
+	EXIT_CODE=0; docker start --attach ${DOCKER_BUILDER_CONTAINER} || EXIT_CODE=$$?; \
 	docker cp ${DOCKER_BUILDER_CONTAINER}:build/out ./ || echo "Could not copy out of builder container: Container not found: ${DOCKER_BUILDER_CONTAINER}"; \
 	docker rm ${DOCKER_BUILDER_CONTAINER} && echo "Container removed: ${DOCKER_BUILDER_CONTAINER}" || echo "Container not found: ${DOCKER_BUILDER_CONTAINER}"; \
+	$(if ${DOCKER_TAG_GENERATED},docker rmi ${DOCKER_BUILDER_TAG} ${DOCKER_BASE_TAG} > /dev/null || true;) \
 	exit $$EXIT_CODE
 
 docker-copy-from-builder-output:
