@@ -21,13 +21,7 @@ internal static class WorkflowPdf
     public static byte[] Large(int padding)
     {
         var builder = PdfBuilder.Basic();
-        var data = new byte[padding];
-        for (int i = 0; i < data.Length; i++)
-        {
-            data[i] = (byte)('a' + (i % 26));
-        }
-
-        builder.StreamObject(4, string.Empty, data);
+        builder.StreamObject(4, string.Empty, Padding(padding));
         builder.Indirect(5, "<< /Title (Large) >>");
         return builder.Finish("/Info 5 0 R");
     }
@@ -45,8 +39,8 @@ internal static class WorkflowPdf
 
     // A one-page form: text fields Name and City, check box Agree, read-only Locked, and Code with /MaxLen 3. With a
     // signature dictionary it also has a signed signature field, Sig, whose /V is object 30 (the pattern of
-    // FlattenTests.BuildForm).
-    public static byte[] Form(string catalogExtra = "", string? signature = null)
+    // FlattenTests.BuildForm). Padding adds an unreferenced stream, object 21, as the last object before the xref.
+    public static byte[] Form(string catalogExtra = "", string? signature = null, int padding = 0)
     {
         string sig = signature != null ? " 9 0 R" : string.Empty;
         var builder = new PdfBuilder();
@@ -65,7 +59,25 @@ internal static class WorkflowPdf
         }
 
         builder.StreamObject(20, string.Empty, Encoding.ASCII.GetBytes("BT /F1 18 Tf 72 750 Td (Header) Tj ET"));
+        if (padding > 0)
+        {
+            builder.StreamObject(21, string.Empty, Padding(padding));
+        }
+
         return builder.Finish();
+    }
+
+    // An AES-128 form that needs the user password "user": one text field, Name, with the value "Ada".
+    public static byte[] EncryptedForm()
+    {
+        var crypt = new StandardEncryptor(false, "user", "owner", -4, encryptMetadata: true);
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R] >>");
+        builder.Indirect(4, "<< /Type /Annot /Subtype /Widget /FT /Tx /T " + crypt.Text("Name", 4) + " /V " + crypt.Text("Ada", 4) + " /Rect [72 700 280 724] /F 4 /P 3 0 R >>");
+        builder.Indirect(20, crypt.Dictionary(null));
+        return builder.Finish("/Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
     }
 
     // A form with an approval signature.
@@ -90,6 +102,17 @@ internal static class WorkflowPdf
         builder.Indirect(4, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Rotate 90 >>");
         builder.Indirect(5, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Rotate 270 >>");
         return builder.Finish();
+    }
+
+    public static byte[] Padding(int length)
+    {
+        var data = new byte[length];
+        for (int i = 0; i < data.Length; i++)
+        {
+            data[i] = (byte)('a' + (i % 26));
+        }
+
+        return data;
     }
 
     public static PdfDocument Open(byte[] pdf)

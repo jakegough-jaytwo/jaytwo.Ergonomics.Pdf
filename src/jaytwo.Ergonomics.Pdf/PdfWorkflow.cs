@@ -1,6 +1,11 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.Internal;
 using jaytwo.Pdf;
+using jaytwo.Pdf.AcroForm;
 
 namespace jaytwo.Ergonomics.Pdf;
 
@@ -47,5 +52,49 @@ public static class PdfWorkflow
     public static PdfWorkflowBuilder FromFile(string path, PdfWorkflowOpenOptions? options = null)
     {
         return new PdfWorkflowBuilder(WorkflowInput.OfFile(path, options));
+    }
+
+    /// <summary>
+    /// Reads a file's form values, as <see cref="PdfAcroForm.Export"/> does, without the caller opening a document (spec F16).
+    /// </summary>
+    /// <remarks>
+    /// The file is opened, shared for reading only, and closed before this returns, after a failure too. It is read as
+    /// <see cref="PdfDocument"/> reads it, so a large file is not buffered.
+    /// </remarks>
+    /// <param name="path">The PDF's path.</param>
+    /// <param name="options">The password, if any.</param>
+    /// <returns>The values by dotted full name. A file without a form has none.</returns>
+    /// <exception cref="ArgumentNullException">The path is null.</exception>
+    /// <exception cref="ArgumentException">The path is empty.</exception>
+    public static IReadOnlyDictionary<string, PdfFieldValue> ExportFormValues(string path, PdfWorkflowOpenOptions? options = null)
+    {
+        return ExportAsync(path, options, false, CancellationToken.None).GetAwaiter().GetResult();
+    }
+
+    /// <summary>
+    /// Reads a file's form values, as <see cref="PdfAcroForm.Export"/> does, without the caller opening a document (spec F16).
+    /// </summary>
+    /// <remarks>
+    /// The file is opened, shared for reading only, and closed before the task completes, after a failure or cancellation
+    /// too. It is read as <see cref="PdfDocument"/> reads it, so a large file is not buffered. The open awaits its reads;
+    /// the engine reads the form itself synchronously (spec F14).
+    /// </remarks>
+    /// <param name="path">The PDF's path.</param>
+    /// <param name="options">The password, if any.</param>
+    /// <param name="cancellationToken">Observed while the file opens.</param>
+    /// <returns>The values by dotted full name. A file without a form has none.</returns>
+    /// <exception cref="ArgumentNullException">The path is null.</exception>
+    /// <exception cref="ArgumentException">The path is empty.</exception>
+    public static Task<IReadOnlyDictionary<string, PdfFieldValue>> ExportFormValuesAsync(string path, PdfWorkflowOpenOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        return ExportAsync(path, options, true, cancellationToken);
+    }
+
+    private static async Task<IReadOnlyDictionary<string, PdfFieldValue>> ExportAsync(string path, PdfWorkflowOpenOptions? options, bool useAsync, CancellationToken cancellationToken)
+    {
+        WorkflowInput input = WorkflowInput.OfFile(path, options);
+        using WorkflowSession session = await input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+        return session.Document.AcroForm.Export();
     }
 }
