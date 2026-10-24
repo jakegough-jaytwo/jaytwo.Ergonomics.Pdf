@@ -107,7 +107,7 @@ public class HardeningTests
     [Fact]
     public void xref_stream_entry_count_is_refused_before_entries_are_built()
     {
-        int listed = PdfParser.MaxXrefStreamObjects + 1;
+        int listed = PdfXrefReader.MaxStreamObjects + 1;
         string count = listed.ToString(CultureInfo.InvariantCulture);
         byte[] pdf = XrefStream("/Size " + count + " /W [0 1 0] /Index [0 " + count + "] /Filter /FlateDecode", TestCompat.Zlib(new byte[listed]));
 
@@ -139,15 +139,15 @@ public class HardeningTests
 
         long allocated = AssertOpenRefused<PdfObjectTooLargeException>(pdf, out PdfObjectTooLargeException error);
 
-        Assert.Contains(PdfParser.MinXrefEntryBudget.ToString(CultureInfo.InvariantCulture), error.Message, StringComparison.Ordinal);
+        Assert.Contains(PdfXrefReader.MinEntryBudget.ToString(CultureInfo.InvariantCulture), error.Message, StringComparison.Ordinal);
         Assert.True(allocated < 8L * 1024 * 1024, "Refusal allocated " + allocated.ToString(CultureInfo.InvariantCulture) + " bytes.");
     }
 
     [Fact]
     public void xref_entry_budget_follows_the_file_length()
     {
-        int entries = PdfParser.MinXrefEntryBudget + 1;
-        int padding = entries * PdfParser.XrefFileBytesPerEntry;
+        int entries = PdfXrefReader.MinEntryBudget + 1;
+        int padding = entries * PdfXrefReader.FileBytesPerEntry;
 
         AssertOpenRefused<PdfObjectTooLargeException>(XrefChainDocument(entries, 1, 0), out _);
         using var document = PdfDocument.Open(new MemoryStream(XrefChainDocument(entries, 1, padding)), leaveOpen: true);
@@ -158,7 +158,7 @@ public class HardeningTests
     public void xref_map_memory_grows_with_unique_objects_not_with_prev_sections()
     {
         const int small = 16384;
-        const int large = PdfParser.MinXrefEntryBudget;
+        const int large = PdfXrefReader.MinEntryBudget;
         long oneSmall = OpenAllocation(XrefChainDocument(small, 1, 0));
         long oneLarge = OpenAllocation(XrefChainDocument(large, 1, 0));
         long threeLarge = OpenAllocation(XrefChainDocument(large, 3, 0));
@@ -201,7 +201,7 @@ public class HardeningTests
     public void classic_xref_map_memory_grows_with_unique_objects_not_with_prev_sections()
     {
         const int small = 16384;
-        const int large = PdfParser.MinXrefEntryBudget;
+        const int large = PdfXrefReader.MinEntryBudget;
         long oneSmall = OpenAllocation(ClassicChainDocument(small, 1));
         long oneLarge = OpenAllocation(ClassicChainDocument(large, 1));
         long threeLarge = OpenAllocation(ClassicChainDocument(large, 3));
@@ -233,11 +233,11 @@ public class HardeningTests
     {
         const int count = 65536;
         byte[] warmup = ObjectStreamData(out int warmupFirst, 8);
-        Assert.Equal(8, PdfParser.ParseObjectStream(warmup, 8, warmupFirst).Count);
+        Assert.Equal(8, PdfObjectStreamReader.Parse(warmup, 8, warmupFirst).Count);
         byte[] data = ObjectStreamData(out int first, count);
 
         long before = GC.GetAllocatedBytesForCurrentThread();
-        var objects = PdfParser.ParseObjectStream(data, count, first);
+        var objects = PdfObjectStreamReader.Parse(data, count, first);
         long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         double factor = (double)allocated / data.Length;
 
@@ -459,10 +459,10 @@ public class HardeningTests
         };
 
         // At the cap a long integer or a bare keyword can still fail as a parse error, but not as an oversized token.
-        Exception? atCap = Record.Exception(() => new PdfParser(PdfCursor.FromBytes(Encoding.ASCII.GetBytes(Token(PdfParser.MaxTokenBytes) + " ")), null, 0).ParseValue());
+        Exception? atCap = Record.Exception(() => new PdfParser(PdfCursor.FromBytes(Encoding.ASCII.GetBytes(Token(PdfLexer.MaxTokenBytes) + " ")), null, 0).ParseValue());
         Assert.False(atCap is PdfObjectTooLargeException, atCap?.Message);
-        Assert.Equal(65536, PdfParser.MaxTokenBytes);
-        Assert.Throws<PdfObjectTooLargeException>(() => new PdfParser(PdfCursor.FromBytes(Encoding.ASCII.GetBytes(Token(PdfParser.MaxTokenBytes + 1) + " ")), null, 0).ParseValue());
+        Assert.Equal(65536, PdfLexer.MaxTokenBytes);
+        Assert.Throws<PdfObjectTooLargeException>(() => new PdfParser(PdfCursor.FromBytes(Encoding.ASCII.GetBytes(Token(PdfLexer.MaxTokenBytes + 1) + " ")), null, 0).ParseValue());
     }
 
     [Theory]

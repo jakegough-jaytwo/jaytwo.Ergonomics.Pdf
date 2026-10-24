@@ -2184,7 +2184,7 @@ internal sealed class PdfEngine : IDisposable
         bool classic = IsClassicXref(offset);
         _cursor.Seek(offset);
         var parser = new PdfParser(_cursor, Resolve, 0);
-        int budget = PdfParser.XrefEntryBudget(_length);
+        int budget = PdfXrefReader.EntryBudget(_length);
         PdfObject.Dict trailer;
         long sectionEnd;
         bool pendingEncrypt;
@@ -2192,7 +2192,7 @@ internal sealed class PdfEngine : IDisposable
         {
             // The table is merged as it is read, before its /XRefStm stream and before /Prev, the search order of
             // ISO 32000-1 7.5.8.4. A /Prev chain never holds a second copy of the map.
-            trailer = parser.ParseClassicXref(_xref, overwrite, budget);
+            trailer = PdfXrefReader.ParseClassic(parser, _xref, overwrite, budget);
             sectionEnd = _cursor.Position;
             pendingEncrypt = !TryEnsureSecurity(trailer, _xref, password);
         }
@@ -2206,7 +2206,7 @@ internal sealed class PdfEngine : IDisposable
 
             sectionEnd = _cursor.Position;
             // A stream section is merged as it is read, so a /Prev chain never holds a second copy of the map.
-            ReadXrefStream(parser, streamDict, overwrite, budget);
+            ReadXrefStream(streamDict, overwrite, budget);
             pendingEncrypt = !TryEnsureSecurity(streamDict, _xref, password);
             trailer = streamDict;
         }
@@ -2365,7 +2365,7 @@ internal sealed class PdfEngine : IDisposable
         return dict;
     }
 
-    private void ReadXrefStream(PdfParser parser, PdfObject.Dict dict, bool overwrite, int budget)
+    private void ReadXrefStream(PdfObject.Dict dict, bool overwrite, int budget)
     {
         if (dict.Body is not PdfObject.FileBody body)
         {
@@ -2382,7 +2382,7 @@ internal sealed class PdfEngine : IDisposable
         // ISO 32000-1 7.5.8.2: an xref stream's /Filter and /DecodeParms are direct, so no resolver is passed.
         List<string> filters = PdfStreamDecoder.FiltersOf(dict);
         List<PdfObject.Dict?> parms = PdfStreamDecoder.ParmsOf(dict, filters.Count);
-        PdfParser.EnsureXrefColumns(dict, parms);
+        PdfXrefReader.EnsureColumns(dict, parms);
         byte[] decoded;
         try
         {
@@ -2395,7 +2395,7 @@ internal sealed class PdfEngine : IDisposable
 
         _decodedBytes += decoded.Length;
 
-        parser.ParseXrefEntries(dict, decoded, _xref, overwrite, budget);
+        PdfXrefReader.ParseStreamEntries(dict, decoded, _xref, overwrite, budget);
     }
 
     private Stream OpenStored(PdfObject.Dict dict, PdfObject.FileBody file)
@@ -2551,7 +2551,7 @@ internal sealed class PdfEngine : IDisposable
                 throw new PdfParseException(0, "Object stream /First is outside the stream.");
             }
 
-            return PdfParser.ParseObjectStream(data, count, first);
+            return PdfObjectStreamReader.Parse(data, count, first);
         }
         finally
         {

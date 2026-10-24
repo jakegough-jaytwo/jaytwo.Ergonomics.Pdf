@@ -181,7 +181,7 @@ public class ParserAllocationTests
             int[] numbers = ids.Split(' ').Select(id => int.Parse(id, CultureInfo.InvariantCulture)).ToArray();
             byte[] data = ObjectStream(out int first, numbers.Select(id => (id, member)).ToArray());
 
-            Exception? error = Record.Exception(() => PdfParser.ParseObjectStream(data, numbers.Length, first));
+            Exception? error = Record.Exception(() => PdfObjectStreamReader.Parse(data, numbers.Length, first));
 
             if (refused)
             {
@@ -290,10 +290,10 @@ public class ParserAllocationTests
         }
 
         byte[] data = ObjectStream(out int first, members);
-        Assert.Equal(count, PdfParser.ParseObjectStream(data, count, first).Count);
+        Assert.Equal(count, PdfObjectStreamReader.Parse(data, count, first).Count);
 
         long before = GC.GetAllocatedBytesForCurrentThread();
-        List<PdfObject> objects = PdfParser.ParseObjectStream(data, count, first);
+        List<PdfObject> objects = PdfObjectStreamReader.Parse(data, count, first);
         long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
         double factor = (double)allocated / data.Length;
 

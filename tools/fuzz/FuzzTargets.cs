@@ -161,7 +161,7 @@ internal static class FuzzTargets
 
         try
         {
-            PdfParser.ParseObjectStream(body, count, first);
+            PdfObjectStreamReader.Parse(body, count, first);
         }
         catch (PdfException)
         {
