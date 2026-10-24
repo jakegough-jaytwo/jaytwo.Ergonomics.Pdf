@@ -133,7 +133,7 @@ internal static class FuzzTargets
     }
 
     /// <summary>
-    /// Input is "N First\n" followed by the decoded object-stream data. The guards mirror <c>PdfEngine.ParseObjectStream</c>,
+    /// Input is "N First\n" followed by the decoded object-stream data. The guards mirror <c>PdfObjectStore.ParseObjectStreamAsync</c>,
     /// so the target sees only what the engine would pass.
     /// </summary>
     private static void ParseObjectStream(byte[] data)
@@ -251,7 +251,7 @@ internal static class FuzzTargets
     }
 
     /// <summary>
-    /// Mirrors <c>PdfEngine.SyncXmp</c>: a packet that does not parse, or that <c>ApplyInfo</c> rejects as not XMP, is left
+    /// Mirrors <c>PdfInfoMetadata.SyncXmp</c>: a packet that does not parse, or that <c>ApplyInfo</c> rejects as not XMP, is left
     /// alone; one that does is edited and serialized.
     /// </summary>
     private static void Xmp(byte[] data)
