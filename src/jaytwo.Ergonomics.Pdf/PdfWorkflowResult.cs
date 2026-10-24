@@ -8,13 +8,11 @@ namespace jaytwo.Ergonomics.Pdf;
 /// </summary>
 public sealed class PdfWorkflowResult
 {
-    private static readonly IReadOnlyDictionary<string, PdfAppearanceDisposition> NoFields = new Dictionary<string, PdfAppearanceDisposition>();
-
-    internal PdfWorkflowResult(bool modified, long outputLength)
+    internal PdfWorkflowResult(bool modified, long outputLength, IReadOnlyDictionary<string, PdfAppearanceDisposition> fieldAppearances)
     {
         Modified = modified;
         OutputLength = outputLength;
-        FieldAppearances = NoFields;
+        FieldAppearances = fieldAppearances;
     }
 
     /// <summary>
@@ -28,7 +26,10 @@ public sealed class PdfWorkflowResult
     public long OutputLength { get; }
 
     /// <summary>
-    /// Gets the appearance disposition of each filled field's final value, by full field name.
+    /// Gets the appearance disposition of each filled field's final value, by full field name. It is empty when the
+    /// workflow fills nothing.
     /// </summary>
     public IReadOnlyDictionary<string, PdfAppearanceDisposition> FieldAppearances { get; }
+
+    internal static IReadOnlyDictionary<string, PdfAppearanceDisposition> NoFields { get; } = new Dictionary<string, PdfAppearanceDisposition>();
 }

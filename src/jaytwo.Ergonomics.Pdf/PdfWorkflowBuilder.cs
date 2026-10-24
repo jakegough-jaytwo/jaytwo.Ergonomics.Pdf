@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.Internal;
 using jaytwo.Pdf;
+using jaytwo.Pdf.AcroForm;
 
 namespace jaytwo.Ergonomics.Pdf;
 
@@ -15,7 +16,9 @@ namespace jaytwo.Ergonomics.Pdf;
 /// <para>
 /// Describing an operation reads nothing. A terminal call (<c>Save</c>, <c>SaveAsync</c>, <c>AppendToSource</c>, or
 /// <c>AppendToSourceAsync</c>) opens the input, applies every operation through one <see cref="PdfDocumentEditor"/>, and
-/// appends at most one revision. A workflow runs once: after a terminal call has begun, whether it succeeds, fails, or is
+/// appends at most one revision. Form operations apply first: every fill, as one all-or-nothing bulk fill that holds the
+/// last value described for each field, then one flatten. The other operations then apply in the order described
+/// (spec F5). A workflow runs once: after a terminal call has begun, whether it succeeds, fails, or is
 /// canceled, every further call throws <see cref="InvalidOperationException"/>.
 /// </para>
 /// <para>
@@ -36,11 +39,141 @@ public sealed class PdfWorkflowBuilder
     private readonly object _gate = new object();
     private readonly WorkflowInput _input;
     private readonly List<Action<PdfDocumentEditor>> _operations = new List<Action<PdfDocumentEditor>>();
+    private readonly List<KeyValuePair<string, PdfFieldValue>> _fills = new List<KeyValuePair<string, PdfFieldValue>>();
+    private readonly Dictionary<string, int> _fillIndex = new Dictionary<string, int>(StringComparer.Ordinal);
+    private readonly List<string> _flattenNames = new List<string>();
+    private readonly HashSet<string> _flattenNamed = new HashSet<string>(StringComparer.Ordinal);
+    private bool _flattenAll;
+    private bool _allowBreakingSignatures;
     private bool _started;
 
     internal PdfWorkflowBuilder(WorkflowInput input)
     {
         _input = input;
+    }
+
+    /// <summary>
+    /// Fills one field by its dotted full name (spec F6).
+    /// </summary>
+    /// <remarks>
+    /// Every fill in the workflow reaches <see cref="PdfAcroFormEditor.Fill(IEnumerable{KeyValuePair{string, PdfFieldValue}})"/>
+    /// as one all-or-nothing bulk fill, before any flatten, whatever order they were described in. A field filled more than
+    /// once takes the last value. The engine checks the name and the value when the workflow runs.
+    /// </remarks>
+    /// <param name="fullName">The dotted field name.</param>
+    /// <param name="value">The new value.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="fullName"/> is <see langword="null"/>.</exception>
+    public PdfWorkflowBuilder Fill(string fullName, PdfFieldValue value)
+    {
+        if (fullName == null)
+        {
+            throw new ArgumentNullException(nameof(fullName));
+        }
+
+        return Record(() => SetFill(fullName, value));
+    }
+
+    /// <summary>
+    /// Fills several fields (spec F6). The values are copied when described.
+    /// </summary>
+    /// <remarks>
+    /// The values join the workflow's one bulk fill, as <see cref="Fill(string, PdfFieldValue)"/> describes. A field filled
+    /// more than once, here or in another call, takes the last value.
+    /// </remarks>
+    /// <param name="values">Full names and values, for example a <see cref="Dictionary{TKey, TValue}"/> or the result of <see cref="PdfAcroForm.Export"/>.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="values"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">A name is <see langword="null"/>.</exception>
+    public PdfWorkflowBuilder FillForm(IEnumerable<KeyValuePair<string, PdfFieldValue>> values)
+    {
+        if (values == null)
+        {
+            throw new ArgumentNullException(nameof(values));
+        }
+
+        var copy = new List<KeyValuePair<string, PdfFieldValue>>(values);
+        foreach (KeyValuePair<string, PdfFieldValue> fill in copy)
+        {
+            if (fill.Key == null)
+            {
+                throw new ArgumentException("A field name cannot be null.", nameof(values));
+            }
+        }
+
+        return Record(() =>
+        {
+            foreach (KeyValuePair<string, PdfFieldValue> fill in copy)
+            {
+                SetFill(fill.Key, fill.Value);
+            }
+        });
+    }
+
+    /// <summary>
+    /// Flattens every field except signature fields (spec F6), after every fill.
+    /// </summary>
+    /// <remarks>
+    /// The workflow flattens once, through <see cref="PdfAcroFormEditor.Flatten()"/>, which also covers any named flatten.
+    /// On a document with an approval signature or a document timestamp, flatten needs
+    /// <see cref="AllowBreakingExistingSignatures"/>.
+    /// </remarks>
+    /// <returns>This workflow.</returns>
+    public PdfWorkflowBuilder FlattenForm()
+    {
+        return Record(() => _flattenAll = true);
+    }
+
+    /// <summary>
+    /// Flattens the named fields (spec F6), after every fill.
+    /// </summary>
+    /// <remarks>
+    /// The workflow flattens once: every field when <see cref="FlattenForm()"/> is also described, otherwise every field
+    /// named in any call, through <see cref="PdfAcroFormEditor.Flatten(IEnumerable{string})"/>. A name may be given more than
+    /// once. The engine checks the names when the workflow runs. On a document with an approval signature or a document
+    /// timestamp, flatten needs <see cref="AllowBreakingExistingSignatures"/>.
+    /// </remarks>
+    /// <param name="fullNames">The dotted full names.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="fullNames"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">A name is <see langword="null"/>.</exception>
+    public PdfWorkflowBuilder FlattenForm(params string[] fullNames)
+    {
+        if (fullNames == null)
+        {
+            throw new ArgumentNullException(nameof(fullNames));
+        }
+
+        string[] copy = (string[])fullNames.Clone();
+        if (Array.IndexOf(copy, null) >= 0)
+        {
+            throw new ArgumentException("A field name cannot be null.", nameof(fullNames));
+        }
+
+        return Record(() =>
+        {
+            foreach (string name in copy)
+            {
+                if (_flattenNamed.Add(name))
+                {
+                    _flattenNames.Add(name);
+                }
+            }
+        });
+    }
+
+    /// <summary>
+    /// Allows a flatten to change a document that has an approval signature or a document timestamp (spec F10).
+    /// </summary>
+    /// <remarks>
+    /// This sets <see cref="PdfDocumentEditor.AllowBreakingSignatures"/> for the run. Viewers will report the existing
+    /// signatures as modified. It does not relax certification, FieldMDP locks, or password permissions, and a signed
+    /// signature field is never flattened.
+    /// </remarks>
+    /// <returns>This workflow.</returns>
+    public PdfWorkflowBuilder AllowBreakingExistingSignatures()
+    {
+        return Record(() => _allowBreakingSignatures = true);
     }
 
     /// <summary>
@@ -168,13 +301,32 @@ public sealed class PdfWorkflowBuilder
 
     private PdfWorkflowBuilder Add(Action<PdfDocumentEditor> operation)
     {
+        return Record(() => _operations.Add(operation));
+    }
+
+    private PdfWorkflowBuilder Record(Action describe)
+    {
         lock (_gate)
         {
             CheckNotStarted();
-            _operations.Add(operation);
+            describe();
         }
 
         return this;
+    }
+
+    private void SetFill(string fullName, PdfFieldValue value)
+    {
+        var fill = new KeyValuePair<string, PdfFieldValue>(fullName, value);
+        if (_fillIndex.TryGetValue(fullName, out int index))
+        {
+            _fills[index] = fill;
+        }
+        else
+        {
+            _fillIndex.Add(fullName, _fills.Count);
+            _fills.Add(fill);
+        }
     }
 
     private void Begin()
@@ -194,12 +346,35 @@ public sealed class PdfWorkflowBuilder
         }
     }
 
-    private void Apply(PdfDocumentEditor editor)
+    // Spec F5: one bulk fill, then one flatten, then the other operations in the order described.
+    private IReadOnlyDictionary<string, PdfAppearanceDisposition> Apply(PdfDocumentEditor editor)
     {
+        if (_allowBreakingSignatures)
+        {
+            editor.AllowBreakingSignatures = true;
+        }
+
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = PdfWorkflowResult.NoFields;
+        if (_fills.Count > 0)
+        {
+            appearances = editor.AcroForm.Fill(_fills);
+        }
+
+        if (_flattenAll)
+        {
+            editor.AcroForm.Flatten();
+        }
+        else if (_flattenNames.Count > 0)
+        {
+            editor.AcroForm.Flatten(_flattenNames);
+        }
+
         foreach (Action<PdfDocumentEditor> operation in _operations)
         {
             operation(editor);
         }
+
+        return appearances;
     }
 
     private async Task<PdfWorkflowResult> SaveStreamAsync(Stream destination, bool useAsync, CancellationToken cancellationToken)
@@ -222,9 +397,10 @@ public sealed class PdfWorkflowBuilder
 
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
         using (PdfDocumentEditor editor = session.Document.Edit())
         {
-            Apply(editor);
+            appearances = Apply(editor);
             if (useAsync)
             {
                 await editor.SaveIncrementalAsync(destination, leaveOpen: true, cancellationToken).ConfigureAwait(false);
@@ -235,7 +411,7 @@ public sealed class PdfWorkflowBuilder
             }
         }
 
-        return new PdfWorkflowResult(destination.Length > session.InputLength, destination.Length);
+        return new PdfWorkflowResult(destination.Length > session.InputLength, destination.Length, appearances);
     }
 
     private async Task<PdfWorkflowResult> SaveFileAsync(string path, PdfFileSaveOptions? options, bool useAsync, CancellationToken cancellationToken)
@@ -273,7 +449,7 @@ public sealed class PdfWorkflowBuilder
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         using PdfDocumentEditor editor = session.Document.Edit();
-        Apply(editor);
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(editor);
         string temporary = WorkflowFiles.TemporarySibling(target);
         bool published = false;
         try
@@ -303,7 +479,7 @@ public sealed class PdfWorkflowBuilder
             // The input stays open while the output is published, so the alias check sees it as the run read it.
             WorkflowFiles.Publish(temporary, target, options.Overwrite, inputPath);
             published = true;
-            return new PdfWorkflowResult(outputLength > session.InputLength, outputLength);
+            return new PdfWorkflowResult(outputLength > session.InputLength, outputLength, appearances);
         }
         finally
         {
@@ -329,9 +505,10 @@ public sealed class PdfWorkflowBuilder
 
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(true, useAsync, cancellationToken).ConfigureAwait(false);
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
         using (PdfDocumentEditor editor = session.Document.Edit())
         {
-            Apply(editor);
+            appearances = Apply(editor);
             if (useAsync)
             {
                 await editor.SaveIncrementalAsync(cancellationToken).ConfigureAwait(false);
@@ -343,6 +520,6 @@ public sealed class PdfWorkflowBuilder
         }
 
         long length = session.Stream!.Length;
-        return new PdfWorkflowResult(length > session.InputLength, length);
+        return new PdfWorkflowResult(length > session.InputLength, length, appearances);
     }
 }

@@ -138,9 +138,9 @@ Each limit fails before any destination grows, and a file inside every limit ope
 
 ## Workflows
 
-`jaytwo.Ergonomics.Pdf` workflows (spec F1 to F4, F7, F11, F12, F14, F15, and F17, W-142). The tests use only the public API of both libraries.
+`jaytwo.Ergonomics.Pdf` workflows (spec F1 to F7, F11 to F15, and F17, W-142 and W-143; F10 for flatten). The tests use only the public API of both libraries.
 
-- `From`, `FromFile`, `WithTitle`, and `WithMetadata` do not read a counting stream or `IPdfSource`, and `FromFile` does not open its file, which a test holds exclusively. A null `PdfMetadataChanges` throws `ArgumentNullException` when described.
+- `From`, `FromFile`, and the metadata and form operation methods do not read a counting stream or `IPdfSource`, and `FromFile` does not open its file, which a test holds exclusively. A null `PdfMetadataChanges` throws `ArgumentNullException` when described.
 - A borrowed input stream, destination stream, or `IPdfSource` is not disposed after success, an engine failure, or a cancellation partway through the copy. A file opened from a path reopens with exclusive access after each.
 - After a terminal call begins, whether it succeeds, fails with `PdfEncryptionRestrictedException`, is canceled, or rejects its own arguments, every sync and async terminal call and operation method throws `InvalidOperationException`. An operation described while a run reads its input throws, and the output does not contain it. Of two concurrent terminal calls, exactly one runs and the other throws `InvalidOperationException`.
 - A metadata workflow appends one revision, keeps the input as an exact prefix, and reads back the same title, author, subject, keywords, creator, producer, and revision count as the direct `PdfDocumentEditor` edit. Each of the six properties can be set or removed; an assigned `null` removes, an unassigned property is unchanged, and a change with nothing assigned writes a copy. Several operations apply in order in one revision.
@@ -151,6 +151,11 @@ Each limit fails before any destination grows, and a file inside every limit ope
 - Cancelling an asynchronous path save after its temporary file `.out.pdf.<8 hex digits>.tmp` appears leaves no temporary file and the destination absent or unchanged.
 - The input's own path, the same path through `./` or `sub/../`, and the name of an input `FileStream` throw `ArgumentException` before the input opens; so does a case variant on Windows and macOS. With `Overwrite`, a copy of the input with its length and last-write time throws `IOException` saying the destination may be the input, and is unchanged; a same-length copy with another last-write time is replaced. Replacing a hard link to the open input throws `IOException` on Windows and Linux and leaves the input unchanged. On Linux, a symbolic-link destination is replaced as a link and its target is unchanged, and a symbolic link to the input is refused.
 - On a 6 MiB input, a metadata workflow reads no more source bytes, and requests no larger read, than the direct engine edit.
+- A fill workflow, a fill-and-flatten workflow, a named flatten, and a flatten of every field each append one revision, keep the input as an exact prefix, and write the same bytes as the direct `PdfDocumentEditor` sequence. Fills described after `FlattenForm()` apply before it. Fills and metadata share one revision.
+- A field filled more than once sends only its last value: an earlier value the engine cannot draw does not appear in `FieldAppearances`, which holds one `Generated` entry for each field. A value the engine cannot draw reports `NeedsViewer`. `FlattenForm("Name")` with `FlattenForm("City", "Name")` flattens both fields in one engine call, and with `FlattenForm()` flattens every field.
+- An unknown field, a read-only field, and a value longer than `/MaxLen` throw `PdfFieldNotFoundException`, `PdfFieldReadOnlyException`, and `PdfFieldValueException` with the destination unwritten. When one of three fills described in separate calls is refused, `AppendToSource` leaves the input unchanged. A fill the engine cannot draw followed by `FlattenForm()` throws `PdfUnsupportedFormException` with nothing written.
+- On a document with an approval signature, a flatten throws `PdfSignatureConflictException` with nothing written, and with `AllowBreakingExistingSignatures()` it flattens every field except the signed signature field. On a document certified with DocMDP `P` 2, a flatten with the opt-in throws `PdfCertificationLockedException`.
+- A null field name, value set, or name list throws when described. Changing a `FillForm` dictionary or a `FlattenForm` array after describing it does not change the output.
 
 ## Foreign files
 

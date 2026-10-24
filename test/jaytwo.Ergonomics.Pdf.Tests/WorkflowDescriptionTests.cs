@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using jaytwo.Pdf;
+using jaytwo.Pdf.AcroForm;
 using jaytwo.Pdf.Tests;
 using Xunit;
 
@@ -16,7 +18,8 @@ public class WorkflowDescriptionTests
     {
         var input = new ProbeStream(new MemoryStream(WorkflowPdf.WithInfo()));
 
-        PdfWorkflow.From(input).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" });
+        PdfWorkflow.From(input).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
 
         Assert.False(input.ReadCalled);
     }
@@ -26,7 +29,8 @@ public class WorkflowDescriptionTests
     {
         var source = new TestPdfSource(WorkflowPdf.WithInfo());
 
-        PdfWorkflow.From(source).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" });
+        PdfWorkflow.From(source).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
 
         Assert.Equal(0, source.SyncReads);
         Assert.Equal(0, source.AsyncReads);
@@ -41,7 +45,8 @@ public class WorkflowDescriptionTests
         // The file is held exclusively, so opening it would throw.
         using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
         {
-            PdfWorkflow.FromFile(path).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" });
+            PdfWorkflow.FromFile(path).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
         }
 
         PdfWorkflow.FromFile(directory.File("missing.pdf")).WithTitle("New");
@@ -151,5 +156,10 @@ public class WorkflowDescriptionTests
         await Assert.ThrowsAsync<InvalidOperationException>(() => workflow.AppendToSourceAsync());
         Assert.Throws<InvalidOperationException>(() => workflow.WithTitle("Again"));
         Assert.Throws<InvalidOperationException>(() => workflow.WithMetadata(new PdfMetadataChanges { Title = "Again" }));
+        Assert.Throws<InvalidOperationException>(() => workflow.Fill("Name", "Again"));
+        Assert.Throws<InvalidOperationException>(() => workflow.FillForm(new Dictionary<string, PdfFieldValue> { ["Name"] = "Again" }));
+        Assert.Throws<InvalidOperationException>(() => workflow.FlattenForm());
+        Assert.Throws<InvalidOperationException>(() => workflow.FlattenForm("Name"));
+        Assert.Throws<InvalidOperationException>(() => workflow.AllowBreakingExistingSignatures());
     }
 }
