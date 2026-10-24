@@ -16,7 +16,7 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 6. Inspect existing signatures: signer and embedded certificates, algorithms, claimed times, byte ranges, later revisions, time-stamp times, and certification level. Nothing is validated.
 7. List logical revisions with their end offsets and signature coverage, including linearized files.
 8. Open a seekable stream or a random-access `IPdfSource` snapshot, synchronously or asynchronously with cancellation.
-9. Run a workflow with `jaytwo.Ergonomics.Pdf`: describe form fills, form flattening, and document information changes to an existing PDF, then apply them as one incremental revision to a stream, to a file through a temporary sibling, or to the source itself (see **Workflows**).
+9. Run a workflow with `jaytwo.Ergonomics.Pdf`: describe form fills, form flattening, document information changes, attachments, and page rotation for an existing PDF, then apply them as one incremental revision to a stream, to a file through a temporary sibling, or to the source itself (see **Workflows**).
 
 Everything else in this README describes what ships today.
 
@@ -135,7 +135,7 @@ PDF 1.0 through 1.7, the operations above, standard security revisions 2 through
 
 ### Workflows
 
-`jaytwo.Ergonomics.Pdf` describes changes to one existing PDF and runs them through one `jaytwo.Pdf` editor, so the caller does not manage a document, an editor, or a temporary file. The workflow operations fill and flatten form fields and change document information.
+`jaytwo.Ergonomics.Pdf` describes changes to one existing PDF and runs them through one `jaytwo.Pdf` editor, so the caller does not manage a document, an editor, or a temporary file. The workflow operations fill and flatten form fields, change document information, add and remove attachments, and rotate pages.
 
 ```csharp
 using jaytwo.Ergonomics.Pdf;
@@ -147,12 +147,16 @@ PdfWorkflowResult result = await PdfWorkflow.FromFile("order.pdf")
     .FlattenForm()
     .WithTitle("Executed Order")
     .WithMetadata(new PdfMetadataChanges { Author = "Contracts", Keywords = null })
+    .AttachFile("order.json", "order.json")
+    .RotateAllPagesBy(90)
     .SaveAsync("order-final.pdf", new PdfFileSaveOptions { Overwrite = true }, cancellationToken);
 ```
 
 `PdfWorkflow.From` binds a readable seekable stream or an `IPdfSource`, and `FromFile` binds a path, with an optional password in `PdfWorkflowOpenOptions`. Neither they nor the operation methods read anything; the input is opened by the terminal call, and arguments are copied when described. `PdfMetadataChanges` changes only the properties its initializer assigns: the title, author, subject, keywords, creator, and producer. An assigned `null` removes the entry, and an unassigned property keeps its value. Every operation applies in one revision, and the original bytes stay a prefix.
 
-`Fill` and `FillForm` fill fields by full name. All the fills in a workflow reach the engine as one all-or-nothing bulk fill, before anything else, holding the last value described for each field, so one refused value writes nothing. `FlattenForm()` flattens every field except signature fields, and `FlattenForm(names)` flattens the named fields; the workflow flattens once, after the fills, either every field or the union of the names. Other operations then apply in the order described. On a document with an approval signature or a document timestamp, a flatten needs `AllowBreakingExistingSignatures()`, which does not relax certification, FieldMDP locks, or password permissions. Engine exceptions such as `PdfFieldNotFoundException`, `PdfFieldReadOnlyException`, `PdfFieldValueException`, and `PdfUnsupportedFormException` (a flatten after a fill the engine could not draw) propagate unchanged.
+`Fill` and `FillForm` fill fields by full name. All the fills in a workflow reach the engine as one all-or-nothing bulk fill, before anything else, holding the last value described for each field, so one refused value writes nothing. `FlattenForm()` flattens every field except signature fields, and `FlattenForm(names)` flattens the named fields; the workflow flattens once, after the fills, either every field or the union of the names. Other operations then apply in the order described. On a document with an approval signature or a document timestamp, a flatten or rotation needs `AllowBreakingExistingSignatures()`, which does not relax certification, FieldMDP locks, or password permissions. Engine exceptions such as `PdfFieldNotFoundException`, `PdfFieldReadOnlyException`, `PdfFieldValueException`, and `PdfUnsupportedFormException` (a flatten after a fill the engine could not draw) propagate unchanged.
+
+`Attach` adds an embedded file from a readable seekable stream: its position is recorded when described, and the run reads the content from that position through the end. The content must not change before or during the run; a change before the run cannot be detected, a change during it throws `InvalidOperationException` with nothing written, and so does a stream that has become shorter than the recorded position. `AttachFile` opens its file when the workflow runs and closes it when the run ends. Its MIME type is the one in `PdfAttachmentOptions`, or else comes from the extension, without regard to case: `.xml` `text/xml`, `.json` `application/json`, `.pdf` `application/pdf`, `.csv` `text/csv`, and `.txt` `text/plain`; any other extension leaves it unspecified. `RemoveAttachment` removes every embedded file with the name, and throws `PdfAttachmentNotFoundException` when there is none. `RotatePage` sets a page's rotation, `RotatePageBy` adds to it, and `RotateAllPagesBy` adds to each page's own rotation, in multiples of 90 with pages numbered from 1. A page number below 1 or an angle that is not a multiple of 90 throws `ArgumentOutOfRangeException` when described, and a page number above the page count throws it with nothing written. Attachment and rotation operations apply in the order described with the engine's semantics, so two relative rotations accumulate and an add after a remove keeps the file. Rotation on a signed document needs `AllowBreakingExistingSignatures()`, as a flatten does.
 
 The terminal calls are `Save` to a stream, `Save` to a path, and `AppendToSource`, each with an asynchronous form that takes a `CancellationToken`. `Save` to a stream needs an empty writable seekable stream other than the input, and with no changes it writes a copy. `AppendToSource` appends to the bound stream or file, writes nothing when nothing changed, and is refused for an `IPdfSource` or a stream that is not writable. In an asynchronous run, opening and copying read asynchronously, but applying the operations and preparing the revision still read the input synchronously. `PdfWorkflowResult` reports `Modified`, `OutputLength`, and `FieldAppearances`, the appearance disposition of each filled field's final value.
 

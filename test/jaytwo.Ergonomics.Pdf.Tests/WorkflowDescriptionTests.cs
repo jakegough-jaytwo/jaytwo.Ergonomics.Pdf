@@ -17,11 +17,14 @@ public class WorkflowDescriptionTests
     public void describing_a_stream_workflow_reads_nothing()
     {
         var input = new ProbeStream(new MemoryStream(WorkflowPdf.WithInfo()));
+        var content = new ProbeStream(new MemoryStream(new byte[4]));
 
         PdfWorkflow.From(input).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
-            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures()
+            .Attach("a.txt", content).RemoveAttachment("a.txt").RotatePage(1, 90).RotatePageBy(1, 90).RotateAllPagesBy(90);
 
         Assert.False(input.ReadCalled);
+        Assert.False(content.ReadCalled);
     }
 
     [Fact]
@@ -30,7 +33,8 @@ public class WorkflowDescriptionTests
         var source = new TestPdfSource(WorkflowPdf.WithInfo());
 
         PdfWorkflow.From(source).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
-            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures()
+            .RemoveAttachment("a.txt").RotatePage(1, 90).RotatePageBy(1, 90).RotateAllPagesBy(90);
 
         Assert.Equal(0, source.SyncReads);
         Assert.Equal(0, source.AsyncReads);
@@ -41,15 +45,18 @@ public class WorkflowDescriptionTests
     {
         using var directory = new TempDirectory();
         string path = directory.Write("in.pdf", WorkflowPdf.WithInfo());
+        string attachment = directory.Write("a.txt", new byte[4]);
 
-        // The file is held exclusively, so opening it would throw.
+        // The files are held exclusively, so opening them would throw.
         using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+        using (new FileStream(attachment, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
         {
             PdfWorkflow.FromFile(path).WithTitle("New").WithMetadata(new PdfMetadataChanges { Author = "Grace" })
-            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures();
+            .Fill("Name", "Ada").FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris" }).FlattenForm("Name").FlattenForm().AllowBreakingExistingSignatures()
+            .AttachFile("a.txt", attachment).RotateAllPagesBy(90);
         }
 
-        PdfWorkflow.FromFile(directory.File("missing.pdf")).WithTitle("New");
+        PdfWorkflow.FromFile(directory.File("missing.pdf")).WithTitle("New").AttachFile("b.txt", directory.File("missing.txt"));
     }
 
     [Fact]
@@ -161,5 +168,11 @@ public class WorkflowDescriptionTests
         Assert.Throws<InvalidOperationException>(() => workflow.FlattenForm());
         Assert.Throws<InvalidOperationException>(() => workflow.FlattenForm("Name"));
         Assert.Throws<InvalidOperationException>(() => workflow.AllowBreakingExistingSignatures());
+        Assert.Throws<InvalidOperationException>(() => workflow.Attach("a.txt", new MemoryStream()));
+        Assert.Throws<InvalidOperationException>(() => workflow.AttachFile("a.txt", "a.txt"));
+        Assert.Throws<InvalidOperationException>(() => workflow.RemoveAttachment("a.txt"));
+        Assert.Throws<InvalidOperationException>(() => workflow.RotatePage(1, 90));
+        Assert.Throws<InvalidOperationException>(() => workflow.RotatePageBy(1, 90));
+        Assert.Throws<InvalidOperationException>(() => workflow.RotateAllPagesBy(90));
     }
 }

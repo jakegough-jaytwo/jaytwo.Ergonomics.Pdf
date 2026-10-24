@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using jaytwo.Ergonomics.Pdf.Internal;
 using jaytwo.Pdf;
 using jaytwo.Pdf.AcroForm;
+using jaytwo.Pdf.Attachments;
 
 namespace jaytwo.Ergonomics.Pdf;
 
@@ -36,9 +37,19 @@ namespace jaytwo.Ergonomics.Pdf;
 /// </remarks>
 public sealed class PdfWorkflowBuilder
 {
+    // Spec F8: the only MIME types a path attachment's extension sets.
+    private static readonly Dictionary<string, string> MimeTypes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        [".xml"] = "text/xml",
+        [".json"] = "application/json",
+        [".pdf"] = "application/pdf",
+        [".csv"] = "text/csv",
+        [".txt"] = "text/plain",
+    };
+
     private readonly object _gate = new object();
     private readonly WorkflowInput _input;
-    private readonly List<Action<PdfDocumentEditor>> _operations = new List<Action<PdfDocumentEditor>>();
+    private readonly List<Action<WorkflowSession, PdfDocumentEditor>> _operations = new List<Action<WorkflowSession, PdfDocumentEditor>>();
     private readonly List<KeyValuePair<string, PdfFieldValue>> _fills = new List<KeyValuePair<string, PdfFieldValue>>();
     private readonly Dictionary<string, int> _fillIndex = new Dictionary<string, int>(StringComparer.Ordinal);
     private readonly List<string> _flattenNames = new List<string>();
@@ -163,7 +174,8 @@ public sealed class PdfWorkflowBuilder
     }
 
     /// <summary>
-    /// Allows a flatten to change a document that has an approval signature or a document timestamp (spec F10).
+    /// Allows a flatten or a page rotation to change a document that has an approval signature or a document timestamp
+    /// (spec F10).
     /// </summary>
     /// <remarks>
     /// This sets <see cref="PdfDocumentEditor.AllowBreakingSignatures"/> for the run. Viewers will report the existing
@@ -199,6 +211,170 @@ public sealed class PdfWorkflowBuilder
         }
 
         return Add(editor => changes.ApplyTo(editor.Metadata));
+    }
+
+    /// <summary>
+    /// Adds an embedded file whose content is the rest of a stream (spec F8).
+    /// </summary>
+    /// <remarks>
+    /// The stream's position is recorded now, and nothing is read. When the workflow runs, it seeks back to that position
+    /// and calls <see cref="PdfAttachmentCollectionEditor.Add"/>, which reads the content through the end; the save reads it
+    /// again. The content must not change before or during the run. A change before the run cannot be detected. A change
+    /// during it makes the run throw <see cref="InvalidOperationException"/> without writing the destination, and so does a
+    /// stream that is shorter than the recorded position when the run reaches it. An attachment with the name of an
+    /// existing one replaces it. The stream is not disposed.
+    /// </remarks>
+    /// <param name="name">The file name.</param>
+    /// <param name="content">A readable seekable stream positioned at the start of the content.</param>
+    /// <param name="options">Optional description, MIME type, relationship, dates, compression, and page mode.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> or <paramref name="content"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="content"/> is not readable and seekable.</exception>
+    public PdfWorkflowBuilder Attach(string name, Stream content, PdfAttachmentOptions? options = null)
+    {
+        if (name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
+        if (content == null)
+        {
+            throw new ArgumentNullException(nameof(content));
+        }
+
+        if (!content.CanRead || !content.CanSeek)
+        {
+            throw new ArgumentException("Attachment content must be a readable seekable stream.", nameof(content));
+        }
+
+        long position = content.Position;
+        return Add(editor =>
+        {
+            if (content.Length < position)
+            {
+                throw new InvalidOperationException("The content of attachment '" + name + "' is shorter than its position when the attachment was described.");
+            }
+
+            content.Position = position;
+            editor.Attachments.Add(name, content, leaveOpen: true, options);
+        });
+    }
+
+    /// <summary>
+    /// Adds an embedded file whose content is a file (spec F8).
+    /// </summary>
+    /// <remarks>
+    /// The file is opened when the workflow runs, once for both of the engine's reads, and closed when the run ends. A MIME
+    /// type in <paramref name="options"/> applies. Otherwise the extension, matched without regard to case, sets it:
+    /// <c>.xml</c> <c>text/xml</c>, <c>.json</c> <c>application/json</c>, <c>.pdf</c> <c>application/pdf</c>, <c>.csv</c>
+    /// <c>text/csv</c>, and <c>.txt</c> <c>text/plain</c>. Any other extension leaves it unspecified. An attachment with the
+    /// name of an existing one replaces it.
+    /// </remarks>
+    /// <param name="name">The file name stored in the document.</param>
+    /// <param name="path">The file to attach.</param>
+    /// <param name="options">Optional description, MIME type, relationship, dates, compression, and page mode.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> or <paramref name="path"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException"><paramref name="path"/> is empty.</exception>
+    public PdfWorkflowBuilder AttachFile(string name, string path, PdfAttachmentOptions? options = null)
+    {
+        if (name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
+        if (path == null)
+        {
+            throw new ArgumentNullException(nameof(path));
+        }
+
+        if (path.Length == 0)
+        {
+            throw new ArgumentException("The attachment path is empty.", nameof(path));
+        }
+
+        string fullPath = Path.GetFullPath(path);
+        PdfAttachmentOptions? resolved = WithMimeType(options, fullPath);
+        return Add((session, editor) => editor.Attachments.Add(name, session.OpenAttachment(fullPath), leaveOpen: true, resolved));
+    }
+
+    /// <summary>
+    /// Removes every embedded file with the given name (spec F8).
+    /// </summary>
+    /// <remarks>
+    /// The removal applies in the order described, so a file added before it is removed and one added after it is kept.
+    /// </remarks>
+    /// <param name="name">The file name.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="name"/> is <see langword="null"/>.</exception>
+    /// <exception cref="PdfAttachmentNotFoundException">When the workflow runs, no embedded file has the name.</exception>
+    public PdfWorkflowBuilder RemoveAttachment(string name)
+    {
+        if (name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+
+        return Add(editor => editor.Attachments.Remove(name));
+    }
+
+    /// <summary>
+    /// Sets a page's rotation (spec F9), through <see cref="PdfPageEditor.Rotation"/>.
+    /// </summary>
+    /// <remarks>
+    /// On a document with an approval signature or a document timestamp, rotation needs
+    /// <see cref="AllowBreakingExistingSignatures"/>.
+    /// </remarks>
+    /// <param name="pageNumber">The 1-based page number, as <see cref="PdfPage.Number"/> is.</param>
+    /// <param name="degrees">A multiple of 90, positive or negative.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="pageNumber"/> is below 1, or <paramref name="degrees"/> is not a multiple of 90. When the workflow runs, <paramref name="pageNumber"/> is above the page count.</exception>
+    public PdfWorkflowBuilder RotatePage(int pageNumber, int degrees)
+    {
+        CheckPage(pageNumber);
+        CheckAngle(degrees);
+        return Add(editor => Page(editor, pageNumber).Rotation = degrees);
+    }
+
+    /// <summary>
+    /// Rotates a page by an angle, added to its rotation when the operation applies (spec F9).
+    /// </summary>
+    /// <remarks>
+    /// Rotations apply in the order described, so two of them accumulate and a later <see cref="RotatePage"/> replaces
+    /// them. On a document with an approval signature or a document timestamp, rotation needs
+    /// <see cref="AllowBreakingExistingSignatures"/>.
+    /// </remarks>
+    /// <param name="pageNumber">The 1-based page number, as <see cref="PdfPage.Number"/> is.</param>
+    /// <param name="degrees">A multiple of 90, positive for clockwise.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="pageNumber"/> is below 1, or <paramref name="degrees"/> is not a multiple of 90. When the workflow runs, <paramref name="pageNumber"/> is above the page count.</exception>
+    public PdfWorkflowBuilder RotatePageBy(int pageNumber, int degrees)
+    {
+        CheckPage(pageNumber);
+        CheckAngle(degrees);
+        return Add(editor => Page(editor, pageNumber).Rotation += degrees % 360);
+    }
+
+    /// <summary>
+    /// Rotates every page by an angle, added to each page's own rotation (spec F9).
+    /// </summary>
+    /// <remarks>
+    /// On a document with an approval signature or a document timestamp, rotation needs
+    /// <see cref="AllowBreakingExistingSignatures"/>.
+    /// </remarks>
+    /// <param name="degrees">A multiple of 90, positive for clockwise.</param>
+    /// <returns>This workflow.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"><paramref name="degrees"/> is not a multiple of 90.</exception>
+    public PdfWorkflowBuilder RotateAllPagesBy(int degrees)
+    {
+        CheckAngle(degrees);
+        return Add(editor =>
+        {
+            foreach (PdfPageEditor page in editor.Pages)
+            {
+                page.Rotation += degrees % 360;
+            }
+        });
     }
 
     /// <summary>
@@ -299,7 +475,58 @@ public sealed class PdfWorkflowBuilder
         return AppendAsync(true, cancellationToken);
     }
 
+    private static void CheckPage(int pageNumber)
+    {
+        if (pageNumber < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pageNumber), "Pages are numbered from 1.");
+        }
+    }
+
+    private static void CheckAngle(int degrees)
+    {
+        if (degrees % 90 != 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(degrees), "Page rotation must be a multiple of 90 degrees.");
+        }
+    }
+
+    private static PdfPageEditor Page(PdfDocumentEditor editor, int pageNumber)
+    {
+        IReadOnlyList<PdfPageEditor> pages = editor.Pages;
+        if (pageNumber > pages.Count)
+        {
+            throw new ArgumentOutOfRangeException(nameof(pageNumber), "The document has no page " + pageNumber + "; it has " + pages.Count + ".");
+        }
+
+        return pages[pageNumber - 1];
+    }
+
+    private static PdfAttachmentOptions? WithMimeType(PdfAttachmentOptions? options, string path)
+    {
+        if (options?.MimeType != null || !MimeTypes.TryGetValue(Path.GetExtension(path), out string? mimeType))
+        {
+            return options;
+        }
+
+        return new PdfAttachmentOptions
+        {
+            Description = options?.Description,
+            MimeType = mimeType,
+            Relationship = options?.Relationship ?? PdfAttachmentRelationship.Unspecified,
+            CreationDate = options?.CreationDate,
+            ModificationDate = options?.ModificationDate,
+            Compress = options?.Compress ?? false,
+            OpenAttachmentsPanel = options?.OpenAttachmentsPanel ?? false,
+        };
+    }
+
     private PdfWorkflowBuilder Add(Action<PdfDocumentEditor> operation)
+    {
+        return Add((session, editor) => operation(editor));
+    }
+
+    private PdfWorkflowBuilder Add(Action<WorkflowSession, PdfDocumentEditor> operation)
     {
         return Record(() => _operations.Add(operation));
     }
@@ -347,7 +574,7 @@ public sealed class PdfWorkflowBuilder
     }
 
     // Spec F5: one bulk fill, then one flatten, then the other operations in the order described.
-    private IReadOnlyDictionary<string, PdfAppearanceDisposition> Apply(PdfDocumentEditor editor)
+    private IReadOnlyDictionary<string, PdfAppearanceDisposition> Apply(WorkflowSession session, PdfDocumentEditor editor)
     {
         if (_allowBreakingSignatures)
         {
@@ -369,9 +596,9 @@ public sealed class PdfWorkflowBuilder
             editor.AcroForm.Flatten(_flattenNames);
         }
 
-        foreach (Action<PdfDocumentEditor> operation in _operations)
+        foreach (Action<WorkflowSession, PdfDocumentEditor> operation in _operations)
         {
-            operation(editor);
+            operation(session, editor);
         }
 
         return appearances;
@@ -400,7 +627,7 @@ public sealed class PdfWorkflowBuilder
         IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
         using (PdfDocumentEditor editor = session.Document.Edit())
         {
-            appearances = Apply(editor);
+            appearances = Apply(session, editor);
             if (useAsync)
             {
                 await editor.SaveIncrementalAsync(destination, leaveOpen: true, cancellationToken).ConfigureAwait(false);
@@ -449,7 +676,7 @@ public sealed class PdfWorkflowBuilder
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         using PdfDocumentEditor editor = session.Document.Edit();
-        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(editor);
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(session, editor);
         string temporary = WorkflowFiles.TemporarySibling(target);
         bool published = false;
         try
@@ -508,7 +735,7 @@ public sealed class PdfWorkflowBuilder
         IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
         using (PdfDocumentEditor editor = session.Document.Edit())
         {
-            appearances = Apply(editor);
+            appearances = Apply(session, editor);
             if (useAsync)
             {
                 await editor.SaveIncrementalAsync(cancellationToken).ConfigureAwait(false);

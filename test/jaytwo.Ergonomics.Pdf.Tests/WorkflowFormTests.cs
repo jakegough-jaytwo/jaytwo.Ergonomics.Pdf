@@ -22,14 +22,14 @@ public class WorkflowFormTests
             .FillForm(new Dictionary<string, PdfFieldValue> { ["City"] = "Paris", ["Agree"] = true })
             .Save(output);
 
-        byte[] direct = Direct(input, editor => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>
+        byte[] direct = WorkflowPdf.Direct(input, editor => editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue>
         {
             ["Name"] = "Ada",
             ["City"] = "Paris",
             ["Agree"] = true,
         }));
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         Assert.Equal(direct, output.ToArray());
         Assert.True(result.Modified);
         Assert.Equal(output.Length, result.OutputLength);
@@ -55,13 +55,13 @@ public class WorkflowFormTests
             .Fill("Agree", true)
             .Save(output);
 
-        byte[] direct = Direct(input, editor =>
+        byte[] direct = WorkflowPdf.Direct(input, editor =>
         {
             editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> { ["Name"] = "Ada", ["Agree"] = true });
             editor.AcroForm.Flatten();
         });
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         Assert.Equal(direct, output.ToArray());
         Assert.Equal(2, result.FieldAppearances.Count);
         using PdfDocument flattened = WorkflowPdf.Open(output.ToArray());
@@ -113,13 +113,13 @@ public class WorkflowFormTests
             .FlattenForm("City", "Name")
             .Save(output);
 
-        byte[] direct = Direct(input, editor =>
+        byte[] direct = WorkflowPdf.Direct(input, editor =>
         {
             editor.AcroForm.Fill("Name", "Ada");
             editor.AcroForm.Flatten(new[] { "Name", "City" });
         });
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         Assert.Equal(direct, output.ToArray());
         using PdfDocument flattened = WorkflowPdf.Open(output.ToArray());
         Assert.Equal(new[] { "Agree", "Locked", "Code" }, flattened.AcroForm.Fields.Select(field => field.FullName));
@@ -133,9 +133,9 @@ public class WorkflowFormTests
         var output = new MemoryStream();
         PdfWorkflow.From(new MemoryStream(input)).FlattenForm("Name").FlattenForm().Save(output);
 
-        byte[] direct = Direct(input, editor => editor.AcroForm.Flatten());
+        byte[] direct = WorkflowPdf.Direct(input, editor => editor.AcroForm.Flatten());
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         Assert.Equal(direct, output.ToArray());
         using PdfDocument flattened = WorkflowPdf.Open(output.ToArray());
         Assert.Empty(flattened.AcroForm.Fields);
@@ -149,7 +149,7 @@ public class WorkflowFormTests
         var output = new MemoryStream();
         PdfWorkflow.From(new MemoryStream(input)).WithTitle("Filled").Fill("Name", "Ada").Save(output);
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         using PdfDocument edited = WorkflowPdf.Open(output.ToArray());
         Assert.Equal("Filled", edited.Metadata.Title);
         Assert.Equal("Ada", Value(edited, "Name"));
@@ -206,7 +206,7 @@ public class WorkflowFormTests
         var output = new MemoryStream();
         PdfWorkflow.From(new MemoryStream(input)).AllowBreakingExistingSignatures().FlattenForm().Save(output);
 
-        AssertOneRevision(input, output.ToArray());
+        WorkflowPdf.AssertOneRevision(input, output.ToArray());
         using PdfDocument flattened = WorkflowPdf.Open(output.ToArray());
         Assert.Equal("Sig", Assert.Single(flattened.AcroForm.Fields).FullName);
     }
@@ -244,27 +244,6 @@ public class WorkflowFormTests
         using PdfDocument edited = WorkflowPdf.Open(output.ToArray());
         Assert.Equal("Ada", Value(edited, "Name"));
         Assert.DoesNotContain(edited.AcroForm.Fields, field => field.FullName == "City");
-    }
-
-    private static byte[] Direct(byte[] input, Action<PdfDocumentEditor> edit)
-    {
-        var output = new MemoryStream();
-        using (PdfDocument document = PdfDocument.Open(new MemoryStream(input), leaveOpen: false))
-        using (PdfDocumentEditor editor = document.Edit())
-        {
-            edit(editor);
-            editor.SaveIncremental(output, leaveOpen: true);
-        }
-
-        return output.ToArray();
-    }
-
-    private static void AssertOneRevision(byte[] input, byte[] output)
-    {
-        WorkflowPdf.AssertPrefix(input, output);
-        using PdfDocument original = WorkflowPdf.Open(input);
-        using PdfDocument edited = WorkflowPdf.Open(output);
-        Assert.Equal(original.Revisions.Count + 1, edited.Revisions.Count);
     }
 
     private static string? Value(PdfDocument document, string name)

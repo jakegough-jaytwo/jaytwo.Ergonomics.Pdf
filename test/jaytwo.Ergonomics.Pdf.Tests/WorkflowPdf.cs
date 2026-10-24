@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Text;
 using jaytwo.Pdf;
@@ -79,6 +80,18 @@ internal static class WorkflowPdf
         return Form(" /Perms << /DocMDP 30 0 R >>", "<< /Type /Sig /Reference [<< /TransformMethod /DocMDP /TransformParams << /P 2 /V /1.2 >> >>] >>");
     }
 
+    // Three pages: page 1 has no /Rotate, page 2 has /Rotate 90, and page 3 has /Rotate 270.
+    public static byte[] Pages()
+    {
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 3 /Kids [3 0 R 4 0 R 5 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.Indirect(4, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Rotate 90 >>");
+        builder.Indirect(5, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Rotate 270 >>");
+        return builder.Finish();
+    }
+
     public static PdfDocument Open(byte[] pdf)
     {
         return PdfDocument.Open(new MemoryStream(pdf), leaveOpen: false);
@@ -94,6 +107,29 @@ internal static class WorkflowPdf
         }
 
         Assert.True(differs < 0, "The output differs from the input at offset " + differs + ".");
+    }
+
+    // The output of the same edit made directly through the engine, saved to a separate stream.
+    public static byte[] Direct(byte[] input, Action<PdfDocumentEditor> edit)
+    {
+        var output = new MemoryStream();
+        using (PdfDocument document = Open(input))
+        using (PdfDocumentEditor editor = document.Edit())
+        {
+            edit(editor);
+            editor.SaveIncremental(output, leaveOpen: true);
+        }
+
+        return output.ToArray();
+    }
+
+    // Asserts the output appends one revision and keeps the input as an exact prefix.
+    public static void AssertOneRevision(byte[] input, byte[] output)
+    {
+        AssertPrefix(input, output);
+        using PdfDocument original = Open(input);
+        using PdfDocument edited = Open(output);
+        Assert.Equal(original.Revisions.Count + 1, edited.Revisions.Count);
     }
 
     // Asserts the output appends one revision with the given title and keeps the input as an exact prefix.
