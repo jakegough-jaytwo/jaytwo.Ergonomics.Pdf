@@ -1,8 +1,10 @@
 # Production Qualification Standard
 
-jaytwo.Ergonomics.Pdf, Release 1.0 (Phase 1). Owner: human owner. Adopted 2026-10-18; revised for the Phase 1 scope under D-38.
+jaytwo.Pdf and jaytwo.Ergonomics.Pdf. Owner: human owner. Adopted 2026-10-18; revised for the Phase 1 scope under D-38; release track suspended under D-54.
 
 `docs/spec/phase-1.md` states the target behavior and `ACCEPTANCE.md` the shipped behavior. This document states the evidence a release needs before that behavior can be called production-qualified. Where it disagrees with `AGENTS.md`, `AGENTS.md` wins. Phase 2 capabilities get their gates when the owner adopts `docs/spec/phase-2.md`.
+
+**Suspended (D-54).** No release is being qualified during the architectural reset. Evidence under `agents/evidence/` was recorded against the pre-reset project and API. It is historical input and does not count toward a gate for `jaytwo.Pdf` or the new API. The decision that adopts packaging and versioning for both libraries re-adopts these gates. Until then, work items verify under D-53, and the gates below describe the eventual bar.
 
 ## 1. Definition
 

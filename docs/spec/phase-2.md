@@ -1,8 +1,8 @@
 # Phase 2 specification: write a new file
 
-Status: **draft outline**, 2026-10-19. Scope is adopted (D-38); behavior is not. The owner interview on section 5 finalizes it.
+Status: **draft outline**, 2026-10-19. Scope is adopted (D-38); behavior is not. The owner interview on section 5 finalizes it. Reset stage R3 implements N1 and N2 after the owner settles the section 5 questions they depend on; N3 to N5 are evaluated in R5 (D-54).
 
-Phase 2 ships in 1.x, after Phase 1 is production-qualified. It adds operations and does not break the Phase 1 API. The tenets in `phase-1.md` section 2 apply unchanged.
+Phase 2 adds new-file operations to the `jaytwo.Pdf` engine, with an assembly workflow in `jaytwo.Ergonomics.Pdf`. Release timing is set by the later packaging decision (D-54). It adds operations without breaking the Phase 1 API in force when it starts. The tenets in `phase-1.md` section 2 apply unchanged.
 
 ## 1. Scope
 

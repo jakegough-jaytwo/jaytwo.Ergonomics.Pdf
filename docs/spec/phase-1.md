@@ -2,17 +2,17 @@
 
 Status: adopted by the owner, 2026-10-19 (D-38). Open questions are listed in section 12 and do not block work on settled requirements.
 
-Phase 1 is release 1.0. It ships production-qualified on its own. Phase 2 (`phase-2.md`) adds to it in 1.x without breaking it.
+Phase 1 is the read-and-append scope. Its capabilities move into the `jaytwo.Pdf` engine in reset stage R1 and gain `jaytwo.Ergonomics.Pdf` workflows in R2 (`reset-plan.md`, D-54). The 1.0 release track is suspended; section 10 is the bar a later release adopts, not current work. Phase 2 (`phase-2.md`) adds new-file writing.
 
 ## 1. Purpose
 
-A permissively licensed, managed .NET library for the common business PDF operations that push developers toward commercial toolkits: reading and filling forms, metadata, attachments, encrypted files, and PKCS#11 signing. It works on gigabyte files and on documents with thousands of pages while reading only what an operation needs.
+Two permissively licensed, managed .NET libraries, the `jaytwo.Pdf` engine and the `jaytwo.Ergonomics.Pdf` workflow layer, for the common business PDF operations that push developers toward commercial toolkits: reading and filling forms, metadata, attachments, encrypted files, and PKCS#11 signing. It works on gigabyte files and on documents with thousands of pages while reading only what an operation needs.
 
 ## 2. Tenets
 
 In priority order. When two conflict, the earlier one wins.
 
-1. **Not a general toolkit.** We do not compete with qpdf, iText, PDFsharp, or Aspose. Every operation is a named business use case. There is no layout engine, no "create a hello-world PDF", no fluent document model.
+1. **Not a general toolkit.** We do not compete with qpdf, iText, PDFsharp, or Aspose. Every operation is a named business use case. There is no layout engine, no "create a hello-world PDF", no fluent document model. A workflow builder that records operations on an existing document is not a document model.
 2. **Usable.** A developer can do each use case in a few lines, with errors that say what to do next.
 3. **Production-ready.** Every advertised operation passes the release gates in section 10. Failure never leaves a half-written output. The one exception is a failure of the destination stream itself, such as an I/O error or a full disk: the library then attempts to restore the destination's original length, still reports the failure, and documents that restoration cannot be guaranteed (`QUALIFICATION.md` G9).
 4. **According to the spec.** ISO 32000-1 (PDF 1.7) is the reference; ISO 32000-2 is followed where real files use it. Deviations are deliberate, listed, and tested.
@@ -29,7 +29,7 @@ Anything that writes a new file, renumbers objects, or drops bytes from the orig
 
 These hold for every Phase 1 operation.
 
-- Input is a readable, seekable `Stream`. Offsets are `long`. Callers with a non-seekable source copy it to a file first.
+- Input is an `IPdfSource` (R13) or a readable, seekable `Stream` through its adapter. Offsets are `long`. Callers with a non-seekable source copy it to a file first.
 - `Open` reads the header and the last cross-reference section chain. Other bytes are read only when an operation needs the objects in them. A page content stream is never decoded.
 - Working memory is the cross-reference map plus the objects an operation touches. It does not grow with page count, image size, or attachment size. Existing budgets (D-20) carry forward; each new operation in section 6 gets a budget before it is qualified.
 - Output is either appended to the opened stream or copied, then appended, to an empty destination stream with a 1 MiB buffer.
@@ -54,10 +54,12 @@ Status key: **Exists** (implemented and tested today), **Change** (exists, behav
 | R10 | **Revision listing.** List revisions in order with the end offset of each and whether a signature covers it. A linearized file's first-page cross-reference section and its main section are one revision, not two. Only cross-reference sections and trailers are read. | Exists |
 | R11 | Strict reading with a documented list of tolerated writer quirks (section 8). | Exists |
 | R12 | Form classification: `AcroForm.IsHybridXfa` and `AcroForm.IsXfaOnly`. | Exists |
+| R13 | **Random-access source.** Open from an `IPdfSource` or a seekable-`Stream` adapter, synchronously or with `OpenAsync` and a `CancellationToken`. The source is one stable snapshot read at absolute `long` offsets; reads may be partial, a zero-byte read is end of source, and the engine serializes its reads. Ownership is explicit at every open entry point. Cancellation publishes no partially parsed document state. A source change detected during use fails instead of mixing versions (`reset-plan.md` section 4.3). | New |
+| R14 | **Inspection and editing.** `PdfDocument` is read-only and lazily loaded. `PdfDocument.Edit()` returns a `PdfDocumentEditor`; every write in section 6, and every save and signature, is an editor operation. | Change |
 
 ## 6. Incremental writes
 
-All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Several edits in one save produce one revision. Dispose never saves.
+All writes are made through a `PdfDocumentEditor` (R14) and are pending until its save or sign operation. Several edits in one save produce one revision; a signature or document timestamp adds the separate revision its semantics require. Disposing an editor never saves.
 
 ### 6.1 Forms
 
@@ -102,39 +104,35 @@ All writes are pending until `SaveIncremental`, `Sign`, or their async forms. Se
 | W17 | **Formats.** `adbe.pkcs7.detached` (current) and **PAdES baseline B-B** (`ETSI.CAdES.detached`, ETSI EN 319 142-1): `signing-certificate-v2` signed attribute, no CMS `signing-time` attribute (the time is in `/M`). With a timestamp authority, the result is PAdES B-T. | Exists |
 | W18 | RFC 3161 signature timestamp as an unsigned attribute, and document timestamps as a separate revision, with the existing nonce, imprint, algorithm, and certificate checks. | Exists |
 | W19 | Failure never extends the output: signer, timestamp, size, and validation failures leave the destination unchanged. Signer exception details are not exposed. | Exists |
-| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. `SaveIncrementalAsync` and `SignAsync` exist beside the synchronous methods. Reads stay synchronous. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | Exists |
+| W20 | **Async.** The signer and timestamp interfaces are asynchronous and take a `CancellationToken`. Asynchronous save and sign exist beside the synchronous methods, and opening and source reads are asynchronous too (R13). Synchronous conveniences remain where they do not hide blocking remote I/O. The API may use `ValueTask` and `IAsyncDisposable` on every target (D-39). | Change |
 
 ### 6.6 API
 
 The API may change freely until 1.0. After 1.0, semantic versioning applies. The shapes below are illustrative; the requirements above are binding.
 
 ```csharp
-using var doc = PdfDocument.Open(stream, password);
+await using var doc = await PdfDocument.OpenAsync(source, options, cancellationToken);
 
 var data = doc.AcroForm.Export();                       // R6
-doc.AcroForm.Fill(new Dictionary<string, PdfFieldValue> // W2
+foreach (PdfSignatureInfo sig in doc.Signatures) { }    // R9
+foreach (PdfRevision rev in doc.Revisions) { }          // R10
+
+await using var editor = doc.Edit();                    // R14
+editor.AcroForm.Fill(new Dictionary<string, PdfFieldValue> // W2
 {
     ["Name"] = "Ada",
     ["Agree"] = true,
-    ["Colors"] = new[] { "Red", "Blue" },
 });
-doc.AcroForm.Flatten();                                 // W3
-doc.Pages[0].Rotation = 90;                             // W6
-
-doc.Attachments.Add("factur-x.xml", xml, new PdfAttachmentOptions
+editor.Pages[0].Rotation = 90;                          // W6
+editor.Attachments.Add("factur-x.xml", xml, new PdfAttachmentOptions
 {
-    MimeType = "text/xml",
     Relationship = PdfAttachmentRelationship.Alternative, // W9
     Compress = true,                                       // W11
 });
 
-foreach (PdfSignatureInfo sig in doc.Signatures) { }    // R9
-foreach (PdfRevision rev in doc.Revisions) { }          // R10
-
-await doc.SignAsync(output, new PdfSignatureOptions
+await editor.SignAsync(output, new PdfSignatureOptions
 {
     Format = PdfSignatureFormat.PadesBaselineB,         // W17
-    DigestAlgorithm = PdfDigestAlgorithm.Sha384,        // W16
 }, new CmsSignatureProvider(cloudKmsSigner, timestampAuthority), cancellationToken);
 ```
 
@@ -198,13 +196,13 @@ Files with no usable cross-reference, or with structurally invalid objects, thro
 
 ## 9. Platforms and dependencies
 
-- Targets `netstandard2.0`, `net6.0`, `net8.0`, and `net10.0` (D-40). `netstandard2.1` is dropped. Tests run on `net6.0`, `net8.0`, and `net10.0`, and on `net48` on Windows. The `netstandard2.0` build is also tested on `net8.0` (D-51).
-- Runtime dependencies: on `netstandard2.0` only, `System.Memory` and `Microsoft.Bcl.AsyncInterfaces` (which brings `System.Threading.Tasks.Extensions`, D-39). `net8.0` and `net10.0` have none. Any other runtime package is an owner decision.
-- Not thread-safe. One `PdfDocument` per operation.
+- Both libraries target `netstandard2.0`, `net6.0`, `net8.0`, and `net10.0` (D-40). `netstandard2.1` is dropped. Tests run on `net6.0`, `net8.0`, and `net10.0`, and on `net48` on Windows. The `netstandard2.0` build is also tested on `net8.0` (D-51).
+- Runtime dependencies of both libraries: on `netstandard2.0` only, `System.Memory` and `Microsoft.Bcl.AsyncInterfaces` (which brings `System.Threading.Tasks.Extensions`, D-39). `net8.0` and `net10.0` have none. Any other runtime package is an owner decision. `jaytwo.Ergonomics.Pdf` adds only its reference to `jaytwo.Pdf`.
+- `PdfDocument` and `PdfDocumentEditor` are not thread-safe. The engine serializes its reads from one source.
 
 ## 10. Release bar
 
-1.0 is released when every requirement marked in sections 5 and 6 passes the gates below. This right-sizes `QUALIFICATION.md`; that file is updated under its own work item with owner approval.
+A future 1.0 release requires every requirement in sections 5 and 6 to pass the gates below. The release track is suspended (D-54); these gates are not current work. This right-sizes `QUALIFICATION.md`; that file is updated under its own work item with owner approval.
 
 | Gate | Phase 1 bar |
 | --- | --- |

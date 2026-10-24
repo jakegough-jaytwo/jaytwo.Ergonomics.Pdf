@@ -15,7 +15,7 @@ The owner made these decisions during the reset interview on 2026-10-23:
 3. `jaytwo.Ergonomics.Pdf` depends on `jaytwo.Pdf`. `jaytwo.Pdf` never depends on Ergonomics.
 4. Move the existing signing implementation and its tests into `jaytwo.Pdf` during the boundary reset without redesigning or extending it. Signing remains usable.
 5. Resume signing work only after document assembly. Until then, signing changes are limited to regressions or migration breakage.
-6. Establish a public random-access source abstraction, async reads, cancellation, and explicit resource ownership in the engine foundation phase. Cloud storage adapters are deferred.
+6. Establish a public random-access source abstraction, async reads, cancellation, and explicit resource ownership in the engine foundation stage. Cloud storage adapters are deferred.
 7. Separate inspection from editing: `PdfDocument` is read-only, `PdfDocument.Edit()` creates a `PdfDocumentEditor`, and save and signing are editor operations.
 8. Build Ergonomics as a deferred, intent-oriented workflow over one core editor session. Do not mirror the core API with fluent names.
 9. Keep raw PDF dictionaries, tokens, indirect objects, parsers, and serializers internal. Reconsider an expert/raw API only for concrete use cases.
@@ -76,7 +76,7 @@ Defer:
 - new signing features, signing API expansion, dedicated signing qualification expansion, and new signing hardening campaigns until after assembly;
 - raw object-model access;
 - S3, Azure Blob, and other storage-specific adapters;
-- compaction, removing revisions, and removing passwords until after the focused assembly phase;
+- compaction, removing revisions, and removing passwords until after the focused assembly stage;
 - cryptographic signature verification, trust, revocation, and long-term-validation support;
 - general content placement and any work resembling a renderer or layout engine.
 
@@ -145,17 +145,17 @@ await PdfWorkflow.From(input)
     .SaveAsync(output, cancellationToken);
 ```
 
-Workflow methods describe intent. `SaveAsync` opens the source, validates and orders the operations, creates one editor session, applies compatible operations, and writes the result. Signing is added to this workflow only in Phase 4.
+Workflow methods describe intent. `SaveAsync` opens the source, validates and orders the operations, creates one editor session, applies compatible operations, and writes the result. Signing is added to this workflow only in stage R4.
 
 ### 4.3 Random-access source contract
 
-Phase 1 settles these semantics before implementing `IPdfSource`:
+Stage R1 settles these semantics before implementing `IPdfSource`:
 
 - A source represents one stable logical snapshot. Its length and bytes do not change during a document's lifetime. A remote adapter uses a version, generation, ETag, or equivalent precondition when its backing store can change; it fails instead of silently mixing versions.
 - Reads address absolute `long` offsets and may return fewer bytes than requested. A zero-byte read means end of source; engine helpers that require an exact range continue reading or report truncation.
 - Reads provide genuine asynchronous I/O and observe cancellation. Cancellation does not publish partially parsed document state.
 - Ownership is explicit at every open entry point. A borrowed source remains the caller's responsibility; an owned source is disposed with the document. The caller must not mutate or dispose a source while a document or editor is using it.
-- Phase 1 does not require concurrent reads from one source. Documents and editors remain non-thread-safe, and the engine serializes its reads. A later use case may add controlled prefetch without changing the basic source contract.
+- Stage R1 does not require concurrent reads from one source. Documents and editors remain non-thread-safe, and the engine serializes its reads. A later use case may add controlled prefetch without changing the basic source contract.
 - Sharing one source among documents is allowed only when the source implementation documents that lifetime and access pattern as safe. The core does not infer shareability.
 - The engine may coalesce neighboring reads and keep a bounded cache. Those optimizations sit above storage adapters so the parser does not acquire S3-, Azure-, HTTP-, or filesystem-specific behavior.
 
@@ -177,7 +177,7 @@ Stream overloads state their required capabilities and partial-output behavior. 
 
 Read-only does not mean eagerly materialized. Opening reads the structural index needed to navigate the file; pages, fields, attachments, signatures, revisions, and related objects remain lazy where practical. Inspection must preserve the existing sparse working-set guarantees.
 
-`document.Edit()` is the primary editor model because it makes inspection, ownership, and the source snapshot explicit. Phase 1 may also evaluate `PdfDocumentEditor.OpenAsync(...)` as a convenience for edit-only callers. If added, it is a factory over the same document/editor lifecycle and invariants, not a second editing architecture.
+`document.Edit()` is the primary editor model because it makes inspection, ownership, and the source snapshot explicit. Stage R1 may also evaluate `PdfDocumentEditor.OpenAsync(...)` as a convenience for edit-only callers. If added, it is a factory over the same document/editor lifecycle and invariants, not a second editing architecture.
 
 ## 5. Migration rules
 
@@ -193,7 +193,7 @@ Read-only does not mean eagerly materialized. Opening reads the structural index
 10. No package is released while the dependency graph contains an unpublished engine package.
 11. Password permission bits, DocMDP and FieldMDP certification restrictions, and cryptographic enforcement are separate mechanisms. APIs, tests, and documentation do not collapse them into one generic permission result.
 
-## 6. Phase 0: align authority and stop the old release plan
+## 6. Stage R0: align authority and stop the old release plan
 
 ### Outcome
 
@@ -201,20 +201,20 @@ The repository's binding instructions describe the reset consistently before str
 
 ### Work
 
-1. Propose the minimum exact updates to `AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and affected skills and decisions needed to remove contradictions, for owner approval. Do not turn Phase 0 into a general documentation rewrite.
+1. Propose the minimum exact updates to `AGENTS.md`, `docs/spec/`, `QUALIFICATION.md`, and affected skills and decisions needed to remove contradictions, for owner approval. Do not turn stage R0 into a general documentation rewrite. The owner approved that proposal, `agents/reference/reset-phase-0-proposal.md`, on 2026-10-23, and W-128 applied it.
 2. Replace the one-library product charter with the two-library responsibility split.
-3. Define the new phase numbering and distinguish migrated existing capability from new phase work.
+3. Define the new stage numbering and distinguish migrated existing capability from new stage work.
 4. Suspend the current 1.0 release and package qualification track.
 5. Replace `agents/state/current.md` with the reset work-item sequence after the owner approves the records.
 6. Mark old work items as retained, deferred, superseded, or cancelled without rewriting frozen closeouts.
 
 ### Exit criteria
 
-- No binding source contradicts the two-project dependency direction, clean break, editor model, source abstraction, revised phase order, or release pause.
+- No binding source contradicts the two-project dependency direction, clean break, editor model, source abstraction, revised stage order, or release pause.
 - The reset has a small ordered set of work items with exact `allowed_changes`.
 - Feature work does not continue against architecture scheduled to move.
 
-## 7. Phase 1: engine foundation
+## 7. Stage R1: engine foundation
 
 ### Outcome
 
@@ -230,9 +230,9 @@ The repository's binding instructions describe the reset consistently before str
 6. **Resolve foundational compatibility defects.** Do W-117 and W-99 in the engine context rather than in the old architecture.
 7. **Re-establish the fast verification baseline.** Build every target and run focused plus proportionate regression tests. Re-record output identity where a namespace or API-only change cannot affect bytes; investigate any byte change rather than accepting it mechanically.
 
-### Signing rule during Phase 1
+### Signing rule during stage R1
 
-Move signing code and tests as-is. Changes required for namespaces, project references, the document/editor split, source access, or an observed regression are allowed. New formats, algorithms, validation features, workflow design, verifier expansion, and dedicated hardening work wait for Phase 4.
+Move signing code and tests as-is. Changes required for namespaces, project references, the document/editor split, source access, or an observed regression are allowed. New formats, algorithms, validation features, workflow design, verifier expansion, and dedicated hardening work wait for stage R4.
 
 ### Exit criteria
 
@@ -245,7 +245,7 @@ Move signing code and tests as-is. Changes required for namespaces, project refe
 - Destination APIs state their validation, rollback, and commit guarantees without claiming atomicity an arbitrary destination cannot provide.
 - W-117 and W-99 have their approved dispositions.
 
-## 8. Phase 2: ergonomic workflows
+## 8. Stage R2: ergonomic workflows
 
 ### Outcome
 
@@ -263,13 +263,13 @@ Move signing code and tests as-is. Changes required for namespaces, project refe
 - provide friendly errors without hiding the underlying failure category;
 - add read shortcuts only where they reduce real ceremony.
 
-Signing is intentionally absent from the workflow in this phase. Callers that need the already-supported signing behavior use `jaytwo.Pdf` directly until Phase 4.
+Signing is intentionally absent from the workflow in this stage. Callers that need the already-supported signing behavior use `jaytwo.Pdf` directly until stage R4.
 
 ### Testing
 
 Ergonomics tests cover intent capture, defaults, option precedence, composition, ordering, invalid-workflow rejection, file and stream ownership, cancellation, and parity with direct core operations. They do not use engine internals.
 
-W-80 belongs at the end of this phase so fill and flatten rendering is checked through the stable engine and workflow boundaries.
+W-80 belongs at the end of this stage so fill and flatten rendering is checked through the stable engine and workflow boundaries.
 
 ### Exit criteria
 
@@ -279,7 +279,7 @@ W-80 belongs at the end of this phase so fill and flatten rendering is checked t
 - Invalid workflows fail before changing the destination.
 - Poppler and MuPDF cover the agreed fill and flatten rendering cases.
 
-## 9. Phase 3: document assembly
+## 9. Stage R3: document assembly
 
 ### Outcome
 
@@ -312,13 +312,13 @@ The engine can create a new PDF from selected pages of existing PDFs, and Ergono
 - Conflicting document-level structures follow documented deterministic rules.
 - Large-input memory use follows the reachable working set rather than total source size wherever the operation permits it.
 
-## 10. Phase 4: signing
+## 10. Stage R4: signing
 
 ### Outcome
 
 Signing is integrated into the final core/editor/workflow architecture, and new signing investment resumes from the already validated baseline.
 
-Core signing has remained available since Phase 1. The owner deliberately deferred its Ergonomics workflow and all further signing investment until after document assembly; Phase 4 does not recover removed functionality.
+Core signing has remained available since stage R1. The owner deliberately deferred its Ergonomics workflow and all further signing investment until after document assembly; stage R4 does not recover removed functionality.
 
 ### Scope
 
@@ -337,7 +337,7 @@ Core signing has remained available since Phase 1. The owner deliberately deferr
 - Existing RSA, ECDSA, digest, CMS/PAdES, timestamp, encryption, certification, and failure guarantees remain covered.
 - Signing-specific fuzz and independent-verifier evidence is fresh for the final implementation.
 
-## 11. Phase 5: advanced capabilities
+## 11. Stage R5: advanced capabilities
 
 Evaluate and schedule separately:
 
@@ -349,19 +349,19 @@ Evaluate and schedule separately:
 - a deliberate expert/raw API backed by concrete use cases;
 - tightly bounded image, vector, or signature-appearance placement that does not become a layout engine.
 
-An item enters this phase only with a concrete use case, explicit guarantees, and a resource model.
+An item enters this stage only with a concrete use case, explicit guarantees, and a resource model.
 
 ## 12. Existing queue disposition
 
 | Item | Disposition |
 | --- | --- |
-| W-117, cross-reference-stream append interoperability | Phase 1 foundational engine compatibility |
-| W-99, unsigned encryption `/P` decision | Phase 1 foundational engine compatibility |
-| W-80, MuPDF as second renderer | End of Phase 2 |
-| W-103, EU DSS validation | Phase 4 signing |
-| W-104, direct CMS fuzz target | Phase 4 signing |
+| W-117, cross-reference-stream append interoperability | Stage R1 foundational engine compatibility |
+| W-99, unsigned encryption `/P` decision | Stage R1 foundational engine compatibility |
+| W-80, MuPDF as second renderer | End of stage R2 |
+| W-103, EU DSS validation | Stage R4 signing |
+| W-104, direct CMS fuzz target | Stage R4 signing |
 | W-81, current 1.0 release checks | Supersede; the old release track is suspended |
-| Other qualification-only work | Pause and reassess when its owning phase reaches a stable boundary |
+| Other qualification-only work | Pause and reassess when its owning stage reaches a stable boundary |
 
 Completed work remains part of the repository history and a source of tests, implementation, and lessons. Completion under the old architecture does not by itself qualify the new project boundary or public APIs.
 
@@ -376,8 +376,8 @@ Completed work remains part of the repository history and a source of tests, imp
 | An API overpromises transactional output | Separate validation, processing, and output failures; require destination capabilities explicitly and use destination-specific commit mechanisms where available |
 | Signing regresses during migration | Move signing tests with the implementation; preserve output identity and independent-verifier checks; freeze enhancements |
 | The workflow becomes a fluent mirror of the core | Require each workflow API to add composition, defaults, validation, ordering, or convenience |
-| Assembly expands into a general toolkit | Keep Phase 3 limited to page import, selection, and combination with explicit document-structure policies |
-| Qualification work becomes stale during structural churn | Run focused falsification during migration and produce release evidence only after the owning phase stabilizes |
+| Assembly expands into a general toolkit | Keep stage R3 limited to page import, selection, and combination with explicit document-structure policies |
+| Qualification work becomes stale during structural churn | Run focused falsification during migration and produce release evidence only after the owning stage stabilizes |
 | An unpublished engine makes the Ergonomics package unusable | Suspend the NuGet release track until packaging for both libraries is deliberately adopted |
 
 ## 14. Definition of reset completion
@@ -389,11 +389,11 @@ The architectural reset is complete when:
 3. The dependency direction is enforced in projects and tests.
 4. The engine has a read-only and lazily loaded document, explicit editor, stable-snapshot random-access source abstraction, async I/O, cancellation, and explicit ownership.
 5. Every valuable existing capability and regression test has an explicit home; none was silently discarded.
-6. Existing signing remains functional without new signing scope before Phase 4.
+6. Existing signing remains functional without new signing scope before stage R4.
 7. Ergonomics provides genuinely simpler non-signing workflows.
 8. Document assembly is complete before signing work resumes.
-9. Protected repository guidance and the work-item queue agree with the new architecture and phase order.
+9. Protected repository guidance and the work-item queue agree with the new architecture and stage order.
 10. Packaging remains intentionally blocked until a separate owner decision establishes how both projects ship.
 11. Source consistency and destination commit guarantees are explicit, testable, and no stronger than their adapters can provide.
 
-At that point the repository is back on the intended path. Subsequent phases add capability to the new architecture rather than extending the architecture being replaced.
+At that point the repository is back on the intended path. Subsequent stages add capability to the new architecture rather than extending the architecture being replaced.

@@ -1,6 +1,6 @@
 # Reset Phase 0 authority proposal
 
-Status: **proposed under W-127, 2026-10-23; awaiting the owner's approval of the wording.** Nothing here is in force. W-128 applies the approved text.
+Status: **proposed under W-127, approved by the owner, and applied under W-128, 2026-10-23.** The protected files and D-54 now carry this text; this record is historical.
 
 This proposal is the first exit step of `reset-plan.md` section 6. It lists every passage in the protected sources that contradicts the approved reset, with the exact replacement text. It removes contradictions only; it does not rewrite guidance that still holds. `reset.md` is the owner's product direction and `reset-plan.md` the approved migration; where `reset.md` differs from the plan (phase order, dependency wording), the plan's later decisions govern.
 

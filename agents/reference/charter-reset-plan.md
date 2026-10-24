@@ -1,5 +1,7 @@
 # Charter reset plan
 
+Status: **historical; superseded by D-54 and `reset-plan.md` on 2026-10-23.** Its former status line follows.
+
 Status: **agreed by author and reviewer; pending the owner's approvals in section 8.** Written 2026-10-19 under W-61 and revised the same day with every agreed finding from `agents/reports/2026-10-19-W-61-review.md`. Nothing in this plan has started. Steps that change `AGENTS.md`, `QUALIFICATION.md`, or `.agents/skills/` also need the owner's approval of the exact text.
 
 ## 0. For the reviewer
