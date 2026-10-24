@@ -15,7 +15,6 @@ ROOT = Path(__file__).resolve().parents[2]
 WORK_DIR = ROOT / "agents" / "work-items"
 DECISION_DIR = ROOT / "agents" / "decisions"
 CURRENT_FILE = ROOT / "agents" / "state" / "current.md"
-CHECKPOINT_DIR = ROOT / "agents" / "evidence" / "checkpoints"
 WORK_PREFIX = "agents/work-items/"
 DECISION_PREFIX = "agents/decisions/"
 CURRENT_PATH = "agents/state/current.md"
@@ -331,12 +330,10 @@ def show_status(works: list[Record], decisions: list[Record]) -> None:
     waiting = [record for record in works if record.meta.get("status") == "waiting"]
     proposed = [record for record in decisions if record.meta.get("status") == "proposed"]
     queued, _ = current_ids(read_current())
-    checkpoints = sorted(CHECKPOINT_DIR.glob("*.md"))
     print("Active:", active[0].meta["id"] if active else "none")
     print("Waiting:", ", ".join(str(x.meta["id"]) for x in waiting) or "none")
     print("Next:", " -> ".join(queued) or "none")
     print("Proposed decisions:", ", ".join(str(x.meta["id"]) for x in proposed) or "none")
-    print("Latest checkpoint:", str(checkpoints[-1].relative_to(ROOT)).replace("\\", "/") if checkpoints else "none")
 
 
 def main() -> int:

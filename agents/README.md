@@ -36,7 +36,7 @@ Do not add `.claude/skills/`, `.cursor/skills/`, or `.grok/skills/` mirrors. Cur
 ## Work, decisions, and evidence
 
 - `work-items/W-NN.md` is the canonical record for one unit of work. Status is front matter; files never move between status folders.
-- `state/current.md` is the only maintained ordering file. `make agents-status` derives the active, waiting, decision, and checkpoint view.
+- `state/current.md` is the only maintained ordering file. `make agents-status` derives the active, waiting, next, and proposed-decision view.
 - `decisions/D-NN.md` contains durable choices and proposals. Decisions are not work items.
 - `evidence/` contains reusable cross-task and qualification evidence; `reference/` contains durable navigation material. Task-specific evidence stays in the work item's Closeout.
 - `reports/` contains task reports. Existing B-prefixed filenames remain unchanged. New work writes at most one report named `<yyyy-mm-dd>-<work-id>.md` when a durable report is needed.
