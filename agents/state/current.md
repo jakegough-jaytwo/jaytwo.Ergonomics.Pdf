@@ -2,22 +2,21 @@
 
 ## Reset stage R3
 
-1. W-166
 
 ## Reset stage R4
 
-2. W-172
+1. W-172
 
 ## Security hardening phase
 
-3. W-151
-4. W-152
-5. W-155
-6. W-156
-7. W-158
-8. W-168
-9. W-149
-10. W-159
+2. W-151
+3. W-152
+4. W-155
+5. W-156
+6. W-158
+7. W-168
+8. W-149
+9. W-159
 
 Architectural reset stage R2, ergonomic workflows (`reset-plan.md` section 8, D-54). W-141 is done: D-60 is accepted, and `docs/spec/phase-1.md` section 6.7 carries the workflow requirements F1 to F16 (`agents/reference/r2-workflow-proposal.md`). W-142 is done: the pipeline ships with metadata. W-143 is done: fill and flatten ship. W-144 is done: attachments and rotation ship. W-145 is done: form export ships. W-146 is done: the exit criteria except the renderer one are verified at an integration checkpoint. W-80 is done: MuPDF is the second renderer for every G6 render check, which ends R2.
 
@@ -25,6 +24,6 @@ Stage R1 is complete. Architectural reset stage R1, engine foundation (`reset-pl
 
 Security hardening is its own phase after R4 signing and before R5 advanced capabilities (D-62). It consists of W-148 through W-159 and their split or corrective items W-167 through W-170, with one scheduling exception: W-154 runs in R3 because W-164 requires its authentication and permission correction for encrypted input. W-148, W-150, W-153, W-157, W-167, W-169, and W-170 are done. The remaining phase work is ordered by P0, P1, then P2 priority. W-149 and W-155 are investigation-first; W-156 is design-first. They produce owner decisions and follow-up implementation items rather than changing behavior in the research item. W-158 follows W-150 so its terminology matches the corrected inspection contract, and W-159 follows the prerequisite hardening and design items so it documents shipped guarantees rather than proposals. The owner split W-149: W-167 recorded the benign baselines in `agents/reference/w-149-work-budgets.md`, W-168 carries the deferred adversarial-fixture evidence, and W-149 stays the decision gate after both. W-168 is eligible as soon as its owner-directed fixture task delivers. The phase ends when every included item is done or cancelled through an owner-approved disposition; R5 follows it.
 
-Stage R3, document assembly (`reset-plan.md` section 9, D-61). W-160 is done: the owner adopted `docs/spec/phase-2.md` for N1 and N2 with requirements A1 to A15. W-161 to W-163 are done: the writer foundation, extraction, and links and appearances ship. W-154 is done: encrypted-open failures and authentication roles are typed, and rotation uses assembly permission. W-164 is done: engine concatenation preserves occurrence-local fields and links, and encrypted input requires consent and per-input permission checks. W-165 is done: `PdfWorkflow.Combine` ships with deferred inputs and safe file publication. W-166 verifies the exit criteria at the integration checkpoint.
+Stage R3, document assembly (`reset-plan.md` section 9, D-61). W-160 is done: the owner adopted `docs/spec/phase-2.md` for N1 and N2 with requirements A1 to A15. W-161 to W-163 are done: the writer foundation, extraction, and links and appearances ship. W-154 is done: encrypted-open failures and authentication roles are typed, and rotation uses assembly permission. W-164 is done: engine concatenation preserves occurrence-local fields and links, and encrypted input requires consent and per-input permission checks. W-165 is done: `PdfWorkflow.Combine` ships with deferred inputs and safe file publication. W-166 is done: the full framework matrix, Docker gate, independent-tool sweep, and large-input memory checks verify the R3 exit criteria. Stage R3 is complete; repeated structural-read amplification on the 100,000-page workload is recorded in its closeout.
 
 Stage R4, signing (`reset-plan.md` section 10, D-54), follows R3. W-172 creates and queues the complete R4 sequence, including W-103 and W-104 or their approved replacements, ahead of the security-hardening phase. The security phase follows the R4 exit checkpoint and precedes every R5 advanced-capability item.
