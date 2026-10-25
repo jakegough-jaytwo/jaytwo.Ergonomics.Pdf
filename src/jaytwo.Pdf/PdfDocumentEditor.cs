@@ -116,6 +116,25 @@ public sealed class PdfDocumentEditor : IDisposable
     }
 
     /// <summary>
+    /// Writes an ordered selection of this document's pages to a new, unencrypted PDF.
+    /// </summary>
+    /// <param name="pageNumbers">One input occurrence: positive, 1-based page numbers, with repetitions allowed.</param>
+    /// <param name="destination">An empty writable destination. It stays open and need not seek.</param>
+    /// <remarks>
+    /// The source remains unchanged. Links, appearances, and signature widgets are omitted. Other form widgets and
+    /// encrypted inputs are currently refused. Document metadata, attachments, outlines, labels, and tags are omitted.
+    /// Unsupported associated files, layers, and dynamic XFA are refused before output. A failure after writing begins
+    /// can leave an incomplete file, which the caller must discard. Do not use the source stream as the destination.
+    /// </remarks>
+    /// <exception cref="ArgumentOutOfRangeException">A page number is outside the source's page range.</exception>
+    /// <exception cref="PdfAssemblyNotSupportedException">The input contains an unsupported assembly structure.</exception>
+    /// <exception cref="PdfResourceLimitException">A structural assembly budget is exceeded.</exception>
+    public void ExtractPages(IEnumerable<int> pageNumbers, Stream destination)
+    {
+        Engine.ExtractPages(pageNumbers, destination);
+    }
+
+    /// <summary>
     /// Appends one incremental update containing the pending changes to the stream passed to <see cref="PdfDocument.Open(Stream, bool)"/>.
     /// </summary>
     /// <remarks>

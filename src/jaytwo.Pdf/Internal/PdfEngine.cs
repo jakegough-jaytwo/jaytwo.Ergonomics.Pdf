@@ -145,6 +145,13 @@ internal sealed class PdfEngine : IDisposable
         return _pages.SetPageRotation(objectId, rotation);
     }
 
+    internal void ExtractPages(IEnumerable<int> pageNumbers, Stream destination)
+    {
+        _store.CheckDisposed();
+        using var release = _store.ReleaseAfter();
+        new PdfPageExtractor(_store).Extract(pageNumbers, destination);
+    }
+
     internal string? GetInfoText(string key)
     {
         return _info.GetInfoText(key);

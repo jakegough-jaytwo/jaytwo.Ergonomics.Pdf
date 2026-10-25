@@ -553,7 +553,7 @@ internal sealed class PdfObjectStore : IDisposable
 
     // ISO 32000-1 7.5.2 and 7.7.2: a catalog /Version later than the header is the version. A value that is not a
     // version name, such as a string, declares nothing.
-    private int EffectiveVersion()
+    internal int EffectiveVersion()
     {
         if (ResolveMaybe(CatalogDict().Get("Version")) is PdfObject.Name name
             && name.Value.Length == 3

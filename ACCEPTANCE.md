@@ -201,3 +201,12 @@ iText Core 9.8.0 reads this library's output (W-112). A read for which iText had
   - each earlier signature, as intact.
 
   A field is terminal when none of its kids has a `/T`, as pypdf's reading counts it. iText counts a kid without `/T` that carries a field key such as `/DA` as a nameless child field (some widgets on the USCIS I-9 and FAA 8710-1), and the comparison does not. iText names a kid whose `/T` is empty with a trailing period (the LibreOffice radio groups), and the comparison drops it.
+
+## Page extraction (W-162)
+
+- `PdfDocumentEditor.ExtractPages` accepts one input occurrence: its document and an ordered selection of positive, 1-based page numbers. Selecting `3, 3, 7` writes three distinct pages; a number outside the source page range throws `ArgumentOutOfRangeException` before output.
+- Repeated pages have distinct page-owned annotation objects with their `/P` naming the correct output page, while fonts and images share source mappings. Inherited resources, media and crop boxes, and rotation become explicit. Explicit user units and page boxes survive. The source bytes stay unchanged.
+- Every signature field and widget, signed or unsigned, is omitted (A3). The new catalog carries no outlines, tags, page labels, XMP, document attachments, catalog actions, viewer preferences, or permissions. The output has a new `/ID` and minimal `/Info` (A4).
+- Nonempty catalog `/AF` or `/OCProperties`, dynamic or XFA-only forms, and nonempty `/AF` on a selected page, its annotations, or retained resources (including Form and Image XObjects and MCAF properties) throw `PdfAssemblyNotSupportedException` before output (A5). Unresolved associations fail closed. Inspection never traverses the discarded structure tree or decodes page content.
+- The current extraction stage refuses non-signature form widgets and encrypted input before output. Links and annotations with appearances are omitted pending W-163; supported basic text, shape, ink, and text-markup annotations are retained without actions or tags. Concatenation and form namespaces remain pending W-164.
+- A pypdf-generated seven-page input with inherited resources and rotation extracts pages `3, 3, 7` to output accepted by qpdf and Poppler. In both Poppler and MuPDF, the extracted text has that order and each output raster equals its selected source page.

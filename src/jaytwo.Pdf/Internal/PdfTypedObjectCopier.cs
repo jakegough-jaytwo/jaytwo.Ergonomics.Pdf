@@ -43,6 +43,11 @@ internal sealed class PdfTypedObjectCopier
         return CopyReference(source, reference, structure, 0);
     }
 
+    internal PdfObject CopyDirect(PdfObjectStore source, PdfObject value, string structure)
+    {
+        return CopyValue(source, value, structure, 0);
+    }
+
     private PdfObject.Ref CopyReference(PdfObjectStore source, PdfObject.Ref reference, string structure, int depth)
     {
         CheckDepth(depth);

@@ -17,6 +17,7 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 7. List logical revisions with their end offsets and signature coverage, including linearized files.
 8. Open a seekable stream or a random-access `IPdfSource` snapshot, synchronously or asynchronously with cancellation.
 9. Run a workflow with `jaytwo.Ergonomics.Pdf`: describe form fills, form flattening, document information changes, attachments, and page rotation for an existing PDF, then apply them as one incremental revision to a stream, to a file through a temporary sibling, or to the source itself; or export a file's form values in one call (see **Workflows**).
+10. Extract an ordered selection of pages from one unencrypted document into a new file with `PdfDocumentEditor.ExtractPages` (see **Page extraction**).
 
 Everything else in this README describes what ships today.
 
@@ -26,7 +27,17 @@ Release 1.0 adds reading and incremental-update operations, such as page rotatio
 
 ### Later
 
-Release 1.x adds operations that write a new file: page extraction, concatenation, compaction, removing revisions, and removing passwords ([`docs/spec/phase-2.md`](docs/spec/phase-2.md), draft). Caller-supplied fonts for non-WinAnsi appearances and PAdES long-term validation are also planned for 1.x.
+The remaining new-file operations are concatenation, compaction, removing revisions, and removing passwords ([`docs/spec/phase-2.md`](docs/spec/phase-2.md); extraction and concatenation are adopted, the other operations remain draft). Caller-supplied fonts for non-WinAnsi appearances and PAdES long-term validation are also planned for 1.x.
+
+## Page extraction
+
+`editor.ExtractPages(new[] { 3, 3, 7 }, destination)` writes three distinct pages from the editor's document in that order. Page numbers are positive and 1-based; an out-of-range page is rejected before output. The input remains unchanged. The destination must be empty and writable, stays open, and need not seek. A processing or destination failure after writing begins may leave an incomplete file, which the caller must discard.
+
+Inherited resources, media and crop boxes, and rotation become explicit on each page. Content and image streams stay encoded and are copied with bounded buffers. Fonts and images share source mappings; each output page and its retained annotations has its own identity. Explicit trim, bleed, and art boxes, user units, and transparency groups survive.
+
+The output has a new identifier and a minimal Info dictionary. Signatures and their widgets, outlines, tags, page labels, XMP, document attachments, catalog actions, viewer preferences, and permissions are omitted. At this stage, links and annotations with appearances are omitted; supported basic text, shape, ink, and text-markup annotations are copied. Other form widgets and encrypted inputs throw `PdfAssemblyNotSupportedException` before output. Link and appearance preservation and form namespaces remain target behavior in the Phase 2 spec.
+
+Nonempty associated-file arrays and optional-content catalog properties, dynamic XFA, and XFA-only forms throw `PdfAssemblyNotSupportedException` before output. Associated-file inspection covers the catalog, selected pages, their annotations, and the retained resource graph, including Form and Image XObjects and MCAF properties. The discarded structure tree is not traversed, so associations confined to it are not detected. Unresolved inspected associations fail closed; structural-budget failures throw `PdfResourceLimitException`. The existing writer budgets also bound mappings, depth, page instances, and structural memory.
 
 ## Tenets
 
