@@ -32,7 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Fixtures\assembly-links\*">
+    <!-- D-63: focused sets copy whole, so FocusedFixtureTests sees an unregistered set and fails on it. -->
+    <Content Include="Fixtures\focused-*\*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Fixtures\*.pdf">

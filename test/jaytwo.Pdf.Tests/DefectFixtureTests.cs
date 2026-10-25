@@ -98,7 +98,7 @@ public class DefectFixtureTests
         Assert.True(problems.Count == 0, string.Join(Environment.NewLine, problems));
     }
 
-    private static bool IsTest(string name)
+    internal static bool IsTest(string name)
     {
         int dot = name.LastIndexOf('.');
         Type? type = dot < 0 ? null : typeof(DefectFixtureTests).Assembly.GetType(typeof(DefectFixtureTests).Namespace + "." + name.Substring(0, dot));

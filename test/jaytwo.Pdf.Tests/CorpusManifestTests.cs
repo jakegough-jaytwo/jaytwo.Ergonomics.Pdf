@@ -177,8 +177,9 @@ public class CorpusManifestTests
     }
 
     // D-59: the G2 corpus is Fixtures/*.pdf and Fixtures/corpus/*.pdf, and each has an entry. A defect fixture is in
-    // Fixtures/defects/, which DefectFixtureTests checks, and is never a corpus entry. This lists files and opens none,
-    // so it runs in the fast lane, where a fixture is added.
+    // Fixtures/defects/, which DefectFixtureTests checks, and is never a corpus entry. D-63: neither is a fixture in a
+    // registered focused set, which FocusedFixtureTests checks. This lists files and opens none, so it runs in the fast
+    // lane, where a fixture is added.
     [Fact]
     public void every_fixture_pdf_has_a_manifest_entry()
     {
@@ -197,9 +198,16 @@ public class CorpusManifestTests
                     problems.Add(file + ": a defect fixture is not a corpus entry");
                 }
             }
+            else if (FocusedFixtures.Sets.Contains(directory, StringComparer.Ordinal))
+            {
+                if (listed.Contains(file))
+                {
+                    problems.Add(file + ": a focused fixture is not a corpus entry");
+                }
+            }
             else if (directory.Length > 0 && directory != "corpus")
             {
-                problems.Add(file + ": a fixture PDF is in Fixtures, Fixtures/corpus, or Fixtures/" + DefectFixtures.DirectoryName);
+                problems.Add(file + ": a fixture PDF is in Fixtures, Fixtures/corpus, Fixtures/" + DefectFixtures.DirectoryName + ", or a registered focused set");
             }
             else if (!listed.Contains(file))
             {

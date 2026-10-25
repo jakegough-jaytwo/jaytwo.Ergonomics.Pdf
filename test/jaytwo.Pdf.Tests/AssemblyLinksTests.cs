@@ -196,7 +196,7 @@ public sealed class AssemblyLinksTests
     [InlineData("LinkAnnot-appearances.pdf", 0, 1)]
     public void pdf_association_link_fixtures_follow_the_whitelist(string name, int retained, int omitted)
     {
-        byte[] input = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "assembly-links", name));
+        byte[] input = File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Fixtures", "focused-assembly-links", name));
         var output = Extract(input, new[] { 1 });
         Assert.Equal(omitted, output.Result.Omissions.Values.Sum());
         string text = Encoding.ASCII.GetString(output.Bytes);
