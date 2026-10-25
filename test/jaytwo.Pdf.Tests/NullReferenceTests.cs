@@ -188,7 +188,8 @@ public class NullReferenceTests
         var crypt = new StandardEncryptor(true, "user", "owner", -4, encryptMetadata: true);
         byte[] pdf = BasicWith(20, crypt.Dictionary(string.Empty), "/Encrypt 20 1 R /ID [" + crypt.IdLiteral() + "]");
 
-        Assert.Throws<PdfParseException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
+        PdfEncryptedException error = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
+        Assert.Equal(PdfEncryptionFailureReason.MalformedEncryption, error.Reason);
     }
 
     private static byte[] BasicWith(int id, string body, string trailer, string catalogExtra = "")
