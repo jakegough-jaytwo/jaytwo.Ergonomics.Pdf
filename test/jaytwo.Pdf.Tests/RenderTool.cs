@@ -148,16 +148,24 @@ internal sealed class RenderTool
             double yMin = double.MaxValue;
             double xMax = double.MinValue;
             double yMax = double.MinValue;
-            foreach (Match character in Regex.Matches(line.Groups[1].Value, "<char c=\"([^\"]*)\" quad=\"([^\"]+)\""))
+            foreach (Match character in Regex.Matches(line.Groups[1].Value, "<char [^>]*>"))
             {
-                string value = WebUtility.HtmlDecode(character.Groups[1].Value);
+                // MuPDF 1.27 writes c last and newer releases write it first, so read the attributes by name.
+                Match textMatch = Regex.Match(character.Value, " c=\"([^\"]*)\"");
+                Match quadMatch = Regex.Match(character.Value, " quad=\"([^\"]+)\"");
+                if (!textMatch.Success || !quadMatch.Success)
+                {
+                    continue;
+                }
+
+                string value = WebUtility.HtmlDecode(textMatch.Groups[1].Value);
                 if (value == " ")
                 {
                     Flush(words, text, ref xMin, ref yMin, ref xMax, ref yMax);
                     continue;
                 }
 
-                double[] quad = character.Groups[2].Value.Split(' ').Select(part => double.Parse(part, CultureInfo.InvariantCulture)).ToArray();
+                double[] quad = quadMatch.Groups[1].Value.Split(' ').Select(part => double.Parse(part, CultureInfo.InvariantCulture)).ToArray();
                 for (int i = 0; i + 1 < quad.Length; i += 2)
                 {
                     xMin = Math.Min(xMin, quad[i]);
