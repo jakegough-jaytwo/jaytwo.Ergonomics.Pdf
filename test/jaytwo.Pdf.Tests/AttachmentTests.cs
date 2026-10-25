@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace jaytwo.Pdf.Tests;
@@ -100,6 +101,128 @@ public class AttachmentTests
         using var jpegDocument = PdfDocument.Open(new MemoryStream(jpeg), leaveOpen: true);
         Assert.Equal(4, jpegDocument.Attachments[0].Size);
         Assert.Throws<PdfUnsupportedFilterException>(() => jpegDocument.Attachments[0].Open());
+    }
+
+    [Theory]
+    [InlineData(false, 0L)]
+    [InlineData(false, 5000L)]
+    [InlineData(true, 0L)]
+    [InlineData(true, 5000L)]
+    public void decoded_byte_limit_ignores_the_declared_size_and_never_returns_bytes_past_it(bool compressed, long declaredSize)
+    {
+        byte[] content = Encoding.ASCII.GetBytes("abcde");
+        byte[] pdf = AttachmentDocument("payload.bin", content, declaredSize, compressed);
+        using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false));
+        PdfAttachment attachment = document.Attachments[0];
+
+        using (Stream exact = attachment.Open(content.Length))
+        using (var exactCopy = new MemoryStream())
+        {
+            exact.CopyTo(exactCopy);
+            Assert.Equal(content, exactCopy.ToArray());
+        }
+
+        using Stream limited = attachment.Open(content.Length - 1);
+        using var limitedCopy = new MemoryStream();
+        PdfAttachmentTooLargeException error = Assert.Throws<PdfAttachmentTooLargeException>(() => limited.CopyTo(limitedCopy));
+        Assert.Equal("payload.bin", error.Name);
+        Assert.Equal(content.Length - 1, error.Limit);
+        Assert.Equal(content.AsSpan(0, content.Length - 1).ToArray(), limitedCopy.ToArray());
+        Assert.Throws<ArgumentOutOfRangeException>(() => attachment.Open(-1));
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task decoded_byte_limit_applies_to_zero_and_async_reads(bool compressed)
+    {
+        byte[] content = Encoding.ASCII.GetBytes("abcde");
+        byte[] pdf = AttachmentDocument("payload.bin", content, 99, compressed);
+        using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false));
+        PdfAttachment attachment = document.Attachments[0];
+        using Stream limited = attachment.Open(0);
+        using var copy = new MemoryStream();
+
+        PdfAttachmentTooLargeException error = await Assert.ThrowsAsync<PdfAttachmentTooLargeException>(() => limited.CopyToAsync(copy));
+
+        Assert.Equal(0, error.Limit);
+        Assert.Equal(0, copy.Length);
+
+        byte[] emptyPdf = AttachmentDocument("empty.bin", Array.Empty<byte>(), 5000, compressed: false);
+        using var emptyDocument = PdfDocument.Open(new MemoryStream(emptyPdf, writable: false));
+        using Stream empty = emptyDocument.Attachments[0].Open(0);
+        Assert.Equal(-1, empty.ReadByte());
+    }
+
+    [Fact]
+    public void decoded_byte_limit_streams_a_large_attachment_in_caller_sized_chunks()
+    {
+        const int size = (4 * 1024 * 1024) + 17;
+        var content = new byte[size];
+        for (int i = 0; i < content.Length; i++)
+        {
+            content[i] = (byte)(i & 0xFF);
+        }
+
+        byte[] pdf = AttachmentDocument("large.bin", content, 1, compressed: false);
+        using var document = PdfDocument.Open(new MemoryStream(pdf, writable: false));
+        using Stream opened = document.Attachments[0].Open(size);
+        var buffer = new byte[4096];
+        int total = 0;
+        int read;
+        while ((read = opened.Read(buffer, 0, buffer.Length)) != 0)
+        {
+            for (int i = 0; i < read; i++)
+            {
+                Assert.Equal(content[total + i], buffer[i]);
+            }
+
+            total += read;
+        }
+
+        Assert.Equal(size, total);
+    }
+
+    [Theory]
+    [InlineData("report.pdf", "report.pdf")]
+    [InlineData("../../etc/passwd", ".._.._etc_passwd")]
+    [InlineData("C:\\temp\\report?.pdf", "C__temp_report_.pdf")]
+    [InlineData("a/b\\c.txt", "a_b_c.txt")]
+    [InlineData("CON.txt", "_CON.txt")]
+    [InlineData("lpt9", "_lpt9")]
+    [InlineData("COM\u00B9.log", "_COM\u00B9.log")]
+    [InlineData("bad<char>|name*.txt", "bad_char__name_.txt")]
+    [InlineData("bad\0name.txt", "bad_name.txt")]
+    [InlineData("report.txt. ", "report.txt")]
+    [InlineData("...", "attachment")]
+    [InlineData("   ", "attachment")]
+    public void safe_filename_is_a_portable_component(string name, string expected)
+    {
+        var attachment = new PdfAttachment(null!, name, null, null, null, PdfAttachmentRelationship.Unspecified, null, null);
+
+        string safe = attachment.GetSafeFileName();
+
+        Assert.Equal(expected, safe);
+        Assert.DoesNotContain('/', safe);
+        Assert.DoesNotContain('\\', safe);
+        Assert.InRange(safe.Length, 1, 255);
+        Assert.InRange(Encoding.UTF8.GetByteCount(safe), 1, 255);
+    }
+
+    [Fact]
+    public void safe_filename_bounds_length_and_replaces_unpaired_surrogates()
+    {
+        string longName = new string('a', 300);
+        var attachment = new PdfAttachment(null!, longName, null, null, null, PdfAttachmentRelationship.Unspecified, null, null);
+        var unicode = new PdfAttachment(null!, new string('\u4E00', 100), null, null, null, PdfAttachmentRelationship.Unspecified, null, null);
+        var malformed = new PdfAttachment(null!, "good\uD800.txt", null, null, null, PdfAttachmentRelationship.Unspecified, null, null);
+
+        string safe = attachment.GetSafeFileName();
+
+        Assert.Equal(255, safe.Length);
+        Assert.All(safe, value => Assert.Equal('a', value));
+        Assert.Equal(255, Encoding.UTF8.GetByteCount(unicode.GetSafeFileName()));
+        Assert.Equal("good_.txt", malformed.GetSafeFileName());
     }
 
     [Fact]
@@ -625,6 +748,19 @@ public class AttachmentTests
         byte[] output = destination.ToArray();
         Assert.True(output.AsSpan(0, pdf.Length).SequenceEqual(pdf));
         return output;
+    }
+
+    private static byte[] AttachmentDocument(string name, byte[] content, long declaredSize, bool compressed)
+    {
+        byte[] stored = compressed ? Zlib(content) : content;
+        string filter = compressed ? " /Filter /FlateDecode" : string.Empty;
+        var builder = new PdfBuilder();
+        builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Names << /EmbeddedFiles << /Names [(" + name + ") 6 0 R] >> >> >>");
+        builder.Indirect(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+        builder.Indirect(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+        builder.StreamObject(5, "/Type /EmbeddedFile" + filter + " /Params << /Size " + declaredSize.ToString(CultureInfo.InvariantCulture) + " >>", stored);
+        builder.Indirect(6, "<< /Type /Filespec /F (" + name + ") /UF (" + name + ") /EF << /F 5 0 R >> >>");
+        return builder.Finish();
     }
 
     private static void WithFile(byte[] pdf, Action<string> check)
