@@ -11,15 +11,17 @@ internal sealed class PdfSerializer
     private readonly Stream _output;
     private readonly Action<PdfObject.FileBody, Stream> _copyFileBody;
     private readonly PdfSecurity? _security;
+    private readonly bool _preserveStreamLength;
 
     // Strings and the /Contents gap are encoded through this buffer rather than whole.
     private readonly byte[] _chunk = new byte[4096];
 
-    public PdfSerializer(Stream output, Action<PdfObject.FileBody, Stream> copyFileBody, PdfSecurity? security)
+    public PdfSerializer(Stream output, Action<PdfObject.FileBody, Stream> copyFileBody, PdfSecurity? security, bool preserveStreamLength = false)
     {
         _output = output;
         _copyFileBody = copyFileBody;
         _security = security;
+        _preserveStreamLength = preserveStreamLength;
     }
 
     public PdfObject.ByteRangeSlot? ByteRange { get; private set; }
@@ -31,7 +33,7 @@ internal sealed class PdfSerializer
     public void WriteObject(PdfObject value)
     {
         bool encryptStrings = _security != null && _security.EncryptsStringsOf(value);
-        if (value is PdfObject.Dict dict && dict.Body != null)
+        if (value is PdfObject.Dict dict && dict.Body != null && !_preserveStreamLength)
         {
             long length = dict.Body.Length;
             if (dict.Body is not PdfObject.FileBody && _security != null && _security.EncryptsStream(dict))

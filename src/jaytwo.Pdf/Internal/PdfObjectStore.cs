@@ -634,6 +634,28 @@ internal sealed class PdfObjectStore : IDisposable
         return PdfStreamDecoder.OpenDecoded(OpenStored(dict, file), filters, parms);
     }
 
+    // The new-file copier preserves the encoded stream and removes only standard-security encryption. Structural
+    // streams still use OpenBody or ReadDecoded because their filters must be interpreted.
+    internal Stream OpenRawBody(PdfObject.Dict dict)
+    {
+        if (dict.Body is PdfObject.MemoryBody memory)
+        {
+            return new MemoryStream(memory.Data, false);
+        }
+
+        if (dict.Body is PdfObject.ExternalBody external)
+        {
+            return new PdfSliceStream(PdfStreamSource.Borrow(external.Source), external.Start, external.Length);
+        }
+
+        if (dict.Body is not PdfObject.FileBody file)
+        {
+            throw new PdfParseException(0, "The stream has no bytes.");
+        }
+
+        return OpenStored(dict, file);
+    }
+
     internal byte[] ReadDecoded(PdfObject.Dict dict, int cap)
     {
         return PdfSync.Result(ReadDecodedAsync(dict, cap, false, CancellationToken.None));

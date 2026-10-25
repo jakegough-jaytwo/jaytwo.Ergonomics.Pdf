@@ -355,6 +355,42 @@ internal abstract class PdfObject
         }
     }
 
+    // A stream imported into a new file. Its encoded length is deliberately discovered while it is copied, so the
+    // new-file writer can put /Length in the following indirect object without buffering the stream.
+    internal sealed class CopiedBody : StreamBody
+    {
+        private readonly Func<Stream> _open;
+
+        public CopiedBody(Func<Stream> open)
+        {
+            _open = open ?? throw new ArgumentNullException(nameof(open));
+        }
+
+        public override long Length => throw new InvalidOperationException("An imported stream's length is known after it is copied.");
+
+        public long CopiedLength { get; private set; } = -1;
+
+        public override void CopyTo(Stream destination)
+        {
+            using Stream source = _open();
+            var buffer = new byte[65536];
+            long written = 0;
+            while (true)
+            {
+                int read = source.Read(buffer, 0, buffer.Length);
+                if (read == 0)
+                {
+                    break;
+                }
+
+                destination.Write(buffer, 0, read);
+                written = checked(written + read);
+            }
+
+            CopiedLength = written;
+        }
+    }
+
     // Caller content for an embedded file. Read measures it once, for /Params /CheckSum and, when compressed, the
     // encoded /Length the serializer writes before the body. CopyTo reads it again and refuses bytes that no longer
     // match, so a save never publishes a checksum or length the content does not have.
