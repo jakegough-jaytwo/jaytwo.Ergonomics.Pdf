@@ -191,6 +191,28 @@ A workflow runs once. After a terminal call begins, whether it succeeds, fails, 
 
 `Save` to a path writes `.<name>.<random>.tmp` beside the destination, flushes it to disk unless `FlushToDisk` is false, and then moves it into place. After a failure or cancellation, the temporary file is deleted and the destination is left as it was. An existing destination is replaced only with `Overwrite`. A destination that may be the input is refused: one whose full path is the input's (ignoring case on Windows and macOS, and resolving a symbolic link in the last segment on .NET 6 and later), and, when replacing, an existing file with the input's length and last-write time. That also refuses a copy whose timestamps were copied. These checks are best-effort safeguards, not proof of file identity. On Unix, a destination that is a symbolic link is replaced as a link, and its target is unchanged. Other hard links to a replaced file keep its old content, and on Windows replacing a hard link to the open input fails. The destination directory is not flushed, and no power-loss durability is claimed.
 
+### Combine PDFs
+
+```csharp
+using System.Linq;
+using jaytwo.Ergonomics.Pdf;
+using jaytwo.Pdf;
+
+PdfAssemblyResult result = await PdfWorkflow.Combine(new[]
+{
+    PdfCombineInput.FromFile("cover.pdf"),
+    PdfCombineInput.FromFile("report.pdf", Enumerable.Range(3, 5)),
+    PdfCombineInput.From(stream, new[] { 2, 1, 2 }),
+}, new PdfAssemblyOptions { ExternalLinks = PdfExternalLinkMode.PreserveSupported })
+    .SaveAsync("combined.pdf", cancellationToken: cancellationToken);
+```
+
+`Combine` describes independent input occurrences without reading their PDFs. `PdfCombineInput.From` accepts a borrowed readable seekable stream or `IPdfSource`; `FromFile` opens and closes a file during the run. Omit the page selection for all pages, or supply positive, 1-based numbers in output order, including repetitions. Input lists, selections, passwords, and assembly options are copied when described. A workflow runs once, including after rejection, failure, or cancellation.
+
+The workflow calls `PdfDocumentEditor.Concatenate` through its public API, returns its aggregate omission counts, and propagates engine exceptions unchanged. All page selections and permissions are checked before output. Assembly produces a new, unencrypted PDF and follows the engine's documented omission, form, link, and encrypted-input rules. Encrypted inputs require `AllowUnencryptedOutput = true` and permitted credentials for every occurrence.
+
+`Save` and `SaveAsync` accept an empty writable seekable stream at position zero or a file path with `PdfFileSaveOptions`. Caller streams and sources remain open; a failed stream save truncates output to zero on a best-effort basis. File saves follow F17 as described above, checking every input for aliases, publishing through a temporary sibling, and requiring explicit overwrite. All input documents remain open together until completion because the engine accepts open documents. Async saves await opening, but the engine's assembly and output writes are synchronous; cancellation is observed during opening, before and after assembly, and before file publication. No whole PDF is buffered by the workflow.
+
 ## Build
 
 ```bash

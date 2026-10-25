@@ -21,6 +21,15 @@ namespace jaytwo.Ergonomics.Pdf;
 /// </example>
 public static class PdfWorkflow
 {
+    /// <summary>Describes a single-use assembly of ordered input occurrences without reading their PDFs.</summary>
+    /// <param name="inputs">Inputs and page selections, copied now in output order.</param>
+    /// <param name="options">Link and encrypted-input options, copied now, or null for defaults.</param>
+    /// <returns>A workflow with stream and file save terminals.</returns>
+    public static PdfCombineWorkflow Combine(IEnumerable<PdfCombineInput> inputs, PdfAssemblyOptions? options = null)
+    {
+        return new PdfCombineWorkflow(inputs, options);
+    }
+
     /// <summary>
     /// Starts a workflow on a readable seekable stream. The stream is borrowed: the workflow reads it only when it runs and never disposes it.
     /// </summary>
