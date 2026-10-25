@@ -296,7 +296,7 @@ public class WriterQuirkTests
         byte[] pdf = EncryptedDocument(crypt, dictionary.Replace(" /P -4 ", " /P " + value + " "));
 
         PdfEncryptedException error = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
-        Assert.Equal("This encryption is not supported.", error.Message);
+        Assert.Equal(PdfEncryptionFailureReason.MalformedEncryption, error.Reason);
     }
 
     private static byte[] EncryptedDocument(StandardEncryptor crypt, string encrypt)
