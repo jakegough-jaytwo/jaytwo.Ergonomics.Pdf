@@ -121,7 +121,7 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <param name="pageNumbers">One input occurrence: positive, 1-based page numbers, with repetitions allowed.</param>
     /// <param name="destination">An empty writable destination. It stays open and need not seek.</param>
     /// <remarks>
-    /// The source remains unchanged. Links, appearances, and signature widgets are omitted. Other form widgets and
+    /// The source remains unchanged. Supported links and appearances are preserved; signature widgets are omitted. Other form widgets and
     /// encrypted inputs are currently refused. Document metadata, attachments, outlines, labels, and tags are omitted.
     /// Unsupported associated files, layers, and dynamic XFA are refused before output. A failure after writing begins
     /// can leave an incomplete file, which the caller must discard. Do not use the source stream as the destination.
@@ -131,7 +131,18 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <exception cref="PdfResourceLimitException">A structural assembly budget is exceeded.</exception>
     public void ExtractPages(IEnumerable<int> pageNumbers, Stream destination)
     {
-        Engine.ExtractPages(pageNumbers, destination);
+        Engine.ExtractPages(pageNumbers, destination, PdfExternalLinkMode.PreserveSupported);
+    }
+
+    /// <summary>Writes selected pages to a new PDF and reports aggregate annotation omissions.</summary>
+    /// <param name="pageNumbers">Positive, 1-based source page numbers, in output order.</param>
+    /// <param name="destination">An empty writable stream, left open; it need not seek.</param>
+    /// <param name="externalLinks">Whether supported external links survive.</param>
+    /// <returns>Counts by omission reason, with no annotation history.</returns>
+    /// <remarks>Uses the same failure and input rules as <see cref="ExtractPages(IEnumerable{int}, Stream)"/>.</remarks>
+    public PdfAssemblyResult ExtractPages(IEnumerable<int> pageNumbers, Stream destination, PdfExternalLinkMode externalLinks)
+    {
+        return Engine.ExtractPages(pageNumbers, destination, externalLinks);
     }
 
     /// <summary>

@@ -1,0 +1,82 @@
+[
+  {
+    "file": "list-of-uri-actions.pdf",
+    "sha256": "c5045d62f5d5a234e1487b607c4b6218f32945be3ac81669f75a928e1c6a6b00",
+    "source": "https://github.com/pdf-association/safedocs/blob/main/Miscellaneous%20Targeted%20Test%20PDFs/list-of-uri-actions.pdf",
+    "acquired": "2026-10-25",
+    "license": "Apache-2.0 (LICENSE)",
+    "redistributable": true,
+    "producer": "PDF Association SafeDocs; handwritten targeted PDF (see UPSTREAM.md)",
+    "transformations": "None; upstream bytes retained",
+    "classification": "Focused assembly fixture, not G2 corpus; action chains and IsMap are unsupported by the adopted whitelist",
+    "operation": "Extract page 1 with PreserveSupported",
+    "expected": {
+      "retained_links": 0,
+      "omitted_annotations": 2
+    },
+    "validators": {
+      "AssemblyLinksTests": "Link whitelist, aggregate omissions, and no Next/IsMap in output",
+      "qpdf --check": "Output PDF structural validity"
+    }
+  },
+  {
+    "file": "list-of-uri-actions-with-base.pdf",
+    "sha256": "9cd3bd10b41fb06bfee907bb832c25b4c9913499da9ab02430f7b97f4461a8a7",
+    "source": "https://github.com/pdf-association/safedocs/blob/main/Miscellaneous%20Targeted%20Test%20PDFs/list-of-uri-actions-with-base.pdf",
+    "acquired": "2026-10-25",
+    "license": "Apache-2.0 (LICENSE)",
+    "redistributable": true,
+    "producer": "PDF Association SafeDocs; handwritten targeted PDF (see UPSTREAM.md)",
+    "transformations": "None; upstream bytes retained",
+    "classification": "Focused assembly fixture, not G2 corpus; action chains and IsMap are unsupported by the adopted whitelist",
+    "operation": "Extract page 1 with PreserveSupported",
+    "expected": {
+      "retained_links": 1,
+      "omitted_annotations": 1
+    },
+    "validators": {
+      "AssemblyLinksTests": "Link whitelist, aggregate omissions, and no Next/IsMap in output",
+      "qpdf --check": "Output PDF structural validity"
+    }
+  },
+  {
+    "file": "uri-ismap-test.pdf",
+    "sha256": "a3a8368b9d511fbacb23bef3870a928664a6ff017c53b5c2efe91f9177e8f518",
+    "source": "https://github.com/pdf-association/safedocs/blob/main/Miscellaneous%20Targeted%20Test%20PDFs/uri-ismap-test.pdf",
+    "acquired": "2026-10-25",
+    "license": "Apache-2.0 (LICENSE)",
+    "redistributable": true,
+    "producer": "PDF Association SafeDocs; handwritten targeted PDF (see UPSTREAM.md)",
+    "transformations": "None; upstream bytes retained",
+    "classification": "Focused assembly fixture, not G2 corpus; action chains and IsMap are unsupported by the adopted whitelist",
+    "operation": "Extract page 1 with PreserveSupported",
+    "expected": {
+      "retained_links": 0,
+      "omitted_annotations": 1
+    },
+    "validators": {
+      "AssemblyLinksTests": "Link whitelist, aggregate omissions, and no Next/IsMap in output",
+      "qpdf --check": "Output PDF structural validity"
+    }
+  },
+  {
+    "file": "LinkAnnot-appearances.pdf",
+    "sha256": "6a10c809c7a5afe1fe7e9df0071ff10ad9ae0421605ab89735e66d245a3eb788",
+    "source": "https://github.com/pdf-association/safedocs/blob/main/Miscellaneous%20Targeted%20Test%20PDFs/LinkAnnot-appearances.pdf",
+    "acquired": "2026-10-25",
+    "license": "Apache-2.0 (LICENSE)",
+    "redistributable": true,
+    "producer": "PDF Association SafeDocs; handwritten targeted PDF (see UPSTREAM.md)",
+    "transformations": "None; upstream bytes retained",
+    "classification": "Focused assembly fixture, not G2 corpus; action chains and IsMap are unsupported by the adopted whitelist",
+    "operation": "Extract page 1 with PreserveSupported",
+    "expected": {
+      "retained_links": 0,
+      "omitted_annotations": 1
+    },
+    "validators": {
+      "AssemblyLinksTests": "Link whitelist, aggregate omissions, and no Next/IsMap in output",
+      "qpdf --check": "Output PDF structural validity"
+    }
+  }
+]

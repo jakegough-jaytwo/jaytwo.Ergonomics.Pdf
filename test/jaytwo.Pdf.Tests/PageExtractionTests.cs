@@ -152,11 +152,11 @@ public sealed class PageExtractionTests
     }
 
     [Fact]
-    public void forms_are_refused_and_links_and_appearances_are_omitted_at_this_stage()
+    public void forms_are_refused_and_unsupported_annotations_are_omitted()
     {
         byte[] input = PdfBuilder.Basic(pageExtra: " /Annots [<< /Subtype /Widget /FT /Tx /Rect [0 0 10 10] >>]").Finish();
         Assert.Throws<PdfAssemblyNotSupportedException>(() => Extract(input, 1));
-        input = PdfBuilder.Basic(pageExtra: " /Annots [<< /Subtype /Link /Rect [0 0 10 10] /Dest [3 0 R /Fit] >> << /Subtype /Text /AP << /N 99 0 R >> >>]").Finish();
+        input = PdfBuilder.Basic(pageExtra: " /Annots [<< /Subtype /Link /Rect [0 0 10 10] /A << /S /Launch >> >> << /Subtype /Text /AP << /N 42 >> >>]").Finish();
         Assert.DoesNotContain("/Annots", Encoding.ASCII.GetString(Extract(input, 1)));
     }
 

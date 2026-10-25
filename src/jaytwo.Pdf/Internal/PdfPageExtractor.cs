@@ -16,11 +16,12 @@ internal sealed class PdfPageExtractor
     private static readonly HashSet<string> AnnotationKeys = new HashSet<string>
     {
         "Type", "Subtype", "Rect", "Contents", "NM", "M", "F", "Border", "BS", "C", "CA", "T", "Subj", "CreationDate",
-        "Name", "Open", "QuadPoints", "L", "LE", "IC", "Vertices", "InkList", "RD",
+        "Name", "Open", "AP", "AS", "H", "QuadPoints", "L", "LE", "IC", "Vertices", "InkList", "RD",
     };
 
     private readonly PdfObjectStore _store;
     private readonly PdfNewFileBudget _budget = new PdfNewFileBudget(new PdfNewFileLimits());
+    private readonly Dictionary<int, int> _sourcePages = new Dictionary<int, int>();
     private int _pageCount;
     private int _nodeCount;
 
@@ -29,7 +30,7 @@ internal sealed class PdfPageExtractor
         _store = store;
     }
 
-    internal void Extract(IEnumerable<int> pageNumbers, Stream destination)
+    internal PdfAssemblyResult Extract(IEnumerable<int> pageNumbers, Stream destination, PdfExternalLinkMode externalLinks)
     {
         if (pageNumbers == null)
         {
@@ -51,6 +52,12 @@ internal sealed class PdfPageExtractor
             throw new PdfAssemblyNotSupportedException("Encrypted input is not yet supported for extraction.");
         }
 
+        if (externalLinks is not (PdfExternalLinkMode.PreserveSupported or PdfExternalLinkMode.Drop))
+        {
+            throw new ArgumentOutOfRangeException(nameof(externalLinks));
+        }
+
+        var result = new PdfAssemblyResult();
         var order = new List<int>();
         var selected = new Dictionary<int, PdfObject.Dict>();
         foreach (int number in pageNumbers)
@@ -86,44 +93,91 @@ internal sealed class PdfPageExtractor
         var writer = new PdfNewFileWriter(_budget);
         var copier = new PdfTypedObjectCopier(writer, _budget, Policy);
         var pages = new List<PdfObject.Ref>(order.Count);
+        var outputPages = new List<PdfObject.Dict>(order.Count);
+        var firstPages = new Dictionary<int, PdfObject.Ref>();
         foreach (int number in order)
         {
-            PdfObject.Dict sourcePage = selected[number];
-            var page = (PdfObject.Dict)copier.CopyDirect(_store, sourcePage, "page");
-            PdfObject.Ref pageReference = writer.Register(page);
-            pages.Add(pageReference);
-            if (sourcePage.Get("Annots") != null)
+            var page = (PdfObject.Dict)copier.CopyDirect(_store, selected[number], "page");
+            PdfObject.Ref reference = writer.Register(page);
+            pages.Add(reference);
+            outputPages.Add(page);
+            if (!firstPages.ContainsKey(number))
             {
-                var annotations = new PdfObject.Arr();
-                foreach (PdfObject value in inspection.Array(sourcePage.Get("Annots")).Items)
-                {
-                    PdfObject.Dict annotation = inspection.Dictionary(value);
-                    string? subtype = PdfValues.NameOf(_store.ResolveMaybe(annotation.Get("Subtype")));
-                    if (subtype == "Widget")
-                    {
-                        if (FieldType(annotation) != "Sig")
-                        {
-                            throw new PdfAssemblyNotSupportedException("Form widgets are not yet supported for extraction.");
-                        }
+                firstPages.Add(number, reference);
+            }
+        }
 
-                        continue;
+        var links = new PdfAssemblyLinks(_store, _budget, catalog, _sourcePages, firstPages, externalLinks);
+        var appearances = new PdfAssemblyAppearances(_store, _budget);
+        for (int index = 0; index < order.Count; index++)
+        {
+            PdfObject.Dict sourcePage = selected[order[index]];
+            if (sourcePage.Get("Annots") == null)
+            {
+                continue;
+            }
+
+            var annotations = new PdfObject.Arr();
+            foreach (PdfObject value in inspection.Array(sourcePage.Get("Annots")).Items)
+            {
+                PdfObject.Dict annotation = inspection.Dictionary(value);
+                string? subtype = PdfValues.NameOf(_store.ResolveMaybe(annotation.Get("Subtype")));
+                if (subtype == "Widget")
+                {
+                    if (FieldType(annotation) != "Sig")
+                    {
+                        throw new PdfAssemblyNotSupportedException("Form widgets are not yet supported for extraction.");
                     }
 
-                    if (subtype is not ("Text" or "Square" or "Circle" or "Line" or "Polygon" or "PolyLine" or "Ink"
-                        or "Highlight" or "Underline" or "Squiggly" or "StrikeOut") || annotation.Get("AP") != null)
+                    result.Omit(PdfOmissionReason.SignatureWidget);
+                    continue;
+                }
+
+                PdfObject.Dict? rebuilt = annotation;
+                if (subtype == "Link")
+                {
+                    rebuilt = links.Rebuild(annotation, order[index], pages[index], out PdfOmissionReason reason);
+                    if (rebuilt == null)
                     {
+                        result.Omit(reason);
                         continue;
                     }
-
-                    var copy = (PdfObject.Dict)copier.CopyDirect(_store, annotation, "annotation");
-                    copy.Set("P", pageReference);
-                    annotations.Items.Add(writer.Register(copy));
                 }
-
-                if (annotations.Items.Count > 0)
+                else if (subtype is not ("Text" or "Square" or "Circle" or "Line" or "Polygon" or "PolyLine" or "Ink"
+                    or "Highlight" or "Underline" or "Squiggly" or "StrikeOut"))
                 {
-                    page.Set("Annots", annotations);
+                    result.Omit(PdfOmissionReason.UnsupportedAnnotation);
+                    continue;
                 }
+
+                if (!appearances.Supported(annotation.Get("AP")))
+                {
+                    result.Omit(PdfOmissionReason.UnsupportedAppearance);
+                    continue;
+                }
+
+                var copy = (PdfObject.Dict)copier.CopyDirect(_store, rebuilt, "annotation");
+                // Link destinations already name destination objects: never feed them through the source copier.
+                if (subtype == "Link")
+                {
+                    if (rebuilt.Get("Dest") is PdfObject destinationValue)
+                    {
+                        copy.Set("Dest", destinationValue);
+                    }
+
+                    if (rebuilt.Get("A") is PdfObject action)
+                    {
+                        copy.Set("A", action);
+                    }
+                }
+
+                copy.Set("P", pages[index]);
+                annotations.Items.Add(writer.Register(copy));
+            }
+
+            if (annotations.Items.Count > 0)
+            {
+                outputPages[index].Set("Annots", annotations);
             }
         }
 
@@ -137,6 +191,7 @@ internal sealed class PdfPageExtractor
         identifier.Items.Add(new PdfObject.Str(id, true));
         identifier.Items.Add(new PdfObject.Str(id, true));
         writer.Write(destination, writer.Register(root), writer.Register(info), identifier, _store.EffectiveVersion());
+        return result;
     }
 
     private void Walk(PdfObject? value, PdfObject.Dict inherited, Dictionary<int, PdfObject.Dict> selected, HashSet<int> path, int depth)
@@ -186,6 +241,7 @@ internal sealed class PdfPageExtractor
                 }
 
                 selected[_pageCount] = page;
+                _sourcePages[id] = _pageCount;
             }
         }
         else if (_store.ResolveMaybe(node.Get("Kids")) is PdfObject.Arr kids)
