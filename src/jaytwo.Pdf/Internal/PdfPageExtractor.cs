@@ -16,25 +16,26 @@ internal sealed class PdfPageExtractor
     private static readonly HashSet<string> AnnotationKeys = new HashSet<string>
     {
         "Type", "Subtype", "Rect", "Contents", "NM", "M", "F", "Border", "BS", "C", "CA", "T", "Subj", "CreationDate",
-        "Name", "Open", "AP", "AS", "H", "QuadPoints", "L", "LE", "IC", "Vertices", "InkList", "RD",
+        "Name", "Open", "AP", "AS", "H", "MK", "QuadPoints", "L", "LE", "IC", "Vertices", "InkList", "RD",
     };
 
     private readonly PdfObjectStore _store;
-    private readonly PdfNewFileBudget _budget = new PdfNewFileBudget(new PdfNewFileLimits());
+    private readonly PdfNewFileBudget _budget;
     private readonly Dictionary<int, int> _sourcePages = new Dictionary<int, int>();
     private int _pageCount;
     private int _nodeCount;
 
-    internal PdfPageExtractor(PdfObjectStore store)
+    internal PdfPageExtractor(PdfObjectStore store, PdfNewFileBudget budget)
     {
         _store = store;
+        _budget = budget;
     }
 
-    internal PdfAssemblyResult Extract(IEnumerable<int> pageNumbers, Stream destination, PdfExternalLinkMode externalLinks)
+    internal static PdfAssemblyResult Assemble(IEnumerable<PdfAssemblyInput> inputs, Stream destination, PdfAssemblyOptions options)
     {
-        if (pageNumbers == null)
+        if (inputs == null)
         {
-            throw new ArgumentNullException(nameof(pageNumbers));
+            throw new ArgumentNullException(nameof(inputs));
         }
 
         if (destination == null)
@@ -44,25 +45,76 @@ internal sealed class PdfPageExtractor
 
         if (!destination.CanWrite || (destination.CanSeek && (destination.Length != 0 || destination.Position != 0)))
         {
-            throw new ArgumentException("Extraction requires an empty writable destination.", nameof(destination));
+            throw new ArgumentException("Assembly requires an empty writable destination.", nameof(destination));
         }
 
-        if (_store.Security != null)
+        if (options.ExternalLinks is not (PdfExternalLinkMode.PreserveSupported or PdfExternalLinkMode.Drop))
         {
-            throw new PdfAssemblyNotSupportedException("Encrypted input is not yet supported for extraction.");
+            throw new ArgumentOutOfRangeException(nameof(options));
         }
 
-        if (externalLinks is not (PdfExternalLinkMode.PreserveSupported or PdfExternalLinkMode.Drop))
-        {
-            throw new ArgumentOutOfRangeException(nameof(externalLinks));
-        }
-
+        var budget = new PdfNewFileBudget(new PdfNewFileLimits());
+        var writer = new PdfNewFileWriter(budget);
+        var pages = new List<PdfObject.Ref>();
+        var form = new PdfObject.Dict();
+        var parents = new PdfObject.Arr();
         var result = new PdfAssemblyResult();
+        int version = 15;
+        int occurrence = 0;
+        foreach (PdfAssemblyInput input in inputs)
+        {
+            if (input == null)
+            {
+                throw new ArgumentException("An input occurrence cannot be null.", nameof(inputs));
+            }
+
+            budget.CountMappedObject();
+            PdfObjectStore store = input.Document.Engine.AssemblyStore;
+            using var release = store.ReleaseAfter();
+            if (store.Security is PdfSecurity security)
+            {
+                if (!options.AllowUnencryptedOutput)
+                {
+                    throw new PdfAssemblyNotSupportedException("Encrypted input requires AllowUnencryptedOutput.");
+                }
+
+                if (security.AuthenticationRole != PdfAuthenticationRole.Owner
+                    && (!security.Permissions.CanCopy || !security.Permissions.CanAssemble))
+                {
+                    throw new PdfEncryptionRestrictedException();
+                }
+            }
+
+            version = Math.Max(version, store.EffectiveVersion());
+            new PdfPageExtractor(store, budget).Import(input.PageNumbers, writer, pages, form, parents, ++occurrence, result, options.ExternalLinks);
+        }
+
+        var root = new PdfObject.Dict();
+        root.Set("Type", new PdfObject.Name("Catalog"));
+        root.Set("Pages", writer.BuildPageTree(pages));
+        if (parents.Items.Count > 0)
+        {
+            form.Set("Fields", parents);
+            root.Set("AcroForm", writer.Register(form));
+        }
+
+        var info = new PdfObject.Dict();
+        info.Set("Producer", new PdfObject.Str(Encoding.ASCII.GetBytes("jaytwo.Pdf"), false));
+        var identifier = new PdfObject.Arr(2);
+        byte[] id = Guid.NewGuid().ToByteArray();
+        identifier.Items.Add(new PdfObject.Str(id, true));
+        identifier.Items.Add(new PdfObject.Str(id, true));
+        writer.Write(destination, writer.Register(root), writer.Register(info), identifier, version);
+        return result;
+    }
+
+    private void Import(IEnumerable<int> pageNumbers, PdfNewFileWriter writer, List<PdfObject.Ref> allPages, PdfObject.Dict form, PdfObject.Arr parents, int occurrence, PdfAssemblyResult result, PdfExternalLinkMode externalLinks)
+    {
         var order = new List<int>();
         var selected = new Dictionary<int, PdfObject.Dict>();
         foreach (int number in pageNumbers)
         {
-            _budget.CountOutputPages(order.Count + 1);
+            _budget.CountOutputPages(checked(allPages.Count + order.Count + 1));
             _budget.AddStructuralBytes(48);
             if (number < 1)
             {
@@ -90,7 +142,6 @@ internal sealed class PdfPageExtractor
             inspection.Page(page);
         }
 
-        var writer = new PdfNewFileWriter(_budget);
         var copier = new PdfTypedObjectCopier(writer, _budget, Policy);
         var pages = new List<PdfObject.Ref>(order.Count);
         var outputPages = new List<PdfObject.Dict>(order.Count);
@@ -107,6 +158,7 @@ internal sealed class PdfPageExtractor
             }
         }
 
+        var forms = new PdfAssemblyForms(_store, _budget, writer, copier, catalog, form, occurrence, selected.Values);
         var links = new PdfAssemblyLinks(_store, _budget, catalog, _sourcePages, firstPages, externalLinks);
         var appearances = new PdfAssemblyAppearances(_store, _budget);
         for (int index = 0; index < order.Count; index++)
@@ -124,12 +176,22 @@ internal sealed class PdfPageExtractor
                 string? subtype = PdfValues.NameOf(_store.ResolveMaybe(annotation.Get("Subtype")));
                 if (subtype == "Widget")
                 {
-                    if (FieldType(annotation) != "Sig")
+                    if (FieldType(annotation) == "Sig")
                     {
-                        throw new PdfAssemblyNotSupportedException("Form widgets are not yet supported for extraction.");
+                        result.Omit(PdfOmissionReason.SignatureWidget);
+                    }
+                    else if (!appearances.Supported(annotation.Get("AP")))
+                    {
+                        result.Omit(PdfOmissionReason.UnsupportedAppearance);
+                    }
+                    else
+                    {
+                        var widget = (PdfObject.Dict)copier.CopyDirect(_store, annotation, "annotation");
+                        widget.Remove("T");
+                        widget.Set("P", pages[index]);
+                        annotations.Items.Add(forms.Widget(annotation, widget));
                     }
 
-                    result.Omit(PdfOmissionReason.SignatureWidget);
                     continue;
                 }
 
@@ -181,17 +243,8 @@ internal sealed class PdfPageExtractor
             }
         }
 
-        var root = new PdfObject.Dict();
-        root.Set("Type", new PdfObject.Name("Catalog"));
-        root.Set("Pages", writer.BuildPageTree(pages));
-        var info = new PdfObject.Dict();
-        info.Set("Producer", new PdfObject.Str(Encoding.ASCII.GetBytes("jaytwo.Pdf"), false));
-        var identifier = new PdfObject.Arr(2);
-        byte[] id = Guid.NewGuid().ToByteArray();
-        identifier.Items.Add(new PdfObject.Str(id, true));
-        identifier.Items.Add(new PdfObject.Str(id, true));
-        writer.Write(destination, writer.Register(root), writer.Register(info), identifier, _store.EffectiveVersion());
-        return result;
+        forms.Complete(parents);
+        allPages.AddRange(pages);
     }
 
     private void Walk(PdfObject? value, PdfObject.Dict inherited, Dictionary<int, PdfObject.Dict> selected, HashSet<int> path, int depth)

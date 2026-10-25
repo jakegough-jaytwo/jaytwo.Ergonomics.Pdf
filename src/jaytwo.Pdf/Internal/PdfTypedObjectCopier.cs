@@ -114,8 +114,28 @@ internal sealed class PdfTypedObjectCopier
         CheckDepth(depth);
         if (sourceValue is PdfObject.Dict sourceDictionary && destination is PdfObject.Dict destinationDictionary)
         {
+            List<string>? filters = sourceDictionary.Body == null ? null : PdfStreamDecoder.FiltersOf(sourceDictionary, source.Resolve);
+            int crypt = filters?.IndexOf("Crypt") ?? -1;
+            string? cryptName = null;
+            IReadOnlyList<PdfObject.Dict?>? parameters = null;
+            if (crypt >= 0)
+            {
+                if (crypt != 0 || filters!.LastIndexOf("Crypt") != 0)
+                {
+                    throw new PdfAssemblyNotSupportedException("A Crypt filter must be the first and only encryption filter.");
+                }
+
+                parameters = PdfStreamDecoder.ParmsOf(sourceDictionary, filters.Count, source.Resolve);
+                cryptName = PdfValues.NameOf(source.ResolveMaybe(parameters[0]?.Get("Name"))) ?? "Identity";
+            }
+
             foreach ((string key, PdfObject value) in sourceDictionary.Items)
             {
+                if (crypt >= 0 && key is "Filter" or "DecodeParms")
+                {
+                    continue;
+                }
+
                 CopyDecision decision = _policy(new CopyContext(structure, key, sourceDictionary, value));
                 if (decision.Kind == CopyKind.Omit)
                 {
@@ -135,7 +155,24 @@ internal sealed class PdfTypedObjectCopier
 
             if (sourceDictionary.Body != null)
             {
-                destinationDictionary.Body = new PdfObject.CopiedBody(() => source.OpenRawBody(sourceDictionary));
+                destinationDictionary.Body = new PdfObject.CopiedBody(() => source.OpenRawBody(sourceDictionary, cryptName));
+                if (crypt >= 0 && filters!.Count > 1)
+                {
+                    var retainedFilters = new PdfObject.Arr();
+                    var retainedParameters = new PdfObject.Arr();
+                    for (int index = 1; index < filters.Count; index++)
+                    {
+                        retainedFilters.Items.Add(new PdfObject.Name(filters[index]));
+                        retainedParameters.Items.Add(parameters![index] is PdfObject.Dict parm
+                            ? CopyValue(source, parm, structure, depth + 1) : PdfObject.NullObj.Instance);
+                    }
+
+                    destinationDictionary.Set("Filter", retainedFilters);
+                    if (sourceDictionary.Get("DecodeParms") != null)
+                    {
+                        destinationDictionary.Set("DecodeParms", retainedParameters);
+                    }
+                }
             }
 
             return;

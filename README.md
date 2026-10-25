@@ -17,7 +17,7 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 7. List logical revisions with their end offsets and signature coverage, including linearized files.
 8. Open a seekable stream or a random-access `IPdfSource` snapshot, synchronously or asynchronously with cancellation.
 9. Run a workflow with `jaytwo.Ergonomics.Pdf`: describe form fills, form flattening, document information changes, attachments, and page rotation for an existing PDF, then apply them as one incremental revision to a stream, to a file through a temporary sibling, or to the source itself; or export a file's form values in one call (see **Workflows**).
-10. Extract an ordered selection of pages from one unencrypted document into a new file with `PdfDocumentEditor.ExtractPages` (see **Page extraction**).
+10. Extract or concatenate ordered page selections into a new, unencrypted file with `PdfDocumentEditor.ExtractPages` (see **Page extraction**).
 
 Everything else in this README describes what ships today.
 
@@ -27,15 +27,19 @@ Release 1.0 adds reading and incremental-update operations, such as page rotatio
 
 ### Later
 
-The remaining new-file operations are concatenation, compaction, removing revisions, and removing passwords ([`docs/spec/phase-2.md`](docs/spec/phase-2.md); extraction and concatenation are adopted, the other operations remain draft). Caller-supplied fonts for non-WinAnsi appearances and PAdES long-term validation are also planned for 1.x.
+The remaining new-file operations are compaction, removing revisions, and removing passwords ([`docs/spec/phase-2.md`](docs/spec/phase-2.md); extraction and concatenation are adopted, the other operations remain draft). Caller-supplied fonts for non-WinAnsi appearances and PAdES long-term validation are also planned for 1.x.
 
-## Page extraction
+## Page extraction and concatenation
 
 `editor.ExtractPages(new[] { 3, 3, 7 }, destination)` writes three distinct pages from the editor's document in that order. Page numbers are positive and 1-based; an out-of-range page is rejected before output. The input remains unchanged. The destination must be empty and writable, stays open, and need not seek. A processing or destination failure after writing begins may leave an incomplete file, which the caller must discard.
 
 Inherited resources, media and crop boxes, and rotation become explicit on each page. Content and image streams stay encoded and are copied with bounded buffers. Fonts and images share source mappings; each output page and its retained annotations has its own identity. Explicit trim, bleed, and art boxes, user units, and transparency groups survive.
 
-The output has a new identifier and a minimal Info dictionary. Signatures and their widgets, outlines, tags, page labels, XMP, document attachments, catalog actions, viewer preferences, and permissions are omitted. Supported basic text, shape, ink, and text-markup annotations are copied. Other form widgets and encrypted inputs throw `PdfAssemblyNotSupportedException` before output. Concatenation and form namespaces remain target behavior in the Phase 2 spec.
+The output has a new identifier and a minimal Info dictionary. Signatures and their widgets, outlines, tags, page labels, XMP, document attachments, catalog actions, viewer preferences, and permissions are omitted. Supported basic text, shape, ink, and text-markup annotations are copied. Form fields on selected pages are kept under a synthetic parent per input occurrence (`Input1.Name`, `Input2.Name`, and so on); repeated pages have distinct widgets belonging to the same occurrence's field. Unselected widgets are pruned. Field inheritance, values, and supported appearances survive. Field actions and scripts, nonempty calculation order, cyclic ownership, and unpreservable default resources throw `PdfAssemblyNotSupportedException` before output. Default resources currently support fonts and the obsolete ProcSet entry; font names in text-state and device-color default appearances are remapped per occurrence. Other default-resource categories or default-appearance operators are refused.
+
+`PdfDocumentEditor.Concatenate(new[] { new PdfAssemblyInput(first, new[] { 1, 2 }), new PdfAssemblyInput(second, new[] { 3 }) }, destination)` assembles open, borrowed documents in order. The same document can appear twice. Each occurrence has independent fields and internal-link targets. Inputs and page selections are enumerated once during assembly, and every selection is checked before output. The documents must stay open until the call returns.
+
+Encrypted inputs require `new PdfAssemblyOptions { AllowUnencryptedOutput = true }`, passed to `Concatenate` or `editor.ExtractPages(pages, destination, options)`. Without that consent, assembly throws `PdfAssemblyNotSupportedException` before output. Owner authentication bypasses password permissions. User authentication requires bits 4 and 5 for revision 2, or bits 5 and 11 for revision 3 and later, on every input; insufficient access throws `PdfEncryptionRestrictedException` before output. RC4, AES-128, and AES-256 encryption is removed while compression filters and their parameters stay intact. An explicit first `/Crypt` filter and only its parameters are removed. Output encryption is not offered.
 
 Internal links become direct destinations. Links to another selected page target its first output occurrence; self-links target their own copy. Targets outside the selection are omitted. External links preserve only absolute `http`, `https`, and `mailto` URIs, resolving relative references against a valid HTTP(S) catalog `/URI /Base` using RFC 3986. Userinfo in HTTP(S) links, action chains, `/IsMap true`, annotation `/AA`, and other action types omit the whole link. No network requests occur. `editor.ExtractPages(pages, destination, PdfExternalLinkMode.Drop)` removes all external links; `PreserveSupported` is the default. The three-argument overload returns `PdfAssemblyResult.Omissions`, aggregate counts by `PdfOmissionReason` with no URLs or annotation history.
 

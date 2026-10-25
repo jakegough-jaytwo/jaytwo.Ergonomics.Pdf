@@ -115,14 +115,29 @@ public sealed class PdfDocumentEditor : IDisposable
         }
     }
 
+    /// <summary>Concatenates independent input occurrences into one new, unencrypted PDF.</summary>
+    /// <param name="inputs">Borrowed open documents and page selections, enumerated once in output order.</param>
+    /// <param name="destination">An empty writable stream, left open; it need not seek.</param>
+    /// <param name="options">Link and encrypted-input options, or null for defaults.</param>
+    /// <returns>Aggregate omission counts.</returns>
+    /// <remarks>
+    /// Each occurrence gets an independent field namespace and internal-link targets. Inputs stay open and unchanged.
+    /// All selections and permissions are checked before output. A failure after writing begins can leave an incomplete
+    /// file, which the caller must discard. Do not use an input stream as the destination.
+    /// </remarks>
+    public static PdfAssemblyResult Concatenate(IEnumerable<PdfAssemblyInput> inputs, Stream destination, PdfAssemblyOptions? options = null)
+    {
+        return PdfPageExtractor.Assemble(inputs, destination, options ?? new PdfAssemblyOptions());
+    }
+
     /// <summary>
     /// Writes an ordered selection of this document's pages to a new, unencrypted PDF.
     /// </summary>
     /// <param name="pageNumbers">One input occurrence: positive, 1-based page numbers, with repetitions allowed.</param>
     /// <param name="destination">An empty writable destination. It stays open and need not seek.</param>
     /// <remarks>
-    /// The source remains unchanged. Supported links and appearances are preserved; signature widgets are omitted. Other form widgets and
-    /// encrypted inputs are currently refused. Document metadata, attachments, outlines, labels, and tags are omitted.
+    /// The source remains unchanged. Supported links and appearances are preserved; signature widgets are omitted. Form fields are kept in an occurrence namespace;
+    /// encrypted inputs require an explicit option. Document metadata, attachments, outlines, labels, and tags are omitted.
     /// Unsupported associated files, layers, and dynamic XFA are refused before output. A failure after writing begins
     /// can leave an incomplete file, which the caller must discard. Do not use the source stream as the destination.
     /// </remarks>
@@ -131,7 +146,7 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <exception cref="PdfResourceLimitException">A structural assembly budget is exceeded.</exception>
     public void ExtractPages(IEnumerable<int> pageNumbers, Stream destination)
     {
-        Engine.ExtractPages(pageNumbers, destination, PdfExternalLinkMode.PreserveSupported);
+        ExtractPages(pageNumbers, destination, new PdfAssemblyOptions());
     }
 
     /// <summary>Writes selected pages to a new PDF and reports aggregate annotation omissions.</summary>
@@ -142,7 +157,24 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <remarks>Uses the same failure and input rules as <see cref="ExtractPages(IEnumerable{int}, Stream)"/>.</remarks>
     public PdfAssemblyResult ExtractPages(IEnumerable<int> pageNumbers, Stream destination, PdfExternalLinkMode externalLinks)
     {
-        return Engine.ExtractPages(pageNumbers, destination, externalLinks);
+        return ExtractPages(pageNumbers, destination, new PdfAssemblyOptions { ExternalLinks = externalLinks });
+    }
+
+    /// <summary>Extracts pages with explicit encrypted-input and link options.</summary>
+    /// <param name="pageNumbers">Positive, 1-based pages, with repetitions allowed.</param>
+    /// <param name="destination">An empty writable stream, left open; it need not seek.</param>
+    /// <param name="options">Assembly options, including consent to unencrypted output.</param>
+    /// <returns>Aggregate omission counts.</returns>
+    /// <remarks>Uses the same failure and input rules as <see cref="Concatenate"/>.</remarks>
+    public PdfAssemblyResult ExtractPages(IEnumerable<int> pageNumbers, Stream destination, PdfAssemblyOptions options)
+    {
+        _ = Engine.AssemblyStore;
+        if (options == null)
+        {
+            throw new ArgumentNullException(nameof(options));
+        }
+
+        return Concatenate(new[] { new PdfAssemblyInput(_document, pageNumbers) }, destination, options);
     }
 
     /// <summary>

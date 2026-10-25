@@ -242,6 +242,36 @@ internal sealed class PdfSecurity : IDisposable
         return new DecryptingStream(ciphertext, ObjectKey(dict.ObjectNumber, dict.Generation, kind), initializationVector);
     }
 
+    internal Stream OpenAssemblyStream(Stream ciphertext, PdfObject.Dict dict, PdfObject.Dict encrypt, string filter)
+    {
+        CipherKind kind = ReadFilter(encrypt, filter, _fileKey.Length, ReadInt(encrypt, "R") >= 5);
+        if (kind == CipherKind.None)
+        {
+            return ciphertext;
+        }
+
+        byte[] key = ObjectKey(dict.ObjectNumber, dict.Generation, kind);
+        if (kind == CipherKind.Rc4)
+        {
+            return new Rc4Stream(ciphertext, key);
+        }
+
+        var iv = new byte[16];
+        int offset = 0;
+        while (offset < iv.Length)
+        {
+            int count = ciphertext.Read(iv, offset, iv.Length - offset);
+            if (count == 0)
+            {
+                throw new PdfParseException(0, "Encrypted stream is truncated.");
+            }
+
+            offset += count;
+        }
+
+        return new DecryptingStream(ciphertext, key, iv);
+    }
+
     private static PdfSecurity CreateRevision2(PdfObject.Dict encrypt, byte[] fileId, string? password, int encryptId)
     {
         if (encrypt.Get("Length") is PdfObject.Num length && ReadNumber(length) != 40)

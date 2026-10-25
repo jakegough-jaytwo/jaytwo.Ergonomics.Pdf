@@ -636,7 +636,7 @@ internal sealed class PdfObjectStore : IDisposable
 
     // The new-file copier preserves the encoded stream and removes only standard-security encryption. Structural
     // streams still use OpenBody or ReadDecoded because their filters must be interpreted.
-    internal Stream OpenRawBody(PdfObject.Dict dict)
+    internal Stream OpenRawBody(PdfObject.Dict dict, string? cryptFilter = null)
     {
         if (dict.Body is PdfObject.MemoryBody memory)
         {
@@ -651,6 +651,30 @@ internal sealed class PdfObjectStore : IDisposable
         if (dict.Body is not PdfObject.FileBody file)
         {
             throw new PdfParseException(0, "The stream has no bytes.");
+        }
+
+        if (cryptFilter != null)
+        {
+            var raw = new PdfSliceStream(Source, file.Offset, file.Length);
+            if (cryptFilter == "Identity")
+            {
+                return raw;
+            }
+
+            try
+            {
+                if (Security == null)
+                {
+                    throw new PdfAssemblyNotSupportedException("A named Crypt filter requires standard security.");
+                }
+
+                return Security.OpenAssemblyStream(raw, dict, (PdfObject.Dict)Load(EncryptId), cryptFilter);
+            }
+            catch
+            {
+                raw.Dispose();
+                throw;
+            }
         }
 
         return OpenStored(dict, file);

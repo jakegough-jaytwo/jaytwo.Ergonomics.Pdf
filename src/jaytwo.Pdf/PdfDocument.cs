@@ -95,6 +95,8 @@ public sealed class PdfDocument : IDisposable
     /// <exception cref="PdfParseException">A revision footer or a signature <c>/ByteRange</c> does not parse.</exception>
     public IReadOnlyList<PdfRevision> Revisions => _engine.ListRevisions();
 
+    internal PdfEngine Engine => _engine;
+
     internal int RetainedObjectStreamCount => _engine.RetainedObjectStreamCount;
 
     internal long DecodedByteCount => _engine.DecodedByteCount;

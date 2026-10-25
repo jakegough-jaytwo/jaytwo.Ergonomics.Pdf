@@ -40,6 +40,15 @@ internal sealed class PdfEngine : IDisposable
         _signer = new PdfSigner(_store, _gate, _pages, _fields, _writer);
     }
 
+    internal PdfObjectStore AssemblyStore
+    {
+        get
+        {
+            _store.CheckDisposed();
+            return _store;
+        }
+    }
+
     internal int PageCount
     {
         get
@@ -152,13 +161,6 @@ internal sealed class PdfEngine : IDisposable
     internal int SetPageRotation(int objectId, int rotation)
     {
         return _pages.SetPageRotation(objectId, rotation);
-    }
-
-    internal PdfAssemblyResult ExtractPages(IEnumerable<int> pageNumbers, Stream destination, PdfExternalLinkMode externalLinks)
-    {
-        _store.CheckDisposed();
-        using var release = _store.ReleaseAfter();
-        return new PdfPageExtractor(_store).Extract(pageNumbers, destination, externalLinks);
     }
 
     internal string? GetInfoText(string key)

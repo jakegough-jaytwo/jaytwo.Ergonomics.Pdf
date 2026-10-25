@@ -55,7 +55,7 @@ internal sealed class PdfAssemblyInspection
             ?? throw new PdfAssemblyNotSupportedException("An inspected assembly array cannot be resolved.");
     }
 
-    private void Resources(PdfObject? value, int depth)
+    internal void Resources(PdfObject? value, int depth)
     {
         if (value == null)
         {
