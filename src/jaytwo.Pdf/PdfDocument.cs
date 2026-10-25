@@ -73,6 +73,12 @@ public sealed class PdfDocument : IDisposable
     public PdfPermissions Permissions => _engine.Permissions;
 
     /// <summary>
+    /// Gets the authenticated password role, or <see cref="PdfAuthenticationRole.Unencrypted"/> for an unencrypted file.
+    /// If both passwords match, the owner role takes precedence. Declared user permissions do not change with this role.
+    /// </summary>
+    public PdfAuthenticationRole AuthenticationRole => _engine.AuthenticationRole;
+
+    /// <summary>
     /// Gets every signature field, signed or not, with what its signature dictionary and CMS value say (spec R9).
     /// Nothing is validated, and the signed byte range is not read.
     /// </summary>

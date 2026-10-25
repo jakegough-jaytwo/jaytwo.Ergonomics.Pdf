@@ -84,8 +84,8 @@ internal sealed class PdfSecurity : IDisposable
             return false;
         }
 
-        long versionValue = version.IsInteger ? version.LongValue : (long)version.DoubleValue;
-        long revisionValue = revision.IsInteger ? revision.LongValue : (long)revision.DoubleValue;
+        long versionValue = version.IsInteger ? version.LongValue : -1;
+        long revisionValue = revision.IsInteger ? revision.LongValue : -1;
         return (versionValue == 1 && revisionValue == 2)
             || (versionValue == 2 && revisionValue == 3)
             || (versionValue == 4 && revisionValue == 4)
@@ -94,6 +94,19 @@ internal sealed class PdfSecurity : IDisposable
 
     public static PdfSecurity Create(PdfObject.Dict encrypt, byte[] fileId, string? password, int encryptId)
     {
+        if (encrypt.Get("Filter") is not PdfObject.Name)
+        {
+            throw Malformed();
+        }
+
+        if (ReadName(encrypt, "Filter") != "Standard" || encrypt.Contains("SubFilter"))
+        {
+            throw Unsupported();
+        }
+
+        ReadInt(encrypt, "V");
+        ReadInt(encrypt, "R");
+        ValidateOptionalTypes(encrypt);
         if (!IsSupportedRevision(encrypt))
         {
             throw Unsupported();
@@ -131,6 +144,10 @@ internal sealed class PdfSecurity : IDisposable
     }
 
     public PdfPermissions Permissions => _userPermissions;
+
+    public PdfAuthenticationRole AuthenticationRole => _owner ? PdfAuthenticationRole.Owner : PdfAuthenticationRole.User;
+
+    public bool CanAssemble => _owner || _userPermissions.CanAssemble;
 
     public bool CanModify => _owner || _userPermissions.CanModify;
 
@@ -660,7 +677,7 @@ internal sealed class PdfSecurity : IDisposable
     {
         if (perms.Length != 16)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         byte[] plain = AesEcb(fileKey, perms, encrypt: false);
@@ -673,7 +690,7 @@ internal sealed class PdfSecurity : IDisposable
                 || plain[10] != (byte)'d'
                 || plain[11] != (byte)'b')
             {
-                throw Rejected();
+                throw Malformed();
             }
         }
         finally
@@ -1157,7 +1174,7 @@ internal sealed class PdfSecurity : IDisposable
     {
         if (data.Length < offset + count)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         var slice = new byte[count];
@@ -1182,9 +1199,10 @@ internal sealed class PdfSecurity : IDisposable
 
         if (encrypt.Get("CF") is not PdfObject.Dict filters || filters.Get(filterName) is not PdfObject.Dict entry)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
+        ValidateOptionalTypes(entry);
         string? method = ReadName(entry, "CFM");
         if (method == null || method == "None")
         {
@@ -1245,13 +1263,13 @@ internal sealed class PdfSecurity : IDisposable
     {
         if (dict.Get("P") is not PdfObject.Num number || !number.IsInteger)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         long value = number.LongValue;
         if (value < int.MinValue || value > uint.MaxValue)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         return unchecked((int)(uint)value);
@@ -1261,7 +1279,7 @@ internal sealed class PdfSecurity : IDisposable
     {
         if (dict.Get(key) is not PdfObject.Num number)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         return ReadNumber(number);
@@ -1269,10 +1287,15 @@ internal sealed class PdfSecurity : IDisposable
 
     private static int ReadNumber(PdfObject.Num number)
     {
-        long value = number.IsInteger ? number.LongValue : (long)number.DoubleValue;
+        if (!number.IsInteger)
+        {
+            throw Malformed();
+        }
+
+        long value = number.LongValue;
         if (value < int.MinValue || value > int.MaxValue)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         return (int)value;
@@ -1282,7 +1305,7 @@ internal sealed class PdfSecurity : IDisposable
     {
         if (dict.Get(key) is not PdfObject.Str text || text.Raw.Length < minimum)
         {
-            throw Unsupported();
+            throw Malformed();
         }
 
         return text.Raw;
@@ -1309,24 +1332,47 @@ internal sealed class PdfSecurity : IDisposable
         return diff == 0;
     }
 
+    private static void ValidateOptionalTypes(PdfObject.Dict dict)
+    {
+        if ((dict.Contains("Length") && dict.Get("Length") is not PdfObject.Num)
+            || (dict.Contains("EncryptMetadata") && dict.Get("EncryptMetadata") is not PdfObject.Bool)
+            || (dict.Contains("CF") && dict.Get("CF") is not PdfObject.Dict))
+        {
+            throw Malformed();
+        }
+
+        foreach (string key in new[] { "StrF", "StmF", "EFF", "CFM", "AuthEvent" })
+        {
+            if (dict.Contains(key) && dict.Get(key) is not PdfObject.Name)
+            {
+                throw Malformed();
+            }
+        }
+    }
+
+    private static PdfEncryptedException Malformed()
+    {
+        return new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption data is malformed or inconsistent.");
+    }
+
     private static PdfEncryptedException Unsupported()
     {
-        return new PdfEncryptedException("This encryption is not supported.");
+        return new PdfEncryptedException(PdfEncryptionFailureReason.UnsupportedEncryption, "This encryption is not supported.");
     }
 
     private static PdfEncryptedException PasswordRequired()
     {
-        return new PdfEncryptedException("The PDF is encrypted. Pass the password to PdfDocument.Open.");
+        return new PdfEncryptedException(PdfEncryptionFailureReason.PasswordRequired, "The PDF is encrypted. Pass the password to PdfDocument.Open.");
     }
 
     private static PdfEncryptedException Rejected()
     {
-        return new PdfEncryptedException("The password was rejected.");
+        return new PdfEncryptedException(PdfEncryptionFailureReason.PasswordRejected, "The password was rejected.");
     }
 
     private static PdfEncryptedException InvalidRevision6Password()
     {
-        return new PdfEncryptedException("The password is not valid for revision 6 encryption.");
+        return new PdfEncryptedException(PdfEncryptionFailureReason.PasswordRejected, "The password is not valid for revision 6 encryption.");
     }
 
     private sealed class NonClosingStream : Stream

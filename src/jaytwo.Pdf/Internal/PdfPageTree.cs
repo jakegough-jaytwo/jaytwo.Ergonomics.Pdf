@@ -60,7 +60,8 @@ internal sealed class PdfPageTree
             throw new PdfSignatureConflictException("The document has a signature; page rotation changes page presentation, which validators report as a modification the signature does not permit. Set AllowBreakingSignatures to rotate anyway.");
         }
 
-        _gate.RequireModify();
+        // ISO 32000-1 Table 22: rotation is page assembly (bit 11 for R >= 3; bit 4 for R2).
+        _gate.RequireAssemble();
         _gate.ApplyUsageRights(null, null);
         ((PdfObject.Dict)_store.EditAny(objectId)).Set("Rotate", PdfObject.Num.FromLong(normalized));
         return normalized;

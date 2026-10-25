@@ -126,7 +126,7 @@ internal static class PdfTextCodec
         {
             if (!PdfDocReverse.TryGetValue(value[i], out byte encoded))
             {
-                throw new PdfEncryptedException("The password cannot be encoded for revision 4 encryption.");
+                throw new PdfEncryptedException(PdfEncryptionFailureReason.PasswordRejected, "The password cannot be encoded for legacy encryption.");
             }
 
             bytes[i] = encoded;

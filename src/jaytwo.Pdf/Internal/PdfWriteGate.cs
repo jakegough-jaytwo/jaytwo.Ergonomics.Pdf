@@ -60,6 +60,14 @@ internal sealed class PdfWriteGate
         }
     }
 
+    internal void RequireAssemble()
+    {
+        if (_store.Security != null && !_store.Security.CanAssemble)
+        {
+            throw new PdfEncryptionRestrictedException();
+        }
+    }
+
     internal void RequireAnnotate()
     {
         if (_store.Security != null && !_store.Security.CanAnnotate)

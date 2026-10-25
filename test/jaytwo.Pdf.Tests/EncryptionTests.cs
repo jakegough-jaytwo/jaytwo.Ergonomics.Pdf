@@ -120,6 +120,9 @@ public class EncryptionTests
         PdfEncryptedException wrong = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "nope", leaveOpen: true));
         PdfEncryptedException empty = Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), string.Empty, leaveOpen: true));
 
+        Assert.Equal(PdfEncryptionFailureReason.PasswordRequired, missing.Reason);
+        Assert.Equal(PdfEncryptionFailureReason.PasswordRejected, wrong.Reason);
+        Assert.Equal(PdfEncryptionFailureReason.PasswordRejected, empty.Reason);
         Assert.Contains("password", missing.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("rejected", wrong.Message, StringComparison.OrdinalIgnoreCase);
         Assert.Contains("rejected", empty.Message, StringComparison.OrdinalIgnoreCase);
@@ -146,6 +149,76 @@ public class EncryptionTests
         using var document = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
 
         Assert.Equal("Secret", document.Metadata.Title);
+        Assert.Equal(PdfAuthenticationRole.User, document.AuthenticationRole);
+    }
+
+    [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(5)]
+    [InlineData(6)]
+    public void owner_authentication_takes_precedence_when_both_passwords_match(int revision)
+    {
+        byte[] pdf = AesDocument(KindFor(revision), "same", "same", textField: false);
+        using var document = PdfDocument.Open(new MemoryStream(pdf), "same");
+        Assert.Equal(PdfAuthenticationRole.Owner, document.AuthenticationRole);
+    }
+
+    [Theory]
+    [InlineData("/Filter /Standard /V 4 /R 4 /O <00> /U <00> /P -4")]
+    [InlineData("/Filter /Standard /V 4 /R 4 /Length (bad)")]
+    [InlineData("/Filter /Standard /V 4.5 /R 4")]
+    [InlineData("/Filter /Standard /V 4 /R (bad)")]
+    [InlineData("/V 4 /R 4")]
+    [InlineData("/Filter /Standard /V 4 /R 4 /StrF /Missing")]
+    public void malformed_encryption_has_a_typed_reason(string encryption)
+    {
+        var builder = PdfBuilder.Basic();
+        builder.Indirect(20, "<< " + encryption + " >>");
+        byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [<0102> <0102>]");
+        Assert.Equal(
+            PdfEncryptionFailureReason.MalformedEncryption,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user")).Reason);
+    }
+
+    [Theory]
+    [InlineData(5)]
+    [InlineData(6)]
+    public void inconsistent_perms_after_authentication_is_malformed_not_a_rejected_password(int revision)
+    {
+        var crypt = new StandardEncryptor(KindFor(revision), "user", "owner", -4, encryptMetadata: true);
+        var builder = PdfBuilder.Basic();
+        builder.Indirect(20, crypt.Dictionary(null).Replace("/P -4", "/P -8"));
+        byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [" + crypt.IdLiteral() + "]");
+        Assert.Equal(
+            PdfEncryptionFailureReason.MalformedEncryption,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user")).Reason);
+    }
+
+    [Theory]
+    [InlineData("/Encrypt << /Filter /Standard >>", "<< >>")]
+    [InlineData("/Encrypt (invalid)", "<< >>")]
+    [InlineData("/Encrypt 21 0 R", "<< >>")]
+    [InlineData("/Encrypt 20 1 R", "<< >>")]
+    [InlineData("/Encrypt 20 0 R", "42")]
+    [InlineData("/Encrypt 20 0 R", "<< /Filter /Standard /V 4 /R 4 >>")]
+    [InlineData("/Encrypt 20 0 R /ID [<0102>]", "<< /Filter /Standard /V >>")]
+    public void malformed_encryption_references_and_dictionaries_have_a_typed_reason(string trailer, string encryption)
+    {
+        var builder = PdfBuilder.Basic();
+        builder.Indirect(20, encryption);
+        byte[] pdf = builder.Finish(trailer);
+        Assert.Equal(
+            PdfEncryptionFailureReason.MalformedEncryption,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user")).Reason);
+    }
+
+    [Fact]
+    public void legacy_exception_constructors_have_an_unknown_reason()
+    {
+        Assert.Equal(PdfEncryptionFailureReason.Unknown, new PdfEncryptedException().Reason);
+        Assert.Equal(PdfEncryptionFailureReason.Unknown, new PdfEncryptedException("custom").Reason);
     }
 
     [Fact]
@@ -180,6 +253,7 @@ public class EncryptionTests
         using var document = PdfDocument.Open(new MemoryStream(pdf), "unused", leaveOpen: true);
 
         Assert.Equal(1, document.PageCount);
+        Assert.Equal(PdfAuthenticationRole.Unencrypted, document.AuthenticationRole);
         AssertPermissions("unencrypted", document.Permissions, true, true, true, true, true, true, true, true);
     }
 
@@ -749,7 +823,9 @@ public class EncryptionTests
         builder.Indirect(20, "<< " + encrypt + " >>");
         byte[] pdf = builder.Finish("/Encrypt 20 0 R /ID [<0102030405060708090A0B0C0D0E0F10> <0102030405060708090A0B0C0D0E0F10>]");
 
-        Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true));
+        Assert.Equal(
+            PdfEncryptionFailureReason.UnsupportedEncryption,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "user", leaveOpen: true)).Reason);
     }
 
     [Fact]

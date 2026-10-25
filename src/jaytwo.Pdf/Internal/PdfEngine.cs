@@ -67,6 +67,15 @@ internal sealed class PdfEngine : IDisposable
         }
     }
 
+    internal PdfAuthenticationRole AuthenticationRole
+    {
+        get
+        {
+            _store.CheckDisposed();
+            return _store.Security == null ? PdfAuthenticationRole.Unencrypted : _store.Security.AuthenticationRole;
+        }
+    }
+
     internal bool HasFields
     {
         get

@@ -184,7 +184,7 @@ internal sealed class PdfDocumentLoader
         bool chainComplete = stack.Count == 1;
         if (pendingEncrypt && !await TryEnsureSecurityAsync(trailer, _store.Xref, password, useAsync, cancellationToken).ConfigureAwait(false) && chainComplete)
         {
-            throw new PdfParseException(offset, "The encryption dictionary is not an uncompressed object in the cross-reference table.");
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary is not an uncompressed object in the cross-reference table.");
         }
 
         if (encryptedInline != null && _store.Security != null)
@@ -237,11 +237,16 @@ internal sealed class PdfDocumentLoader
 
         if (trailer.Get("Encrypt") is PdfObject.Dict)
         {
-            throw new PdfEncryptedException("The encryption dictionary must be an indirect object.");
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary must be an indirect object.");
         }
 
         if (trailer.Get("Encrypt") is not PdfObject.Ref reference)
         {
+            if (trailer.Get("Encrypt") is not null and not PdfObject.NullObj)
+            {
+                throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary must be an indirect object.");
+            }
+
             return true;
         }
 
@@ -252,13 +257,17 @@ internal sealed class PdfDocumentLoader
 
         _store.EncryptId = reference.ObjectId;
         _store.EncryptGen = reference.GenerationNumber;
-        PdfObject.Dict encrypt = await ParseEncryptDictionaryAsync(encryptOffset, reference.ObjectId, useAsync, cancellationToken).ConfigureAwait(false);
-        _store.Cache[reference.ObjectId] = encrypt;
-        if (!PdfSecurity.IsSupportedRevision(encrypt))
+        PdfObject.Dict encrypt;
+        try
         {
-            throw new PdfEncryptedException("This encryption is not supported.");
+            encrypt = await ParseEncryptDictionaryAsync(encryptOffset, reference.ObjectId, useAsync, cancellationToken).ConfigureAwait(false);
+        }
+        catch (PdfParseException)
+        {
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary could not be parsed.");
         }
 
+        _store.Cache[reference.ObjectId] = encrypt;
         _store.Security = PdfSecurity.Create(encrypt, FileId(trailer), password, _store.EncryptId);
         return true;
     }
@@ -284,12 +293,12 @@ internal sealed class PdfDocumentLoader
 
         if (entry.Type != 1)
         {
-            throw new PdfParseException(entry.Field1, "The encryption dictionary is not an uncompressed object.");
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary is not an uncompressed object.");
         }
 
         if (entry.Field2 != reference.GenerationNumber)
         {
-            throw new PdfParseException(entry.Field1, "The encryption dictionary reference does not match its cross-reference generation.");
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary reference does not match its cross-reference generation.");
         }
 
         offset = entry.Field1;
@@ -302,7 +311,7 @@ internal sealed class PdfDocumentLoader
         var parser = new PdfParser(_store.Cursor, null, 0, useAsync, cancellationToken);
         if (await parser.ParseIndirectAsync(id).ConfigureAwait(false) is not PdfObject.Dict dict)
         {
-            throw new PdfParseException(offset, "The encryption dictionary is not a dictionary.");
+            throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "The encryption dictionary is not a dictionary.");
         }
 
         return dict;
@@ -350,7 +359,7 @@ internal sealed class PdfDocumentLoader
             return copy;
         }
 
-        throw new PdfParseException(0, "An encrypted PDF has no file identifier.");
+        throw new PdfEncryptedException(PdfEncryptionFailureReason.MalformedEncryption, "An encrypted PDF has no file identifier.");
     }
 
     private async ValueTask<bool> IsClassicXrefAsync(long offset, bool useAsync, CancellationToken cancellationToken)

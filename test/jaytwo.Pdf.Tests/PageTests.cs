@@ -206,9 +206,9 @@ public class PageTests
 
     [Fact]
     [Trait(Lane.Trait, Lane.External)]
-    public void user_password_without_modify_refuses_and_the_owner_can_rotate()
+    public void user_password_without_assembly_refuses_and_the_owner_can_rotate()
     {
-        byte[] pdf = QpdfEncrypt(PageDocument(inheritedRotation: 0), "256", "--modify-other=n");
+        byte[] pdf = QpdfEncrypt(PageDocument(inheritedRotation: 0), "256", "--assemble=n");
         using var stream = new MemoryStream();
         stream.Write(pdf, 0, pdf.Length);
         using (var document = PdfDocument.Open(stream, "user", leaveOpen: true))
@@ -226,6 +226,95 @@ public class PageTests
         }
 
         Assert.True(stream.Length > pdf.Length);
+    }
+
+    [Theory]
+    [Trait(Lane.Trait, Lane.External)]
+    [InlineData("40")]
+    [InlineData("128-rc4")]
+    [InlineData("128-aes")]
+    [InlineData("256-r5")]
+    [InlineData("256")]
+    public void qpdf_inputs_report_authentication_separately_from_permissions(string cipher)
+    {
+        byte[] pdf = QpdfEncrypt(PageDocument(0), cipher, cipher == "40" ? "--modify=n" : "--modify-other=n");
+        using var user = PdfDocument.Open(new MemoryStream(pdf), "user");
+        using var owner = PdfDocument.Open(new MemoryStream(pdf), "owner");
+        Assert.Equal(PdfAuthenticationRole.User, user.AuthenticationRole);
+        Assert.Equal(PdfAuthenticationRole.Owner, owner.AuthenticationRole);
+        Assert.False(user.Permissions.CanModify);
+        Assert.False(owner.Permissions.CanModify);
+        Assert.Equal(
+            PdfEncryptionFailureReason.PasswordRequired,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf))).Reason);
+        Assert.Equal(
+            PdfEncryptionFailureReason.PasswordRejected,
+            Assert.Throws<PdfEncryptedException>(() => PdfDocument.Open(new MemoryStream(pdf), "wrong")).Reason);
+    }
+
+    [Theory]
+    [Trait(Lane.Trait, Lane.Interop)]
+    [InlineData("128-rc4", true)]
+    [InlineData("128-rc4", false)]
+    [InlineData("128-aes", true)]
+    [InlineData("128-aes", false)]
+    [InlineData("256-r5", true)]
+    [InlineData("256-r5", false)]
+    [InlineData("256", true)]
+    [InlineData("256", false)]
+    public void rotation_uses_assembly_even_when_modify_disagrees(string cipher, bool assemble)
+    {
+        byte[] pdf = QpdfEncrypt(
+            PageDocument(0),
+            cipher,
+            assemble ? "--modify-other=n" : "--modify-other=y",
+            assemble ? "--assemble=y" : "--assemble=n");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, "user", leaveOpen: true);
+        using var editor = document.Edit();
+        Assert.Equal(assemble, document.Permissions.CanAssemble);
+        Assert.Equal(!assemble, document.Permissions.CanModify);
+        if (!assemble)
+        {
+            Assert.Throws<PdfEncryptionRestrictedException>(() => editor.Pages[0].Rotation = 90);
+            AssertUnchanged(editor, stream, pdf);
+            return;
+        }
+
+        editor.Pages[0].Rotation = 90;
+        editor.SaveIncremental();
+        byte[] saved = stream.ToArray();
+        Assert.True(saved.AsSpan(0, pdf.Length).SequenceEqual(pdf));
+        using var reopened = PdfDocument.Open(new MemoryStream(saved), "user");
+        Assert.Equal(90, reopened.Pages[0].Rotation);
+        AssertQpdfCheck(saved, "user");
+    }
+
+    [Theory]
+    [Trait(Lane.Trait, Lane.External)]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void revision2_rotation_follows_modify(bool modify)
+    {
+        byte[] pdf = QpdfEncrypt(PageDocument(0), "40", modify ? "--modify=y" : "--modify=n");
+        using var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, "user", leaveOpen: true);
+        using var editor = document.Edit();
+        Assert.Equal(modify, document.Permissions.CanAssemble);
+        if (modify)
+        {
+            editor.Pages[0].Rotation = 90;
+            editor.SaveIncremental();
+            using var reopened = PdfDocument.Open(new MemoryStream(stream.ToArray()), "user");
+            Assert.Equal(90, reopened.Pages[0].Rotation);
+        }
+        else
+        {
+            Assert.Throws<PdfEncryptionRestrictedException>(() => editor.Pages[0].Rotation = 90);
+            AssertUnchanged(editor, stream, pdf);
+        }
     }
 
     private static PdfFieldSnapshot FieldSnapshot(PdfDocument document)
@@ -370,7 +459,7 @@ public class PageTests
         return value;
     }
 
-    private static byte[] QpdfEncrypt(byte[] pdf, string cipher, string? restriction = null)
+    private static byte[] QpdfEncrypt(byte[] pdf, string cipher, params string[] restrictions)
     {
         string directory = ExternalTool.TempDirectory();
         try
@@ -379,11 +468,15 @@ public class PageTests
             string output = Path.Combine(directory, "encrypted.pdf");
             File.WriteAllBytes(input, pdf);
             var args = new List<string> { "--allow-weak-crypto", "--encrypt", "user", "owner" };
-            args.AddRange(cipher == "128-rc4" ? new[] { "128", "--use-aes=n" } : new[] { "256" });
-            if (restriction != null)
+            args.AddRange(cipher switch
             {
-                args.Add(restriction);
-            }
+                "40" => new[] { "40" },
+                "128-rc4" => new[] { "128", "--use-aes=n" },
+                "128-aes" => new[] { "128", "--use-aes=y", "--force-V4" },
+                "256-r5" => new[] { "256", "--force-R5" },
+                _ => new[] { "256" },
+            });
+            args.AddRange(restrictions);
 
             args.AddRange(new[] { "--", input, output });
             using Process process = ExternalTool.Start(CorpusManifest.Qpdf(), args.ToArray());
