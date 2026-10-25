@@ -1,0 +1,33 @@
+{
+  "description": "Focused A15 hybrid invoice refusal fixture, outside G2.",
+  "fixtures": [
+    {
+      "file": "factur-x.pdf",
+      "sha256": "7629bd356fe1a5c2d82ed08774300a2acf5bf50329dd8ec9f24b58f2528d830b",
+      "workItem": "W-166",
+      "purpose": "A15 real hybrid invoice: A5 association refusal before extraction or concatenation writes",
+      "producer": "Mustangproject upstream test invoice",
+      "source": "https://github.com/ZUGFeRD/mustangproject/blob/1d633ab612856527d536a709ed53bedd2a4ea98c/library/src/test/resources/cii/X19_01_Warenrechnung_fx.pdf",
+      "acquired": "2026-10-25",
+      "transformations": "None; upstream bytes retained",
+      "license": "Apache-2.0",
+      "redistribution": "Apache-2.0 permits redistribution with the retained license, notice, and attribution",
+      "attribution": [
+        "LICENSE",
+        "NOTICE",
+        "UPSTREAM.md"
+      ],
+      "tests": [
+        "AssemblyCheckpointTests.factur_x_association_is_refused_before_either_operation_writes"
+      ],
+      "expected": "Typed PdfAssemblyNotSupportedException before either operation writes",
+      "validators": [
+        {
+          "tool": "pypdf",
+          "result": "not-run",
+          "property": "Four-page PDF with catalog AF and embedded factur-x.xml containing CrossIndustryInvoice"
+        }
+      ]
+    }
+  ]
+}

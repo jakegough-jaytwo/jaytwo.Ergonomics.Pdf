@@ -15,6 +15,7 @@ internal static class FocusedFixtures
     public static readonly IReadOnlyList<string> Sets = new[]
     {
         "focused-assembly-links",
+        "focused-assembly-invoice",
     };
 
     public static string Fixtures => Path.Combine(AppContext.BaseDirectory, "Fixtures");
