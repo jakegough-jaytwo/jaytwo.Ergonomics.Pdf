@@ -24,7 +24,7 @@
       "validators": [
         {
           "tool": "pypdf",
-          "result": "not-run",
+          "result": "pass",
           "property": "Four-page PDF with catalog AF and embedded factur-x.xml containing CrossIndustryInvoice"
         }
       ]
