@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using jaytwo.Pdf.Internal;
 using Xunit;
 
 namespace jaytwo.Pdf.Tests;
@@ -771,6 +772,67 @@ public class EncryptionTests
         AssertDiagnosticOmitsKey(exception, fileKey);
     }
 
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(6)]
+    public void disposing_the_object_store_clears_its_file_key(int revision)
+    {
+        PdfSecurity security = Security(KindFor(revision));
+        byte[] fileKey = security.FileKeyForTesting;
+        var store = new PdfObjectStore(new TestPdfSource(Array.Empty<byte>()), ownsSource: true, cursorWindows: 1)
+        {
+            Security = security,
+        };
+
+        Assert.Contains(fileKey, value => value != 0);
+
+        store.Dispose();
+        store.Dispose();
+
+        Assert.All(fileKey, value => Assert.Equal(0, value));
+    }
+
+    [Fact]
+    public void file_key_is_cleared_when_later_object_store_cleanup_fails()
+    {
+        PdfSecurity security = Security(StandardEncryptor.Kind.Revision6);
+        byte[] fileKey = security.FileKeyForTesting;
+        var store = new PdfObjectStore(new TestPdfSource(Array.Empty<byte>()), ownsSource: true, cursorWindows: 1)
+        {
+            Security = security,
+        };
+        store.OwnedStreams.Add(new ThrowingDisposeStream());
+
+        Assert.Throws<InvalidOperationException>(() => store.Dispose());
+
+        Assert.All(fileKey, value => Assert.Equal(0, value));
+        store.Dispose();
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void encrypted_stream_cleanup_disposes_its_source_once(bool fail)
+    {
+        using PdfSecurity security = Security(StandardEncryptor.Kind.Revision4Aes);
+        var dict = new PdfObject.Dict { ObjectNumber = 5 };
+        var source = new CountingDisposeStream(fail);
+        Stream decrypted = security.OpenDecrypted(source, new byte[16], dict);
+
+        if (fail)
+        {
+            Assert.Throws<InvalidOperationException>(() => decrypted.Dispose());
+        }
+        else
+        {
+            decrypted.Dispose();
+        }
+
+        decrypted.Dispose();
+        Assert.Equal(1, source.DisposeCount);
+    }
+
     private static void AssertDiagnosticOmits(Exception exception, string secret, string kind)
     {
         Assert.False(string.IsNullOrEmpty(secret));
@@ -873,6 +935,13 @@ public class EncryptionTests
         };
     }
 
+    private static PdfSecurity Security(StandardEncryptor.Kind kind)
+    {
+        var crypt = new StandardEncryptor(kind, "user", "owner", -4, encryptMetadata: true);
+        var parser = new PdfParser(PdfCursor.FromBytes(Encoding.ASCII.GetBytes(crypt.Dictionary(null))), null, 0);
+        return PdfSecurity.Create((PdfObject.Dict)parser.ParseValue(), crypt.Id, "user", 99);
+    }
+
     private static byte[] Encrypted(StandardEncryptor.Kind kind, int permissions, bool textField)
     {
         var crypt = new StandardEncryptor(kind, "user", "owner", permissions, encryptMetadata: true);
@@ -967,6 +1036,37 @@ public class EncryptionTests
         public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)
         {
             return new ValueTask<byte[]>(new byte[] { 1, 2, 3, 4 });
+        }
+    }
+
+    private sealed class ThrowingDisposeStream : MemoryStream
+    {
+        protected override void Dispose(bool disposing)
+        {
+            throw new InvalidOperationException("dispose failed");
+        }
+    }
+
+    private sealed class CountingDisposeStream : MemoryStream
+    {
+        private readonly bool _fail;
+
+        public CountingDisposeStream(bool fail)
+        {
+            _fail = fail;
+        }
+
+        public int DisposeCount { get; private set; }
+
+        protected override void Dispose(bool disposing)
+        {
+            DisposeCount++;
+            if (_fail)
+            {
+                throw new InvalidOperationException("dispose failed");
+            }
+
+            base.Dispose(disposing);
         }
     }
 

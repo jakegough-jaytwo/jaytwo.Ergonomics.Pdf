@@ -78,22 +78,38 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
             digest = hasher.ComputeHash(signed);
         }
 
-        byte[] contentType = DerCodec.Sequence(
-            DerCodec.Oid("1.2.840.113549.1.9.3"),
-            DerCodec.Set(DerCodec.Oid("1.2.840.113549.1.7.1")));
-        byte[] messageDigest = DerCodec.Sequence(
-            DerCodec.Oid("1.2.840.113549.1.9.4"),
-            DerCodec.Set(DerCodec.OctetString(digest)));
-        byte[] signedAttrs = context.Format == PdfSignatureFormat.PadesBaselineB
-            ? DerCodec.Set(contentType, messageDigest, SigningCertificateV2(certificates[0], issuer, serial))
-            : DerCodec.Set(contentType, messageDigest, SigningTime(context.SigningTime ?? DateTimeOffset.UtcNow));
-        byte[] hash;
-        using (HashAlgorithm hasher = CreateHash(hashAlgorithm))
+        byte[] signedAttrs;
+        byte[]? signature;
+        try
         {
-            hash = hasher.ComputeHash(signedAttrs);
-        }
+            byte[] contentType = DerCodec.Sequence(
+                DerCodec.Oid("1.2.840.113549.1.9.3"),
+                DerCodec.Set(DerCodec.Oid("1.2.840.113549.1.7.1")));
+            byte[] messageDigest = DerCodec.Sequence(
+                DerCodec.Oid("1.2.840.113549.1.9.4"),
+                DerCodec.Set(DerCodec.OctetString(digest)));
+            signedAttrs = context.Format == PdfSignatureFormat.PadesBaselineB
+                ? DerCodec.Set(contentType, messageDigest, SigningCertificateV2(certificates[0], issuer, serial))
+                : DerCodec.Set(contentType, messageDigest, SigningTime(context.SigningTime ?? DateTimeOffset.UtcNow));
+            byte[] hash;
+            using (HashAlgorithm hasher = CreateHash(hashAlgorithm))
+            {
+                hash = hasher.ComputeHash(signedAttrs);
+            }
 
-        byte[]? signature = await CallSignerAsync(hash, hashAlgorithm, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                signature = await CallSignerAsync(hash, hashAlgorithm, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                Clear(hash);
+            }
+        }
+        finally
+        {
+            Clear(digest);
+        }
 
         if (signature == null || signature.Length == 0)
         {
@@ -117,64 +133,83 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
         byte[]? token = null;
         byte[]? imprint = null;
         byte[]? nonce = null;
-        if (_timestampAuthority != null)
+        try
         {
-            using (SHA256 sha256 = SHA256.Create())
+            if (_timestampAuthority != null)
             {
-                imprint = sha256.ComputeHash(signature);
+                using (SHA256 sha256 = SHA256.Create())
+                {
+                    imprint = sha256.ComputeHash(signature);
+                }
+
+                nonce = Rfc3161TimeStampRequest.NewNonce();
+                byte[]? request = null;
+                try
+                {
+                    request = Rfc3161TimeStampRequest.Create(imprint, nonce);
+                    token = await TimestampAuthorityCall.GetTokenAsync(_timestampAuthority, request, cancellationToken).ConfigureAwait(false);
+                }
+                finally
+                {
+                    Clear(request);
+                }
+
+                if (token == null)
+                {
+                    Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
+                }
+
+                // The token is wrapped verbatim, so the CMS length below is exact before the token is parsed.
+                byte[] attribute = DerCodec.Sequence(
+                    DerCodec.Oid("1.2.840.113549.1.9.16.2.14"),
+                    DerCodec.Set(token!));
+                unsignedAttrs = DerCodec.ReplaceTag(DerCodec.Set(attribute), 0xA1);
             }
 
-            nonce = Rfc3161TimeStampRequest.NewNonce();
-            token = await TimestampAuthorityCall.GetTokenAsync(_timestampAuthority, Rfc3161TimeStampRequest.Create(imprint, nonce), cancellationToken).ConfigureAwait(false);
+            byte[] signerInfo = unsignedAttrs == null
+                ? DerCodec.Sequence(
+                    DerCodec.Integer(1),
+                    DerCodec.Sequence(issuer, serial),
+                    DerCodec.Algorithm(digestOid),
+                    DerCodec.ReplaceTag(signedAttrs, 0xA0),
+                    signatureAlgorithm,
+                    DerCodec.OctetString(signature))
+                : DerCodec.Sequence(
+                    DerCodec.Integer(1),
+                    DerCodec.Sequence(issuer, serial),
+                    DerCodec.Algorithm(digestOid),
+                    DerCodec.ReplaceTag(signedAttrs, 0xA0),
+                    signatureAlgorithm,
+                    DerCodec.OctetString(signature),
+                    unsignedAttrs);
+            byte[] certificateSet = DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0);
+            byte[] signedData = DerCodec.Sequence(
+                DerCodec.Integer(1),
+                DerCodec.Set(DerCodec.Algorithm(digestOid)),
+                DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.1")),
+                certificateSet,
+                DerCodec.Set(signerInfo));
+            byte[] contents = DerCodec.Sequence(
+                DerCodec.Oid("1.2.840.113549.1.7.2"),
+                DerCodec.ExplicitContext(0, signedData));
+            if (contents.Length > context.ReservedContentsBytes)
+            {
+                throw new PdfSignatureTooLargeException(contents.Length, context.ReservedContentsBytes);
+            }
+
             if (token == null)
             {
-                Rfc3161TimeStampToken.RequireMatch(token, imprint, nonce);
+                return contents;
             }
 
-            // The token is wrapped verbatim, so the CMS length below is exact before the token is parsed.
-            byte[] attribute = DerCodec.Sequence(
-                DerCodec.Oid("1.2.840.113549.1.9.16.2.14"),
-                DerCodec.Set(token!));
-            unsignedAttrs = DerCodec.ReplaceTag(DerCodec.Set(attribute), 0xA1);
-        }
-
-        byte[] signerInfo = unsignedAttrs == null
-            ? DerCodec.Sequence(
-                DerCodec.Integer(1),
-                DerCodec.Sequence(issuer, serial),
-                DerCodec.Algorithm(digestOid),
-                DerCodec.ReplaceTag(signedAttrs, 0xA0),
-                signatureAlgorithm,
-                DerCodec.OctetString(signature))
-            : DerCodec.Sequence(
-                DerCodec.Integer(1),
-                DerCodec.Sequence(issuer, serial),
-                DerCodec.Algorithm(digestOid),
-                DerCodec.ReplaceTag(signedAttrs, 0xA0),
-                signatureAlgorithm,
-                DerCodec.OctetString(signature),
-                unsignedAttrs);
-        byte[] certificateSet = DerCodec.ReplaceTag(DerCodec.Set(certificates.ToArray()), 0xA0);
-        byte[] signedData = DerCodec.Sequence(
-            DerCodec.Integer(1),
-            DerCodec.Set(DerCodec.Algorithm(digestOid)),
-            DerCodec.Sequence(DerCodec.Oid("1.2.840.113549.1.7.1")),
-            certificateSet,
-            DerCodec.Set(signerInfo));
-        byte[] contents = DerCodec.Sequence(
-            DerCodec.Oid("1.2.840.113549.1.7.2"),
-            DerCodec.ExplicitContext(0, signedData));
-        if (contents.Length > context.ReservedContentsBytes)
-        {
-            throw new PdfSignatureTooLargeException(contents.Length, context.ReservedContentsBytes);
-        }
-
-        if (token != null)
-        {
             Rfc3161TimeStampToken.RequireMatch(token, imprint!, nonce!);
+            return contents;
         }
-
-        return contents;
+        finally
+        {
+            Clear(imprint);
+            Clear(nonce);
+        }
     }
 
     private static T CallSigner<T>(Func<T> access)
@@ -275,6 +310,14 @@ public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider
     private static bool Same(byte[] left, byte[] right)
     {
         return ((ReadOnlySpan<byte>)left).SequenceEqual(right);
+    }
+
+    private static void Clear(byte[]? bytes)
+    {
+        if (bytes != null)
+        {
+            Array.Clear(bytes, 0, bytes.Length);
+        }
     }
 
     // The digest OID, its framework name, and its arc under 2.16.840.1.101.3.4.2, which also numbers the signature algorithms.

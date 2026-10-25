@@ -7,7 +7,7 @@ using System.Text;
 
 namespace jaytwo.Pdf.Internal;
 
-internal sealed class PdfSecurity
+internal sealed class PdfSecurity : IDisposable
 {
     private const int StringChunk = 4096;
 
@@ -33,6 +33,7 @@ internal sealed class PdfSecurity
     private readonly bool _metadata;
     private readonly bool _owner;
     private readonly PdfPermissions _userPermissions;
+    private bool _disposed;
 
     private PdfSecurity(
         byte[] fileKey,
@@ -136,6 +137,19 @@ internal sealed class PdfSecurity
     public bool CanFill => _owner || _userPermissions.CanFillForms;
 
     public bool CanAnnotate => _owner || _userPermissions.CanAnnotate;
+
+    internal byte[] FileKeyForTesting => _fileKey;
+
+    public void Dispose()
+    {
+        if (_disposed)
+        {
+            return;
+        }
+
+        _disposed = true;
+        Clear(_fileKey);
+    }
 
     public bool UsesInitializationVector(PdfObject.Dict dict)
     {
@@ -274,23 +288,51 @@ internal sealed class PdfSecurity
             : ReadFilter(encrypt, embeddedName, 32, revision6: true);
         string candidate = password ?? string.Empty;
         byte[] prepared = stretched ? PrepareRevision6(candidate) : PrepareRevision5(candidate);
-        byte[] ownerValue = ReadBytes(encrypt, "O", 48);
-        byte[] userValue = ReadBytes(encrypt, "U", 48);
-        byte[] ownerEncrypted = ReadBytes(encrypt, "OE", 32);
-        byte[] userEncrypted = ReadBytes(encrypt, "UE", 32);
-        byte[] perms = ReadBytes(encrypt, "Perms", 16);
-        int permissions = ReadPermissions(encrypt);
-        bool ownerMatched = PasswordMatches(prepared, Slice(ownerValue, 32, 8), userValue, ownerValue, stretched);
-        bool userMatched = PasswordMatches(prepared, Slice(userValue, 32, 8), null, userValue, stretched);
-        if (!ownerMatched && !userMatched)
+        byte[]? ownerSalt = null;
+        byte[]? userSalt = null;
+        byte[]? hash = null;
+        byte[]? fileKey = null;
+        try
         {
-            throw password == null ? PasswordRequired() : Rejected();
-        }
+            byte[] ownerValue = ReadBytes(encrypt, "O", 48);
+            byte[] userValue = ReadBytes(encrypt, "U", 48);
+            byte[] ownerEncrypted = ReadBytes(encrypt, "OE", 32);
+            byte[] userEncrypted = ReadBytes(encrypt, "UE", 32);
+            byte[] perms = ReadBytes(encrypt, "Perms", 16);
+            int permissions = ReadPermissions(encrypt);
+            ownerSalt = Slice(ownerValue, 32, 8);
+            userSalt = Slice(userValue, 32, 8);
+            bool ownerMatched = PasswordMatches(prepared, ownerSalt, userValue, ownerValue, stretched);
+            bool userMatched = PasswordMatches(prepared, userSalt, null, userValue, stretched);
+            if (!ownerMatched && !userMatched)
+            {
+                throw password == null ? PasswordRequired() : Rejected();
+            }
 
-        byte[] hash = KeyHash(prepared, ownerMatched ? ownerValue : userValue, ownerMatched ? userValue : null, stretched);
-        byte[] fileKey = AesCbc(hash, new byte[16], ownerMatched ? Slice(ownerEncrypted, 0, 32) : Slice(userEncrypted, 0, 32), encrypt: false, padding: false);
-        ValidatePerms(fileKey, perms, permissions, metadata);
-        return new PdfSecurity(fileKey, encryptId, strings, streams, embedded, metadata, ownerMatched, stretched ? 6 : 5, permissions);
+            hash = KeyHash(prepared, ownerMatched ? ownerValue : userValue, ownerMatched ? userValue : null, stretched);
+            byte[] encryptedKey = Slice(ownerMatched ? ownerEncrypted : userEncrypted, 0, 32);
+            try
+            {
+                fileKey = AesCbc(hash, new byte[16], encryptedKey, encrypt: false, padding: false);
+            }
+            finally
+            {
+                Clear(encryptedKey);
+            }
+
+            ValidatePerms(fileKey, perms, permissions, metadata);
+            var security = new PdfSecurity(fileKey, encryptId, strings, streams, embedded, metadata, ownerMatched, stretched ? 6 : 5, permissions);
+            fileKey = null;
+            return security;
+        }
+        finally
+        {
+            Clear(prepared);
+            Clear(ownerSalt);
+            Clear(userSalt);
+            Clear(hash);
+            Clear(fileKey);
+        }
     }
 
     private static PdfSecurity CreateLegacy(
@@ -321,30 +363,54 @@ internal sealed class PdfSecurity
         byte[] user = ReadBytes(encrypt, "U", 32);
         int permissions = ReadPermissions(encrypt);
         byte[] padded = PadPassword(PdfTextCodec.EncodePdfDoc(password ?? string.Empty));
-        byte[]? recovered = RecoverUserPassword(padded, owner, revision, keyBytes);
-        bool ownerMatched = recovered != null && UserMatches(recovered, owner, permissions, fileId, metadata, user, revision, keyBytes);
-        bool userMatched = UserMatches(padded, owner, permissions, fileId, metadata, user, revision, keyBytes);
-        if (!ownerMatched && !userMatched)
+        byte[]? recovered = null;
+        byte[]? fileKey = null;
+        try
         {
-            throw password == null ? PasswordRequired() : Rejected();
-        }
+            recovered = RecoverUserPassword(padded, owner, revision, keyBytes);
+            bool ownerMatched = recovered != null && UserMatches(recovered, owner, permissions, fileId, metadata, user, revision, keyBytes);
+            bool userMatched = UserMatches(padded, owner, permissions, fileId, metadata, user, revision, keyBytes);
+            if (!ownerMatched && !userMatched)
+            {
+                throw password == null ? PasswordRequired() : Rejected();
+            }
 
-        byte[] fileKey = FileKey(ownerMatched ? recovered! : padded, owner, permissions, fileId, metadata, revision, keyBytes);
-        bool encryptsMetadata = revision < 4 || metadata;
-        return new PdfSecurity(fileKey, encryptId, strings, streams, embedded, encryptsMetadata, ownerMatched, revision, permissions);
+            fileKey = FileKey(ownerMatched ? recovered! : padded, owner, permissions, fileId, metadata, revision, keyBytes);
+            bool encryptsMetadata = revision < 4 || metadata;
+            var security = new PdfSecurity(fileKey, encryptId, strings, streams, embedded, encryptsMetadata, ownerMatched, revision, permissions);
+            fileKey = null;
+            return security;
+        }
+        finally
+        {
+            Clear(padded);
+            Clear(recovered);
+            Clear(fileKey);
+        }
     }
 
     private static bool UserMatches(byte[] paddedPassword, byte[] owner, int permissions, byte[] fileId, bool metadata, byte[] user, int revision, int keyBytes)
     {
         byte[] key = FileKey(paddedPassword, owner, permissions, fileId, metadata, revision, keyBytes);
-        if (revision == 2)
+        byte[]? value = null;
+        byte[]? hash = null;
+        try
         {
-            byte[] value = Rc4(key, PasswordPadding);
-            return FixedEquals(value, 0, user, 0, 32);
-        }
+            if (revision == 2)
+            {
+                value = Rc4(key, PasswordPadding);
+                return FixedEquals(value, 0, user, 0, 32);
+            }
 
-        byte[] hash = UserHash(key, fileId);
-        return FixedEquals(hash, 0, user, 0, 16);
+            hash = UserHash(key, fileId);
+            return FixedEquals(hash, 0, user, 0, 16);
+        }
+        finally
+        {
+            Clear(key);
+            Clear(value);
+            Clear(hash);
+        }
     }
 
     private static byte[] FileKey(byte[] paddedPassword, byte[] owner, int permissions, byte[] fileId, bool metadata, int revision, int keyBytes)
@@ -364,25 +430,50 @@ internal sealed class PdfSecurity
         {
             for (int i = 0; i < 50; i++)
             {
-                hash = Digest(HashAlgorithmName.MD5, hash, 0, keyBytes);
+                byte[] next = Digest(HashAlgorithmName.MD5, hash, 0, keyBytes);
+                Clear(hash);
+                hash = next;
             }
         }
 
         var key = new byte[keyBytes];
         Buffer.BlockCopy(hash, 0, key, 0, key.Length);
+        Clear(hash);
         return key;
     }
 
     private static byte[] UserHash(byte[] fileKey, byte[] fileId)
     {
         byte[] hash = Digest(HashAlgorithmName.MD5, PasswordPadding, fileId);
-        byte[] result = Rc4(fileKey, hash);
-        for (int round = 1; round <= 19; round++)
+        byte[]? result = Rc4(fileKey, hash);
+        try
         {
-            result = Rc4(XorKey(fileKey, round), result);
-        }
+            for (int round = 1; round <= 19; round++)
+            {
+                byte[] mixed = XorKey(fileKey, round);
+                byte[] next;
+                try
+                {
+                    next = Rc4(mixed, result);
+                }
+                finally
+                {
+                    Clear(mixed);
+                }
 
-        return result;
+                Clear(result);
+                result = next;
+            }
+
+            byte[] completed = result;
+            result = null;
+            return completed;
+        }
+        finally
+        {
+            Clear(hash);
+            Clear(result);
+        }
     }
 
     private static byte[]? RecoverUserPassword(byte[] paddedOwner, byte[] ownerValue, int revision, int keyBytes)
@@ -393,54 +484,105 @@ internal sealed class PdfSecurity
         }
 
         byte[] hash = Digest(HashAlgorithmName.MD5, paddedOwner);
-        if (revision >= 3)
+        byte[]? key = null;
+        byte[]? data = null;
+        try
         {
-            for (int i = 0; i < 50; i++)
+            if (revision >= 3)
             {
-                hash = Digest(HashAlgorithmName.MD5, hash);
+                for (int i = 0; i < 50; i++)
+                {
+                    byte[] next = Digest(HashAlgorithmName.MD5, hash);
+                    Clear(hash);
+                    hash = next;
+                }
             }
-        }
 
-        var key = new byte[keyBytes];
-        Buffer.BlockCopy(hash, 0, key, 0, key.Length);
-        var data = new byte[32];
-        Buffer.BlockCopy(ownerValue, 0, data, 0, data.Length);
-        if (revision == 2)
+            key = new byte[keyBytes];
+            Buffer.BlockCopy(hash, 0, key, 0, key.Length);
+            data = new byte[32];
+            Buffer.BlockCopy(ownerValue, 0, data, 0, data.Length);
+            if (revision == 2)
+            {
+                byte[] recovered = Rc4(key, data);
+                Clear(data);
+                data = null;
+                return recovered;
+            }
+
+            for (int round = 19; round >= 0; round--)
+            {
+                byte[] mixed = XorKey(key, round);
+                byte[] next;
+                try
+                {
+                    next = Rc4(mixed, data);
+                }
+                finally
+                {
+                    Clear(mixed);
+                }
+
+                Clear(data);
+                data = next;
+            }
+
+            byte[] completed = data;
+            data = null;
+            return completed;
+        }
+        finally
         {
-            return Rc4(key, data);
+            Clear(hash);
+            Clear(key);
+            Clear(data);
         }
-
-        for (int round = 19; round >= 0; round--)
-        {
-            data = Rc4(XorKey(key, round), data);
-        }
-
-        return data;
     }
 
     private static byte[] PadPassword(byte[] password)
     {
-        var padded = new byte[32];
-        int count = Math.Min(password.Length, padded.Length);
-        Buffer.BlockCopy(password, 0, padded, 0, count);
-        if (count < padded.Length)
+        try
         {
-            Buffer.BlockCopy(PasswordPadding, 0, padded, count, padded.Length - count);
-        }
+            var padded = new byte[32];
+            int count = Math.Min(password.Length, padded.Length);
+            Buffer.BlockCopy(password, 0, padded, 0, count);
+            if (count < padded.Length)
+            {
+                Buffer.BlockCopy(PasswordPadding, 0, padded, count, padded.Length - count);
+            }
 
-        return padded;
+            return padded;
+        }
+        finally
+        {
+            Clear(password);
+        }
     }
 
     private static bool PasswordMatches(byte[] password, byte[] salt, byte[]? userKey, byte[] expected, bool stretched)
     {
         byte[] hash = stretched ? ComputeHash(password, salt, userKey) : Sha256(password, salt, userKey);
-        return FixedEquals(hash, 0, expected, 0, 32);
+        try
+        {
+            return FixedEquals(hash, 0, expected, 0, 32);
+        }
+        finally
+        {
+            Clear(hash);
+        }
     }
 
     private static byte[] KeyHash(byte[] password, byte[] value, byte[]? userKey, bool stretched)
     {
         byte[] salt = Slice(value, 40, 8);
-        return stretched ? ComputeHash(password, salt, userKey) : Sha256(password, salt, userKey);
+        try
+        {
+            return stretched ? ComputeHash(password, salt, userKey) : Sha256(password, salt, userKey);
+        }
+        finally
+        {
+            Clear(salt);
+        }
     }
 
     private static byte[] Sha256(byte[] password, byte[] salt, byte[]? userKey)
@@ -460,35 +602,58 @@ internal sealed class PdfSecurity
         byte[] user = userKey ?? Array.Empty<byte>();
         byte[] k = Digest(HashAlgorithmName.SHA256, password, salt, user);
         byte[] encrypted = Array.Empty<byte>();
-        int round = 0;
-        while (round < 64 || (encrypted[encrypted.Length - 1] & 0xFF) > round - 32)
+        try
         {
-            byte[] block = Concat(password, k, user);
-            byte[] repeated = Repeat(block, 64);
-            var key = new byte[16];
-            var iv = new byte[16];
-            Buffer.BlockCopy(k, 0, key, 0, key.Length);
-            Buffer.BlockCopy(k, 16, iv, 0, iv.Length);
-            encrypted = AesCbc(key, iv, repeated, encrypt: true, padding: false);
-            int selector = 0;
-            for (int i = 0; i < 16; i++)
+            int round = 0;
+            while (round < 64 || (encrypted[encrypted.Length - 1] & 0xFF) > round - 32)
             {
-                selector += encrypted[i];
+                byte[] block = Concat(password, k, user);
+                byte[] repeated = Repeat(block, 64);
+                var key = new byte[16];
+                var iv = new byte[16];
+                try
+                {
+                    Buffer.BlockCopy(k, 0, key, 0, key.Length);
+                    Buffer.BlockCopy(k, 16, iv, 0, iv.Length);
+                    byte[] nextEncrypted = AesCbc(key, iv, repeated, encrypt: true, padding: false);
+                    Clear(encrypted);
+                    encrypted = nextEncrypted;
+                }
+                finally
+                {
+                    Clear(block);
+                    Clear(repeated);
+                    Clear(key);
+                    Clear(iv);
+                }
+
+                int selector = 0;
+                for (int i = 0; i < 16; i++)
+                {
+                    selector += encrypted[i];
+                }
+
+                selector %= 3;
+                HashAlgorithmName name = selector == 0
+                    ? HashAlgorithmName.SHA256
+                    : selector == 1
+                        ? HashAlgorithmName.SHA384
+                        : HashAlgorithmName.SHA512;
+                byte[] next = Digest(name, encrypted);
+                Clear(k);
+                k = next;
+                round++;
             }
 
-            selector %= 3;
-            HashAlgorithmName name = selector == 0
-                ? HashAlgorithmName.SHA256
-                : selector == 1
-                    ? HashAlgorithmName.SHA384
-                    : HashAlgorithmName.SHA512;
-            k = Digest(name, encrypted);
-            round++;
+            var result = new byte[32];
+            Buffer.BlockCopy(k, 0, result, 0, result.Length);
+            return result;
         }
-
-        var result = new byte[32];
-        Buffer.BlockCopy(k, 0, result, 0, result.Length);
-        return result;
+        finally
+        {
+            Clear(k);
+            Clear(encrypted);
+        }
     }
 
     private static void ValidatePerms(byte[] fileKey, byte[] perms, int permissions, bool metadata)
@@ -499,14 +664,21 @@ internal sealed class PdfSecurity
         }
 
         byte[] plain = AesEcb(fileKey, perms, encrypt: false);
-        uint stored = (uint)(plain[0] | (plain[1] << 8) | (plain[2] << 16) | (plain[3] << 24));
-        if (stored != unchecked((uint)permissions)
-            || plain[8] != (metadata ? (byte)'T' : (byte)'F')
-            || plain[9] != (byte)'a'
-            || plain[10] != (byte)'d'
-            || plain[11] != (byte)'b')
+        try
         {
-            throw Rejected();
+            uint stored = (uint)(plain[0] | (plain[1] << 8) | (plain[2] << 16) | (plain[3] << 24));
+            if (stored != unchecked((uint)permissions)
+                || plain[8] != (metadata ? (byte)'T' : (byte)'F')
+                || plain[9] != (byte)'a'
+                || plain[10] != (byte)'d'
+                || plain[11] != (byte)'b')
+            {
+                throw Rejected();
+            }
+        }
+        finally
+        {
+            Clear(plain);
         }
     }
 
@@ -557,6 +729,7 @@ internal sealed class PdfSecurity
 
         var truncated = new byte[length];
         Buffer.BlockCopy(utf8, 0, truncated, 0, length);
+        Clear(utf8);
         return truncated;
     }
 
@@ -731,55 +904,69 @@ internal sealed class PdfSecurity
 
     private static void Encrypt(CipherKind kind, byte[] key, Stream destination, Action<Stream> writePlain)
     {
-        if (kind == CipherKind.Rc4)
+        try
         {
-            using (var rc4Guard = new NonClosingStream(destination))
-            using (var rc4 = new Rc4Stream(rc4Guard, key))
+            if (kind == CipherKind.Rc4)
             {
-                writePlain(rc4);
+                using (var rc4Guard = new NonClosingStream(destination))
+                using (var rc4 = new Rc4Stream(rc4Guard, key))
+                {
+                    writePlain(rc4);
+                }
+
+                return;
             }
 
-            return;
-        }
+            byte[] iv = new byte[16];
+            using (RandomNumberGenerator random = RandomNumberGenerator.Create())
+            {
+                random.GetBytes(iv);
+            }
 
-        byte[] iv = new byte[16];
-        using (RandomNumberGenerator random = RandomNumberGenerator.Create())
+            destination.Write(iv, 0, iv.Length);
+            using var guard = new NonClosingStream(destination);
+            using var aes = new EncryptingStream(guard, key, iv);
+            writePlain(aes);
+            aes.FlushFinalBlock();
+        }
+        finally
         {
-            random.GetBytes(iv);
+            Clear(key);
         }
-
-        destination.Write(iv, 0, iv.Length);
-        using var guard = new NonClosingStream(destination);
-        using var aes = new EncryptingStream(guard, key, iv);
-        writePlain(aes);
-        aes.FlushFinalBlock();
     }
 
     private byte[] DecryptBytes(byte[] cipher, int objectNumber, int generation, CipherKind kind)
     {
         byte[] key = ObjectKey(objectNumber, generation, kind);
-        if (kind == CipherKind.Rc4)
+        try
         {
-            return Rc4(key, cipher);
-        }
+            if (kind == CipherKind.Rc4)
+            {
+                return Rc4(key, cipher);
+            }
 
-        if (cipher.Length < 32 || (cipher.Length & 15) != 0)
+            if (cipher.Length < 32 || (cipher.Length & 15) != 0)
+            {
+                throw new PdfParseException(0, "Encrypted data is truncated.");
+            }
+
+            var iv = new byte[16];
+            Buffer.BlockCopy(cipher, 0, iv, 0, iv.Length);
+            var body = new byte[cipher.Length - iv.Length];
+            Buffer.BlockCopy(cipher, iv.Length, body, 0, body.Length);
+            return Transform(body, key, iv, encrypt: false);
+        }
+        finally
         {
-            throw new PdfParseException(0, "Encrypted data is truncated.");
+            Clear(key);
         }
-
-        var iv = new byte[16];
-        Buffer.BlockCopy(cipher, 0, iv, 0, iv.Length);
-        var body = new byte[cipher.Length - iv.Length];
-        Buffer.BlockCopy(cipher, iv.Length, body, 0, body.Length);
-        return Transform(body, key, iv, encrypt: false);
     }
 
     private byte[] ObjectKey(int objectNumber, int generation, CipherKind kind)
     {
         if (kind == CipherKind.Aes256)
         {
-            return _fileKey;
+            return (byte[])_fileKey.Clone();
         }
 
         bool aes = kind == CipherKind.Aes128;
@@ -801,6 +988,7 @@ internal sealed class PdfSecurity
         int length = aes ? 16 : Math.Min(_fileKey.Length + 5, 16);
         var key = new byte[length];
         Buffer.BlockCopy(hash, 0, key, 0, key.Length);
+        Clear(hash);
         return key;
     }
 
@@ -840,13 +1028,20 @@ internal sealed class PdfSecurity
     private static byte[] Rc4(byte[] key, byte[] data)
     {
         var state = new byte[256];
-        InitializeRc4(key, state);
-        var output = new byte[data.Length];
-        Buffer.BlockCopy(data, 0, output, 0, data.Length);
-        int a = 0;
-        int b = 0;
-        ProcessRc4(state, ref a, ref b, output, 0, output.Length);
-        return output;
+        try
+        {
+            InitializeRc4(key, state);
+            var output = new byte[data.Length];
+            Buffer.BlockCopy(data, 0, output, 0, data.Length);
+            int a = 0;
+            int b = 0;
+            ProcessRc4(state, ref a, ref b, output, 0, output.Length);
+            return output;
+        }
+        finally
+        {
+            Clear(state);
+        }
     }
 
     private static void InitializeRc4(byte[] key, byte[] state)
@@ -968,6 +1163,14 @@ internal sealed class PdfSecurity
         var slice = new byte[count];
         Buffer.BlockCopy(data, offset, slice, 0, count);
         return slice;
+    }
+
+    private static void Clear(byte[]? bytes)
+    {
+        if (bytes != null)
+        {
+            Array.Clear(bytes, 0, bytes.Length);
+        }
     }
 
     private static CipherKind ReadFilter(PdfObject.Dict encrypt, string filterName, int keyBytes, bool revision6)
@@ -1183,15 +1386,23 @@ internal sealed class PdfSecurity
     {
         private readonly Aes _aes;
         private readonly CryptoStream _crypto;
+        private bool _disposed;
 
         public DecryptingStream(Stream source, byte[] key, byte[] iv)
         {
-            _aes = Aes.Create();
-            _aes.Mode = CipherMode.CBC;
-            _aes.Padding = PaddingMode.PKCS7;
-            _aes.Key = key;
-            _aes.IV = iv;
-            _crypto = new CryptoStream(source, _aes.CreateDecryptor(), CryptoStreamMode.Read);
+            try
+            {
+                _aes = Aes.Create();
+                _aes.Mode = CipherMode.CBC;
+                _aes.Padding = PaddingMode.PKCS7;
+                _aes.Key = key;
+                _aes.IV = iv;
+                _crypto = new CryptoStream(source, _aes.CreateDecryptor(), CryptoStreamMode.Read);
+            }
+            finally
+            {
+                Clear(key);
+            }
         }
 
         public override bool CanRead => true;
@@ -1241,10 +1452,17 @@ internal sealed class PdfSecurity
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !_disposed)
             {
-                _crypto.Dispose();
-                _aes.Dispose();
+                _disposed = true;
+                try
+                {
+                    _crypto.Dispose();
+                }
+                finally
+                {
+                    _aes.Dispose();
+                }
             }
 
             base.Dispose(disposing);
@@ -1261,16 +1479,24 @@ internal sealed class PdfSecurity
         private readonly byte[] _chunk = new byte[65536];
         private readonly byte[] _partial = new byte[16];
         private int _partialCount;
+        private bool _disposed;
 
         public EncryptingStream(Stream inner, byte[] key, byte[] iv)
         {
-            _inner = inner;
-            _aes = Aes.Create();
-            _aes.Mode = CipherMode.CBC;
-            _aes.Padding = PaddingMode.PKCS7;
-            _aes.Key = key;
-            _aes.IV = iv;
-            _encryptor = _aes.CreateEncryptor();
+            try
+            {
+                _inner = inner;
+                _aes = Aes.Create();
+                _aes.Mode = CipherMode.CBC;
+                _aes.Padding = PaddingMode.PKCS7;
+                _aes.Key = key;
+                _aes.IV = iv;
+                _encryptor = _aes.CreateEncryptor();
+            }
+            finally
+            {
+                Clear(key);
+            }
         }
 
         public override bool CanRead => false;
@@ -1344,11 +1570,32 @@ internal sealed class PdfSecurity
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !_disposed)
             {
-                _encryptor.Dispose();
-                _aes.Dispose();
-                _inner.Dispose();
+                _disposed = true;
+                try
+                {
+                    _encryptor.Dispose();
+                }
+                finally
+                {
+                    try
+                    {
+                        _aes.Dispose();
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            _inner.Dispose();
+                        }
+                        finally
+                        {
+                            Clear(_chunk);
+                            Clear(_partial);
+                        }
+                    }
+                }
             }
 
             base.Dispose(disposing);
@@ -1362,11 +1609,19 @@ internal sealed class PdfSecurity
         private readonly byte[] _chunk = new byte[65536];
         private int _a;
         private int _b;
+        private bool _disposed;
 
         public Rc4Stream(Stream inner, byte[] key)
         {
             _inner = inner;
-            InitializeRc4(key, _state);
+            try
+            {
+                InitializeRc4(key, _state);
+            }
+            finally
+            {
+                Clear(key);
+            }
         }
 
         public override bool CanRead => _inner.CanRead;
@@ -1424,9 +1679,18 @@ internal sealed class PdfSecurity
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && !_disposed)
             {
-                _inner.Dispose();
+                _disposed = true;
+                try
+                {
+                    _inner.Dispose();
+                }
+                finally
+                {
+                    Clear(_state);
+                    Clear(_chunk);
+                }
             }
 
             base.Dispose(disposing);

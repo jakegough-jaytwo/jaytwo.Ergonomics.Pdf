@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 #if NET8_0_OR_GREATER
 using System.Security.Cryptography.Pkcs;
@@ -821,14 +822,39 @@ public class SignatureTests
         long length = stream.Length;
         using var document = PdfDocument.Open(stream, leaveOpen: true);
         using var editor = document.Edit();
+        var signer = new ThrowingSigner(certificate.RawData);
 
         Assert.Throws<CryptographicException>(() => editor.Sign(
             stream,
             new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
-            new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));
+            new CmsDetachedSignatureProvider(signer)));
 
         Assert.Equal(length, stream.Length);
         Assert.Equal(pdf, stream.ToArray());
+        Assert.NotNull(signer.HashBuffer);
+        Assert.All(signer.HashBuffer!, value => Assert.Equal(0, value));
+    }
+
+    [Fact]
+    public void successful_external_sign_clears_the_digest_buffer_after_the_host_returns()
+    {
+        using var rsa = RSA.Create(2048);
+        var request = new CertificateRequest("CN=Pdf Test", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+        using var certificate = request.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
+        var signer = new RsaSigner(rsa, certificate.RawData);
+        using var stream = new MemoryStream();
+        byte[] pdf = TextField();
+        stream.Write(pdf, 0, pdf.Length);
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        using var editor = document.Edit();
+
+        editor.Sign(
+            stream,
+            new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = TestCompat.UnixEpoch },
+            new CmsDetachedSignatureProvider(signer));
+
+        Assert.NotNull(signer.HashBuffer);
+        Assert.All(signer.HashBuffer!, value => Assert.Equal(0, value));
     }
 
     [Fact]
@@ -1961,8 +1987,12 @@ public class SignatureTests
 
         public byte[] LastSignature { get; private set; } = Array.Empty<byte>();
 
+        public byte[]? HashBuffer { get; private set; }
+
         public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
+            Assert.True(MemoryMarshal.TryGetArray(hash, out ArraySegment<byte> segment));
+            HashBuffer = segment.Array;
             LastSignature = _rsa.SignHash(hash.ToArray(), hashAlgorithm, RSASignaturePadding.Pkcs1);
             return new ValueTask<byte[]>(LastSignature);
         }
@@ -1979,8 +2009,12 @@ public class SignatureTests
 
         public IReadOnlyList<byte[]> AdditionalCertificates { get; } = Array.Empty<byte[]>();
 
+        public byte[]? HashBuffer { get; private set; }
+
         public ValueTask<byte[]> SignHashAsync(ReadOnlyMemory<byte> hash, HashAlgorithmName hashAlgorithm, CancellationToken cancellationToken)
         {
+            Assert.True(MemoryMarshal.TryGetArray(hash, out ArraySegment<byte> segment));
+            HashBuffer = segment.Array;
             throw new CryptographicException("The external signer failed.");
         }
     }

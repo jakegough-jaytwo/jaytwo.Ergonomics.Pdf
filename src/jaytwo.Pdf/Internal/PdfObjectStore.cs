@@ -92,6 +92,7 @@ internal sealed class PdfObjectStore : IDisposable
         }
 
         _disposed = true;
+        Security?.Dispose();
         foreach (Stream owned in OwnedStreams)
         {
             owned.Dispose();

@@ -53,14 +53,27 @@ public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider
         }
 
         byte[] nonce = Rfc3161TimeStampRequest.NewNonce();
-        byte[] request = Rfc3161TimeStampRequest.Create(digest, nonce);
-        byte[]? token = await TimestampAuthorityCall.GetTokenAsync(_authority, request, cancellationToken).ConfigureAwait(false);
-        if (token != null && token.Length > context.ReservedContentsBytes)
+        byte[]? request = null;
+        try
         {
-            throw new PdfSignatureTooLargeException(token.Length, context.ReservedContentsBytes);
-        }
+            request = Rfc3161TimeStampRequest.Create(digest, nonce);
+            byte[]? token = await TimestampAuthorityCall.GetTokenAsync(_authority, request, cancellationToken).ConfigureAwait(false);
+            if (token != null && token.Length > context.ReservedContentsBytes)
+            {
+                throw new PdfSignatureTooLargeException(token.Length, context.ReservedContentsBytes);
+            }
 
-        Rfc3161TimeStampToken.RequireMatch(token, digest, nonce);
-        return token!;
+            Rfc3161TimeStampToken.RequireMatch(token, digest, nonce);
+            return token!;
+        }
+        finally
+        {
+            Array.Clear(digest, 0, digest.Length);
+            Array.Clear(nonce, 0, nonce.Length);
+            if (request != null)
+            {
+                Array.Clear(request, 0, request.Length);
+            }
+        }
     }
 }
