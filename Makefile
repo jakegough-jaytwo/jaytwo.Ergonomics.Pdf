@@ -162,7 +162,8 @@ unit-test:
 	status=0; pids=; for run in ${UNIT_TEST_RUNS}; do \
 		dir=$${run%@*}; framework=$${run#*@}; name=$$(basename $$dir)-$$framework; filter='Category!=Clock&Category!=Interop'; \
 		if [ "$$dir" = "${MAIN_TEST_DIR}" ] && [ "$$framework" = "${INTEROP_FRAMEWORK}" ]; then filter='Category!=Clock'; fi; \
-		dotnet test "$$dir" --no-build -f $$framework --filter "$$filter" \
+		mkdir -p "${BUILD_TEST_RESULTS_DIR}/tmp/$$name"; \
+		TMPDIR="${BUILD_TEST_RESULTS_DIR}/tmp/$$name" dotnet test "$$dir" --no-build -f $$framework --filter "$$filter" \
 			--results-directory "${BUILD_TEST_RESULTS_DIR}" --logger "trx;LogFileName=$$name.trx" \
 			> "${BUILD_TEST_RESULTS_DIR}/$$name.log" 2>&1 & pids="$$pids $$!"; \
 	done; \
