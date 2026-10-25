@@ -3,7 +3,7 @@
   <!--
     D-51: the jaytwo.Pdf.Tests sources on net8.0 against the engine's netstandard2.0 build. Every other
     modern test host loads the engine build for its own framework, so without this project only net48 on Windows
-    runs the netstandard2.0 build. Keep the package references and fixtures in step with jaytwo.Pdf.Tests.
+    runs the netstandard2.0 build. Keep the package references in step with jaytwo.Pdf.Tests; the fixtures come from its Fixtures.targets.
   -->
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -31,19 +31,7 @@
     <Compile Include="$(TestSources)**\*.cs" Exclude="$(TestSources)bin\**;$(TestSources)obj\**" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="$(TestSources)Fixtures\*.pdf;$(TestSources)Fixtures\*.py" Link="Fixtures\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(TestSources)Fixtures\corpus\*.pdf;$(TestSources)Fixtures\corpus\*.py;$(TestSources)Fixtures\corpus\manifest.json" Link="Fixtures\corpus\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(TestSources)Fixtures\defects\*.pdf;$(TestSources)Fixtures\defects\fixtures.json" Link="Fixtures\defects\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="$(TestSources)Fixtures\output-identity\*.txt" Link="Fixtures\output-identity\%(Filename)%(Extension)">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <!-- W-177: the fixture list is shared with jaytwo.Pdf.Tests, so the two cannot drift. -->
+  <Import Project="$(TestSources)Fixtures.targets" />
 
 </Project>

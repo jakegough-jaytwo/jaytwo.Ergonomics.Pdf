@@ -1,0 +1,31 @@
+<Project>
+
+  <!--
+    W-177: the one list of fixtures the jaytwo.Pdf.Tests sources copy to their output. jaytwo.Pdf.Tests and
+    jaytwo.Pdf.NetStandard.Tests both import it, so a fixture directory added here reaches every lane. Neither
+    project lists fixture Content items of its own.
+  -->
+  <PropertyGroup>
+    <PdfTestFixtures>$(MSBuildThisFileDirectory)Fixtures\</PdfTestFixtures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="$(PdfTestFixtures)*.pdf;$(PdfTestFixtures)*.py" Link="Fixtures\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PdfTestFixtures)corpus\*.pdf;$(PdfTestFixtures)corpus\*.py;$(PdfTestFixtures)corpus\manifest.json" Link="Fixtures\corpus\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PdfTestFixtures)defects\*.pdf;$(PdfTestFixtures)defects\fixtures.json" Link="Fixtures\defects\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- D-63: focused sets copy whole, so FocusedFixtureTests sees an unregistered set and fails on it. -->
+    <Content Include="$(PdfTestFixtures)focused-*\*" Link="Fixtures\%(RecursiveDir)%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="$(PdfTestFixtures)output-identity\*.txt" Link="Fixtures\output-identity\%(Filename)%(Extension)">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

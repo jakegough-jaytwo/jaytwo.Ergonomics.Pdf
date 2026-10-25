@@ -31,26 +31,7 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <!-- D-63: focused sets copy whole, so FocusedFixtureTests sees an unregistered set and fails on it. -->
-    <Content Include="Fixtures\focused-*\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\*.pdf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\*.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\corpus\*.pdf;Fixtures\corpus\*.py;Fixtures\corpus\manifest.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\defects\*.pdf;Fixtures\defects\fixtures.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Fixtures\output-identity\*.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+  <!-- W-177: fixtures are listed only in Fixtures.targets, which jaytwo.Pdf.NetStandard.Tests also imports. -->
+  <Import Project="Fixtures.targets" />
 
 </Project>
