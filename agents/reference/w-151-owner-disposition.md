@@ -1,6 +1,18 @@
 # W-151 proposed owner disposition
 
-Status: approved by the owner, 2026-10-26. The owner approved the exact AGENTS.md replacement and original-exception reporting contract, directed preservation of the restore-to-original-length-and-seek convention and ordinary-save behavior, and required net10.0/net48 regressions. Implementation is recorded in W-151. Seed-value standards questions remain subject to the primary-source verification requirement below.
+Status: approved by the owner, 2026-10-26. The owner approved the exact AGENTS.md replacement and original-exception reporting contract, directed preservation of the restore-to-original-length-and-seek convention and ordinary-save behavior, and required net10.0/net48 regressions. The owner subsequently approved the seed enforcement and provider contract recorded below. Implementation is recorded in W-151.
+
+## Approved seed-value disposition, 2026-10-26
+
+This approval supersedes the earlier request to obtain further expert advice before implementing seed enforcement. The full published ISO 32000-2:2020 with EC3 errata was inspected through the local `C:/jake/git/pdfdocs` reference library. Tables 237–238 establish seed flags and policy dependencies; Table 255 and section 12.8.5 establish timestamp structure. The choices below are owner-approved engine policies where interpretation remains necessary, not additional claims of explicit ISO requirements.
+
+- **Policy:** Treat certificate SignaturePolicyOID and its dependent entries as advisory without a policy-specific mandatory flag. Ignore dependent entries when the OID is absent. Do not claim signature-policy or EPES support.
+- **Document timestamps:** Apply mandatory Reasons, DigestMethod, Cert, and MDP constraints. Refuse mandatory Reasons that require a value the engine cannot emit; honor the specified omission exceptions. Interpret DigestMethod as constraining RFC 3161 messageImprint over signed PDF bytes. Refuse mandatory TSA certificate constraints that cannot be established and every MDP/P=0–3 request. Treat the standalone RFC 3161 token as satisfying TimeStamp/Ff=1 when no URL is specified; refuse a required timestamp with a specified URL that cannot be established as used.
+- **Locking:** In noninteractive mode, refuse mandatory LockDocument=true; accept mandatory false only without conflicting document locking; resolve mandatory auto to no new lock. Preserve existing document and field restrictions. Do not add locking transforms.
+- **Digest and encoding:** For PDF 1.7 mandatory digest mismatches with unknown provider key type, refuse, acknowledging possible over-refusal. Apply the PDF 2.0 mechanism-fixed-digest exception only when justified by the mechanism's requirements. Select the first supported SubFilter in seed order from the engine's actual operation-specific set, never merely from caller preference.
+- **Provider contract (explicitly approved):** A provider shall generate the requested signature format using the requested digest and exactly the signed PDF byte sequence supplied by the engine. For a document timestamp, the returned RFC 3161 token shall have a SHA-256 messageImprint of those bytes. The provider shall not substitute another format, digest, or input. The engine does not independently verify arbitrary provider output for format, digest, byte coverage, certificate attributes, or signature policy.
+
+No new provider inputs, introspection, validation, algorithms, certification creation, or locking transforms are authorized. Existing rollback behavior remains unchanged.
 
 The owner supplied `w-151-expert-review-response.md`. It confirms the signing-guarantee conflict and recommends preserving the original exception with structured restoration diagnostics. The expert did not inspect the repository. Its standards interpretation remains review input, not verified implementation evidence or owner approval.
 
