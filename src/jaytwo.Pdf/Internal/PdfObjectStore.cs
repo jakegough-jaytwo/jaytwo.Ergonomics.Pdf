@@ -23,6 +23,7 @@ internal sealed class PdfObjectStore : IDisposable
     private bool _ownsSource;
     private bool _disposed;
     private Dictionary<int, PdfObject?>? _backup;
+    private PdfObjectStoreCheckpoint? _checkpoint;
     private int _objectStreamParseDepth;
 
     internal PdfObjectStore(IPdfSource source, bool ownsSource, int cursorWindows)
@@ -490,8 +491,10 @@ internal sealed class PdfObjectStore : IDisposable
         _backup[id] = null;
     }
 
-    internal void Restore(int size, int? infoId, int infoGen, PdfObject.Arr? id, HashSet<int> dirty)
+    internal void Restore()
     {
+        PdfObjectStoreCheckpoint? checkpoint = _checkpoint;
+        _checkpoint = null;
         if (_backup != null)
         {
             foreach (KeyValuePair<int, PdfObject?> item in _backup)
@@ -509,12 +512,17 @@ internal sealed class PdfObjectStore : IDisposable
         }
 
         _backup = null;
-        Size = size;
-        InfoId = infoId;
-        InfoGen = infoGen;
-        TrailerId = id;
+        if (checkpoint == null)
+        {
+            return;
+        }
+
+        Size = checkpoint.Size;
+        InfoId = checkpoint.InfoId;
+        InfoGen = checkpoint.InfoGen;
+        TrailerId = checkpoint.TrailerId;
         Dirty.Clear();
-        foreach (int dirtyId in dirty)
+        foreach (int dirtyId in checkpoint.Dirty)
         {
             Dirty.Add(dirtyId);
         }
@@ -880,11 +888,13 @@ internal sealed class PdfObjectStore : IDisposable
     // Fill, flatten, and sign record each object's state before its first edit, so a failure restores it.
     internal void BeginBackup()
     {
+        _checkpoint = new PdfObjectStoreCheckpoint(this);
         _backup = new Dictionary<int, PdfObject?>();
     }
 
     internal void EndBackup()
     {
+        _checkpoint = null;
         _backup = null;
     }
 }

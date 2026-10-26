@@ -105,12 +105,7 @@ internal sealed class PdfSigner
             throw new PdfSignException(PdfAppendixBuffer.TooLargeMessage);
         }
 
-        int savedSize = _store.Size;
-        int? savedInfo = _store.InfoId;
-        int savedInfoGen = _store.InfoGen;
-        PdfObject.Arr? savedId = _store.TrailerId;
         SignatureState? savedSignatureState = _gate.CachedSignatureState;
-        var savedDirty = new HashSet<int>(_store.Dirty);
         _store.BeginBackup();
         try
         {
@@ -195,7 +190,7 @@ internal sealed class PdfSigner
         }
         catch
         {
-            _store.Restore(savedSize, savedInfo, savedInfoGen, savedId, savedDirty);
+            _store.Restore();
             _gate.CachedSignatureState = savedSignatureState;
             throw;
         }

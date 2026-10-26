@@ -107,10 +107,8 @@ internal sealed class PdfFormFiller
         }
 
         // Applying reads objects the checks did not, such as /DR; a failure there restores every edit.
-        int savedSize = _store.Size;
         int savedHelv = _appearances.HelvId;
         bool savedSticky = _appearances.StickyNeedAppearances;
-        var savedDirty = new HashSet<int>(_store.Dirty);
         _store.BeginBackup();
         try
         {
@@ -137,7 +135,7 @@ internal sealed class PdfFormFiller
         }
         catch
         {
-            _store.Restore(savedSize, _store.InfoId, _store.InfoGen, _store.TrailerId, savedDirty);
+            _store.Restore();
             _appearances.HelvId = savedHelv;
             _appearances.StickyNeedAppearances = savedSticky;
             throw;

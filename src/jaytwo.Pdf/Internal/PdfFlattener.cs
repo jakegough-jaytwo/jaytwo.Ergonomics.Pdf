@@ -179,8 +179,6 @@ internal sealed class PdfFlattener
             }
         }
 
-        int savedSize = _store.Size;
-        var savedDirty = new HashSet<int>(_store.Dirty);
         _store.BeginBackup();
         try
         {
@@ -219,7 +217,7 @@ internal sealed class PdfFlattener
         }
         catch
         {
-            _store.Restore(savedSize, _store.InfoId, _store.InfoGen, _store.TrailerId, savedDirty);
+            _store.Restore();
             throw;
         }
 
