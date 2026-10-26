@@ -56,8 +56,7 @@ RUN curl -fsSL 'https://github.com/adoptium/temurin21-binaries/releases/download
   && tar -xzf /tmp/jdk.tar.gz -C /opt/test-jdk --strip-components=1 \
   && rm /tmp/jdk.tar.gz
 COPY tools/test-tools/dss /opt/dss
-RUN curl -fsSL 'https://ec.europa.eu/digital-building-blocks/artifact/repository/esignaturedss/eu/europa/ec/joinup/sd-dss/dss-demo-bundle/6.3/dss-demo-bundle-6.3.zip' -o /tmp/dss.zip \
-  && echo '60452c53eb395106655340890a207885f165bf844485046e3a1f8535ef8fa944  /tmp/dss.zip' | sha256sum -c - \
+RUN python /opt/dss/download.py /tmp/dss.zip \
   && python /opt/dss/extract.py /tmp/dss.zip /opt/dss/lib \
   && rm /tmp/dss.zip
 ENV JAYTWO_JAVA=/opt/test-jdk/bin/java
