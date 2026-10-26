@@ -42,6 +42,7 @@ public sealed class PdfDocumentEditor : IDisposable
     private readonly PdfMetadataEditor _metadata;
     private readonly PdfAttachmentCollectionEditor _attachments;
     private readonly PdfAcroFormEditor _form;
+    private List<PdfPageEditor>? _pages;
     private bool _disposed;
 
     internal PdfDocumentEditor(PdfDocument document, PdfEngine engine)
@@ -71,17 +72,29 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <summary>
     /// Gets each page's settable rotation. Page content streams are not read.
     /// </summary>
+    /// <remarks>
+    /// The pages are listed on first use and the same handles serve the rest of this editor's session; a handle's
+    /// <see cref="PdfPageEditor.Rotation"/> stays current because every rotation change goes through the handles.
+    /// </remarks>
     public IReadOnlyList<PdfPageEditor> Pages
     {
         get
         {
-            IReadOnlyList<PdfPage> pages = Engine.ListPages();
+            PdfEngine engine = Engine;
+            if (_pages != null)
+            {
+                engine.CheckDisposed();
+                return _pages;
+            }
+
+            IReadOnlyList<PdfPage> pages = engine.ListPages();
             var result = new List<PdfPageEditor>(pages.Count);
             foreach (PdfPage page in pages)
             {
                 result.Add(new PdfPageEditor(this, page.ObjectId, page.Number, page.Rotation));
             }
 
+            _pages = result;
             return result;
         }
     }

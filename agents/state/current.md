@@ -2,9 +2,8 @@
 
 ## Priority simplifications already approved for implementation
 
-1. W-184
-2. W-185
-3. W-186
+1. W-185
+2. W-186
 
 Retain the owner's existing maintenance order: page-list materialization, workflow file-save lifecycle, then object-store checkpoints. These preserve shipped behavior. The research sequence below does not authorize additional product implementation (D-66).
 

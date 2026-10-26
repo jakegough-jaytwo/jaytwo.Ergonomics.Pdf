@@ -153,6 +153,11 @@ internal sealed class PdfEngine : IDisposable
         return OpenAsync(source, ownsSource, password, cursorWindows, true, cancellationToken);
     }
 
+    internal void CheckDisposed()
+    {
+        _store.CheckDisposed();
+    }
+
     internal IReadOnlyList<PdfPage> ListPages()
     {
         return _pages.ListPages();
