@@ -5,19 +5,18 @@
 
 ## Reset stage R4
 
-1. W-181
-2. W-182
+1. W-182
 
 ## Security hardening phase
 
-3. W-151
-4. W-152
-5. W-155
-6. W-156
-7. W-158
-8. W-168
-9. W-149
-10. W-159
+2. W-151
+3. W-152
+4. W-155
+5. W-156
+6. W-158
+7. W-168
+8. W-149
+9. W-159
 
 Architectural reset stage R2, ergonomic workflows (`reset-plan.md` section 8, D-54). W-141 is done: D-60 is accepted, and `docs/spec/phase-1.md` section 6.7 carries the workflow requirements F1 to F16 (`agents/reference/r2-workflow-proposal.md`). W-142 is done: the pipeline ships with metadata. W-143 is done: fill and flatten ship. W-144 is done: attachments and rotation ship. W-145 is done: form export ships. W-146 is done: the exit criteria except the renderer one are verified at an integration checkpoint. W-80 is done: MuPDF is the second renderer for every G6 render check, which ends R2.
 
