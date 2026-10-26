@@ -1,0 +1,2383 @@
+{
+  "archive": "r4-dss-linux-integration.zip",
+  "sha256": "0f131b87a310963c8a14ad91a035e08a0854f5c6c4c0086c151d029f9fedbf48",
+  "results": [
+    {
+      "case": "engine-p-256-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "C110E720F10A514169638DE438EF697A57ADBA63D1F168606F7075E3E58DA30F",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:08.0503387+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "450EC04F581B960E3F0E7688ED03C337EF2E33AA8DEA292E56637D0DBADEB935"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "E9AE4EAE6E62507989DC136E44B63305F6B1E0A34781A28FDDA1FB756AA1E797"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:08.0503387+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-FAA59BDB0DED9E4001CADC945384BEE54A17E5551D9643889E8BD6B1DE266C1D",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-256-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "22EFCE9F8DEC00DF47593729633D18462AC2A491E3E329E392FBC130627BDA3A",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:57.2406120+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "92E7939188E87961EA1FD30C48D46D5DE1682C75F7D97A2A5FFC9F49C6EB7A46"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "AA9146EDC29D9AAEDC0EA2F6C710E0CDA4C105AB95D8851143896F6A1AACA123"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:57.2406120+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-C4BCA23A6689942F2F44E9060F45ACED1C765863002246968ADDEFADA826D742",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-256-Sha384-bt/positive",
+      "fixture": {
+        "inputSha256": "1B931F8FA6F5B752669F557867635A4FC64E646B5D28FC15988120B7C1E10504",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:12.7828878+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "D86DA511B6F69EF85A7EFC0CCA62F01B385CB1DC2F4F0D732B1DF207F2B07D71"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "DC5116629D6609A1BDBD9F8B75308FEBC22C13962E724B4E0BA1367F376A9E12"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "E2BA9E47346BB9BC59472960255370D82376A3D8BC8D4783E8DCF4480E6EB301"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "8A37E43194E45DA121D396D621DFA96DFD77F44BAF8CD7D83B7C60B60CABD9A8"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:12.7828878+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-68DFB3EDAC2AED3296337298CA90652BB09FD6F158F1CFD11D31A92718C5EE9F",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-280888ACB0CE78AC961236A3A90797BA0CB71CFC814180231306C6D43B15E797",
+                "signatureIntact": true,
+                "signatureValid": true,
+                "imprintIntact": true,
+                "trustedChain": true,
+                "indication": "PASSED",
+                "subIndication": null
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-256-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "9E1DBBC7D408867E417C9D6573C182C96971D304EC30FC05999FA4B6AD5E5A8B",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:43.4177076+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "4DCDCB874C6A60030000563F295ED9D1BD8B1B2BA88B232A9CDECFF097BFD5B0"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "191F0042275343DF1D178CA45805F47986ADC6B75692A39E64014A2B66C426CF"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:43.4177076+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-FBAC0A87EC5769DEDBE07A98413E9C793C8C2445FDA875AC12779BE99CB87C33",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-384-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "A409A0199454A90AF6C0F24D55C4B6F4ADD77DAB64A96E756BC92FB78994E798",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:21.4765895+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "E8E6BC7EAD1489CDDAB6BD674825891B501024038428AFE7D5C86F1874C3F8DB"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "77CEF1E3B46D8CBE8000BA765AA7FB717B65FF007B587B784C202F3FE2E13304"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:21.4765895+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-E905EE041CD6932FBC37DE1256E855798EF712510DC0907E5FAD03A8A6ABB3D0",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-384-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "A53905F2F3C0FAA6BAFF759C52E289B55B026D8944C061FD043982F460858D86",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:16.2822964+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "38FC1B10A07F34F3DD5F223B4BE29D8E1D321A064B3FCC3CF55F5FC092635B65"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "7869895EB497FD517C479BAEB8D2CF3CF44A3CA051B84B9E60D7AD85A85DC5DC"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:16.2822964+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-27B29E849BD0FA42DFAC8F83405DF8D461EA7D6247B31F89371FCF5A632FE70C",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-p-384-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "A19CD8AFFC9DB0B326BBBD5211025D5D7156077A3B37221272E7B374C3FC6A1C",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:56.2923615+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "2634C3C0D0A482217D4F4A4C366B93978DA31995230B84098B420950D046EAEA"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "54DBD5AA637F9C19FFA20326DD9D85B9DBD310FAAD4D2C9356950DB88B7B0F98"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:56.2923615+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-F72C9B8C17BD8FB92452323C7419F6A86E3327B13220C1F3AE95756818AB7E1F",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "A1DAD4B122BC8308CE586EAE6BE7D7407252D53D5F0DE02217D2829474CED530",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:34.8443541+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "F2AEC48BBED3F2DD90BC2E15D9614C65000451893BE809F85BC111A64B7E4AD6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "1A22352EB853C572D6C901D8CDFF5884082573C055AD38EDD0DA0AAAE8F12DE6"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:34.8443541+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-72B4046A0DF167889EDD8237758DB7D903CBEE7BA40168FDAAB263D512961B06",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-controls/corrupt-signature",
+      "fixture": {
+        "inputSha256": "28BD199DCB1FB68F2391E9DFA2370D24FBB97FCE507FA933E2E902E85B7CB426",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:50:02.5034348+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BEDBB0150062C07BEF142A1FE464127FED96AF3D05A545A86DEA5B9F0FD11B5B"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "CD7B88EF363F54EDCB94355132C3BE52E3BAE771A4D44E3CA31535F655E07CB6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "03970CE372DF2016A1793EC43FA1D8309586B4CE98E175AE8BA6951F562BC315"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "D5975B37BED3951F42623AFB17281836FB1F740DD59470DC59338F5494323B9B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:50:02.5034348+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-7BCFBCB9AD0635CE08E3B47BAB4E48B7861C27CC1B4203D306D856830C5B2BDF",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": false,
+            "signatureValid": false,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_FAILED",
+            "subIndication": "SIG_CRYPTO_FAILURE",
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-controls/legacy",
+      "fixture": {
+        "inputSha256": "D877320454D788FFA6FD94DFBCC4826145212193D24E328A59295BBBB5272DF6",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:51.6918914+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BEDBB0150062C07BEF142A1FE464127FED96AF3D05A545A86DEA5B9F0FD11B5B"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "CD7B88EF363F54EDCB94355132C3BE52E3BAE771A4D44E3CA31535F655E07CB6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "03970CE372DF2016A1793EC43FA1D8309586B4CE98E175AE8BA6951F562BC315"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "D5975B37BED3951F42623AFB17281836FB1F740DD59470DC59338F5494323B9B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:51.6918914+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-5A5A711A3D73BDAB83557A59BD7785C6CC81EB2DAE3AAEA2C1FA8D137B90EF41",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PKCS7_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp",
+      "fixture": {
+        "inputSha256": "755DAAFE4EA70749792E9EEE4584CFAFCA06FA3B716B2A4A06BD25DD83EADECF",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:50:09.6284765+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BEDBB0150062C07BEF142A1FE464127FED96AF3D05A545A86DEA5B9F0FD11B5B"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "CD7B88EF363F54EDCB94355132C3BE52E3BAE771A4D44E3CA31535F655E07CB6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "03970CE372DF2016A1793EC43FA1D8309586B4CE98E175AE8BA6951F562BC315"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "D5975B37BED3951F42623AFB17281836FB1F740DD59470DC59338F5494323B9B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:50:09.6284765+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-46C878405BC147A41EFC104300C6C2FBE92373CF0E7C7EF4EC34F21A6AE90EDB",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-CA97CC1556103440E2287709B3179F34B24A2D0FBCD2880F2D083577A856C787",
+                "signatureIntact": true,
+                "signatureValid": false,
+                "imprintIntact": false,
+                "trustedChain": true,
+                "indication": "FAILED",
+                "subIndication": "HASH_FAILURE"
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-controls/modified-byte",
+      "fixture": {
+        "inputSha256": "7C3B95BCFFBF5D445A039E04072D5099A261EB5955B155B0006F26E01F129ABA",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:57.0435837+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BEDBB0150062C07BEF142A1FE464127FED96AF3D05A545A86DEA5B9F0FD11B5B"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "CD7B88EF363F54EDCB94355132C3BE52E3BAE771A4D44E3CA31535F655E07CB6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "03970CE372DF2016A1793EC43FA1D8309586B4CE98E175AE8BA6951F562BC315"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "D5975B37BED3951F42623AFB17281836FB1F740DD59470DC59338F5494323B9B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:57.0435837+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-033D00F7B362045C6350CB0E017B820EF964C3B5AB84CB52C06ADAA28EFB1196",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": false,
+            "signatureValid": false,
+            "digestIntact": false,
+            "trustedChain": true,
+            "indication": "TOTAL_FAILED",
+            "subIndication": "HASH_FAILURE",
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-controls/positive",
+      "fixture": {
+        "inputSha256": "E734BBE7C63D0E4F4BCB9F7E9AEC0569DB8C9E96227179848CB676BC4A9E754F",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:43.8666661+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BEDBB0150062C07BEF142A1FE464127FED96AF3D05A545A86DEA5B9F0FD11B5B"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "CD7B88EF363F54EDCB94355132C3BE52E3BAE771A4D44E3CA31535F655E07CB6"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "03970CE372DF2016A1793EC43FA1D8309586B4CE98E175AE8BA6951F562BC315"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "D5975B37BED3951F42623AFB17281836FB1F740DD59470DC59338F5494323B9B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:43.8666661+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-033D00F7B362045C6350CB0E017B820EF964C3B5AB84CB52C06ADAA28EFB1196",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-owner/positive",
+      "fixture": {
+        "inputSha256": "499443511AC5C09C52BE13EBF31682DE93FE1ECE1FE62CD9B11925D3D6996E98",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:26.1900617+00:00",
+        "passwordRole": "owner",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "FD3DF7818B8683183DA704AC605144BC4F60ABFB84FCE886946C77E0EA311BD0"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "710B32606552B271CE39840F480E663911ACAEF4FBC0D7A72188F33C9C1ADA0F"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:26.1900617+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-12E47F4A9A6A925802487CC38A70C5AD13307381CC09B1558521C4D741F070FD",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bb-user/positive",
+      "fixture": {
+        "inputSha256": "801E6D75C1F0751DE3C1608AB6704C29B214DC8BC9A9A8B1E08DDDF2B91F87CA",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:34.9594187+00:00",
+        "passwordRole": "user",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "341B26FE435234320BAA8043BF9EB318A26FC75134B65B651B1B8C3600661D81"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "94C5A27F98FE6FA44B200F2916BDCB1E5BDC895432508D1DCF370C7A8532445A"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:34.9594187+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-097E4C0D5DE2F8BAF8DF831009B0FA32A1815BB66B28059C3E580682A6C88F78",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha256-bt/positive",
+      "fixture": {
+        "inputSha256": "8D0546B26F706B70F597A3DDB81F9377B38DDBA449DE09F2D012A769BC375883",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:30.5009046+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "AE57611E218F0CB61848A85E035A3E4DB81B19108285AA4FC958651ED363BCDB"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C069DE83EECB4752BCD3DAA524EEF502E93EDCE9EAB3A41AFF1A13F5E45EA3A4"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "BFC090A42B07DCB45E1C89471258F3D0A2D1966BF0E0AC69A257BA6181D25206"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "07E3A0D84B2DA793B05AC9A89427B073AFCD8529771BEFE7BA913B5345B8DE3D"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:30.5009046+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-A0C06090B40C6D02CC896B513A2206655D0AEE4C8EC992E7A820864B57EFA879",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-F21EBC54ECB9C398821BB60359464045BFF9FC7C477A40B03996EAE7C91D5235",
+                "signatureIntact": true,
+                "signatureValid": true,
+                "imprintIntact": true,
+                "trustedChain": true,
+                "indication": "PASSED",
+                "subIndication": null
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "D348EA6F2D53BF68BC925D2758FE0D7682C71FAD32C7DEC3FD4F6F909649E9EE",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:46.7114763+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "DF0BB158FD8045CDD6507F97469E516F78306A87CFD4249C46995F2847F19C60"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "217B393C280621878F5E2C4670368C2FBC23940892EC6ADB619C17FAA6D0D09E"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:46.7114763+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-84AE8C22F01FD702731A2F7EE5FECCD698E61E4A47578BEE0D8DBF94A9E1F894",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "engine-rsa-2048-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "CF0103624E4006B0114E6075631DBDC7E4F711D5EA058F40B817BF105C741912",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:09.3229226+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "C1995911A51B4C86DF0C451194F9A377AA89DF3B787F11ADF9C7313699703580"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "A0388BB47C7755C936DE8328FEEF562B11E039A5D4129964BF93E0BCDC72B79A"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:09.3229226+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-847513D1F3190BE7C31FFB212A07EF5034A4D06B4CA9215CD9F20D2AD2C84995",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-256-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "C0CC37C336767671F0E88F8BEDF7526CD56A3E20E6CE077920BA6038ED6F9217",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:46:44.5363791+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "21E8D709139CD9C89FFD89D38845034A5EBD74F972D5E877817F9A1441A953CE"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "9D22B370BBE3B99577CE3D7F3BEA65A4E44FDFD5CE2EF690956E6C70D2AFA60F"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:46:44.5363791+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-AEB4CFE075B53BC107752C1D6FB34154D7B26E02272F7A8BC19022D9FF1B7525",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-256-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "0E9531420B02599042D24F4A0C7922232A2DD1C587D8BFB9E24089D1EFF49E8A",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:16.2615522+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "4B1A896EC8A7D491C1D3C7B0DAB9C2941E26942CC1820703B6B6D88D89CB744D"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "AA832893AC1A545BCB9C8C69760B617FD61B47B4F66BDD76BF9DFF7A678FD158"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:16.2615522+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-ACAFE63819705D8E912F4CB5AFC1AA964324E34F064C1563965D7F0DB687FCC5",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-256-Sha384-bt/positive",
+      "fixture": {
+        "inputSha256": "5CA2439BE45878D19BEA28B99223D8512F3302C0435C8B8E1D4D66A52C0031B6",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:28.8179922+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "CE3D2952772F5238674CE79B9CDDAD1DB5011EC586A1A91E5F9C68135122ECCC"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "685BD87A5F607B02BF5D1BFE0FCF00CC1657B0F3C0A404543E06D4F52C4FEF2B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "3ADC09E5E432C60026C7B661EA5200AC84200EDBD190BA1B9840DC3EBD5166E1"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "A3B3FF64629DBC2FA45EBD018D2C0F1CC7555045F81BBB6E4AFE358C6553D56E"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:28.8179922+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-79BFC5D25FAD45597B59FAF618608D1F60D8294AAFF7FAA547FE29496458F4D3",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-723C8F8DAAFB0D64852C1BEFDC8927941E4CFFF0A4D29577651F991863D3E2BD",
+                "signatureIntact": true,
+                "signatureValid": true,
+                "imprintIntact": true,
+                "trustedChain": true,
+                "indication": "PASSED",
+                "subIndication": null
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-256-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "4EFF7BF0812DFB15C94EB5FBC1DFFA89C96B2F1947E989267B39391EF78B2F21",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:46:02.1672906+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "0B8E4B5FECE556EEE4BD1AF17934DF41A471422821C75E2ED7399C7F47296C5A"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "F268E9286A07EF6334F3EED3D06FAB41ADBA7DF67DE9FCD8CF2DD585C3F446E5"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:46:02.1672906+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-4D21CDEF8A70CF998E84878FE4D1A3BD8BF2EE922A7F130A6929911A6ED21E8A",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-384-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "3EA1B8EF3BF8CBAD574C55993BE393636E92032F3986FBE7F7B34C452D04BAF6",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:45:31.5985253+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "5194D224B78135E2431AA0D0A0E9B3F9B4433EDAC0F0AA9A353F94AAF11AC846"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "8C2E44CF0E15A049A5C8C0F1E2BB88F64758A352AB8A582453DF107B3B6ACB2A"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:45:31.5985253+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-AD40A3A76586D2E7BB9B80C7E28616E767F4A7A53459E512D1DB4784B87F8C07",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-384-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "E83E8E227DD990B8F9D776C3D9AEAAB2067397CA2656CE7F02108A462CEB1B12",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:59.7946620+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "6D291319B9A250FB2A15ED0CC60C96A96D33DB0E98992060490DE940BDF40AC2"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "5107A413D7C598C25CADF00274AE5F13FE8750C7B540EA5463D88D53D849B4EF"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:59.7946620+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-4669F5878CF66070E340C7B7F5D9737DFF8868A5933651D6A3A23FC9924241F3",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-p-384-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "6DE3AA270DBF0CF540DE04C9351958EBF7130D3BCA26D4F7C1546217CE0437BA",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:46:27.2756695+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "CCAD9BD59E477C58DE5BD8D8560043C93FA6A1A35979CEA1AABE750C9A05237E"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "AF1E122F49567FE46DF90CBB4E86DC94106EC68B640B32C7AA2D7501AC8ED30E"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:46:27.2756695+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-7CC94667F6E821AF856662E4266097F703CD3F91F9963C66EC82710ECF700D20",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "ECDSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb/positive",
+      "fixture": {
+        "inputSha256": "2FEB70C02C3D0F3325D24F84D9B25A4276B37B6322F60E3EA69E852770E01758",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:46.1944612+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "C34653DB265546B0594138C2505D34B52E5722A32C47C23135CB9E398AD1391C"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "73DE0A400BA8EC46E8E8C2E5FC062415537C9EED659463C020FEA53FC9CE0726"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:46.1944612+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-6964EBC3E5522C20A995B95E37786F7F77EDBA6B460A8A7BF0A3945EA4BF2C5A",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature",
+      "fixture": {
+        "inputSha256": "8CED8118D644D8FD998F07A710DA6180E383C5008A9FB44F171B28CA831ED222",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:14.8083559+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BCE414A00B794F03112AFC11E5BDD574CA2958F3ABA08C9F54E08ABEBB6DA893"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C672C0D28AD88936393318FAED3BCCD757B751C88C398E94A70CDCDB59C8A52B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "742F0C18FDCE16B4DCB4ABBAC7D06D287095C869D516A9763297CD55CC1BAF12"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "B4250B3800F03FCD77BF183DF9D754F5C3EA29A950B905E54F5F6840D8E7FCF9"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:14.8083559+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-A3A84E5B083BDE6925E55D1F6D635C23BF613812B4287BB80711680F363AF5CC",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": false,
+            "signatureValid": false,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_FAILED",
+            "subIndication": "SIG_CRYPTO_FAILURE",
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-controls/legacy",
+      "fixture": {
+        "inputSha256": "58667A2F723D60F7482F5DE24CA7B395B5DE19C9A55E444F68D1F127B2E9AB2E",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:52.4760826+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BCE414A00B794F03112AFC11E5BDD574CA2958F3ABA08C9F54E08ABEBB6DA893"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C672C0D28AD88936393318FAED3BCCD757B751C88C398E94A70CDCDB59C8A52B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "742F0C18FDCE16B4DCB4ABBAC7D06D287095C869D516A9763297CD55CC1BAF12"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "B4250B3800F03FCD77BF183DF9D754F5C3EA29A950B905E54F5F6840D8E7FCF9"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:52.4760826+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-EF1700E0A37B9826DD73B2E978CC179D7178B95D5330DEE363893FB994F1B268",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PKCS7_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp",
+      "fixture": {
+        "inputSha256": "D5463C8A495511250405652AC1DFE18F8CCE2717B1564A50A92F6EE4050832DD",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:22.9586471+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BCE414A00B794F03112AFC11E5BDD574CA2958F3ABA08C9F54E08ABEBB6DA893"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C672C0D28AD88936393318FAED3BCCD757B751C88C398E94A70CDCDB59C8A52B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "742F0C18FDCE16B4DCB4ABBAC7D06D287095C869D516A9763297CD55CC1BAF12"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "B4250B3800F03FCD77BF183DF9D754F5C3EA29A950B905E54F5F6840D8E7FCF9"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:22.9586471+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-34208DF08968201AD3343221296810059C93890CC8110C14E162B42D944BB8F7",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-CD332CBBA9891E61949DBE37684A0551616444F63AF363628F774CAA1344BE39",
+                "signatureIntact": true,
+                "signatureValid": false,
+                "imprintIntact": false,
+                "trustedChain": true,
+                "indication": "FAILED",
+                "subIndication": "HASH_FAILURE"
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-controls/modified-byte",
+      "fixture": {
+        "inputSha256": "3780CC94608AC5E402B5D8A8CDE0825A477960847411452714C6A820F933B4A3",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:02.7042757+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BCE414A00B794F03112AFC11E5BDD574CA2958F3ABA08C9F54E08ABEBB6DA893"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C672C0D28AD88936393318FAED3BCCD757B751C88C398E94A70CDCDB59C8A52B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "742F0C18FDCE16B4DCB4ABBAC7D06D287095C869D516A9763297CD55CC1BAF12"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "B4250B3800F03FCD77BF183DF9D754F5C3EA29A950B905E54F5F6840D8E7FCF9"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:02.7042757+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-4F5155C9DF82A03EE30A87841973045CA8CD1DF7B99646954658A36DF1BAE8E5",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": false,
+            "signatureValid": false,
+            "digestIntact": false,
+            "trustedChain": true,
+            "indication": "TOTAL_FAILED",
+            "subIndication": "HASH_FAILURE",
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-controls/positive",
+      "fixture": {
+        "inputSha256": "4E11D3E03271AC0270F64F771C29130CE1D60F57AACB0802517D4670D9D2F97D",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:41.1361358+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "BCE414A00B794F03112AFC11E5BDD574CA2958F3ABA08C9F54E08ABEBB6DA893"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "C672C0D28AD88936393318FAED3BCCD757B751C88C398E94A70CDCDB59C8A52B"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "742F0C18FDCE16B4DCB4ABBAC7D06D287095C869D516A9763297CD55CC1BAF12"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "B4250B3800F03FCD77BF183DF9D754F5C3EA29A950B905E54F5F6840D8E7FCF9"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:41.1361358+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-4F5155C9DF82A03EE30A87841973045CA8CD1DF7B99646954658A36DF1BAE8E5",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-owner/positive",
+      "fixture": {
+        "inputSha256": "8EE7A410BD601E69CAF7495E43F8DD23FEF42826BC66BEBDCC24A6F9C2BD78A5",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:42.2149616+00:00",
+        "passwordRole": "owner",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "D00F9F7342672C09742EDB583245D5056377C336ED58792F686C423E8B2C153F"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "442B402AA57E775FB6C0AF7DBA8867B23D7B9560D7383EC5C71099826B7364E3"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:42.2149616+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-5E81B0D43691759F19CBF8D3A3F195DF3BB932FD274C8FB0834CA92B61D92685",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bb-user/positive",
+      "fixture": {
+        "inputSha256": "87E6F4FFAAFD64BCDFA3BC751971C63E353B1225DB920C7C9A0757649C63D1C3",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:49:33.8649123+00:00",
+        "passwordRole": "user",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "D4569E61DCC1CE45AA2C5D8B379F9AD8CB7E4172BAEAA36D182CD09B5353F08D"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "500928ABB0117FBCE57369AA9E24A05E0D385873A7E2FB758221574CA59D24F6"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:49:33.8649123+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-CC08F65D19860E1111CB07A118CDFFBBD5BE7A764DDDF31D3AF58D15DA99C421",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha256-bt/positive",
+      "fixture": {
+        "inputSha256": "BE6E88140CC18DE872AED4CE3B34ABCB8AD1F64B4D8EB547D38843852A3DB3C5",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:48:14.4959534+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "tsa-root.cer",
+            "sha256": "1F9969373876947FF0F8136FCD34CF3EF9BD9D455DB2CD210D07DC735ABF5937"
+          },
+          {
+            "name": "signer-root.cer",
+            "sha256": "FF3179507F9D3799FC0AD7A0213CFA9D9FBCC069F2FDD23FF28154269C5FB820"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "E5C13D6E42C8FD013B3144C65D9922E23BCC6DA6A9BCCF3BE7DF6FA1E9A42C82"
+          },
+          {
+            "name": "tsa-root.crl",
+            "sha256": "2E7BC09735381262219337590D5B0C6F3FE4C0FE9C5E3DD7274C2018F752AA01"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:48:14.4959534+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-5752B14515C2890846EB544639FB8DAB5FE5316E57D063EDDB630C9629D64BCF",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_T",
+            "digest": "SHA256",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": [
+              {
+                "id": "T-610B699AD21DCD95899FEAF753DD3BA48AA0C1233E510B40D8812019D11FE3FE",
+                "signatureIntact": true,
+                "signatureValid": true,
+                "imprintIntact": true,
+                "trustedChain": true,
+                "indication": "PASSED",
+                "subIndication": null
+              }
+            ]
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha384-bb/positive",
+      "fixture": {
+        "inputSha256": "89E9E05BA20C15A4A8B3591EC68148026EF5B926C15F59A6F03922DE778E4BBF",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:00.8004343+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "7ECE38BD3520F83227A8E861540472CB1CA94CC78261B48EBC28DF798C298433"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "864B705655EEDCD02913C26B7F3A76847CA74C50A44494D0B66FC592B308B07B"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:00.8004343+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-5DFB6412B571FF6B7B1276917920840F83C9FA6B57EBDBA39C3F69D585CE0A28",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA384",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    },
+    {
+      "case": "workflow-rsa-2048-Sha512-bb/positive",
+      "fixture": {
+        "inputSha256": "3A00EEF83C47AD2F0BD3AF26E8901DFCF83C9BBBE8659DCB7713A68A2C0329F3",
+        "producingCommit": "d2cbbc7",
+        "validationTime": "2026-10-26T01:47:32.3335973+00:00",
+        "passwordRole": "unencrypted",
+        "anchors": [
+          {
+            "name": "signer-root.cer",
+            "sha256": "F597AD34F444D9886594304047CD0CB78613F1A3171F8B83EDD393FFE019CBDB"
+          }
+        ],
+        "crls": [
+          {
+            "name": "signer-root.crl",
+            "sha256": "ADDA0CE46BDEAED7353E635464C1CC91C95861F2FE1DC6D7CFA91D28394FA2AC"
+          }
+        ]
+      },
+      "result": {
+        "dss": "6.3",
+        "java": "21.0.9+10-LTS",
+        "os": "Linux 5.15.167.4-microsoft-standard-WSL2",
+        "validationTime": "2026-10-26T01:47:32.3335973+00:00",
+        "network": "disabled: no AIA, OCSP, online CRL, or trusted-list sources",
+        "signatures": [
+          {
+            "id": "S-59531C8D5F50935ECC107C1E5B3D3B02A7C87AB8D5D05347256C85800F39BE3D",
+            "fieldNames": [
+              "Signature1"
+            ],
+            "profile": "PAdES_BASELINE_B",
+            "digest": "SHA512",
+            "encryption": "RSA",
+            "signatureIntact": true,
+            "signatureValid": true,
+            "digestIntact": true,
+            "trustedChain": true,
+            "indication": "TOTAL_PASSED",
+            "subIndication": null,
+            "timestamps": []
+          }
+        ],
+        "execution": "completed"
+      }
+    }
+  ],
+  "files": {
+    "engine-p-256-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-256-Sha256-bb/positive/detailed.xml": "c6b122fb680d3c5844ccdff053699182ed35b98319bc16a0e38cce66e0bec8af",
+    "engine-p-256-Sha256-bb/positive/diagnostic.xml": "28330c9114c02226655ee23f258546bbc6fe6ada040b2764448c932f394691ff",
+    "engine-p-256-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-256-Sha256-bb/positive/fixture.json": "2dc429121d511924706f26ac55e421918d2e5ac7bd7ae70fb6b19e99dbdfaaf9",
+    "engine-p-256-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-256-Sha256-bb/positive/result.json": "aac6a8e9c95b85b7e4c944d4059a89c3f2685160a13823da069dd7e21ab5b5a8",
+    "engine-p-256-Sha256-bb/positive/simple.xml": "0bba8801e2ebe8b3e96b72956ffc4807c6b9f479693e9dce3007334edbc637cf",
+    "engine-p-256-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-256-Sha256-bb/positive/stdout.txt": "d245f65a11e27d6bcecd15676d08a5b22805f414e59053c9a5421c2468220850",
+    "engine-p-256-Sha256-bb/positive/validation.xml": "b4a36d320a93c6fa43f1dfd9277d9a78ff986c6f0289aaaa6b04b1d71627d920",
+    "engine-p-256-Sha256-bb/positive.pdf": "c110e720f10a514169638de438ef697a57adba63d1f168606f7075e3e58da30f",
+    "engine-p-256-Sha256-bb/signer-root.cer": "450ec04f581b960e3f0e7688ed03c337ef2e33aa8dea292e56637d0dbadeb935",
+    "engine-p-256-Sha256-bb/signer-root.crl": "e9ae4eae6e62507989dc136e44b63305f6b1e0a34781a28fdda1fb756aa1e797",
+    "engine-p-256-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-256-Sha384-bb/positive/detailed.xml": "3c33cd77f5b98affe3403c31a34500e01a39a7a1a9bbf26c38e9771a17dacab8",
+    "engine-p-256-Sha384-bb/positive/diagnostic.xml": "6066f04c1de13e38a77ff050c020fd3485cdbc491729dadedeafcf6cb0bfff19",
+    "engine-p-256-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-256-Sha384-bb/positive/fixture.json": "f00e65cb688249a456b378b27c0b62e766af170f06332f42367010bbe1260cf6",
+    "engine-p-256-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-256-Sha384-bb/positive/result.json": "f3d32ad92245737ef636ca7f6047f5aac8c9d053a648ef6a92b31359954eaedd",
+    "engine-p-256-Sha384-bb/positive/simple.xml": "50b43b61e22adc510562dd1e45da68a0c2e9fd9d827459bcfbf45f96119ec4e5",
+    "engine-p-256-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-256-Sha384-bb/positive/stdout.txt": "de36c2f32c8a787bfa35f5c5e19c14584c6971f591f50ac04133664690f75ece",
+    "engine-p-256-Sha384-bb/positive/validation.xml": "6cfdc56bbde6100180c929bf82be3c162af9867e631c5f31b333082b764ff2a6",
+    "engine-p-256-Sha384-bb/positive.pdf": "22efce9f8dec00df47593729633d18462ac2a491e3e329e392fbc130627bda3a",
+    "engine-p-256-Sha384-bb/signer-root.cer": "92e7939188e87961ea1fd30c48d46d5de1682c75f7d97a2a5ffc9f49c6eb7a46",
+    "engine-p-256-Sha384-bb/signer-root.crl": "aa9146edc29d9aaedc0ea2f6c710e0cda4c105ab95d8851143896f6a1aaca123",
+    "engine-p-256-Sha384-bt/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-256-Sha384-bt/positive/detailed.xml": "60b9dc33d621005398551b6d3189b08353a293331c4065f187bb707acc9a255b",
+    "engine-p-256-Sha384-bt/positive/diagnostic.xml": "19a0817bb8ebf7ab7fbe94f0f1675bc56bf1e5136123e8d9a4c6383dc334218e",
+    "engine-p-256-Sha384-bt/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-256-Sha384-bt/positive/fixture.json": "02162f737c5954264e0ac567db544affbe8b19fc5e63de0dcb945546c7a67861",
+    "engine-p-256-Sha384-bt/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-256-Sha384-bt/positive/result.json": "a7f0c2fc693a73d96666a9d448695e6109f0270a89057792677fbb9879128e02",
+    "engine-p-256-Sha384-bt/positive/simple.xml": "f62c43b216f4df7ac0527bdb3353c629ae7fbdebb81e78cf81bb1cfca5777ace",
+    "engine-p-256-Sha384-bt/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-256-Sha384-bt/positive/stdout.txt": "94419406044014f17b94c9ef912b1c7d8ba4eb43597549b17a62f9a03af8f34d",
+    "engine-p-256-Sha384-bt/positive/validation.xml": "06db204e4d77a0b955b0fb52a9633d5cf4784db4e1c6342bc7ab61f9e58a8e55",
+    "engine-p-256-Sha384-bt/positive.pdf": "1b931f8fa6f5b752669f557867635a4fc64e646b5d28fc15988120b7c1e10504",
+    "engine-p-256-Sha384-bt/signer-root.cer": "dc5116629d6609a1bdbd9f8b75308febc22c13962e724b4e0ba1367f376a9e12",
+    "engine-p-256-Sha384-bt/signer-root.crl": "e2ba9e47346bb9bc59472960255370d82376a3d8bc8d4783e8dcf4480e6eb301",
+    "engine-p-256-Sha384-bt/tsa-root.cer": "d86da511b6f69ef85a7efc0cca62f01b385cb1dc2f4f0d732b1df207f2b07d71",
+    "engine-p-256-Sha384-bt/tsa-root.crl": "8a37e43194e45da121d396d621dfa96dfd77f44baf8cd7d83b7c60b60cabd9a8",
+    "engine-p-256-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-256-Sha512-bb/positive/detailed.xml": "2de1a0941a0ea11d88bde1d058271131b91bb898658c55881abfd047666b272d",
+    "engine-p-256-Sha512-bb/positive/diagnostic.xml": "91b45d6b26cc67f6f4eea4fa5fccbf8dc9f65e281e122f3e410615d92a6c43f3",
+    "engine-p-256-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-256-Sha512-bb/positive/fixture.json": "277a1f9ec4a04362958cee164d426b8b05fa77199b608666af0c02f6f18c5ca9",
+    "engine-p-256-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-256-Sha512-bb/positive/result.json": "232117aae93dcda2a0cbd4a7f6cc78cd92b81d38b4a891009c199bd4442a2bc3",
+    "engine-p-256-Sha512-bb/positive/simple.xml": "1e4c308ca413f13d997acc56257fe8b9b13eabf5673d108ccfa8e2cd7b9aedc5",
+    "engine-p-256-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-256-Sha512-bb/positive/stdout.txt": "38075b9959f0183ed0e2ace4d4fd246aca34044fe2cc62fbbddd65222ba413c3",
+    "engine-p-256-Sha512-bb/positive/validation.xml": "2a0ef0f5bfdec9340726b4daade37a0edfd5ef852ab98cde02b6c714bdeb4219",
+    "engine-p-256-Sha512-bb/positive.pdf": "9e1dbbc7d408867e417c9d6573c182c96971d304ec30fc05999fa4b6ad5e5a8b",
+    "engine-p-256-Sha512-bb/signer-root.cer": "4dcdcb874c6a60030000563f295ed9d1bd8b1b2ba88b232a9cdecff097bfd5b0",
+    "engine-p-256-Sha512-bb/signer-root.crl": "191f0042275343df1d178ca45805f47986adc6b75692a39e64014a2b66c426cf",
+    "engine-p-384-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-384-Sha256-bb/positive/detailed.xml": "fde340c30d9743c079f32aedecedfcfff6ef7ae8900f354e556a4170dc0988dd",
+    "engine-p-384-Sha256-bb/positive/diagnostic.xml": "e60875097e90b15ceb7fa06152bc7a86f43a00369bd5a490cacd1842555fd85b",
+    "engine-p-384-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-384-Sha256-bb/positive/fixture.json": "b3c96f636c3a18aec5c56e0efd582273221cd781f8f46b0920848b9dca69350c",
+    "engine-p-384-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-384-Sha256-bb/positive/result.json": "0ac1e96e93ccc18316b6b224bfd5e7bf7539d05f4d4c762ac06c22c464e66db2",
+    "engine-p-384-Sha256-bb/positive/simple.xml": "6c74079ecfe05c4abf08491fa7017eac6be81a691d214bcab742b087084defe5",
+    "engine-p-384-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-384-Sha256-bb/positive/stdout.txt": "526e9f8cfe8b8678f843c1d20d7661bbf7d70bba33e438a12c6487693cdf7a05",
+    "engine-p-384-Sha256-bb/positive/validation.xml": "228686bce603a6370a6975c1be9dea08d619d2a85eb9a152ee8f93606ad1ee63",
+    "engine-p-384-Sha256-bb/positive.pdf": "a409a0199454a90af6c0f24d55c4b6f4add77dab64a96e756bc92fb78994e798",
+    "engine-p-384-Sha256-bb/signer-root.cer": "e8e6bc7ead1489cddab6bd674825891b501024038428afe7d5c86f1874c3f8db",
+    "engine-p-384-Sha256-bb/signer-root.crl": "77cef1e3b46d8cbe8000ba765aa7fb717b65ff007b587b784c202f3fe2e13304",
+    "engine-p-384-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-384-Sha384-bb/positive/detailed.xml": "1975320c15d649b257cf8fa5490bfb7d4978d603202134d62df54a8e957071ea",
+    "engine-p-384-Sha384-bb/positive/diagnostic.xml": "43c58322278b22bde84b8155165319b8e1fc00d32dc9066330e0046a58971432",
+    "engine-p-384-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-384-Sha384-bb/positive/fixture.json": "74112b822f791bb0be15eabfe1b6f967e511e5d9d775bdcab8e4994faf4c5924",
+    "engine-p-384-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-384-Sha384-bb/positive/result.json": "87cd1a0f9f4771563a472331fa92e7c37c4fef0f425da76d3f592d8b04d8fe1b",
+    "engine-p-384-Sha384-bb/positive/simple.xml": "51e81bbe2dc5aa890d583b84cd7b2720da910f40bfa2bca66962086036f0ee57",
+    "engine-p-384-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-384-Sha384-bb/positive/stdout.txt": "65813e721e4471e08f05ce6ba9f9140e34404a3dc7f3eb0f5692fea49d99b96a",
+    "engine-p-384-Sha384-bb/positive/validation.xml": "52a62a05fd5aab8e5e5cb24a5b6b18363fd8b9bf24a409c05170cc397f66683c",
+    "engine-p-384-Sha384-bb/positive.pdf": "a53905f2f3c0faa6baff759c52e289b55b026d8944c061fd043982f460858d86",
+    "engine-p-384-Sha384-bb/signer-root.cer": "38fc1b10a07f34f3dd5f223b4be29d8e1d321a064b3fcc3cf55f5fc092635b65",
+    "engine-p-384-Sha384-bb/signer-root.crl": "7869895eb497fd517c479baeb8d2cf3cf44a3ca051b84b9e60d7ad85a85dc5dc",
+    "engine-p-384-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-p-384-Sha512-bb/positive/detailed.xml": "4552af92c732c06f325ca2cb1e0545669b8886b1af011f186c2359972f5cea87",
+    "engine-p-384-Sha512-bb/positive/diagnostic.xml": "bc76561fa9e026cfdd6400b2d7c8561d867d320673e46e8575995cf0d3c17da1",
+    "engine-p-384-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-p-384-Sha512-bb/positive/fixture.json": "2bde12848f093712fce306c39e4a55b5394e23920c38b77e35cf2aea9782939c",
+    "engine-p-384-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-p-384-Sha512-bb/positive/result.json": "92c382e2db2c342d81097a5597904923a021a2df947fd11dc9fa2df145efad5b",
+    "engine-p-384-Sha512-bb/positive/simple.xml": "f096c366a3c9d26332470b4dd15a12c14d556d8d2f290366bad203aad1893433",
+    "engine-p-384-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-p-384-Sha512-bb/positive/stdout.txt": "67005e30bbee323377e76a68cda1cfc731e4211a44b4b4a9d8c6a49ccd0edfb6",
+    "engine-p-384-Sha512-bb/positive/validation.xml": "81b5e6b0ee64c851ed5b3124f587bd10f1b4c4ee7d4612e32ee47cd53fd3dbb0",
+    "engine-p-384-Sha512-bb/positive.pdf": "a19cd8affc9db0b326bbbd5211025d5d7156077a3b37221272e7b374c3fc6a1c",
+    "engine-p-384-Sha512-bb/signer-root.cer": "2634c3c0d0a482217d4f4a4c366b93978da31995230b84098b420950d046eaea",
+    "engine-p-384-Sha512-bb/signer-root.crl": "54dbd5aa637f9c19ffa20326dd9d85b9dbd310faad4d2c9356950db88b7b0f98",
+    "engine-rsa-2048-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha256-bb/positive/detailed.xml": "86fa0bbe5af51d9fb927defac70d55b9a47d40cdfa93ccb66dd0a994cef34f6c",
+    "engine-rsa-2048-Sha256-bb/positive/diagnostic.xml": "9e8a7eeb66afa6905f78c3dd377321062d71939c21ed75a323bb5ce0227865ef",
+    "engine-rsa-2048-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb/positive/fixture.json": "d2839934f97f6bba70a522c48f92e1b7f4ce4731629e819c46b5f887910f071a",
+    "engine-rsa-2048-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb/positive/result.json": "c847643e167f9ad1aa755a17a1a8a550eba0dd9792ce3f274d5d8eba7e52ee93",
+    "engine-rsa-2048-Sha256-bb/positive/simple.xml": "da049c6a9c0958a57473341d0fc4972d49c61fd3fdbde3aa2006d1cd0ddfd7e4",
+    "engine-rsa-2048-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb/positive/stdout.txt": "e04c8fdbc640974359dee754c11bb8e615f27ff5a3c799ac9837446a7f8ef0f7",
+    "engine-rsa-2048-Sha256-bb/positive/validation.xml": "44a508e0b4fdf8f243870b960985f3a94bc61fae98e0e4815f5e30bca81947d6",
+    "engine-rsa-2048-Sha256-bb/positive.pdf": "a1dad4b122bc8308ce586eae6be7d7407252d53d5f0de02217d2829474ced530",
+    "engine-rsa-2048-Sha256-bb/signer-root.cer": "f2aec48bbed3f2dd90bc2e15d9614c65000451893be809f85bc111a64b7e4ad6",
+    "engine-rsa-2048-Sha256-bb/signer-root.crl": "1a22352eb853c572d6c901d8cdff5884082573c055ad38edd0da0aaae8f12de6",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/detailed.xml": "1d0914d65ba95fbbfcda1756c02c5fc5b24a86543d525088003e0dddf4de6e54",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/diagnostic.xml": "6147a21e86480c101011ee4f696cc659a82f009ac15b0ebc6472b9b08d41d03b",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/fixture.json": "53314a315c87e8bfb9f87c4891cc5931263d04d9ccd0e498080128a1279fe5ff",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/result.json": "752e4d25ea6cd2e08054a5d457f1c21eea6b2c41058d57d9067599be3522037a",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/simple.xml": "ec4e367c8b6892de557462ea48febc563e8a4afd02a54626623aba72f504f066",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/stdout.txt": "92f5508bcc8550829e1f2187ad4c0d9be71daf20edefe347def9d86f273ff6c5",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature/validation.xml": "be2ed582aecedbeffe9bc7468372634d3013d31c31ac6c9ed07c968be573f3df",
+    "engine-rsa-2048-Sha256-bb-controls/corrupt-signature.pdf": "28bd199dcb1fb68f2391e9dfa2370d24fbb97fce507fa933e2e902e85b7cb426",
+    "engine-rsa-2048-Sha256-bb-controls/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/detailed.xml": "51d186e6a48eb1293c5327322f777dd8141e33fbb829f2bfdedd58445d7dc69c",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/diagnostic.xml": "d4b75f7786a3c75632e1b192e208c14ffc5049262d65c15b725405447466185a",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/fixture.json": "ddf55ad56e6ddf91df089edcc01baecbbc87d3c689236f36faf9974cb4f2a30d",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/result.json": "965111ad996a88541537c46bffe0b8caf6dfab4fc63b05c598f0a8e0e87a7b6b",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/simple.xml": "013e947f5118c500b59a05abc3e6144b6a8d722c74ed33e7a7fc3b88cff91aea",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/stdout.txt": "d9ba43b26295abcc4e5e7f735091177a317e4e5d3de1b0cef7c462aae00716b8",
+    "engine-rsa-2048-Sha256-bb-controls/legacy/validation.xml": "ab725cffe66c842ccf94985f2e7f943df1504010c88aa9bd09e322da8e88083b",
+    "engine-rsa-2048-Sha256-bb-controls/legacy.pdf": "d877320454d788ffa6fd94dfbcc4826145212193d24e328a59295bbbb5272df6",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/detailed.xml": "013ee212b78cae4234cfad28a2d8df757b594fd7ee8ee0df5066d76b7454a158",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/diagnostic.xml": "21fe28ed1cf0c3e00301b6928e444cd3e587586942099183a7e0345bb30c79f5",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/fixture.json": "000d2c909c6f9a447abe29f9ccd58a949c76dc33ddf522aea9af19cf1b5cfe13",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/result.json": "7c135f2b485d9e96e5d7fc655c6acc6ef3f5718c91e474b9376d1658cd4752c3",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/simple.xml": "b5ba6a3afe9ca8eddba05b5c83a9a89e7676781566f0dbca7f25af2f49a41bb3",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/stdout.txt": "fc690d4b050a203d1f9bb143283391bc041850a3b2d7e70d3943e84c6036a944",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp/validation.xml": "1f39aa6852c41403604bbe64ccb286f9959a57076b8306bb2d61b855372b5f79",
+    "engine-rsa-2048-Sha256-bb-controls/mismatched-timestamp.pdf": "755daafe4ea70749792e9eee4584cfafca06fa3b716b2a4a06bd25dd83eadecf",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/detailed.xml": "eda9ab4c64cd63737b141575c8d4e77c91b00654c5baeaf43406f77a1a11cc99",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/diagnostic.xml": "3c403b551b74081382ca3e531312bf1be9174c41c4cd25de17442525ee49e0c9",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/fixture.json": "9da0c9e9391ab1e05c733298d4b9b19fbf4f3bb9eb5756b0dad32d92caf91ab8",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/result.json": "13a66ecbbac44872894ccdeb7b4756576c5aee83b3f34d1e60855e1adee91542",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/simple.xml": "77fa50d7e1b0b178e69c6284b39302f6d6a16166e461ef56702f66b23ab7ca03",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/stdout.txt": "558bafd3a79e1bf8ffee8b535d80d89a54dcff915a57cb4086b0b056238442af",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte/validation.xml": "2371b2c8e7818b072eda748e9ce3f24ffe19498a0580127bc76e8f5767332f60",
+    "engine-rsa-2048-Sha256-bb-controls/modified-byte.pdf": "7c3b95bcffbf5d445a039e04072d5099a261eb5955b155b0006f26e01f129aba",
+    "engine-rsa-2048-Sha256-bb-controls/positive/detailed.xml": "32d68d80f087a0be0a0ec556de21f7c7cad5e788e495fc7db5acb75d9cab8a99",
+    "engine-rsa-2048-Sha256-bb-controls/positive/diagnostic.xml": "8b0a07738b42cc27d1ac1df207e1a1f12857c2f8e1dbe73a1896304fa1112760",
+    "engine-rsa-2048-Sha256-bb-controls/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-controls/positive/fixture.json": "6efc01d602c84c0b8c7a80b339c98f2d6ae7901c9b63c238db63cd472d3432e1",
+    "engine-rsa-2048-Sha256-bb-controls/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-controls/positive/result.json": "716499518b6a0a1414a9ceb6c7512be2d70a0fd88a55510f30e0794e9295326a",
+    "engine-rsa-2048-Sha256-bb-controls/positive/simple.xml": "5fd80fb5c017d5867033a15a472331a1f52a00ae8bba01cfe67361efa727fad6",
+    "engine-rsa-2048-Sha256-bb-controls/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-controls/positive/stdout.txt": "413ec4712b0855787828ac40ab9bea4be3800373389f2bb7b3441989721bc8fe",
+    "engine-rsa-2048-Sha256-bb-controls/positive/validation.xml": "9484c64ec364d58c51aaba8787cc7e7954f4bd5da08614ad4135f8f740293c59",
+    "engine-rsa-2048-Sha256-bb-controls/positive.pdf": "e734bbe7c63d0e4f4bcb9f7e9aec0569db8c9e96227179848cb676bc4a9e754f",
+    "engine-rsa-2048-Sha256-bb-controls/signer-root.cer": "cd7b88ef363f54edcb94355132c3be52e3bae771a4d44e3ca31535f655e07cb6",
+    "engine-rsa-2048-Sha256-bb-controls/signer-root.crl": "03970ce372df2016a1793ec43fa1d8309586b4ce98e175ae8ba6951f562bc315",
+    "engine-rsa-2048-Sha256-bb-controls/tsa-root.cer": "bedbb0150062c07bef142a1fe464127fed96af3d05a545a86dea5b9f0fd11b5b",
+    "engine-rsa-2048-Sha256-bb-controls/tsa-root.crl": "d5975b37bed3951f42623afb17281836fb1f740dd59470dc59338f5494323b9b",
+    "engine-rsa-2048-Sha256-bb-owner/encrypted.pdf": "a2ebdfe9dadc4773fc8118e10e9574b8a292252fdeeac5c03c35a9450ae48a28",
+    "engine-rsa-2048-Sha256-bb-owner/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha256-bb-owner/positive/detailed.xml": "e31860bf8dc81641afe770e8e26bdac586b2b9fae0fdf97590aa6f89b2bb87bc",
+    "engine-rsa-2048-Sha256-bb-owner/positive/diagnostic.xml": "a0b13ac3aa53ef229659d792f82b82ba239d90eb67b1b7f69bef851a92f79757",
+    "engine-rsa-2048-Sha256-bb-owner/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-owner/positive/fixture.json": "0bf16844af2bc909bf33afebb1f9526c56aa1bcd4d146113a0f0061be6b7f5d4",
+    "engine-rsa-2048-Sha256-bb-owner/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-owner/positive/result.json": "3ada6a41c504c1ec43c2ae97bc1dc80eabefc049ef945fc61ea43c85b88c06a0",
+    "engine-rsa-2048-Sha256-bb-owner/positive/simple.xml": "4660e32851796e84a5d50dbe15aa1d78497970a8758e4223fdea749339cd3ab5",
+    "engine-rsa-2048-Sha256-bb-owner/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-owner/positive/stdout.txt": "90b3541866edaec3053a76e152b8490e2343abab96ea47ac23cd3f7c39ed828f",
+    "engine-rsa-2048-Sha256-bb-owner/positive/validation.xml": "3066cf78c415ab45d0d77da1bbc0fef1564916d3a1fcdc67582f776556555526",
+    "engine-rsa-2048-Sha256-bb-owner/positive.pdf": "499443511ac5c09c52be13ebf31682de93fe1ece1fe62cd9b11925d3d6996e98",
+    "engine-rsa-2048-Sha256-bb-owner/signer-root.cer": "fd3df7818b8683183da704ac605144bc4f60abfb84fce886946c77e0ea311bd0",
+    "engine-rsa-2048-Sha256-bb-owner/signer-root.crl": "710b32606552b271ce39840f480e663911acaef4fbc0d7a72188f33c9c1ada0f",
+    "engine-rsa-2048-Sha256-bb-user/encrypted.pdf": "2ab63588109726e0428ae698f5186f8a58054937e5d316d1c9146b8711f9fe53",
+    "engine-rsa-2048-Sha256-bb-user/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha256-bb-user/positive/detailed.xml": "fd74fb81d6038ea754b2daee8b2797c38eb0bdd403723fa3187363520fb7b604",
+    "engine-rsa-2048-Sha256-bb-user/positive/diagnostic.xml": "e134cf64f75a5bb8cc2b53d79c728052f7757d1402802605a7063873848f2a17",
+    "engine-rsa-2048-Sha256-bb-user/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bb-user/positive/fixture.json": "a5ad05c845b418813cc25e61e1741179e1b7194b6986f2e86bb3dc59136608ee",
+    "engine-rsa-2048-Sha256-bb-user/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bb-user/positive/result.json": "b70e009cdf2616a3e45c3e79e0e17085b0c6f293ed82fadce57adb18997937af",
+    "engine-rsa-2048-Sha256-bb-user/positive/simple.xml": "3d0d4bce0c0b288a993a80646e78d2b25f197ce539756a8f32a284bbb06d84a0",
+    "engine-rsa-2048-Sha256-bb-user/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bb-user/positive/stdout.txt": "f6df6f26598200839646e042fc8b97c452de945757ca0092108dff106c164a03",
+    "engine-rsa-2048-Sha256-bb-user/positive/validation.xml": "d91941e284e0c82384ff91e6df36d238e00271e58f9f5e7fdc81953b74f30789",
+    "engine-rsa-2048-Sha256-bb-user/positive.pdf": "801e6d75c1f0751de3c1608ab6704c29b214dc8bc9a9a8b1e08dddf2b91f87ca",
+    "engine-rsa-2048-Sha256-bb-user/signer-root.cer": "341b26fe435234320baa8043bf9eb318a26fc75134b65b651b1b8c3600661d81",
+    "engine-rsa-2048-Sha256-bb-user/signer-root.crl": "94c5a27f98fe6fa44b200f2916bdcb1e5bdc895432508d1dcf370c7a8532445a",
+    "engine-rsa-2048-Sha256-bt/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha256-bt/positive/detailed.xml": "158e9505fa33ab3968bf73570b3603df5db6788d089dba7fb4c1d55da732b977",
+    "engine-rsa-2048-Sha256-bt/positive/diagnostic.xml": "ffaf21c8dae83ac41d912f43887e4e641f160e1c485449ef13dbcddd26d4a563",
+    "engine-rsa-2048-Sha256-bt/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha256-bt/positive/fixture.json": "d3e9274c1afbc8e7b4bd4d5ff2e92494b8f6ecb859807756e5807cb2de36031c",
+    "engine-rsa-2048-Sha256-bt/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha256-bt/positive/result.json": "f89418ee31023e4e778e342c358a869f941e486177545d26d73ede87e209db70",
+    "engine-rsa-2048-Sha256-bt/positive/simple.xml": "fb8b6e88857c5cf0653b982221210650494cbc809e3454a744b926e706f4c308",
+    "engine-rsa-2048-Sha256-bt/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha256-bt/positive/stdout.txt": "d18e2010ea4bf62f1ab564f6d31e70b555f834f3f5e64f7ccc1a582b969f039d",
+    "engine-rsa-2048-Sha256-bt/positive/validation.xml": "88c0098c7f165c4edae8d1e370795566cf5ea585b9d24bccc297eb7d16559681",
+    "engine-rsa-2048-Sha256-bt/positive.pdf": "8d0546b26f706b70f597a3ddb81f9377b38ddba449de09f2d012a769bc375883",
+    "engine-rsa-2048-Sha256-bt/signer-root.cer": "c069de83eecb4752bcd3daa524eef502e93edce9eab3a41aff1a13f5e45ea3a4",
+    "engine-rsa-2048-Sha256-bt/signer-root.crl": "bfc090a42b07dcb45e1c89471258f3d0a2d1966bf0e0ac69a257ba6181d25206",
+    "engine-rsa-2048-Sha256-bt/tsa-root.cer": "ae57611e218f0cb61848a85e035a3e4db81b19108285aa4fc958651ed363bcdb",
+    "engine-rsa-2048-Sha256-bt/tsa-root.crl": "07e3a0d84b2da793b05ac9a89427b073afcd8529771befe7ba913b5345b8de3d",
+    "engine-rsa-2048-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha384-bb/positive/detailed.xml": "7f5e0efd44cc84223dd82a10add0d160f0796a989d0eb14e5c40df92c7973d10",
+    "engine-rsa-2048-Sha384-bb/positive/diagnostic.xml": "5143cbcd115b62204ec569ae44eedbc46a669bbc362cd01967790e533a1aa1c4",
+    "engine-rsa-2048-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha384-bb/positive/fixture.json": "2879b56792e34ef5ba05690052a8ea4dd9342912cf975d31a4b3192b3749f129",
+    "engine-rsa-2048-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha384-bb/positive/result.json": "72adcc58f9336d7aaa386bb2d2876b0e7ff8c747c32fb984fdfd59dda819e0a8",
+    "engine-rsa-2048-Sha384-bb/positive/simple.xml": "6e66b9a5e9cccda23d318ec41e722d74ba2c2746498dad58ba6aec5531408f69",
+    "engine-rsa-2048-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha384-bb/positive/stdout.txt": "3ba3ba91c17823c1bc232156ef51283b66cd9555e01501ae0d2338e035e62105",
+    "engine-rsa-2048-Sha384-bb/positive/validation.xml": "8b197a11a0f32fa96903acdf4a2eca6689821a358eb8a6b7b6c26e85140427da",
+    "engine-rsa-2048-Sha384-bb/positive.pdf": "d348ea6f2d53bf68bc925d2758fe0d7682c71fad32c7dec3fd4f6f909649e9ee",
+    "engine-rsa-2048-Sha384-bb/signer-root.cer": "df0bb158fd8045cdd6507f97469e516f78306a87cfd4249c46995f2847f19c60",
+    "engine-rsa-2048-Sha384-bb/signer-root.crl": "217b393c280621878f5e2c4670368c2fbc23940892ec6adb619c17faa6d0d09e",
+    "engine-rsa-2048-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "engine-rsa-2048-Sha512-bb/positive/detailed.xml": "bd3f3ba17350ff60226020a66e8950646020e4f45b3c48ff49037c95cf242440",
+    "engine-rsa-2048-Sha512-bb/positive/diagnostic.xml": "179777b64ac3ec78abc6e6358e7089ad7001cd9f95739a6e80a878f68223c3fd",
+    "engine-rsa-2048-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "engine-rsa-2048-Sha512-bb/positive/fixture.json": "8e2fa5b173f9bef55b556a40b98da3cd7b468da1d16ebe5a434b6d298b7709a3",
+    "engine-rsa-2048-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "engine-rsa-2048-Sha512-bb/positive/result.json": "00bc056f241d4f59c7b57d4f9d6dcc80ff52f93d0b320c49a5be4c3ab8499c86",
+    "engine-rsa-2048-Sha512-bb/positive/simple.xml": "27cdf1d00a69a2becce20675f1accd25384f3d4467a03a3a4770feba3ce0ebb1",
+    "engine-rsa-2048-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "engine-rsa-2048-Sha512-bb/positive/stdout.txt": "5004bbe42245eefe4cd30ac7f5703bbb1e8fa07beee9ae26774de17f2085bd9f",
+    "engine-rsa-2048-Sha512-bb/positive/validation.xml": "e941baf24eaff20b9420f9efc76411a36f91be5533e7460a909b8390cd4d9272",
+    "engine-rsa-2048-Sha512-bb/positive.pdf": "cf0103624e4006b0114e6075631dbdc7e4f711d5ea058f40b817bf105c741912",
+    "engine-rsa-2048-Sha512-bb/signer-root.cer": "c1995911a51b4c86df0c451194f9a377aa89df3b787f11adf9c7313699703580",
+    "engine-rsa-2048-Sha512-bb/signer-root.crl": "a0388bb47c7755c936de8328feef562b11e039a5d4129964bf93e0bcdc72b79a",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net10.0-clock.trx.xml": "cb92eb307849b8692fe40856dee14c76c6b7adf779aba3ee8d87a0f4cbe65e3d",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net10.0.trx.xml": "4d79bae08ef2d6462c64aa4a16ea3df342dfa075fb421523320798f98bf99b0d",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net6.0-clock.trx.xml": "418cdeb5749f7f0c232a10e04a6a4330d73b6da7836e86d4efb5382c6a3ac589",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net6.0.trx.xml": "f4b76f3b7428527428b5ee59ca843855f9e0c29624d2a9b13f134640bbe0333b",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net8.0-clock.trx.xml": "75201686ed38cda65ffb823e02aef76cbb0ebb343675808c1ee22086accec83e",
+    "integration-jaytwo.Ergonomics.Pdf.Tests-net8.0.trx.xml": "19552e491233c61a35d97ffcc6678a48102324db63a8db4b3e9d018fabe5bc32",
+    "integration-jaytwo.Pdf.NetStandard.Tests-net8.0-clock.trx.xml": "be2d81aa06220c6732edcefa6b06fb1ed4e3832ac8367494c66ebb5a038be4e4",
+    "integration-jaytwo.Pdf.NetStandard.Tests-net8.0.trx.xml": "62df2fd49919278b2a6d4037e9fc70f4509b71cee9b554847481c2a47e13dcf2",
+    "integration-jaytwo.Pdf.Tests-net10.0-clock.trx.xml": "aeecd59b03f8f818ea239b2c3fd7c707029e412fc766c699d38f6301e5bcc90b",
+    "integration-jaytwo.Pdf.Tests-net10.0.trx.xml": "7a51c6ce9687721b53925a3786f40286b3bf09ad925e575da970fadd9bccfd1f",
+    "integration-jaytwo.Pdf.Tests-net6.0-clock.trx.xml": "0c17347be174d7747dd0a5ea26b0ff2cd098a43b9c7feb3dea57b51e775ea1b9",
+    "integration-jaytwo.Pdf.Tests-net6.0.trx.xml": "7db3111038ef20996fbd56c49f8afde0bad73506fa4cc61adec45ed3f788058c",
+    "integration-jaytwo.Pdf.Tests-net8.0-clock.trx.xml": "4ff98f11c11f0061fc95eddaaa3982aa83aefd27855a406f25c0496033ddb28c",
+    "integration-jaytwo.Pdf.Tests-net8.0.trx.xml": "855ca7524e202707db310bbc5bf33aa69d1ffd5444c9079ebdba0909da939227",
+    "integration.txt": "f2bcdacb9d5fa208710c7976c87dc670f5d0b73d8e81c7ec54a704c05c8c2793",
+    "workflow-p-256-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-256-Sha256-bb/positive/detailed.xml": "07bed9b1fedc4006ee5808a07b23370095f2e8623c3a5842495c3969992b1f77",
+    "workflow-p-256-Sha256-bb/positive/diagnostic.xml": "ec74a33b9e409a6017b81ad3e63a1349bea31060fb1e58c94028848fcfe59a58",
+    "workflow-p-256-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-256-Sha256-bb/positive/fixture.json": "2e5f326c53b8b85535c913c5b9d77c7570e06cec3c44b8fce9240c4f8790cca7",
+    "workflow-p-256-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-256-Sha256-bb/positive/result.json": "365146f311921c8b068b84afb136149a8a51ffb2e7640795c3351bae852054a8",
+    "workflow-p-256-Sha256-bb/positive/simple.xml": "1a5e8b2708b2fe32d7bf1a25d591ffda019c3f0afa7025f54613b993c40bd6fa",
+    "workflow-p-256-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-256-Sha256-bb/positive/stdout.txt": "6c4d84a499221116da1a8faa1dea20f5aafaf9ef02be73b5919c4f0401e48bf0",
+    "workflow-p-256-Sha256-bb/positive/validation.xml": "170efc64ad1f78adc8211a60775b3ddc6f4098eb14d601e76bf8749380cddefe",
+    "workflow-p-256-Sha256-bb/positive.pdf": "c0cc37c336767671f0e88f8bedf7526cd56a3e20e6ce077920ba6038ed6f9217",
+    "workflow-p-256-Sha256-bb/signer-root.cer": "21e8d709139cd9c89ffd89d38845034a5ebd74f972d5e877817f9a1441a953ce",
+    "workflow-p-256-Sha256-bb/signer-root.crl": "9d22b370bbe3b99577ce3d7f3bea65a4e44fdfd5ce2ef690956e6c70d2afa60f",
+    "workflow-p-256-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-256-Sha384-bb/positive/detailed.xml": "c5ccfa84b6978453d15c95231b8bd51ca0a7a7ba25c75ea0f9d65f506ac34a3e",
+    "workflow-p-256-Sha384-bb/positive/diagnostic.xml": "fbd523cdfa74bb2ca0f593ae36b3cfb20b88caf857576e33033689518f35b841",
+    "workflow-p-256-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-256-Sha384-bb/positive/fixture.json": "15be478361bdf8c101192cf9820e6130278698d3a91593d2d194850ecb34c239",
+    "workflow-p-256-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-256-Sha384-bb/positive/result.json": "cf5a492d5109dc909c942378bdab5c84e686e904440a548fe7df9b770fe4ad88",
+    "workflow-p-256-Sha384-bb/positive/simple.xml": "a2d2c113899c1c400f23e65bcbc9aad51c90e9a76766f0e4742b5f209fdb67c5",
+    "workflow-p-256-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-256-Sha384-bb/positive/stdout.txt": "c24bea6281df589d0190bac933835def7af4f1107326b0da599faf6460ca188d",
+    "workflow-p-256-Sha384-bb/positive/validation.xml": "1186804dcbef5b04bc80fd5c5de576ee2f60a49532be83ee4d751a6b2454f126",
+    "workflow-p-256-Sha384-bb/positive.pdf": "0e9531420b02599042d24f4a0c7922232a2dd1c587d8bfb9e24089d1eff49e8a",
+    "workflow-p-256-Sha384-bb/signer-root.cer": "4b1a896ec8a7d491c1d3c7b0dab9c2941e26942cc1820703b6b6d88d89cb744d",
+    "workflow-p-256-Sha384-bb/signer-root.crl": "aa832893ac1a545bcb9c8c69760b617fd61b47b4f66bdd76bf9dff7a678fd158",
+    "workflow-p-256-Sha384-bt/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-256-Sha384-bt/positive/detailed.xml": "97d3a0ec23bc9992dc6daab1e9cf8a4dcfafa91bb55ac6d2dd9b022bd8290d90",
+    "workflow-p-256-Sha384-bt/positive/diagnostic.xml": "9930f8e9b5c54dd308151b5176087796327fb01428e343c397900b0ec338f2d8",
+    "workflow-p-256-Sha384-bt/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-256-Sha384-bt/positive/fixture.json": "18a4ca31fa5ccb8cab6a526a8c3705b4db876ed75981878cabea78e3484a1168",
+    "workflow-p-256-Sha384-bt/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-256-Sha384-bt/positive/result.json": "cf1d3acef7ff307f24062c55c431fbdd7006784db7120eda706f74ef80a94e8d",
+    "workflow-p-256-Sha384-bt/positive/simple.xml": "39df601970140b42e53e1af7e9c976dbe50ea699a0ba506aa8dc9b55c6039329",
+    "workflow-p-256-Sha384-bt/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-256-Sha384-bt/positive/stdout.txt": "47383ae20d10e2395727ece87e758d4984f016495cc2ec1edfdd69665c45f476",
+    "workflow-p-256-Sha384-bt/positive/validation.xml": "07ca9f85a92f4f0fb1d4e6d7442e3cefdc60a2103706165b21e988f9346f8582",
+    "workflow-p-256-Sha384-bt/positive.pdf": "5ca2439be45878d19bea28b99223d8512f3302c0435c8b8e1d4d66a52c0031b6",
+    "workflow-p-256-Sha384-bt/signer-root.cer": "685bd87a5f607b02bf5d1bfe0fcf00cc1657b0f3c0a404543e06d4f52c4fef2b",
+    "workflow-p-256-Sha384-bt/signer-root.crl": "3adc09e5e432c60026c7b661ea5200ac84200edbd190ba1b9840dc3ebd5166e1",
+    "workflow-p-256-Sha384-bt/tsa-root.cer": "ce3d2952772f5238674ce79b9cddad1db5011ec586a1a91e5f9c68135122eccc",
+    "workflow-p-256-Sha384-bt/tsa-root.crl": "a3b3ff64629dbc2fa45ebd018d2c0f1cc7555045f81bbb6e4afe358c6553d56e",
+    "workflow-p-256-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-256-Sha512-bb/positive/detailed.xml": "7b597296b1f1de7176377f5c21ae3ec9130521c2c4cdd5f5428ce699c2550e51",
+    "workflow-p-256-Sha512-bb/positive/diagnostic.xml": "c967934dcc0ca1514771d27ca0003f6c029a3e53b39aacc3e66a949d6e19c4eb",
+    "workflow-p-256-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-256-Sha512-bb/positive/fixture.json": "349ea673e5d06232db2f69cd4899240189593f1addc44815d6aefcb1eb3e550e",
+    "workflow-p-256-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-256-Sha512-bb/positive/result.json": "93aff71768df9fa360800fd2d7ecc4d44af47e6b96411422d636d7e15cdaa998",
+    "workflow-p-256-Sha512-bb/positive/simple.xml": "fafe1c9b8fcd21aa5aba085cd24897e6231cf821c55b7550ceb062fa0fde5bd4",
+    "workflow-p-256-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-256-Sha512-bb/positive/stdout.txt": "b590590651940bfbf66159ab2cee318bf0a3961dcfd7811446bbb9e6d3807e6f",
+    "workflow-p-256-Sha512-bb/positive/validation.xml": "ccff065567dc8a6e7ac9081c02b5cccb20083cab5fc2dd984ce3d831dc7f58f3",
+    "workflow-p-256-Sha512-bb/positive.pdf": "4eff7bf0812dfb15c94eb5fbc1dffa89c96b2f1947e989267b39391ef78b2f21",
+    "workflow-p-256-Sha512-bb/signer-root.cer": "0b8e4b5fece556eee4bd1af17934df41a471422821c75e2ed7399c7f47296c5a",
+    "workflow-p-256-Sha512-bb/signer-root.crl": "f268e9286a07ef6334f3eed3d06fab41adba7df67de9fcd8cf2dd585c3f446e5",
+    "workflow-p-384-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-384-Sha256-bb/positive/detailed.xml": "5248a9ea8533272df39f28d2115bc61662ce4a0e6d3d93733d0eab63c3e3f3b8",
+    "workflow-p-384-Sha256-bb/positive/diagnostic.xml": "9075dd46a91cede7af388779aa1e92c068129ed89f862add8584542a9bafe855",
+    "workflow-p-384-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-384-Sha256-bb/positive/fixture.json": "bba13cca648ceea99a0702e2de5f4a61b617164f46edb9bf7fa55df636f3675b",
+    "workflow-p-384-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-384-Sha256-bb/positive/result.json": "404b963ff25569be141e004574b585e0c05703d7505bd6d7a10a3e8f9b71f160",
+    "workflow-p-384-Sha256-bb/positive/simple.xml": "33d09252650e2b0933b9a97a91f1d984a778a8e5799f43d30ae9f3c56c88d96b",
+    "workflow-p-384-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-384-Sha256-bb/positive/stdout.txt": "fb4943a00d833a5694a56ddc3f022b0cb673a7ccefd1be22bab586b33add15ff",
+    "workflow-p-384-Sha256-bb/positive/validation.xml": "12d9e13e6ed92dd52962797fa5d9cfd0d2a586e95e47fd137adca35a5f32095d",
+    "workflow-p-384-Sha256-bb/positive.pdf": "3ea1b8ef3bf8cbad574c55993be393636e92032f3986fbe7f7b34c452d04baf6",
+    "workflow-p-384-Sha256-bb/signer-root.cer": "5194d224b78135e2431aa0d0a0e9b3f9b4433edac0f0aa9a353f94aaf11ac846",
+    "workflow-p-384-Sha256-bb/signer-root.crl": "8c2e44cf0e15a049a5c8c0f1e2bb88f64758a352ab8a582453df107b3b6acb2a",
+    "workflow-p-384-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-384-Sha384-bb/positive/detailed.xml": "8b685d3eab240d7184cd7e3016829f8b9998d4a068f7bd247966ac4de6b61822",
+    "workflow-p-384-Sha384-bb/positive/diagnostic.xml": "8db3e2d8ecaf36cc82d3ac5fdfc9a4b2b631eada402fca225d7bf6c51b71c4c0",
+    "workflow-p-384-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-384-Sha384-bb/positive/fixture.json": "7a15e1951594746b42dec06a8539c26d09004d03debd01b01f90a5a24c972d38",
+    "workflow-p-384-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-384-Sha384-bb/positive/result.json": "30e1655f181c05e3217ec4daeafce63867a18f26fb7470ae03f7635a2d6cdad8",
+    "workflow-p-384-Sha384-bb/positive/simple.xml": "02698fe981cd66e8a87695a657d275ef9826707a2ce53d0bb53733393cb3e1b6",
+    "workflow-p-384-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-384-Sha384-bb/positive/stdout.txt": "8ab2f9626c020228a51be63a41de1c71905d990ea3aa73ca45bc6dadbf2bf600",
+    "workflow-p-384-Sha384-bb/positive/validation.xml": "57e5715ede3a18ff4d9b05e9b536b91ff0695784db0650f7dea78005543fb364",
+    "workflow-p-384-Sha384-bb/positive.pdf": "e83e8e227dd990b8f9d776c3d9aeaab2067397ca2656ce7f02108a462ceb1b12",
+    "workflow-p-384-Sha384-bb/signer-root.cer": "6d291319b9a250fb2a15ed0cc60c96a96d33db0e98992060490de940bdf40ac2",
+    "workflow-p-384-Sha384-bb/signer-root.crl": "5107a413d7c598c25cadf00274ae5f13fe8750c7b540ea5463d88d53d849b4ef",
+    "workflow-p-384-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-p-384-Sha512-bb/positive/detailed.xml": "387a3d0edccfb5fb5f7d6a9dd86bd0698ac8e0e2443ee10c4b4e31ad91a3d673",
+    "workflow-p-384-Sha512-bb/positive/diagnostic.xml": "3baccafb51856ad3bde28b49e78f4dfacb7e10c2184e5003229da0364872678b",
+    "workflow-p-384-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-p-384-Sha512-bb/positive/fixture.json": "7195327e459d08daf9d291379e64e68c536d62eb13dfa341cfea79fb95ec765d",
+    "workflow-p-384-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-p-384-Sha512-bb/positive/result.json": "ae8d0706fe00eaa8251e4548ff3cb942dd72db667912179ed5f68aa3fc9f18ec",
+    "workflow-p-384-Sha512-bb/positive/simple.xml": "26b7a60b2bb0d1f6c70260a5bd102dd0d72e77e14161cf1cc66c288cbfd78f2f",
+    "workflow-p-384-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-p-384-Sha512-bb/positive/stdout.txt": "2a49604576114e8021cf5a151bf518708b3fd59638de9fcba4135ea47fa625a2",
+    "workflow-p-384-Sha512-bb/positive/validation.xml": "015042b7d882f2659fcf2cc4e8899a5b50e4a80a7465f47650f0820942b9d54b",
+    "workflow-p-384-Sha512-bb/positive.pdf": "6de3aa270dbf0cf540de04c9351958ebf7130d3bca26d4f7c1546217ce0437ba",
+    "workflow-p-384-Sha512-bb/signer-root.cer": "ccad9bd59e477c58de5bd8d8560043c93fa6a1a35979cea1aabe750c9a05237e",
+    "workflow-p-384-Sha512-bb/signer-root.crl": "af1e122f49567fe46df90cbb4e86dc94106ec68b640b32c7aa2d7501ac8ed30e",
+    "workflow-rsa-2048-Sha256-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha256-bb/positive/detailed.xml": "f5acb0fe35b0f07f0dafef161f53ef236915b78febcb0032550c2da7d9bbd921",
+    "workflow-rsa-2048-Sha256-bb/positive/diagnostic.xml": "fc680a8eaf208f9334dbc715ea81851e9f07e4a1fe59fcea369cd0432a0264d7",
+    "workflow-rsa-2048-Sha256-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb/positive/fixture.json": "9eaadb1b138830d4ce5c6fb3161b8d47c48c266ecae5cf380d54ceb43ef2ac7f",
+    "workflow-rsa-2048-Sha256-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb/positive/result.json": "65b9c5b8bf49bf6b354dd4af8824f323b68ea697126e18d9879e754167b0c15c",
+    "workflow-rsa-2048-Sha256-bb/positive/simple.xml": "f6dfb94b10c79fbaa222ab51f4797354fddeef452d18d035ae690f4445d5b488",
+    "workflow-rsa-2048-Sha256-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb/positive/stdout.txt": "11269f6501df20c3ce58993281b15257e4360218057e892ace98fd819e47cb5d",
+    "workflow-rsa-2048-Sha256-bb/positive/validation.xml": "3ac7fb734fa52940b2728955f659a8bcee070092dd98d8367bb8d38ee6a5837b",
+    "workflow-rsa-2048-Sha256-bb/positive.pdf": "2feb70c02c3d0f3325d24f84d9b25a4276b37b6322f60e3ea69e852770e01758",
+    "workflow-rsa-2048-Sha256-bb/signer-root.cer": "c34653db265546b0594138c2505d34b52e5722a32c47c23135cb9e398ad1391c",
+    "workflow-rsa-2048-Sha256-bb/signer-root.crl": "73de0a400ba8ec46e8e8c2e5fc062415537c9eed659463c020fea53fc9ce0726",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/detailed.xml": "dbc0e462c693dfe8fc9ae8b00c017ab29e2eaa25f8b0e1f325a2a1b356e1a6c1",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/diagnostic.xml": "75409ba9dd80121555b69cbef56b62a1fc4d1f690d5fa3b00476c26b3e2f2961",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/fixture.json": "7c54099acd6671c5c8f240c321a4d5b9be1da08a46e840e6d79ea2b251af3b41",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/result.json": "8346c2317ce4b3a39f74a9dc51d45eae9c2a24b3486a002239475a7b761d1b97",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/simple.xml": "1eaa5dc47643b16807ba859c9f4d3b6f4504b331d0edc328950308e870794bd2",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/stdout.txt": "92b35092081e191a99500a7f2abfc73d269ca5e014001f361a1f262e88a94602",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature/validation.xml": "180b0c826c784aa2efc40b5f7b1abb473ada1f7a7c7a8207d8d71f5dd4fbe3f4",
+    "workflow-rsa-2048-Sha256-bb-controls/corrupt-signature.pdf": "8ced8118d644d8fd998f07a710da6180e383c5008a9fb44f171b28ca831ed222",
+    "workflow-rsa-2048-Sha256-bb-controls/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/detailed.xml": "3804e68951cd1a25c5ddd6d3f36c6b4b8e6cd5d44d2fa60cfe32fd90bb1f4112",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/diagnostic.xml": "028f661b46df4daeb98ee9ab97018e530dac8cbe9a80493e2ff460c6c3d88cbd",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/fixture.json": "64a2d9174ae58c757df422d809f9a224117ae56295c9f5aa1c65840401aa469b",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/result.json": "0242ae9a617aee6114da47b57d5d8b1e266a2a5a1125e520bae42fcf18124264",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/simple.xml": "10bd2e3ecff64d4b47dce2edeac2e63137c186919f6d04ad0d57dff0a9ffdd0b",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/stdout.txt": "42942a7a30d69280615729f13e226ddeb38d616f8330af2e48cbc6bd774636cd",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy/validation.xml": "99baf60cf51ea2534b53005a40758e27ab7fa67e358292c36b715baa6d530254",
+    "workflow-rsa-2048-Sha256-bb-controls/legacy.pdf": "58667a2f723d60f7482f5de24ca7b395b5de19c9a55e444f68d1f127b2e9ab2e",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/detailed.xml": "9d6ef727000eb8baca50721e35bdfb1608e0f5c8cfb9fb77cb90eb84af12d7d2",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/diagnostic.xml": "cb2a0ec01e088ee273c54eb8986283715d39b2ddd66f10053fe5a9b65ed9fe62",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/fixture.json": "a4dd4884a07242143d1cbb9f563cb68accb93572d6f3fec1857f6d51140d5d86",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/result.json": "a2c8e5123659bddcb69fe130de1602fdfbbaa4906427615807eb395166fb7243",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/simple.xml": "f02d08c818688c43f817e0ec31df7b85f370866f835130bb2648c93d25e249a6",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/stdout.txt": "28fea2e8187609cb881b464f1feeece1de2b525e1f0b9b3cfb7e52e0912a0efc",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp/validation.xml": "fefbdc5cbed401baa6cb0723806ca34deebf85022890ac3a8380f13a66bf4365",
+    "workflow-rsa-2048-Sha256-bb-controls/mismatched-timestamp.pdf": "d5463c8a495511250405652ac1dfe18f8cce2717b1564a50a92f6ee4050832dd",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/detailed.xml": "2a9a629e6b7673417b269cf6bdbbaa251010ee5dfb3e6ed21b60a633cbc5f005",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/diagnostic.xml": "613c2a538773dab1ac1abbb420e635107a90c70352b330b23a401123ca5b3091",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/fixture.json": "f28bd6ef9c89574d6fddd48844dda770f9d8444fe7c66e6e23514d7256b499a9",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/result.json": "190262db0f302d42a858abcaf2f7581397a56ba2685b303497f30eefc351ad45",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/simple.xml": "59cd5efb8c7b5aa50293aad30631b6f60049c984dff195aacf1bb4fb710e44bc",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/stdout.txt": "3354d7017026107a33f26b0e9e37c4ef4bdf9ca6519b2a88117b8c4a6443962b",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte/validation.xml": "6ae7fc64f1ca2b9bc2639bd19d940834603870c795d7781d32490e6159082f55",
+    "workflow-rsa-2048-Sha256-bb-controls/modified-byte.pdf": "3780cc94608ac5e402b5d8a8cde0825a477960847411452714c6a820f933b4a3",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/detailed.xml": "e9059fbcd26964d3e01e6f648bb51452db802d8e8c0d1c81dc0d197536559095",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/diagnostic.xml": "b854883c8872fe9eb1488b51b60ff542e9ce4ab2fc6e10686e402f173b8e73e5",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/fixture.json": "31b3cdfe5404e02506ee34360ada631bdad3f41cc5f48f69d3d65707ea61d1f8",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/result.json": "2efdbba93ef47e8788502e706e6a61e24872a8a485556800a483db465171d057",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/simple.xml": "27da637fcd7c1722ae9463e6cd1a692dd2b008fd56246bac8ce8b7f60a26adaf",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/stdout.txt": "8808121a5104899eff4fab717e050b077914f6d594b559de8e4b94f05a0adbf6",
+    "workflow-rsa-2048-Sha256-bb-controls/positive/validation.xml": "6fccc77fc3d6cf582d35eb27543eabfac389525f4feaf60ec1297761307df13a",
+    "workflow-rsa-2048-Sha256-bb-controls/positive.pdf": "4e11d3e03271ac0270f64f771c29130ce1d60f57aacb0802517d4670d9d2f97d",
+    "workflow-rsa-2048-Sha256-bb-controls/signer-root.cer": "c672c0d28ad88936393318faed3bccd757b751c88c398e94a70cdcdb59c8a52b",
+    "workflow-rsa-2048-Sha256-bb-controls/signer-root.crl": "742f0c18fdce16b4dcb4abbac7d06d287095c869d516a9763297cd55cc1baf12",
+    "workflow-rsa-2048-Sha256-bb-controls/tsa-root.cer": "bce414a00b794f03112afc11e5bdd574ca2958f3aba08c9f54e08abebb6da893",
+    "workflow-rsa-2048-Sha256-bb-controls/tsa-root.crl": "b4250b3800f03fcd77bf183df9d754f5c3ea29a950b905e54f5f6840d8e7fcf9",
+    "workflow-rsa-2048-Sha256-bb-owner/encrypted.pdf": "469e34a84590b447d44f7cb5f3e2f2767787ed69b58ebdee0810df3cd96f4591",
+    "workflow-rsa-2048-Sha256-bb-owner/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/detailed.xml": "c81aab29f07c7fa674c1abd4c96c0401fa9be1f725006ab661e903b15c51fdda",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/diagnostic.xml": "e159623dc60c834811e8a2c357105697f66f896f5af041b7181fbcbc072eb03a",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/fixture.json": "e438dba55d49ec95dc501da0b41722289ea2aed4abc1270fe3c87313d641c82a",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/result.json": "c6f17b0ddb6cf76c4ead31f857b2042239b6c7cc73377b97f931d70076a2122b",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/simple.xml": "a9c139308fffb0f057486df5a65e4523ce6996694c40024ceb7f834e5aed4608",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/stdout.txt": "a5c8ccad235d65b1bd991cbc3224f84a87a26df6da7a130038f1c1ca0aa73245",
+    "workflow-rsa-2048-Sha256-bb-owner/positive/validation.xml": "ea5c0e186584cb71b02b73302690bdcc0d1185bea714e185b9a3e6870fa7f53b",
+    "workflow-rsa-2048-Sha256-bb-owner/positive.pdf": "8ee7a410bd601e69caf7495e43f8dd23fef42826bc66bebdcc24a6f9c2bd78a5",
+    "workflow-rsa-2048-Sha256-bb-owner/signer-root.cer": "d00f9f7342672c09742edb583245d5056377c336ed58792f686c423e8b2c153f",
+    "workflow-rsa-2048-Sha256-bb-owner/signer-root.crl": "442b402aa57e775fb6c0af7dba8867b23d7b9560d7383ec5c71099826b7364e3",
+    "workflow-rsa-2048-Sha256-bb-user/encrypted.pdf": "c1464f86cef87b755bd8a0b09b58550f7d2d5728f0b5674739985f8f28d572a5",
+    "workflow-rsa-2048-Sha256-bb-user/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha256-bb-user/positive/detailed.xml": "97dcc6e079f2aaa249cf51379fd65040ff457e0c2bbcb73f7105856ba41962cf",
+    "workflow-rsa-2048-Sha256-bb-user/positive/diagnostic.xml": "5b5cbecd68fba5ba6f17b24a629f6a7e2158d2c4526fe94e53df1b73a7ba69d2",
+    "workflow-rsa-2048-Sha256-bb-user/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bb-user/positive/fixture.json": "323d461fad42e825ce05e657a73b1184459cc083e18597ccfbca3d82601b5e7d",
+    "workflow-rsa-2048-Sha256-bb-user/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bb-user/positive/result.json": "1383d9254cdef6e8d4c328d30bc7d67090313e808b1388db0dc6ed622859423f",
+    "workflow-rsa-2048-Sha256-bb-user/positive/simple.xml": "0659c26526a81a07737249dd675f488fef065840f2785cfa44b8fcd998d9c688",
+    "workflow-rsa-2048-Sha256-bb-user/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bb-user/positive/stdout.txt": "6c9065df80357889d376ed62364d860ab14b42d61e3a4c0cd4c674207d8b019d",
+    "workflow-rsa-2048-Sha256-bb-user/positive/validation.xml": "b502d04600565cc0e339540a8c9c7638a70a604be49749ae72a1f43a159c3977",
+    "workflow-rsa-2048-Sha256-bb-user/positive.pdf": "87e6f4ffaafd64bcdfa3bc751971c63e353b1225db920c7c9a0757649c63d1c3",
+    "workflow-rsa-2048-Sha256-bb-user/signer-root.cer": "d4569e61dcc1ce45aa2c5d8b379f9ad8cb7e4172baeaa36d182cd09b5353f08d",
+    "workflow-rsa-2048-Sha256-bb-user/signer-root.crl": "500928abb0117fbce57369aa9e24a05e0d385873a7e2fb758221574ca59d24f6",
+    "workflow-rsa-2048-Sha256-bt/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha256-bt/positive/detailed.xml": "b5d423e171a0672a9691b82306d36fbca050a13a8d7381c721fe4ce966914566",
+    "workflow-rsa-2048-Sha256-bt/positive/diagnostic.xml": "3860a1aac4c0ca78ee1f87eefc653b7b846b24e80332945b78be5b0ce21fdd52",
+    "workflow-rsa-2048-Sha256-bt/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha256-bt/positive/fixture.json": "da164ce203247490568f02b2a771120fedf80340e0de9da1d92b094342a51e85",
+    "workflow-rsa-2048-Sha256-bt/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha256-bt/positive/result.json": "8e3735aca83e9c3a3226fc2527bce2a88e43ddc31c180b7a9b151518c1cfafad",
+    "workflow-rsa-2048-Sha256-bt/positive/simple.xml": "abbbabf3bdf9a5254de96c5f6ff6e7214fe5e4529be22863caf556006254f97e",
+    "workflow-rsa-2048-Sha256-bt/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha256-bt/positive/stdout.txt": "6a01ece0f2d8b10fda96b320429da0ead0fa1f87e0249694010127f0a1e8ef5a",
+    "workflow-rsa-2048-Sha256-bt/positive/validation.xml": "a940562ac0b85d20e1e25bae696551664a7298e95f3a2a4ab537ef0c0bf1697b",
+    "workflow-rsa-2048-Sha256-bt/positive.pdf": "be6e88140cc18de872aed4ce3b34abcb8ad1f64b4d8eb547d38843852a3db3c5",
+    "workflow-rsa-2048-Sha256-bt/signer-root.cer": "ff3179507f9d3799fc0ad7a0213cfa9d9fbcc069f2fdd23ff28154269c5fb820",
+    "workflow-rsa-2048-Sha256-bt/signer-root.crl": "e5c13d6e42c8fd013b3144c65d9922e23bcc6da6a9bccf3be7df6fa1e9a42c82",
+    "workflow-rsa-2048-Sha256-bt/tsa-root.cer": "1f9969373876947ff0f8136fcd34cf3ef9bd9d455db2cd210d07dc735abf5937",
+    "workflow-rsa-2048-Sha256-bt/tsa-root.crl": "2e7bc09735381262219337590d5b0c6f3fe4c0fe9c5e3dd7274c2018f752aa01",
+    "workflow-rsa-2048-Sha384-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha384-bb/positive/detailed.xml": "5a203edc7ac2a3252cb21c5e8e8f191daddededf624d230005b0798d30e29140",
+    "workflow-rsa-2048-Sha384-bb/positive/diagnostic.xml": "f909eb327abc1e8682d52d4153b99907a5256e9e8ecab0dcbefa5df3f7df1d1c",
+    "workflow-rsa-2048-Sha384-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha384-bb/positive/fixture.json": "22620a674265377b9f930f6d6b6908c5a6d881af0a2fec8b4e93c74100924366",
+    "workflow-rsa-2048-Sha384-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha384-bb/positive/result.json": "7de1fd41d260eaf1962668ced35833622ae90145bd3c1dab004913ed5207b65c",
+    "workflow-rsa-2048-Sha384-bb/positive/simple.xml": "ef8718078d6ecb63378260745806258ca1264cbc0bd9e434b600b07506918acc",
+    "workflow-rsa-2048-Sha384-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha384-bb/positive/stdout.txt": "69e8de5fa49580abe77fc3b841a6a554614b893d4777a5c940796223af07ede3",
+    "workflow-rsa-2048-Sha384-bb/positive/validation.xml": "5dc3b1597b47918c5b2e3c81ca4dd76baa542297ce00f28c32804791a37aa3e3",
+    "workflow-rsa-2048-Sha384-bb/positive.pdf": "89e9e05ba20c15a4a8b3591ec68148026ef5b926c15f59a6f03922de778e4bbf",
+    "workflow-rsa-2048-Sha384-bb/signer-root.cer": "7ece38bd3520f83227a8e861540472cb1ca94cc78261b48ebc28df798c298433",
+    "workflow-rsa-2048-Sha384-bb/signer-root.crl": "864b705655eedcd02913c26b7f3a76847ca74c50a44494d0b66fc592b308b07b",
+    "workflow-rsa-2048-Sha512-bb/input.pdf": "2820d0b69d219c610a1969e5dae8b668ae0c7e607bde55c669304f83698a7967",
+    "workflow-rsa-2048-Sha512-bb/positive/detailed.xml": "03a06659327fb57294be947c10059ce99db654e75b8137b8a1a8f225eb1163bd",
+    "workflow-rsa-2048-Sha512-bb/positive/diagnostic.xml": "4928438246f5a57a212443131966e81c58787e8a2e03123bec235d32e2ab005f",
+    "workflow-rsa-2048-Sha512-bb/positive/exit-code.txt": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+    "workflow-rsa-2048-Sha512-bb/positive/fixture.json": "707d1c59c88969a581aa6bef0bf2f2e96f5d8ad4ae1abc09122ba648071cb320",
+    "workflow-rsa-2048-Sha512-bb/positive/policy.xml": "842c4a877b8ab8c125abf89bb3a4d39599d489ed0cdf75f7e57c13f701e70d4b",
+    "workflow-rsa-2048-Sha512-bb/positive/result.json": "d655faa5b639f987842b3937fa5fe3f04214d55c52f5d0ae1a09ce86a0d1a1c7",
+    "workflow-rsa-2048-Sha512-bb/positive/simple.xml": "ecb56a980f60f40cbcd1c37dc1784117cae53aec29c9b21466d294989adbfefa",
+    "workflow-rsa-2048-Sha512-bb/positive/stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "workflow-rsa-2048-Sha512-bb/positive/stdout.txt": "83cb77467eb4189526867657e362cdcd2b8fb85a9cc4abcd2e98e67d8600ec82",
+    "workflow-rsa-2048-Sha512-bb/positive/validation.xml": "c6ca424a8142529635198773f013212ac870ed86631a857ef52bde17334759e0",
+    "workflow-rsa-2048-Sha512-bb/positive.pdf": "3a00eef83c47ad2f0bd3af26e8901dfcf83c9bbbe8659dcb7713a68a2c0329f3",
+    "workflow-rsa-2048-Sha512-bb/signer-root.cer": "f597ad34f444d9886594304047cd0cb78613f1a3171f8b83edd393ffe019cbdb",
+    "workflow-rsa-2048-Sha512-bb/signer-root.crl": "adda0ce46bdeaed7353e635464c1cc91c95861f2fe1dc6d7cfa91d28394fa2ac"
+  }
+}

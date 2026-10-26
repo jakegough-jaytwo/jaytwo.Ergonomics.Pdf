@@ -26,4 +26,32 @@ Each path also exercises B-B and four controls: legacy basic output must be `PKC
 
 ## Execution and retained evidence
 
-Source implementation and preliminary Windows runs are in progress. Revision-bound Windows/Linux results, original reports, fixture hashes and report checksum inventories will be recorded here after the source checkpoint and tool-install integration gate. Pending checks are not passes.
+Source implementation: `71f9971dc3f48742c0984ef48f7e9778f2e4bb53`. CI host selection: `32897fdd7430393c6333dfe86ec416cf2592d033` (only Makefile/work-item changes; identical product, wrapper and test sources).
+
+Windows 11, .NET net10.0: `make quiet-test TEST_FRAMEWORK=net10.0 TEST_FILTER=FullyQualifiedName~DssInteropTests` passed 14/14; the same command with `TEST_PROJECT=./test/jaytwo.Ergonomics.Pdf.Tests` passed 14/14. Both revision-bound runs set `JAYTWO_EVIDENCE_COMMIT=71f9971` and `JAYTWO_DSS_EVIDENCE=out/dss/final-windows`. The Windows installer exercised both DSS extraction and the pinned JDK extraction branch. `make quiet-build` passed the full solution with warnings as errors. External input tools: qpdf 12.3.2, OpenSSL 3.6.5.
+
+[Windows original reports and public fixtures](r4-dss-windows.zip), archive SHA-256 `f3d24bd24db54a3c317ddfd7957b4134be31dba394a73a2235d750660f59fdf8`; [searchable result/checksum index](r4-dss-windows.json). All 36 invocations completed; 24 positive B-B, four positive B-T and two legacy controls passed their respective properties. Four negative byte/signature controls failed as expected. The two mismatched-timestamp controls have the explicitly recorded failed timestamp result despite the T label and base-signature pass. There were no unsupported or not-run Windows cases. Each case retains its PDF, test roots/CRLs, exact validation time, signature identity, algorithms, policy, indications, four original XML reports, process exit status and stdout/stderr. The archive inventory hashes every retained file, including reports.
+
+Recreate an archive with `python tools/test-tools/dss/collect.py <evidence-directory> <archive.zip>`. Private keys are generated only in a temporary fixture directory and deleted after the case; they are not retained.
+
+Linux focused runs used the separate worktree at `d2cbbc7c83b976134722a5a1f05a5d0aeb2cbe35` (the committed bounded-download recovery; product, wrapper and test sources are unchanged from `71f9971`). Ubuntu 26.04.1 LTS, Temurin 21.0.9+10, qpdf 12.3.2 and OpenSSL 3.5.5: the same focused net10.0 filter passed 14/14 in each project. `JAYTWO_EVIDENCE_COMMIT=d2cbbc7` and `JAYTWO_DSS_EVIDENCE=/build/out/dss/linux-focused` were passed through make. The running image's Makefile, wrapper and downloader hashes matched the worktree exactly.
+
+[Linux focused original reports and fixtures](r4-dss-linux-focused.zip), archive SHA-256 `b95538331216765e69a3f1a3b988b68661e962b969a77af622aabbce7b2be423`, and [result/checksum index](r4-dss-linux-focused.json) retain another 36 completed invocations with the same expected properties and no unsupported/not-run cases. All 498 retained file hashes were verified. The 36 case sets agree across Windows/Linux on profile, algorithms, digest/signature results, trust-policy indication/subindication and timestamp results; signature identities and fixture hashes differ as expected for freshly generated keys.
+
+The separate-worktree integration command `make quiet-docker-test DOCKER_TAG=jaytwo_ergonomics_pdf_w103_d2cbbc7 "DOCKER_RUN_MAKE_TARGETS=test JAYTWO_DSS_EVIDENCE=/build/out/dss/linux JAYTWO_EVIDENCE_COMMIT=d2cbbc7"` passed at `d2cbbc7` in 13m38s. This wraps the required `make docker-builder docker-test`. All builds passed with warnings as errors; fuzz smoke passed. Framework results, including the serial clock hosts:
+
+| Project | Framework | Passed | Platform skips | Failed |
+|---|---|---:|---:|---:|
+| Engine | net10.0 | 4674 | 0 | 0 |
+| Engine | net8.0 | 4200 | 0 | 0 |
+| Engine | net6.0 | 4200 | 0 | 0 |
+| Engine netstandard2.0 lane | net8.0 | 4200 | 0 | 0 |
+| Workflow | net10.0 | 166 | 2 | 0 |
+| Workflow | net8.0 | 152 | 2 | 0 |
+| Workflow | net6.0 | 152 | 2 | 0 |
+
+Total: 17,744 passed, six existing platform skips, zero failures. The two workflow skips per framework are `WorkflowFileSaveTests.a_destination_that_differs_from_the_input_only_by_case_is_refused` (Windows/OSX only) and `WorkflowExportTests.export_reads_no_bytes_that_the_engine_does_not` (Windows only). Neither is a tool-availability skip. Both net10.0 project TRX files explicitly contain all 14 DSS cases as Passed; none of W-103's checks was skipped, unsupported or not run.
+
+[Linux integration original reports, fixtures, full gate log and TRX results](r4-dss-linux-integration.zip), archive SHA-256 `0f131b87a310963c8a14ad91a035e08a0854f5c6c4c0086c151d029f9fedbf48`, and [result/checksum index](r4-dss-linux-integration.json) retain the 36 full-gate DSS invocations. All 511 retained file hashes were verified. Every archive contains the full expected 36-case set, completed execution status, and the original report files. The hashes in each external JSON index also identify every fixture and report inside its ZIP.
+
+The first Docker attempt was interrupted in the single-connection EU bundle download before tests. The replacement downloader was executed against the official server and verified the same complete archive hash, then the Linux image built successfully with it. A separate Windows launcher attempt selected `cmd.exe` for the POSIX make recipe and ran no tests; selecting Git Bash explicitly corrected the launcher. Neither attempt is counted as a pass. On Windows, Docker make recipes were run with `SHELL=C:/Program Files/Git/bin/bash.exe`, `MSYS_NO_PATHCONV=1`, and `MSYS2_ARG_CONV_EXCL=*`.
