@@ -1,5 +1,7 @@
 # W-151: focused seed-value standards follow-up
 
+Status, 2026-10-26: historical research prompt. The full published PDF 2.0 EC3 text was subsequently inspected in `C:/jake/git/pdfdocs`. The owner approved the bounded enforcement and provider contract recorded in `w-151-owner-disposition.md`; this prompt no longer blocks implementation. Interpretive choices remain labelled owner policy rather than settled ISO requirements.
+
 Copy the prompt below to an expert agent. It is self-contained; no repository access is needed.
 
 ---

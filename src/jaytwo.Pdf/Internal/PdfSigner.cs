@@ -290,6 +290,16 @@ internal sealed class PdfSigner
             }
         }
 
+        var seeds = new PdfSignatureSeedValues(_store);
+        var checkedOwners = new HashSet<int>();
+        foreach (FieldSlot slot in matches)
+        {
+            if (checkedOwners.Add(slot.ValueObjectId))
+            {
+                seeds.Check(slot.ValueObjectId, options);
+            }
+        }
+
         // Spec 7.3: /Signature Modify grants signing an existing empty field (ISO 32000-1 Table 255). It does not
         // grant a document timestamp.
         if (options.Kind == PdfSignatureKind.DocTimeStamp)
