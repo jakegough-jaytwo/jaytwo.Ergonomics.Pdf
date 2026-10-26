@@ -23,13 +23,14 @@ mkdir -p "$OUT/logs"
   echo "limits: -timeout=10 -rss_limit_mb=2048"
 } > "$OUT/run.txt"
 
-# Release build, no coverage collection; SharpFuzz instruments only the library.
+# Release build, no coverage collection. Seed classification calls the engine outside
+# a fuzz callback, so it must finish before SharpFuzz instruments the library.
 dotnet publish "$ROOT/tools/fuzz/jaytwo.Ergonomics.Pdf.Fuzz.csproj" -c Release -o "$OUT/bin" -nologo -v q
-sharpfuzz "$OUT/bin/jaytwo.Pdf.dll"
 
 rm -rf "$OUT/seeds"
 dotnet "$OUT/bin/jaytwo.Ergonomics.Pdf.Fuzz.dll" seeds "$OUT/seeds"
 sh "$ROOT/tools/fuzz/external-seeds.sh" "$OUT/seeds"
+sharpfuzz "$OUT/bin/jaytwo.Pdf.dll"
 
 for spec in "$@"; do
   target=${spec%%:*}
