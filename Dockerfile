@@ -48,6 +48,21 @@ RUN pip install --no-cache-dir --break-system-packages -r /tmp/test-tools-requir
 
 ENV JAYTWO_PKCS11=/usr/lib/softhsm/libsofthsm2.so
 
+# W-103: pinned test-only Temurin JDK and EU DSS; no public trust-list service or web application is started.
+# This test image targets linux/amd64, matching the pinned JDK archive.
+RUN curl -fsSL 'https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.9%2B10/OpenJDK21U-jdk_x64_linux_hotspot_21.0.9_10.tar.gz' -o /tmp/jdk.tar.gz \
+  && echo '810d3773df7e0d6c4394e4e244b264c8b30e0b05a0acf542d065fd78a6b65c2f  /tmp/jdk.tar.gz' | sha256sum -c - \
+  && mkdir -p /opt/test-jdk \
+  && tar -xzf /tmp/jdk.tar.gz -C /opt/test-jdk --strip-components=1 \
+  && rm /tmp/jdk.tar.gz
+COPY tools/test-tools/dss /opt/dss
+RUN curl -fsSL 'https://ec.europa.eu/digital-building-blocks/artifact/repository/esignaturedss/eu/europa/ec/joinup/sd-dss/dss-demo-bundle/6.3/dss-demo-bundle-6.3.zip' -o /tmp/dss.zip \
+  && echo '60452c53eb395106655340890a207885f165bf844485046e3a1f8535ef8fa944  /tmp/dss.zip' | sha256sum -c - \
+  && python /opt/dss/extract.py /tmp/dss.zip /opt/dss/lib \
+  && rm /tmp/dss.zip
+ENV JAYTWO_JAVA=/opt/test-jdk/bin/java
+ENV JAYTWO_DSS=/opt/dss/DssValidate.java
+
 FROM base AS builder
 WORKDIR /build
 COPY . /build

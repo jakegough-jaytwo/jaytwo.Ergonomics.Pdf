@@ -58,6 +58,15 @@ $UvPin = @{
 $PythonVersion = '3.13'
 $Requirements = Join-Path $PSScriptRoot 'requirements.txt'
 
+$DssPin = @{
+    Url = 'https://ec.europa.eu/digital-building-blocks/artifact/repository/esignaturedss/eu/europa/ec/joinup/sd-dss/dss-demo-bundle/6.3/dss-demo-bundle-6.3.zip'
+    Sha256 = '60452c53eb395106655340890a207885f165bf844485046e3a1f8535ef8fa944'
+}
+$JdkPin = @{
+    Url = 'https://github.com/adoptium/temurin21-binaries/releases/download/jdk-21.0.9%2B10/OpenJDK21U-jdk_x64_windows_hotspot_21.0.9_10.zip'
+    Sha256 = '1c67df516e9795c0b09f5714bfe151da2e3cc988082042f5bbb60d75e4e63fb5'
+}
+
 $DotnetRuntimes = @('6.0', '8.0', '10.0')
 
 function Write-Step([string] $message) {
@@ -77,6 +86,10 @@ function Get-PinnedFile([hashtable] $pin) {
     $downloads = Join-Path $ToolsDirectory 'downloads'
     New-Item -ItemType Directory -Force $downloads | Out-Null
     $path = Join-Path $downloads ([IO.Path]::GetFileName($pin.Url))
+    if ((Test-Path $path) -and ((Get-FileHash -Algorithm SHA256 $path).Hash.ToLowerInvariant() -eq $pin.Sha256)) {
+        return $path
+    }
+
     $partial = "$path.partial"
     Write-Step "Downloading $($pin.Url)"
     Invoke-WebRequest -UseBasicParsing -Uri $pin.Url -OutFile $partial
@@ -92,6 +105,11 @@ function Get-PinnedFile([hashtable] $pin) {
 
 function Expand-PinnedZip([hashtable] $pin, [string] $destination) {
     $zip = Get-PinnedFile $pin
+    $resolvedDestination = [IO.Path]::GetFullPath($destination)
+    if (-not $resolvedDestination.StartsWith($ToolsDirectory.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Archive destination must be inside $ToolsDirectory."
+    }
+
     if (Test-Path $destination) {
         Remove-Item -Recurse -Force $destination
     }
@@ -216,10 +234,28 @@ if (-not (Test-Stamp 'python' $pythonPin)) {
     Set-Stamp 'python' $pythonPin
 }
 
+# DSS is test-only. Extract its libraries, never deploy or start the bundled Tomcat server.
+$jdk = Join-Path $ToolsDirectory 'jdk'
+if (-not (Test-Stamp 'jdk' $JdkPin.Sha256)) {
+    Expand-PinnedZip $JdkPin $jdk
+    Set-Stamp 'jdk' $JdkPin.Sha256
+}
+
+$dss = Join-Path $ToolsDirectory 'dss'
+if (-not (Test-Stamp 'dss' $DssPin.Sha256)) {
+    $bundle = Get-PinnedFile $DssPin
+    Invoke-Native $python @((Join-Path $PSScriptRoot 'dss\extract.py'), $bundle, (Join-Path $dss 'lib')) @{}
+    Set-Stamp 'dss' $DssPin.Sha256
+}
+
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'dss\DssValidate.java') -Destination (Join-Path $dss 'DssValidate.java') -Force
+
 # The run settings the test projects load. Every path is checked, so a broken install fails here, not in a test.
 $ucrtBin = Join-Path $msys64 'ucrt64\bin'
 $softhsmLibrary = Find-One $softhsm 'softhsm2-x64.dll'
 $variables = [ordered]@{
+    JAYTWO_DSS = Join-Path $dss 'DssValidate.java'
+    JAYTWO_JAVA = Find-One $jdk 'java.exe'
     JAYTWO_CERTUTIL = Join-Path $ucrtBin 'certutil.exe'
     JAYTWO_MUTOOL = Join-Path $ucrtBin 'mutool.exe'
     JAYTWO_OPENSSL = Join-Path $ucrtBin 'openssl.exe'
@@ -263,6 +299,8 @@ $versions += (Get-FirstLine $variables.JAYTWO_OPENSSL 'version')
 $versions += (Get-FirstLine $python '--version')
 $versions += (Invoke-Native $uvExe @('pip', 'list', '--python', $python) $uvEnvironment | Select-String -Pattern '^(pyhanko|pyhanko-certvalidator|pypdf) ' | ForEach-Object { $_.Line })
 $versions += "SoftHSM $($SoftHsmPin.Url)"
+$versions += 'DSS 6.3 bundle SHA-256 ' + $DssPin.Sha256
+$versions += (Get-FirstLine $variables.JAYTWO_JAVA '--version')
 Set-Content -Encoding utf8 -Path (Join-Path $ToolsDirectory 'versions.txt') -Value $versions
 
 # .NET is not installed here; report what the test targets need.
