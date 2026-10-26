@@ -67,6 +67,7 @@ internal static class SeedWriter
         }
 
         seeds["der"].Add(new byte[] { 0x30, 0x03, 0x02, 0x01, 0x05 });
+        seeds["cms"].AddRange(CmsSeeds.Build(repositoryRoot));
         seeds["tsr"].Add(TsrInput(new byte[32], new byte[] { 1 }, 0, new byte[] { 0x30, 0x05, 0x30, 0x03, 0x02, 0x01, 0x00 }));
         return seeds;
     }

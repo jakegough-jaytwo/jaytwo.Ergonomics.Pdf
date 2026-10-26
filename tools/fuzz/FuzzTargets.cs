@@ -39,6 +39,7 @@ internal static class FuzzTargets
         new FuzzTarget("objstm", FragmentMaxLength, ParseObjectStream),
         new FuzzTarget("decode", FragmentMaxLength, Decode),
         new FuzzTarget("der", FragmentMaxLength, Der),
+        new FuzzTarget("cms", CmsFuzzTarget.MaxLength, CmsFuzzTarget.Run),
         new FuzzTarget("tsr", FragmentMaxLength, TimestampResponse),
         new FuzzTarget("xmp", FragmentMaxLength, Xmp),
     };

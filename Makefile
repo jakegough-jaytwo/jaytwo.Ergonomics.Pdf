@@ -194,7 +194,7 @@ fuzz-smoke:
 # W-18 (legacy B-18): a bounded libFuzzer campaign in the fuzz image. FUZZ_TARGETS is TARGET:SECONDS pairs; CPU time is about
 # FUZZ_WORKERS x SECONDS per target. D-23 caps a campaign at 24 aggregate CPU-hours.
 FUZZ_WORKERS?=7
-FUZZ_TARGETS?=open:60 edit:60 object:60 objstm:60 decode:60 der:60 tsr:60 xmp:60
+FUZZ_TARGETS?=open:60 edit:60 object:60 objstm:60 decode:60 der:60 cms:60 tsr:60 xmp:60
 docker-fuzz-campaign:
 	docker build -t ${DOCKER_TAG}__fuzz . --target fuzz
 	EXIT_CODE=0; docker run --rm -v "${TOPDIR}/out/fuzz:/out" \

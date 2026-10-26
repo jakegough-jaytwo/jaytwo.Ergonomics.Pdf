@@ -5,10 +5,13 @@
 set -eu
 
 SEEDS=$1
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+mkdir -p "$SEEDS/cms" "$SEEDS/der" "$SEEDS/tsr"
 WORK=$(mktemp -d)
 trap 'rm -rf "$WORK"' EXIT
 
 # Encryption variants with an empty user password, so the `open` target reaches decryption.
+if [ "${2:-}" != "--cms-only" ]; then
 for seed in "$SEEDS"/open/*; do
   name=$(basename "$seed")
   for variant in "40 --" "128 --use-aes=n --" "128 --use-aes=y --" "256 --"; do
@@ -27,6 +30,7 @@ for seed in "$SEEDS"/open/*; do
     cp "$WORK/os" "$SEEDS/edit/$digest"
   fi
 done
+fi
 
 # RFC 3161 responses. The tsr input is imprint (32 bytes), nonce length, nonce, mode, body. See FuzzTargets.TimestampResponse.
 cd "$WORK"
@@ -66,8 +70,14 @@ ess_cert_id_alg = sha256
 accuracy = secs:1
 CNF
 
+# A real CMS signer using SKI, and an issuer/serial CMS whose signature value is timestamped below.
+printf 'CMS fuzz seed' > payload
+openssl cms -sign -binary -in payload -signer tsa.pem -inkey tsa.key -outform DER -out base.cms
+openssl cms -sign -binary -keyid -in payload -signer tsa.pem -inkey tsa.key -outform DER -out "$SEEDS/cms/subject-key-identifier.cms"
+python3 "$SCRIPT_DIR/cms-seeds.py" signature base.cms signature-value
+
 for n in 1 2 3; do
-  printf 'signature value %s' "$n" > data
+  if [ "$n" = 1 ]; then cp signature-value data; else printf 'signature value %s' "$n" > data; fi
   if [ "$n" = 3 ]; then cert=""; else cert="-cert"; fi
   # shellcheck disable=SC2086
   openssl ts -query -data data -sha256 $cert -out q.tsq 2>/dev/null
@@ -86,5 +96,9 @@ for mode, body in ((0, "r.tsr"), (1, "t.tst")):
 token = pathlib.Path("t.tst").read_bytes()
 (seeds / "der" / hashlib.sha256(token).hexdigest()).write_bytes(token)
 PY
+  if [ "$n" = 1 ]; then
+    cp t.tst "$SEEDS/cms/document-timestamp.cms"
+    python3 "$SCRIPT_DIR/cms-seeds.py" attach base.cms t.tst "$SEEDS/cms/signature-timestamp.cms"
+  fi
 done
 openssl x509 -in tsa.pem -outform DER -out "$SEEDS/der/tsa-cert"

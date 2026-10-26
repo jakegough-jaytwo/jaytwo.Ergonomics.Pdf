@@ -11,6 +11,7 @@ namespace jaytwo.Ergonomics.Pdf.Fuzz;
 /// <list type="bullet">
 /// <item><c>smoke [--iterations N] [--seed S] [--out DIR]</c>: the fixed-seed CI smoke run.</item>
 /// <item><c>seeds DIR</c>: writes the in-process seed corpus, one directory per target.</item>
+/// <item><c>cms-library-seeds DIR</c>: explicitly regenerates the fixed library-produced CMS seed files.</item>
 /// <item><c>run TARGET PATH...</c>: runs files or directories through a target and reports uncontrolled failures.</item>
 /// <item><c>libfuzzer TARGET</c>: the SharpFuzz entry point for libfuzzer-dotnet campaigns.</item>
 /// <item><c>list</c>: prints the target names and maximum input lengths.</item>
@@ -38,6 +39,9 @@ internal static class Program
                 return 0;
             case "seeds":
                 SeedWriter.Write(SeedWriter.Build(root), args[1]);
+                return 0;
+            case "cms-library-seeds":
+                CmsSeeds.WriteGenerated(args[1]);
                 return 0;
             case "smoke":
                 return Smoke(root, args);

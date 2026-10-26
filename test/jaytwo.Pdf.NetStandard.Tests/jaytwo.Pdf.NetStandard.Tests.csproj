@@ -34,4 +34,10 @@
   <!-- W-177: the fixture list is shared with jaytwo.Pdf.Tests, so the two cannot drift. -->
   <Import Project="$(TestSources)Fixtures.targets" />
 
+  <ItemGroup>
+    <Compile Include="..\..\tools\fuzz\CmsFuzzTarget.cs" Link="Fuzz\CmsFuzzTarget.cs" />
+    <Compile Include="..\..\tools\fuzz\CmsSeeds.cs" Link="Fuzz\CmsSeeds.cs" />
+    <Compile Include="..\..\tools\fuzz\SeedSigner.cs" Link="Fuzz\SeedSigner.cs" />
+  </ItemGroup>
+
 </Project>

@@ -34,4 +34,11 @@
   <!-- W-177: fixtures are listed only in Fixtures.targets, which jaytwo.Pdf.NetStandard.Tests also imports. -->
   <Import Project="Fixtures.targets" />
 
+  <!-- Harness-only APIs use the net8.0 runtime; exercise the same source on the net8/net10 test hosts. -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0' Or '$(TargetFramework)' == 'net10.0'">
+    <Compile Include="..\..\tools\fuzz\CmsFuzzTarget.cs" Link="Fuzz\CmsFuzzTarget.cs" />
+    <Compile Include="..\..\tools\fuzz\CmsSeeds.cs" Link="Fuzz\CmsSeeds.cs" />
+    <Compile Include="..\..\tools\fuzz\SeedSigner.cs" Link="Fuzz\SeedSigner.cs" />
+  </ItemGroup>
+
 </Project>
