@@ -1,0 +1,475 @@
+[
+  {
+    "id": "ap-extra-key",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 700,
+    "before": [],
+    "edit": "no selected field",
+    "omissions": {
+      "UnsupportedAppearance": 1
+    }
+  },
+  {
+    "id": "ap-extra-key",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 1491,
+    "before": [],
+    "edit": "no selected field",
+    "omissions": {
+      "UnsupportedAppearance": 4
+    }
+  },
+  {
+    "id": "checkbox",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1809,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Off"
+      }
+    ],
+    "edit": "ExistingAppearanceSelected",
+    "omissions": {}
+  },
+  {
+    "id": "checkbox",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 4025,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Off"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Off"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Off"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Off"
+      }
+    ],
+    "edit": "ExistingAppearanceSelected",
+    "omissions": {}
+  },
+  {
+    "id": "choice",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1705,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "choice",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3757,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "courier",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1690,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "courier",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3727,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "cycle",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a cyclic or multiply owned field."
+  },
+  {
+    "id": "cycle",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a cyclic or multiply owned field."
+  },
+  {
+    "id": "merged",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1584,
+    "before": [
+      {
+        "name": "Input1.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "merged",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3350,
+    "before": [
+      {
+        "name": "Input1.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "missing-font",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a default appearance or its font resources."
+  },
+  {
+    "id": "missing-font",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a default appearance or its font resources."
+  },
+  {
+    "id": "multi-owner",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a cyclic or multiply owned field."
+  },
+  {
+    "id": "multi-owner",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a cyclic or multiply owned field."
+  },
+  {
+    "id": "need-appearances",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1714,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "need-appearances",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3753,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "nested",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1692,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "nested",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3731,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "no-p",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1692,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "no-p",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3731,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "non-font-dr",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve non-font default resources."
+  },
+  {
+    "id": "non-font-dr",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve non-font default resources."
+  },
+  {
+    "id": "orphan",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a widget outside the AcroForm field tree."
+  },
+  {
+    "id": "orphan",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve a widget outside the AcroForm field tree."
+  },
+  {
+    "id": "resource-cycle",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 1719,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "resource-cycle",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 3786,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      },
+      {
+        "name": "Input2.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "unselected-action",
+    "op": "extract",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve widget actions or cyclic ownership."
+  },
+  {
+    "id": "unselected-action",
+    "op": "repeat",
+    "result": "failed",
+    "stage": "assemble",
+    "bytes": 0,
+    "type": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve widget actions or cyclic ownership."
+  },
+  {
+    "id": "unsupported-ap",
+    "op": "extract",
+    "result": "accepted",
+    "bytes": 700,
+    "before": [],
+    "edit": "no selected field",
+    "omissions": {
+      "UnsupportedAppearance": 1
+    }
+  },
+  {
+    "id": "unsupported-ap",
+    "op": "repeat",
+    "result": "accepted",
+    "bytes": 2492,
+    "before": [
+      {
+        "name": "Input1.Group.Name",
+        "value": "Original"
+      }
+    ],
+    "edit": "Generated",
+    "omissions": {
+      "UnsupportedAppearance": 3
+    }
+  }
+]

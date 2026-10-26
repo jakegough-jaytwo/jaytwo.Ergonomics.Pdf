@@ -1,0 +1,130 @@
+[
+  {
+    "id": "nested",
+    "path": "nested.pdf",
+    "sha256": "8559e702890642c03dd7bc64853cdd84474afeedf1dc56509370136e7dbcb0de",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "courier",
+    "path": "courier.pdf",
+    "sha256": "7de29b457014c468ee27ef63936aa2f24be96e02da1d9119a90e89b5947debb2",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "merged",
+    "path": "merged.pdf",
+    "sha256": "1d163eb6addf5a5d204728e2ca931463e5abba099dabbf87b621b95ebedc0d62",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "no-p",
+    "path": "no-p.pdf",
+    "sha256": "9b3e56d7aafc0ba2885e8a7fb264fca0fea3092e3a885226eb12f773a8925b51",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "checkbox",
+    "path": "checkbox.pdf",
+    "sha256": "cea88c1eb4b9abfeba2314b71a9d346501e1496668faf6c847729701976ba28e",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "choice",
+    "path": "choice.pdf",
+    "sha256": "4e4fc0ec03a72d0fe3ca8d86b17a00d1dc792e6724431142f23f93e468a0679e",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "cycle",
+    "path": "cycle.pdf",
+    "sha256": "6ddf7a8004772f4c10af06b7f8f2e6840f812565724b0661731f039eaae33957",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "deliberately malformed"
+  },
+  {
+    "id": "multi-owner",
+    "path": "multi-owner.pdf",
+    "sha256": "06e90a668c9c50eb53627895bfb02e4b16cdb76030fccd06533d967c59c51ab5",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "deliberately malformed"
+  },
+  {
+    "id": "orphan",
+    "path": "orphan.pdf",
+    "sha256": "6eed59d8c4e1510c03bc5c96471c5c00221a1d1d2c7c23ca96b8eae9ac78f317",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "deliberately malformed"
+  },
+  {
+    "id": "missing-font",
+    "path": "missing-font.pdf",
+    "sha256": "632a5b95729cc319480c8e368f941ced4d4ae0731faf43c02d35cc508852a8ea",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "deliberately malformed"
+  },
+  {
+    "id": "non-font-dr",
+    "path": "non-font-dr.pdf",
+    "sha256": "26cf8d0f1dfa49d99f533f2ed01f870d0be7d622027c7e38dc527b9c18737007",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "unsupported-ap",
+    "path": "unsupported-ap.pdf",
+    "sha256": "9978de73c444f8eb95f39e9686bd9069a8446561f8cd45dac03fe17dd068c0af",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "deliberately malformed"
+  },
+  {
+    "id": "ap-extra-key",
+    "path": "ap-extra-key.pdf",
+    "sha256": "2131f8c99f7b0d332879611850dc1177271657da52f9a15e5f6493610f427af9",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "unselected-action",
+    "path": "unselected-action.pdf",
+    "sha256": "d183ec2453fa308aa1c756fc4b343609d4bb8f6b6627acb49d6ec267510eb889",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "need-appearances",
+    "path": "need-appearances.pdf",
+    "sha256": "cd5c0ea27d95362849a70f3b24f42ef01e7c37a848dc607e82870f1b12e2dc8a",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  },
+  {
+    "id": "resource-cycle",
+    "path": "resource-cycle.pdf",
+    "sha256": "68da62919622983f0af9b28e4bd16fe6eb4b7d740433958a7cb86d65fae96b0d",
+    "producer": "original generate.py / pypdf",
+    "rights": "MIT (repository)",
+    "validity": "not a conformance claim"
+  }
+]

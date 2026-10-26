@@ -1,0 +1,355 @@
+{
+  "reader": "pypdf 6.21.1",
+  "qpdf": "qpdf version 12.3.2",
+  "poppler": "pdftoppm version 26.08.0",
+  "mupdf": "mutool version 1.28.5",
+  "checks": [
+    {
+      "fixture": "nested",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "nested",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "courier",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "courier",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "merged",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "merged",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "no-p",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "no-p",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "need-appearances",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "need-appearances",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "resource-cycle",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "resource-cycle",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "checkbox",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "checkbox",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "choice",
+      "op": "extract",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    },
+    {
+      "fixture": "choice",
+      "op": "repeat",
+      "structure": "pass",
+      "edit_values": "pass",
+      "incremental_prefix": "pass",
+      "qpdf": "pass"
+    }
+  ],
+  "source_qpdf_checks": [
+    "nested",
+    "courier",
+    "merged",
+    "no-p",
+    "need-appearances",
+    "resource-cycle",
+    "checkbox",
+    "choice",
+    "ap-extra-key",
+    "non-font-dr",
+    "unselected-action"
+  ],
+  "refusals": "12/32 operations; typed assembly error, zero destination bytes",
+  "late_refusal": {
+    "failure": "PdfAssemblyNotSupportedException",
+    "bytes": 0
+  },
+  "source_hashes": "unchanged after operations",
+  "omissions": "4/32 operations; exact UnsupportedAppearance counts verified; LastModified source renders like nested, output loses widget in both renderers",
+  "font_collision": "pass; Input2=Helvetica, Input3=Courier; empty occurrence consumes Input1",
+  "renders": [
+    {
+      "fixture": "nested",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "nested",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "nested",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "nested",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "courier",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "courier",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "courier",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "courier",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "merged",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "merged",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "merged",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "merged",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "no-p",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "no-p",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "no-p",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "no-p",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "resource-cycle",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "resource-cycle",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "resource-cycle",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "resource-cycle",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "checkbox",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "checkbox",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "checkbox",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "checkbox",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "choice",
+      "renderer": "poppler",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "choice",
+      "renderer": "poppler",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "choice",
+      "renderer": "mupdf",
+      "op": "extract",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    },
+    {
+      "fixture": "choice",
+      "renderer": "mupdf",
+      "op": "repeat",
+      "source_pixels": "identical",
+      "edit_pixels": "only occurrence 1 selected widgets changed"
+    }
+  ]
+}
