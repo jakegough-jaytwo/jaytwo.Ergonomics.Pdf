@@ -140,7 +140,7 @@ Each limit fails before any destination grows, and a file inside every limit ope
 
 ## Workflows
 
-`jaytwo.Ergonomics.Pdf` workflows (spec F1 to F17, W-142 to W-145). The tests use only the public API of both libraries.
+`jaytwo.Ergonomics.Pdf` workflows (spec F1 to F21, W-142 to W-145 and W-180). The tests use only the public API of both libraries.
 
 - `From`, `FromFile`, and the operation methods do not read a counting input stream, attachment stream, or `IPdfSource`, and `FromFile` and `AttachFile` do not open their files, which a test holds exclusively. A null `PdfMetadataChanges` throws `ArgumentNullException` when described.
 - A borrowed input stream, destination stream, or `IPdfSource` is not disposed after success, an engine failure, or a cancellation partway through the copy. A file opened from a path reopens with exclusive access after each.
@@ -166,6 +166,9 @@ Each limit fails before any destination grows, and a file inside every limit ope
 - A page number below 1 and an angle that is not a multiple of 90 throw `ArgumentOutOfRangeException` when described. A page number above the page count throws it with nothing written. A null attachment name, stream, or path, an empty path, and a stream that is closed or not seekable throw when described.
 - On a document with an approval signature, a rotation throws `PdfSignatureConflictException` with nothing written and succeeds with `AllowBreakingExistingSignatures()`. On a document certified with DocMDP `P` 2, a rotation with the opt-in throws `PdfCertificationLockedException`.
 - `ExportFormValues` and `ExportFormValuesAsync` return the same values as `PdfAcroForm.Export()` on the same file, and none for a file without a form. With the user password in `PdfWorkflowOpenOptions` they read an encrypted file; without it they throw `PdfEncryptedException`. A null or empty path throws when called. The file reopens with exclusive access after a successful export, after `PdfEncryptedException`, and after a canceled asynchronous export. On Windows, both succeed while another handle holds a byte-range lock on the middle of an unreferenced 3 MiB stream, as the direct engine export does.
+- `Sign`, `SignAsync` (a signer with an optional timestamp authority, or a provider), `Timestamp`, and `TimestampAsync` to a stream and to a path (W-180, F18 to F21) add one revision for a signature or document timestamp on an unchanged document, and an edit revision plus a separate signature or timestamp revision after edits. The original bytes stay a prefix, an embedded signature timestamp adds no revision, and the default format stays `adbe.pkcs7.detached`.
+- A signing run reads a counting source as often as a `Save` run does, signs an encrypted input after a fill through the same editor, signs an existing empty signature field by name, and stages and signs a 10 MiB streamed attachment that exceeds the 8 MiB signature appendix.
+- A signer, authority, reservation-overflow, certification, or cancellation failure leaves a stream empty and an existing file unchanged, with no temporary sibling. A failure while copying to a stream truncates it to empty. Each signer and authority is called once and never retried. Null, non-empty, aliased, mismatched-kind, empty-path, existing-file, and missing-directory arguments are refused before the input is read or the signer is called, and a signing workflow runs once with borrowed streams left open.
 
 ## Foreign files
 

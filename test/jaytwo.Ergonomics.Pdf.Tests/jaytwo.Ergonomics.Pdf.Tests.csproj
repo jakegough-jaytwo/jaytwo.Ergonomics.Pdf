@@ -13,11 +13,18 @@
 
   <!-- W-142: engine test helpers that use only the public jaytwo.Pdf API. TestCompat.cs here stands in for theirs. -->
   <ItemGroup>
+    <Compile Include="..\jaytwo.Pdf.Tests\ExternalTool.cs" Link="Shared\ExternalTool.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\OpenSslTimestampAuthority.cs" Link="Shared\OpenSslTimestampAuthority.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\StandardEncryptor.cs" Link="Shared\StandardEncryptor.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\TestPdfSource.cs" Link="Shared\TestPdfSource.cs" />
+  </ItemGroup>
+
+  <!-- The linked OpenSslTimestampAuthority is in the engine tests' global usings. -->
+  <ItemGroup>
+    <Using Include="jaytwo.Pdf.Signatures" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">

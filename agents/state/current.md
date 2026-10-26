@@ -5,22 +5,21 @@
 
 ## Reset stage R4
 
-1. W-180
-2. W-103
-3. W-104
-4. W-181
-5. W-182
+1. W-103
+2. W-104
+3. W-181
+4. W-182
 
 ## Security hardening phase
 
-6. W-151
-7. W-152
-8. W-155
-9. W-156
-10. W-158
-11. W-168
-12. W-149
-13. W-159
+5. W-151
+6. W-152
+7. W-155
+8. W-156
+9. W-158
+10. W-168
+11. W-149
+12. W-159
 
 Architectural reset stage R2, ergonomic workflows (`reset-plan.md` section 8, D-54). W-141 is done: D-60 is accepted, and `docs/spec/phase-1.md` section 6.7 carries the workflow requirements F1 to F16 (`agents/reference/r2-workflow-proposal.md`). W-142 is done: the pipeline ships with metadata. W-143 is done: fill and flatten ship. W-144 is done: attachments and rotation ship. W-145 is done: form export ships. W-146 is done: the exit criteria except the renderer one are verified at an integration checkpoint. W-80 is done: MuPDF is the second renderer for every G6 render check, which ends R2.
 
@@ -30,4 +29,4 @@ Security hardening is its own phase after R4 signing and before R5 advanced capa
 
 Stage R3, document assembly (`reset-plan.md` section 9, D-61). W-160 is done: the owner adopted `docs/spec/phase-2.md` for N1 and N2 with requirements A1 to A15. W-161 to W-163 are done: the writer foundation, extraction, and links and appearances ship. W-154 is done: encrypted-open failures and authentication roles are typed, and rotation uses assembly permission. W-164 is done: engine concatenation preserves occurrence-local fields and links, and encrypted input requires consent and per-input permission checks. W-165 is done: `PdfWorkflow.Combine` ships with deferred inputs and safe file publication. W-166 is done: the full framework matrix, Docker gate, independent-tool sweep, and large-input memory checks verify the R3 exit criteria. Stage R3 is complete; repeated structural-read amplification on the 100,000-page workload is recorded in its closeout.
 
-Stage R4, signing (`reset-plan.md` section 10, D-54), follows R3. W-172 is done and D-64 adopts dedicated signing/document-timestamp terminals, private staging with one editor, and fresh signing evidence. W-179 is done: the owner approved the exact protected wording with five review corrections, recorded in `agents/reference/r4-signing-proposal.md`, and the corrected wording is adopted. F4 remains Change and F18 to F21 remain New until W-180 ships them. W-180 implements the terminals, W-103 adds pinned DSS classification, W-104 adds direct CMS smoke coverage, W-181 refreshes interoperability and bounded campaign evidence, and W-182 verifies the R4 exit. No engine API migration is scheduled without a demonstrated gap. Each remaining security item depends on W-182. The security phase follows the R4 exit checkpoint and precedes every R5 advanced-capability item.
+Stage R4, signing (`reset-plan.md` section 10, D-54), follows R3. W-172 is done and D-64 adopts dedicated signing/document-timestamp terminals, private staging with one editor, and fresh signing evidence. W-179 is done: the owner approved the exact protected wording with five review corrections, recorded in `agents/reference/r4-signing-proposal.md`, and the corrected wording is adopted. W-180 is done: the terminals ship, and F4 and F18 to F21 are Exists. W-103 adds pinned DSS classification, W-104 adds direct CMS smoke coverage, W-181 refreshes interoperability and bounded campaign evidence, and W-182 verifies the R4 exit. No engine API migration is scheduled without a demonstrated gap. Each remaining security item depends on W-182. The security phase follows the R4 exit checkpoint and precedes every R5 advanced-capability item.

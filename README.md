@@ -191,6 +191,16 @@ A workflow runs once. After a terminal call begins, whether it succeeds, fails, 
 
 `Save` to a path writes `.<name>.<random>.tmp` beside the destination, flushes it to disk unless `FlushToDisk` is false, and then moves it into place. After a failure or cancellation, the temporary file is deleted and the destination is left as it was. An existing destination is replaced only with `Overwrite`. A destination that may be the input is refused: one whose full path is the input's (ignoring case on Windows and macOS, and resolving a symbolic link in the last segment on .NET 6 and later), and, when replacing, an existing file with the input's length and last-write time. That also refuses a copy whose timestamps were copied. These checks are best-effort safeguards, not proof of file identity. On Unix, a destination that is a symbolic link is replaced as a link, and its target is unchanged. Other hard links to a replaced file keep its old content, and on Windows replacing a hard link to the open input fails. The destination directory is not flushed, and no power-loss durability is claimed.
 
+`Sign`, `SignAsync`, `Timestamp`, and `TimestampAsync` are terminal calls that add one CMS signature or one RFC 3161 document timestamp after the described edits, to an empty writable seekable stream or to a file path (`PdfFileSaveOptions` applies as for `Save`). `Sign` takes an `IPdfExternalSigner`, an optional `ITimestampAuthority` that stores a timestamp inside the signature, and `PdfSignatureOptions`, or an existing `IPdfSignatureProvider`. `Timestamp` takes an `ITimestampAuthority` and optional options. Existing engine defaults apply, including the `adbe.pkcs7.detached` format unless the options choose `PadesBaselineB`.
+
+```csharp
+await PdfWorkflow.FromFile("order.pdf")
+    .Fill("Customer", "Ada Lovelace")
+    .SignAsync("order-signed.pdf", signer, new PdfSignatureOptions { FieldName = "Approval" }, authority, cancellationToken: cancellationToken);
+```
+
+A signing terminal saves the ordinary edits to a private temporary file through the run's one editor and has that editor sign the file, so the original input opens once and the 8 MiB signature appendix never holds a large edit such as a streamed attachment. The edits add at most one revision and the signature or document timestamp adds a separate one; with no edits only the signature revision is added, and an embedded signature timestamp adds none. The signed file is copied to a stream, or published from its temporary sibling to a path, only after the signer and any authority have finished. A signer, authority, size, validation, or cancellation failure before that leaves a destination stream empty and a destination file as it was. A failure or cancellation while copying to a stream truncates it to its starting length on a best-effort basis. The signer, provider, and authority are each called at most once; a reservation overflow throws `PdfSignatureTooLargeException` and is never retried, so a caller starts a new workflow with a larger `ReservedContentsBytes`. Temporary disk use can follow the output size. Signing to the input and adding more than one signature or timestamp are not offered. The engine's certification, field-lock, permission, and appearance checks apply unchanged, and host exception details stay sanitized by the engine.
+
 ### Combine PDFs
 
 ```csharp

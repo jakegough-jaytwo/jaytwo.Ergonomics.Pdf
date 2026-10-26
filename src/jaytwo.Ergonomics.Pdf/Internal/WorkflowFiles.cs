@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace jaytwo.Ergonomics.Pdf.Internal;
 
@@ -65,6 +67,53 @@ internal static class WorkflowFiles
         }
 
         File.Replace(temporary, target, null);
+    }
+
+    // Spec F20: copies a finished staging file from its start to an empty destination in 1 MiB blocks. A failure or
+    // cancellation sets the destination back to its starting length, as far as it allows.
+    public static async Task CopyAsync(Stream staging, Stream destination, bool useAsync, CancellationToken cancellationToken)
+    {
+        long start = destination.Position;
+        try
+        {
+            staging.Position = 0;
+            var buffer = new byte[1024 * 1024];
+            while (true)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                int read = useAsync
+                    ? await staging.ReadAsync(buffer, 0, buffer.Length, cancellationToken).ConfigureAwait(false)
+                    : staging.Read(buffer, 0, buffer.Length);
+                if (read == 0)
+                {
+                    break;
+                }
+
+                if (useAsync)
+                {
+                    await destination.WriteAsync(buffer, 0, read, cancellationToken).ConfigureAwait(false);
+                }
+                else
+                {
+                    destination.Write(buffer, 0, read);
+                }
+            }
+
+            destination.Flush();
+        }
+        catch
+        {
+            try
+            {
+                destination.SetLength(start);
+                destination.Position = start;
+            }
+            catch (Exception rollback) when (rollback is IOException || rollback is NotSupportedException || rollback is ObjectDisposedException)
+            {
+            }
+
+            throw;
+        }
     }
 
     public static IOException Exists(string target)

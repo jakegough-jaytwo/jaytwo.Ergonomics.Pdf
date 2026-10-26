@@ -15,8 +15,9 @@ namespace jaytwo.Ergonomics.Pdf;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Describing an operation reads nothing. A terminal call (<c>Save</c>, <c>SaveAsync</c>, <c>AppendToSource</c>, or
-/// <c>AppendToSourceAsync</c>) opens the input, applies every operation through one <see cref="PdfDocumentEditor"/>, and
+/// Describing an operation reads nothing. A terminal call (<c>Save</c>, <c>SaveAsync</c>, <c>AppendToSource</c>,
+/// <c>AppendToSourceAsync</c>, or, for a signature or document timestamp, <c>Sign</c>, <c>SignAsync</c>, <c>Timestamp</c>, or
+/// <c>TimestampAsync</c>) opens the input, applies every operation through one <see cref="PdfDocumentEditor"/>, and
 /// appends at most one revision. Form operations apply first: every fill, as one all-or-nothing bulk fill that holds the
 /// last value described for each field, then one flatten. The other operations then apply in the order described
 /// (spec F5). A workflow runs once: after a terminal call has begun, whether it succeeds, fails, or is
@@ -35,7 +36,7 @@ namespace jaytwo.Ergonomics.Pdf;
 /// The builder is not thread-safe, except that of concurrent terminal calls exactly one runs.
 /// </para>
 /// </remarks>
-public sealed class PdfWorkflowBuilder
+public sealed partial class PdfWorkflowBuilder
 {
     // Spec F8: the only MIME types a path attachment's extension sets.
     private static readonly Dictionary<string, string> MimeTypes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
