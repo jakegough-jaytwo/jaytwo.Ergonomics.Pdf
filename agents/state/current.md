@@ -8,10 +8,9 @@ Retain the owner's existing maintenance order: page-list materialization, workfl
 
 ## Simplification baseline and compatibility evidence
 
-1. W-188
-2. W-189
+1. W-189
 
-Establish authority, sources, independent-review arrangements and a reproducible corpus before relying on review conclusions or refusal counts. W-188 is ready to inventory the available material; unavailable reviews and tools remain explicit evidence gaps. Other research items remain proposed until their prerequisites and execution arrangements are available. Queue placement authorizes their research scopes, not a product recommendation.
+Establish authority, sources, independent-review arrangements and a reproducible corpus before relying on review conclusions or refusal counts. W-188 is done (baseline, ledger and decision log under `agents/reference/simplification/W-188/`); the four review attachments were not found and remain an explicit evidence gap pending the owner. Other research items remain proposed until their prerequisites and execution arrangements are available. Queue placement authorizes their research scopes, not a product recommendation.
 
 ## Security hardening: retained encryption research
 
