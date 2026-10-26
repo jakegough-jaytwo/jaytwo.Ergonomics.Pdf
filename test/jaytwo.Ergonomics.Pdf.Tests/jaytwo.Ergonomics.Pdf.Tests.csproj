@@ -19,6 +19,7 @@
     <Compile Include="..\jaytwo.Pdf.Tests\Lane.cs" Link="Shared\Lane.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\OpenSslTimestampAuthority.cs" Link="Shared\OpenSslTimestampAuthority.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\PdfBuilder.cs" Link="Shared\PdfBuilder.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\Pdfsig.cs" Link="Shared\Pdfsig.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\ProbeStream.cs" Link="Shared\ProbeStream.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\StandardEncryptor.cs" Link="Shared\StandardEncryptor.cs" />
     <Compile Include="..\jaytwo.Pdf.Tests\TestPdfSource.cs" Link="Shared\TestPdfSource.cs" />
@@ -26,12 +27,19 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <Compile Include="..\jaytwo.Pdf.Tests\G7Fixtures.cs" Link="Shared\G7Fixtures.cs" />
+    <Compile Include="..\jaytwo.Pdf.Tests\WorkloadMeter.cs" Link="Shared\WorkloadMeter.cs" />
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\jaytwo.Pdf.Tests\Fixtures\validate_signature.py;..\jaytwo.Pdf.Tests\Fixtures\validate_doc_timestamp.py" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- The linked OpenSslTimestampAuthority is in the engine tests' global usings. -->
   <ItemGroup>
     <Using Include="jaytwo.Pdf.Signatures" />
+    <Using Include="jaytwo.Pdf.AcroForm" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'net48'">

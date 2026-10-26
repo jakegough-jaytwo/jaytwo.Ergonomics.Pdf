@@ -9,6 +9,15 @@ namespace jaytwo.Pdf.Tests;
 // cross-reference stream.
 internal static class TestCompat
 {
+    public static Encoding Latin1 => Encoding.GetEncoding(28591);
+
+#if NET10_0_OR_GREATER
+    public static long TotalAllocatedBytes()
+    {
+        return GC.GetTotalAllocatedBytes(precise: true);
+    }
+#endif
+
     public static byte[] Zlib(byte[] data)
     {
         throw new NotSupportedException("The workflow tests build classic cross-reference tables only.");
