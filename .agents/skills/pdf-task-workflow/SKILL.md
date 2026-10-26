@@ -33,7 +33,7 @@ An item is done when:
 - when code or build files change, the affected targets build with StyleCop warnings as errors;
 - each confirmed defect has at least one permanent regression test and a disposition: fix, documented limitation, or release blocker;
 - changed failure behavior matches the documented guarantee;
-- `README.md` and `ACCEPTANCE.md` describe changed public behavior, and no criterion was weakened;
+- `docs/behavior.md` and `ACCEPTANCE.md` describe changed public behavior, and no criterion was weakened;
 - relevant remaining limitations are written down.
 
 ## Escalation

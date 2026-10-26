@@ -44,4 +44,4 @@ A checklist of field topology, inheritance, and appearance variants that real pr
 | Radio | export value's state name; no value: `/Off` | the matching widget on, others `/Off`; no value: every widget `/Off` | kept; generated for a single widget with no on-state | n/a | unchanged |
 | Choice | export value(s); no value or an empty list: removed | n/a | generated in the subset; empty appearance for no value or an empty list | updated to match `/V`; removed for no value or an empty list | set when outside the subset |
 
-Any row a change alters is a contract change: check it against `ACCEPTANCE.md` and `README.md` before editing.
+Any row a change alters is a contract change: check it against `ACCEPTANCE.md` and `docs/behavior.md` before editing.

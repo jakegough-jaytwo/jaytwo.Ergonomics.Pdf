@@ -7,7 +7,7 @@ using Xunit;
 namespace jaytwo.Pdf.Tests;
 
 // Regression tests for B-18 fuzz smoke findings FZ-1 to FZ-7. A malformed file throws a document exception
-// (README limits row), never a framework exception from the decoder or the source stream.
+// (docs/behavior.md limits row), never a framework exception from the decoder or the source stream.
 public class FuzzRegressionTests
 {
     // FZ-1: corrupt Flate data in an object stream escaped as System.IO.InvalidDataException.

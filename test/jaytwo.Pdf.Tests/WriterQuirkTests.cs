@@ -12,7 +12,7 @@ using Xunit;
 
 namespace jaytwo.Pdf.Tests;
 
-// Spec section 8: each tolerated writer quirk has a real-world fixture, a test, and a README entry. Also the reads
+// Spec section 8: each tolerated writer quirk has a real-world fixture, a test, and a docs/behavior.md entry. Also the reads
 // that the G2 corpus showed were too strict (W-66, findings D1 and Q1 in agents/evidence/qualification/g2-corpus.md).
 public class WriterQuirkTests
 {

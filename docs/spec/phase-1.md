@@ -34,7 +34,7 @@ These hold for every Phase 1 operation.
 - Working memory is the cross-reference map plus the objects an operation touches. It does not grow with page count, image size, or attachment size. Existing budgets (D-20) carry forward; each new operation in section 6 gets a budget before it is qualified.
 - Output is either appended to the opened stream or copied, then appended, to an empty destination stream with a 1 MiB buffer.
 - An update writes a classic cross-reference table when the section at the source's `startxref` is a classic table, a hybrid file's included, and a cross-reference stream when that section is one (D-56). It never writes an object stream. Saving fails with `PdfTooLargeForClassicXrefException` before writing anything when an offset would pass 9,999,999,999 bytes (about 9.3 GiB). Reading has no such limit.
-- Decompression caps (32 MiB and 64 MiB) and structural limits stay as documented in `README.md`.
+- Decompression caps (32 MiB and 64 MiB) and structural limits stay as documented in `docs/behavior.md`.
 
 ## 5. Reads
 
@@ -209,7 +209,7 @@ Generated appearances cover WinAnsi text only (Western European languages), in H
 
 ## 8. Real-world tolerance
 
-Reading is strict to ISO 32000. A short, closed list of writer bugs that Acrobat accepts is tolerated. Each entry has a real-world fixture, a test, and a line in `README.md`. A quirk handler may look in a small window around the expected position; it never scans the whole file, so sparse reading holds.
+Reading is strict to ISO 32000. A short, closed list of writer bugs that Acrobat accepts is tolerated. Each entry has a real-world fixture, a test, and a line in `docs/behavior.md`. A quirk handler may look in a small window around the expected position; it never scans the whole file, so sparse reading holds.
 
 Candidates, confirmed or dropped by what the corpus actually contains:
 
@@ -232,7 +232,7 @@ A future 1.0 release requires every requirement in sections 5 and 6 to pass the 
 
 | Gate | Phase 1 bar |
 | --- | --- |
-| G1 Boundaries | `README.md` support matrix matches this spec, including every tolerated quirk. |
+| G1 Boundaries | `docs/behavior.md` support matrix matches this spec, including every tolerated quirk. |
 | G2 Interop corpus | About 30 committed or reproducibly fetched files, mostly real-world, covering all four categories: business and government forms (including hybrid XFA, Reader-extended, and signed forms), Office and browser exports (Word, Excel, LibreOffice, Chrome or Edge), scans and image-heavy files (including linearized), and generated reports (thousands of pages). Each has a manifest entry: producer, source, license, and what it exercises. Every write is checked with `qpdf --check`. |
 | G3 Correctness | Every requirement has a positive test, a negative test, and an independent-reader check (pypdf, qpdf, Poppler, or pyHanko). |
 | G4 Signatures | Two PDF-aware verifiers: pyHanko plus Poppler `pdfsig`. RSA and ECDSA, each digest, both formats. |

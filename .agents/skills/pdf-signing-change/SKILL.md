@@ -5,7 +5,7 @@ description: Change PDF signatures, CMS encoding, external signing, RFC 3161 tim
 
 # PDF signing change
 
-Follow the signer contract, supported algorithms, certification rules, and exclusions in `AGENTS.md`. Work from that text, not from memory. Read only the applicable `ACCEPTANCE.md` and `README.md` sections and the current task record.
+Follow the signer contract, supported algorithms, certification rules, and exclusions in `AGENTS.md`. Work from that text, not from memory. Read only the applicable `ACCEPTANCE.md` and `docs/behavior.md` sections and the current task record.
 
 Read `references/signing-matrix.md` before claiming signing evidence. It separates the properties a test or verifier can establish and names what establishes each.
 
