@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using jaytwo.Pdf.Signatures;
 
 namespace jaytwo.Pdf.Internal;
 
@@ -260,7 +261,7 @@ internal sealed class PdfIncrementalWriter
 
     // The steps that can fail (the destination length and releasing an owned source) run before the engine records the
     // revision, so a failure truncates the destination and leaves the pending edits for a retry.
-    internal void FinishWrite(Stream destination, bool leaveOpen, bool same, AppendixLayout layout)
+    internal void FinishWrite(Stream destination, bool leaveOpen, bool same, AppendixLayout layout, bool signing = false)
     {
         try
         {
@@ -275,9 +276,17 @@ internal sealed class PdfIncrementalWriter
                 _store.SwitchStream(destination, leaveOpen);
             }
         }
-        catch
+        catch (Exception failure)
         {
-            Truncate(destination, same ? _store.Length : 0);
+            if (signing)
+            {
+                PdfSigningRollbackFailure.Restore(destination, same ? _store.Length : 0, failure);
+            }
+            else
+            {
+                Truncate(destination, same ? _store.Length : 0);
+            }
+
             throw;
         }
 

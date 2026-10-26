@@ -184,13 +184,13 @@ internal sealed class PdfSigner
                     buffer.WriteTo(destination);
                 }
             }
-            catch
+            catch (Exception failure)
             {
-                PdfIncrementalWriter.Truncate(destination, same ? _store.Length : 0);
+                PdfSigningRollbackFailure.Restore(destination, same ? _store.Length : 0, failure);
                 throw;
             }
 
-            _writer.FinishWrite(destination, leaveOpen, same, layout);
+            _writer.FinishWrite(destination, leaveOpen, same, layout, signing: true);
             _store.EndBackup();
         }
         catch

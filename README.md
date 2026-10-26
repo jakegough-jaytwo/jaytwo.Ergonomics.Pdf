@@ -223,6 +223,28 @@ The workflow calls `PdfDocumentEditor.Concatenate` through its public API, retur
 
 `Save` and `SaveAsync` accept an empty writable seekable stream at position zero or a file path with `PdfFileSaveOptions`. Caller streams and sources remain open; a failed stream save truncates output to zero on a best-effort basis. File saves follow F17 as described above, checking every input for aliases, publishing through a temporary sibling, and requiring explicit overwrite. All input documents remain open together until completion because the engine accepts open documents. Async saves await opening, but the engine's assembly and output writes are synchronous; cancellation is observed during opening, before and after assembly, and before file publication. No whole PDF is buffered by the workflow.
 
+### Engine signing output failures
+
+Engine signing and document timestamps prepare the signature before destination writing. A failure before copying or appending leaves destination bytes unchanged. After a write or finalization failure, the engine attempts to restore the original length and then seek to that length. If truncation fails, partial output may remain; if seeking fails after successful truncation, length has been restored but position is uncertain. Pending engine changes are restored separately and do not prove a same-stream destination is safe for retry. Repair or verify the destination before retrying after unsuccessful restoration.
+
+The original output exception is rethrown with its identity, type, stack, and cancellation token preserved. `PdfSigningRollbackFailure.Get(exception)` returns structured diagnostics if restoration failed: `OriginalLength`, `LengthRestored`, `SeekAttempted`, `SeekSucceeded`, and `RestorationException`. The same object is attached at `exception.Data[PdfSigningRollbackFailure.DataKey]` when that dictionary accepts writes. The accessor also works if a custom exception refuses access to its data dictionary. Default exception logging may omit these diagnostics; inspect them explicitly:
+
+```csharp
+catch (Exception exception)
+{
+    var rollback = PdfSigningRollbackFailure.Get(exception);
+    if (rollback != null)
+    {
+        // Inspect rollback.LengthRestored and rollback.RestorationException
+        // before repairing or replacing the destination.
+    }
+
+    throw;
+}
+```
+
+These diagnostics apply to engine signing output, including finalization; ordinary incremental-save rollback and workflow final-copy rollback retain their existing behavior.
+
 ## Build
 
 ```bash

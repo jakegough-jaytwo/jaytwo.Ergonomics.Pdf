@@ -1,6 +1,6 @@
 # W-151 proposed owner disposition
 
-Status: proposed, 2026-10-26. No protected wording or runtime behavior has changed.
+Status: approved by the owner, 2026-10-26. The owner approved the exact AGENTS.md replacement and original-exception reporting contract, directed preservation of the restore-to-original-length-and-seek convention and ordinary-save behavior, and required net10.0/net48 regressions. Implementation is recorded in W-151. Seed-value standards questions remain subject to the primary-source verification requirement below.
 
 The owner supplied `w-151-expert-review-response.md`. It confirms the signing-guarantee conflict and recommends preserving the original exception with structured restoration diagnostics. The expert did not inspect the repository. Its standards interpretation remains review input, not verified implementation evidence or owner approval.
 

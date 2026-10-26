@@ -240,7 +240,9 @@ public sealed class PdfDocumentEditor : IDisposable
     /// The provider is called with <see cref="CancellationToken.None"/>, and this method waits for it.
     /// </summary>
     /// <remarks>
-    /// A failure follows the classes described on <see cref="PdfDocumentEditor"/>, and the document is as it was before the call.
+    /// Pending engine changes are restored after failure. Output restoration follows <see cref="PdfDocumentEditor"/>;
+    /// inspect <see cref="PdfSigningRollbackFailure.Get"/> on the original exception if restoration fails.
+    /// The physical destination may need repair before retry, even when pending changes were restored.
     /// </remarks>
     /// <param name="options">Signature field, page, and reserved contents size.</param>
     /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
@@ -254,7 +256,9 @@ public sealed class PdfDocumentEditor : IDisposable
     /// The provider is called with <see cref="CancellationToken.None"/>, and this method waits for it.
     /// </summary>
     /// <remarks>
-    /// A failure follows the classes described on <see cref="PdfDocumentEditor"/>, and the document is as it was before the call.
+    /// Pending engine changes are restored after failure. Output restoration follows <see cref="PdfDocumentEditor"/>;
+    /// inspect <see cref="PdfSigningRollbackFailure.Get"/> on the original exception if restoration fails.
+    /// The physical destination may need repair before retry, even when pending changes were restored.
     /// </remarks>
     /// <param name="destination">The same stream, or an empty writable seekable stream.</param>
     /// <param name="options">Signature field, page, and reserved contents size.</param>
@@ -270,13 +274,15 @@ public sealed class PdfDocumentEditor : IDisposable
     /// It produces the same bytes as <see cref="Sign(PdfSignatureOptions, IPdfSignatureProvider)"/> for the same provider output.
     /// </summary>
     /// <remarks>
-    /// A failure follows the classes described on <see cref="PdfDocumentEditor"/>, and the document is as it was before the call.
+    /// Pending engine changes are restored after failure. Output restoration follows <see cref="PdfDocumentEditor"/>;
+    /// inspect <see cref="PdfSigningRollbackFailure.Get"/> on the original exception if restoration fails.
+    /// The physical destination may need repair before retry, even when pending changes were restored.
     /// </remarks>
     /// <param name="options">Signature field, page, and reserved contents size.</param>
     /// <param name="provider">Builds the /Contents bytes. <see cref="IPdfSignatureProvider.Kind"/> must match <see cref="PdfSignatureOptions.Kind"/>.</param>
     /// <param name="cancellationToken">Passed to the provider, which passes it to the signer and the timestamp authority, and observed before the revision is written.</param>
     /// <returns>A task that completes when the revision is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The stream is unchanged, and the document is as it was before the call.</exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. Before writing, the destination is unchanged; after writing begins, restoration is best effort. Pending engine changes are restored.</exception>
     public Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken = default)
     {
         return Engine.SignAsync(options, provider, cancellationToken);
@@ -288,7 +294,9 @@ public sealed class PdfDocumentEditor : IDisposable
     /// A different destination receives the copy and the revision with asynchronous reads and writes.
     /// </summary>
     /// <remarks>
-    /// A failure follows the classes described on <see cref="PdfDocumentEditor"/>, and the document is as it was before the call.
+    /// Pending engine changes are restored after failure. Output restoration follows <see cref="PdfDocumentEditor"/>;
+    /// inspect <see cref="PdfSigningRollbackFailure.Get"/> on the original exception if restoration fails.
+    /// The physical destination may need repair before retry, even when pending changes were restored.
     /// </remarks>
     /// <param name="destination">The same stream, or an empty writable seekable stream.</param>
     /// <param name="options">Signature field, page, and reserved contents size.</param>
@@ -296,7 +304,7 @@ public sealed class PdfDocumentEditor : IDisposable
     /// <param name="leaveOpen">When <paramref name="destination"/> is a different stream, controls whether the document owns it.</param>
     /// <param name="cancellationToken">Passed to the provider, and observed before the write and between the 1 MiB blocks of the copy.</param>
     /// <returns>A task that completes when the revision is written.</returns>
-    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. The destination is truncated to its starting length, and the document is as it was before the call.</exception>
+    /// <exception cref="OperationCanceledException"><paramref name="cancellationToken"/> was canceled. Restoration to the starting length and a seek to that length are best effort. Pending engine changes are restored.</exception>
     public Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen = false, CancellationToken cancellationToken = default)
     {
         return Engine.SignAsync(destination, options, provider, leaveOpen, cancellationToken);
