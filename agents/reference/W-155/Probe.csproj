@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <EngineTarget Condition="'$(EngineTarget)' == '' And '$(TargetFramework)' != 'net48'">$(TargetFramework)</EngineTarget>
+    <EngineTarget Condition="'$(TargetFramework)' == 'net48'">netstandard2.0</EngineTarget>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../../src/jaytwo.Pdf/jaytwo.Pdf.csproj" SetTargetFramework="TargetFramework=$(EngineTarget)" SkipGetTargetFrameworkProperties="true" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(EngineTarget)' == 'netstandard2.0'">
+    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+    <PackageReference Include="System.Memory" Version="4.5.5" />
+  </ItemGroup>
+</Project>

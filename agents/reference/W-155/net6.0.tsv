@@ -1,0 +1,118 @@
+﻿# engine=.NETCoreApp,Version=v6.0
+rc4-40	OK	cHJvYmU=	cGF5bG9hZA==	User
+rc4-40	SAVED	prefix=True
+rc4-128	OK	cHJvYmU=	cGF5bG9hZA==	User
+rc4-128	SAVED	prefix=True
+aes-128	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-128	SAVED	prefix=True
+top-omitted	OK	cHJvYmU=	cGF5bG9hZA==	User
+top-16	FAIL	open	PdfEncryptedException	UnsupportedEncryption
+cf-omitted	OK	cHJvYmU=	cGF5bG9hZA==	User
+cf-bits	OK	cHJvYmU=	cGF5bG9hZA==	User
+cf-bad	FAIL	open	PdfEncryptedException	UnsupportedEncryption
+aes-128-empty-0	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-128-empty-stream-0	FAIL	attachment	PdfParseException	Parse error at offset 445: Encrypted stream is truncated.
+aes-128-empty-16	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-128-empty-stream-16	FAIL	attachment	PdfParseException	Parse error at offset 446: Encrypted stream is truncated.
+aes-128-empty-valid	OK		cGF5bG9hZA==	User
+aes-128-empty-valid	SAVED	prefix=True
+aes-128-crypt-identity	FAIL	attachment	PdfParseException	Parse error at offset 499: Encrypted stream is truncated.
+aes-128-crypt-default-name	FAIL	attachment	PdfParseException	Parse error at offset 484: Encrypted stream is truncated.
+aes-128-crypt-stdcf	FAIL	attachment	PdfUnsupportedFilterException	The stream filter /Crypt is not supported.
+aes-128-inline-info	FAIL	open	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-r5	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5	SAVED	prefix=True
+aes-256-r5-O--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-r5-O-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-O-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-U--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-r5-U-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-U-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-OE--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-r5-OE-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-OE-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-UE--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-r5-UE-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-UE-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-empty-0	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-r5-empty-stream-0	FAIL	attachment	PdfParseException	Parse error at offset 511: Encrypted stream is truncated.
+aes-256-r5-empty-16	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-r5-empty-stream-16	FAIL	attachment	PdfParseException	Parse error at offset 512: Encrypted stream is truncated.
+aes-256-r5-empty-valid	OK		cGF5bG9hZA==	User
+aes-256-r5-empty-valid	SAVED	prefix=True
+aes-256-r5-crypt-identity	FAIL	attachment	PdfParseException	Parse error at offset 565: Encrypted stream is truncated.
+aes-256-r5-crypt-default-name	FAIL	attachment	PdfParseException	Parse error at offset 550: Encrypted stream is truncated.
+aes-256-r5-crypt-stdcf	FAIL	attachment	PdfUnsupportedFilterException	The stream filter /Crypt is not supported.
+aes-256-r5-inline-info	FAIL	open	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256	SAVED	prefix=True
+aes-256-O--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-O-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-O-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-U--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-U-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-U-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-OE--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-OE-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-OE-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-UE--1	FAIL	open	PdfEncryptedException	MalformedEncryption
+aes-256-UE-1	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-UE-79	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-empty-0	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-empty-stream-0	FAIL	attachment	PdfParseException	Parse error at offset 445: Encrypted stream is truncated.
+aes-256-empty-16	FAIL	title	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-empty-stream-16	FAIL	attachment	PdfParseException	Parse error at offset 446: Encrypted stream is truncated.
+aes-256-empty-valid	OK		cGF5bG9hZA==	User
+aes-256-empty-valid	SAVED	prefix=True
+aes-256-crypt-identity	FAIL	attachment	PdfParseException	Parse error at offset 499: Encrypted stream is truncated.
+aes-256-crypt-default-name	FAIL	attachment	PdfParseException	Parse error at offset 484: Encrypted stream is truncated.
+aes-256-crypt-stdcf	FAIL	attachment	PdfUnsupportedFilterException	The stream filter /Crypt is not supported.
+aes-256-inline-info	FAIL	open	PdfParseException	Parse error at offset 0: Encrypted data is truncated.
+aes-256-r5-split127	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-r5-nfkc	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-r5-space	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-r5-mapped	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-r5-bidi	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-post32	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-r5-supp-private	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-r5-noncharacter	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-split127	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-nfkc	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-space	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-mapped	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-bidi	FAIL	open	PdfEncryptedException	PasswordRejected
+aes-256-post32	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-supp-private	OK	cHJvYmU=	cGF5bG9hZA==	User
+aes-256-noncharacter	OK	cHJvYmU=	cGF5bG9hZA==	User
+r6-unicode32-query	FAIL	open	PdfEncryptedException	PasswordRejected
+r5-raw-nfkc	OK	cHJvYmU=	cGF5bG9hZA==	User
+r2-inline-info	FAIL	title	PdfParseException	Parse error at offset 0: Undefined PDFDocEncoding byte 0x0E.
+plain-inline-info	OK	cHJvYmU=	cGF5bG9hZA==	Unencrypted
+plain-inline-info	SAVED	prefix=True
+qpdf-40-default-euro	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-40-default-latin	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-40-default-bullet	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-40-default-long	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-40-default-split127	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-default-euro	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-default-latin	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-default-bullet	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-default-long	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-default-split127	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-aes-euro	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-aes-latin	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-aes-bullet	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-aes-long	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-128-aes-split127	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-default-euro	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-default-latin	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-default-bullet	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-default-long	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-default-split127	FAIL	open	PdfEncryptedException	PasswordRejected
+qpdf-256-default-mapped	FAIL	open	PdfEncryptedException	PasswordRejected
+qpdf-256-r5-euro	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-r5-latin	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-r5-bullet	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-r5-long	OK	cHJvYmU=	cGF5bG9hZA==	User
+qpdf-256-r5-split127	FAIL	open	PdfEncryptedException	PasswordRejected
+qpdf-256-r5-mapped	OK	cHJvYmU=	cGF5bG9hZA==	User

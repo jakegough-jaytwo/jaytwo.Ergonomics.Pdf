@@ -1,0 +1,1116 @@
+[
+  {
+    "case": "rc4-40",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\rc4-40.pdf\nPDF Version: 1.7\nR = 2\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "rc4-128",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\rc4-128.pdf\nPDF Version: 1.7\nR = 3\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "top-omitted",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\top-omitted.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nWARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\top-omitted.pdf, object 9 0 at offset 779 -> dictionary key /Length: operation for integer attempted on object of type null: returning 0\nERROR: unsupported key length\nqpdf: errors detected\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "top-16",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\top-16.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nERROR: unsupported key length\nqpdf: errors detected\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "cf-omitted",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\cf-omitted.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "cf-bits",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\cf-bits.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "cf-bad",
+    "pypdf-error": "ValueError: Invalid key size (120) for RC4.",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\cf-bad.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-empty-0",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-empty-0.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-empty-stream-0",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-empty-stream-0.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-empty-16",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-empty-16.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-empty-stream-16",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-empty-stream-16.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-empty-valid",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-empty-valid.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-crypt-identity",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-crypt-identity.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-crypt-default-name",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-crypt-default-name.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-crypt-stdcf",
+    "pypdf-title": "probe",
+    "pypdf-error": "NotImplementedError: /Crypt filter with /Name or /Type not supported yet",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-crypt-stdcf.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-128-inline-info",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-128-inline-info.pdf\nPDF Version: 1.7\nR = 4\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-O--1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-O--1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-O-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-O-1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-O-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-O-79.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-U--1",
+    "pypdf-title": null,
+    "pypdf-error": "KeyError: 'probe.bin'",
+    "qpdf-exit": 3,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-U--1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nWARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-U--1.pdf (encryption dictionary, offset 1388): /Perms field in encryption dictionary doesn't match expected value\nqpdf: operation succeeded with warnings\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-U--1.pdf (encryption dictionary, offset 1388): /Perms field in encryption dictionary doesn't match expected value\r\nqpdf: attachment probe.bin not found\r\n"
+  },
+  {
+    "case": "aes-256-r5-U-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-U-1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-U-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-U-79.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-OE--1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-OE--1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-OE-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-OE-1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-OE-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-OE-79.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-UE--1",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 3,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-UE--1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nWARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-UE--1.pdf (encryption dictionary, offset 1388): /Perms field in encryption dictionary doesn't match expected value\nqpdf: operation succeeded with warnings\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-UE--1.pdf (encryption dictionary, offset 1388): /Perms field in encryption dictionary doesn't match expected value\r\nqpdf: attachment probe.bin not found\r\n"
+  },
+  {
+    "case": "aes-256-r5-UE-1",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-UE-1.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-UE-79",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-UE-79.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-empty-0",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-empty-0.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-empty-stream-0",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-empty-stream-0.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-empty-16",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-empty-16.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-empty-stream-16",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-empty-stream-16.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-empty-valid",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-empty-valid.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-crypt-identity",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-crypt-identity.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-crypt-default-name",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-crypt-default-name.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-crypt-stdcf",
+    "pypdf-title": "probe",
+    "pypdf-error": "NotImplementedError: /Crypt filter with /Name or /Type not supported yet",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-crypt-stdcf.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-inline-info",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-inline-info.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-O--1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-O--1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-O-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-O-1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-O-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-O-79.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-U--1",
+    "pypdf-title": null,
+    "pypdf-error": "KeyError: 'probe.bin'",
+    "qpdf-exit": 3,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-U--1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nWARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-U--1.pdf (encryption dictionary, offset 1322): /Perms field in encryption dictionary doesn't match expected value\nqpdf: operation succeeded with warnings\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-U--1.pdf (encryption dictionary, offset 1322): /Perms field in encryption dictionary doesn't match expected value\r\nqpdf: attachment probe.bin not found\r\n"
+  },
+  {
+    "case": "aes-256-U-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-U-1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-U-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-U-79.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-OE--1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-OE--1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-OE-1",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-OE-1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-OE-79",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-OE-79.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-UE--1",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 3,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-UE--1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nWARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-UE--1.pdf (encryption dictionary, offset 1322): /Perms field in encryption dictionary doesn't match expected value\nqpdf: operation succeeded with warnings\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-UE--1.pdf (encryption dictionary, offset 1322): /Perms field in encryption dictionary doesn't match expected value\r\nqpdf: attachment probe.bin not found\r\n"
+  },
+  {
+    "case": "aes-256-UE-1",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-UE-1.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-UE-79",
+    "pypdf-error": "ValueError: The length of the provided data is not a multiple of the block length.",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-UE-79.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-empty-0",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-empty-0.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-empty-stream-0",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-empty-stream-0.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-empty-16",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-empty-16.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-empty-stream-16",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-empty-stream-16.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-empty-valid",
+    "pypdf-title": null,
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-empty-valid.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-crypt-identity",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-crypt-identity.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-crypt-default-name",
+    "pypdf-title": "probe",
+    "pypdf-payload": "",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-crypt-default-name.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-crypt-stdcf",
+    "pypdf-title": "probe",
+    "pypdf-error": "NotImplementedError: /Crypt filter with /Name or /Type not supported yet",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-crypt-stdcf.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-inline-info",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-inline-info.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-split127",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-split127.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-nfkc",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-nfkc.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-nfkc.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-r5-space",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-space.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-space.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-r5-mapped",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-mapped.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-mapped.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-r5-bidi",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-bidi.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = a\u05d0\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-post32",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-post32.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-post32.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-r5-supp-private",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-supp-private.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = \udb80\udc00\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-r5-noncharacter",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-r5-noncharacter.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = \ud83f\udffe\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-split127",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-split127.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-nfkc",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-nfkc.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-nfkc.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-space",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-space.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-space.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-mapped",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-mapped.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-mapped.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-bidi",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-bidi.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = a\u05d0\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-post32",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-post32.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-post32.pdf: invalid password\r\n"
+  },
+  {
+    "case": "aes-256-supp-private",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-supp-private.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = \udb80\udc00\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "aes-256-noncharacter",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\aes-256-noncharacter.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = \ud83f\udffe\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "r6-unicode32-query",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\r6-unicode32-query.pdf\nPDF Version: 2.0\nR = 6\nP = -4\nUser password = \u1d2c\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "r5-raw-nfkc",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\r5-raw-nfkc.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = a\ufb01\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "r2-inline-info",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\r2-inline-info.pdf\nPDF Version: 1.7\nR = 2\nP = -4\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "plain-inline-info",
+    "pypdf-error": "PdfReadError: Not an encrypted file",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\plain-inline-info.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-40-default-euro",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-40-default-euro.pdf\nPDF Version: 1.3\nR = 2\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-40-default-latin",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-40-default-latin.pdf\nPDF Version: 1.3\nR = 2\nP = -4\nUser password = caf\ufffd\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-40-default-bullet",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-40-default-bullet.pdf\nPDF Version: 1.3\nR = 2\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-40-default-long",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-40-default-long.pdf\nPDF Version: 1.3\nR = 2\nP = -4\nUser password = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-40-default-split127",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-40-default-split127.pdf\nPDF Version: 1.3\nR = 2\nP = -4\nUser password = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-default-euro",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-default-euro.pdf\nPDF Version: 1.4\nR = 3\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-default-latin",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-default-latin.pdf\nPDF Version: 1.4\nR = 3\nP = -4\nUser password = caf\ufffd\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-default-bullet",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-default-bullet.pdf\nPDF Version: 1.4\nR = 3\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-default-long",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-default-long.pdf\nPDF Version: 1.4\nR = 3\nP = -4\nUser password = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-default-split127",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-default-split127.pdf\nPDF Version: 1.4\nR = 3\nP = -4\nUser password = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-aes-euro",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-aes-euro.pdf\nPDF Version: 1.6\nR = 4\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-aes-latin",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-aes-latin.pdf\nPDF Version: 1.6\nR = 4\nP = -4\nUser password = caf\ufffd\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-aes-bullet",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-aes-bullet.pdf\nPDF Version: 1.6\nR = 4\nP = -4\nUser password = \ufffd100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-aes-long",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-aes-long.pdf\nPDF Version: 1.6\nR = 4\nP = -4\nUser password = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-128-aes-split127",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-128-aes-split127.pdf\nPDF Version: 1.6\nR = 4\nP = -4\nUser password = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-default-euro",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-euro.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -4\nUser password = \u20ac100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-default-latin",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-latin.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -4\nUser password = caf\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-default-bullet",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-bullet.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -4\nUser password = \u2022100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-default-long",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-long.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -4\nUser password = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-default-split127",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-split127.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-split127.pdf: invalid password\r\n"
+  },
+  {
+    "case": "qpdf-256-default-mapped",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-default-mapped.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -4\nUser password = a\u00adb\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-r5-euro",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-euro.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = \u20ac100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-r5-latin",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-latin.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = caf\u00e9\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-r5-bullet",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-bullet.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = \u2022100\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-r5-long",
+    "pypdf-title": "probe",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-long.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "qpdf-256-r5-split127",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 2,
+    "qpdf-output": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-split127.pdf: invalid password\n",
+    "qpdf-attachment-exit": 2,
+    "qpdf-payload": "",
+    "qpdf-attachment-error": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-split127.pdf: invalid password\r\n"
+  },
+  {
+    "case": "qpdf-256-r5-mapped",
+    "pypdf-error": "WrongPasswordError: Wrong password",
+    "qpdf-exit": 0,
+    "qpdf-output": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\agents\\reference\\W-155\\fixtures\\qpdf-256-r5-mapped.pdf\nPDF Version: 1.7 extension level 3\nR = 5\nP = -4\nUser password = a\u00adb\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: allowed\nmodify other: allowed\nmodify anything: allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+    "qpdf-attachment-exit": 0,
+    "qpdf-payload": "cGF5bG9hZA==",
+    "qpdf-attachment-error": ""
+  },
+  {
+    "case": "saved/aes-128-empty-valid",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/aes-128",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/aes-256-empty-valid",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/aes-256-r5-empty-valid",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/aes-256-r5",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/aes-256",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/plain-inline-info",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/rc4-128",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  },
+  {
+    "case": "saved/rc4-40",
+    "pypdf-title": "saved",
+    "pypdf-payload": "cGF5bG9hZA==",
+    "pypdf-empty-payload": ""
+  }
+]

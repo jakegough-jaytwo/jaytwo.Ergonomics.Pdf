@@ -1,0 +1,108 @@
+{
+  "cases": 108,
+  "runtime_differences_from_windows_net10": {
+    "net8.0.tsv": {},
+    "net6.0.tsv": {},
+    "net48.tsv": {
+      "aes-256-noncharacter": [
+        "FAIL",
+        "open",
+        "ArgumentException",
+        "Invalid Unicode code point found at index 1.  Parameter name: strInput"
+      ]
+    },
+    "netstandard.tsv": {},
+    "linux-net10.0.tsv": {},
+    "linux-net8.0.tsv": {},
+    "linux-net6.0.tsv": {},
+    "linux-invariant.tsv": {
+      "aes-256-nfkc": [
+        "FAIL",
+        "open",
+        "PdfEncryptedException",
+        "PasswordRejected"
+      ],
+      "aes-256-post32": [
+        "FAIL",
+        "open",
+        "PdfEncryptedException",
+        "PasswordRejected"
+      ],
+      "r6-unicode32-query": [
+        "OK",
+        "cHJvYmU=",
+        "cGF5bG9hZA==",
+        "User"
+      ]
+    }
+  },
+  "saved": [
+    {
+      "case": "saved/aes-128-empty-valid",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/aes-128",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/aes-256-empty-valid",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/aes-256-r5-empty-valid",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/aes-256-r5",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/aes-256",
+      "embedded_stream_lengths": [
+        32,
+        32
+      ]
+    },
+    {
+      "case": "saved/plain-inline-info",
+      "embedded_stream_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "case": "saved/rc4-128",
+      "embedded_stream_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "case": "saved/rc4-40",
+      "embedded_stream_lengths": [
+        7,
+        0
+      ]
+    }
+  ],
+  "baseline_outcomes": {
+    "OK": 62,
+    "FAIL": 46
+  }
+}

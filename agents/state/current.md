@@ -14,7 +14,7 @@ Establish authority, sources, independent-review arrangements and a reproducible
 
 ## Security hardening: retained encryption research
 
-1. W-155
+(W-155 is done: `agents/reference/W-155/findings.md`; proposed corrections W-214 to W-216 and owner policy decision D-67/W-217 remain unqueued.)
 
 Encryption remains supported under every current simplification proposal. Settle interoperability questions before optional API/decoder removals; W-155's existing owner research is preserved. Confirmed defects get narrow follow-ups, not an implicit change in this investigation.
 

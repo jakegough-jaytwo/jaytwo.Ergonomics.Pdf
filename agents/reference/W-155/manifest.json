@@ -1,0 +1,546 @@
+{
+  "pypdf": "6.21.1",
+  "qpdf": "qpdf version 12.3.2\nRun qpdf --copyright to see copyright and license information.",
+  "cases": [
+    {
+      "case": "rc4-40",
+      "producer": "pypdf",
+      "sha256": "78a28ce3eb08b9036ac3cdcb3daf9cc5f9d4d2130b6578bf608886ca63a6c12b"
+    },
+    {
+      "case": "rc4-128",
+      "producer": "pypdf",
+      "sha256": "57ae4b706734c05370f591d070700c9ad765af4a51f484d527f208463963fcf0"
+    },
+    {
+      "case": "aes-128",
+      "producer": "pypdf",
+      "sha256": "e0a2f2c0bfacbcacbb78b2c334c9439253ce3d3b0c8f570fecb09877003384c0"
+    },
+    {
+      "case": "top-omitted",
+      "producer": "pypdf envelope + synthetic Length mutation",
+      "sha256": "2a1557f44b99fec2f14b66bb89426070bf6313945f7860bb991b419dd93d2d3c"
+    },
+    {
+      "case": "top-16",
+      "producer": "pypdf envelope + synthetic Length mutation",
+      "sha256": "8d5ee2425f58c28c4ef15d59c0b5c80cfbd07335d66a8b94a365b04fffa74bab"
+    },
+    {
+      "case": "cf-omitted",
+      "producer": "pypdf envelope + synthetic Length mutation",
+      "sha256": "499cecdfff43f650b82d71ed8f22b1094c20ed53ca8745779b0aa0f4c26b10f5"
+    },
+    {
+      "case": "cf-bits",
+      "producer": "pypdf envelope + synthetic Length mutation",
+      "sha256": "28167872ada844086f8250109bb08a10314e563c383f3c8c28a383382b7ba37e"
+    },
+    {
+      "case": "cf-bad",
+      "producer": "pypdf envelope + synthetic Length mutation",
+      "sha256": "b4983f51d730fe37b8f3946e8b437b30b08e0ade13faf8b579e7df00a827c5e7"
+    },
+    {
+      "case": "aes-128-empty-0",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "db6648c261025bff381e80581a0ac33637b53605170a397b11b71f0d35df5ff7"
+    },
+    {
+      "case": "aes-128-empty-stream-0",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "9d10aec5c3a42b26b5e46d5794d80086608bf3fb7ad727cdffe960a94f8b07b5"
+    },
+    {
+      "case": "aes-128-empty-16",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "441f961c7572468b35ddd387c8610ae41477fb31d964f9d6e0565075c35f412f"
+    },
+    {
+      "case": "aes-128-empty-stream-16",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "2efc708a8036f1647e59bef5f8d82189d056d293ccbb9e8dbf7853cd0ceccb2e"
+    },
+    {
+      "case": "aes-128-empty-valid",
+      "producer": "pypdf",
+      "sha256": "721eb7a31108bd2e6e52290db3f6380d68116d262c3fbc04747fb7666b124389"
+    },
+    {
+      "case": "aes-128-crypt-identity",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "7b8679c382bfb8d53033a617455648c1ba6f6df71584cd8d03a964ed22936a66"
+    },
+    {
+      "case": "aes-128-crypt-default-name",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "bc85857c611a0302c132b95bc44a38531e194634f0eae581fd0d0a2fc6961146"
+    },
+    {
+      "case": "aes-128-crypt-stdcf",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "22fbaf5b41f56326c581024de644b47ce37debb0940642c334a16d0f7fac098a"
+    },
+    {
+      "case": "aes-128-inline-info",
+      "producer": "pypdf envelope + malformed direct Info",
+      "sha256": "28753ea55e33e5ce85257acfb0ae9ede23122135a9d1f09368efeb89a82f87e2"
+    },
+    {
+      "case": "aes-256-r5",
+      "producer": "pypdf",
+      "sha256": "72af7387d87102cc76b165973f5573fdedfeb784af578a74cc14f5bfd5e647f4"
+    },
+    {
+      "case": "aes-256-r5-O--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "a08865de2365eea2f7b97e4e0a25deb2c1e1755ff31c75b52fc676cd6689cba1"
+    },
+    {
+      "case": "aes-256-r5-O-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "ac081736bb8f44a9c77dd9ddc5cb77460a9a56034ac75c771b02474a5da9797d"
+    },
+    {
+      "case": "aes-256-r5-O-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "84302b6371a546b96856d26e52e0c3ee122f007577e259f86d2e9aeb8e714626"
+    },
+    {
+      "case": "aes-256-r5-U--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "4e4b3a9a78d5b1e884ce92db1707e775918403140e5f1d423e3a75f991235666"
+    },
+    {
+      "case": "aes-256-r5-U-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "0871440ded21101e437e76ce8676b03293610f009440e9a7bdd6bad61a12ff1b"
+    },
+    {
+      "case": "aes-256-r5-U-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "9fbc6546308b046b73e8cc6b107cce2b953545697569fc9b4eca5118ec4dec4d"
+    },
+    {
+      "case": "aes-256-r5-OE--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "bc7705831fef5cd78fcf487a52cddbe0eb8e4420d67750263a19260af05d704e"
+    },
+    {
+      "case": "aes-256-r5-OE-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "d03a6c0a9b4b4a6453b508d8161f1c458f3b1cd0409d85af7f5b1977dbdfb44a"
+    },
+    {
+      "case": "aes-256-r5-OE-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "b9c835a5616b3c3324dc34525232d35a800f9e2c90985a273f3f77e7ed482d27"
+    },
+    {
+      "case": "aes-256-r5-UE--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "5514e01d640be91573e45473cedb9bb6be97d8c92ace653e60039f472081f632"
+    },
+    {
+      "case": "aes-256-r5-UE-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "37bb38fc09048eb6ff75c8c67fb2db6a2047f22a844241d58cb4e83cc9ea2b6e"
+    },
+    {
+      "case": "aes-256-r5-UE-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "f4a149ff43dc8d783bd50b563cdeebad6d720bab74b96dbe22c5ab9ba08ad77b"
+    },
+    {
+      "case": "aes-256-r5-empty-0",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "268d6c18203324e1d40a454470e987a5a671a7ff5c0b76df02d885cfaa02a66e"
+    },
+    {
+      "case": "aes-256-r5-empty-stream-0",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "eedad8e8d63d2b71fe69fb4fd7fec45a968327ae9cd3fbc84df24806b5acf09b"
+    },
+    {
+      "case": "aes-256-r5-empty-16",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "a8994949fff997b347f4cd8b6f3988bfcb7f10c1679655b18c9a125f59e437d4"
+    },
+    {
+      "case": "aes-256-r5-empty-stream-16",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "ae21027fa97880823bd159a769ba54e7fe945ee18350d509d330778779e3412e"
+    },
+    {
+      "case": "aes-256-r5-empty-valid",
+      "producer": "pypdf",
+      "sha256": "f4941d21557409b161a5e50df3e749417b6ecb044f53544afd0a96c6888d677c"
+    },
+    {
+      "case": "aes-256-r5-crypt-identity",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "e7f8bbbfa9f0b6bee6e80be546821f039d52f984f9a43a0f8d40f01d4a8d7777"
+    },
+    {
+      "case": "aes-256-r5-crypt-default-name",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "a7a4085b9ef9dee8ae54f20dcb3460b9eda696656734f6d9c148ec1a42cd345c"
+    },
+    {
+      "case": "aes-256-r5-crypt-stdcf",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "d7ffb1a0a95efbf3dde3b7277a63c77fe03332ef52e794de737d4f5d4e9faa95"
+    },
+    {
+      "case": "aes-256-r5-inline-info",
+      "producer": "pypdf envelope + malformed direct Info",
+      "sha256": "c5096443fbf98759c55667049353d92798d116b1bd67eda7f38cfc191b282e7d"
+    },
+    {
+      "case": "aes-256",
+      "producer": "pypdf",
+      "sha256": "2609eecca56f37f8182e67226d26cdb4c3e3af07be627382a9f3bddddd823333"
+    },
+    {
+      "case": "aes-256-O--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "58e839a760c168277c1aa43658d78f6a602ab95af75a7b056cd9ac18f5da4281"
+    },
+    {
+      "case": "aes-256-O-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "d871ed7fd78c56fd66b0ddfd9d4de399a30d33f98062d2224c83605af68e8927"
+    },
+    {
+      "case": "aes-256-O-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "5e753cd1bd468706d61b9f86a8179c8dcc48cec0534858b45527acb2282370f9"
+    },
+    {
+      "case": "aes-256-U--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "8bb75dd25b9c396538e06a4a9065e0d6982b5aba607440e9dba875546fa07912"
+    },
+    {
+      "case": "aes-256-U-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "582d2bf162fd01d884662e926fbb8e8387f7d81a709269fba5c95259cb734c23"
+    },
+    {
+      "case": "aes-256-U-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "fe02edc16e8824ceafc30c958850c8d3140549807f0eed60488ad9f600196249"
+    },
+    {
+      "case": "aes-256-OE--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "e532a3eea020e3a78149a3dae615ff7a078a088152ef0faf6c3564a8b6f8cda4"
+    },
+    {
+      "case": "aes-256-OE-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "78ea5521ede827734b9ae20a272aaa757ee042b9a613430841d46ebeb21c932b"
+    },
+    {
+      "case": "aes-256-OE-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "56aa306c174e3c703d15cc92291ac792f8955da766ba63b7894237f58bf11f34"
+    },
+    {
+      "case": "aes-256-UE--1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "14b38a2c7f5c6d5d77a0b5682651d32ae653291bb2df17ebeaa0680802796f91"
+    },
+    {
+      "case": "aes-256-UE-1",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "9133b7f44029eb7f86679e1b2fa4e31b15e289abf299a91926062ca8972ca8f5"
+    },
+    {
+      "case": "aes-256-UE-79",
+      "producer": "pypdf envelope + synthetic length mutation",
+      "sha256": "b12598f16394059352a14db43c7e13380b21a58b87ff800164ed878429b6eecf"
+    },
+    {
+      "case": "aes-256-empty-0",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "a95b64222bb4ff1cbb49e82fc9274941649e59b547d2581e561c7889824e1e79"
+    },
+    {
+      "case": "aes-256-empty-stream-0",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "aa46ee00edb7614bf08abe8179917a57269a9e173307e8f17249ec7e8a61b377"
+    },
+    {
+      "case": "aes-256-empty-16",
+      "producer": "pypdf envelope + malformed AES string",
+      "sha256": "3e7617e65d931b278a8a23a2e04e00be2d2dd98d81725d36b14d646e2e86b8bb"
+    },
+    {
+      "case": "aes-256-empty-stream-16",
+      "producer": "pypdf envelope + malformed AES stream",
+      "sha256": "c5304f78a07dd1e20966eca68ddcf7cc7ec7587e54c72bd524dcf4903b752720"
+    },
+    {
+      "case": "aes-256-empty-valid",
+      "producer": "pypdf",
+      "sha256": "d2dc1f5e0b3c53aee3ff37116693e664b440e9bae06bb530a86edad69a12cf00"
+    },
+    {
+      "case": "aes-256-crypt-identity",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "f0dbf0339b85e35c5ae5703ae94e1cb87c0fce5a1f4dc7c83dcd66f5ad098abc"
+    },
+    {
+      "case": "aes-256-crypt-default-name",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "1e69fc9e81d4b49b56f8bce9d4efdc03671026a07de7aa05d6ca876a13963d20"
+    },
+    {
+      "case": "aes-256-crypt-stdcf",
+      "producer": "pypdf envelope + explicit Crypt stream",
+      "sha256": "6848a9a9261d41dab0835aa7b7aac358ce0b22c9f39bce5b643a0aacc3eac0df"
+    },
+    {
+      "case": "aes-256-inline-info",
+      "producer": "pypdf envelope + malformed direct Info",
+      "sha256": "ccd37ff7ab2a38cd5af3be7e97fd64112f2ea10162522f65b89f7cd4fffaaa8d"
+    },
+    {
+      "case": "aes-256-r5-split127",
+      "producer": "pypdf",
+      "sha256": "13275abfeefddc79302155b7dc52e944be3da8d8d4c6de03225b32953329665a"
+    },
+    {
+      "case": "aes-256-r5-nfkc",
+      "producer": "pypdf",
+      "sha256": "c0acf3ab2d116a7936f3742576ad124b664e78d00d036353870551d825ffbea2"
+    },
+    {
+      "case": "aes-256-r5-space",
+      "producer": "pypdf",
+      "sha256": "da811b64890e96ef632eb2fe525f8d8a804e4d2b79ca6ee074babb07db5b575d"
+    },
+    {
+      "case": "aes-256-r5-mapped",
+      "producer": "pypdf",
+      "sha256": "da093bc68112f86908e0f803f8e466ad326efcdefb326b600a259d74c4570112"
+    },
+    {
+      "case": "aes-256-r5-bidi",
+      "producer": "pypdf",
+      "sha256": "42659075a74d0b88408e58f2f46b09e7b9425dd23194d31d492a40d70ad722c4"
+    },
+    {
+      "case": "aes-256-r5-post32",
+      "producer": "pypdf",
+      "sha256": "2b1acc9a707d18438a6fd6d8ae138a617ca54ac0ef3a88672ee0d09267190c0c"
+    },
+    {
+      "case": "aes-256-r5-supp-private",
+      "producer": "pypdf",
+      "sha256": "3b99e27e18a4678401686701af0e78ef5face06e1645358ee3b687c10ca03fcb"
+    },
+    {
+      "case": "aes-256-r5-noncharacter",
+      "producer": "pypdf",
+      "sha256": "55ed1de4b673ab115a10e35eeb9def74e13018034bb90123bc0dad70571c67e6"
+    },
+    {
+      "case": "aes-256-split127",
+      "producer": "pypdf",
+      "sha256": "1c023425ba89facbbf026e11e03157bd062fd5c9e4f0156cd00037785b18251c"
+    },
+    {
+      "case": "aes-256-nfkc",
+      "producer": "pypdf",
+      "sha256": "7a43fc59ee09448f8ff0a29dde09b43cbc2b8bb39e588f161d750d4cbb14b71b"
+    },
+    {
+      "case": "aes-256-space",
+      "producer": "pypdf",
+      "sha256": "10ac6b5e13243be1e9b48fd7f000e72a0662f01f5716f87cac62cf4d23bf3fd3"
+    },
+    {
+      "case": "aes-256-mapped",
+      "producer": "pypdf",
+      "sha256": "f2a4fc713a94d854a974d0a17385d0ef782e59d5f70cc918aefe8a9ebf62ed95"
+    },
+    {
+      "case": "aes-256-bidi",
+      "producer": "pypdf",
+      "sha256": "7d582672af9ba71fb662e45360cc4a0bae79416c0d6bf74a1231cc25cfedacd3"
+    },
+    {
+      "case": "aes-256-post32",
+      "producer": "pypdf",
+      "sha256": "c885f71a8c803dd70219d984c158d7931036eed85447460a6a92780221b02533"
+    },
+    {
+      "case": "aes-256-supp-private",
+      "producer": "pypdf",
+      "sha256": "18022711bf22ef087db79886226fad787162c7615cb1c50a2ac4af7c1d4ba865"
+    },
+    {
+      "case": "aes-256-noncharacter",
+      "producer": "pypdf",
+      "sha256": "140c18125cdffc870aebb81450c7ca661420fa713dd5452c0387bf05963302e5"
+    },
+    {
+      "case": "r6-unicode32-query",
+      "producer": "pypdf crypto with explicit Unicode 3.2 query bytes",
+      "sha256": "d3cd6ee2a43ea5bdfc5d4bfcb630fc0ca6741ff2718402ef0e6db2f2f477b373"
+    },
+    {
+      "case": "r5-raw-nfkc",
+      "producer": "pypdf crypto with explicit R5 UTF-8 bytes",
+      "sha256": "b7b15173312e0d4a9a82658e80233207f4bbe7bcf7717b1df54ed5baccbda778"
+    },
+    {
+      "case": "r2-inline-info",
+      "producer": "pypdf envelope + malformed direct Info",
+      "sha256": "fbfb78031f52427903900aacf2b23737cfe234b8b9c2a9a9ffbcc2467fc89ccd"
+    },
+    {
+      "case": "plain-inline-info",
+      "producer": "pypdf plaintext + malformed direct Info",
+      "sha256": "2b11815eeb731d34677f028c20dae2d70d603f54e166dfd7d060b7e9e3820cf1"
+    },
+    {
+      "case": "qpdf-40-default-euro",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "42fe5aaf90999ec5b3df5fbc2bdd044fccdd6bf0950615ef4af750666fa99146"
+    },
+    {
+      "case": "qpdf-40-default-latin",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "1729f903dc0d8d73392e96b9818182745537b77d3ff54f3cce0ed66d5649006c"
+    },
+    {
+      "case": "qpdf-40-default-bullet",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "3db4abb6246954c0ef80a1f37a38987865ce035e1ed08c25d4c41d0e5241d18d"
+    },
+    {
+      "case": "qpdf-40-default-long",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "9c2f9b4f79155e47150bc5656d057dc0873bc67b1599aa3749e5f131ea0cfe57"
+    },
+    {
+      "case": "qpdf-40-default-split127",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "78911aca5cb1a523361fdff5102b358e3c6fad5e31dc4682530fe7b3df95ea53"
+    },
+    {
+      "case": "qpdf-128-default-euro",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "6a5c110ebf163a2af59051b7c457c71422a45268ba654224c90a62716cafbb5f"
+    },
+    {
+      "case": "qpdf-128-default-latin",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "482664939b1d5602ec4f8dfcaa8f693c812dd21cace6f03708b3ed1c68b12e45"
+    },
+    {
+      "case": "qpdf-128-default-bullet",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "4e876ee266867dda0a5dd0940475baa0f616d0fd2b180a5be368375603c49ce8"
+    },
+    {
+      "case": "qpdf-128-default-long",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "a72cafb6b19b7ee7d230d087810459062ec2a319170e5308b50cd7fc412dc11b"
+    },
+    {
+      "case": "qpdf-128-default-split127",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "58d9bc5d757fd8f4f8b14f7b11ae070090edac9cf497f3e225b63f59959b8a56"
+    },
+    {
+      "case": "qpdf-128-aes-euro",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "fc87735736f8c2d9ca226065471b0b2f9f91652f96ef19e9c9c76eee11650c9f"
+    },
+    {
+      "case": "qpdf-128-aes-latin",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "d93c701388f292a4c0dc0a51c92b2a5bcbcad15d4856d98def30b7d9e1f4ad5e"
+    },
+    {
+      "case": "qpdf-128-aes-bullet",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "5405b9f7b3e8def1f530154fde67899a1eb289f51d0dfc7728c1bb68c2850b6b"
+    },
+    {
+      "case": "qpdf-128-aes-long",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "77fe998ff2da56e962ab8e8cf4fdbb097939dc2262d58398702df4afb5bd993e"
+    },
+    {
+      "case": "qpdf-128-aes-split127",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "7abcebbed6e575404c31dd0f841057d6c529ee9aeac18aab5e01113263d0eb39"
+    },
+    {
+      "case": "qpdf-256-default-euro",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "26b7c8dcc04b4e4c0a2a815339bcc1fde361372f9def2c171b20725de926ee75"
+    },
+    {
+      "case": "qpdf-256-default-latin",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "3916a568e79c4468d701d119a9baf8f88ad6b795b0b3c7b2816e1df7462b02d4"
+    },
+    {
+      "case": "qpdf-256-default-bullet",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "f072875e4a6ab970e107a15bbe2c21c87b9683f086f1b856b29a7fc171228926"
+    },
+    {
+      "case": "qpdf-256-default-long",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "ff2cf7ad697471a7d8439a2ebd7a7e14a0c370586aab11e9cb5d12bb3629bcfd"
+    },
+    {
+      "case": "qpdf-256-default-split127",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "bec7da939dfafed0cf8669b00e18b709cfa2f3755eaeffb0042d1e9ae317ff35"
+    },
+    {
+      "case": "qpdf-256-default-mapped",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "66db0a48ddd48caf721ede5fa1f13c15c959d0c34cca19bd7da4b192ea68b3cb"
+    },
+    {
+      "case": "qpdf-256-r5-euro",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "84bea8f0db23ddf1bd417d678e6717b2ad3d8bf632ede6a4a3f8ef1862528b0e"
+    },
+    {
+      "case": "qpdf-256-r5-latin",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "782579d16be0a0e4292447c7cfb1d0a6b9937477bcb75d566e8ff39e29cd6b42"
+    },
+    {
+      "case": "qpdf-256-r5-bullet",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "90a5729e581d6397ff446ff2e3245551fbc30740b3755afc8fdd1a9e49bd5938"
+    },
+    {
+      "case": "qpdf-256-r5-long",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "85b9cbee8786b27eca444dc84699689345eb3b1a415288090e6a4d66167630b5"
+    },
+    {
+      "case": "qpdf-256-r5-split127",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "8f30653386c6f0a0a2afe6b4b65007a281a7754b31be8a1d24a6278d2c5214f8"
+    },
+    {
+      "case": "qpdf-256-r5-mapped",
+      "producer": "qpdf CLI (pypdf plaintext input)",
+      "sha256": "10096bcf8242c11855eaf65e940a7cb392e346f08a9d8dccecf6043634172b1f"
+    }
+  ]
+}
