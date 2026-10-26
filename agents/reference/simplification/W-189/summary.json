@@ -1,0 +1,402 @@
+{
+ "denominators": {
+  "tracked_pdfs": 51,
+  "unclassifiable": [
+   "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf"
+  ]
+ },
+ "combine-all": {
+  "accepted_now": 30,
+  "refused_now": 21,
+  "of": 51,
+  "newly_refused_by_category_of_accepted": {
+   "tagged": 8,
+   "signed-or-certified": 2,
+   "usage-rights": 2,
+   "xfa": 2,
+   "active-content": 3,
+   "attachments-or-AF": 1,
+   "optional-content": 0,
+   "field-lock": 1,
+   "outlines-labels-dests": 11
+  },
+  "pairwise_intersections": {
+   "tagged & usage-rights": 2,
+   "tagged & xfa": 2,
+   "tagged & active-content": 2,
+   "tagged & outlines-labels-dests": 3,
+   "signed-or-certified & field-lock": 1,
+   "signed-or-certified & outlines-labels-dests": 1,
+   "usage-rights & xfa": 2,
+   "usage-rights & active-content": 2,
+   "xfa & active-content": 2,
+   "active-content & outlines-labels-dests": 1,
+   "field-lock & outlines-labels-dests": 1
+  },
+  "union_all_categories": 18,
+  "union_excluding_outlines_labels_dests": 12,
+  "core_accepted_after_all_named_preparations": 2,
+  "core_accepted_after_all_named_preparations_files": [
+   "gpo-bills-118hr815enr.pdf",
+   "pyhanko-signed.pdf"
+  ],
+  "core_still_blocked": [
+   "chrome-invoice.pdf",
+   "chrome-ledger-2000p.pdf",
+   "edge-handbook.pdf",
+   "excel-invoice.pdf",
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "powerpoint-photos.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf",
+   "word-report.pdf"
+  ],
+  "scenarioB_with_untagged_derivative_accepted": 8,
+  "scenarioB_still_blocked": [
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf"
+  ],
+  "files_by_category": {
+   "tagged": [
+    "chrome-invoice.pdf",
+    "chrome-ledger-2000p.pdf",
+    "edge-handbook.pdf",
+    "excel-invoice.pdf",
+    "irs-fw9-2024-03.pdf",
+    "powerpoint-photos.pdf",
+    "va-21-4138.pdf",
+    "word-report.pdf"
+   ],
+   "signed-or-certified": [
+    "gpo-bills-118hr815enr.pdf",
+    "pyhanko-signed.pdf"
+   ],
+   "usage-rights": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "xfa": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "active-content": [
+    "frb-beige-book-2024-01.pdf",
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "attachments-or-AF": [
+    "qpdf-attachment.pdf"
+   ],
+   "optional-content": [],
+   "field-lock": [
+    "gpo-bills-118hr815enr.pdf"
+   ],
+   "outlines-labels-dests": [
+    "edge-handbook.pdf",
+    "frb-beige-book-2024-01.pdf",
+    "gpo-bills-118hr815enr.pdf",
+    "irs-f5500-2005.pdf",
+    "libreoffice-calc-ledger.pdf",
+    "libreoffice-form-pypdf-inherited.pdf",
+    "libreoffice-form.pdf",
+    "naca-rm-19930086000.pdf",
+    "nbs-circular-1.pdf",
+    "powerpoint-photos.pdf",
+    "word-report.pdf"
+   ]
+  }
+ },
+ "combine-page1": {
+  "accepted_now": 30,
+  "refused_now": 21,
+  "of": 51,
+  "newly_refused_by_category_of_accepted": {
+   "tagged": 8,
+   "signed-or-certified": 2,
+   "usage-rights": 2,
+   "xfa": 2,
+   "active-content": 3,
+   "attachments-or-AF": 1,
+   "optional-content": 0,
+   "field-lock": 1,
+   "outlines-labels-dests": 11
+  },
+  "pairwise_intersections": {
+   "tagged & usage-rights": 2,
+   "tagged & xfa": 2,
+   "tagged & active-content": 2,
+   "tagged & outlines-labels-dests": 3,
+   "signed-or-certified & field-lock": 1,
+   "signed-or-certified & outlines-labels-dests": 1,
+   "usage-rights & xfa": 2,
+   "usage-rights & active-content": 2,
+   "xfa & active-content": 2,
+   "active-content & outlines-labels-dests": 1,
+   "field-lock & outlines-labels-dests": 1
+  },
+  "union_all_categories": 18,
+  "union_excluding_outlines_labels_dests": 12,
+  "core_accepted_after_all_named_preparations": 2,
+  "core_accepted_after_all_named_preparations_files": [
+   "gpo-bills-118hr815enr.pdf",
+   "pyhanko-signed.pdf"
+  ],
+  "core_still_blocked": [
+   "chrome-invoice.pdf",
+   "chrome-ledger-2000p.pdf",
+   "edge-handbook.pdf",
+   "excel-invoice.pdf",
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "powerpoint-photos.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf",
+   "word-report.pdf"
+  ],
+  "scenarioB_with_untagged_derivative_accepted": 8,
+  "scenarioB_still_blocked": [
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf"
+  ],
+  "files_by_category": {
+   "tagged": [
+    "chrome-invoice.pdf",
+    "chrome-ledger-2000p.pdf",
+    "edge-handbook.pdf",
+    "excel-invoice.pdf",
+    "irs-fw9-2024-03.pdf",
+    "powerpoint-photos.pdf",
+    "va-21-4138.pdf",
+    "word-report.pdf"
+   ],
+   "signed-or-certified": [
+    "gpo-bills-118hr815enr.pdf",
+    "pyhanko-signed.pdf"
+   ],
+   "usage-rights": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "xfa": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "active-content": [
+    "frb-beige-book-2024-01.pdf",
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "attachments-or-AF": [
+    "qpdf-attachment.pdf"
+   ],
+   "optional-content": [],
+   "field-lock": [
+    "gpo-bills-118hr815enr.pdf"
+   ],
+   "outlines-labels-dests": [
+    "edge-handbook.pdf",
+    "frb-beige-book-2024-01.pdf",
+    "gpo-bills-118hr815enr.pdf",
+    "irs-f5500-2005.pdf",
+    "libreoffice-calc-ledger.pdf",
+    "libreoffice-form-pypdf-inherited.pdf",
+    "libreoffice-form.pdf",
+    "naca-rm-19930086000.pdf",
+    "nbs-circular-1.pdf",
+    "powerpoint-photos.pdf",
+    "word-report.pdf"
+   ]
+  }
+ },
+ "combine-all-consent": {
+  "accepted_now": 31,
+  "refused_now": 20,
+  "of": 51,
+  "newly_refused_by_category_of_accepted": {
+   "tagged": 8,
+   "signed-or-certified": 2,
+   "usage-rights": 2,
+   "xfa": 2,
+   "active-content": 3,
+   "attachments-or-AF": 1,
+   "optional-content": 0,
+   "field-lock": 1,
+   "outlines-labels-dests": 11
+  },
+  "pairwise_intersections": {
+   "tagged & usage-rights": 2,
+   "tagged & xfa": 2,
+   "tagged & active-content": 2,
+   "tagged & outlines-labels-dests": 3,
+   "signed-or-certified & field-lock": 1,
+   "signed-or-certified & outlines-labels-dests": 1,
+   "usage-rights & xfa": 2,
+   "usage-rights & active-content": 2,
+   "xfa & active-content": 2,
+   "active-content & outlines-labels-dests": 1,
+   "field-lock & outlines-labels-dests": 1
+  },
+  "union_all_categories": 18,
+  "union_excluding_outlines_labels_dests": 12,
+  "core_accepted_after_all_named_preparations": 2,
+  "core_accepted_after_all_named_preparations_files": [
+   "gpo-bills-118hr815enr.pdf",
+   "pyhanko-signed.pdf"
+  ],
+  "core_still_blocked": [
+   "chrome-invoice.pdf",
+   "chrome-ledger-2000p.pdf",
+   "edge-handbook.pdf",
+   "excel-invoice.pdf",
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "powerpoint-photos.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf",
+   "word-report.pdf"
+  ],
+  "scenarioB_with_untagged_derivative_accepted": 8,
+  "scenarioB_still_blocked": [
+   "frb-beige-book-2024-01.pdf",
+   "irs-fw9-2024-03.pdf",
+   "qpdf-attachment.pdf",
+   "va-21-4138.pdf"
+  ],
+  "files_by_category": {
+   "tagged": [
+    "chrome-invoice.pdf",
+    "chrome-ledger-2000p.pdf",
+    "edge-handbook.pdf",
+    "excel-invoice.pdf",
+    "irs-fw9-2024-03.pdf",
+    "powerpoint-photos.pdf",
+    "va-21-4138.pdf",
+    "word-report.pdf"
+   ],
+   "signed-or-certified": [
+    "gpo-bills-118hr815enr.pdf",
+    "pyhanko-signed.pdf"
+   ],
+   "usage-rights": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "xfa": [
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "active-content": [
+    "frb-beige-book-2024-01.pdf",
+    "irs-fw9-2024-03.pdf",
+    "va-21-4138.pdf"
+   ],
+   "attachments-or-AF": [
+    "qpdf-attachment.pdf"
+   ],
+   "optional-content": [],
+   "field-lock": [
+    "gpo-bills-118hr815enr.pdf"
+   ],
+   "outlines-labels-dests": [
+    "edge-handbook.pdf",
+    "frb-beige-book-2024-01.pdf",
+    "gpo-bills-118hr815enr.pdf",
+    "irs-f5500-2005.pdf",
+    "libreoffice-calc-ledger.pdf",
+    "libreoffice-form-pypdf-inherited.pdf",
+    "libreoffice-form.pdf",
+    "naca-rm-19930086000.pdf",
+    "nbs-circular-1.pdf",
+    "powerpoint-photos.pdf",
+    "word-report.pdf"
+   ]
+  }
+ },
+ "current_refusal_reasons_combine_all": {
+  "This encryption is not supported.": 1,
+  "Assembly cannot preserve field actions or scripts.": 6,
+  "Dynamic or XFA-only forms cannot be extracted.": 1,
+  "Assembly refuses a nonempty or unresolved /OCProperties.": 2,
+  "Assembly refuses a nonempty or unresolved /AF.": 2,
+  "Encrypted input requires AllowUnencryptedOutput.": 7,
+  "Assembly cannot preserve a default appearance or its font resources.": 1,
+  "An inspected assembly dictionary cannot be resolved.": 1
+ },
+ "page1_result_equals_all_pages_result_for_every_fixture": true,
+ "silent_feature_loss_on_accepted_consent_run": {
+  "accepted": 31,
+  "feature_dropped_count": {
+   "tagged": 8,
+   "named-destinations": 1,
+   "outlines": 7,
+   "xmp": 13,
+   "acroform": 3,
+   "certified": 1,
+   "page-labels": 4,
+   "signature-field": 4,
+   "signed": 2,
+   "javascript": 2,
+   "usage-rights": 2,
+   "xfa": 2,
+   "embedded-files": 1
+  }
+ },
+ "feature_counts_51": {
+  "tagged": 18,
+  "acroform": 22,
+  "field-actions": 6,
+  "javascript": 10,
+  "outlines": 16,
+  "page-labels": 7,
+  "sig-flags": 11,
+  "signature-field": 8,
+  "signed": 4,
+  "usage-rights": 6,
+  "xmp": 25,
+  "named-destinations": 3,
+  "embedded-files": 5,
+  "catalog-actions": 1,
+  "certified": 2,
+  "field-lock": 1,
+  "xfa": 3,
+  "optional-content": 2,
+  "associated-files": 2,
+  "encrypted": 7
+ },
+ "feature_counts_41_manifest_entries": {
+  "tagged": 18,
+  "acroform": 17,
+  "field-actions": 6,
+  "javascript": 10,
+  "outlines": 16,
+  "page-labels": 7,
+  "sig-flags": 11,
+  "signature-field": 8,
+  "signed": 4,
+  "usage-rights": 6,
+  "xmp": 24,
+  "named-destinations": 2,
+  "embedded-files": 4,
+  "catalog-actions": 1,
+  "certified": 2,
+  "field-lock": 1,
+  "xfa": 3,
+  "optional-content": 2,
+  "associated-files": 1,
+  "encrypted": 2
+ },
+ "decode_filter_file_counts_51": {
+  "/FlateDecode": 34,
+  "/RunLengthDecode": 1,
+  "/DCTDecode": 8,
+  "/CCITTFaxDecode": 2,
+  "/JBIG2Decode": 1,
+  "/JPXDecode": 1
+ },
+ "files_with_any_decode_filter_51": 36
+}

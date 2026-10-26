@@ -1,0 +1,486 @@
+[
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\chrome-invoice.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2,
+  "objectsSeen": 25,
+  "sha256": "55c1e1be077dafcfbd35a03ebdd056848edc94b2b4e084f211c36e46f9962879",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\chrome-ledger-2000p.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2000,
+  "objectsSeen": 6043,
+  "sha256": "b9dffb5ea4e128e30c728304ad4392d01ae50386f1af9ea5b002372958bb0f2e",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\edge-handbook.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 16,
+  "objectsSeen": 111,
+  "sha256": "d879e10a887e7bba4a5a5a34de39af9b10fcb1a006a68f3e355b3e293e3deab5",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\excel-invoice.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 36,
+  "sha256": "2e2e21c4f2d8770fbdf3a4b9d352254a3bc09572866ece10bd7116f0d936ed77",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\frb-beige-book-2024-01.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 54,
+  "objectsSeen": 389,
+  "sha256": "27a3b7338119b347af02187d95f022413bbceb2fda34ccc81ad500db9a890617",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\gpo-bills-118hr815enr.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 110,
+  "objectsSeen": 473,
+  "sha256": "99316284269ab8a95984b9ef844c5ecc213192a71403f92bf7db1abe8d458ad5",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\imagemagick-scan.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/RunLengthDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 39,
+  "sha256": "c06fcf78bdd63d8fc03cea6d000c6214f706b8069d063f0badf050c5a80b2048",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\inkscape-network.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 33,
+  "sha256": "d2ccfbb0f444c2bb9d4c604cf04946b8dcefc275a8defeead5f4af39806caa11",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\irs-f5500-2005.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 53,
+  "sha256": "82ede2ba5772f9c016b73a31b43dbd0b4eb7f815a5dffa7f71fadf8ea54e2031",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\irs-fw9-2024-03.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 6,
+  "objectsSeen": 163,
+  "sha256": "3666b6ea96228b6bc3d577654ad15d4d395c54adfe2902fb0effdc98d629e1f2",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\libreoffice-calc-ledger.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 62,
+  "objectsSeen": 260,
+  "sha256": "960451c7002939aa4150ecf1570d7d436ca047fc39d4db7486cebcb5d2c73350",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\libreoffice-form-pypdf-inherited.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 79,
+  "sha256": "c43a18fcc1a5469c9ca18166a509154decb4cb75f6601b44bf5677da979f95cf",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\libreoffice-form.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 83,
+  "sha256": "8e26935b8973cc5858b6784ffb17997e681cc98908f1f822ad5b8acd99a87cfb",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\LinkAnnot-appearances.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 9,
+  "sha256": "e08d012b322a91c45dc633ae09647cfcc850fddb6af25f32b3e8cb1c620187e0",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\list-of-uri-actions-with-base.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "8f04e8b98224c40e13b151250e53c9be1dff8bff7dbc129a540e58c53ab5843d",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\list-of-uri-actions.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 7,
+  "sha256": "e4bfe5e2d79baa2f431895bc046c7fc5bbd3cea4fa17a42e89a22124678240f0",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\matplotlib-report.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 6,
+  "objectsSeen": 125,
+  "sha256": "9a90163d491fb38100d50c9e4b55ed9082ecaf0ba2a1625113bf121ea2d1cdd2",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\ms-print-to-pdf.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 39,
+  "sha256": "136dd7a1fdd9a2a71add64247d262fb0ed20d654f15180bb4819450634f81b87",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\naca-rm-19930086000.pdf",
+  "features": [],
+  "filters": [
+   "/CCITTFaxDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 12,
+  "objectsSeen": 111,
+  "sha256": "a38439989706fdc9f7ef1bef77c79999f90538d95dbf9f540cf6cefb182b5a83",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\naca-tn2350.pdf",
+  "features": [],
+  "filters": [
+   "/CCITTFaxDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 24,
+  "objectsSeen": 320,
+  "sha256": "635eea48c00b14694deb407ca9dc2490c8935425bb5f0bdf40650b81f9b21522",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\nbs-circular-1.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode",
+   "/JBIG2Decode",
+   "/JPXDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 40,
+  "sha256": "bb71fa7bf60f5366a6dc7a3117adc7e468667a54028ceddec8f52d4b0717b6d9",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\powerpoint-photos.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 25,
+  "sha256": "97796b9b10749c37233ceac4c147cf9f2c7f66122c5dd953e594ceddc1e78970",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\pyhanko-sigfield.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "cb17f3d5fefa87a92b58cd060769a2ebc3699c8dd0af2f7bace59219486377bf",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\pyhanko-signed.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "eee38c134754593a7d002a88323580146230a1bac42d946c1b24a22b6f03c8ae",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\pypdf-base.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "e41fd1b326c1b7080536b970c7a484f148d8be6ca11351cab827f696337148dd",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\qpdf-attachment.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "74585b8a4c91638dc766ec54a5f5608ebea05a21e3a22af849d8c455aede9b3a",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\qpdf-encrypted.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "251b388617a8b48c6861c9e40211ff206343c5ac49d071b111ea3a4b9d41da51",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\qpdf-object-streams.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "3163c04eaea009e407f48042bcd66417b4f19a8252c3b05546e78347d35b9b63",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\uri-ismap-test.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 8,
+  "sha256": "07d2d7443b61ecf9cd37279af613ab5c9f839f427d5b49ec857dd40d26a9f9f9",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\va-21-4138.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2,
+  "objectsSeen": 188,
+  "sha256": "b3f2006206fc43777989a3623968a28c4dc2d9e895620994d58e0e5d0f53c465",
+  "hashMatchesManifest": false
+ },
+ {
+  "path": "C:\\Users\\Jake\\AppData\\Local\\Temp\\claude\\c--jake-git-jaytwo-Ergonomics-Pdf\\0f98bb93-d3c6-4dda-b1d0-199ebbc6adaa\\scratchpad\\out\\word-report.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 37,
+  "sha256": "969c6dc5138ff99afafe1bae2cba0fcb933946b1bc25284adca94d4a0add44a9",
+  "hashMatchesManifest": false
+ }
+]

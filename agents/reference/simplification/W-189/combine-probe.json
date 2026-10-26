@@ -1,0 +1,1226 @@
+[
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfEncryptedException: This encryption is not supported.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfEncryptedException: This encryption is not supported.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfEncryptedException: This encryption is not supported.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=39013",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=36575",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=39013",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=2059720",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=16175",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=2059720",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=94619",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=44939",
+    "omissions": "MissingDestination=15"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=94619",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=189682",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=181726",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=189682",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=684655",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=151542",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=684655",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=285444",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=35751",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=285444",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Dynamic or XFA-only forms cannot be extracted.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Dynamic or XFA-only forms cannot be extracted.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Dynamic or XFA-only forms cannot be extracted.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=280860",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=93640",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=280860",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=345740",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=345740",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=345740",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=35803",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=20477",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=35803",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=77458",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=55460",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=77458",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=223523",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=25909",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=223523",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54207",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54207",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54207",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54314",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54314",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=54314",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=35261",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=19874",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=35261",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=509156",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=424643",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=509156",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=424529",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=32243",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=424529",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=751550",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=22919",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=751550",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=318917",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=115158",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=318917",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /OCProperties.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=473919",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=115586",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=473919",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve field actions or scripts.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=829791",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=820598",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=829791",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=260067",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=203404",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=260067",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfEncryptionRestrictedException: The PDF password does not allow this change.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly refuses a nonempty or unresolved /AF.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=1269",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=1269",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=1269",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=2017",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=2017",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=2017",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=810",
+    "omissions": "UnsupportedLink=2"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=810",
+    "omissions": "UnsupportedLink=2"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=810",
+    "omissions": "UnsupportedLink=2"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=136959",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=136959",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=136959",
+    "omissions": "UnsupportedLink=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": "SignatureWidget=1"
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve a default appearance or its font resources.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve a default appearance or its font resources.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Assembly cannot preserve a default appearance or its font resources.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: An inspected assembly dictionary cannot be resolved.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: An inspected assembly dictionary cannot be resolved.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: An inspected assembly dictionary cannot be resolved.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+    "op": "combine-all",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+    "op": "combine-page1",
+    "credential": "user-password",
+    "result": "refused",
+    "detail": "PdfAssemblyNotSupportedException: Encrypted input requires AllowUnencryptedOutput.",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+    "op": "combine-all-consent",
+    "credential": "user-password",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+    "op": "combine-all",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+    "op": "combine-page1",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+    "op": "combine-all-consent",
+    "credential": "none",
+    "result": "accepted",
+    "detail": "bytes=506",
+    "omissions": ""
+  }
+]

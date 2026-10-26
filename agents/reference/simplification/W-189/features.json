@@ -1,0 +1,1096 @@
+[
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [
+   "NotImplementedError: only Standard PDF encryption handler is available"
+  ],
+  "sha256": "f6955c5e07c7214a323062f5ceb09f1628b599d4ca8b1dc16a85d5686c4847d5",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+  "features": [
+   "tagged"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2,
+  "objectsSeen": 389,
+  "sha256": "5f943b65535887d160c811a753868d18b5afe6bfa74ea5016e41a07ff5c3099d",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+  "features": [
+   "tagged"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2000,
+  "objectsSeen": 12298,
+  "sha256": "ea0b5289b577f7a17fbddef19d5a1cb1edd739c67cde139b6dbae048fd708a89",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+  "features": [
+   "acroform",
+   "field-actions",
+   "javascript",
+   "outlines",
+   "page-labels",
+   "sig-flags",
+   "signature-field",
+   "signed",
+   "tagged",
+   "usage-rights",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/JavaScript",
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute",
+   "relative-or-other"
+  ],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 447,
+  "sha256": "01709e690e9e2bd622fc0b87069eb3dc30c07a72246db7ae10f849e5bfafb171",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+  "features": [
+   "acroform",
+   "field-actions",
+   "javascript",
+   "outlines",
+   "page-labels",
+   "sig-flags",
+   "signature-field",
+   "tagged",
+   "usage-rights",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/JavaScript",
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute",
+   "relative-or-other"
+  ],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 443,
+  "sha256": "c991595989dafd5bff332bef16bc8f18bf2263db0799b738bdb9c528d51cf470",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+  "features": [
+   "named-destinations",
+   "outlines",
+   "tagged"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 16,
+  "objectsSeen": 508,
+  "sha256": "12da032e4f2d3f710831c3802493e32792b45bccf813dc85b3159d3fd00f865b",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+  "features": [
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 581,
+  "sha256": "9dc75910a00e7ffdc68a490c0a78df5bbc460f99a5f1ffb5d6ea78506571a791",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+  "features": [
+   "acroform",
+   "embedded-files",
+   "field-actions",
+   "javascript",
+   "outlines",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/JavaScript",
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 6,
+  "objectsSeen": 2512,
+  "sha256": "3cdda1d9975be05aa68dccf614f899726c9469239127d8d4803c04e1e0394b4c",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+  "features": [
+   "catalog-actions",
+   "outlines",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 54,
+  "objectsSeen": 449,
+  "sha256": "8b7d6baaa3f692021ec51418600a2a5ae71a4b9ae1dc0148e4b27de79b2cf230",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+  "features": [
+   "acroform",
+   "certified",
+   "field-lock",
+   "page-labels",
+   "sig-flags",
+   "signature-field",
+   "signed",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 110,
+  "objectsSeen": 403,
+  "sha256": "0ced1efb0610dbb34ab437f16c53362a847b4fb69b3025b1c876a872611b9939",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+  "features": [
+   "acroform",
+   "javascript",
+   "sig-flags",
+   "tagged",
+   "usage-rights",
+   "xfa",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 48,
+  "sha256": "5cad14f3d86f8cb0c4b9ed6e1b4f5fcefd0d492f164e56573864bafd6cdcf2a5",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/RunLengthDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 45,
+  "sha256": "2bf1a103218a48de73b2fc65de6c6bfdd41deb46d622e164301d43b9d6e022a4",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 32,
+  "sha256": "20dea582d288c9904a046ab26015d92182b377b118d36a7995cf4c8af0cc0e71",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+  "features": [
+   "acroform",
+   "embedded-files",
+   "javascript",
+   "named-destinations",
+   "optional-content",
+   "outlines",
+   "sig-flags",
+   "tagged",
+   "usage-rights",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 16,
+  "objectsSeen": 3484,
+  "sha256": "396ffad25baa737b33a67d27624f7444be3ac4e7245d287aebe5f89864f90b54",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+  "features": [
+   "page-labels",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 44,
+  "sha256": "f35aec19e5c601c370e73a2e49636caae821c4806d86b115b7527344e092d037",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+  "features": [
+   "acroform",
+   "javascript",
+   "sig-flags",
+   "tagged",
+   "usage-rights",
+   "xfa",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 6,
+  "objectsSeen": 1078,
+  "sha256": "2d420cbb4123dcf1fb82595b2359cfbb5d81f00b9df9d359fcc7af361d093f53",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+  "features": [
+   "outlines",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 62,
+  "objectsSeen": 199,
+  "sha256": "01a0452c76307d2f21712c07b87f128a177d7dda479d9b2c5ae53dcea60476ca",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+  "features": [
+   "acroform",
+   "outlines",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 51,
+  "sha256": "f833215307709b67c00499f3e1341ad3a02939ff0215f21106c7f6cc81875c43",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+  "features": [
+   "acroform",
+   "outlines",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 55,
+  "sha256": "cbef8f2cf3eb2ad547b26e9f6866812f978ec256fb10f4294c412f2300db2a72",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+  "features": [
+   "associated-files",
+   "embedded-files",
+   "outlines",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 54,
+  "sha256": "8af25afb19122dc515b585a7d3823154f799704222fafbb46b9a6a39b9eb0548",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+  "features": [
+   "encrypted",
+   "outlines",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode",
+   "/Standard"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 34,
+  "sha256": "f876ef84252a03dfbefff7506241dfb6ba5b515108d4785027e6e69fafdb20ab",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 6,
+  "objectsSeen": 81,
+  "sha256": "27b1e0f5a05e002195867d6a24f45fead5befb151532a7e96c85b20191ed8afb",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 30,
+  "sha256": "250102650dd6115f4e0fb4c921295a404fd73cf7d5ddaf248adeb73df0177a37",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+  "features": [
+   "page-labels"
+  ],
+  "filters": [
+   "/CCITTFaxDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 12,
+  "objectsSeen": 92,
+  "sha256": "d5eed87c2b2f155a06128c30a492e8a0a1037362433baaee3e9d68951fbdde47",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+  "features": [
+   "xmp"
+  ],
+  "filters": [
+   "/CCITTFaxDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 24,
+  "objectsSeen": 246,
+  "sha256": "f6803764c0c1bc9459a50cb84744a98a74a0df4b47f4a1c27803787bc9016462",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+  "features": [
+   "page-labels",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode",
+   "/JBIG2Decode",
+   "/JPXDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 29,
+  "sha256": "edaa52d57f35a6f7bd743b309a8a053d0b291b4ef5b19511e0afb42a337b0960",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+  "features": [
+   "optional-content",
+   "outlines",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 531,
+  "sha256": "f3b4436626b87fceb12cde8dd29da7432254821e3e2753103fe3500dd1f6e17d",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+  "features": [
+   "acroform",
+   "certified",
+   "field-actions",
+   "javascript",
+   "outlines",
+   "sig-flags",
+   "signature-field",
+   "signed",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 686,
+  "sha256": "8c46212815ec6a424a2f688d4aff96dba2b2a834fdddb81e6e011ed2a96a8008",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+  "features": [
+   "acroform",
+   "field-actions",
+   "javascript",
+   "outlines",
+   "sig-flags",
+   "signature-field",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/GoTo",
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 683,
+  "sha256": "3229d821dd6b07b2f38c73fa5be4ce87276a09f03df881fab2be9ef3bd5b6261",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+  "features": [
+   "outlines",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 52,
+  "sha256": "5ff533a34c2281e514a7ff5a0f139e5cc6b56bcd1d87c9e80a6cfd150d515374",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+  "features": [
+   "acroform",
+   "field-actions",
+   "javascript",
+   "page-labels",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/JavaScript",
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 1692,
+  "sha256": "780f348c34df694bb0b4dbbfaf9f22b99b9757b80d16a37ba89aadf069597281",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+  "features": [
+   "acroform",
+   "javascript",
+   "sig-flags",
+   "signature-field",
+   "tagged",
+   "usage-rights",
+   "xfa",
+   "xmp"
+  ],
+  "filters": [
+   "/Adobe.PPKLite",
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link",
+   "/Widget"
+  ],
+  "actionTypes": [
+   "/JavaScript"
+  ],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 2,
+  "objectsSeen": 402,
+  "sha256": "f534b7c43aa774ed8a9005d7e564cbf18d4ce54d04e0e0559282d95ba2c6c6be",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+  "features": [
+   "outlines",
+   "tagged",
+   "xmp"
+  ],
+  "filters": [
+   "/DCTDecode",
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 3,
+  "objectsSeen": 273,
+  "sha256": "aeb50d34ba918a7c9003e3e79bf3770b04b01e58da656994554b5a82313d0490",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+  "features": [
+   "acroform",
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "aed1bcef29c8f491c58191bfd94ad9491af63dcedb23ffebd934a9201b856a73",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+  "features": [
+   "acroform",
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "da2fe7c93a6f3338fd8fe2ff5a23a0253b6dc0f22eb444ae0beec9645bdd0931",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+  "features": [
+   "acroform",
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "9c07c3a5c86a11dc4ddac65a9631da10a8691e8fab5932126b88c05e21f51218",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+  "features": [
+   "acroform",
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "c27993c22394edeaee813d63df36bdf1feb0843ed60d12209c21dfefff2b3e4e",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+  "features": [
+   "acroform",
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 10,
+  "sha256": "5c669a32b13de7fc77f70e0882d44574f3d824a70c4bee61b8a4d3a4570c5b08",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+  "features": [
+   "associated-files",
+   "embedded-files",
+   "named-destinations",
+   "xmp"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 4,
+  "objectsSeen": 46,
+  "sha256": "7629bd356fe1a5c2d82ed08774300a2acf5bf50329dd8ec9f24b58f2528d830b",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 11,
+  "sha256": "6a10c809c7a5afe1fe7e9df0071ff10ad9ae0421605ab89735e66d245a3eb788",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute",
+   "relative-or-other"
+  ],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 16,
+  "sha256": "9cd3bd10b41fb06bfee907bb832c25b4c9913499da9ab02430f7b97f4461a8a7",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [
+   "/URI"
+  ],
+  "uriKinds": [
+   "absolute"
+  ],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 16,
+  "sha256": "c5045d62f5d5a234e1487b607c4b6218f32945be3ac81669f75a928e1c6a6b00",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+  "features": [],
+  "filters": [
+   "/DCTDecode"
+  ],
+  "annotSubtypes": [
+   "/Link"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 7,
+  "sha256": "a3a8368b9d511fbacb23bef3870a928664a6ff017c53b5c2efe91f9177e8f518",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+  "features": [
+   "acroform",
+   "sig-flags",
+   "signature-field"
+  ],
+  "filters": [],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 7,
+  "sha256": "1b95f440159cd947a069736510e2ca95a99d43e94abe58e613eed9cb801d79b1",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+  "features": [
+   "acroform",
+   "sig-flags",
+   "signature-field",
+   "signed"
+  ],
+  "filters": [
+   "/Adobe.PPKLite"
+  ],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 9,
+  "sha256": "0dc5f99225d18dae729709b6c1266b3e4681574ee2007a12dfce382036afc716",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 9,
+  "sha256": "04ae561b996e3dfebe91ac6bc59d3861a3c8d95ccfe6d6b688977b029d02f7d5",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+  "features": [],
+  "filters": [],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 4,
+  "sha256": "f2a70d070564dd6b2a8f63bee1e1f1119a46fbb51fb644fff178c7a16c107120",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+  "features": [
+   "acroform"
+  ],
+  "filters": [],
+  "annotSubtypes": [
+   "/Widget"
+  ],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 6,
+  "sha256": "283cff3703628e5bf7fc45180c54f499a58e77c113258ac1f817e4e1d4af1019",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+  "features": [
+   "embedded-files"
+  ],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 7,
+  "sha256": "356a740cdf1c07a493a00e6b03db10ef09fc31dbf8f666d7fe3f1f49e72eda6a",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+  "features": [
+   "encrypted"
+  ],
+  "filters": [
+   "/Standard"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 5,
+  "sha256": "a4096a9567f6e07370c0832465d36000f354b2c2096b109ef21643bcb20270be",
+  "hashMatchesManifest": true
+ },
+ {
+  "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+  "features": [],
+  "filters": [
+   "/FlateDecode"
+  ],
+  "annotSubtypes": [],
+  "actionTypes": [],
+  "uriKinds": [],
+  "errors": [],
+  "pages": 1,
+  "objectsSeen": 6,
+  "sha256": "61c184db8f5f08cd24e5ef4147ecd301455a1ebdca8c2f9ede75629a9b23b83b",
+  "hashMatchesManifest": true
+ }
+]
