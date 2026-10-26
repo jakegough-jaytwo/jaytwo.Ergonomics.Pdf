@@ -6,8 +6,13 @@ namespace jaytwo.Ergonomics.Pdf;
 public sealed class PdfFileSaveOptions
 {
     /// <summary>
-    /// Gets a value indicating whether an existing destination file is replaced. Without it, an existing destination is refused before the input opens.
+    /// Gets a value indicating whether a destination detected as existing may be replaced. Without it, a destination detected as existing before opening the input is refused then.
     /// </summary>
+    /// <remarks>
+    /// File saves are not coordinated across independent operations or processes targeting the same output pathname.
+    /// Callers requiring exclusive publication must serialize those operations. A false value does not guarantee
+    /// atomic create-if-absent behavior against concurrent filesystem changes.
+    /// </remarks>
     public bool Overwrite { get; init; }
 
     /// <summary>

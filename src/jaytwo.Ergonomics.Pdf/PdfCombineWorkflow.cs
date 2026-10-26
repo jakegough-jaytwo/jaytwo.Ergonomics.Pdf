@@ -182,23 +182,7 @@ public sealed class PdfCombineWorkflow
                 }
 
                 cancellationToken.ThrowIfCancellationRequested();
-                if (overwrite && File.Exists(target))
-                {
-                    var existing = new FileInfo(target);
-                    foreach (PdfCombineInput input in _inputs)
-                    {
-                        if (input.Input.FilePath is string inputPath)
-                        {
-                            var file = new FileInfo(inputPath);
-                            if (file.Exists && file.Length == existing.Length && file.LastWriteTimeUtc == existing.LastWriteTimeUtc)
-                            {
-                                throw new IOException("The destination may alias an input: its length and last-write time match.");
-                            }
-                        }
-                    }
-                }
-
-                WorkflowFiles.Publish(temporary, target, overwrite, null);
+                WorkflowFiles.Publish(temporary, target, overwrite, _inputs.Select(input => input.Input.FilePath).ToArray());
                 published = true;
             }
 

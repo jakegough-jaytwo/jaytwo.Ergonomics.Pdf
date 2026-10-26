@@ -14,18 +14,10 @@ internal static class WorkflowFiles
             ? StringComparison.OrdinalIgnoreCase
             : StringComparison.Ordinal;
 
-    // A full path, with a symbolic link in the last segment resolved where the runtime can (net6+).
+    // Resolve links in every segment. Older targets cannot resolve reparse points portably, so refuse them.
     public static string Normalize(string path)
     {
-        string full = Path.GetFullPath(path);
-#if NET6_0_OR_GREATER
-        var info = new FileInfo(full);
-        if (info.LinkTarget != null && info.ResolveLinkTarget(true) is FileSystemInfo target)
-        {
-            return target.FullName;
-        }
-#endif
-        return full;
+        return Normalize(path, 0);
     }
 
     public static bool SamePath(string first, string second)
@@ -40,11 +32,17 @@ internal static class WorkflowFiles
         return Path.Combine(directory, "." + Path.GetFileName(target) + "." + random + ".tmp");
     }
 
-    // Moves the finished temporary file to the target. An existing target is replaced only with overwrite, and only when
-    // it cannot be the input: a true alias always has the input's length and last-write time, so a match is refused even
-    // though a copy with copied timestamps matches too (D-60 item 5).
-    public static void Publish(string temporary, string target, bool overwrite, string? inputPath)
+    // D-60's best-effort checks, repeated for every input immediately before atomic publication.
+    public static void Publish(string temporary, string target, bool overwrite, params string?[] inputPaths)
     {
+        foreach (string? inputPath in inputPaths)
+        {
+            if (inputPath != null && SamePath(inputPath, target))
+            {
+                throw new IOException("The destination is the input file. Save to a different path.");
+            }
+        }
+
         var existing = new FileInfo(target);
         if (!existing.Exists)
         {
@@ -57,10 +55,16 @@ internal static class WorkflowFiles
             throw Exists(target);
         }
 
-        if (inputPath != null)
+        foreach (string? inputPath in inputPaths)
         {
+            if (inputPath == null)
+            {
+                continue;
+            }
+
             var input = new FileInfo(inputPath);
-            if (input.Exists && input.Length == existing.Length && input.LastWriteTimeUtc == existing.LastWriteTimeUtc)
+            // Length throws if input metadata is unavailable; never silently skip the safety check.
+            if (input.Length == existing.Length && input.LastWriteTimeUtc == existing.LastWriteTimeUtc)
             {
                 throw new IOException("The destination '" + target + "' may be the input file: it has the input's length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input.");
             }
@@ -133,5 +137,46 @@ internal static class WorkflowFiles
         catch (UnauthorizedAccessException)
         {
         }
+    }
+
+    private static string Normalize(string path, int links)
+    {
+        if (links > 40)
+        {
+            throw new IOException("The file path contains too many symbolic links.");
+        }
+
+        string full = Path.GetFullPath(path);
+        string root = Path.GetPathRoot(full)!;
+        string current = root;
+        string[] segments = full.Substring(root.Length).Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+        for (int index = 0; index < segments.Length; index++)
+        {
+            current = Path.Combine(current, segments[index]);
+            FileAttributes attributes;
+            try
+            {
+                attributes = File.GetAttributes(current);
+            }
+            catch (FileNotFoundException) when (index == segments.Length - 1)
+            {
+                return current;
+            }
+
+            if ((attributes & FileAttributes.ReparsePoint) == 0)
+            {
+                continue;
+            }
+
+#if NET6_0_OR_GREATER
+            FileSystemInfo info = (attributes & FileAttributes.Directory) != 0 ? new DirectoryInfo(current) : new FileInfo(current);
+            FileSystemInfo target = info.ResolveLinkTarget(true) ?? throw new IOException("The file path contains an unresolved reparse point.");
+            current = Normalize(target.FullName, links + 1);
+#else
+            throw new IOException("The file path contains a reparse point that this runtime cannot resolve safely.");
+#endif
+        }
+
+        return current;
     }
 }

@@ -17,6 +17,167 @@ public class WorkflowFileSaveTests
 
     private static readonly byte[] Previous = Encoding.ASCII.GetBytes("previous destination content");
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void intermediate_directory_links_are_checked_before_opening_the_input(bool combine)
+    {
+        using var directory = new TempDirectory();
+        byte[] input = WorkflowPdf.WithInfo();
+        string path = directory.Write("in.pdf", input);
+        string link = directory.File("linked");
+        FileLinks.CreateDirectoryLink(link, directory.Path);
+        try
+        {
+            using var exclusive = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None);
+            Action save = () =>
+            {
+                if (combine)
+                {
+                    PdfWorkflow.Combine(new[] { PdfCombineInput.FromFile(path) }).Save(Path.Combine(link, "in.pdf"), new PdfFileSaveOptions { Overwrite = true });
+                }
+                else
+                {
+                    PdfWorkflow.FromFile(path).Save(Path.Combine(link, "in.pdf"), new PdfFileSaveOptions { Overwrite = true });
+                }
+            };
+#if NET6_0_OR_GREATER
+            Assert.Throws<ArgumentException>(save);
+#else
+            Assert.Contains("reparse point", Assert.Throws<IOException>(save).Message, StringComparison.Ordinal);
+#endif
+        }
+        finally
+        {
+            Directory.Delete(link);
+        }
+
+        Assert.Equal(input, File.ReadAllBytes(path));
+        Assert.Empty(directory.Temporaries());
+    }
+
+    [Fact]
+    public async Task a_destination_created_during_processing_is_preserved_without_overwrite()
+    {
+        using var directory = new TempDirectory();
+        string destination = directory.File("out.pdf");
+        var source = new TestPdfSource(WorkflowPdf.WithInfo());
+        source.BeforeAsyncRead = _ =>
+        {
+            File.WriteAllBytes(destination, Previous);
+            source.BeforeAsyncRead = null;
+        };
+
+        await Assert.ThrowsAsync<IOException>(() => PdfWorkflow.From(source).SaveAsync(destination));
+
+        Assert.Equal(Previous, File.ReadAllBytes(destination));
+        Assert.Empty(directory.Temporaries());
+    }
+
+    [Fact]
+    public async Task a_destination_replaced_by_an_input_hard_link_during_processing_is_refused()
+    {
+        using var directory = new TempDirectory();
+        byte[] input = WorkflowPdf.Pages();
+        string path = directory.Write("in.pdf", input);
+        string destination = directory.Write("out.pdf", Previous);
+        var source = new TestPdfSource(input);
+        source.BeforeAsyncRead = _ =>
+        {
+            File.Delete(destination);
+            FileLinks.CreateHardLink(destination, path);
+            source.BeforeAsyncRead = null;
+        };
+
+        await Assert.ThrowsAnyAsync<IOException>(() => PdfWorkflow.Combine(new[] { PdfCombineInput.FromFile(path), PdfCombineInput.From(source) })
+            .SaveAsync(destination, new PdfFileSaveOptions { Overwrite = true }));
+
+        Assert.Equal(input, File.ReadAllBytes(path));
+        Assert.Equal(input, File.ReadAllBytes(destination));
+        Assert.Empty(directory.Temporaries());
+    }
+
+    [PlatformFact("LINUX")]
+    public async Task missing_input_path_metadata_prevents_overwrite()
+    {
+        using var directory = new TempDirectory();
+        byte[] input = WorkflowPdf.Pages();
+        string path = directory.Write("in.pdf", input);
+        string moved = directory.File("moved.pdf");
+        string destination = directory.Write("out.pdf", Previous);
+        var source = new TestPdfSource(input);
+        source.BeforeAsyncRead = _ =>
+        {
+            File.Move(path, moved);
+            source.BeforeAsyncRead = null;
+        };
+
+        await Assert.ThrowsAnyAsync<IOException>(() => PdfWorkflow.Combine(new[] { PdfCombineInput.FromFile(path), PdfCombineInput.From(source) })
+            .SaveAsync(destination, new PdfFileSaveOptions { Overwrite = true }));
+
+        Assert.Equal(input, File.ReadAllBytes(moved));
+        Assert.Equal(Previous, File.ReadAllBytes(destination));
+        Assert.Empty(directory.Temporaries());
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task concurrent_publications_leave_one_complete_output(bool overwrite)
+    {
+        using var directory = new TempDirectory();
+        using var ready = new Barrier(2);
+        byte[] input = WorkflowPdf.WithInfo();
+        string destination = directory.File("out.pdf");
+        Task<Exception?> Run(string title) => Task.Run(async () =>
+        {
+            var source = new TestPdfSource(input);
+            source.BeforeAsyncRead = _ =>
+            {
+                source.BeforeAsyncRead = null;
+                Assert.True(ready.SignalAndWait(TimeSpan.FromSeconds(30)));
+            };
+            return (Exception?)await Record.ExceptionAsync(() => PdfWorkflow.From(source).WithTitle(title).SaveAsync(destination, new PdfFileSaveOptions { Overwrite = overwrite }));
+        });
+
+        Exception?[] results = await Task.WhenAll(Run("First"), Run("Second"));
+
+        Assert.Contains(results, result => result == null);
+        foreach (Exception? result in results)
+        {
+            Assert.True(result == null || result is IOException, result?.ToString());
+        }
+
+        // D-65: saves do not coordinate publication. On Unix both no-overwrite moves may succeed;
+        // either outcome must leave a complete PDF, and the test must not require the race to reproduce.
+
+        byte[] output = File.ReadAllBytes(destination);
+        using PdfDocument document = WorkflowPdf.Open(output);
+        Assert.Contains(document.Metadata.Title, new[] { "First", "Second" });
+        WorkflowPdf.AssertTitled(input, output, document.Metadata.Title!);
+        Assert.Empty(directory.Temporaries());
+    }
+
+    [Fact]
+    public async Task failed_publication_removes_the_temporary_and_preserves_the_destination_directory()
+    {
+        using var directory = new TempDirectory();
+        string destination = directory.File("out.pdf");
+        var source = new TestPdfSource(WorkflowPdf.WithInfo());
+        source.BeforeAsyncRead = _ =>
+        {
+            Directory.CreateDirectory(destination);
+            source.BeforeAsyncRead = null;
+        };
+
+        Exception? failure = await Record.ExceptionAsync(() => PdfWorkflow.From(source).SaveAsync(destination, new PdfFileSaveOptions { Overwrite = true }));
+
+        Assert.True(failure is IOException || failure is UnauthorizedAccessException, failure?.ToString());
+        Assert.True(Directory.Exists(destination));
+        Assert.Empty(Directory.GetFileSystemEntries(destination));
+        Assert.Empty(directory.Temporaries());
+    }
+
     [Fact]
     public void a_path_save_publishes_a_new_file()
     {
