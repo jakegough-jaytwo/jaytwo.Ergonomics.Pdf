@@ -343,35 +343,19 @@ public sealed partial class PdfWorkflowBuilder
 
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
-        string temporary = WorkflowFiles.TemporarySibling(target);
-        bool published = false;
-        try
-        {
-            IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
-            long outputLength;
-            using (var staging = new FileStream(temporary, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, 4096, useAsync))
+        PdfWorkflowResult result = await WorkflowFiles.WriteAndPublishAsync(
+            target,
+            saveOptions.Overwrite,
+            saveOptions.FlushToDisk,
+            useAsync,
+            cancellationToken,
+            async staging =>
             {
-                appearances = await StageSignedAsync(session, staging, options, provider, useAsync, cancellationToken).ConfigureAwait(false);
-                if (saveOptions.FlushToDisk)
-                {
-                    staging.Flush(flushToDisk: true);
-                }
-
-                outputLength = staging.Length;
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-            WorkflowFiles.Publish(temporary, target, saveOptions.Overwrite, inputPath);
-            published = true;
-            return new PdfWorkflowResult(true, outputLength, appearances);
-        }
-        finally
-        {
-            if (!published)
-            {
-                WorkflowFiles.TryDelete(temporary);
-            }
-        }
+                IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = await StageSignedAsync(session, staging, options, provider, useAsync, cancellationToken).ConfigureAwait(false);
+                return new PdfWorkflowResult(true, staging.Length, appearances);
+            },
+            inputPath).ConfigureAwait(false);
+        return result;
     }
 
     // Spec F19: the ordinary edits are saved to the staging file through the run's editor, which then signs that file.

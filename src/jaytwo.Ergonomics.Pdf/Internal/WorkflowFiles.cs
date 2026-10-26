@@ -32,6 +32,40 @@ internal static class WorkflowFiles
         return Path.Combine(directory, "." + Path.GetFileName(target) + "." + random + ".tmp");
     }
 
+    // Spec F17: the shared lifecycle of a file terminal. The write callback fills a new temporary sibling; the
+    // helper flushes it when configured, observes cancellation, publishes it, and deletes it unless published.
+    public static async Task<T> WriteAndPublishAsync<T>(string target, bool overwrite, bool flushToDisk, bool asyncStream, CancellationToken cancellationToken, Func<FileStream, Task<T>> write, params string?[] inputPaths)
+    {
+        string temporary = TemporarySibling(target);
+        bool published = false;
+        try
+        {
+            T result;
+            using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, 4096, asyncStream))
+            {
+                result = await write(output).ConfigureAwait(false);
+                if (flushToDisk)
+                {
+                    output.Flush(flushToDisk: true);
+                }
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+
+            // Callers keep their inputs open through this call, so the alias check sees them as the run read them.
+            Publish(temporary, target, overwrite, inputPaths);
+            published = true;
+            return result;
+        }
+        finally
+        {
+            if (!published)
+            {
+                TryDelete(temporary);
+            }
+        }
+    }
+
     // D-60's best-effort checks, repeated for every input immediately before atomic publication.
     public static void Publish(string temporary, string target, bool overwrite, params string?[] inputPaths)
     {

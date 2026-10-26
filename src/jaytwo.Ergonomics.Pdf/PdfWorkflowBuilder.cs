@@ -678,12 +678,13 @@ public sealed partial class PdfWorkflowBuilder
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         using PdfDocumentEditor editor = session.Document.Edit();
         IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(session, editor);
-        string temporary = WorkflowFiles.TemporarySibling(target);
-        bool published = false;
-        try
-        {
-            long outputLength;
-            using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, 4096, useAsync))
+        long outputLength = await WorkflowFiles.WriteAndPublishAsync(
+            target,
+            options.Overwrite,
+            options.FlushToDisk,
+            useAsync,
+            cancellationToken,
+            async output =>
             {
                 if (useAsync)
                 {
@@ -694,28 +695,10 @@ public sealed partial class PdfWorkflowBuilder
                     editor.SaveIncremental(output, leaveOpen: true);
                 }
 
-                if (options.FlushToDisk)
-                {
-                    output.Flush(flushToDisk: true);
-                }
-
-                outputLength = output.Length;
-            }
-
-            cancellationToken.ThrowIfCancellationRequested();
-
-            // The input stays open while the output is published, so the alias check sees it as the run read it.
-            WorkflowFiles.Publish(temporary, target, options.Overwrite, inputPath);
-            published = true;
-            return new PdfWorkflowResult(outputLength > session.InputLength, outputLength, appearances);
-        }
-        finally
-        {
-            if (!published)
-            {
-                WorkflowFiles.TryDelete(temporary);
-            }
-        }
+                return output.Length;
+            },
+            inputPath).ConfigureAwait(false);
+        return new PdfWorkflowResult(outputLength > session.InputLength, outputLength, appearances);
     }
 
     private async Task<PdfWorkflowResult> AppendAsync(bool useAsync, CancellationToken cancellationToken)

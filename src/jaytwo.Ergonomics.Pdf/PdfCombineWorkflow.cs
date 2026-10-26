@@ -127,8 +127,6 @@ public sealed class PdfCombineWorkflow
         }
 
         var sessions = new List<WorkflowSession>();
-        string? temporary = null;
-        bool published = false;
         try
         {
             var selections = new List<PdfAssemblyInput>();
@@ -171,30 +169,20 @@ public sealed class PdfCombineWorkflow
             }
             else
             {
-                temporary = WorkflowFiles.TemporarySibling(target);
-                using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None))
-                {
-                    result = PdfDocumentEditor.Concatenate(selections, output, _options);
-                    if (flushToDisk)
-                    {
-                        output.Flush(flushToDisk: true);
-                    }
-                }
-
-                cancellationToken.ThrowIfCancellationRequested();
-                WorkflowFiles.Publish(temporary, target, overwrite, _inputs.Select(input => input.Input.FilePath).ToArray());
-                published = true;
+                result = await WorkflowFiles.WriteAndPublishAsync(
+                    target,
+                    overwrite,
+                    flushToDisk,
+                    false,
+                    cancellationToken,
+                    output => Task.FromResult(PdfDocumentEditor.Concatenate(selections, output, _options)),
+                    _inputs.Select(input => input.Input.FilePath).ToArray()).ConfigureAwait(false);
             }
 
             return result;
         }
         finally
         {
-            if (temporary != null && !published)
-            {
-                WorkflowFiles.TryDelete(temporary);
-            }
-
             foreach (WorkflowSession session in sessions)
             {
                 session.Dispose();
