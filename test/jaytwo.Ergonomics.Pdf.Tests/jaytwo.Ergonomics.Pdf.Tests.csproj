@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="..\jaytwo.Pdf.Tests\Fixtures\validate_signature.py;..\jaytwo.Pdf.Tests\Fixtures\validate_doc_timestamp.py" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\jaytwo.Pdf.Tests\Fixtures\validate_signature.py;..\jaytwo.Pdf.Tests\Fixtures\validate_doc_timestamp.py;..\jaytwo.Pdf.Tests\Fixtures\certify_samples.py" Link="Fixtures\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <!-- The linked OpenSslTimestampAuthority is in the engine tests' global usings. -->

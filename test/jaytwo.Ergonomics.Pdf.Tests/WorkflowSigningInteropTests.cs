@@ -177,6 +177,48 @@ public class WorkflowSigningInteropTests
         Retain(directory, "document-timestamp-" + existing, report, "Poppler does not validate ETSI.RFC3161 document timestamps.");
     }
 
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    [Trait(Lane.Trait, Lane.Interop)]
+    public void certified_workflow_fills_obey_docmdp_and_fieldmdp(bool fieldLock)
+    {
+        using var directory = new TempDirectory();
+        var arguments = new List<string> { ExternalTool.Fixture("certify_samples.py"), directory.Path };
+        if (fieldLock)
+        {
+            arguments.Add("fieldmdp");
+        }
+
+        using Process generate = ExternalTool.Start(ExternalTool.Python(), arguments.ToArray());
+        ExternalTool.Output(generate);
+        byte[] input = File.ReadAllBytes(directory.File(fieldLock ? "fieldmdp-certified.pdf" : "fillable.pdf"));
+        using PdfDocument original = WorkflowPdf.Open(input);
+        byte[] certificate = Assert.IsType<byte[]>(Assert.Single(original.Signatures).SignerCertificate);
+        using var output = new MemoryStream();
+        PdfWorkflow.From(new MemoryStream(input)).Fill(fieldLock ? "Open" : "Name", "Grace").Save(output);
+        byte[] filled = output.ToArray();
+        WorkflowPdf.AssertPrefix(input, filled);
+        Verify(directory, filled, certificate, null, "revision", "docmdp-ok,modification=FORM_FILLING", false, "certified-" + fieldLock);
+
+        using var refused = new MemoryStream();
+        Assert.ThrowsAny<PdfException>(() => PdfWorkflow.From(new MemoryStream(input)).WithTitle("Forbidden").Save(refused));
+        Assert.Equal(0, refused.Length);
+        if (fieldLock)
+        {
+            Assert.ThrowsAny<PdfException>(() => PdfWorkflow.From(new MemoryStream(input)).Fill("Locked", "Forbidden").Save(refused));
+        }
+        else
+        {
+            using AsymmetricAlgorithm key = TestKeys.Create(TestKeys.Rsa);
+            using X509Certificate2 signer = TestKeys.SelfSigned("CN=Refused Workflow", key);
+            byte[] locked = File.ReadAllBytes(directory.File("locked.pdf"));
+            Assert.ThrowsAny<PdfException>(() => PdfWorkflow.From(new MemoryStream(locked)).Sign(refused, new KeySigner(key, signer.RawData), new PdfSignatureOptions()));
+        }
+
+        Assert.Equal(0, refused.Length);
+    }
+
     private static byte[] Sign(byte[] input, string? password, IPdfExternalSigner signer, PdfSignatureOptions options, ITimestampAuthority? authority = null)
     {
         using var output = new MemoryStream();
