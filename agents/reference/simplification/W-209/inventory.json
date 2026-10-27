@@ -1,0 +1,3645 @@
+{
+ "qpdf": "qpdf version 12.3.2",
+ "corpusPdfs": 51,
+ "hashMismatches": [],
+ "requiredStreamSummary": [
+  {
+   "role": "attachment",
+   "chain": "FlateDecode",
+   "streams": 21,
+   "files": 6,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 0
+  },
+  {
+   "role": "attachment",
+   "chain": "none",
+   "streams": 1,
+   "files": 1,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 0
+  },
+  {
+   "role": "metadata",
+   "chain": "FlateDecode",
+   "streams": 1,
+   "files": 1,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 0
+  },
+  {
+   "role": "metadata",
+   "chain": "none",
+   "streams": 24,
+   "files": 24,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 0
+  },
+  {
+   "role": "objstm",
+   "chain": "FlateDecode",
+   "streams": 255,
+   "files": 18,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 0
+  },
+  {
+   "role": "xref",
+   "chain": "FlateDecode",
+   "streams": 33,
+   "files": 18,
+   "abbreviatedStreams": 0,
+   "predictorStreams": 26
+  }
+ ],
+ "candidateFilterInRequiredStream": [],
+ "xrefSectionKinds": {
+  "xref-table": 42,
+  "xref-stream": 33
+ },
+ "abbreviatedStreams": {
+  "required": 0,
+  "otherCopiedOrIgnored": 0
+ },
+ "otherStreamChainsNotDecoderDemand": {
+  "FlateDecode": 3732,
+  "none": 413,
+  "CCITTFaxDecode": 41,
+  "DCTDecode": 16,
+  "JPXDecode": 8,
+  "JBIG2Decode": 4,
+  "RunLengthDecode": 3
+ },
+ "files": {
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 98500,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0,
+   "qpdfError": "qpdf: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf (encryption dictionary, offset 97921): unsupported encryption filter\r\n"
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 83929,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 6
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 2529099,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 2002
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 141526,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 108056,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "9 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "12 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "53 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "54 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "55 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "56 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "57 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "58 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "59 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "61 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "62 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "417 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "60 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 37,
+    "none": 35
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 108056,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "9 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "12 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "53 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "54 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "55 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "56 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "57 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "58 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "59 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "61 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "62 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "417 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "60 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 37,
+    "none": 34
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 132193,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 20
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 201107,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 199744,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "35 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "538 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "579 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 7
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 408310,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "8 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "13 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "24 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "34 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "624 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "625 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "626 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "627 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "628 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "629 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "630 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "634 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "635 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "636 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "637 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "638 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "639 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "640 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "641 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "642 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "643 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "644 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "645 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "646 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "649 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "650 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "2440 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "648 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "647 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 364,
+    "none": 297
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 1026995,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "6 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "9 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "12 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "15 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "18 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "21 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "26 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "29 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "32 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "37 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "40 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "43 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "46 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "51 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "54 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "57 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "60 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "65 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "68 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "71 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "74 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "79 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "82 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "85 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "88 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "93 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "96 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "99 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "102 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "107 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "110 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "113 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "118 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "121 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "124 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "129 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "132 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "135 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "138 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "143 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "146 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "149 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "152 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "157 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "160 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "163 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "166 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "171 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "174 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "177 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "180 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "188 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "193 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "195 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "196 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "406 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "416 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "194 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 95,
+    "none": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 351700,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "372 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 123
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 149488,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "9 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "11 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 11,
+    "none": 2
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 281383,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 3,
+    "DCTDecode": 6,
+    "RunLengthDecode": 3
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 345415,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "11 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "18 0 R"
+    }
+   ],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 6,
+    "DCTDecode": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 331113,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 310315,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "7 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "10 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "15 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "33 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "36 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "39 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "42 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "68 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "69 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "70 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "71 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "72 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "73 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "74 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "75 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "76 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "77 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "78 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "79 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "80 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "81 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "82 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "83 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "84 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "85 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "86 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "87 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "88 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "89 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "90 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "91 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "92 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "93 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "94 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "95 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "96 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "97 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "98 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "99 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "100 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "101 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "103 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "104 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "106 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "107 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3398 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3425 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3483 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3484 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3485 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "105 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "102 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 67,
+    "none": 8
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 43482,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 116,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 38935,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "13 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 16
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 140462,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 126278,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "35 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "44 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "45 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "46 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "47 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "48 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "49 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "50 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "51 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "52 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "53 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "54 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "56 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "57 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1037 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1078 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1079 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "55 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "36 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "37 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "38 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "39 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "40 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "41 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "42 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "43 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 31,
+    "none": 16
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 222204,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "197 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 64
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 58103,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "50 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 22
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 57470,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "38 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 22
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 75591,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "48 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 6
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 75964,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "31 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 9
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 31875,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 50
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 508241,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 5,
+    "none": 2,
+    "DCTDecode": 2
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 173,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 426629,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 13,
+    "CCITTFaxDecode": 12
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 173,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 747880,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "227 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 54,
+    "CCITTFaxDecode": 29
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 110,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 322939,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "19 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 6,
+    "JPXDecode": 8,
+    "JBIG2Decode": 4
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 462070,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "66 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "67 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "68 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "69 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "70 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "71 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "73 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "74 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "448 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "72 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 112,
+    "none": 3,
+    "DCTDecode": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 179540,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 170673,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "5 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "12 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "115 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "116 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "117 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "118 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "119 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "120 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "121 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "123 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "124 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "633 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "645 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "122 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 121,
+    "none": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 170673,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "5 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "12 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "115 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "116 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "117 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "118 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "119 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "120 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "121 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "123 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "124 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "633 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "645 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "122 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 121,
+    "none": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 478372,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 477992,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "30 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "50 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 4,
+    "DCTDecode": 3
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 523068,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1695 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1696 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1697 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1698 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1699 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1700 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1701 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1702 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1703 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1704 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1705 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1706 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1707 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1708 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1709 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1710 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1711 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1712 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1713 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1714 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1715 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1716 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1717 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1718 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "206 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 230
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 881561,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 116,
+     "kind": "xref-stream"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 867559,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "3 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "43 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "44 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "45 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "46 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "48 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "49 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "357 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "402 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "403 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "47 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "33 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "34 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "35 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "36 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "37 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "38 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "39 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "40 0 R"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "41 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 49,
+    "none": 1,
+    "DCTDecode": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 267526,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 266739,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "37 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "271 0 R"
+    }
+   ],
+   "attachment": [],
+   "other": {
+    "FlateDecode": 7,
+    "DCTDecode": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1196,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1197,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1739,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1987,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1987,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 62877,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "45 0 R"
+    }
+   ],
+   "metadata": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "44 0 R"
+    }
+   ],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "14 0 R"
+    }
+   ],
+   "other": {
+    "FlateDecode": 15
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1338,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 2
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 2850,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 2
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1794,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 2
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 136857,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 1,
+    "DCTDecode": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 294,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 6902,
+     "kind": "xref-table"
+    },
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 294,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {
+    "none": 1
+   },
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 924,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 294,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 523,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 757,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "7 0 R"
+    }
+   ],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf": {
+   "xref": [
+    {
+     "chain": [],
+     "abbreviated": [],
+     "predictor": false,
+     "offset": 1077,
+     "kind": "xref-table"
+    }
+   ],
+   "objstm": [],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  },
+  "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf": {
+   "xref": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": true,
+     "offset": 288,
+     "kind": "xref-stream"
+    }
+   ],
+   "objstm": [
+    {
+     "chain": [
+      "FlateDecode"
+     ],
+     "abbreviated": [],
+     "predictor": false,
+     "object": "1 0 R"
+    }
+   ],
+   "metadata": [],
+   "attachment": [],
+   "other": {},
+   "otherAbbreviated": 0
+  }
+ }
+}

@@ -1,0 +1,896 @@
+﻿[
+    {
+        "id":  "xref__flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__flate-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__lzw-early0",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__lzw-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__abbr-fl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__abbr-ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__abbr-a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__abbr-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__abbr-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__chain-a85-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__chain-ahx-flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__chain-a85-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__ahx-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base Hex decode: G"
+    },
+    {
+        "id":  "xref__ahx-odd-digit",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__ahx-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__a85-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base 85 decode"
+    },
+    {
+        "id":  "xref__a85-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__a85-overflow-group",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...20; actual = 24:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__a85-single-trailing-char",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__lzw-bad-code",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: Pl_LZWDecoder::handleCode: table overflow"
+    },
+    {
+        "id":  "xref__lzw-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...file is damaged:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__lzw-no-clear-first",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__rl-truncated-run",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...file is damaged:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__rl-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__rl-trailing-after-eod",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...20; actual = 22:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__flate-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use... still be valid:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__flate-bad-adler",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xref__unsupported-dct",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...file is damaged:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__unsupported-unknown",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...file is damaged:String) [], RemoteException"
+    },
+    {
+        "id":  "xref__unsupported-in-chain",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...file is damaged:String) [], RemoteException"
+    },
+    {
+        "id":  "objstm__flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__flate-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__lzw-early0",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__lzw-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__abbr-fl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__abbr-ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__abbr-a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__abbr-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__abbr-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__chain-a85-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__chain-ahx-flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__chain-a85-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__ahx-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base Hex decode: G"
+    },
+    {
+        "id":  "objstm__ahx-odd-digit",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__ahx-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__a85-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base 85 decode"
+    },
+    {
+        "id":  "objstm__a85-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__a85-overflow-group",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...t stream header:String) [], RemoteException"
+    },
+    {
+        "id":  "objstm__a85-single-trailing-char",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__lzw-bad-code",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: Pl_LZWDecoder::handleCode: table overflow"
+    },
+    {
+        "id":  "objstm__lzw-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | stream 4 (object 3 0, offset 55): parse error while reading object"
+    },
+    {
+        "id":  "objstm__lzw-no-clear-first",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__rl-truncated-run",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | stream 4 (object 3 0, offset 63): parse error while reading object"
+    },
+    {
+        "id":  "objstm__rl-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__rl-trailing-after-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__flate-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use... still be valid:String) [], RemoteException"
+    },
+    {
+        "id":  "objstm__flate-bad-adler",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "objstm__unsupported-dct",
+        "kind":  "unsupported",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...lterable stream:String) [], RemoteException"
+    },
+    {
+        "id":  "objstm__unsupported-unknown",
+        "kind":  "unsupported",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...lterable stream:String) [], RemoteException"
+    },
+    {
+        "id":  "objstm__unsupported-in-chain",
+        "kind":  "unsupported",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...lterable stream:String) [], RemoteException"
+    },
+    {
+        "id":  "xmp__flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__flate-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__lzw-early0",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__lzw-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__abbr-fl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__abbr-ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__abbr-a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__abbr-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__abbr-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__chain-a85-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__chain-ahx-flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__chain-a85-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__ahx-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base Hex decode: G"
+    },
+    {
+        "id":  "xmp__ahx-odd-digit",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__ahx-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__a85-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: character out of range during base 85 decode"
+    },
+    {
+        "id":  "xmp__a85-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__a85-overflow-group",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__a85-single-trailing-char",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__lzw-bad-code",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: Pl_LZWDecoder::handleCode: table overflow"
+    },
+    {
+        "id":  "xmp__lzw-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__lzw-no-clear-first",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__rl-truncated-run",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__rl-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__rl-trailing-after-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__flate-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use... still be valid:String) [], RemoteException"
+    },
+    {
+        "id":  "xmp__flate-bad-adler",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__unsupported-dct",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | error decoding stream data for object 4 0: Not a JPEG file: starts with 0x3c 0x3f"
+    },
+    {
+        "id":  "xmp__unsupported-unknown",
+        "kind":  "unsupported",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "xmp__unsupported-in-chain",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | 325): error decoding stream data for object 4 0: Not a JPEG file: starts with 0x3c 0x3f"
+    },
+    {
+        "id":  "attachment__flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__flate-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__lzw-early0",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__lzw-predictor",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__abbr-fl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__abbr-ahx",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__abbr-a85",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__abbr-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__abbr-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__chain-a85-lzw",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__chain-ahx-flate",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__chain-a85-rl",
+        "kind":  "valid",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__ahx-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | 369): error decoding stream data for object 4 0: character out of range during base Hex decode: G"
+    },
+    {
+        "id":  "attachment__ahx-odd-digit",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__ahx-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__a85-badchar",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | 368): error decoding stream data for object 4 0: character out of range during base 85 decode"
+    },
+    {
+        "id":  "attachment__a85-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__a85-overflow-group",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__a85-single-trailing-char",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__lzw-bad-code",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | 361): error decoding stream data for object 4 0: Pl_LZWDecoder::handleCode: table overflow"
+    },
+    {
+        "id":  "attachment__lzw-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__lzw-no-clear-first",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__rl-truncated-run",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__rl-no-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__rl-trailing-after-eod",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__flate-truncated",
+        "kind":  "malformed",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use... still be valid:String) [], RemoteException"
+    },
+    {
+        "id":  "attachment__flate-bad-adler",
+        "kind":  "malformed",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__unsupported-dct",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | (offset 364): error decoding stream data for object 4 0: Not a JPEG file: starts with 0x00 0x00"
+    },
+    {
+        "id":  "attachment__unsupported-unknown",
+        "kind":  "unsupported",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "attachment__unsupported-in-chain",
+        "kind":  "unsupported",
+        "qpdfExit":  3,
+        "qpdfSummary":  "qpdf.exe : WARNING:  | (offset 382): error decoding stream data for object 4 0: Not a JPEG file: starts with 0x00 0x00"
+    },
+    {
+        "id":  "bomb-xmp__flate",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-xmp__rl",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-xmp__a85",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-xmp__lzw",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-objstm__flate",
+        "kind":  "limit",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...t stream header:String) [], RemoteException"
+    },
+    {
+        "id":  "bomb-objstm__rl",
+        "kind":  "limit",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...t stream header:String) [], RemoteException"
+    },
+    {
+        "id":  "bomb-objstm__a85",
+        "kind":  "limit",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...t stream header:String) [], RemoteException"
+    },
+    {
+        "id":  "bomb-objstm__lzw",
+        "kind":  "limit",
+        "qpdfExit":  2,
+        "qpdfSummary":  "qpdf.exe : WARNING:  |     + CategoryInfo          : NotSpecified: (WARNING: C:\\Use...t stream header:String) [], RemoteException"
+    },
+    {
+        "id":  "bomb-attachment__flate",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-attachment__rl",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-attachment__a85",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-attachment__lzw",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    },
+    {
+        "id":  "bomb-attachment__ahx",
+        "kind":  "limit",
+        "qpdfExit":  0,
+        "qpdfSummary":  "No syntax or stream encoding errors found; the file may still contain | errors that qpdf cannot detect"
+    }
+]

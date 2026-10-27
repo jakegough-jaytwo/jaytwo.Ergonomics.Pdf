@@ -1,0 +1,29 @@
+W-209 verification (research item; no runtime, test, build or protected-file change)
+Baseline revision: fe6243df337d71335514601f8ba763be0de8fd31 (W-208 completion commit), clean source tree; only W-209 records and reference material changed.
+
+Ran and passed:
+- make agents-check (before activation and before completion): OK, 217 work items, 68 decisions.
+- inventory.py -> inventory.json: 51 corpus PDFs, 0 SHA-256 mismatches vs W-188/fixture-manifest.csv, qpdf 12.3.2.
+  One file unresolved (public-key encryption, qpdf "unsupported encryption filter"); its xref chain only was read.
+- gen_fixtures.py: 149 PDFs, 20,541,850 bytes; ASCIIHex/ASCII85/RunLength/LZW encoders round-tripped through pypdf 6.21.1.
+- & .\agents\reference\simplification\W-209\run.ps1 (PowerShell tool, default execution policy): dotnet build of jaytwo.Pdf
+  (net10.0 Release, --no-restore) 0 warnings, 0 errors; qpdf --check on all 149 fixtures (qpdf-check.json: every kind "valid"
+  fixture exits 0 with no warnings); disposable probe (public API only) -> observations.jsonl; execution.json pins SDK 10.0.402,
+  OS, assembly, probe and generator SHA-256. Final run exit status 0.
+- loc.py -> loc.json (brace-matched line counts; test/fuzz/src mentions).
+- analyze.py summarizes observations.jsonl and qpdf-check.json into the tables quoted in findings.md.
+- graphify update .
+
+Measured: required-stream inventory (335 streams), 64 valid decodes, 60 malformed, 12 unsupported, 13 limit cases, allocations,
+exception types and stages, line counts (findings sections 2, 3, 4).
+Inferred, not measured: legacy-producer exposure, effort ranges, recovery cost, xref-site 64 MiB cap behavior, ~40 dispatch lines,
+that a removal reuses the existing PdfUnsupportedFilterException unchanged, the A85 z-inside-group case.
+Probe note: observations.jsonl objstm limit rows contain two decode attempts (the probe retries PageCount after a failure);
+halve them for one attempt (findings section 3). The first execution of this probe before that instrumentation showed 64.2 MiB
+(Flate) and 424.2 MiB (ASCII85) for the object-stream bombs.
+run.ps1 exited non-zero in two earlier executions because of a stale $LASTEXITCODE from a `| Select-Object -First 1` pipeline
+and an early-stopping pipeline at the end; both were script-ending defects fixed before the final recorded run; no data differed.
+
+Not run and not claimed: full test suite, framework matrix, fuzz campaign, Docker gate, Linux, net48/netstandard2.0, Poppler/MuPDF/DSS
+cross-reads of the fixtures, gigabyte files, a pre-1.5 or legacy-producer corpus, independent review. No bypass of the execution policy
+was used. W-188's missing review attachments remain a gap.

@@ -1,0 +1,124 @@
+{
+ "PdfStreamDecoder.cs total lines": 1547,
+ "blocks": {
+  "AsciiHexDecodeStream (stream decoder, includes NextByte)": {
+   "start": 954,
+   "end": 1065,
+   "lines": 112
+  },
+  "Ascii85DecodeStream (stream decoder)": {
+   "start": 1067,
+   "end": 1207,
+   "lines": 141
+  },
+  "LzwDecodeStream (stream decoder)": {
+   "start": 1209,
+   "end": 1428,
+   "lines": 220
+  },
+  "RunLengthDecodeStream (stream decoder)": {
+   "start": 1430,
+   "end": 1546,
+   "lines": 117
+  },
+  "Lzw() array wrapper": {
+   "start": 321,
+   "end": 326,
+   "lines": 6
+  },
+  "RunLength() array wrapper": {
+   "start": 328,
+   "end": 333,
+   "lines": 6
+  },
+  "EarlyChangeOf()": {
+   "start": 335,
+   "end": 344,
+   "lines": 10
+  },
+  "AsciiHex() array decoder": {
+   "start": 533,
+   "end": 567,
+   "lines": 35
+  },
+  "Ascii85() array decoder": {
+   "start": 569,
+   "end": 619,
+   "lines": 51
+  },
+  "WriteGroup()": {
+   "start": 621,
+   "end": 629,
+   "lines": 9
+  },
+  "HexNibble()": {
+   "start": 636,
+   "end": 654,
+   "lines": 19
+  }
+ },
+ "candidateBlockLinesTotal": 726,
+ "fractionOfFile": 0.469,
+ "filesMentioningCandidates": {
+  "test/jaytwo.Pdf.Tests/ForeignPdfTests.cs": {
+   "mentions": 1,
+   "lines": 485,
+   "factsAndTheories": 9
+  },
+  "test/jaytwo.Pdf.Tests/HardeningTests.cs": {
+   "mentions": 2,
+   "lines": 809,
+   "factsAndTheories": 28
+  },
+  "test/jaytwo.Pdf.Tests/IndirectFilterTests.cs": {
+   "mentions": 3,
+   "lines": 234,
+   "factsAndTheories": 8
+  },
+  "test/jaytwo.Pdf.Tests/LzwTests.cs": {
+   "mentions": 30,
+   "lines": 379,
+   "factsAndTheories": 10
+  },
+  "test/jaytwo.Pdf.Tests/OpenTests.cs": {
+   "mentions": 1,
+   "lines": 586,
+   "factsAndTheories": 31
+  },
+  "test/jaytwo.Pdf.Tests/PageConcatenationTests.cs": {
+   "mentions": 4,
+   "lines": 284,
+   "factsAndTheories": 8
+  },
+  "test/jaytwo.Pdf.Tests/RunLengthTests.cs": {
+   "mentions": 16,
+   "lines": 226,
+   "factsAndTheories": 8
+  },
+  "test/jaytwo.Pdf.Tests/WorkCounterTests.cs": {
+   "mentions": 1,
+   "lines": 114,
+   "factsAndTheories": 2
+  },
+  "tools/fuzz/Mutator.cs": {
+   "mentions": 4,
+   "lines": 130,
+   "factsAndTheories": 0
+  },
+  "tools/fuzz/SeedWriter.cs": {
+   "mentions": 8,
+   "lines": 250,
+   "factsAndTheories": 0
+  },
+  "src/jaytwo.Pdf/Internal/PdfCommonTokens.cs": {
+   "mentions": 4,
+   "lines": 138,
+   "factsAndTheories": 0
+  },
+  "src/jaytwo.Pdf/Internal/PdfStreamDecoder.cs": {
+   "mentions": 52,
+   "lines": 1548,
+   "factsAndTheories": 0
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+    "revision":  "fe6243df337d71335514601f8ba763be0de8fd31",
+    "sdk":  "10.0.402",
+    "os":  "Microsoft Windows NT 10.0.26100.0",
+    "framework":  "net10.0",
+    "configuration":  "Release",
+    "fixtures":  "{\"cases\": 149, \"selfcheck\": {\"pypdf-roundtrip\": \"ok\"}, \"totalBytes\": 20541850}",
+    "qpdf":  "qpdf version 12.3.2",
+    "engineSha256":  "48B3B5ED54827754950574060E1D78B3B3AD960FB6EAD44618D48728275D6087",
+    "probeSha256":  "9A753509E87B628E790C2EF4E50F119AD85F9EF0A26A10CEDAC4C92864581A27",
+    "generatorSha256":  "28193424BCF1715BC483EF7F8E92BB4E150D1682E1FB3529C6CA6495477E3478"
+}

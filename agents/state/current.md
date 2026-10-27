@@ -74,7 +74,7 @@ These are not replaced by page-access optimization, copier cleanup or a decoder 
 ## Simplification: remaining compatibility-sensitive investigations
 
 (W-208 is done: `agents/reference/simplification/W-208/`; recommends retaining `OpenAsync` and `IPdfSource.ReadAsync`, supplies measured constraints to W-138 and leaves W-109 unchanged; an unrelated `ExtractPages` read-amplification observation is routed to the owner. The dispositions await Gate 2 approval.)
-1. W-209
+(W-209 is done: `agents/reference/simplification/W-209/`; recommends retaining the four decoders and the caps, proposes only accepting full filter names in stream dictionaries, and routes ASCII85 strictness and unbounded array-decoder observations to the owner. The dispositions await Gate 2 approval.)
 
 Async-source measurements feed W-138; required-stream decoder measurements preserve the distinction between bytes consumed and encoded streams copied. These P2 studies follow bounded useful work. They must not hold up independently approvable slices.
 
