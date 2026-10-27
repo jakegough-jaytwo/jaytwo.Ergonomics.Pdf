@@ -1,0 +1,3647 @@
+{
+  "versions": {
+    "python": "3.13.17 (main, Oct 21 2026, 17:48:10) [MSC v.1944 64 bit (AMD64)]",
+    "pypdf": "6.21.1",
+    "qpdf": "qpdf version 12.3.2\nRun qpdf --copyright to see copyright and license information.",
+    "poppler": "pdftoppm version 26.08.0\nCopyright 2005-2026 The Poppler Developers - http://poppler.freedesktop.org\nCopyright 1996-2011, 2022 Glyph & Cog, LLC",
+    "mupdf": "mutool version 1.28.5"
+  },
+  "inputs": [
+    {
+      "case": "popup",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/Popup": null,
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Popup",
+              "links": {
+                "/Parent": null,
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "reply",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/R"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "group",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/Group"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "state",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/R"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "cross-page-reply",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/R"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case": "cycle-reply",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/R"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "dangling-reply",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Text",
+              "links": {
+                "/IRT": null,
+                "/P": null
+              },
+              "rt": "/R"
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "wrong-parent",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/Popup": null,
+                "/P": null
+              },
+              "rt": ""
+            },
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Popup",
+              "links": {
+                "/Parent": null,
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "orphan-popup",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                8,
+                0
+              ],
+              "subtype": "/Popup",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": []
+        }
+      ]
+    },
+    {
+      "case": "duplicate-owner",
+      "pages": [
+        {
+          "page": 1,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        },
+        {
+          "page": 2,
+          "annotations": [
+            {
+              "ref": [
+                7,
+                0
+              ],
+              "subtype": "/Square",
+              "links": {
+                "/P": null
+              },
+              "rt": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "operations": [
+    {
+      "name": "annotation-aa",
+      "operation": "single",
+      "sha256": "cfd2b3b9e9433d46b3c513b5eb4dbc411a55bebc1bb01fd739292146ee30c6f8",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "ap-action",
+      "operation": "single",
+      "sha256": "58b46682526049f1ec18908d6dffc74f8b0b83c789aacb389eddbbc81c03a97b",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "ap-bytes",
+      "operation": "single",
+      "sha256": "5096deb7ac7f14af3232dab7c22efc4aa326148f616bb38802284c44712ca5ca",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "ap-depth",
+      "operation": "single",
+      "sha256": "7ed8c9c9a028029dcee59f9339feee9bd4c129ad7b700255c6be07a25ef154e8",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "caret-no-ap",
+      "operation": "single",
+      "sha256": "5fe94767c1021133dc5ea1ab21b85850deae55e5e03e24fe9e0b184778333864",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "caret",
+      "operation": "single",
+      "sha256": "7bf25af77e0075539878f9207bc978b5bf4d49e3f53b2dd3cbce7815a6f8c2e1",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "single",
+      "sha256": "5d807aa2c00faa48e75a4855f630acab198b51a5cf109f3e03cced98da62c004",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "repeat",
+      "sha256": "233b7baefe9c8e6ac746c181fda1af28807c35b6820f230423c106dead8d4cb3",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 3,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            3,
+            0
+          ],
+          "expected_owner": [
+            3,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "twice",
+      "sha256": "80e46c3fe443c3927f7f8ca25811c27c3330dc46ce74db0ac09fcffc0c826ade",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 3,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            3,
+            0
+          ],
+          "expected_owner": [
+            3,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            12,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            8,
+            0
+          ],
+          "expected_owner": [
+            8,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            13,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 6,
+          "ref": [
+            14,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "exclude",
+      "sha256": "787fbb9600b06f7d2b9ac35b510030e2b88f3f44d37e5561d077cb9d879e97fd",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "cycle-reply",
+      "operation": "single",
+      "sha256": "5bfc24e23c38feac6f005aff63f88128ca10658a9c41a987cff037a0bf625c5d",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "dangling-ap",
+      "operation": "single",
+      "error": "PdfParseException",
+      "bytes": 0
+    },
+    {
+      "name": "dangling-reply",
+      "operation": "single",
+      "sha256": "96fafb5732476febd02d7aabd91b0e135b0a4b606da6874cd1ac27791ace2684",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "single",
+      "sha256": "a920a5822870cbf0fb23d48fb8c7e38404dd009a17b0eb8fddf6ada7314738e4",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "repeat",
+      "sha256": "015fd400090373cd51b020762c5ea73abfd04d357a631fe7ea476302025ce69f",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 3,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            3,
+            0
+          ],
+          "expected_owner": [
+            3,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "twice",
+      "sha256": "a132a6340ca8a4b1bc3f9987e8e9acb0c553719f297b293e8300e6101b772e67",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 3,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            3,
+            0
+          ],
+          "expected_owner": [
+            3,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            12,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            8,
+            0
+          ],
+          "expected_owner": [
+            8,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            13,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 6,
+          "ref": [
+            14,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            11,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "exclude",
+      "sha256": "46ea8fdb9ee7de0d2b8cef376e326bba1f962b90587af011332ed3983baa03be",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "single",
+      "sha256": "7c4fb344a4c899220e0464de309166989e843fdd16ee09400e351151b57ba9e8",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "repeat",
+      "sha256": "1782b3a03136101c284adbdf4a64eb0d269c52080140430a24e768fc6f20816f",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "twice",
+      "sha256": "12bb39a00590834f67e8e062d2e0f84dc1baab1a2e6cc22307936fa7aca3b893",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            11,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            7,
+            0
+          ],
+          "expected_owner": [
+            7,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            10,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            12,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            8,
+            0
+          ],
+          "expected_owner": [
+            8,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            10,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "exclude",
+      "sha256": "000cb4cd7d72f2d55ae18d3f70c8f126cb9557d4b837a609983ac58ca232c715",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "freetext-no-ap",
+      "operation": "single",
+      "sha256": "6e880ea038786c33841a4683d2c3578af77fe5917bc0f5cc31319e5e8ecf33f1",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "freetext",
+      "operation": "single",
+      "sha256": "70a4e261badbc28a7ad388ef52d27988e6db363d8584ac3cd75252fc6582f537",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "group",
+      "operation": "single",
+      "sha256": "a0de6fcc9a027c98dd398766125ebd82f9ec1f8ad7365bb67114fcf2314191c7",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "orphan-popup",
+      "operation": "single",
+      "sha256": "ad62f0f553edf0bacc668e910b45e12df2657e2e9de5781dae4b2957df9e0e48",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "popup",
+      "operation": "single",
+      "sha256": "2be6a5f598ba558e66459e7c8f8c6eed2c9695f87d7fef81b1f94853149de7d6",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "popup",
+      "operation": "repeat",
+      "sha256": "8bc0c9e63eb217dd3952215bd1222fca33326f6824f77bdb5b33400113ee8252",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "popup",
+      "operation": "twice",
+      "sha256": "c0ac9b28d502bc027b515587ecfa7a24ea0664ec54444bb75c8d67437492ef01",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            11,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            7,
+            0
+          ],
+          "expected_owner": [
+            7,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            10,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            12,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            8,
+            0
+          ],
+          "expected_owner": [
+            8,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            10,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "popup",
+      "operation": "exclude",
+      "sha256": "c3ef2c6ed48c5d0f117eee69a797f1ca6aa1df6ea67099b99fd172b76deb316d",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "reply",
+      "operation": "single",
+      "sha256": "81b96b0ab7ed4b6d9205c25ffd2ec93062517acb146b59e041604389197380a8",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "reply",
+      "operation": "repeat",
+      "sha256": "8f2dd85ca3c295b747c2fbbd2ce15042d449217f2df4306a97cab9ce4f0f2330",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            8,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "reply",
+      "operation": "twice",
+      "sha256": "ab3f361ace1b8c3560ab69329a9607e870bbea874c848fc2370d0973d3a3a4d3",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            8,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            13,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            14,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            15,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            16,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "reply",
+      "operation": "exclude",
+      "sha256": "e72dd3f7241517f4d7761214dca94a74f24ab3eae5490476f8f3d29d3f1786b3",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "resource-closure",
+      "operation": "single",
+      "sha256": "86d5cf5ee1022c9e57b8eafca972c5be02a71f839ff1a8344409f275c1fd3034",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "92152eeacc18468794d8ae4be8eb678e16278a6599455e0cd1911c8d7592e48d"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "resource-cycle",
+      "operation": "single",
+      "sha256": "5d064ed867989d687eb1064d7c20ca8702e440f43b2e8d426e6ec9b59ca9800d",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "single",
+      "sha256": "8d12ea63282b0da0cc0854f847b4ba04c54b52ac3dd5a30d518bb1a8451405a7",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "repeat",
+      "sha256": "006badd2123ef5480d6a4926ddc2fd41cf4d6a96c13951bdaa41bfa44bf41f24",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            8,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "twice",
+      "sha256": "df1042c33085ec322b20c36f4d34552898bd41f5d9eba63881291861f6018f18",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            5,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            6,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            7,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 2,
+          "ref": [
+            8,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            2,
+            0
+          ],
+          "expected_owner": [
+            2,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            4,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            13,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 4,
+          "ref": [
+            14,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            9,
+            0
+          ],
+          "expected_owner": [
+            9,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            15,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 5,
+          "ref": [
+            16,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            10,
+            0
+          ],
+          "expected_owner": [
+            10,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            12,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "exclude",
+      "sha256": "586a404bb6d7a1d79650ad18c3d34a4e0e0ae07d4210345b65417dfa7335dfad",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "square",
+      "operation": "single",
+      "sha256": "16cfa8ab6cd54d9cede7ca1a8c8f9e506313788160c9a6126207fea0de6a4c21",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "stamp-no-ap",
+      "operation": "single",
+      "sha256": "dba98a696fb01e3b3067e626390e657e41ac813b98769224f6900c956b28bcba",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "stamp",
+      "operation": "single",
+      "sha256": "f16e86a21a3ecbea91d49b99fa6dce27203fcc2c33282dabf2ef68965a7ccc9d",
+      "annotations": [],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "state",
+      "operation": "single",
+      "sha256": "35afb25e86e312660150a89019d0630d3dd6a9218561c77379b512bbbbe87463",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        },
+        {
+          "page": 1,
+          "ref": [
+            4,
+            0
+          ],
+          "subtype": "/Text",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    },
+    {
+      "name": "wrong-parent",
+      "operation": "single",
+      "sha256": "c7bb6d273284e91d30b153082498d95f19a60feddac2a0e52b50ad3a09207695",
+      "annotations": [
+        {
+          "page": 1,
+          "ref": [
+            3,
+            0
+          ],
+          "subtype": "/Square",
+          "keys": [
+            "/AP",
+            "/Contents",
+            "/F",
+            "/NM",
+            "/P",
+            "/Rect",
+            "/Subtype",
+            "/T",
+            "/Type"
+          ],
+          "owner": [
+            1,
+            0
+          ],
+          "expected_owner": [
+            1,
+            0
+          ],
+          "relationships": {},
+          "rt": "",
+          "ap": [
+            2,
+            0
+          ],
+          "appearance_sha256": "46ac507561beb5e8be37d6007d090cd981e00389c848965ff1b10535e508ecc4"
+        }
+      ],
+      "qpdf": "accepted"
+    }
+  ],
+  "renders": [
+    {
+      "case": "square",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4",
+      "output_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4"
+    },
+    {
+      "case": "square",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba",
+      "output_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba"
+    },
+    {
+      "case": "stamp",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 2400,
+      "input_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "stamp",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 2400,
+      "input_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "freetext",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 181,
+      "input_sha256": "828f2228b184cfddee1bd87fc64692097b13f2a312bd38d866640d5f652e2d0c",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "freetext",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 181,
+      "input_sha256": "3f825eb6bc8c4c6be451e9f7e614b3218bfc2b9357553419884bf779ae715369",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "caret",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 2400,
+      "input_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "caret",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 2400,
+      "input_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba",
+      "output_sha256": "7c9987a3b78b49714b081a1fda1f5a8f78507dce6d7572acc1bc2ba0a85b5348"
+    },
+    {
+      "case": "resource-closure",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4",
+      "output_sha256": "81f826954e2a7437121a2967c93befb298357c0f3f9277adf062f4569336daf4"
+    },
+    {
+      "case": "resource-closure",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba",
+      "output_sha256": "18f0884b1d8b2fb58bb01e7a44e872c5de969b6587cfa01eda7410d3a09bceba"
+    },
+    {
+      "case": "shared-ap",
+      "renderer": "poppler",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "40f89f0568b6efd41077db7190b15fa2920e2a671089800d2ad56d1c04293b8a",
+      "output_sha256": "40f89f0568b6efd41077db7190b15fa2920e2a671089800d2ad56d1c04293b8a"
+    },
+    {
+      "case": "shared-ap",
+      "renderer": "mupdf",
+      "width": 140,
+      "height": 120,
+      "changed_pixels": 0,
+      "input_sha256": "ea3bccaf87706b7ac7a64428893ef5f3fef4ae180837d3bdf5197e39dfcc78a2",
+      "output_sha256": "ea3bccaf87706b7ac7a64428893ef5f3fef4ae180837d3bdf5197e39dfcc78a2"
+    }
+  ]
+}

@@ -1,0 +1,359 @@
+{
+  "accepted_baseline": 43,
+  "new_refusals": 17,
+  "remaining_accepted": 26,
+  "operations": [
+    {
+      "name": "annotation-aa",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Unsupported event action",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "ap-action",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Unsupported AP or local resource limit",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "ap-bytes",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Unsupported AP or local resource limit",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "ap-depth",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Unsupported AP or local resource limit",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "caret-no-ap",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Added subtype requires existing AP",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "caret",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "cross-page-reply",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "cycle-reply",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "dangling-ap",
+      "operation": "single",
+      "baseline": "refused",
+      "candidate": "refused",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "dangling-reply",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Multiply owned source annotation",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Multiply owned source annotation",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "duplicate-owner",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "excluded-unsupported",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "freetext-no-ap",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Added subtype requires existing AP",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "freetext",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "group",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "orphan-popup",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "popup",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "popup",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "popup",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "popup",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "reply",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "reply",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "reply",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "reply",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "resource-closure",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "resource-cycle",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "repeat",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "twice",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "shared-ap",
+      "operation": "exclude",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "square",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "stamp-no-ap",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Added subtype requires existing AP",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "stamp",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "state",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "accepted",
+      "reason": null,
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    },
+    {
+      "name": "wrong-parent",
+      "operation": "single",
+      "baseline": "accepted",
+      "candidate": "refused",
+      "reason": "Invalid or unsupported relationship",
+      "evidence": "Structural counterfactual inference; candidate not implemented"
+    }
+  ]
+}

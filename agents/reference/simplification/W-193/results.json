@@ -1,0 +1,500 @@
+[
+  {
+    "name": "annotation-aa",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "ap-action",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAppearance": 1
+    }
+  },
+  {
+    "name": "ap-bytes",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAppearance": 1
+    }
+  },
+  {
+    "name": "ap-depth",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAppearance": 1
+    }
+  },
+  {
+    "name": "caret-no-ap",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "caret",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "cross-page-reply",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 896,
+    "omissions": {}
+  },
+  {
+    "name": "cross-page-reply",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1510,
+    "omissions": {}
+  },
+  {
+    "name": "cross-page-reply",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 2646,
+    "omissions": {}
+  },
+  {
+    "name": "cross-page-reply",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 896,
+    "omissions": {}
+  },
+  {
+    "name": "cycle-reply",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "dangling-ap",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": "PdfParseException",
+    "bytes": 0,
+    "omissions": null
+  },
+  {
+    "name": "dangling-reply",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "duplicate-owner",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "duplicate-owner",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1512,
+    "omissions": {}
+  },
+  {
+    "name": "duplicate-owner",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 2650,
+    "omissions": {}
+  },
+  {
+    "name": "duplicate-owner",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "excluded-unsupported",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "excluded-unsupported",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1319,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "excluded-unsupported",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 2264,
+    "omissions": {
+      "UnsupportedAnnotation": 2
+    }
+  },
+  {
+    "name": "excluded-unsupported",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "freetext-no-ap",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "freetext",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "group",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "orphan-popup",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "popup",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "popup",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1319,
+    "omissions": {
+      "UnsupportedAnnotation": 2
+    }
+  },
+  {
+    "name": "popup",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 2264,
+    "omissions": {
+      "UnsupportedAnnotation": 4
+    }
+  },
+  {
+    "name": "popup",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "reply",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "reply",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1682,
+    "omissions": {}
+  },
+  {
+    "name": "reply",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 2992,
+    "omissions": {}
+  },
+  {
+    "name": "reply",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "resource-closure",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1111,
+    "omissions": {}
+  },
+  {
+    "name": "resource-cycle",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 926,
+    "omissions": {}
+  },
+  {
+    "name": "shared-ap",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1078,
+    "omissions": {}
+  },
+  {
+    "name": "shared-ap",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 1686,
+    "omissions": {}
+  },
+  {
+    "name": "shared-ap",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2
+    ],
+    "error": null,
+    "bytes": 3000,
+    "omissions": {}
+  },
+  {
+    "name": "shared-ap",
+    "operation": "exclude",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1078,
+    "omissions": {}
+  },
+  {
+    "name": "square",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {}
+  },
+  {
+    "name": "stamp-no-ap",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "stamp",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  },
+  {
+    "name": "state",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 1076,
+    "omissions": {}
+  },
+  {
+    "name": "wrong-parent",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 897,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    }
+  }
+]

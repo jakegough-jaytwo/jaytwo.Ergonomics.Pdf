@@ -1,0 +1,158 @@
+[
+  {
+    "case": "square",
+    "sha256": "25540b2840ea398c006f07056b7d9fd4966a65fb46de23812fed6ce8fc4ab4fd",
+    "bytes": 907,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "stamp",
+    "sha256": "d03b320508d29cbe869d3acb778221830478ff4206abb2acf81ccdeda14df919",
+    "bytes": 922,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "freetext",
+    "sha256": "4ae81254ea83591b3b4f417875323ec782b20c949f4797bc78ccb4e921a6bc90",
+    "bytes": 1149,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "caret",
+    "sha256": "dd9b7930289d3cc56b95f3b67fe41b06a16b811222f6d84eadb51c0bfa75bad1",
+    "bytes": 913,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "stamp-no-ap",
+    "sha256": "33d64c8fc2236d4103f683fe367dc1638669567e1255058cf95305e31b0e816c",
+    "bytes": 903,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "freetext-no-ap",
+    "sha256": "d2f2c57268e87c7cd6684fb2aed3abc9215e09d45e066869eb83bf566796c6a0",
+    "bytes": 1130,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "caret-no-ap",
+    "sha256": "de90f055c45383282225b96ef29ed0a1b470792fc8c5187115338734e229b9cb",
+    "bytes": 894,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "popup",
+    "sha256": "5e3a2695adf4d1a5521aaa8b8833c3183910ea5c8dfd4c7eeca7d7e316e88691",
+    "bytes": 1055,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "reply",
+    "sha256": "fe3ca277d97a4d81e8a6e6cf9437972fe229794767198060f27edfb099b3dcbe",
+    "bytes": 1106,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "group",
+    "sha256": "7956536c06810255a27c54ba0e97c105725afaba7bfbe469727d5a5e05f10c5a",
+    "bytes": 1110,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "state",
+    "sha256": "301c3ba7a0a9aec170fa59750ceee091dacf510731c2b2e1a60facb8a9c6c742",
+    "bytes": 1145,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "cross-page-reply",
+    "sha256": "fb684f6d30ed3e228e3aee3327ba5f2dad596ce3837c6e33839e6dd63d4133e9",
+    "bytes": 1118,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "cycle-reply",
+    "sha256": "a7fbcb889093121b81c585c891375b8ae834812ceb45467bb77feaf9f3da8996",
+    "bytes": 1117,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "dangling-reply",
+    "sha256": "68f95841e1de81b0071af07ec96399932a97d0b25d4e415e8a5f63e35100860b",
+    "bytes": 1108,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "wrong-parent",
+    "sha256": "b948813195468b37a462f6eec1ba9a7e1de74c4a6589433fd4f490bfeeeb2ac3",
+    "bytes": 1098,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "orphan-popup",
+    "sha256": "f80bef6c075ea2f2ce54a5d4a192358fc3e7c089ba33c60cfccb2c013d385691",
+    "bytes": 1035,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "duplicate-owner",
+    "sha256": "11b8e9e6b1464f989f02d9d009248bf4e21116f9e494b009dfc9040e4ec53014",
+    "bytes": 925,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "shared-ap",
+    "sha256": "79f98dd5a41ed2f92eb2f793ecf267e4d83b9b3e43ec9f8ea17a5e9b9d6084e0",
+    "bytes": 1090,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "resource-closure",
+    "sha256": "7b975caf10bcbead83a3873ebd2113978ff224de6b18832625da15abe328d686",
+    "bytes": 1080,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "resource-cycle",
+    "sha256": "cdaa61e66c00201ee8ed9e49e94e5cb6d23e5d2398db6d91834d82830f6260d9",
+    "bytes": 936,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "dangling-ap",
+    "sha256": "8a09449ee95fc725bbc32dc492f1bf0192e16db8c024313d51fca88627902503",
+    "bytes": 909,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "ap-depth",
+    "sha256": "8c3b949b267e3a9db49e70f66ae3b95bdc7ea63056084469f2092095ec38852b",
+    "bytes": 3462,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "ap-bytes",
+    "sha256": "b61ee4a802c5e6eae2377fa8037419c98b4791353d5167580a1fca5f898520cd",
+    "bytes": 8389500,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "ap-action",
+    "sha256": "308e74f40f754d745c4c8f87fbb719c999ce04776a9eaf143d2040d73c58986b",
+    "bytes": 967,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "annotation-aa",
+    "sha256": "95c1540d46364c2555a9265d7fcf4cefa2775be00306cdb6d59bbe362fa50f2b",
+    "bytes": 977,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  },
+  {
+    "case": "excluded-unsupported",
+    "sha256": "4cbc04e9fa93fb0d3ff0066a123ae9b52f36c6b879cf1dc4d967a6eda335de8d",
+    "bytes": 1100,
+    "provenance": "Original MIT synthetic fixture; W-193 generate.py"
+  }
+]
