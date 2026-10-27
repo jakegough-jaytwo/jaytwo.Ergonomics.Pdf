@@ -1,0 +1,1950 @@
+{
+  "revision": "87c6283e8fd7787272d82b312dc273b5186a9de9",
+  "matched_files": 45,
+  "matching_lines": 207,
+  "implementations": [
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 14,
+      "text": "public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 12,
+      "text": "public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AcroFormTests.cs",
+      "line": 871,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1108,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1149,
+      "text": "private sealed class TimeStampProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/HardeningTests.cs",
+      "line": 799,
+      "text": "private sealed class FixedContents : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/InteropTests.cs",
+      "line": 274,
+      "text": "private sealed class SilentProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/NullReferenceTests.cs",
+      "line": 227,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ScaleTests.cs",
+      "line": 106,
+      "text": "private sealed class SilentProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 591,
+      "text": "private sealed class CapturingProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 615,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureSeedValueTests.cs",
+      "line": 299,
+      "text": "private sealed class RecordingProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1929,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1941,
+      "text": "private sealed class HashProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningRollbackTests.cs",
+      "line": 209,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 1122,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/VersionTests.cs",
+      "line": 368,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XfaTests.cs",
+      "line": 489,
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 432,
+      "text": "private sealed class TimeStampProvider : IPdfSignatureProvider"
+    }
+  ],
+  "files": [
+    {
+      "path": "ACCEPTANCE.md",
+      "sha256": "85afad3be1d49565fa469d209f82f6d2d9566df223c8e9cb7df69bd95634e5eb"
+    },
+    {
+      "path": "docs/behavior.md",
+      "sha256": "65de3cac7c6682ccc58b0c2dbe127d1a700406971978b1fc09e8204439ccfc4a"
+    },
+    {
+      "path": "docs/spec/phase-1.md",
+      "sha256": "2ed118246ac7669c9b6599db24b3a9cb08a315910740c3d2bd7495c6d209b217"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "sha256": "600764703d9c25fcafa1ed11110d383df6df43cfbc0805e1dd4cdafff95bb90b"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfEngine.cs",
+      "sha256": "0d2a0c0ce7777cea2f074e980439245bd5e8da821b568831863537ef50456e07"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs",
+      "sha256": "b0d6a8370bd904971100c9966ad01803571966eecf3db976f0ad3317b90e4fba"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfSigner.cs",
+      "sha256": "8dfe29a341396beb2127e6357531eb3a3d35363d77a6e3559f452e0edfb5bf4c"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "sha256": "feb8e8c1baa61c840c3f3a824d166a2870c73942129237abe3627f4827b8f40b"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "sha256": "3ad1610d93e3bd4f9b273626c274e08b685b76398d68ce76f9a02b907882870e"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "sha256": "5f64098aa5f58aac480106239fadf11f9cf554a7a0484fe3dbac0295c1e9dcb6"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs",
+      "sha256": "a590af89e56a003117a71d898c82262478335150d02a823a61f0c8757693791c"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs",
+      "sha256": "a80d2c8518dfec29adc94be5b7cc3819df4d9818924e8663caa5552028f1e6f0"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs",
+      "sha256": "3be40b18d6b26383ff97c70c9ac00cf03fec14c0a500f678ec10e120b90af364"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs",
+      "sha256": "9e0e38cb1911cfc88122316385a28c4a54ac41fb752be4332351939354878946"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Comparison/ErgonomicsWorkloads.cs",
+      "sha256": "fdca5a03b4fd562b1980f7765397f6c7a90eb5237bb89e18c320c9d6d180a514"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "sha256": "15796c49ca3fbe55f9a8a84c622b04607c6fe661317a23f0d9fafb28381e688e"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AcroFormTests.cs",
+      "sha256": "35a68944c6a5b34a66e3baaa1da7395e9a5fb2e3c7f32a6ff877cae470b4e1b2"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "sha256": "c52fa9e9ccf6763f62a1167644a3bf2829c4da7cfc4d34b573b0b5111f75eb98"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/DssInteropTests.cs",
+      "sha256": "43674e22fcaac65ca9e8799d206019ca78cd8b9857160dee337c072abebcd839"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "sha256": "cfb78901757e595f930b8ef341d61d4e956c66de608758f4194db85cfc5689f6"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ForeignPdfTests.cs",
+      "sha256": "642a05c64bd9bbcdf18fcdd4cee04c7920491331efc8c2dacac9c095d17835de"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/HardeningTests.cs",
+      "sha256": "544bf1b4ce3bf5b2f68f963e624e8d859e765abfe975ff55e9a95cbd4ed0d61d"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ITextInteropTests.cs",
+      "sha256": "97b3eb54c9a9d0d036014eaeddede55ffc4424d4fd9e6d20ab00129128aa5b77"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/InteropTests.cs",
+      "sha256": "bb6bdd654d63edff83308b2e9ad81851aeca6f0bf6e68f31592c5b22b849e202"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/LargeWorkloadTests.cs",
+      "sha256": "4893925439dee20c203b89a4d96668c325bfc4b957c197f0c5f48fffb7cdc697"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/NullReferenceTests.cs",
+      "sha256": "188ad9c5416eb0543d4c5b8aec25237f604621a5537c6a26ba0ad0fab2c9446d"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/OpenSslTimestampTests.cs",
+      "sha256": "4beca900cf48fc026590f6331096d4f87272a52b53f5860dfdf8093b238303bc"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/OutputIdentityTests.cs",
+      "sha256": "3c26f4e125babb29019fb2649946c036e8ff5f0719956fd9579110ccb8c03d16"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "sha256": "4d2e1133f4a20000d2c7dc161d8e062f2eb115409eef4a51717b2b47399eb441"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/RevisionTests.cs",
+      "sha256": "64e66b3054a3d753f9b8fa480276018ac3b70c1117d55e8bfe9830e3402b3363"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ScaleTests.cs",
+      "sha256": "cde93a6b803d3204ec89f25157ef6fcaca2214af62149cb3d6f2c171b3105503"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "sha256": "86bca0a79ae14d1a82d4d0f476a62dfa181cea97f2291cbec86bce6e5e3b92f5"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "sha256": "6e82a3184fe25acfb7a3c831fa8a7f460f0fa6961944543a041126be2b6687e7"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureSeedValueTests.cs",
+      "sha256": "9fa65d09f1dfead0ea56c54eaf4f501c6c9e3a19a220448bf2c92a4d5a477f11"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "sha256": "1ea9e8d946647f0b2a716534f96a323a1f3bb4556254f44f6286d8d73b687481"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "sha256": "d548dac270acb492e0b81f2f9d0180afc7c6656a64d1fc50c887d3cde66c5335"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "sha256": "77be0643cec2ede9ecf2b5c937a37e10473a314d77bec25c14b4485de5afbedf"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningRollbackTests.cs",
+      "sha256": "aaf3122ffa3cb3476428b2ff18006768386c72e67ce5110ba47e0d3927a15880"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "sha256": "a18c4d6168b2129a027c06b11d68c702bb943c321f6c0aa4d96dae8a3143c66f"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/VersionTests.cs",
+      "sha256": "b52404b2475621b9c6dec98dbf58ba2e51fc0350b236571f8e09f52aab56e5b9"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/WorkBaselineTests.cs",
+      "sha256": "38c52dcdc63e4008290b40413c51fa36a42dde21008adff440137c3e257d9049"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XfaTests.cs",
+      "sha256": "c3086bc2aab607cc06c64bdb656d06c58b2cfb77fe846e6d7e77e29bc8c30e25"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "sha256": "98026f50b6d17120975ea4780f690647a9dd24c951d8a9279a25cad1e40a5405"
+    },
+    {
+      "path": "tools/fuzz/CmsSeeds.cs",
+      "sha256": "813bda859f6f22f1620fd504d40fb9c45a3621069416e97cc5806fc8ecb4c510"
+    },
+    {
+      "path": "tools/fuzz/FuzzTargets.cs",
+      "sha256": "5c5f92d2141371b630941f6d9111bb53f9752a89d2bc82c1274a5b9761d734ed"
+    }
+  ],
+  "hits": [
+    {
+      "path": "ACCEPTANCE.md",
+      "line": 119,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "- `CmsDetachedSignatureProvider` verifies with `SignedCms.CheckSignature(verifySignatureOnly: true)`, and the signed `messageDigest` is the SHA-256 of the byte ranges by default. Additional certificates are embedded beside the leaf. An `ITimestampAuthority` passed to the provider receives a request whose imprint is the SHA-256 of the signature value as the SignerInfo stores it, whatever the signature's digest, and the token is the unsigned attribute `1.2.840.113549.1.9.16.2.14`. Certificate inclusion in a timestamp token is checked separately from cryptographic validity and trust; the library performs no trust validation."
+    },
+    {
+      "path": "ACCEPTANCE.md",
+      "line": 129,
+      "symbols": [
+        "CmsDetachedSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "- `CertificateDer` is read once and `AdditionalCertificates` is read and enumerated once on a successful sign, and a leaf getter that changes after its first read does not affect the signature. A CMS value from `CmsDetachedSignatureProvider` that is larger than `ReservedContentsBytes` throws `PdfSignatureTooLargeException` whose `ActualBytes` is its exact length (W-71): for an oversize chain, signature value, or time-stamp token, reserving exactly that many bytes fits with no padding (signing, or for a token that does not parse, reaching the token parser), and one byte fewer reports the same length again. The signer and the authority run before that comparison, and a time-stamp token is wrapped verbatim to measure the CMS and parsed only once the CMS fits. `DocTimeStampSignatureProvider` refuses a token larger than the reserved size before parsing it, with the token's length. Certificates whose running total exceeds 1,048,576 bytes, the largest reservation, throw `PdfSignException` before the leaf is parsed and leave `SignHashAsync` uncalled, and an endless `AdditionalCertificates` enumeration stops at the first certificate past that total. In each case the source stream and an empty cross-stream destination stay unchanged."
+    },
+    {
+      "path": "ACCEPTANCE.md",
+      "line": 130,
+      "symbols": [
+        "CmsDetachedSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "- `Rfc3161TimeStampRequest.Create` of SHA-256(\"abc\") is the 59-byte vector in the tests, has no nonce, and explicitly sets `certReq` TRUE. `CmsDetachedSignatureProvider` and `DocTimeStampSignatureProvider` call the nonce overload with a random nonce and `certReq` TRUE. Both reject a token that does not include the TSA signing certificate identified by its single ESSCertID or ESSCertIDv2 signing-certificate attribute. `HttpTimestampAuthority` POSTs `application/timestamp-query`, accepts status 0, rejects status 2, and returns the time-stamp token. A response body larger than 2,097,152 bytes throws `PdfTimestampException` after reading at most 2,179,072 bytes and does not extend the file. A header- or body-phase timeout throws `TaskCanceledException` with a `TimeoutException` inner exception on every target; unrelated cancellation is not reclassified as a timeout. The caller's cancellation, in the header or the body phase, throws `OperationCanceledException` carrying the caller's token, not a `TaskCanceledException` and not a timeout, and a body that ignores the token is aborted by disposing the response. `DocTimeStampSignatureProvider` sends the request for the signed-range hash and embeds the returned token."
+    },
+    {
+      "path": "ACCEPTANCE.md",
+      "line": 134,
+      "symbols": [
+        "CmsDetachedSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "- An exception from a host `ITimestampAuthority`, a `PdfTimestampException` with a secret in its message included, surfaces from `CmsDetachedSignatureProvider` and `DocTimeStampSignatureProvider` as a fresh `PdfTimestampException` with the message `The timestamp authority failed.` and no provider message, data, or inner exception, and does not extend the file. `HttpTimestampAuthority` exceptions pass through as described above."
+    },
+    {
+      "path": "docs/behavior.md",
+      "line": 26,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "- **Async signing and saving.** `IPdfExternalSigner.SignHashAsync`, `ITimestampAuthority.GetTimeStampTokenAsync`, and `IPdfSignatureProvider.CreateContentsAsync` return `ValueTask<byte[]>` and take a `CancellationToken`, so a cloud key service or a remote timestamp authority does not hold a thread. `SaveIncrementalAsync` and `SignAsync` sit beside `SaveIncremental` and `Sign` and write the same bytes. They copy into a different destination with asynchronous reads and writes, and `SignAsync` writes its appendix asynchronously; the `SaveIncrementalAsync` appendix is serialized synchronously. Cancellation is observed before anything is written, inside the signer and the timestamp authority, and between the 1 MiB blocks of a copy, and throws `OperationCanceledException`; the pending edits remain. The synchronous `Sign` passes `CancellationToken.None` and waits for the provider, so a host whose async code needs the calling thread's synchronization context calls `SignAsync`. `OpenAsync` awaits `IPdfSource.ReadAsync` for every read it makes and observes cancellation between reads; a canceled open returns no document. After opening, the document's properties, the synchronous methods, and the appendix of an asynchronous save read the source with `IPdfSource.Read`, so an `IPdfSource` must also read synchronously."
+    },
+    {
+      "path": "docs/behavior.md",
+      "line": 34,
+      "symbols": [
+        "IPdfSignatureProvider",
+        "PdfSignatureContext"
+      ],
+      "text": "- **PKCS#11 stays in the host.** The library does not P/Invoke a PKCS#11 module. `PdfSignatureOptions.DigestAlgorithm` picks SHA-256 (the default), SHA-384, or SHA-512, and `IPdfExternalSigner.SignHashAsync` receives the raw digest (32, 48, or 64 bytes) and its `HashAlgorithmName`. The key type comes from the leaf certificate. For an RSA key, the host matches `RSA.SignHash(hash, hashAlgorithm, Pkcs1)`; with PKCS#11 `CKM_RSA_PKCS`, the host prepends the DigestInfo for that algorithm. For an ECDSA P-256 or P-384 key, the host returns the IEEE P1363 `r||s` value (64 or 96 bytes) that `ECDsa.SignHash` and `CKM_ECDSA` produce, and the library DER-encodes it. `CKM_SHA256_RSA_PKCS` or `CKM_ECDSA_SHA256` would hash the digest again. Other keys, such as P-521 or RSA-PSS, are refused. `AdditionalCertificates` is the chain beyond the leaf, and those certificates are embedded in the CMS signature. `PdfSignatureOptions.Format` picks the CMS format: `AdbePkcs7Detached` (the default) signs content-type, message-digest, and a CMS signing-time; `PadesBaselineB` writes `/ETSI.CAdES.detached` with content-type, message-digest, and signing-certificate-v2 (the SHA-256 of the leaf, with its issuer and serial), and no CMS signing-time, so the signing time is only in `/M` (ETSI EN 319 142-1). With a timestamp authority, a `PadesBaselineB` signature is PAdES baseline B-T. B-LT and B-LTA, which need revocation data, are not written. A custom `IPdfSignatureProvider` must honor `PdfSignatureContext.Format`, because the `/SubFilter` already names it. The library does not verify the signature value the host returns against the leaf certificate, or the signature on a timestamp token. A key that does not match its certificate produces a file that validators reject, so check the signer's output with a validator when you integrate it."
+    },
+    {
+      "path": "docs/behavior.md",
+      "line": 35,
+      "symbols": [
+        "CmsDetachedSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "- **Timestamps.** `CmsDetachedSignatureProvider` can take an `ITimestampAuthority`. It hashes the signature value with SHA-256, whatever the signature's digest, requests an RFC 3161 token with a random nonce and `certReq` set to true, and stores that token as the unsigned attribute `1.2.840.113549.1.9.16.2.14`. The provider rejects a token whose message imprint, digest algorithm, or nonce does not match the request, or that does not carry the TSA signing certificate identified by its ESS signing-certificate attribute. A document timestamp is still a second revision from `DocTimeStampSignatureProvider`, and that provider applies the same checks. It hashes with SHA-256, and another `DigestAlgorithm` with `PdfSignatureKind.DocTimeStamp` throws `PdfSignException`. Certificate inclusion makes the token self-contained; it does not validate the signature or establish certificate trust. `HttpTimestampAuthority` POSTs `application/timestamp-query` and accepts PKI status 0 or 1. A response body larger than 2 MiB (2,097,152 bytes) throws `PdfTimestampException`, and the entire exchange stays under `HttpClient.Timeout`; a timeout is a `TaskCanceledException` with a `TimeoutException` inner exception. The caller's cancellation is an `OperationCanceledException` that carries the caller's token, not a timeout. An exception from a host `ITimestampAuthority`, a `PdfTimestampException` included, is replaced with a generic `PdfTimestampException` without its message, data, or inner exception; `HttpTimestampAuthority` exceptions pass through as described here."
+    },
+    {
+      "path": "docs/behavior.md",
+      "line": 116,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(pkcs11Signer));"
+    },
+    {
+      "path": "docs/behavior.md",
+      "line": 218,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "`Sign`, `SignAsync`, `Timestamp`, and `TimestampAsync` are terminal calls that add one CMS signature or one RFC 3161 document timestamp after the described edits, to an empty writable seekable stream or to a file path (`PdfFileSaveOptions` applies as for `Save`). `Sign` takes an `IPdfExternalSigner`, an optional `ITimestampAuthority` that stores a timestamp inside the signature, and `PdfSignatureOptions`, or an existing `IPdfSignatureProvider`. `Timestamp` takes an `ITimestampAuthority` and optional options. Existing engine defaults apply, including the `adbe.pkcs7.detached` format unless the options choose `PadesBaselineB`."
+    },
+    {
+      "path": "docs/spec/phase-1.md",
+      "line": 160,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "| F18 | **Signing terminals.** `Sign` and `SignAsync` execute the described ordinary edits and one CMS signature. They accept an `IPdfExternalSigner` with an optional `ITimestampAuthority`, or the existing `IPdfSignatureProvider`, and `PdfSignatureOptions`. `Timestamp` and `TimestampAsync` execute the described ordinary edits and one document timestamp through the existing timestamp authority/provider. Each terminal offers separate stream and file-path outputs; async forms take a `CancellationToken`. Existing engine interfaces, options, algorithms, and defaults remain unchanged. A CMS signature may include an RFC 3161 signature timestamp. A run adds exactly one CMS signature or one document timestamp. Adding multiple signatures, adding a signature followed by a separate document timestamp, and signing-to-source conveniences are not supported. Existing signatures in the input remain subject to the engine's preservation and permission checks. F1 to F3 and F5 to F17 continue to apply where relevant. | Exists |"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 49,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public PdfWorkflowResult Sign(Stream destination, IPdfSignatureProvider provider, PdfSignatureOptions options)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 86,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public PdfWorkflowResult Sign(string path, IPdfSignatureProvider provider, PdfSignatureOptions options, PdfFileSaveOptions? saveOptions = null)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 117,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public Task<PdfWorkflowResult> SignAsync(Stream destination, IPdfSignatureProvider provider, PdfSignatureOptions options, CancellationToken cancellationToken = default)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 152,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public Task<PdfWorkflowResult> SignAsync(string path, IPdfSignatureProvider provider, PdfSignatureOptions options, PdfFileSaveOptions? saveOptions = null, CancellationToken cancellationToken = default)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 219,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static IPdfSignatureProvider CmsProvider(IPdfExternalSigner signer, ITimestampAuthority? timestampAuthority)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 226,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "return new CmsDetachedSignatureProvider(signer, timestampAuthority);"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 229,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static IPdfSignatureProvider TimestampProvider(ITimestampAuthority authority)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 236,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "return new DocTimeStampSignatureProvider(authority);"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 259,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static void CheckSigning(PdfSignatureOptions options, IPdfSignatureProvider provider, PdfSignatureKind kind)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 282,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private async Task<PdfWorkflowResult> SignStreamAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, PdfSignatureKind kind, bool useAsync, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 311,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private async Task<PdfWorkflowResult> SignFileAsync(string path, PdfSignatureOptions options, IPdfSignatureProvider provider, PdfSignatureKind kind, PdfFileSaveOptions? saveOptions, bool useAsync, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs",
+      "line": 363,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private async Task<IReadOnlyDictionary<string, PdfAppearanceDisposition>> StageSignedAsync(WorkflowSession session, FileStream staging, PdfSignatureOptions options, IPdfSignatureProvider provider, bool useAsync, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfEngine.cs",
+      "line": 287,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "internal void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfEngine.cs",
+      "line": 293,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "internal void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfEngine.cs",
+      "line": 298,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "internal Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfEngine.cs",
+      "line": 303,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "internal Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs",
+      "line": 119,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "// capabilities are not discoverable through IPdfSignatureProvider."
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfSigner.cs",
+      "line": 36,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "internal async Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen, bool useAsync, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Internal/PdfSigner.cs",
+      "line": 142,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "var context = new PdfSignatureContext(range, options.ReservedContentsBytes, signingTime, options.DigestAlgorithm, options.Format, () => _writer.OpenSigned(buffer, layout.Contents.LessThanPosition, gap));"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 261,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// <param name=\"provider\">Builds the /Contents bytes. <see cref=\"IPdfSignatureProvider.Kind\"/> must match <see cref=\"PdfSignatureOptions.Kind\"/>.</param>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 262,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public void Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 278,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// <param name=\"provider\">Builds the /Contents bytes. <see cref=\"IPdfSignatureProvider.Kind\"/> must match <see cref=\"PdfSignatureOptions.Kind\"/>.</param>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 280,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public void Sign(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen = false)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 287,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// It produces the same bytes as <see cref=\"Sign(PdfSignatureOptions, IPdfSignatureProvider)\"/> for the same provider output."
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 295,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// <param name=\"provider\">Builds the /Contents bytes. <see cref=\"IPdfSignatureProvider.Kind\"/> must match <see cref=\"PdfSignatureOptions.Kind\"/>.</param>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 299,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public Task SignAsync(PdfSignatureOptions options, IPdfSignatureProvider provider, CancellationToken cancellationToken = default)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 306,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// It produces the same bytes as <see cref=\"Sign(Stream, PdfSignatureOptions, IPdfSignatureProvider, bool)\"/> for the same provider output."
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 316,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// <param name=\"provider\">Builds the /Contents bytes. <see cref=\"IPdfSignatureProvider.Kind\"/> must match <see cref=\"PdfSignatureOptions.Kind\"/>.</param>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/PdfDocumentEditor.cs",
+      "line": 321,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public Task SignAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, bool leaveOpen = false, CancellationToken cancellationToken = default)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 12,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "/// Builds a detached CMS SignedData value from a host RSA or ECDSA signer, in the format that <see cref=\"PdfSignatureContext.Format\"/> names."
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 14,
+      "symbols": [
+        "IPdfSignatureProvider",
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "public sealed class CmsDetachedSignatureProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 25,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "/// Initializes a new instance of the <see cref=\"CmsDetachedSignatureProvider\"/> class."
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 28,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "public CmsDetachedSignatureProvider(IPdfExternalSigner signer)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 34,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "/// Initializes a new instance of the <see cref=\"CmsDetachedSignatureProvider\"/> class."
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 38,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "public CmsDetachedSignatureProvider(IPdfExternalSigner signer, ITimestampAuthority? timestampAuthority)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 59,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "/// <exception cref=\"PdfSignatureTooLargeException\">The CMS value is larger than <see cref=\"PdfSignatureContext.ReservedContentsBytes\"/>. <see cref=\"PdfSignatureTooLargeException.ActualBytes\"/> is its exact length. The signer and any timestamp authority have been called, and a time-stamp token is not parsed.</exception>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs",
+      "line": 61,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 12,
+      "symbols": [
+        "IPdfSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "public sealed class DocTimeStampSignatureProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 17,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "/// Initializes a new instance of the <see cref=\"DocTimeStampSignatureProvider\"/> class."
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 20,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "public DocTimeStampSignatureProvider(ITimestampAuthority authority)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 36,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "/// <exception cref=\"PdfSignatureTooLargeException\">The token is larger than <see cref=\"PdfSignatureContext.ReservedContentsBytes\"/>. It is not parsed.</exception>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs",
+      "line": 39,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs",
+      "line": 41,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "/// <param name=\"cancellationToken\">Canceled when the caller of <see cref=\"PdfDocumentEditor.SignAsync(PdfSignatureOptions, IPdfSignatureProvider, CancellationToken)\"/> cancels. <see cref=\"PdfDocumentEditor.Sign(PdfSignatureOptions, IPdfSignatureProvider)\"/> passes <see cref=\"CancellationToken.None\"/> and waits for the result.</param>"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs",
+      "line": 15,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public interface IPdfSignatureProvider"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs",
+      "line": 28,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken);"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs",
+      "line": 9,
+      "symbols": [
+        "CmsDetachedSignatureProvider",
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "/// When <see cref=\"CmsDetachedSignatureProvider\"/> or <see cref=\"DocTimeStampSignatureProvider\"/> calls a host implementation,"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs",
+      "line": 9,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public sealed class PdfSignatureContext"
+    },
+    {
+      "path": "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs",
+      "line": 13,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "internal PdfSignatureContext(PdfByteRange byteRange, int reservedContentsBytes, DateTimeOffset? signingTime, PdfDigestAlgorithm digestAlgorithm, PdfSignatureFormat format, Func<Stream> openSignedBytes)"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Comparison/ErgonomicsWorkloads.cs",
+      "line": 239,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, options, new CmsDetachedSignatureProvider(new ErgonomicsRsaSigner()), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "line": 51,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "? await workflow.SignAsync(destination, new CmsDetachedSignatureProvider(signer), Options())"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "line": 52,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": workflow.Sign(destination, new CmsDetachedSignatureProvider(signer), Options());"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "line": 56,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "? await workflow.SignAsync(path, new CmsDetachedSignatureProvider(signer), Options())"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "line": 57,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": workflow.Sign(path, new CmsDetachedSignatureProvider(signer), Options());"
+    },
+    {
+      "path": "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs",
+      "line": 314,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "var provider = new DocTimeStampSignatureProvider(new FailingAuthority());"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AcroFormTests.cs",
+      "line": 871,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AcroFormTests.cs",
+      "line": 875,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 79,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "await Assert.ThrowsAsync<PdfEncryptionRestrictedException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key))), leaveOpen: true));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 118,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "OperationCanceledException sign = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, canceled.Token));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 120,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(Options(), new CmsDetachedSignatureProvider(signer), canceled.Token));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 124,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 147,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "OperationCanceledException canceled = await Assert.ThrowsAnyAsync<OperationCanceledException>(() => editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(stalling), true, cancellation.Token));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 157,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 174,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "IPdfSignatureProvider provider = documentTimestamp"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 175,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "? new DocTimeStampSignatureProvider(authority)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 176,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key)), authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 204,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "IPdfSignatureProvider provider = documentTimestamp"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 205,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "? new DocTimeStampSignatureProvider(authority)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 206,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": new CmsDetachedSignatureProvider(new DeferredSigner(key, Certificate(key)), authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 239,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "? editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, cancellation.Token)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 250,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(retry, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 423,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "return editor.SignAsync(destination, Options(), new CmsDetachedSignatureProvider(signer), true, CancellationToken.None);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 426,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, Options(), new CmsDetachedSignatureProvider(signer), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/AsyncTests.cs",
+      "line": 474,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var provider = new CmsDetachedSignatureProvider(signer);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/DssInteropTests.cs",
+      "line": 57,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(output, options, new CmsDetachedSignatureProvider(signer, authority), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1108,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1112,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1149,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class TimeStampProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/EncryptionTests.cs",
+      "line": 1153,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ForeignPdfTests.cs",
+      "line": 315,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/HardeningTests.cs",
+      "line": 799,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedContents : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/HardeningTests.cs",
+      "line": 803,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ITextInteropTests.cs",
+      "line": 184,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/InteropTests.cs",
+      "line": 274,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class SilentProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/InteropTests.cs",
+      "line": 278,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/LargeWorkloadTests.cs",
+      "line": 129,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, new PdfSignatureOptions { Reason = \"G7\", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/LargeWorkloadTests.cs",
+      "line": 392,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, new PdfSignatureOptions { Reason = \"G7\", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/LargeWorkloadTests.cs",
+      "line": 564,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, new PdfSignatureOptions { Reason = \"W-108\", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/NullReferenceTests.cs",
+      "line": 227,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/NullReferenceTests.cs",
+      "line": 231,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/OpenSslTimestampTests.cs",
+      "line": 95,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "new DocTimeStampSignatureProvider(authority),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/OutputIdentityTests.cs",
+      "line": 115,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(stream, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 37,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] saved = Sign(Options(PdfSignatureFormat.PadesBaselineB, digestAlgorithm), new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 60,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] saved = Sign(Options(PdfSignatureFormat.AdbePkcs7Detached, PdfDigestAlgorithm.Sha256), new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 82,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "await editor.SignAsync(destination, options, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 103,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "() => new DocTimeStampSignatureProvider(authority));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 109,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 120,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(PdfSignatureOptions options, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs",
+      "line": 133,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static PdfSignException AssertSignFailsWithoutWriting(PdfSignatureOptions options, Func<IPdfSignatureProvider> createProvider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/RevisionTests.cs",
+      "line": 56,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(original, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/RevisionTests.cs",
+      "line": 258,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(byte[] pdf, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ScaleTests.cs",
+      "line": 106,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class SilentProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/ScaleTests.cs",
+      "line": 112,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 91,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture(\"pypdf-base.pdf\")), null, new CmsDetachedSignatureProvider(signer), new PdfSignatureOptions"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 123,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData), new OpenSslTimestampAuthority(openssl, directory)),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 128,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory)),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 153,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(File.ReadAllBytes(ExternalTool.Fixture(\"pypdf-base.pdf\")), null, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), new PdfSignatureOptions());"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 172,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(encrypted, \"user-secret\", new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), new PdfSignatureOptions"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionInteropTests.cs",
+      "line": 301,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(byte[] pdf, string? password, IPdfSignatureProvider provider, PdfSignatureOptions options)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 51,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var provider = new CapturingProvider(new CmsDetachedSignatureProvider(new KeySigner(leafKey, leaf.RawData, new[] { root.RawData }, null)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 94,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(PdfBuilder.Basic().Finish(), new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), new PdfSignatureOptions());"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 121,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 164,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var provider = new CapturingProvider(new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 255,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(PdfBuilder.Basic().Finish(), new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)), new PdfSignatureOptions());"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 387,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var capture = new CapturingProvider(new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 454,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(byte[] pdf, IPdfSignatureProvider provider, PdfSignatureOptions options)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 591,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class CapturingProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 593,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private readonly IPdfSignatureProvider _inner;"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 595,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "public CapturingProvider(IPdfSignatureProvider inner)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 606,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public async ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 615,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureInspectionTests.cs",
+      "line": 628,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureSeedValueTests.cs",
+      "line": 299,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class RecordingProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureSeedValueTests.cs",
+      "line": 316,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 305,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "IPdfSignatureProvider provider;"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 309,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "provider = new DocTimeStampSignatureProvider(new RecordingAuthority());"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 369,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "new DocTimeStampSignatureProvider(authority));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 459,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 507,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(signer, authority));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 698,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "new DocTimeStampSignatureProvider(new RecordingAuthority()));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 830,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(signer)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 854,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 882,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new ThrowingSigner(certificate.RawData))));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 906,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new LeakySigner(certificate.RawData, sentinel, sentinelKey))));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 932,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new ThrowingAuthority())));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 979,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "Assert.Contains(\"certificate is empty\", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(certificate: () => Array.Empty<byte>()))).Message, StringComparison.Ordinal);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 980,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "Assert.Contains(\"additional certificate is empty\", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(additional: () => new[] { Array.Empty<byte>() }))).Message, StringComparison.Ordinal);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 981,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "Assert.Contains(\"empty signature\", AssertSignFailsWithoutWriting<PdfSignException>(options, () => new CmsDetachedSignatureProvider(Hostile(sign: hash => Array.Empty<byte>()))).Message, StringComparison.Ordinal);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 996,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(stream, SignerBoundOptions(8192), new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1021,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(stream, SignerBoundOptions(reserved), new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1049,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => certificate))));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1064,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(Track(signers, Hostile(certificate: () => new byte[(1024 * 1024) + 1]))));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1084,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "return new CmsDetachedSignatureProvider(Track(signers, Hostile(additional: () => chain)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1108,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(create()));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1113,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "Assert.Equal(tooLarge.ActualBytes, AssertSignFailsWithoutWriting<PdfSignatureTooLargeException>(SignerBoundOptions(tooLarge.ActualBytes - 1), () => new CmsDetachedSignatureProvider(create())).ActualBytes);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1121,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(stream, SignerBoundOptions(tooLarge.ActualBytes), new CmsDetachedSignatureProvider(create()));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1137,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "Func<IPdfSignatureProvider> create = () =>"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1141,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "return new CmsDetachedSignatureProvider(Hostile(), authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1164,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "return new DocTimeStampSignatureProvider(authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1351,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "IPdfSignatureProvider provider;"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1355,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "provider = new DocTimeStampSignatureProvider(new FaultAuthority(fault));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1366,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "provider = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData), new FaultAuthority(fault));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1395,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "CryptographicException exception = AssertSignFailsWithoutWriting<CryptographicException>(SignerBoundOptions(8192), () => new CmsDetachedSignatureProvider(createSigner()));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1404,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static TException AssertSignFailsWithoutWriting<TException>(PdfSignatureOptions options, Func<IPdfSignatureProvider> createProvider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1437,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static IPdfSignatureProvider TimestampProvider(ITimestampAuthority authority, bool documentTimestamp, TimestampChain? signerChain)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1441,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "return new DocTimeStampSignatureProvider(authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1446,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "return new CmsDetachedSignatureProvider(new RsaSigner(chain.SignerKey, chain.Signer, additional), authority);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1479,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "new DocTimeStampSignatureProvider(authority)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1929,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1935,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1941,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class HashProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SignatureTests.cs",
+      "line": 1947,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 50,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] saved = Sign(Page(), digestAlgorithm, new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 100,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] saved = Sign(Page(), PdfDigestAlgorithm.Sha256, new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 118,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "PdfSignException exception = AssertSignFailsWithoutWriting(new PdfSignatureOptions(), () => new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 141,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData, Array.Empty<byte[]>(), transform)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 153,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "() => new CmsDetachedSignatureProvider(signer));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 166,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "() => new DocTimeStampSignatureProvider(authority));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 255,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(byte[] pdf, PdfDigestAlgorithm digestAlgorithm, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningAlgorithmTests.cs",
+      "line": 269,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static PdfSignException AssertSignFailsWithoutWriting(PdfSignatureOptions options, Func<IPdfSignatureProvider> createProvider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 686,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(signer),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 792,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "new CmsDetachedSignatureProvider(signer, authority),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 812,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "? new CmsDetachedSignatureProvider(signer)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 813,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": new CmsDetachedSignatureProvider(signer, authority),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 828,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "? new CmsDetachedSignatureProvider(signer)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningInteropTests.cs",
+      "line": 829,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": ": new CmsDetachedSignatureProvider(signer, authority),"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningRollbackTests.cs",
+      "line": 209,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/SigningRollbackTests.cs",
+      "line": 213,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 344,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 368,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 613,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 617,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var cms = new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 696,
+      "symbols": [
+        "DocTimeStampSignatureProvider"
+      ],
+      "text": "var stamp = new DocTimeStampSignatureProvider(new OpenSslTimestampAuthority(openssl, directory));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 796,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(destination, new PdfSignatureOptions { FieldName = field }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate.RawData)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 1122,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/UsageRightsTests.cs",
+      "line": 1128,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/VersionTests.cs",
+      "line": 368,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/VersionTests.cs",
+      "line": 374,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/WorkBaselineTests.cs",
+      "line": 94,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(output, new PdfSignatureOptions { Reason = \"W-167\", SigningTime = TestCompat.UnixEpoch }, new CmsDetachedSignatureProvider(new RsaSigner(rsa, certificate)), leaveOpen: true);"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XfaTests.cs",
+      "line": 489,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class FixedProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XfaTests.cs",
+      "line": 493,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 119,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "var provider = new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 183,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "byte[] signed = Sign(filled, password, new PdfSignatureOptions { FieldName = \"Approval\" }, new CmsDetachedSignatureProvider(new KeySigner(key, certificate.RawData)));"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 362,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private static byte[] Sign(byte[] pdf, string? password, PdfSignatureOptions options, IPdfSignatureProvider provider)"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 432,
+      "symbols": [
+        "IPdfSignatureProvider"
+      ],
+      "text": "private sealed class TimeStampProvider : IPdfSignatureProvider"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/XrefStreamAppendTests.cs",
+      "line": 436,
+      "symbols": [
+        "PdfSignatureContext"
+      ],
+      "text": "public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken)"
+    },
+    {
+      "path": "tools/fuzz/CmsSeeds.cs",
+      "line": 130,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "editor.Sign(output, new PdfSignatureOptions { Format = format, SigningTime = new DateTimeOffset(2026, 10, 25, 0, 0, 0, TimeSpan.Zero) }, new CmsDetachedSignatureProvider(signer), leaveOpen: true);"
+    },
+    {
+      "path": "tools/fuzz/FuzzTargets.cs",
+      "line": 116,
+      "symbols": [
+        "CmsDetachedSignatureProvider"
+      ],
+      "text": "reopenedEditor.Sign(signed, options, new CmsDetachedSignatureProvider(Signer.Value), leaveOpen: true);"
+    }
+  ]
+}

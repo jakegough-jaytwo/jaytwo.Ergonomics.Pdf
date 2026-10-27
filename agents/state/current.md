@@ -57,9 +57,10 @@ Prove unused copier modes first; then resolve navigation, annotation relationshi
 
 ## Simplification: signing API and security-documentation overlap
 
-1. W-202
-2. W-203
-3. W-210
+(W-202 is done: `agents/reference/simplification/W-202/`; recommends retaining the provider boundary pending deliberate acceptance of complete-CMS/custom-attribute losses. The alternative narrowing proposal awaits Gate 2 approval.)
+
+1. W-203
+2. W-210
 
 Assess provider migration before seed-policy interactions, then decide the retained forensic surface before rewriting signature guidance. W-151 stays binding. Advance W-210 ahead of the other P2 removals because W-158 needs its findings.
 

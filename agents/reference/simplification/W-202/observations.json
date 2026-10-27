@@ -1,0 +1,28 @@
+{
+  "fixtureSha256": "3C0284EF12C67B63CF9EA551051124CFECCCC9DB1553FD151244CB88ADCB86A4",
+  "observations": [
+    {
+      "path": "engine-complete-cms",
+      "Calls": 1,
+      "customSignedAttribute": true,
+      "cryptographicSignatureOnly": true,
+      "prefixPreserved": true,
+      "outputBytes": 33851
+    },
+    {
+      "path": "workflow-complete-cms",
+      "Calls": 1,
+      "customSignedAttribute": true,
+      "cryptographicSignatureOnly": true,
+      "prefixPreserved": true,
+      "outputBytes": 33851
+    },
+    {
+      "path": "engine-raw-signer-via-builtin",
+      "Calls": 1,
+      "customSignedAttribute": false,
+      "signerDigestDiffersFromPdfDigest": true,
+      "cryptographicSignatureOnly": true
+    }
+  ]
+}
