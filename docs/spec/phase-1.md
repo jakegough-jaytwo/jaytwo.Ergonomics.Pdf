@@ -205,7 +205,7 @@ No PDF/A conformance is claimed. Appending to a PDF/A file is not guaranteed to 
 
 ### 7.6 Appearances
 
-Generated appearances cover WinAnsi text only (Western European languages), in Helvetica with Adobe advance widths. Other scripts return `NeedsViewer`, which blocks signing and flattening with a clear exception. Caller-supplied fonts are planned for 1.x (section 12, question 1).
+Generated appearances cover WinAnsi text only (Western European languages), in Helvetica with Adobe advance widths. Other scripts return `NeedsViewer`, which blocks signing and flattening with a clear exception. Caller-supplied appearance fonts remain intended scope under [SUPPORTED.md](../SUPPORTED.md); their operation contract is not adopted here (D-70).
 
 ## 8. Real-world tolerance
 
@@ -251,7 +251,9 @@ Image placement, image-to-PDF, and security-permission setters are intended scop
 
 **Phase 2** (`phase-2.md`): page extraction, concatenation, compaction, removing revisions, removing passwords.
 
-**Planned for 1.x:** caller-supplied fonts for non-WinAnsi appearances; long-term validation data (PAdES B-LT and B-LTA).
+**Intended appearance scope (D-70):** Generate text and choice-field appearances using caller-supplied TrueType fonts, embedded or subset as needed, for a documented character and script subset. Unsupported characters or shaping requirements must produce an explicit outcome. Implementation requires an adopted operation contract; no delivery milestone is assigned here.
+
+**Retired commitment (D-70):** PAdES B-LT/B-LTA construction is outside scope. This explicitly supersedes the earlier planned-for-1.x commitment. Constructing detached CMS and PAdES B-B/B-T signatures using host-controlled keys, and appending document timestamps, remain in scope. Separate document timestamps alone do not establish B-LTA conformance. Cryptographic signature validation remains excluded.
 
 **Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../SUPPORTED.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption.
 
@@ -259,8 +261,8 @@ Image placement, image-to-PDF, and security-permission setters are intended scop
 
 These were flagged for discussion at adoption. Settled requirements above do not wait on them.
 
-1. **Fonts timing.** Caller-supplied TrueType fonts are deferred to 1.x. Revisit if users need non-Latin fills in 1.0.
-2. **Long-term validation.** PAdES B-LT and B-LTA are deferred to 1.x. Revisit if a user archives signed documents for years.
+1. **Appearance fonts (resolved scope, D-70).** Caller-supplied TrueType fonts remain intended scope as defined in section 11; the operation contract and delivery timing remain to be defined.
+2. **Long-term signing (resolved, D-70).** The earlier PAdES B-LT/B-LTA commitment is retired; construction of those profiles is outside scope.
 3. **Large attachment plus signature.** Signing in the same revision as a large attachment hits the 8 MiB signature-appendix cap and requires `SaveIncremental` first. Should `Sign` do that split automatically (two revisions)?
 4. **Integrity check in inspection.** Should signature inspection offer an opt-in check that the signed bytes still hash to the CMS message digest? It reads the whole signed range, and it is the first step toward the validation that section 11 excludes.
 5. **Page-level attachment listing.** Read-only listing of paperclip annotations was declined. Confirm.

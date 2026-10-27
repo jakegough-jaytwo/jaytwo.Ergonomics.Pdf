@@ -83,7 +83,7 @@ await PdfWorkflow.FromFile("order.pdf")
 
 ## Status
 
-Pre-release. No package is published, and the 1.0 release track is suspended while the [architectural reset](reset-plan.md) moves through stages R0 to R5. Target scope is in [`docs/spec/`](docs/spec/): Phase 1 reads and appends to existing files; Phase 2 writes new files. Caller-supplied fonts and PAdES long-term validation are planned for 1.x.
+Pre-release. No package is published, and the 1.0 release track is suspended while the [architectural reset](reset-plan.md) moves through stages R0 to R5. Target operation contracts are in [`docs/spec/`](docs/spec/): Phase 1 reads and appends to existing files; Phase 2 writes new files. Caller-supplied TrueType appearance fonts remain intended scope under [supported capabilities](docs/SUPPORTED.md), with an operation contract still to define. PAdES B-LT/B-LTA construction is outside scope; [D-70](agents/decisions/D-70.md) explicitly retires the older commitment.
 
 ## More
 

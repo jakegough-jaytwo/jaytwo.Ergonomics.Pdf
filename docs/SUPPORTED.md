@@ -4,7 +4,7 @@ The intended product capabilities and boundaries of `jaytwo.Pdf` and `jaytwo.Erg
 
 This document is the durable scope commitment against which implementation, backlog items, and proposed changes are measured. An unfinished capability is a gap to close, not a reason to remove it from scope. Inclusion does not claim that a capability is available or production-qualified today.
 
-The [Project Charter](CHARTER.md) defines why the project exists and its governing principles. This document defines what belongs in the product. The [behavior reference](behavior.md) defines what the implementation currently does, including exact conditions, limitations, preservation rules, and failure guarantees. [Acceptance criteria](../ACCEPTANCE.md) define the outcomes the current tests enforce. Delivery order, implementation status, and release milestones belong in planning records.
+The [Project Charter](CHARTER.md) defines why the project exists and its governing principles. This document defines what belongs in the product. The [behavior reference](behavior.md) defines what the implementation currently does, including exact conditions, limitations, preservation rules, and failure guarantees. [Acceptance criteria](../ACCEPTANCE.md) define required outcomes and verification requirements. Delivery order, implementation status, and release milestones belong in planning records.
 
 ## Intended capabilities
 
@@ -14,9 +14,10 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | Document inspection | Read page count, page geometries, and rotation. |
 | AcroForm inspection | Read field names, types, values, and widget geometries. |
 | AcroForm population and export | Populate supported text, checkbox, radio, and choice fields, individually or in bulk; export form values. |
+| AcroForm appearances | Generate text and choice-field appearances using caller-supplied TrueType fonts, embedded or subset as needed, for a documented character and script subset. Unsupported characters or shaping requirements must produce an explicit outcome. |
 | AcroForm flattening | Flatten eligible editable fields into page content, subject to appearance, permission, and signature restrictions. |
-| XFA-bearing forms | Classify hybrid and XFA-only forms and apply operation-specific acceptance, refusal, and removal rules, including supported use of hybrid forms' AcroForm representation. XFA packet editing is excluded; removal must be an explicitly documented consequence. |
-| PDF/A inputs | Accept PDF/A inputs under normal operation contracts and preserve relevant structures where practical. Conversion, validation, and guarantees of creating or preserving conformance are excluded, including PDF/A-3. |
+| XFA-bearing forms | Classify hybrid and XFA-only forms and apply operation-specific acceptance, refusal, and removal rules, including supported use of hybrid forms' AcroForm representation. Removal must be an explicitly documented consequence. |
+| PDF/A inputs | Accept PDF/A inputs under normal operation contracts and preserve relevant structures where practical. |
 | Page rotation | Change page rotation in multiples of 90 degrees. |
 | Page extraction | Create a new PDF from selected pages of documents the operation contract supports, preserving the requested order and allowing repeated and reordered pages. Which document structures survive, are dropped, or cause refusal is set by that contract. |
 | Concatenation | Combine selected pages from supported existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. Preservation and refusal rules are set by the operation contract. |
@@ -27,7 +28,7 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | Image to PDF | Create a new PDF with specified page dimensions and place a supported image on the page. |
 | Password-protected PDFs | Open and modify supported password-protected PDFs under documented authentication and permission rules. |
 | Security permissions | Read and change supported document security permissions with appropriate authorization. |
-| Digital signing | Sign PDFs using host-controlled keys in detached CMS and PAdES B-B/B-T formats, with optional RFC 3161 signature timestamps; append document timestamps. |
+| Digital signing | Construct detached CMS and PAdES B-B/B-T signatures using host-controlled keys, with optional RFC 3161 signature timestamps, and append document timestamps. |
 | Signature and revision inspection | Inspect signatures and the claims they embed, and list document revisions, without cryptographic validation or trust assessment. The depth of CMS content and revision or coverage detail reported is set by the operation contract. |
 | Workflow ergonomics | Compose supported operations with sensible defaults and operation ordering; provide form-export shortcuts and file publication. |
 
@@ -62,18 +63,17 @@ These are product boundaries, independent of implementation status. Changing the
 - Rendering and page-content text extraction.
 - General document authoring and layout, apart from the limited image operations below.
 - Redaction, cryptographic signature validation, and general PDF repair.
+- PAdES B-LT/B-LTA construction. Separate document timestamps alone do not establish B-LTA conformance.
 - XFA packet editing.
 - JavaScript authoring, editing, or execution.
-- PDF/A conversion, validation, and guarantees of creating or preserving conformance, including PDF/A-3.
+- PDF/A conversion, validation, and guarantees of creating or preserving conformance, including PDF/A-3. Attachment support and associated-file keys do not imply PDF/A-3 compliance.
 - Public-key encryption and adding encryption to a file.
 - General annotation editing and page-level file attachment annotations.
 - Rewriting an input file in place. Incrementally appending to a source is a separate supported operation.
 
 Limited blank-page creation and image placement for image-to-PDF conversion, image stamping, and image watermarking are the explicit image exception adopted in [D-68](../agents/decisions/D-68.md). General stamping or watermarking beyond that image capability is not included.
 
-XFA classification and operation-specific acceptance, refusal, and removal include supported use of hybrid forms' AcroForm representation. XFA packet editing remains excluded. The operation contract must explicitly document removal as a consequence wherever it occurs; current rules remain in the behavior reference.
-
-PDF/A inputs are accepted under normal operation contracts, with relevant structures preserved where practical. This does not guarantee that every PDF/A input supports every operation or that output creates or preserves conformance. Attachment support and associated-file keys do not imply PDF/A-3 compliance. Necessary internal functionality for supported workflows does not create additional public capabilities.
+Necessary internal functionality for supported workflows does not create additional public capabilities.
 
 ## Resource and failure contracts
 

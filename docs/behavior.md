@@ -1,6 +1,6 @@
 # Behavior reference
 
-This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](CHARTER.md) defines product intent and architectural principles; [supported capabilities](SUPPORTED.md) defines intended capabilities and boundaries. [`ACCEPTANCE.md`](../ACCEPTANCE.md) lists the checks the tests enforce. A documented capability is not by itself a production-qualification claim.
+This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](CHARTER.md) defines product intent and architectural principles; [supported capabilities](SUPPORTED.md) defines intended capabilities and boundaries. [`ACCEPTANCE.md`](../ACCEPTANCE.md) defines required outcomes and verification requirements. A documented capability is not by itself a production-qualification claim.
 
 The engine owns parsing, writing, encryption, forms, appearances, PDF signature construction, and document invariants. Its public API exposes supported operations rather than raw PDF objects. The workflow library composes operations through that public API and owns convenience, ordering, and file handling. Private signing keys remain under host control.
 
@@ -10,11 +10,14 @@ The owner's documentation reset adds the following targets. They are not current
 
 | Target | Intended behavior | Contract still to define |
 | --- | --- | --- |
+| Caller-supplied appearance fonts | Generate text and choice-field appearances using caller-supplied TrueType fonts, embedded or subset as needed, for a documented character and script subset. Unsupported characters or shaping requirements must produce an explicit outcome. | Supported characters and scripts, shaping boundaries, embedding and subsetting, resource limits, permissions, preservation, and failure guarantees. |
 | Image placement | Place JPEG and PNG images on existing pages with position, size, rotation, opacity, and foreground/background painting order. | Accepted JPEG and PNG variants; PNG decoding and transparency, including alpha and separate transparent-color declarations; color-profile handling; encoded and decoded resource limits; coordinates relative to crop boxes, page rotation, and user units; permissions, certification, existing signatures, preservation, and failure guarantees. |
 | Image to PDF | Create a new PDF with specified page dimensions and place a supported image on it. The engine supplies the limited creation and placement operations; workflows supply the shortcut. | Page and image sizing, image fit and clipping, output version and structure, ownership, resource limits, and failure guarantees. This target does not introduce general authoring or layout. |
 | Permission changes | Change supported document security permissions with appropriate authorization. | Supported security schemes, required credentials, permitted changes, interaction with existing signatures, encryption preservation, output strategy, and failure guarantees. Existing permission inspection and enforcement do not provide a permission-editing API. |
 
 Unsupported image formats and variants are intended to be rejected; general image conversion remains the caller's responsibility. Foreground/background placement describes painting order, not guaranteed visibility over every existing page element. Selected-page watermarking is a planned workflow composition of the engine's placement operation.
+
+The agreed initial PNG subset is 8-bit, non-interlaced RGB/RGBA. This is a planned implementation boundary, not current image support. Transparency, color-profile handling, resource limits, and exact refusal behavior still require an adopted operation contract.
 
 The charter favors incremental preservation and permits justified rewrites under its governance. That principle does not change the existing incremental-save contract or assembly writer described here, or add a general rewrite operation. Both libraries remain managed .NET, with no native runtime dependencies or third-party runtime packages; necessary Microsoft framework compatibility packages and the workflow's engine reference are permitted.
 
