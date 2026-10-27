@@ -1,0 +1,1846 @@
+{
+  "real_examples": [
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+      "pages": [
+        3
+      ],
+      "before": [
+        "092817 8710 Instruction Pages@s1+",
+        "  FAA Form 8710-1, Airman Certificate and/or Rating Application Supplemental Information and Instructions@s1",
+        "  AIRMAN CERTIFICATE AND/OR RATING APPLICATION@s2",
+        "  PILOT\u2019S BILL OF RIGHTS WRITTEN NOTIFICATION OF INVESTIGATION@s3+",
+        "    The information you submit on the attached FAA Form 8710-1, Airman Certificate and/or Rating Application, will be used by the Administrator of the Federal Aviation Administration as part of the basis for issuing an airman certificate, rating, or inspe...@s3+",
+        "      II. CERTIFICATE OR RATING APPLIED FOR ON BASIS OF: Block A.  Completion of Required Test.@s4",
+        "      Block C.  Graduate of an Approved Course.@s4",
+        "      Block D.  Holder of Foreign License.@s4",
+        "      Block E. Completion of Air Carrier\u2019s Training Program.@s4",
+        "      IV. HAVE YOU PREVIOUSLY RECEIVED A NOTICE OF DISAPPROVAL OR  BEEN  DENIED  FOR  ANY REASON  FOR  THE  CERTIFICATE  AND/OR RATING@s4",
+        "      V. APPLICANT\u2019S CERTIFICATION.@s4",
+        "FAA Form 8710-1 Front Page One Draft_080817 correction@s5",
+        "FAA Form 8710-1 Back Page Two Draft CLEAN_092817@s6"
+      ],
+      "afterA": [
+        "092817 8710 Instruction Pages+",
+        "  PILOT\u2019S BILL OF RIGHTS WRITTEN NOTIFICATION OF INVESTIGATION@1+",
+        "    The information you submit on the attached FAA Form 8710-1, Airman Certificate and/or Rating Application, will be used by the Administrator of the Federal Aviation Administration as part of the basis for issuing an airman certificate, rating, or inspe...@1"
+      ],
+      "afterB": [
+        "PILOT\u2019S BILL OF RIGHTS WRITTEN NOTIFICATION OF INVESTIGATION@1+",
+        "  The information you submit on the attached FAA Form 8710-1, Airman Certificate and/or Rating Application, will be used by the Administrator of the Federal Aviation Administration as part of the basis for issuing an airman certificate, rating, or inspe...@1"
+      ]
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+      "pages": [
+        2
+      ],
+      "before": [
+        "Declaration for Federal Employment* (*This form may also be used to assess fitness for federal contract employment)@s1+",
+        "  Instructions@s1",
+        "  Privacy Act Statement@s1",
+        "  Public Burden Statement@s1",
+        "  General Information@s2",
+        "  Selective Service Registration@s2",
+        "  Military Service@s2",
+        "  Background Information@s2",
+        "  Additional Questions@s3",
+        "  Continuation Space / Agency Optional Questions@s3",
+        "  Certifications / Additional Questions@s3"
+      ],
+      "afterA": [
+        "Declaration for Federal Employment* (*This form may also be used to assess fitness for federal contract employment)+",
+        "  General Information@1",
+        "  Selective Service Registration@1",
+        "  Military Service@1",
+        "  Background Information@1"
+      ],
+      "afterB": [
+        "General Information@1",
+        "Selective Service Registration@1",
+        "Military Service@1",
+        "Background Information@1"
+      ]
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+      "pages": [
+        3,
+        1
+      ],
+      "before": [
+        "Declaration for Federal Employment* (*This form may also be used to assess fitness for federal contract employment)@s1+",
+        "  Instructions@s1",
+        "  Privacy Act Statement@s1",
+        "  Public Burden Statement@s1",
+        "  General Information@s2",
+        "  Selective Service Registration@s2",
+        "  Military Service@s2",
+        "  Background Information@s2",
+        "  Additional Questions@s3",
+        "  Continuation Space / Agency Optional Questions@s3",
+        "  Certifications / Additional Questions@s3"
+      ],
+      "afterA": [
+        "Declaration for Federal Employment* (*This form may also be used to assess fitness for federal contract employment)@2+",
+        "  Instructions@2",
+        "  Privacy Act Statement@2",
+        "  Public Burden Statement@2",
+        "  Additional Questions@1",
+        "  Continuation Space / Agency Optional Questions@1",
+        "  Certifications / Additional Questions@1"
+      ],
+      "afterB": [
+        "Declaration for Federal Employment* (*This form may also be used to assess fitness for federal contract employment)@2+",
+        "  Instructions@2",
+        "  Privacy Act Statement@2",
+        "  Public Burden Statement@2",
+        "  Additional Questions@1",
+        "  Continuation Space / Agency Optional Questions@1",
+        "  Certifications / Additional Questions@1"
+      ]
+    }
+  ],
+  "tools": {
+    "pypdf": "6.21.1",
+    "qpdf": "qpdf version 12.3.2",
+    "mutool": "mutool version 1.28.5"
+  },
+  "summary": {
+    "operations": 48,
+    "engine_baseline_accepted": 48,
+    "engine_baseline_with_outlines_in_output": 0,
+    "proposal_accepted": 27,
+    "proposal_refused": 21,
+    "proposal_accepted_with_projected_outline": 26,
+    "rules_differ": 7,
+    "refusal_reasons": {
+      "limit:depth": 1,
+      "malformed:cycle-or-shared-item": 3,
+      "malformed:parent-mismatch": 1,
+      "malformed:item-not-dictionary": 1,
+      "malformed:title": 1,
+      "malformed:dest-not-page": 4,
+      "malformed:name-missing": 1,
+      "malformed:dest-and-action": 1,
+      "malformed:dest-mode": 1,
+      "malformed:dest-params": 1,
+      "unsupported:action:URI": 1,
+      "unsupported:action:GoToR": 1,
+      "unsupported:action:Launch": 1,
+      "unsupported:action:Named": 1,
+      "unsupported:action:JavaScript": 1,
+      "unsupported:action:Next": 1
+    }
+  },
+  "corpus": {
+    "files": 169,
+    "no_outlines": 30,
+    "encrypted_skipped": 121,
+    "unreadable_ValueError": 1,
+    "unreadable_NotImplementedError": 1,
+    "with_outlines": 16,
+    "classified_supported": 15,
+    "empty_outline": 1
+  },
+  "corpus_files_with_outlines": [
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+      "items": 12,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 5,
+      "dead_ancestors_total": 7,
+      "max_items_A": 9,
+      "max_items_B": 8,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+      "items": 12,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 5,
+      "dead_ancestors_total": 7,
+      "max_items_A": 9,
+      "max_items_B": 8,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+      "items": 61,
+      "pages": 16,
+      "selections": 32,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 32,
+      "max_items_B": 32,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+      "items": 13,
+      "pages": 6,
+      "selections": 12,
+      "rules_differ": 6,
+      "dead_ancestors_total": 12,
+      "max_items_A": 11,
+      "max_items_B": 8,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+      "items": 15,
+      "pages": 54,
+      "selections": 108,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 11,
+      "max_items_B": 11,
+      "empty_A": 50
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+      "items": 22,
+      "pages": 16,
+      "selections": 32,
+      "rules_differ": 4,
+      "dead_ancestors_total": 4,
+      "max_items_A": 13,
+      "max_items_B": 13,
+      "empty_A": 18
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+      "items": 1,
+      "pages": 62,
+      "selections": 124,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 1,
+      "max_items_B": 1,
+      "empty_A": 122
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+      "items": 1,
+      "pages": 1,
+      "selections": 2,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 1,
+      "max_items_B": 1,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+      "items": 1,
+      "pages": 1,
+      "selections": 2,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 1,
+      "max_items_B": 1,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+      "items": 1,
+      "pages": 1,
+      "selections": 2,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 1,
+      "max_items_B": 1,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+      "items": 3,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 2,
+      "max_items_B": 2,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+      "items": 11,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 4,
+      "dead_ancestors_total": 4,
+      "max_items_A": 7,
+      "max_items_B": 7,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+      "items": 11,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 4,
+      "dead_ancestors_total": 4,
+      "max_items_A": 7,
+      "max_items_B": 7,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+      "items": 3,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 2,
+      "max_items_B": 2,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+      "items": 0,
+      "pages": 4,
+      "selections": 0,
+      "rules_differ": 0,
+      "dead_ancestors_total": 0,
+      "max_items_A": 0,
+      "max_items_B": 0,
+      "empty_A": 0
+    },
+    {
+      "file": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+      "items": 5,
+      "pages": 3,
+      "selections": 6,
+      "rules_differ": 2,
+      "dead_ancestors_total": 2,
+      "max_items_A": 3,
+      "max_items_B": 3,
+      "empty_A": 2
+    }
+  ],
+  "failures": [],
+  "results": [
+    {
+      "name": "book-all",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@2",
+        "Ch2@3-",
+        "  2.1@3",
+        "  2.2@4",
+        "Ch3@4"
+      ],
+      "itemsA": 7,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@2",
+        "Ch2@3-",
+        "  2.1@3",
+        "  2.2@4",
+        "Ch3@4"
+      ],
+      "itemsB": 7,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 7,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "book-12",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@2"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@2"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "book-2",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1+",
+        "  1.2@1"
+      ],
+      "itemsA": 2,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "1.2@1"
+      ],
+      "itemsB": 1,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 1,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "book-23",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1+",
+        "  1.2@1",
+        "Ch2@2-",
+        "  2.1@2"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "1.2@1",
+        "Ch2@2-",
+        "  2.1@2"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "book-4",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch2-",
+        "  2.2@1",
+        "Ch3@1"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "2.2@1",
+        "Ch3@1"
+      ],
+      "itemsB": 2,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "book-31",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1@2+",
+        "  1.1@2",
+        "Ch2@1-",
+        "  2.1@1"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@2+",
+        "  1.1@2",
+        "Ch2@1-",
+        "  2.1@1"
+      ],
+      "itemsB": 4,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 4,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "book-reverse",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1@4+",
+        "  1.1@4",
+        "  1.2@3",
+        "Ch2@2-",
+        "  2.1@2",
+        "  2.2@1",
+        "Ch3@1"
+      ],
+      "itemsA": 7,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@4+",
+        "  1.1@4",
+        "  1.2@3",
+        "Ch2@2-",
+        "  2.1@2",
+        "  2.2@1",
+        "Ch3@1"
+      ],
+      "itemsB": 7,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 7,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "book-repeat",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@3"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@1+",
+        "  1.1@1",
+        "  1.2@3"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "book-two-occurrences",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ],
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7,
+        7
+      ],
+      "afterA": [
+        "Ch1@1+",
+        "  1.1@1",
+        "Ch1+",
+        "  1.2@2"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch1@1+",
+        "  1.1@1",
+        "1.2@2"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "book-two-same-order",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ],
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ]
+      ],
+      "source_items": [
+        7,
+        7
+      ],
+      "afterA": [
+        "Ch2@1-",
+        "  2.1@1",
+        "  2.2@2",
+        "Ch3@2",
+        "Ch2@3-",
+        "  2.1@3",
+        "  2.2@4",
+        "Ch3@4"
+      ],
+      "itemsA": 8,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Ch2@1-",
+        "  2.1@1",
+        "  2.2@2",
+        "Ch3@2",
+        "Ch2@3-",
+        "  2.1@3",
+        "  2.2@4",
+        "Ch3@4"
+      ],
+      "itemsB": 8,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 8,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "headings-23",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Part I+",
+          "  A@s1",
+          "  B@s2",
+          "Part II+",
+          "  C@s3",
+          "Part III",
+          "Appendix@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Part I+",
+        "  B@1",
+        "Part II+",
+        "  C@2"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Part I+",
+        "  B@1",
+        "Part II+",
+        "  C@2"
+      ],
+      "itemsB": 4,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "headings-1",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Part I+",
+          "  A@s1",
+          "  B@s2",
+          "Part II+",
+          "  C@s3",
+          "Part III",
+          "Appendix@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Part I+",
+        "  A@1"
+      ],
+      "itemsA": 2,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Part I+",
+        "  A@1"
+      ],
+      "itemsB": 2,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 1,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "headings-all",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Part I+",
+          "  A@s1",
+          "  B@s2",
+          "Part II+",
+          "  C@s3",
+          "Part III",
+          "Appendix@s4"
+        ]
+      ],
+      "source_items": [
+        7
+      ],
+      "afterA": [
+        "Part I+",
+        "  A@1",
+        "  B@2",
+        "Part II+",
+        "  C@3",
+        "Appendix@4"
+      ],
+      "itemsA": 6,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Part I+",
+        "  A@1",
+        "  B@2",
+        "Part II+",
+        "  C@3",
+        "Appendix@4"
+      ],
+      "itemsB": 6,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 4,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "dupes-1",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Summary@s1",
+          "Summary@s2+",
+          "  Notes@s1",
+          "  Notes@s2",
+          "Summary@s3"
+        ]
+      ],
+      "source_items": [
+        5
+      ],
+      "afterA": [
+        "Summary@1",
+        "Summary+",
+        "  Notes@1"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Summary@1",
+        "Notes@1"
+      ],
+      "itemsB": 2,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "dupes-21",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Summary@s1",
+          "Summary@s2+",
+          "  Notes@s1",
+          "  Notes@s2",
+          "Summary@s3"
+        ]
+      ],
+      "source_items": [
+        5
+      ],
+      "afterA": [
+        "Summary@2",
+        "Summary@1+",
+        "  Notes@2",
+        "  Notes@1"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Summary@2",
+        "Summary@1+",
+        "  Notes@2",
+        "  Notes@1"
+      ],
+      "itemsB": 4,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 4,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "dupes-2",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Summary@s1",
+          "Summary@s2+",
+          "  Notes@s1",
+          "  Notes@s2",
+          "Summary@s3"
+        ]
+      ],
+      "source_items": [
+        5
+      ],
+      "afterA": [
+        "Summary@1+",
+        "  Notes@1"
+      ],
+      "itemsA": 2,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Summary@1+",
+        "  Notes@1"
+      ],
+      "itemsB": 2,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "dupes-twice",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Summary@s1",
+          "Summary@s2+",
+          "  Notes@s1",
+          "  Notes@s2",
+          "Summary@s3"
+        ],
+        [
+          "Summary@s1",
+          "Summary@s2+",
+          "  Notes@s1",
+          "  Notes@s2",
+          "Summary@s3"
+        ]
+      ],
+      "source_items": [
+        5,
+        5
+      ],
+      "afterA": [
+        "Summary@1",
+        "Summary@2+",
+        "  Notes@1",
+        "  Notes@2",
+        "Summary@3",
+        "Summary@4+",
+        "  Notes@3",
+        "  Notes@4"
+      ],
+      "itemsA": 8,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "Summary@1",
+        "Summary@2+",
+        "  Notes@1",
+        "  Notes@2",
+        "Summary@3",
+        "Summary@4+",
+        "  Notes@3",
+        "  Notes@4"
+      ],
+      "itemsB": 8,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 8,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "named-all",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "N1@s1",
+          "N2@s2+",
+          "  N3@s3",
+          "Direct@s4"
+        ]
+      ],
+      "source_items": [
+        4
+      ],
+      "afterA": [
+        "N1@1",
+        "N2@2+",
+        "  N3@3",
+        "Direct@4"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "N1@1",
+        "N2@2+",
+        "  N3@3",
+        "Direct@4"
+      ],
+      "itemsB": 4,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 4,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "named-3",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "N1@s1",
+          "N2@s2+",
+          "  N3@s3",
+          "Direct@s4"
+        ]
+      ],
+      "source_items": [
+        4
+      ],
+      "afterA": [
+        "N2+",
+        "  N3@1"
+      ],
+      "itemsA": 2,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "N3@1"
+      ],
+      "itemsB": 1,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 1,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "modes-all",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "xyz-null@s1",
+          "xyz@s2",
+          "fit@s3",
+          "fith@s4",
+          "fitv@s1",
+          "fitr@s2",
+          "fitb@s3",
+          "fitbh@s4",
+          "fitbv@s1"
+        ]
+      ],
+      "source_items": [
+        9
+      ],
+      "afterA": [
+        "xyz-null@1",
+        "xyz@2",
+        "fit@3",
+        "fith@4",
+        "fitv@1",
+        "fitr@2",
+        "fitb@3",
+        "fitbh@4",
+        "fitbv@1"
+      ],
+      "itemsA": 9,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "xyz-null@1",
+        "xyz@2",
+        "fit@3",
+        "fith@4",
+        "fitv@1",
+        "fitr@2",
+        "fitb@3",
+        "fitbh@4",
+        "fitbv@1"
+      ],
+      "itemsB": 9,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 9,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "modes-34",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "xyz-null@s1",
+          "xyz@s2",
+          "fit@s3",
+          "fith@s4",
+          "fitv@s1",
+          "fitr@s2",
+          "fitb@s3",
+          "fitbh@s4",
+          "fitbv@s1"
+        ]
+      ],
+      "source_items": [
+        9
+      ],
+      "afterA": [
+        "fit@1",
+        "fith@2",
+        "fitb@1",
+        "fitbh@2"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "fit@1",
+        "fith@2",
+        "fitb@1",
+        "fitbh@2"
+      ],
+      "itemsB": 4,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 4,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "styled-2",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Colored@s1",
+          "Plain@s2"
+        ]
+      ],
+      "source_items": [
+        2
+      ],
+      "afterA": [
+        "Plain@1"
+      ],
+      "itemsA": 1,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "Plain@1"
+      ],
+      "itemsB": 1,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 1,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "styled-all",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Colored@s1",
+          "Plain@s2"
+        ]
+      ],
+      "source_items": [
+        2
+      ],
+      "afterA": [
+        "Colored@1",
+        "Plain@2"
+      ],
+      "itemsA": 2,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "Colored@1",
+        "Plain@2"
+      ],
+      "itemsB": 2,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "mixed-inputs",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch1@s1+",
+          "  1.1@s1",
+          "  1.2@s2",
+          "Ch2@s3-",
+          "  2.1@s3",
+          "  2.2@s4",
+          "Ch3@s4"
+        ],
+        [],
+        [],
+        [
+          "Part I+",
+          "  A@s1",
+          "  B@s2",
+          "Part II+",
+          "  C@s3",
+          "Part III",
+          "Appendix@s4"
+        ]
+      ],
+      "source_items": [
+        7,
+        0,
+        0,
+        7
+      ],
+      "afterA": [
+        "Ch1+",
+        "  1.2@1",
+        "Part II+",
+        "  C@4"
+      ],
+      "itemsA": 4,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "A_oracle_equals_model": true,
+      "afterB": [
+        "1.2@1",
+        "Part II+",
+        "  C@4"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "B_oracle_equals_model": true,
+      "live_items": 2,
+      "dead_ancestor_headings_A": 1
+    },
+    {
+      "name": "none-only",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        []
+      ],
+      "source_items": [
+        0
+      ],
+      "afterA": [],
+      "itemsA": 0,
+      "afterB": [],
+      "itemsB": 0,
+      "live_items": 0,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "deep",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "limit",
+        "reason": "depth"
+      }
+    },
+    {
+      "name": "bad-cycle-next",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "cycle-or-shared-item"
+      }
+    },
+    {
+      "name": "bad-cycle-first",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "cycle-or-shared-item"
+      }
+    },
+    {
+      "name": "bad-shared-item",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "cycle-or-shared-item"
+      }
+    },
+    {
+      "name": "bad-parent-mismatch",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "parent-mismatch"
+      }
+    },
+    {
+      "name": "bad-dangling-first",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "item-not-dictionary"
+      }
+    },
+    {
+      "name": "bad-no-title",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "title"
+      }
+    },
+    {
+      "name": "bad-dest-dangling",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-not-page"
+      }
+    },
+    {
+      "name": "bad-dest-nonpage",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-not-page"
+      }
+    },
+    {
+      "name": "bad-dest-intpage",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-not-page"
+      }
+    },
+    {
+      "name": "bad-name-missing",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "name-missing"
+      }
+    },
+    {
+      "name": "bad-both-dest-action",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-and-action"
+      }
+    },
+    {
+      "name": "bad-mode-bad",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-mode"
+      }
+    },
+    {
+      "name": "bad-mode-short",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-params"
+      }
+    },
+    {
+      "name": "bad-act-uri",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:URI"
+      }
+    },
+    {
+      "name": "bad-act-gotor",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:GoToR"
+      }
+    },
+    {
+      "name": "bad-act-launch",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:Launch"
+      }
+    },
+    {
+      "name": "bad-act-named",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:Named"
+      }
+    },
+    {
+      "name": "bad-act-js",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:JavaScript"
+      }
+    },
+    {
+      "name": "bad-act-next",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "unsupported",
+        "reason": "action:Next"
+      }
+    },
+    {
+      "name": "count-lie",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch@s1+",
+          "  Sub@s2",
+          "Other@s3"
+        ]
+      ],
+      "source_items": [
+        3
+      ],
+      "afterA": [
+        "Ch@1+",
+        "  Sub@2",
+        "Other@3"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "Ch@1+",
+        "  Sub@2",
+        "Other@3"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "se-present",
+      "outcome": "accepted",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "before": [
+        [
+          "Ch@s1+",
+          "  Sub@s2",
+          "Other@s3"
+        ]
+      ],
+      "source_items": [
+        3
+      ],
+      "afterA": [
+        "Ch@1+",
+        "  Sub@2",
+        "Other@3"
+      ],
+      "itemsA": 3,
+      "A_qpdf_ok": true,
+      "A_pypdf_problems": [],
+      "A_pypdf_equals_model": true,
+      "A_mutool_equals_model": true,
+      "afterB": [
+        "Ch@1+",
+        "  Sub@2",
+        "Other@3"
+      ],
+      "itemsB": 3,
+      "B_qpdf_ok": true,
+      "B_pypdf_problems": [],
+      "B_pypdf_equals_model": true,
+      "B_mutool_equals_model": true,
+      "live_items": 3,
+      "dead_ancestor_headings_A": 0
+    },
+    {
+      "name": "bad-dest-dangling-sub-unselected",
+      "outcome": "refused",
+      "engine_error": null,
+      "engine_omissions": {},
+      "engine_qpdf_ok": true,
+      "engine_has_outlines": false,
+      "refusal": {
+        "kind": "malformed",
+        "reason": "dest-not-page"
+      }
+    }
+  ]
+}

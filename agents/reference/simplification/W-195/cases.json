@@ -1,0 +1,782 @@
+[
+  {
+    "name": "book-all",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": "Ch1@1+\n  1.1@1\n  1.2@2\nCh2@3-\n  2.1@3\n  2.2@4\nCh3@4",
+    "oracleB": "Ch1@1+\n  1.1@1\n  1.2@2\nCh2@3-\n  2.1@3\n  2.2@4\nCh3@4",
+    "refuse": null
+  },
+  {
+    "name": "book-12",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "oracleA": "Ch1@1+\n  1.1@1\n  1.2@2",
+    "oracleB": "Ch1@1+\n  1.1@1\n  1.2@2",
+    "refuse": null
+  },
+  {
+    "name": "book-2",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "oracleA": "Ch1+\n  1.2@1",
+    "oracleB": "1.2@1",
+    "refuse": null
+  },
+  {
+    "name": "book-23",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": "Ch1+\n  1.2@1\nCh2@2-\n  2.1@2",
+    "oracleB": "1.2@1\nCh2@2-\n  2.1@2",
+    "refuse": null
+  },
+  {
+    "name": "book-4",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          4
+        ]
+      }
+    ],
+    "oracleA": "Ch2-\n  2.2@1\nCh3@1",
+    "oracleB": "2.2@1\nCh3@1",
+    "refuse": null
+  },
+  {
+    "name": "book-31",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          3,
+          1
+        ]
+      }
+    ],
+    "oracleA": "Ch1@2+\n  1.1@2\nCh2@1-\n  2.1@1",
+    "oracleB": "Ch1@2+\n  1.1@2\nCh2@1-\n  2.1@1",
+    "refuse": null
+  },
+  {
+    "name": "book-reverse",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          4,
+          3,
+          2,
+          1
+        ]
+      }
+    ],
+    "oracleA": "Ch1@4+\n  1.1@4\n  1.2@3\nCh2@2-\n  2.1@2\n  2.2@1\nCh3@1",
+    "oracleB": "Ch1@4+\n  1.1@4\n  1.2@3\nCh2@2-\n  2.1@2\n  2.2@1\nCh3@1",
+    "refuse": null
+  },
+  {
+    "name": "book-repeat",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          1,
+          1,
+          2
+        ]
+      }
+    ],
+    "oracleA": "Ch1@1+\n  1.1@1\n  1.2@3",
+    "oracleB": "Ch1@1+\n  1.1@1\n  1.2@3",
+    "refuse": null
+  },
+  {
+    "name": "book-two-occurrences",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "file": "book",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "oracleA": "Ch1@1+\n  1.1@1\nCh1+\n  1.2@2",
+    "oracleB": "Ch1@1+\n  1.1@1\n1.2@2",
+    "refuse": null
+  },
+  {
+    "name": "book-two-same-order",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          3,
+          4
+        ]
+      },
+      {
+        "file": "book",
+        "pages": [
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": "Ch2@1-\n  2.1@1\n  2.2@2\nCh3@2\nCh2@3-\n  2.1@3\n  2.2@4\nCh3@4",
+    "oracleB": "Ch2@1-\n  2.1@1\n  2.2@2\nCh3@2\nCh2@3-\n  2.1@3\n  2.2@4\nCh3@4",
+    "refuse": null
+  },
+  {
+    "name": "headings-23",
+    "inputs": [
+      {
+        "file": "headings",
+        "pages": [
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": "Part I+\n  B@1\nPart II+\n  C@2",
+    "oracleB": "Part I+\n  B@1\nPart II+\n  C@2",
+    "refuse": null
+  },
+  {
+    "name": "headings-1",
+    "inputs": [
+      {
+        "file": "headings",
+        "pages": [
+          1
+        ]
+      }
+    ],
+    "oracleA": "Part I+\n  A@1",
+    "oracleB": "Part I+\n  A@1",
+    "refuse": null
+  },
+  {
+    "name": "headings-all",
+    "inputs": [
+      {
+        "file": "headings",
+        "pages": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": "Part I+\n  A@1\n  B@2\nPart II+\n  C@3\nAppendix@4",
+    "oracleB": "Part I+\n  A@1\n  B@2\nPart II+\n  C@3\nAppendix@4",
+    "refuse": null
+  },
+  {
+    "name": "dupes-1",
+    "inputs": [
+      {
+        "file": "dupes",
+        "pages": [
+          1
+        ]
+      }
+    ],
+    "oracleA": "Summary@1\nSummary+\n  Notes@1",
+    "oracleB": "Summary@1\nNotes@1",
+    "refuse": null
+  },
+  {
+    "name": "dupes-21",
+    "inputs": [
+      {
+        "file": "dupes",
+        "pages": [
+          2,
+          1
+        ]
+      }
+    ],
+    "oracleA": "Summary@2\nSummary@1+\n  Notes@2\n  Notes@1",
+    "oracleB": "Summary@2\nSummary@1+\n  Notes@2\n  Notes@1",
+    "refuse": null
+  },
+  {
+    "name": "dupes-2",
+    "inputs": [
+      {
+        "file": "dupes",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "oracleA": "Summary@1+\n  Notes@1",
+    "oracleB": "Summary@1+\n  Notes@1",
+    "refuse": null
+  },
+  {
+    "name": "dupes-twice",
+    "inputs": [
+      {
+        "file": "dupes",
+        "pages": [
+          1,
+          2
+        ]
+      },
+      {
+        "file": "dupes",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "oracleA": "Summary@1\nSummary@2+\n  Notes@1\n  Notes@2\nSummary@3\nSummary@4+\n  Notes@3\n  Notes@4",
+    "oracleB": "Summary@1\nSummary@2+\n  Notes@1\n  Notes@2\nSummary@3\nSummary@4+\n  Notes@3\n  Notes@4",
+    "refuse": null
+  },
+  {
+    "name": "named-all",
+    "inputs": [
+      {
+        "file": "named",
+        "pages": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": "N1@1\nN2@2+\n  N3@3\nDirect@4",
+    "oracleB": "N1@1\nN2@2+\n  N3@3\nDirect@4",
+    "refuse": null
+  },
+  {
+    "name": "named-3",
+    "inputs": [
+      {
+        "file": "named",
+        "pages": [
+          3
+        ]
+      }
+    ],
+    "oracleA": "N2+\n  N3@1",
+    "oracleB": "N3@1",
+    "refuse": null
+  },
+  {
+    "name": "modes-all",
+    "inputs": [
+      {
+        "file": "modes",
+        "pages": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "modes-34",
+    "inputs": [
+      {
+        "file": "modes",
+        "pages": [
+          3,
+          4
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "styled-2",
+    "inputs": [
+      {
+        "file": "styled",
+        "pages": [
+          2
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "styled-all",
+    "inputs": [
+      {
+        "file": "styled",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "mixed-inputs",
+    "inputs": [
+      {
+        "file": "book",
+        "pages": [
+          2
+        ]
+      },
+      {
+        "file": "no-outlines",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "file": "empty-root",
+        "pages": [
+          2
+        ]
+      },
+      {
+        "file": "headings",
+        "pages": [
+          3
+        ]
+      }
+    ],
+    "oracleA": "Ch1+\n  1.2@1\nPart II+\n  C@4",
+    "oracleB": "1.2@1\nPart II+\n  C@4",
+    "refuse": null
+  },
+  {
+    "name": "none-only",
+    "inputs": [
+      {
+        "file": "no-outlines",
+        "pages": [
+          1,
+          2
+        ]
+      }
+    ],
+    "oracleA": "",
+    "oracleB": "",
+    "refuse": null
+  },
+  {
+    "name": "deep",
+    "inputs": [
+      {
+        "file": "deep-chain",
+        "pages": [
+          1
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "bad-cycle-next",
+    "inputs": [
+      {
+        "file": "cycle-next",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-cycle-first",
+    "inputs": [
+      {
+        "file": "cycle-first",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-shared-item",
+    "inputs": [
+      {
+        "file": "shared-item",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-parent-mismatch",
+    "inputs": [
+      {
+        "file": "parent-mismatch",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-dangling-first",
+    "inputs": [
+      {
+        "file": "dangling-first",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-no-title",
+    "inputs": [
+      {
+        "file": "no-title",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-dest-dangling",
+    "inputs": [
+      {
+        "file": "dest-dangling",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-dest-nonpage",
+    "inputs": [
+      {
+        "file": "dest-nonpage",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-dest-intpage",
+    "inputs": [
+      {
+        "file": "dest-intpage",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-name-missing",
+    "inputs": [
+      {
+        "file": "name-missing",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-both-dest-action",
+    "inputs": [
+      {
+        "file": "both-dest-action",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-mode-bad",
+    "inputs": [
+      {
+        "file": "mode-bad",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-mode-short",
+    "inputs": [
+      {
+        "file": "mode-short",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-uri",
+    "inputs": [
+      {
+        "file": "act-uri",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-gotor",
+    "inputs": [
+      {
+        "file": "act-gotor",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-launch",
+    "inputs": [
+      {
+        "file": "act-launch",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-named",
+    "inputs": [
+      {
+        "file": "act-named",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-js",
+    "inputs": [
+      {
+        "file": "act-js",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "bad-act-next",
+    "inputs": [
+      {
+        "file": "act-next",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  },
+  {
+    "name": "count-lie",
+    "inputs": [
+      {
+        "file": "count-lie",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "se-present",
+    "inputs": [
+      {
+        "file": "se-present",
+        "pages": [
+          1,
+          2,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": null
+  },
+  {
+    "name": "bad-dest-dangling-sub-unselected",
+    "inputs": [
+      {
+        "file": "dest-dangling",
+        "pages": [
+          1,
+          3
+        ]
+      }
+    ],
+    "oracleA": null,
+    "oracleB": null,
+    "refuse": true
+  }
+]
