@@ -1,0 +1,101 @@
+using System;
+using jaytwo.Pdf.Signatures;
+
+namespace jaytwo.Pdf.Internal;
+
+// UNADOPTED R203 draft: blanket applicable-mandatory refusal supersedes W-151 only if approved.
+internal sealed class PdfSignatureSeedValues
+{
+    private readonly PdfObjectStore _store;
+
+    internal PdfSignatureSeedValues(PdfObjectStore store)
+    {
+        _store = store;
+    }
+
+    internal void Check(int fieldId, PdfSignatureOptions options)
+    {
+        var field = (PdfObject.Dict)_store.Load(fieldId);
+        if (Get(field, "SV") is not PdfObject.Dict seed)
+        {
+            return;
+        }
+
+        long flags = Flags(seed);
+        string[] entries = { "Filter", "SubFilter", "V", "Reasons", "LegalAttestation", "AddRevInfo", "DigestMethod", "LockDocument", "AppearanceFilter" };
+        int count = _store.EffectiveVersion() >= 20 ? 9 : 7;
+        for (int i = 0; i < count; i++)
+        {
+            if ((flags & (1L << i)) != 0 && (entries[i] == "Reasons" || Get(seed, entries[i]) != null))
+            {
+                Refuse(entries[i]);
+            }
+        }
+
+        if (Get(seed, "Cert") is PdfObject.Dict certificate)
+        {
+            CheckCertificate(certificate);
+        }
+
+        if (Get(seed, "MDP") is PdfObject.Dict mdp && Get(mdp, "P") != null)
+        {
+            Refuse("MDP/P");
+        }
+
+        if (Get(seed, "TimeStamp") is PdfObject.Dict timestamp && Flags(timestamp) != 0)
+        {
+            Refuse("TimeStamp");
+        }
+    }
+
+    private void CheckCertificate(PdfObject.Dict certificate)
+    {
+        long flags = Flags(certificate);
+        string[] entries = { "Subject", "Issuer", "OID", "SubjectDN", "KeyUsage" };
+        int[] masks = { 1, 2, 4, 8, 32 };
+        for (int i = 0; i < entries.Length; i++)
+        {
+            if ((flags & masks[i]) != 0 && Get(certificate, entries[i]) != null)
+            {
+                Refuse("Cert/" + entries[i]);
+            }
+        }
+
+        if ((flags & 64) != 0 && Get(certificate, "URL") != null
+            && Get(certificate, "URLType") is PdfObject type && PdfValues.NameOf(type) != "Browser")
+        {
+            Refuse("Cert/URL");
+        }
+
+        // URLType Browser explicitly ignores the mandatory URL flag. Policy entries have
+        // no policy-specific flag and remain advisory under the owner's W-151 disposition.
+    }
+
+    private PdfObject? Get(PdfObject.Dict dictionary, string key)
+    {
+        PdfObject? value = _store.ResolveMaybe(dictionary.Get(key));
+        return value is PdfObject.NullObj ? null : value;
+    }
+
+    private long Flags(PdfObject.Dict dictionary)
+    {
+        PdfObject? value = Get(dictionary, "Ff");
+        if (value == null)
+        {
+            return 0;
+        }
+
+        if (value is PdfObject.Num number && number.IsInteger && number.LongValue >= 0)
+        {
+            return number.LongValue;
+        }
+
+        Refuse("Ff");
+        return 0;
+    }
+
+    private void Refuse(string key)
+    {
+        throw new PdfSignException("The signature field's required seed value /" + key + " cannot be satisfied.");
+    }
+}

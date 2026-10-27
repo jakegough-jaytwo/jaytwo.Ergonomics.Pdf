@@ -1,0 +1,734 @@
+{
+  "candidateEngine": true,
+  "cases": 28,
+  "observations": [
+    {
+      "Id": "filter",
+      "Version": "2.0",
+      "Flags": 1,
+      "seed": "\u003C\u003C /Ff 1 /Filter /Adobe.PPKLite \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Filter cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "195598F191D29F1BFF822AAD635E08A7DBF45151BC29E5A8B10D5DFBC3B142E4"
+    },
+    {
+      "Id": "ordered-format",
+      "Version": "2.0",
+      "Flags": 2,
+      "seed": "\u003C\u003C /Ff 2 /SubFilter [/Unknown /adbe.pkcs7.detached /ETSI.CAdES.detached] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /SubFilter cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "A1BA77CA6908F6D6420E7B108ED1F53595455E4F61C259C92AEDEF90F6EA3A11"
+    },
+    {
+      "Id": "pades-format",
+      "Version": "2.0",
+      "Flags": 2,
+      "seed": "\u003C\u003C /Ff 2 /SubFilter [/ETSI.CAdES.detached /adbe.pkcs7.detached] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /SubFilter cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "FDA96268EB32C0BF51386CC0224C81EB7F38796636527C2F7EFFFFA583C04D01"
+    },
+    {
+      "Id": "parser-capability",
+      "Version": "2.0",
+      "Flags": 4,
+      "seed": "\u003C\u003C /Ff 4 /V 3 \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /V cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "6927D085A7C75AED0C1B63424B892A00A99D27A9BEC2FE677824253F8510CD49"
+    },
+    {
+      "Id": "reason",
+      "Version": "2.0",
+      "Flags": 8,
+      "seed": "\u003C\u003C /Ff 8 /Reasons [(Approved) (Reviewed)] \u003E\u003E",
+      "Reason": "Approved",
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Reasons cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "3662EDF0F540333D07CC2752778F0633368E412D4D2276817294A850FB34DE67"
+    },
+    {
+      "Id": "reason-omitted",
+      "Version": "2.0",
+      "Flags": 8,
+      "seed": "\u003C\u003C /Ff 8  \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Reasons cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "71F600BEC9C6324D114A885932A6C1934DFAA5509408D1DC7E856D5408B0053E"
+    },
+    {
+      "Id": "reason-unicode",
+      "Version": "2.0",
+      "Flags": 8,
+      "seed": "\u003C\u003C /Ff 8 /Reasons [\u003CFEFF0041007000700072006F007600650064\u003E] \u003E\u003E",
+      "Reason": "Approved",
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Reasons cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "40F0F35A0400E48843F04FFEF8F98BB8BEEDD9B1A4E50BA076C04916BC7BDEC4"
+    },
+    {
+      "Id": "no-revocation",
+      "Version": "2.0",
+      "Flags": 32,
+      "seed": "\u003C\u003C /Ff 32 /AddRevInfo false \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /AddRevInfo cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "DB48EABC5734EC8CB79779CE3F5DF4E0450F9CFCFD303F94BDF38EB2BEED1874"
+    },
+    {
+      "Id": "digest",
+      "Version": "2.0",
+      "Flags": 64,
+      "seed": "\u003C\u003C /Ff 64 /DigestMethod [/SHA512 /SHA256] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /DigestMethod cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "AEE429AD06D1654CC292B59A170054378B09D1B809FEAF6C5B32631969C8ECD3"
+    },
+    {
+      "Id": "no-document-lock",
+      "Version": "2.0",
+      "Flags": 128,
+      "seed": "\u003C\u003C /Ff 128 /LockDocument /false \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /LockDocument cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "41979F6E450CAF62338C5B0DF8C9FA16D1DD31C07817F86A395D2A1FE556BBBD"
+    },
+    {
+      "Id": "auto-document-lock",
+      "Version": "2.0",
+      "Flags": 128,
+      "seed": "\u003C\u003C /Ff 128 /LockDocument /auto \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /LockDocument cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "3C282A194DA747CB127F4F0BBBA01045454E2DED4751BEE8AD4B5385B26570B2"
+    },
+    {
+      "Id": "approval-only",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /MDP \u003C\u003C /P 0 \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /MDP/P cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "D6394CB081A7CF951002021D5894331D73315FD8DBA3F308F77D0686A4615DAB"
+    },
+    {
+      "Id": "unconstrained",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0  \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "C59B158518287FFCFBF30E302C1B9A2D17539A715C8A515260EA4E9B95C1930D"
+    },
+    {
+      "Id": "optional-unsupported",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /Filter /Other /SubFilter [/Unsupported] /Reasons [] /DigestMethod [/SHA1] /LockDocument /true \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "41CED98270F950377F3464A5373EB105C92FE46C85DB333D47D1F80FA635DA4C"
+    },
+    {
+      "Id": "absent-entries",
+      "Version": "2.0",
+      "Flags": 99,
+      "seed": "\u003C\u003C /Ff 99 /PrivateValue 42 \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "A823CEC1002708217DBA566470E0A95DA5D8FA77DA70005B297C75641E12E26C"
+    },
+    {
+      "Id": "enrollment-browser",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /Cert \u003C\u003C /Ff 64 /URL (https://example.test/enroll) /URLType /Browser \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "5B3B3B86F418A918E84DCC403A515B51AAA83E7814FCD10AEB71E083F79C8ACB"
+    },
+    {
+      "Id": "advisory-policy",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /Cert \u003C\u003C /SignaturePolicyOID (1.2.3) \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "6EE24C3152873E29F8765D2BC3BF0A7562EE3A8B4B0A8D50E6EBC68656680EE2"
+    },
+    {
+      "Id": "pdf17-new-flags",
+      "Version": "1.7",
+      "Flags": 384,
+      "seed": "\u003C\u003C /Ff 384 /LockDocument /true /AppearanceFilter (Unavailable) \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "candidate": {
+        "Accepted": true,
+        "Calls": 1,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": true,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": null
+      },
+      "lost": false,
+      "fixtureSha256": "79A4C9888427E0D6A5105CC8A7122B8CED571C2C505E24D95F5C48A0B258B2A4"
+    },
+    {
+      "Id": "filter-mismatch",
+      "Version": "2.0",
+      "Flags": 1,
+      "seed": "\u003C\u003C /Ff 1 /Filter /Other \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Filter cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "A8461DC1FEAF11CBD2909F6E58762783A2ECE69A8C2D9669A62EB4D1BC16D3D8"
+    },
+    {
+      "Id": "format-order-mismatch",
+      "Version": "2.0",
+      "Flags": 2,
+      "seed": "\u003C\u003C /Ff 2 /SubFilter [/ETSI.CAdES.detached /adbe.pkcs7.detached] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /SubFilter cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "FDA96268EB32C0BF51386CC0224C81EB7F38796636527C2F7EFFFFA583C04D01"
+    },
+    {
+      "Id": "digest-mismatch",
+      "Version": "2.0",
+      "Flags": 64,
+      "seed": "\u003C\u003C /Ff 64 /DigestMethod [/SHA384] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /DigestMethod cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "E25D53BBD3CC233CE5E158D924F7FAA53615BFC8C920982DD6F28D6573E89837"
+    },
+    {
+      "Id": "reason-mismatch",
+      "Version": "2.0",
+      "Flags": 8,
+      "seed": "\u003C\u003C /Ff 8 /Reasons [(Approved)] \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Reasons cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "3F1A9A936C9F1FC21BF336F86336FC5BE8249F37F3DE47FAED809FFFC5370935"
+    },
+    {
+      "Id": "certificate-required",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /Cert \u003C\u003C /Ff 1 /Subject [\u003C00\u003E] \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Cert/Subject cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "0B08711A462D85AE2EB058C858548C027950BC91617FCCDB280080658B6CE8C9"
+    },
+    {
+      "Id": "cms-timestamp-required",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /TimeStamp \u003C\u003C /Ff 1 \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /TimeStamp cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "AAEAB32902585FE20B845E08ABDD7CE112103748FED4A07FE2B9E0FA326417AB"
+    },
+    {
+      "Id": "certification-required",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /MDP \u003C\u003C /P 2 \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": false,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /MDP/P cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "08C3E733A228F099D3FB95E9385B011CE48D4B17EEDED3FDB6BECBE62E8C247C"
+    },
+    {
+      "Id": "dts-timestamp-required",
+      "Version": "2.0",
+      "Flags": 0,
+      "seed": "\u003C\u003C /Ff 0 /TimeStamp \u003C\u003C /Ff 1 \u003E\u003E \u003E\u003E",
+      "Reason": null,
+      "Dts": true,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /TimeStamp cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "AAEAB32902585FE20B845E08ABDD7CE112103748FED4A07FE2B9E0FA326417AB"
+    },
+    {
+      "Id": "dts-digest",
+      "Version": "2.0",
+      "Flags": 64,
+      "seed": "\u003C\u003C /Ff 64 /DigestMethod [/SHA256] \u003E\u003E",
+      "Reason": null,
+      "Dts": true,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /DigestMethod cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "25043CCA0DF1269E7C8A0C3D4CA0299BFA264551514D9BD5D1D7DEB7592D568C"
+    },
+    {
+      "Id": "dts-reason-omission",
+      "Version": "2.0",
+      "Flags": 8,
+      "seed": "\u003C\u003C /Ff 8 /Reasons [(.)] \u003E\u003E",
+      "Reason": null,
+      "Dts": true,
+      "baseline": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "The signature field\u0027s required seed value /Reasons cannot be satisfied."
+      },
+      "candidate": {
+        "Accepted": false,
+        "Calls": 0,
+        "ByteGuarantee": true,
+        "CmsSignatureChecked": false,
+        "OpaqueTimestampPreflightOnly": false,
+        "Refusal": "R203 mandatory constraint admission refusal"
+      },
+      "lost": false,
+      "fixtureSha256": "92130C2AC2F42DFE33E11EA821FA18310E402940D0D04AA740A59F9799F3ADF4"
+    }
+  ]
+}

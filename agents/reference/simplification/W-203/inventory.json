@@ -1,0 +1,44 @@
+{
+  "revision": "7efb97a8e3597f6669a3549598e50d6b04cca401",
+  "baseline": {
+    "lines": 283,
+    "nonblankLines": 240,
+    "ifTokens": 37,
+    "loopTokens": 4,
+    "methodsIncludingConstructor": 10
+  },
+  "candidateDraft": {
+    "lines": 101,
+    "nonblankLines": 85,
+    "ifTokens": 9,
+    "loopTokens": 2,
+    "methodsIncludingConstructor": 6
+  },
+  "candidateExecutionEvidence": "run.ps1 creates an isolated source build; see execution.json and candidate-observations.json for successful execution",
+  "files": [
+    {
+      "path": "src\\jaytwo.Pdf\\Internal\\PdfSignatureSeedValues.cs",
+      "sha256": "b0d6a8370bd904971100c9966ad01803571966eecf3db976f0ad3317b90e4fba"
+    },
+    {
+      "path": "src\\jaytwo.Pdf\\Internal\\PdfSigner.cs",
+      "sha256": "8dfe29a341396beb2127e6357531eb3a3d35363d77a6e3559f452e0edfb5bf4c"
+    },
+    {
+      "path": "test\\jaytwo.Pdf.Tests\\SignatureSeedValueTests.cs",
+      "sha256": "9fa65d09f1dfead0ea56c54eaf4f501c6c9e3a19a220448bf2c92a4d5a477f11"
+    },
+    {
+      "path": "agents\\reference\\w-151-owner-disposition.md",
+      "sha256": "2976780e430bf05a1cae99d5e8c2fa5d7de84ce6666ace767e42af3dbd799fd1"
+    },
+    {
+      "path": "C:\\jake\\git\\pdfdocs\\text\\iso-32000-2\\295-12-7-5-5-signature-fields.md",
+      "sha256": "6202d7a250a59a749011ea3c798f0b88cca786b40add30482caf7e6920f0e03d"
+    },
+    {
+      "path": "C:\\jake\\git\\pdfdocs\\text\\iso-32000-1\\242-12-7-4-5-signature-fields.md",
+      "sha256": "daa43a22f1bf340b1c5e9ca2f652646cc0f8338b219583212015cfae20ec9716"
+    }
+  ]
+}

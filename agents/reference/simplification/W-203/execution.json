@@ -1,0 +1,14 @@
+{
+    "revision":  "7efb97a8e3597f6669a3549598e50d6b04cca401",
+    "sdk":  "10.0.402",
+    "os":  "Microsoft Windows NT 10.0.26100.0",
+    "framework":  "net10.0",
+    "pkcsVersion":  "10.0.0.0",
+    "engineSha256":  "31CCB1F49E4EB988DCC9187214B6BB6C5BF01F971C7C0AEA88A6005DEB8DD9F1",
+    "pkcsSha256":  "EFF9ED505C194F0F5C9FAEF1A175459CD0560EEB4AD08890C7C0C0E1FF4D34C3",
+    "probeSha256":  "55DE8AA0910D0DB899AAFFF735D3A0C19ABBB29C4EA76AAC2A7D82F816A27549",
+    "candidateCheckerSha256":  "6C7E01CF386EBB55D0B9D30DC50BFD34856CF5C2FAAF635E3C356BD2E75AE24F",
+    "candidateEngineSha256":  "2980A328EB76EB2DAB13B3A7E65DA8DB0FE0B397A559DAAC696E673F3277B902",
+    "candidateBuild":  "isolated net10 engine source build, same sources except checker; compiler warnings as errors; no StyleCop package or framework matrix",
+    "scratch":  "C:\\Users\\Jake\\AppData\\Local\\Temp\\w203-3cef71d576dc47f0863646e5e245cb49"
+}

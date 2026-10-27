@@ -1,0 +1,32 @@
+W-203 research verification, 2026-10-26
+Baseline: 7efb97a8e3597f6669a3549598e50d6b04cca401 (W-202 complete).
+
+make agents-check: PASS before task work, 217 work items / 68 decisions.
+make quiet-test TEST_FRAMEWORK=net10.0 TEST_FILTER=FullyQualifiedName~SignatureSeedValueTests:
+  Initial restricted attempt FAIL during NuGet restore, NU1301/NU1900 network access; no test result.
+  Network-enabled retry PASS, 74/74, zero failed/skipped. out/logs/test.log (transient log).
+python agents/reference/simplification/W-203/measure.py: PASS.
+  Exact draft checker generated; original 283 lines / 37 lexical if tokens;
+  candidate 101 lines / 9 lexical if tokens. inventory.json contains source hashes.
+powershell -NoProfile -ExecutionPolicy Bypass -File agents/reference/simplification/W-203/run.ps1: PASS.
+  Current engine, baseline probe, disposable candidate engine, candidate probe builds:
+  each zero compiler warnings/errors. Product engine build also uses existing StyleCop settings.
+  28 fixtures, 56 operation attempts per engine (direct and descriptor-gated paths;
+  model refusal happens before calling the engine).
+  Current: 21 accepted (18 CMS signature-mathematics checks, 3 opaque DTS preflights).
+  Candidate: 6 accepted (6 CMS signature-mathematics checks).
+  Candidate/model disposition mismatches: zero. Seven existing refusals retained.
+  Accepted calls preserve original prefix; refused calls leave source and empty destination unchanged,
+  with zero provider callbacks. No pending-edit assertion in this disposable probe.
+  Toolchain/assembly/source hashes and isolated-build limitations: execution.json.
+  Probe descriptors and actual candidate are separate; both measured outputs retained.
+
+No product source, test-suite, build configuration, shipped contract or protected file changed.
+No net48 or other-framework rerun, candidate full regression suite, PDF-aware verifier/profile
+classification, real TSA/hardware, renderer, fuzz, resource campaign, Docker checkpoint, release
+qualification or independent reviewer claim. Those are not required by this research item.
+Final make agents-check: PASS, 217 items / 68 decisions.
+Final staged make task-check and git diff --cached --check: PASS.
+Initial sandbox git add failed on .git/index.lock access; authorized staging retry succeeded.
+graphify update .: initial sandbox attempt failed on Git user-ignore access; authorized retry PASS,
+  8406 nodes / 23587 edges, known unchanged SignatureTests.cs extraction warning.

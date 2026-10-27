@@ -59,7 +59,7 @@ Prove unused copier modes first; then resolve navigation, annotation relationshi
 
 (W-202 is done: `agents/reference/simplification/W-202/`; recommends retaining the provider boundary pending deliberate acceptance of complete-CMS/custom-attribute losses. The alternative narrowing proposal awaits Gate 2 approval.)
 
-1. W-203
+(W-203 is done: `agents/reference/simplification/W-203/`; recommends retaining W-151 after measuring mandatory-refusal savings and lost compatible signing cases. The exact alternative remains unadopted pending Gate 2 approval.)
 2. W-210
 
 Assess provider migration before seed-policy interactions, then decide the retained forensic surface before rewriting signature guidance. W-151 stays binding. Advance W-210 ahead of the other P2 removals because W-158 needs its findings.
