@@ -1,0 +1,38 @@
+{
+  "pypdf": "6.21.1",
+  "observations": [
+    {
+      "name": "defaults-overrides",
+      "qpdfExit": 0,
+      "qpdfStdout": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-204\\pypdf-defaults-overrides.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+      "qpdfStderr": "",
+      "values": {
+        "Name": "Ada",
+        "City": "",
+        "Code": ""
+      },
+      "text": ""
+    },
+    {
+      "name": "same-value",
+      "qpdfExit": 0,
+      "qpdfStdout": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-204\\pypdf-same-value.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n",
+      "qpdfStderr": "",
+      "values": {
+        "Name": "Ada",
+        "City": "",
+        "Code": ""
+      },
+      "text": ""
+    },
+    {
+      "name": "fill-then-flatten",
+      "qpdfExit": 3,
+      "qpdfStdout": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-204\\pypdf-fill-then-flatten.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\n",
+      "qpdfStderr": "WARNING: object 4 0: encountered a non-dictionary as a field or annotation while traversing /AcroForm; ignoring field or annotation\nWARNING: object 5 0: encountered a non-dictionary as a field or annotation while traversing /AcroForm; ignoring field or annotation\nWARNING: object 6 0: encountered a non-dictionary as a field or annotation while traversing /AcroForm; ignoring field or annotation\nqpdf: operation succeeded with warnings\n",
+      "values": {},
+      "text": "Ada"
+    }
+  ],
+  "limits": "Mapping API, not a deferred builder; no claim of equal atomicity, permissions, signed-document behavior, or flatten cleanup."
+}

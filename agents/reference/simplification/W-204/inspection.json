@@ -1,0 +1,453 @@
+{
+  "across-batches": {
+    "values": {
+      "Name": "Ada",
+      "City": "Rome",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "89003734aa031f3c916b0e5f6d4e2e82bfa1795fb00f074ff5e4be34f3de1ebc",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "all-flatten": {
+    "values": {},
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "e3b25df1df9a463aade335389df8ddcddc1dc72b53f625b105025b0efac5bcd0",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "attach-remove": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Final",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "3f0ca69ddea635e7e53566630f96628a097791d989e5285bdad733a2719944f4",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "cumulative-rotation": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 180,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "690db55519b8858a8331ea921bd156b0d98e50a54ffd5aa6255be93cee761acf",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-atomic": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Pending",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "df07efbd361b1498c212e8868742e437b6b909a2021e6ac5e7993df9a1bf7a66",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-bulk-duplicate": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 1,
+    "qpdfExit": 0,
+    "sha256": "63af571c1d0d242bfacea5f0b0baf44339353c4a99ef0a38ea6599adfd66d822",
+    "pypdfWarnings": ""
+  },
+  "engine-bulk-identical": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 1,
+    "qpdfExit": 0,
+    "sha256": "63af571c1d0d242bfacea5f0b0baf44339353c4a99ef0a38ea6599adfd66d822",
+    "pypdfWarnings": ""
+  },
+  "engine-error-order": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 1,
+    "qpdfExit": 0,
+    "sha256": "63af571c1d0d242bfacea5f0b0baf44339353c4a99ef0a38ea6599adfd66d822",
+    "pypdfWarnings": ""
+  },
+  "engine-flatten-first": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "fb7ea3f7e2ae3c6541ba13225b9b3a54fe0b94f829a5d0526602c0dc7aa5d2f7",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-interleaved-equivalent": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 270,
+    "title": "Final",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "49564548606e77dcc1b4a4fa15c800041bfc4bcd72f1bb3fb00128edc7adc7fe",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-invalid-first": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 1,
+    "qpdfExit": 0,
+    "sha256": "63af571c1d0d242bfacea5f0b0baf44339353c4a99ef0a38ea6599adfd66d822",
+    "pypdfWarnings": ""
+  },
+  "engine-rotation-before-flatten": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 90,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "d641bc0aa6fd8c4ef9613dc8881127132cbb4e5509849a95aaa8b1831691f5a7",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-sequential-partial": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Pending",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "0561c4e59aef616974f91f66e8fa6bcce743cbb79741748c6eba882281d62780",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-sequential": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "52e1eecaaa3cd3d38c96628b164f962418ede1c9fbaa74d91d0d07b0641aa6ae",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-staged-equivalent": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "905c6cf0e4bf682003c4c728a8a237145a0b5ec8e9b46fc4d61a63c94552bffe",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "engine-undrawable-first": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": true,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "f65f1462f632254ab9ea1e7d3b567afcf5495b3545b73b4689b94104eacd482d",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "flatten-first": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "905c6cf0e4bf682003c4c728a8a237145a0b5ec8e9b46fc4d61a63c94552bffe",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "form": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 1,
+    "qpdfExit": 0,
+    "sha256": "63af571c1d0d242bfacea5f0b0baf44339353c4a99ef0a38ea6599adfd66d822",
+    "pypdfWarnings": ""
+  },
+  "interleaved": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 270,
+    "title": "Final",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "49564548606e77dcc1b4a4fa15c800041bfc4bcd72f1bb3fb00128edc7adc7fe",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "invalid-kind-overridden": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "237b41ed994bff6a8403ae434f278a955dfaa6e8aed4f9deba11750014fc8d82",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "invalid-length-overridden": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": "OK"
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "34d1094af58f6ebdf69fba2b89678d48dd3ddf9836a834029a8f99d6c6d43919",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "last-value": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "237b41ed994bff6a8403ae434f278a955dfaa6e8aed4f9deba11750014fc8d82",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "relative-order": {
+    "values": {
+      "Name": "",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 90,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "726c106d18a9e4bdc0ffd5718556cd38e0b3f6c597a6997c54cce73db22d3f6b",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "rotation-before-flatten": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 90,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "5fea256aba251a657f73e89da929e1223f46a9de5d0ac0a003b81cb7cb418c08",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "same-value": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "237b41ed994bff6a8403ae434f278a955dfaa6e8aed4f9deba11750014fc8d82",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "snapshot": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "237b41ed994bff6a8403ae434f278a955dfaa6e8aed4f9deba11750014fc8d82",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "undrawable-overridden": {
+    "values": {
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "905c6cf0e4bf682003c4c728a8a237145a0b5ec8e9b46fc4d61a63c94552bffe",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "union-flatten": {
+    "values": {
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "Ada\nRome",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "0a179ceea599d156396965a4a93e7f0cf69928292e79dd8ecbda3b6a5c940898",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  },
+  "within-batch": {
+    "values": {
+      "Name": "Ada",
+      "City": "",
+      "Code": ""
+    },
+    "rotation": 0,
+    "title": "Original",
+    "attachments": [],
+    "text": "",
+    "needAppearances": false,
+    "startxrefCount": 2,
+    "qpdfExit": 0,
+    "sha256": "237b41ed994bff6a8403ae434f278a955dfaa6e8aed4f9deba11750014fc8d82",
+    "pypdfWarnings": "Xref table not zero-indexed. ID numbers for objects will be corrected.\n"
+  }
+}

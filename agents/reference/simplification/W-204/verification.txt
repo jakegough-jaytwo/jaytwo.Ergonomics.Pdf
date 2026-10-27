@@ -1,0 +1,7 @@
+  jaytwo.Pdf -> C:\jake\git\jaytwo.Ergonomics.Pdf\src\jaytwo.Pdf\bin\Debug\net10.0\jaytwo.Pdf.dll
+  jaytwo.Ergonomics.Pdf -> C:\jake\git\jaytwo.Ergonomics.Pdf\src\jaytwo.Ergonomics.Pdf\bin\Debug\net10.0\jaytwo.Ergonomics.Pdf.dll
+  jaytwo.Ergonomics.Pdf.Tests -> C:\jake\git\jaytwo.Ergonomics.Pdf\test\jaytwo.Ergonomics.Pdf.Tests\bin\Debug\net10.0\jaytwo.Ergonomics.Pdf.Tests.dll
+Test run for C:\jake\git\jaytwo.Ergonomics.Pdf\test\jaytwo.Ergonomics.Pdf.Tests\bin\Debug\net10.0\jaytwo.Ergonomics.Pdf.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 229 ms - jaytwo.Ergonomics.Pdf.Tests.dll (net10.0)

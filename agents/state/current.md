@@ -48,7 +48,8 @@ First establish editable forms, tags and empty signature-field semantics, then r
 
 (W-201 is done: `agents/reference/simplification/W-201/`; fresh metadata/viewer identity clarification and coordinated initial-action proposals await Gate 2 approval.)
 
-5. W-204
+(W-204 is done: `agents/reference/simplification/W-204/`; recommends retaining shipped workflow staging and last-value-wins. Exact explanatory wording remains a proposal; no product implementation is approved.)
+
 6. W-205
 7. W-206
 
