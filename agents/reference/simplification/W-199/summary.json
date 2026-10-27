@@ -1,0 +1,10 @@
+{
+  "observations": 72,
+  "accepted": 63,
+  "refused": 9,
+  "outputs": 63,
+  "python": "3.13.17 (main, Oct 21 2026, 17:48:10) [MSC v.1944 64 bit (AMD64)]",
+  "pypdf": "6.21.1",
+  "pyhanko": "0.38.0",
+  "sdk": "10.0.402"
+}

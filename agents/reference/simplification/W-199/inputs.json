@@ -1,0 +1,689 @@
+{
+  "pypdf": "6.21.1",
+  "fixtures": [
+    {
+      "name": "absent",
+      "sha256": "c1c16cf05723863e1d1edd90463741379a9678789a247505690c99127e133280",
+      "inspection": {
+        "rights": false,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": ""
+      }
+    },
+    {
+      "name": "approve",
+      "sha256": "0057b1486b4caa05514a6c5bcaddeedea296d3f4994fe5f802d831261d2b20b6",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 1,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u00f6g&C\u00f1\u2022\u017e\u0192\u0152\u00eb\u2030\u000f!\u00e6\u00b9\u2013",
+          ",a\u00cb>\u0152n\u00a7\u02da\\\u02c6\u00d2\u00a9\u02dd\u00da&\u00cc"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "certify-p1",
+      "sha256": "4a5fd628b89101f7ec34bde231a56556efe411f2c0266edd71ad03af9c4267fa",
+      "inspection": {
+        "rights": true,
+        "docmdp": true,
+        "signatures": 1,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "%\u00e9\u201cuu\u00c0\u00a9~?\u02d9\u00e7\u00f1tN\u0007\u00bb",
+          "\u103b\u4adf\u145d\u62e6\u8dd9\u6239\u9fae\u9f41"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "certify-p2",
+      "sha256": "c69e9146260a9240cc430c7094dcf6e2f79bdbef1a2b5aff2a0871f20abf580b",
+      "inspection": {
+        "rights": true,
+        "docmdp": true,
+        "signatures": 1,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u1655\ue9fe\u908e\u132b\u8354\u95a7\u7f58\u7664",
+          "\u2019\u2044N\u00a1\u02dcn\u00e9\u00bba\u00d9=\u0178Qy\u00aeN"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "certify-p3",
+      "sha256": "155a4ba34ce7ecce256c1c29888767258a1d91ec3008462af414d39d02a18341",
+      "inspection": {
+        "rights": true,
+        "docmdp": true,
+        "signatures": 1,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u201ew'\u00bd\u00d4\u00cd\u000e\u00e90\u00d4:\u00a6{+\u017eA",
+          "(\u00a3k\u0003!\u00f0\u0007\u00e7\u00f8ZZ\u00b9\u00f2x\u201eM"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "encrypted-r4-hybrid-rights",
+      "sha256": "1c434c35bcfdeb27487bc7d914415979f798b4cea12e667573eeb640be134271",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": true,
+        "encryptEntry": true,
+        "id": [
+          "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+          "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "encrypted-r4-rights",
+      "sha256": "8aa20ea6cfcde56dc93eb6c1f6d8d64927b2b526423cbe3aba745890df18f99f",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": true,
+        "encryptEntry": true,
+        "id": [
+          "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+          "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "encrypted-r6-hybrid-rights",
+      "sha256": "7e5efa1d7f71307c96ca24cf6cf3958851e3ae692e5daad219a5e6df2fa901a8",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": true,
+        "encryptEntry": true,
+        "id": [
+          "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+          "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "encrypted-r6-rights",
+      "sha256": "602d4b449705e83da1387fc2bc79cde31c5c7097f1b76884a2e6aefd8007cbd4",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": true,
+        "encryptEntry": true,
+        "id": [
+          "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+          "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+        ],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "hybrid-rights",
+      "sha256": "9ec61e7756fee0613ff9c135ba578f8039f834f2e11784aa219b295c34b0fccd",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "modeled-removed-hybrid-rights",
+      "sha256": "b4a0bf2fb3fe6e57452957cfdb6865127223a334dddc8e3baf4ec521841d7f45",
+      "inspection": {
+        "rights": false,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "modeled-removed-rights",
+      "sha256": "10b691ef973df96cf07b08dbaa7d8402962b3d9646e7ba41b4e69c869be3d2b8",
+      "inspection": {
+        "rights": false,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "rights-no-grant",
+      "sha256": "8ba4e7b62ae9d4994b92f0181e7359be00f25be838bed26a6f630666305e862a",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": "retain-me"
+      }
+    },
+    {
+      "name": "rights",
+      "sha256": "cc79c79a0b9238858a776ced5fc708ec8c8ac4bae3a24229fd13fcebd3a003c2",
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "Name": "old"
+        },
+        "title": "",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [],
+        "marker": "retain-me"
+      }
+    }
+  ],
+  "corpus": [
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+      "sha256": "01709e690e9e2bd622fc0b87069eb3dc30c07a72246db7ae10f849e5bfafb171",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 1,
+        "xfa": false,
+        "fields": {
+          "1-1-1": "",
+          "1-1-2": "",
+          "1-1-3": "",
+          "1-2": "",
+          "1-2-3-1": "",
+          "1-3-1": "",
+          "1-3-2": "",
+          "1-3-3": "",
+          "1-3-4": "",
+          "1-4-1": "",
+          "1-4-2": "",
+          "1-4-3": "",
+          "1-5": "",
+          "CheckBox1-2-1-1": "",
+          "CheckBox1-2-1-2": "",
+          "CheckBox1-2-2-1": "",
+          "CheckBox1-2-2-2": "",
+          "1-2-3-3": "",
+          "1-2-3-4": "",
+          "1-2-3-2": "",
+          "CheckBox1-2-3-5": "",
+          "1-2-3-6": "",
+          "1-2-3-7": "",
+          "1-2-3-8": "",
+          "1-2-3-9": "",
+          "CheckBox1-2-3-10": "",
+          "1-2-3-11": "",
+          "1-2-3-12": "",
+          "1-2-3-13": "",
+          "1-2-3-14": "",
+          "CheckBox1-2-3-15": "",
+          "CheckBox1-2-4-1": "",
+          "CheckBox1-2-4-2": "",
+          "1-2-4-3": "",
+          "CheckBox1-2-4-4": "",
+          "CheckBox1-2-4-5": "",
+          "1-2-4-6": "",
+          "1-2-4-7": "",
+          "2-3-2-1": "",
+          "2-3-2-2": "",
+          "2-3-2-3": "",
+          "2-3-3": "",
+          "2-5-1": "",
+          "2-5-2": "",
+          "2-5-3": ""
+        },
+        "title": "Application for Enrollment in Medicare Part B (Medical Insurance)",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u02dc\u00f1-\u0131.nEo\u00b5r(s\u0015\u2039r\u20ac",
+          "\u0007 (\u00a7\u2021P1\u201c\u2014pg\u02c7\u00a1\u00daj\u00fc"
+        ],
+        "marker": ""
+      }
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+      "sha256": "c991595989dafd5bff332bef16bc8f18bf2263db0799b738bdb9c528d51cf470",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "1-1-1": "",
+          "1-1-2": "",
+          "1-1-3": "",
+          "1-2": "",
+          "1-2-3-1": "",
+          "1-3-1": "",
+          "1-3-2": "",
+          "1-3-3": "",
+          "1-3-4": "",
+          "1-4-1": "",
+          "1-4-2": "",
+          "1-4-3": "",
+          "1-5": "",
+          "CheckBox1-2-1-1": "",
+          "CheckBox1-2-1-2": "",
+          "CheckBox1-2-2-1": "",
+          "CheckBox1-2-2-2": "",
+          "1-2-3-3": "",
+          "1-2-3-4": "",
+          "1-2-3-2": "",
+          "CheckBox1-2-3-5": "",
+          "1-2-3-6": "",
+          "1-2-3-7": "",
+          "1-2-3-8": "",
+          "1-2-3-9": "",
+          "CheckBox1-2-3-10": "",
+          "1-2-3-11": "",
+          "1-2-3-12": "",
+          "1-2-3-13": "",
+          "1-2-3-14": "",
+          "CheckBox1-2-3-15": "",
+          "CheckBox1-2-4-1": "",
+          "CheckBox1-2-4-2": "",
+          "1-2-4-3": "",
+          "CheckBox1-2-4-4": "",
+          "CheckBox1-2-4-5": "",
+          "1-2-4-6": "",
+          "1-2-4-7": "",
+          "2-3-2-1": "",
+          "2-3-2-2": "",
+          "2-3-2-3": "",
+          "2-3-3": "",
+          "2-5-1": "",
+          "2-5-2": "",
+          "2-5-3": ""
+        },
+        "title": "Application for Enrollment in Medicare Part B (Medical Insurance)",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u02dc\u00f1-\u0131.nEo\u00b5r(s\u0015\u2039r\u20ac",
+          "\u000b\u201a\u00e9\u000b(\u0003\ufb02I\u00b1\u2020\u00b3(\u0014\u00e3E@"
+        ],
+        "marker": ""
+      }
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+      "sha256": "5cad14f3d86f8cb0c4b9ed6e1b4f5fcefd0d492f164e56573864bafd6cdcf2a5",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {},
+        "title": "Application for Federal Assistance (SF-424)",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u9390\u0312\uae7e\u4721\u52ba\u3700\u5225\ub3a3",
+          "\u00fab0M\u00c6EX&&\u2039\u2013\u00cfW\u00c2\u00abA"
+        ],
+        "marker": ""
+      }
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+      "sha256": "396ffad25baa737b33a67d27624f7444be3ac4e7245d287aebe5f89864f90b54",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": false,
+        "fields": {
+          "topmostSubform[0]": "",
+          "topmostSubform[0].Page12[0]": "",
+          "topmostSubform[0].Page12[0].f12_1[0]": "",
+          "topmostSubform[0].Page12[0].f12_2[0]": "",
+          "topmostSubform[0].Page12[0].f12_3[0]": "",
+          "topmostSubform[0].Page12[0].f12_4[0]": "",
+          "topmostSubform[0].Page12[0].f12_5[0]": "",
+          "topmostSubform[0].Page12[0].f12_6[0]": "",
+          "topmostSubform[0].Page12[0].f12_7[0]": "",
+          "topmostSubform[0].Page12[0].f12_8[0]": "",
+          "topmostSubform[0].Page12[0].f12_9[0]": "",
+          "topmostSubform[0].Page12[0].f12_10[0]": "",
+          "topmostSubform[0].Page12[0].f12_11[0]": "",
+          "topmostSubform[0].Page12[0].f12_12[0]": "",
+          "topmostSubform[0].Page12[0].f12_13[0]": "",
+          "topmostSubform[0].Page12[0].f12_14[0]": "",
+          "topmostSubform[0].Page12[0].f12_15[0]": "",
+          "topmostSubform[0].Page12[0].f12_16[0]": "",
+          "topmostSubform[0].Page12[0].f12_17[0]": "",
+          "topmostSubform[0].Page12[0].f12_18[0]": "",
+          "topmostSubform[0].Page12[0].f12_19[0]": "",
+          "topmostSubform[0].Page12[0].f12_20[0]": "",
+          "topmostSubform[0].Page12[0].f12_21[0]": "",
+          "topmostSubform[0].Page12[0].c12_1[0]": "",
+          "topmostSubform[0].Page12[0].c12_1[1]": "",
+          "topmostSubform[0].Page12[0].f12_22[0]": "",
+          "topmostSubform[0].Page12[0].c12_2[0]": "",
+          "topmostSubform[0].Page12[0].c12_2[1]": "",
+          "topmostSubform[0].Page12[0].f12_23[0]": "",
+          "topmostSubform[0].Page13[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].Date1[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_1[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_2[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_3[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_4[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_5[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line1[0].f13_6[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].Date2[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_7[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_8[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_9[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_10[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_11[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line2[0].f13_12[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].Date3[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_13[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_14[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_15[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_16[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_17[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line3[0].f13_18[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].Date4[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_19[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_20[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_21[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_22[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_23[0]": "",
+          "topmostSubform[0].Page13[0].Pg13Table[0].Line4[0].f13_24[0]": "",
+          "topmostSubform[0].Page13[0].Total[0]": "",
+          "topmostSubform[0].Page13[0].Total[0].f13_25[0]": "",
+          "topmostSubform[0].Page13[0].Total[0].f13_26[0]": "",
+          "topmostSubform[0].Page13[0].Total[0].f13_27[0]": "",
+          "topmostSubform[0].Page14[0]": "",
+          "topmostSubform[0].Page14[0].f14_1[0]": "",
+          "topmostSubform[0].Page14[0].LinkActivator[0]": "",
+          "topmostSubform[0].Page14[0].f14_2[0]": "",
+          "topmostSubform[0].Page14[0].f14_3[0]": "",
+          "topmostSubform[0].Page14[0].f14_4[0]": "",
+          "topmostSubform[0].Page14[0].f14_5[0]": "",
+          "topmostSubform[0].Page14[0].f14_6[0]": "",
+          "topmostSubform[0].Page14[0].f14_7[0]": "",
+          "topmostSubform[0].Page14[0].f14_8[0]": "",
+          "topmostSubform[0].Page14[0].f14_9[0]": "",
+          "topmostSubform[0].Page14[0].f14_10[0]": "",
+          "topmostSubform[0].Page14[0].f14_11[0]": "",
+          "topmostSubform[0].Page14[0].f14_12[0]": "",
+          "topmostSubform[0].Page14[0].f14_13[0]": "",
+          "topmostSubform[0].Page14[0].f14_14[0]": "",
+          "topmostSubform[0].Page15[0]": "",
+          "topmostSubform[0].Page15[0].f15_1[0]": "",
+          "topmostSubform[0].Page15[0].LinkActivator3[0]": "",
+          "topmostSubform[0].Page15[0].f15_2[0]": "",
+          "topmostSubform[0].Page15[0].f15_3[0]": "",
+          "topmostSubform[0].Page15[0].f15_4[0]": "",
+          "topmostSubform[0].Page15[0].f15_5[0]": "",
+          "topmostSubform[0].Page15[0].f15_6[0]": "",
+          "topmostSubform[0].Page15[0].f15_7[0]": "",
+          "topmostSubform[0].Page15[0].f15_8[0]": "",
+          "topmostSubform[0].Page15[0].f15_9[0]": "",
+          "topmostSubform[0].Page15[0].f15_10[0]": "",
+          "topmostSubform[0].Page15[0].f15_11[0]": "",
+          "topmostSubform[0].Page15[0].f15_12[0]": "",
+          "topmostSubform[0].Page15[0].f15_13[0]": "",
+          "topmostSubform[0].Page15[0].f15_14[0]": "",
+          "topmostSubform[0].Page15[0].f15_15[0]": "",
+          "topmostSubform[0].Page15[0].LinkActivator2[0]": "",
+          "topmostSubform[0].Page15[0].f15_16[0]": "",
+          "topmostSubform[0].Page15[0].f15_17[0]": "",
+          "topmostSubform[0].Page15[0].f15_18[0]": "",
+          "topmostSubform[0].Page15[0].f15_19[0]": "",
+          "topmostSubform[0].Page15[0].f15_20[0]": "",
+          "topmostSubform[0].Page15[0].f15_21[0]": "",
+          "topmostSubform[0].Page15[0].f15_22[0]": "",
+          "topmostSubform[0].Page15[0].f15_23[0]": "",
+          "topmostSubform[0].Page15[0].f15_24[0]": "",
+          "topmostSubform[0].Page15[0].f15_25[0]": "",
+          "topmostSubform[0].Page15[0].f15_26[0]": "",
+          "topmostSubform[0].Page15[0].f15_27[0]": "",
+          "topmostSubform[0].Page15[0].f15_28[0]": "",
+          "topmostSubform[0].Page15[0].f15_29[0]": "",
+          "topmostSubform[0].Page15[0].LinkActivator1[0]": "",
+          "topmostSubform[0].Page15[0].f15_30[0]": "",
+          "topmostSubform[0].Page15[0].f15_31[0]": "",
+          "topmostSubform[0].Page15[0].f15_32[0]": "",
+          "topmostSubform[0].Page15[0].f15_33[0]": "",
+          "topmostSubform[0].Page15[0].f15_34[0]": "",
+          "topmostSubform[0].Page15[0].f15_35[0]": "",
+          "topmostSubform[0].Page15[0].f15_36[0]": "",
+          "topmostSubform[0].Page15[0].f15_37[0]": "",
+          "topmostSubform[0].Page15[0].f15_38[0]": "",
+          "topmostSubform[0].Page15[0].f15_39[0]": "",
+          "topmostSubform[0].Page15[0].f15_40[0]": "",
+          "topmostSubform[0].Page15[0].f15_41[0]": "",
+          "topmostSubform[0].Page15[0].f15_42[0]": ""
+        },
+        "title": "2026 Form 1040-ES",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u00a1 \u02da\u00bdV\u0002Mc\u201c\u201dw\u0007\"\u0006C\u00f1",
+          "\u00ee\u0178/\u00e3D\u00e7}e\u00f3WZ\u00ba\u000b[\u00e8A"
+        ],
+        "marker": ""
+      }
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+      "sha256": "2d420cbb4123dcf1fb82595b2359cfbb5d81f00b9df9d359fcc7af361d093f53",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "topmostSubform[0]": "",
+          "topmostSubform[0].Page1[0]": "",
+          "topmostSubform[0].Page1[0].f1_01[0]": "",
+          "topmostSubform[0].Page1[0].f1_02[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+          "topmostSubform[0].Page1[0].f1_05[0]": "",
+          "topmostSubform[0].Page1[0].f1_06[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+          "topmostSubform[0].Page1[0].f1_09[0]": "",
+          "topmostSubform[0].Page1[0].f1_10[0]": "",
+          "topmostSubform[0].Page1[0].f1_11[0]": "",
+          "topmostSubform[0].Page1[0].f1_12[0]": "",
+          "topmostSubform[0].Page1[0].f1_13[0]": "",
+          "topmostSubform[0].Page1[0].f1_14[0]": "",
+          "topmostSubform[0].Page1[0].f1_15[0]": ""
+        },
+        "title": "Form W-9 (Rev. March 2024)",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u0012%6\u02d8\u00b0\u02c7\u00f6A\ufb01S\u00b3\u00c7\u0015SG\u0160",
+          "\ua19e\u16a8\u24f5\ufa7f\uf1f0\uf67d\uac3f\u7897"
+        ],
+        "marker": ""
+      }
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+      "sha256": "f534b7c43aa774ed8a9005d7e564cbf18d4ce54d04e0e0559282d95ba2c6c6be",
+      "matchesW189": true,
+      "inspection": {
+        "rights": true,
+        "docmdp": false,
+        "signatures": 0,
+        "xfa": true,
+        "fields": {
+          "form1[0]": "",
+          "form1[0].#subform[0]": "",
+          "form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+          "form1[0].#subform[0].Middle_Initial1[0]": "",
+          "form1[0].#subform[0].Last_Name[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+          "form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+          "form1[0].#subform[0].Month[0]": "",
+          "form1[0].#subform[0].Day[0]": "",
+          "form1[0].#subform[0].Year[0]": "",
+          "form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+          "form1[0].#subform[0].AreaCode[0]": "",
+          "form1[0].#subform[0].FirstThreeNumbers[0]": "",
+          "form1[0].#subform[0].LastFourNumbers[0]": "",
+          "form1[0].#subform[0].International_Phone_Number[0]": "",
+          "form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+          "form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+          "form1[0].#subform[0].REMARKS[0]": "",
+          "form1[0].#subform[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[1]": "",
+          "form1[0].#subform[1].REMARKS[1]": "",
+          "form1[0].#subform[1].Month[1]": "",
+          "form1[0].#subform[1].Day[1]": "",
+          "form1[0].#subform[1].Year[1]": ""
+        },
+        "title": "VA Form 21-4138, STATEMENT IN SUPPORT OF CLAIM",
+        "encrypted": false,
+        "encryptEntry": false,
+        "id": [
+          "\u0001\u00e8\u000e\u0000\u00c0\u008eAN\u00b57\r\u00dbQz\u001fe",
+          "y/|\u00ac\u2030\u00b9q\u00bfx\u00car\u000eK\u20ac\u01920"
+        ],
+        "marker": ""
+      }
+    }
+  ]
+}

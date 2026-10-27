@@ -1,0 +1,18 @@
+[
+  {
+    "file": "encrypted-r4-hybrid-rights.pdf",
+    "output": "R = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\n"
+  },
+  {
+    "file": "encrypted-r4-rights.pdf",
+    "output": "R = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\n"
+  },
+  {
+    "file": "encrypted-r6-hybrid-rights.pdf",
+    "output": "R = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\n"
+  },
+  {
+    "file": "encrypted-r6-rights.pdf",
+    "output": "R = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\n"
+  }
+]

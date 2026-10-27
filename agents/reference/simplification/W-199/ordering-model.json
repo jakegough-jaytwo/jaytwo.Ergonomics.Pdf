@@ -1,0 +1,84 @@
+{
+  "kind": "proposed pure-state model only; no production API",
+  "rows": [
+    {
+      "case": "unsigned",
+      "changed": true,
+      "error": "",
+      "state": {
+        "rights": false,
+        "xfa": true,
+        "signed": false,
+        "certified": false,
+        "modify": true,
+        "pendingTitle": "earlier"
+      }
+    },
+    {
+      "case": "fill-only",
+      "changed": false,
+      "error": "PdfEncryptionRestrictedException",
+      "state": {
+        "rights": true,
+        "xfa": true,
+        "signed": false,
+        "certified": false,
+        "modify": false,
+        "pendingTitle": "earlier"
+      }
+    },
+    {
+      "case": "signed",
+      "changed": false,
+      "error": "PdfSignatureConflictException",
+      "state": {
+        "rights": true,
+        "xfa": true,
+        "signed": true,
+        "certified": false,
+        "modify": true,
+        "pendingTitle": "earlier"
+      }
+    },
+    {
+      "case": "certified",
+      "changed": false,
+      "error": "PdfCertificationLockedException",
+      "state": {
+        "rights": true,
+        "xfa": true,
+        "signed": false,
+        "certified": true,
+        "modify": true,
+        "pendingTitle": "earlier"
+      }
+    },
+    {
+      "case": "apply-failure",
+      "changed": false,
+      "error": "injected",
+      "state": {
+        "rights": true,
+        "xfa": true,
+        "signed": false,
+        "certified": false,
+        "modify": true,
+        "pendingTitle": "earlier",
+        "applyFailure": true
+      }
+    },
+    {
+      "case": "absent-signed",
+      "changed": false,
+      "error": "",
+      "state": {
+        "rights": false,
+        "xfa": true,
+        "signed": true,
+        "certified": false,
+        "modify": true,
+        "pendingTitle": "earlier"
+      }
+    }
+  ]
+}

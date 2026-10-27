@@ -1,0 +1,1194 @@
+{
+  "pypdf": "6.21.1",
+  "qpdf": "qpdf version 12.3.2",
+  "outputs": [
+    {
+      "file": "absent-none-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\absent-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "absent-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\absent-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "absent-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\absent-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "absent-none-save.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\absent-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "approve-none-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u00f6g&C\u00f1\u2022\u017e\u0192\u0152\u00eb\u2030\u000f!\u00e6\u00b9\u2013",
+        ",a\u00cb>\u0152n\u00a7\u02da\\\u02c6\u00d2\u00a9\u02dd\u00da&\u00cc"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\approve-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "approve-none-metadata.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u00f6g&C\u00f1\u2022\u017e\u0192\u0152\u00eb\u2030\u000f!\u00e6\u00b9\u2013",
+        ",a\u00cb>\u0152n\u00a7\u02da\\\u02c6\u00d2\u00a9\u02dd\u00da&\u00cc"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\approve-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "approve-none-refused-metadata-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u00f6g&C\u00f1\u2022\u017e\u0192\u0152\u00eb\u2030\u000f!\u00e6\u00b9\u2013",
+        ",a\u00cb>\u0152n\u00a7\u02da\\\u02c6\u00d2\u00a9\u02dd\u00da&\u00cc"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\approve-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "approve-none-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u00f6g&C\u00f1\u2022\u017e\u0192\u0152\u00eb\u2030\u000f!\u00e6\u00b9\u2013",
+        ",a\u00cb>\u0152n\u00a7\u02da\\\u02c6\u00d2\u00a9\u02dd\u00da&\u00cc"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\approve-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p1-none-save.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "%\u00e9\u201cuu\u00c0\u00a9~?\u02d9\u00e7\u00f1tN\u0007\u00bb",
+        "\u103b\u4adf\u145d\u62e6\u8dd9\u6239\u9fae\u9f41"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p1-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p2-none-fill.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u1655\ue9fe\u908e\u132b\u8354\u95a7\u7f58\u7664",
+        "\u2019\u2044N\u00a1\u02dcn\u00e9\u00bba\u00d9=\u0178Qy\u00aeN"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p2-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p2-none-refused-metadata-fill.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u1655\ue9fe\u908e\u132b\u8354\u95a7\u7f58\u7664",
+        "\u2019\u2044N\u00a1\u02dcn\u00e9\u00bba\u00d9=\u0178Qy\u00aeN"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p2-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p2-none-save.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u1655\ue9fe\u908e\u132b\u8354\u95a7\u7f58\u7664",
+        "\u2019\u2044N\u00a1\u02dcn\u00e9\u00bba\u00d9=\u0178Qy\u00aeN"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p2-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p3-none-fill.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u201ew'\u00bd\u00d4\u00cd\u000e\u00e90\u00d4:\u00a6{+\u017eA",
+        "(\u00a3k\u0003!\u00f0\u0007\u00e7\u00f8ZZ\u00b9\u00f2x\u201eM"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p3-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p3-none-refused-metadata-fill.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u201ew'\u00bd\u00d4\u00cd\u000e\u00e90\u00d4:\u00a6{+\u017eA",
+        "(\u00a3k\u0003!\u00f0\u0007\u00e7\u00f8ZZ\u00b9\u00f2x\u201eM"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p3-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "certify-p3-none-save.pdf",
+      "rights": true,
+      "docmdp": true,
+      "signatures": 1,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [
+        "\u201ew'\u00bd\u00d4\u00cd\u000e\u00e90\u00d4:\u00a6{+\u017eA",
+        "(\u00a3k\u0003!\u00f0\u0007\u00e7\u00f8ZZ\u00b9\u00f2x\u201eM"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\certify-p3-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-owner-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-owner-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-owner-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-owner-metadata.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-owner-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-owner-refused-metadata-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-owner-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-owner-save.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-user-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-user-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-user-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-user-refused-metadata-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-hybrid-rights-user-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa",
+        "\u0006\u00fa\u0002@_\u00d9\u0011\u0018i\u0090\u0099\u0016\"\u00b6f\u00fa"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-hybrid-rights-user-save.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-owner-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-owner-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-owner-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-owner-metadata.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-owner-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-owner-refused-metadata-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-owner-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-owner-save.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-user-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-user-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-user-refused-metadata-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-user-refused-metadata-fill.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r4-rights-user-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add",
+        "\u5cf8\ud484\u4ad4\u93cc\ub897\uad01\ua4c1\u4add"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r4-rights-user-save.pdf\nPDF Version: 1.6\nR = 4\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv2\nstring encryption method: AESv2\nfile encryption method: AESv2\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-owner-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-owner-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-owner-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-owner-metadata.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-owner-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-owner-refused-metadata-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-owner-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-owner-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-user-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-user-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-user-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-user-refused-metadata-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-hybrid-rights-user-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p",
+        "\u2020\u2021\u00ca0\u00f7\u0141\u00c8\u00c79^M\u017e\u00bd\u00ec\u0015p"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-hybrid-rights-user-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-owner-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-owner-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-owner-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-owner-metadata.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-owner-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-owner-refused-metadata-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-owner-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-owner-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-user-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-user-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-user-refused-metadata-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-user-refused-metadata-fill.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-r6-rights-user-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": true,
+      "encryptEntry": true,
+      "id": [
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1",
+        "\uae3e\u761c\uc949\uab9f\u9bb8\ue205\u7e67\ud7f1"
+      ],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\encrypted-r6-rights-user-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -1084\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: not allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: not allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-none-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\hybrid-rights-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\hybrid-rights-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\hybrid-rights-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-none-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\hybrid-rights-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-hybrid-rights-none-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-hybrid-rights-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-hybrid-rights-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-hybrid-rights-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-hybrid-rights-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-hybrid-rights-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-hybrid-rights-none-save.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": true,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-hybrid-rights-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-rights-none-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-rights-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-rights-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-rights-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-rights-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-rights-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-removed-rights-none-save.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\modeled-removed-rights-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-no-grant-none-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-no-grant-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-no-grant-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-no-grant-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-no-grant-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-no-grant-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-no-grant-none-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-no-grant-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-none-fill.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-none-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-none-metadata.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "W199",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-none-metadata.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-none-refused-metadata-fill.pdf",
+      "rights": false,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "Ada"
+      },
+      "title": "earlier",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-none-refused-metadata-fill.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "rights-none-save.pdf",
+      "rights": true,
+      "docmdp": false,
+      "signatures": 0,
+      "xfa": false,
+      "fields": {
+        "Name": "old"
+      },
+      "title": "",
+      "encrypted": false,
+      "encryptEntry": false,
+      "id": [],
+      "marker": "retain-me",
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-199\\outputs\\rights-none-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    }
+  ]
+}

@@ -42,7 +42,8 @@ First establish editable forms, tags and empty signature-field semantics, then r
 
 (W-198 is done: `agents/reference/simplification/W-198/`; explicit XFA preparation and shared rights ordering await Gate 2 approval.)
 
-2. W-199
+(W-199 is done: `agents/reference/simplification/W-199/`; explicit rights removal, unsigned-write refusal and credential costs await Gate 2 approval.)
+
 3. W-200
 4. W-201
 5. W-204
