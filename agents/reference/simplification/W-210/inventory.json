@@ -1,0 +1,685 @@
+{
+ "revision": "f78114b9c4e12aff9c475ec2cb8f97f29b8e82ab",
+ "symbols": {
+  "byte_range": {
+   "by_area": {
+    "engine": 17,
+    "test": 8
+   },
+   "files": 10,
+   "lines": 25,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     142,
+     195,
+     226,
+     227,
+     232,
+     261,
+     267,
+     269
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": [
+     140
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfByteRange.cs": [
+     6,
+     9,
+     15
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs": [
+     13,
+     26
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     34,
+     152,
+     164
+    ]
+   }
+  },
+  "byte_range_status": {
+   "by_area": {
+    "engine": 14,
+    "test": 22
+   },
+   "files": 5,
+   "lines": 36,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     61,
+     266,
+     267,
+     271,
+     276,
+     281,
+     287,
+     292,
+     297,
+     300
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfByteRangeStatus.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     35,
+     79,
+     158
+    ]
+   }
+  },
+  "info_type": {
+   "by_area": {
+    "docs": 2,
+    "engine": 12,
+    "fuzz": 1,
+    "test": 30,
+    "top-level": 1
+   },
+   "files": 18,
+   "lines": 46,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": [
+     256
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     28,
+     43,
+     61,
+     192,
+     210
+    ],
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+     71,
+     87
+    ],
+    "src/jaytwo.Pdf/PdfPermissions.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfByteRangeStatus.cs": [
+     6
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     18,
+     20
+    ]
+   }
+  },
+  "list_revisions": {
+   "by_area": {
+    "engine": 4,
+    "test": 2
+   },
+   "files": 5,
+   "lines": 6,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": [
+     261,
+     263
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     70
+    ],
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+     96
+    ]
+   }
+  },
+  "list_signatures": {
+   "by_area": {
+    "docs": 1,
+    "engine": 35,
+    "fuzz": 4,
+    "test": 37,
+    "top-level": 3,
+    "workflow": 1
+   },
+   "files": 65,
+   "lines": 81,
+   "src_files": {
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Internal/PdfAppendixBuffer.cs": [
+     3
+    ],
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": [
+     8,
+     256,
+     258
+    ],
+    "src/jaytwo.Pdf/Internal/PdfIncrementalWriter.cs": [
+     10
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     6,
+     28
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs": [
+     2
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": [
+     12
+    ],
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+     10,
+     87
+    ],
+    "src/jaytwo.Pdf/PdfDocumentEditor.cs": [
+     10
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     6
+    ],
+    "src/jaytwo.Pdf/Signatures/DerCodec.cs": [
+     4
+    ],
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": [
+     7
+    ],
+    "src/jaytwo.Pdf/Signatures/HttpTimestampAuthority.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs": [
+     7
+    ],
+    "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs": [
+     4
+    ],
+    "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs": [
+     5
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfByteRange.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfByteRangeStatus.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfDigestAlgorithm.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignException.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs": [
+     4
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureFormat.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     5
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureKind.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureOptions.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureTooLargeException.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSigningRollbackFailure.cs": [
+     5
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfTimestampException.cs": [
+     1
+    ],
+    "src/jaytwo.Pdf/Signatures/Rfc3161TimeStampRequest.cs": [
+     4
+    ],
+    "src/jaytwo.Pdf/Signatures/Rfc3161TimeStampToken.cs": [
+     4
+    ],
+    "src/jaytwo.Pdf/Signatures/TimestampAuthorityCall.cs": [
+     5
+    ]
+   }
+  },
+  "p_ByteRangeEnd": {
+   "by_area": {
+    "engine": 3,
+    "fuzz": 1,
+    "test": 12,
+    "top-level": 1
+   },
+   "files": 8,
+   "lines": 17,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     164,
+     167,
+     174
+    ]
+   }
+  },
+  "p_ByteRangeRevisionNumber": {
+   "by_area": {
+    "docs": 2,
+    "engine": 3,
+    "test": 8,
+    "top-level": 1
+   },
+   "files": 6,
+   "lines": 14,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     10,
+     65,
+     171
+    ]
+   }
+  },
+  "p_Certificates": {
+   "by_area": {
+    "engine": 3,
+    "fuzz": 1,
+    "test": 10
+   },
+   "files": 7,
+   "lines": 14,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     215
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     69,
+     78
+    ]
+   }
+  },
+  "p_CertificationLevel": {
+   "by_area": {
+    "engine": 23,
+    "fuzz": 1,
+    "test": 7
+   },
+   "files": 12,
+   "lines": 31,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfFlattener.cs": [
+     70
+    ],
+    "src/jaytwo.Pdf/Internal/PdfFormFiller.cs": [
+     65
+    ],
+    "src/jaytwo.Pdf/Internal/PdfWriteGate.cs": [
+     25,
+     33,
+     41,
+     180,
+     182,
+     185,
+     189,
+     208,
+     210,
+     215,
+     250,
+     252,
+     257,
+     259,
+     309,
+     311
+    ],
+    "src/jaytwo.Pdf/Internal/SignatureState.cs": [
+     7
+    ],
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+     71
+    ],
+    "src/jaytwo.Pdf/PdfPermissions.cs": [
+     9
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     68,
+     191
+    ]
+   }
+  },
+  "p_CmsSigningTime": {
+   "by_area": {
+    "engine": 2,
+    "fuzz": 1,
+    "test": 5
+   },
+   "files": 5,
+   "lines": 8,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     58,
+     126
+    ]
+   }
+  },
+  "p_DigestAlgorithm": {
+   "by_area": {
+    "docs": 1,
+    "engine": 8,
+    "fuzz": 1,
+    "test": 9,
+    "workflow": 1
+   },
+   "files": 14,
+   "lines": 20,
+   "src_files": {
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": [
+     248
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     216
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs": [
+     66
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": [
+     56,
+     57,
+     142
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": [
+     72
+    ],
+    "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs": [
+     40
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs": [
+     39
+    ]
+   }
+  },
+  "p_DigestAlgorithmOid": {
+   "by_area": {
+    "engine": 2,
+    "test": 3
+   },
+   "files": 3,
+   "lines": 5,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     46,
+     110
+    ]
+   }
+  },
+  "p_EndsAtSignatureByteRange": {
+   "by_area": {
+    "docs": 3,
+    "engine": 2,
+    "test": 6,
+    "top-level": 1
+   },
+   "files": 6,
+   "lines": 12,
+   "src_files": {
+    "src/jaytwo.Pdf/PdfRevision.cs": [
+     12,
+     29
+    ]
+   }
+  },
+  "p_HasLaterRevisions": {
+   "by_area": {
+    "docs": 2,
+    "engine": 3,
+    "fuzz": 1,
+    "test": 16
+   },
+   "files": 8,
+   "lines": 22,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfByteRangeStatus.cs": [
+     6
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     66,
+     178
+    ]
+   }
+  },
+  "p_HasSignatureValueDictionary": {
+   "by_area": {
+    "docs": 2,
+    "engine": 3,
+    "fuzz": 1,
+    "test": 12,
+    "top-level": 1
+   },
+   "files": 9,
+   "lines": 19,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     9,
+     42,
+     81
+    ]
+   }
+  },
+  "p_Name_Reason_Location_Contact": {
+   "by_area": {
+    "docs": 1,
+    "engine": 4,
+    "fuzz": 2,
+    "test": 24,
+    "top-level": 1,
+    "workflow": 3
+   },
+   "files": 15,
+   "lines": 35,
+   "src_files": {
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": [
+     250,
+     251,
+     252
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs": [
+     50
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": [
+     344,
+     345,
+     346
+    ]
+   }
+  },
+  "p_SignatureAlgorithmOid": {
+   "by_area": {
+    "engine": 2,
+    "fuzz": 1,
+    "test": 4
+   },
+   "files": 5,
+   "lines": 7,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     56,
+     116
+    ]
+   }
+  },
+  "p_SignerCertificate": {
+   "by_area": {
+    "engine": 5,
+    "fuzz": 2,
+    "test": 18
+   },
+   "files": 11,
+   "lines": 25,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     214
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     133,
+     141
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     44,
+     94
+    ]
+   }
+  },
+  "p_SigningTime": {
+   "by_area": {
+    "docs": 2,
+    "engine": 12,
+    "fuzz": 2,
+    "test": 60,
+    "top-level": 1,
+    "workflow": 1
+   },
+   "files": 29,
+   "lines": 78,
+   "src_files": {
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": [
+     254
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     219
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": [
+     119
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": [
+     93,
+     286
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     137,
+     149
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureContext.cs": [
+     17,
+     36
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     57,
+     121,
+     124
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureOptions.cs": [
+     76
+    ]
+   }
+  },
+  "p_SubFilter": {
+   "by_area": {
+    "docs": 1,
+    "fuzz": 1,
+    "test": 9
+   },
+   "files": 5,
+   "lines": 11,
+   "src_files": {}
+  },
+  "p_TimestampTime": {
+   "by_area": {
+    "engine": 5,
+    "fuzz": 1,
+    "test": 8
+   },
+   "files": 8,
+   "lines": 14,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     228
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     138,
+     151
+    ],
+    "src/jaytwo.Pdf/Signatures/PdfSignatureInfo.cs": [
+     67,
+     185
+    ]
+   }
+  },
+  "reader": {
+   "by_area": {
+    "engine": 3,
+    "fuzz": 4,
+    "other": 1,
+    "test": 12
+   },
+   "files": 7,
+   "lines": 20,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     197,
+     205
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsSignatureReader.cs": [
+     11
+    ]
+   }
+  },
+  "revision_sections": {
+   "by_area": {
+    "engine": 3
+   },
+   "files": 3,
+   "lines": 3,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfDocumentLoader.cs": [
+     165
+    ],
+    "src/jaytwo.Pdf/Internal/PdfObjectStore.cs": [
+     45
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     99
+    ]
+   }
+  },
+  "revision_type": {
+   "by_area": {
+    "docs": 2,
+    "engine": 7,
+    "test": 3,
+    "top-level": 1
+   },
+   "files": 9,
+   "lines": 13,
+   "src_files": {
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": [
+     261
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": [
+     70,
+     76,
+     79
+    ],
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+     96
+    ],
+    "src/jaytwo.Pdf/PdfRevision.cs": [
+     6,
+     8
+    ]
+   }
+  },
+  "tstinfo_reader": {
+   "by_area": {
+    "engine": 4,
+    "fuzz": 1,
+    "other": 1
+   },
+   "files": 5,
+   "lines": 6,
+   "src_files": {
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": [
+     159,
+     205
+    ],
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": [
+     66
+    ],
+    "src/jaytwo.Pdf/Signatures/Rfc3161TimeStampToken.cs": [
+     6
+    ]
+   }
+  }
+ }
+}

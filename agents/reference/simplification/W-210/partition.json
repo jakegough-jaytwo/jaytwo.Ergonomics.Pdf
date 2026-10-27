@@ -1,0 +1,44 @@
+{
+ "revision": "f78114b9c4e12aff9c475ec2cb8f97f29b8e82ab",
+ "unit": "physical lines (comments and blanks included)",
+ "parts": {
+  "basic_detection_and_text_fields": {
+   "inspector_ListSignatures_and_SignatureText": 45,
+   "note": "field walk itself is PdfFieldTree.CollectFields, shared with forms and settled"
+  },
+  "rich_cms_reader": {
+   "CmsSignatureReader.cs": 680,
+   "inspector_cms_call_site": 12,
+   "tools/fuzz/CmsFuzzTarget.cs": 35,
+   "tools/fuzz/CmsSeeds.cs": 162,
+   "tools/fuzz/cms-seeds.py": 55,
+   "test/CmsFuzzTests.cs": 87,
+   "tools/fuzz/seeds/cms_tracked_files": 6
+  },
+  "revision_attribution": {
+   "inspector_ListRevisions..RevisionEnd": 123,
+   "inspector_byte_helpers": 63,
+   "PdfRevision.cs": 30,
+   "RevisionSection.cs": 14,
+   "test/RevisionTests.cs": 293
+  },
+  "coverage_hints": {
+   "inspector_ReadByteRange..lexer_skip": 135,
+   "PdfByteRangeStatus.cs": 49,
+   "PdfByteRange.cs_retained_by_signing_context": 42
+  },
+  "public_model": {
+   "PdfSignatureInfo.cs": 192
+  },
+  "retained_signing_der_and_timestamp_validation": {
+   "DerCodec.cs": 338,
+   "CmsDetachedSignatureProvider.cs": 453,
+   "Rfc3161TimeStampToken.cs": 672,
+   "DocTimeStampSignatureProvider.cs": 79
+  },
+  "mixed_test_files": {
+   "SignatureInspectionTests.cs": 634,
+   "SignatureInspectionInteropTests.cs": 346
+  }
+ }
+}

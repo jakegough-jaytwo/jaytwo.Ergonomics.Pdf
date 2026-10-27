@@ -1,0 +1,95 @@
+{
+  "fixtureSha256": "989BBDAA5408091A98742DB2117B27346AF07E717430F9FE339684A9CB5CFF58",
+  "observations": [
+    {
+      "id": "P1-library-signed-plus-metadata-revision",
+      "publicPropertyCount": 21,
+      "cmsDerivedProperties": [
+        "SignerCertificate",
+        "Certificates",
+        "DigestAlgorithm",
+        "DigestAlgorithmOid",
+        "SignatureAlgorithmOid",
+        "CmsSigningTime",
+        "TimestampTime"
+      ],
+      "properties": {
+        "FieldName": "Signature1",
+        "HasSignatureValueDictionary": "True",
+        "SubFilter": "adbe.pkcs7.detached",
+        "SignerCertificate": "byte[698]",
+        "Certificates": "byte[][1]",
+        "DigestAlgorithm": "SHA256",
+        "DigestAlgorithmOid": "2.16.840.1.101.3.4.2.1",
+        "SignatureAlgorithmOid": "1.2.840.113549.1.1.11",
+        "SigningTime": "10/26/2026 12:00:00 AM \u002B00:00",
+        "CmsSigningTime": "10/26/2026 12:00:00 AM \u002B00:00",
+        "Name": "null",
+        "Reason": "probe",
+        "Location": "lab",
+        "ContactInfo": "null",
+        "ByteRange": "PdfByteRange { Offset0 = 0, Length0 = 681, Offset1 = 33451, Length1 = 433 }",
+        "ByteRangeStatus": "WellFormed",
+        "ByteRangeEnd": "33884",
+        "ByteRangeRevisionNumber": "2",
+        "HasLaterRevisions": "True",
+        "TimestampTime": "null",
+        "CertificationLevel": "null"
+      },
+      "revisions": [
+        {
+          "Number": 1,
+          "EndOffset": 330,
+          "EndsAtSignatureByteRange": false
+        },
+        {
+          "Number": 2,
+          "EndOffset": 33884,
+          "EndsAtSignatureByteRange": true
+        },
+        {
+          "Number": 3,
+          "EndOffset": 34866,
+          "EndsAtSignatureByteRange": false
+        }
+      ],
+      "fileLength": 34866
+    },
+    {
+      "id": "P2-malformed-cms-contents",
+      "opens": true,
+      "signatures": "PdfParseException: Parse error at offset 482: A CMS value has tag 0x31 where 0x30 was expected.",
+      "revisions": "ok count=3",
+      "pages": "ok count=1",
+      "permissions": "ok modify=True",
+      "editorMetadataSave": "ok appended=858 bytes prefixPreserved=True"
+    },
+    {
+      "id": "P3-unknown-subfilter",
+      "opens": true,
+      "signatures": "ok count=1 subFilter=adbe.pkcs7.dxtached byteRangeStatus=WellFormed revisionNumber=2 signerCertificate=null timestampTime=null",
+      "revisions": "ok count=3",
+      "pages": "ok count=1",
+      "permissions": "ok modify=True",
+      "editorMetadataSave": "ok appended=858 bytes prefixPreserved=True"
+    },
+    {
+      "id": "P4-malformed-historical-footer",
+      "opens": true,
+      "signatures": "ok count=1 subFilter=adbe.pkcs7.detached byteRangeStatus=WellFormed revisionNumber= signerCertificate=present timestampTime=null",
+      "revisions": "PdfParseException: Parse error at offset 309: The cross-reference section is not followed by its own startxref / %%EOF footer.",
+      "pages": "ok count=1",
+      "permissions": "ok modify=True",
+      "editorMetadataSave": "ok appended=858 bytes prefixPreserved=True"
+    },
+    {
+      "id": "P5-caller-side-recovery-from-retained-byte-range",
+      "extractedCmsBytes": 1207,
+      "onlyZeroPaddingRemoved": true,
+      "signerCertificateEqualsLibraryReader": true,
+      "digestOidEqualsLibraryReader": true,
+      "externalCheckSignatureOnly": "passed",
+      "callerLinesOfCode": "about 12 including the DER length helper, plus a Pkcs/BouncyCastle/asn1crypto-class dependency owned by the caller"
+    }
+  ]
+}

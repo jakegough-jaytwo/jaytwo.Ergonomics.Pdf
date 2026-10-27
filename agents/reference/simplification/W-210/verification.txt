@@ -1,0 +1,24 @@
+W-210 verification (research item; no runtime, test, build or protected-file change)
+Baseline revision: f78114b9c4e12aff9c475ec2cb8f97f29b8e82ab (W-203 completion commit), clean source tree; only W-210 records and reference material changed.
+
+Ran and passed:
+- make agents-check (before and after recording completion): OK, 217 work items, 68 decisions.
+- powershell -NoProfile -ExecutionPolicy Bypass -File agents/reference/simplification/W-210/run.ps1
+  - dotnet build src/jaytwo.Pdf (net10.0, --no-restore): 0 warnings, 0 errors.
+  - inventory.py -> inventory.json; test_oracle.py -> test_oracle.json; partition.py -> partition.json (run separately).
+  - disposable probe build and run (net10.0, public API only, test-only Pkcs assembly from the existing engine test bin):
+    five paths P1-P5 in observations.json; execution.json pins SDK 10.0.402, OS, assembly and probe SHA-256.
+- graphify update .: 8,447 nodes / 23,762 edges.
+
+Measured: member counts and values in P1; P2 (malformed CMS makes Signatures throw while Revisions, Pages, Permissions and a metadata
+save succeed with the prefix preserved); P3 (unknown SubFilter: CMS-derived members null, rest populated); P4 (damaged first %%EOF:
+Signatures succeeds with null revision number, Revisions throws, writes succeed); P5 (caller-side recovery through the retained ByteRange
+agrees with the library reader on signer certificate and digest OID, and .NET SignedCms.CheckSignature(verifySignatureOnly) passes).
+Inventory counts are lexical matches over tracked files; physical line counts include comments and blanks.
+
+Inferred, not measured: effort ranges; deletable-line sums; demand for signer-identity display; absence of external consumers;
+that Rfc3161TimeStampToken validation remains fully exercised by the existing `tsr` fuzz target after the reader is removed.
+
+Not run and not claimed: full test suite, framework matrix, fuzz campaign, Docker gate, pyHanko/pdfsig/DSS cross-checks of the probe
+fixture, real TSA or PAdES-T/document-timestamp fixtures in the probe, hostile-input audit, trust or cryptographic validation by the
+library, customer survey, independent human or fresh-context review. W-188's missing review attachments remain an explicit gap.

@@ -1,0 +1,174 @@
+{
+ "files_scanned": 43,
+ "note": "lexical member-name matches in files that mention the inspection API; overcounts unrelated same-named members",
+ "properties": {
+  "FieldName": {
+   "inspection_specific_reads": 10,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "WorkflowSigningTests.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "HasSignatureValueDictionary": {
+   "inspection_specific_reads": 11,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "LargeWorkloadTests.cs",
+    "OutputCheck.cs"
+   ]
+  },
+  "SubFilter": {
+   "inspection_specific_reads": 9,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "SignerCertificate": {
+   "inspection_specific_reads": 17,
+   "oracle_reads": 3,
+   "oracle_files": [
+    "LargeWorkloadTests.cs",
+    "WorkflowSigningInteropTests.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "Certificates": {
+   "inspection_specific_reads": 10,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "DigestAlgorithm": {
+   "inspection_specific_reads": 7,
+   "oracle_reads": 3,
+   "oracle_files": [
+    "SignatureSeedValueTests.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "DigestAlgorithmOid": {
+   "inspection_specific_reads": 3,
+   "oracle_reads": 0,
+   "oracle_files": []
+  },
+  "SignatureAlgorithmOid": {
+   "inspection_specific_reads": 4,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "SigningTime": {
+   "inspection_specific_reads": 9,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "DssCases.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "CmsSigningTime": {
+   "inspection_specific_reads": 5,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "Name": {
+   "inspection_specific_reads": 7,
+   "oracle_reads": 23,
+   "oracle_files": [
+    "CorpusTests.cs",
+    "CursorWindowTests.cs",
+    "SigningInteropTests.cs",
+    "WorkBaselineTests.cs",
+    "WorkflowCombineTests.cs",
+    "WorkflowCompositionTests.cs",
+    "WriterQuirkTests.cs",
+    "XfaTests.cs"
+   ]
+  },
+  "Reason": {
+   "inspection_specific_reads": 5,
+   "oracle_reads": 7,
+   "oracle_files": [
+    "ITextInteropTests.cs",
+    "LargeWorkloadTests.cs",
+    "NullReferenceTests.cs",
+    "OutputCheck.cs",
+    "PageTests.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "Location": {
+   "inspection_specific_reads": 3,
+   "oracle_reads": 0,
+   "oracle_files": []
+  },
+  "ContactInfo": {
+   "inspection_specific_reads": 3,
+   "oracle_reads": 0,
+   "oracle_files": []
+  },
+  "ByteRange": {
+   "inspection_specific_reads": 10,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "WriterQuirkTests.cs",
+    "XrefStreamAppendTests.cs"
+   ]
+  },
+  "ByteRangeStatus": {
+   "inspection_specific_reads": 9,
+   "oracle_reads": 0,
+   "oracle_files": []
+  },
+  "ByteRangeEnd": {
+   "inspection_specific_reads": 10,
+   "oracle_reads": 3,
+   "oracle_files": [
+    "LargeWorkloadTests.cs",
+    "OutputCheck.cs"
+   ]
+  },
+  "ByteRangeRevisionNumber": {
+   "inspection_specific_reads": 7,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "LargeWorkloadTests.cs"
+   ]
+  },
+  "HasLaterRevisions": {
+   "inspection_specific_reads": 15,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "WriterQuirkTests.cs",
+    "XrefStreamAppendTests.cs"
+   ]
+  },
+  "TimestampTime": {
+   "inspection_specific_reads": 8,
+   "oracle_reads": 1,
+   "oracle_files": [
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "CertificationLevel": {
+   "inspection_specific_reads": 6,
+   "oracle_reads": 2,
+   "oracle_files": [
+    "CorpusTests.cs",
+    "WriterQuirkTests.cs"
+   ]
+  },
+  "EndsAtSignatureByteRange": {
+   "inspection_specific_reads": 5,
+   "oracle_reads": 3,
+   "oracle_files": [
+    "LargeWorkloadTests.cs"
+   ]
+  }
+ }
+}
