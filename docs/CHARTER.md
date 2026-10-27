@@ -57,3 +57,5 @@ Significant trade-offs between compatibility, complexity, and maintainability re
 Engineers and agents may make implementation decisions consistent with the charter. Adding new full-document rewrite strategies requires explicit approval from the project owner, supported by a concise explanation of the need, alternatives, and trade-offs. Maintaining existing rewrite functionality does not require fresh approval.
 
 The project owner approves changes to product scope or architectural direction. The charter governs the backlog; the backlog and implementation history do not independently authorize capabilities or commitments.
+
+Change this charter deliberately when the project owner approves a change to the project’s purpose, governing principles, or architectural direction. Implementation difficulties, delivery priorities, and existing code do not by themselves change those commitments. Keep capability details in SUPPORTED.md, current behavior in behavior.md, and delivery plans in planning records.

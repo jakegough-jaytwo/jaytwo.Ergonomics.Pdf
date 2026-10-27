@@ -15,8 +15,9 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | AcroForm population and export | Populate supported text, checkbox, radio, and choice fields, individually or in bulk; export form values. |
 | AcroForm flattening | Flatten eligible editable fields into page content, subject to appearance, permission, and signature restrictions. |
 | Page rotation | Change page rotation in multiples of 90 degrees. |
-| Page extraction | Create a new PDF from selected existing pages. |
-| Concatenation | Combine existing PDFs into a new PDF. |
+| Page extraction | Create a new PDF from selected existing pages, preserving the requested order and allowing repeated and reordered pages. |
+| Concatenation | Combine selected pages from existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. |
+| Incremental saves | Save supported edits as incremental updates, preserving the original document bytes as a prefix. |
 | Binary attachments | Read, add, replace, and remove document-level embedded files. |
 | User metadata | Read and update document information, including authorship information and custom key/value properties, and XMP metadata. |
 | Image placement | Place supported images on existing pages with position, size, rotation, opacity, and foreground/background placement, for image stamping and image watermarking. |
@@ -47,6 +48,12 @@ Foreground/background image placement controls painting order; it does not guara
 Private signing keys remain under host control. Signature inspection reports structures and claims rather than validating signatures. Timestamp inclusion alone does not establish trust.
 
 Rendering, page-content text extraction, redaction, cryptographic signature validation, general PDF repair, general annotation editing, and general document authoring and layout are outside scope unless explicitly adopted by the project owner. Limited blank-page creation and image placement serve image-to-PDF conversion, image stamping, and image watermarking. Necessary internal support does not establish a general public feature.
+
+## Resource and failure contracts
+
+Supported operations require documented resource limits and explicit failure behavior. File size alone does not determine support; there is no guarantee that every document below a particular size can be processed.
+
+Output guarantees must distinguish the operation, destination type, and point of failure. Detailed contracts must state whether a failure leaves the destination unchanged, permits partial output, or provides restoration or publication guarantees. Rollback and retry safety must be stated explicitly rather than inferred from a failed operation. Exact limits and failure mechanics belong in the behavior reference and its acceptance criteria.
 
 ## Maintaining the scope commitment
 
