@@ -1,0 +1,573 @@
+{
+ "_qpdf_check_exit_codes": {
+  "clean": 0,
+  "dangling-action": 0,
+  "deep-outline": 0,
+  "embedded-files": 0,
+  "fileattachment-annot": 0,
+  "indirect-field-aa": 0,
+  "link-gotor": 0,
+  "link-uri": 0,
+  "names-js": 0,
+  "nested-next-launch": 0,
+  "next-cycle": 0,
+  "openaction-js": 0,
+  "page2-aa": 0,
+  "revisioned-removed-js": 0,
+  "richmedia-annot": 0,
+  "submit-form": 0,
+  "unknown-action": 0,
+  "wide-budget": 0,
+  "xfa": 0
+ },
+ "clean": {
+  "categories": [],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [
+   "Resources",
+   "ContentStreams",
+   "StructureTree",
+   "UnreachableObjects"
+  ],
+  "findings": 0,
+  "gaps": [],
+  "locations": [],
+  "revisions": 1,
+  "verdict": "WithinPolicy",
+  "visits": 7
+ },
+ "dangling-action": {
+  "categories": [],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Partial",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 0,
+  "gaps": [
+   "Unresolvable"
+  ],
+  "locations": [],
+  "revisions": 1,
+  "verdict": "Indeterminate",
+  "visits": 7
+ },
+ "deep-outline": {
+  "categories": [
+   "JavaScript"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Outlines/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/First/A"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 68
+ },
+ "deep-outline@depth=10": {
+  "categories": [],
+  "gaps": [
+   "DepthExceeded"
+  ],
+  "verdict": "Indeterminate"
+ },
+ "embedded-files": {
+  "categories": [
+   "EmbeddedFile"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Names/EmbeddedFiles/Names[1]"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 6
+ },
+ "fileattachment-annot": {
+  "categories": [
+   "EmbeddedFile"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 1/Annots[0]"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 6
+ },
+ "indirect-field-aa": {
+  "categories": [
+   "FormAction",
+   "JavaScript"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 2,
+  "gaps": [],
+  "locations": [
+   "AcroForm/Fields[0]/AA/K",
+   "AcroForm/Fields[0]/AA/K/Next"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 13
+ },
+ "link-gotor": {
+  "categories": [
+   "ExternalReference"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 1/Annots[0]/A"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 7
+ },
+ "link-uri": {
+  "categories": [
+   "ExternalReference"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 1/Annots[0]/A"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 7
+ },
+ "link-uri@allow=ExternalReference": {
+  "exclusions": [
+   "Resources",
+   "ContentStreams",
+   "StructureTree",
+   "UnreachableObjects"
+  ],
+  "verdict": "WithinPolicy"
+ },
+ "names-js": {
+  "categories": [
+   "JavaScript"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Names/JavaScript/Names[1]"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 6
+ },
+ "nested-next-launch": {
+  "categories": [
+   "Launch"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Catalog/OpenAction/Next[0]/Next"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 10
+ },
+ "next-cycle": {
+  "categories": [
+   "OtherAction"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Catalog/OpenAction"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 9
+ },
+ "openaction-js": {
+  "categories": [
+   "JavaScript"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Catalog/OpenAction"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 7
+ },
+ "openaction-js@max_findings=0": {
+  "suppressed": 1,
+  "verdict": "Indeterminate"
+ },
+ "page2-aa": {
+  "categories": [
+   "JavaScript"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 2/AA/O"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 10
+ },
+ "password-required": {
+  "opened": false,
+  "reason": "password required"
+ },
+ "revisioned-removed-js": {
+  "categories": [],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "NotInspected",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [
+   "Resources",
+   "ContentStreams",
+   "StructureTree",
+   "PriorRevisions",
+   "UnreachableObjects"
+  ],
+  "findings": 0,
+  "gaps": [],
+  "locations": [],
+  "revisions": 2,
+  "verdict": "WithinPolicy",
+  "visits": 4
+ },
+ "richmedia-annot": {
+  "categories": [
+   "RichMedia"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 1/Annots[0]"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 6
+ },
+ "submit-form": {
+  "categories": [
+   "FormAction"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "AcroForm/Fields[0]/A"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 8
+ },
+ "unknown-action": {
+  "categories": [
+   "UnknownAction"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "Page 1/Annots[0]/A"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 7
+ },
+ "wide-budget": {
+  "categories": [],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [
+   "Resources",
+   "ContentStreams",
+   "StructureTree",
+   "UnreachableObjects"
+  ],
+  "findings": 0,
+  "gaps": [],
+  "locations": [],
+  "revisions": 1,
+  "verdict": "WithinPolicy",
+  "visits": 1204
+ },
+ "wide-budget@visits=50": {
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Partial",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "gaps": [
+   "BudgetExhausted"
+  ],
+  "verdict": "Indeterminate"
+ },
+ "wide-budget@visits=50,allow-all": {
+  "exclusions": [
+   "Pages",
+   "Resources",
+   "ContentStreams",
+   "StructureTree",
+   "UnreachableObjects"
+  ],
+  "verdict": "WithinPolicy"
+ },
+ "xfa": {
+  "categories": [
+   "Xfa"
+  ],
+  "coverage": {
+   "AcroForm": "Complete",
+   "Catalog": "Complete",
+   "ContentStreams": "NotInspected",
+   "NameTrees": "Complete",
+   "Outlines": "Complete",
+   "Pages": "Complete",
+   "PriorRevisions": "Complete",
+   "Resources": "NotInspected",
+   "StructureTree": "NotInspected",
+   "UnreachableObjects": "NotInspected"
+  },
+  "exclusions": [],
+  "findings": 1,
+  "gaps": [],
+  "locations": [
+   "AcroForm/XFA"
+  ],
+  "revisions": 1,
+  "verdict": "Rejected",
+  "visits": 4
+ }
+}

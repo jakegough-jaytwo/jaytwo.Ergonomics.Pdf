@@ -86,9 +86,10 @@ Reconcile all findings into exact wording, small implementation tickets, migrati
 
 ## Security hardening: admission design and final guidance
 
-1. W-156
-2. W-158
-3. W-159
+(W-156 is done: `agents/reference/w-156/`; the proposed admission inspection contract, six owner decisions and draft items P156-A to D await owner approval, not shipped behavior.)
+
+1. W-158
+2. W-159
 
 W-156 follows W-197 to avoid designing overlapping admission machinery before assembly requirements are understood. Retain it unless the owner explicitly approves a narrower replacement or cancellation; assembly refusal is not a host admission verdict. W-158 follows W-210 to document the retained inspection surface and trust boundaries. W-159 follows its existing budget/admission prerequisites and documents only shipped guarantees, including host responsibilities that simplification cannot remove.
 
