@@ -14,9 +14,10 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | AcroForm inspection | Read field names, types, values, and widget geometries. |
 | AcroForm population and export | Populate supported text, checkbox, radio, and choice fields, individually or in bulk; export form values. |
 | AcroForm flattening | Flatten eligible editable fields into page content, subject to appearance, permission, and signature restrictions. |
+| XFA-bearing forms | Classify hybrid and XFA-only forms and handle them under explicit operation-specific refusal or XFA-removal rules. XFA packet editing is excluded. |
 | Page rotation | Change page rotation in multiples of 90 degrees. |
-| Page extraction | Create a new PDF from selected existing pages, preserving the requested order and allowing repeated and reordered pages. |
-| Concatenation | Combine selected pages from existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. |
+| Page extraction | Create a new PDF from selected pages of documents the operation contract supports, preserving the requested order and allowing repeated and reordered pages. Which document structures survive, are dropped, or cause refusal is set by that contract. |
+| Concatenation | Combine selected pages from supported existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. Preservation and refusal rules are set by the operation contract. |
 | Incremental saves | Save supported edits as incremental updates, preserving the original document bytes as a prefix. |
 | Binary attachments | Read, add, replace, and remove document-level embedded files. |
 | User metadata | Read and update document information, including authorship information and custom key/value properties, and XMP metadata. |
@@ -25,7 +26,7 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | Password-protected PDFs | Open and modify supported password-protected PDFs under documented authentication and permission rules. |
 | Security permissions | Read and change supported document security permissions with appropriate authorization. |
 | Digital signing | Sign PDFs using host-controlled keys, with optional trusted timestamps; append document timestamps. |
-| Signature and revision inspection | Inspect signature structures and embedded claims, and list document revisions and signature coverage, without cryptographic validation or trust assessment. |
+| Signature and revision inspection | Inspect signatures and the claims they embed, and list document revisions, without cryptographic validation or trust assessment. The depth of CMS content and revision or coverage detail reported is set by the operation contract. |
 
 ### Image inputs and shortcuts
 
@@ -49,7 +50,25 @@ Foreground/background image placement controls painting order; it does not guara
 
 Private signing keys remain under host control. Signature inspection reports structures and claims rather than validating signatures. Timestamp inclusion alone does not establish trust.
 
-Rendering, page-content text extraction, redaction, cryptographic signature validation, general PDF repair, general annotation editing, and general document authoring and layout are outside scope unless explicitly adopted by the project owner. Limited blank-page creation and image placement serve image-to-PDF conversion, image stamping, and image watermarking. Necessary internal support does not establish a general public feature.
+## Enduring non-goals
+
+These are product boundaries, independent of implementation status. Changing them requires an explicit owner-approved scope change:
+
+- Rendering and page-content text extraction.
+- General document authoring and layout, apart from the limited image operations below.
+- Redaction, cryptographic signature validation, and general PDF repair.
+- XFA packet editing.
+- JavaScript authoring, editing, or execution.
+- PDF/A conversion and PDF/A conformance claims, including PDF/A-3.
+- Public-key encryption and adding encryption to a file.
+- General annotation editing and page-level file attachment annotations.
+- Rewriting an input file in place. Incrementally appending to a source is a separate supported operation.
+
+Limited blank-page creation and image placement for image-to-PDF conversion, image stamping, and image watermarking are the explicit image exception adopted in [D-68](../agents/decisions/D-68.md). General stamping or watermarking beyond that image capability is not included.
+
+XFA classification, refusal, or removal in support of an approved AcroForm operation does not make XFA editing a product capability. The operation contract determines when XFA must be refused or removed; current rules remain in the behavior reference.
+
+Document-level attachments and associated-file keys do not establish PDF/A-3 conformance. No PDF/A conversion, conformance verification, or guarantee that edits preserve PDF/A conformance is offered. Necessary internal functionality for supported workflows does not create additional public capabilities.
 
 ## Resource and failure contracts
 
