@@ -1,0 +1,104 @@
+[
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+    "hash_matches_W189": true,
+    "pages": 3,
+    "first_labels": [
+      "C1",
+      "1",
+      "2"
+    ],
+    "differs_from_ordinal": 3
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+    "hash_matches_W189": true,
+    "pages": 3,
+    "first_labels": [
+      "C1",
+      "1",
+      "2"
+    ],
+    "differs_from_ordinal": 3
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+    "hash_matches_W189": true,
+    "pages": 110,
+    "first_labels": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16"
+    ],
+    "differs_from_ordinal": 0
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+    "hash_matches_W189": true,
+    "pages": 4,
+    "first_labels": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "differs_from_ordinal": 0
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+    "hash_matches_W189": true,
+    "pages": 12,
+    "first_labels": [
+      "",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11"
+    ],
+    "differs_from_ordinal": 12
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+    "hash_matches_W189": true,
+    "pages": 4,
+    "first_labels": [
+      "",
+      "2",
+      "3",
+      ""
+    ],
+    "differs_from_ordinal": 2
+  },
+  {
+    "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+    "hash_matches_W189": true,
+    "pages": 4,
+    "first_labels": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "differs_from_ordinal": 0
+  }
+]

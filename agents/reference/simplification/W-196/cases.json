@@ -1,0 +1,260 @@
+[
+  {
+    "name": "all-mixed",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "mixed",
+        "pages": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10
+        ]
+      }
+    ],
+    "preserve": [
+      "i",
+      "ii",
+      "iii",
+      "1",
+      "2",
+      "3",
+      "A-8",
+      "A-9",
+      "Part-IV",
+      "Part-V"
+    ]
+  },
+  {
+    "name": "cross-ranges",
+    "mode": "extract",
+    "inputs": [
+      {
+        "file": "mixed",
+        "pages": [
+          2,
+          3,
+          4,
+          7,
+          8,
+          9
+        ]
+      }
+    ],
+    "preserve": [
+      "ii",
+      "iii",
+      "1",
+      "A-8",
+      "A-9",
+      "Part-IV"
+    ]
+  },
+  {
+    "name": "reorder-repeat",
+    "mode": "extract",
+    "inputs": [
+      {
+        "file": "mixed",
+        "pages": [
+          10,
+          2,
+          2,
+          7,
+          4,
+          1
+        ]
+      }
+    ],
+    "preserve": [
+      "Part-V",
+      "ii",
+      "ii",
+      "A-8",
+      "1",
+      "i"
+    ]
+  },
+  {
+    "name": "restart-prefix",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "restart",
+        "pages": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      }
+    ],
+    "preserve": [
+      "Ex-7",
+      "Ex-8",
+      "Ex-1",
+      "Ex-2",
+      "Contents"
+    ]
+  },
+  {
+    "name": "plain-subset",
+    "mode": "extract",
+    "inputs": [
+      {
+        "file": "plain",
+        "pages": [
+          3,
+          5,
+          3
+        ]
+      }
+    ],
+    "preserve": [
+      "3",
+      "5",
+      "3"
+    ]
+  },
+  {
+    "name": "two-inputs",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "mixed",
+        "pages": [
+          2,
+          4,
+          7
+        ]
+      },
+      {
+        "file": "restart",
+        "pages": [
+          3,
+          5
+        ]
+      },
+      {
+        "file": "plain",
+        "pages": [
+          3,
+          4
+        ]
+      }
+    ],
+    "preserve": [
+      "ii",
+      "1",
+      "A-8",
+      "Ex-1",
+      "Contents",
+      "3",
+      "4"
+    ]
+  },
+  {
+    "name": "repeated-input",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "restart",
+        "pages": [
+          3,
+          4
+        ]
+      },
+      {
+        "file": "restart",
+        "pages": [
+          3,
+          4
+        ]
+      }
+    ],
+    "preserve": [
+      "Ex-1",
+      "Ex-2",
+      "Ex-1",
+      "Ex-2"
+    ]
+  },
+  {
+    "name": "prefix-only-empty",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "prefix",
+        "pages": [
+          1,
+          2,
+          3,
+          4,
+          1
+        ]
+      }
+    ],
+    "preserve": [
+      "Résumé-",
+      "Résumé-",
+      "",
+      "",
+      "Résumé-"
+    ]
+  },
+  {
+    "name": "alphabetic",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "letters",
+        "pages": [
+          1,
+          2,
+          3,
+          4
+        ]
+      }
+    ],
+    "preserve": [
+      "Z",
+      "AA",
+      "z",
+      "aa"
+    ]
+  },
+  {
+    "name": "unlabeled-first",
+    "mode": "concat",
+    "inputs": [
+      {
+        "file": "plain",
+        "pages": [
+          4,
+          5
+        ]
+      },
+      {
+        "file": "mixed",
+        "pages": [
+          1,
+          7
+        ]
+      }
+    ],
+    "preserve": [
+      "4",
+      "5",
+      "i",
+      "A-8"
+    ]
+  }
+]

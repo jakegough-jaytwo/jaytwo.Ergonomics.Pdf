@@ -1,0 +1,62 @@
+[
+  {
+    "name": "all-mixed",
+    "error": null,
+    "bytes": 1554,
+    "omissions": {}
+  },
+  {
+    "name": "cross-ranges",
+    "error": null,
+    "bytes": 1078,
+    "omissions": {}
+  },
+  {
+    "name": "reorder-repeat",
+    "error": null,
+    "bytes": 1078,
+    "omissions": {}
+  },
+  {
+    "name": "restart-prefix",
+    "error": null,
+    "bytes": 962,
+    "omissions": {}
+  },
+  {
+    "name": "plain-subset",
+    "error": null,
+    "bytes": 734,
+    "omissions": {}
+  },
+  {
+    "name": "two-inputs",
+    "error": null,
+    "bytes": 1194,
+    "omissions": {}
+  },
+  {
+    "name": "repeated-input",
+    "error": null,
+    "bytes": 848,
+    "omissions": {}
+  },
+  {
+    "name": "prefix-only-empty",
+    "error": null,
+    "bytes": 962,
+    "omissions": {}
+  },
+  {
+    "name": "alphabetic",
+    "error": null,
+    "bytes": 848,
+    "omissions": {}
+  },
+  {
+    "name": "unlabeled-first",
+    "error": null,
+    "bytes": 848,
+    "omissions": {}
+  }
+]

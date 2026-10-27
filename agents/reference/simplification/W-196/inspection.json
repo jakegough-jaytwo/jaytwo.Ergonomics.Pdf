@@ -1,0 +1,359 @@
+{
+  "pypdf": "6.21.1",
+  "python": "3.13.17",
+  "qpdf": "qpdf version 12.3.2",
+  "cases": [
+    {
+      "name": "all-mixed",
+      "selection": [
+        {
+          "file": "mixed",
+          "pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "preserve": [
+        "i",
+        "ii",
+        "iii",
+        "1",
+        "2",
+        "3",
+        "A-8",
+        "A-9",
+        "Part-IV",
+        "Part-V"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 10,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "cross-ranges",
+      "selection": [
+        {
+          "file": "mixed",
+          "pages": [
+            2,
+            3,
+            4,
+            7,
+            8,
+            9
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "preserve": [
+        "ii",
+        "iii",
+        "1",
+        "A-8",
+        "A-9",
+        "Part-IV"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 6,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "reorder-repeat",
+      "selection": [
+        {
+          "file": "mixed",
+          "pages": [
+            10,
+            2,
+            2,
+            7,
+            4,
+            1
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "preserve": [
+        "Part-V",
+        "ii",
+        "ii",
+        "A-8",
+        "1",
+        "i"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 6,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "restart-prefix",
+      "selection": [
+        {
+          "file": "restart",
+          "pages": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "preserve": [
+        "Ex-7",
+        "Ex-8",
+        "Ex-1",
+        "Ex-2",
+        "Contents"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 5,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "plain-subset",
+      "selection": [
+        {
+          "file": "plain",
+          "pages": [
+            3,
+            5,
+            3
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3"
+      ],
+      "preserve": [
+        "3",
+        "5",
+        "3"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 3,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "two-inputs",
+      "selection": [
+        {
+          "file": "mixed",
+          "pages": [
+            2,
+            4,
+            7
+          ]
+        },
+        {
+          "file": "restart",
+          "pages": [
+            3,
+            5
+          ]
+        },
+        {
+          "file": "plain",
+          "pages": [
+            3,
+            4
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ],
+      "preserve": [
+        "ii",
+        "1",
+        "A-8",
+        "Ex-1",
+        "Contents",
+        "3",
+        "4"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 7,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "repeated-input",
+      "selection": [
+        {
+          "file": "restart",
+          "pages": [
+            3,
+            4
+          ]
+        },
+        {
+          "file": "restart",
+          "pages": [
+            3,
+            4
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "preserve": [
+        "Ex-1",
+        "Ex-2",
+        "Ex-1",
+        "Ex-2"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 4,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "prefix-only-empty",
+      "selection": [
+        {
+          "file": "prefix",
+          "pages": [
+            1,
+            2,
+            3,
+            4,
+            1
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "preserve": [
+        "Résumé-",
+        "Résumé-",
+        "",
+        "",
+        "Résumé-"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 5,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "alphabetic",
+      "selection": [
+        {
+          "file": "letters",
+          "pages": [
+            1,
+            2,
+            3,
+            4
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "preserve": [
+        "Z",
+        "AA",
+        "z",
+        "aa"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 4,
+      "qpdf": "passed-both"
+    },
+    {
+      "name": "unlabeled-first",
+      "selection": [
+        {
+          "file": "plain",
+          "pages": [
+            4,
+            5
+          ]
+        },
+        {
+          "file": "mixed",
+          "pages": [
+            1,
+            7
+          ]
+        }
+      ],
+      "new_document": [
+        "1",
+        "2",
+        "3",
+        "4"
+      ],
+      "preserve": [
+        "4",
+        "5",
+        "i",
+        "A-8"
+      ],
+      "engine_has_labels": false,
+      "model_ranges": 4,
+      "qpdf": "passed-both"
+    }
+  ]
+}

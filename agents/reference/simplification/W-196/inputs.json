@@ -1,0 +1,55 @@
+{
+  "mixed": {
+    "labels": [
+      "i",
+      "ii",
+      "iii",
+      "1",
+      "2",
+      "3",
+      "A-8",
+      "A-9",
+      "Part-IV",
+      "Part-V"
+    ],
+    "sha256": "ce049338ff72821425f99409537526d18514d3945769307ec922a07e5a72d1d3"
+  },
+  "restart": {
+    "labels": [
+      "Ex-7",
+      "Ex-8",
+      "Ex-1",
+      "Ex-2",
+      "Contents"
+    ],
+    "sha256": "2812323deeb3d9ce5f3f1512a25d825c8e4b75f8b76b8626cd813d7c581597e1"
+  },
+  "plain": {
+    "labels": [
+      "1",
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "sha256": "f2d4563d9621dfec08a31a10bc973350aae51ed6992895ce5df9dcee0f424b98"
+  },
+  "prefix": {
+    "labels": [
+      "Résumé-",
+      "Résumé-",
+      "",
+      ""
+    ],
+    "sha256": "912d7f7fb109f8e7c7245bf2550f8c0487590e771250b8f842dbeb0b425fb963"
+  },
+  "letters": {
+    "labels": [
+      "Z",
+      "AA",
+      "z",
+      "aa"
+    ],
+    "sha256": "0870609857c1b10c84e9286a0fbcfd5662a7066209fef145314ccb3a53e69d3b"
+  }
+}
