@@ -1,0 +1,152 @@
+[
+  {
+    "id": "minimal",
+    "sha256": "e8b80137602a4d9fb12c45a15f6eeb9c280bbbba7baa15995c04f942625fd497",
+    "bytes": 1650,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "mappings",
+    "sha256": "8e8c9ccf2b5de7319d998494f94850dc826dc09ecd07c8cdb8bf2aac6bcdac79",
+    "bytes": 1859,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "conflicting-mappings",
+    "sha256": "2e91aee1ad9a2d79081806e2e88b910ae4ff908eff185e2167a43cf564f330d5",
+    "bytes": 1860,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "annotation",
+    "sha256": "3aff058d1826594ecda7bc7ed3119c6a37c11254f9ddb1abdee2665bcaf61a97",
+    "bytes": 1980,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "tagged-form",
+    "sha256": "cea2ced357bc463cd1a40809a92c9d65a33188fd3781052128cff409f301e8ae",
+    "bytes": 2393,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "cross-page",
+    "sha256": "b14386cd0c524cf2d19da5249ea881f6316e120079439af8355f96d49d3b4a12",
+    "bytes": 1705,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page2",
+      "Page1"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "bad-page",
+    "sha256": "6d9f75fa29adf8d69a1001cabb5a89597a5ed2cbd6508090b4da3fa2ca027cf7",
+    "bytes": 1650,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": true,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "bad-parent",
+    "sha256": "48e907bfbd1b77df14c170b7ee825492d3cc8fa1c0c857755f77656826e428d4",
+    "bytes": 1648,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": true,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "cycle",
+    "sha256": "7d379d631d21c14d70bc3f1bab677167b099ff0bcd8a72276a1f9cdbce3129b0",
+    "bytes": 1642,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": true,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  },
+  {
+    "id": "unmarked-tree",
+    "sha256": "60fb5b5ba0213b40654f713638fda1fa87a3406f49426ade9a256d40167fcecf",
+    "bytes": 1651,
+    "physicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "expectedLogicalOrder": [
+      "Page1",
+      "Page2"
+    ],
+    "malformed": false,
+    "provenance": "Original synthetic W-191 generator; MIT repository license; no third-party document content"
+  }
+]

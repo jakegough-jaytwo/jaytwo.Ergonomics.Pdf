@@ -1,0 +1,322 @@
+[
+  {
+    "id": "annotation",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1925,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "annotation",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 973,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "annotation",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1330,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "annotation",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 2223,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-page",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-page",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-page",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-page",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-parent",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-parent",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-parent",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "bad-parent",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "conflicting-mappings",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "conflicting-mappings",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "conflicting-mappings",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "conflicting-mappings",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cross-page",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cross-page",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cross-page",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cross-page",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cycle",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cycle",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cycle",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "cycle",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "mappings",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "mappings",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "mappings",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "mappings",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "minimal",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "minimal",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "minimal",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "minimal",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "tagged-form",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 3070,
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "tagged-form",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 1589,
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "tagged-form",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1948,
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "tagged-form",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 3391,
+    "edit": "Generated",
+    "omissions": {}
+  },
+  {
+    "id": "unmarked-tree",
+    "operation": "concat",
+    "outcome": "accepted",
+    "bytes": 1638,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "unmarked-tree",
+    "operation": "subset",
+    "outcome": "accepted",
+    "bytes": 833,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "unmarked-tree",
+    "operation": "reorder",
+    "outcome": "accepted",
+    "bytes": 1188,
+    "edit": null,
+    "omissions": {}
+  },
+  {
+    "id": "unmarked-tree",
+    "operation": "repeat",
+    "outcome": "accepted",
+    "bytes": 1796,
+    "edit": null,
+    "omissions": {}
+  }
+]

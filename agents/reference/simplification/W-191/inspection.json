@@ -1,0 +1,1156 @@
+{
+  "productRevision": "c2412525000c48e4651aee80f02b7db71d72a4cf",
+  "pypdf": "6.21.1",
+  "qpdfVersion": "qpdf version 12.3.2\r\nRun qpdf --copyright to see copyright and license information.",
+  "inputs": {
+    "minimal": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\minimal.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "mappings": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {
+        "/BusinessPara": "/P"
+      },
+      "classMap": {
+        "/BusinessStyle": "{'/O': '/Layout', '/Placement': '/Block'}"
+      },
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/BusinessPara",
+          "/Lang": "en-US",
+          "/Alt": "First page alternate description",
+          "/ActualText": "First page replacement text",
+          "/C": "/BusinessStyle"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\mappings.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "conflicting-mappings": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {
+        "/BusinessPara": "/H1"
+      },
+      "classMap": {
+        "/BusinessStyle": "{'/O': '/Layout', '/Placement': '/Block'}"
+      },
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/BusinessPara",
+          "/Lang": "en-US",
+          "/Alt": "First page alternate description",
+          "/ActualText": "First page replacement text",
+          "/C": "/BusinessStyle"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\conflicting-mappings.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "annotation": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 1,
+          "annotation": "/Text",
+          "alt": "Invoice note"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/Annot",
+          "/Alt": "Invoice note"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [
+        2
+      ],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\annotation.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "tagged-form": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 1,
+          "annotation": "/Widget",
+          "alt": "Customer name"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/Form",
+          "/Alt": "Customer name"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [
+        2
+      ],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\tagged-form.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "cross-page": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        },
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\cross-page.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "bad-page": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [
+        "invalid-page"
+      ],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\bad-page.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "bad-parent": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [
+        "parent-mismatch"
+      ],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\bad-parent.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "cycle": {
+      "pages": 2,
+      "tree": true,
+      "marked": true,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [],
+      "elements": [
+        {
+          "/S": "/Document"
+        }
+      ],
+      "errors": [
+        "cycle"
+      ],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\cycle.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    },
+    "unmarked-tree": {
+      "pages": 2,
+      "tree": true,
+      "marked": false,
+      "language": "en-US",
+      "roleMap": {},
+      "classMap": {},
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "elements": [
+        {
+          "/S": "/Document"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        },
+        {
+          "/S": "/P",
+          "/Lang": "en-US"
+        }
+      ],
+      "errors": [],
+      "pageParentKeys": [
+        0,
+        1
+      ],
+      "annotationParentKeys": [],
+      "qpdfCheck": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-191\\inputs\\unmarked-tree.pdf\r\nPDF Version: 1.7\r\nFile is not encrypted\r\nFile is not linearized\r\nNo syntax or stream encoding errors found; the file may still contain\r\nerrors that qpdf cannot detect\r\n"
+    }
+  },
+  "outputs": [
+    {
+      "file": "annotation-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "annotation-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "annotation-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "annotation-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-page-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-page-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-page-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-page-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-parent-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-parent-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-parent-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "bad-parent-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "conflicting-mappings-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "conflicting-mappings-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "conflicting-mappings-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "conflicting-mappings-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cross-page-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cross-page-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cross-page-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cross-page-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cycle-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cycle-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cycle-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "cycle-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "mappings-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "mappings-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "mappings-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "mappings-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "minimal-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "minimal-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "minimal-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "minimal-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "tagged-form-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "tagged-form-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "tagged-form-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "tagged-form-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "unmarked-tree-concat.pdf",
+      "pages": 3,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "unmarked-tree-subset.pdf",
+      "pages": 1,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "unmarked-tree-reorder.pdf",
+      "pages": 2,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    },
+    {
+      "file": "unmarked-tree-repeat.pdf",
+      "pages": 4,
+      "tree": false,
+      "qpdfCheck": "passed",
+      "qpdfJsonKeys": "tag ownership absent",
+      "encodedContents": "identical"
+    }
+  ],
+  "mapCollision": {
+    "pages": 2,
+    "tree": false,
+    "marked": false,
+    "language": null,
+    "roleMap": {},
+    "classMap": {},
+    "items": [],
+    "elements": [],
+    "errors": [],
+    "pageParentKeys": [
+      null,
+      null
+    ],
+    "annotationParentKeys": []
+  },
+  "precedents": [
+    {
+      "library": "pypdf 6.21.1",
+      "input": "minimal",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "minimal",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "minimal",
+      "operation": "subset",
+      "tree": true,
+      "pageParentKeys": [
+        0
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        }
+      ],
+      "errors": [
+        "invalid-page"
+      ]
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "minimal",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "minimal",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        1,
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "minimal",
+      "operation": "reorder",
+      "tree": true,
+      "pageParentKeys": [
+        1,
+        0
+      ],
+      "items": [
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "minimal",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "minimal",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "minimal",
+      "operation": "repeat",
+      "tree": true,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 3,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "tagged-form",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "tagged-form",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "tagged-form",
+      "operation": "subset",
+      "tree": true,
+      "pageParentKeys": [
+        0
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 1,
+          "annotation": "/Widget",
+          "alt": "Customer name"
+        }
+      ],
+      "errors": [
+        "invalid-page"
+      ]
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "tagged-form",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "tagged-form",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        1,
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "tagged-form",
+      "operation": "reorder",
+      "tree": true,
+      "pageParentKeys": [
+        1,
+        0
+      ],
+      "items": [
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 2,
+          "annotation": "/Widget",
+          "alt": "Customer name"
+        },
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "tagged-form",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "tagged-form",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "tagged-form",
+      "operation": "repeat",
+      "tree": true,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        },
+        {
+          "page": 1,
+          "annotation": "/Widget",
+          "alt": "Customer name"
+        },
+        {
+          "page": 3,
+          "mcid": 0,
+          "text": "Page2"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "cross-page",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "cross-page",
+      "operation": "subset",
+      "tree": false,
+      "pageParentKeys": [
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "cross-page",
+      "operation": "subset",
+      "tree": true,
+      "pageParentKeys": [
+        0
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        }
+      ],
+      "errors": [
+        "invalid-page"
+      ]
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "cross-page",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "cross-page",
+      "operation": "reorder",
+      "tree": false,
+      "pageParentKeys": [
+        1,
+        0
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "cross-page",
+      "operation": "reorder",
+      "tree": true,
+      "pageParentKeys": [
+        1,
+        0
+      ],
+      "items": [
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page2"
+        },
+        {
+          "page": 2,
+          "mcid": 0,
+          "text": "Page1"
+        }
+      ],
+      "errors": []
+    },
+    {
+      "library": "pypdf 6.21.1",
+      "input": "cross-page",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        null,
+        null,
+        null
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 --empty",
+      "input": "cross-page",
+      "operation": "repeat",
+      "tree": false,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "library": "qpdf 12.3.2 primary",
+      "input": "cross-page",
+      "operation": "repeat",
+      "tree": true,
+      "pageParentKeys": [
+        0,
+        0,
+        1
+      ],
+      "items": [
+        {
+          "page": 3,
+          "mcid": 0,
+          "text": "Page2"
+        },
+        {
+          "page": 1,
+          "mcid": 0,
+          "text": "Page1"
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "W188CorpusHashesRechecked": 51,
+  "limits": "Fixture-specific offline semantic oracle, not an accessibility validator or independent reviewer."
+}
