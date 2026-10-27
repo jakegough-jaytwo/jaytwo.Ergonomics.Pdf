@@ -1,0 +1,35 @@
+Baseline: d17c35f0a55abb8d33aebea922dae3819cf7eff9
+Environment: Windows; .NET SDK 10.0.402; net10.0.
+
+Probe:
+powershell -NoProfile -ExecutionPolicy Bypass -File agents/reference/simplification/W-205/run.ps1
+PASS: build 0 warnings/errors; 25 cases, 146 assertions.
+Opaque probe provider bytes test lifecycle only, not CMS/RFC 3161 validity.
+
+Initial make quiet-test failed before execution because restore could not access NuGet:
+NU1301 / NU1900 (restricted socket / vulnerability lookup). No test failure inferred.
+Offline restores then succeeded from existing local caches; no dependency/configuration edit:
+dotnet restore test/jaytwo.Pdf.Tests --packages .tools/nuget-packages --source .tools/nuget-packages --source C:/Users/Jake/.nuget/packages -p:NuGetAudit=false
+dotnet restore test/jaytwo.Ergonomics.Pdf.Tests --packages .tools/nuget-packages --source .tools/nuget-packages --source C:/Users/Jake/.nuget/packages -p:NuGetAudit=false
+
+Quiet-runner equivalents with --no-restore (make quiet-test has no separate no-restore option):
+python tools/agents/quiet_run.py --name w205-engine --tests -- dotnet test test/jaytwo.Pdf.Tests --no-restore --nologo -p:CollectCoverage=false -f net10.0 --filter "FullyQualifiedName~SigningRollbackTests|FullyQualifiedName~ObjectStoreCheckpointTests|FullyQualifiedName~EditorTests|FullyQualifiedName~AsyncTests.timestamp_authority_exceptions_carry_no_provider_details|FullyQualifiedName~AsyncTests.cancellation_inside_the_signer|FullyQualifiedName~AsyncTests.cancellation_inside_the_timestamp_authority|FullyQualifiedName~AsyncTests.cancellation_during_the_prefix_copy"
+PASS: 54 passed, 0 failed, 0 skipped. Full local log: out/logs/w205-engine.log.
+
+python tools/agents/quiet_run.py --name w205-workflow --tests -- dotnet test test/jaytwo.Ergonomics.Pdf.Tests --no-restore --nologo -p:CollectCoverage=false -f net10.0 --filter "FullyQualifiedName~WorkflowFileSaveTests|FullyQualifiedName~WorkflowSigningTests.a_timestamp_authority_failure|FullyQualifiedName~WorkflowSigningTests.a_signer_failure|FullyQualifiedName~WorkflowSigningTests.a_reservation_overflow|FullyQualifiedName~WorkflowSigningTests.cancellation_before_the_copy|FullyQualifiedName~WorkflowSigningTests.a_failure_while_copying|FullyQualifiedName~WorkflowSigningTests.a_signing_workflow_runs_once|FullyQualifiedName~WorkflowSigningTests.existing_certification_refusals"
+PASS: 32 passed, 0 failed, 3 skipped. Full local log: out/logs/w205-workflow.log.
+Skipped platform cases in WorkflowFileSaveTests:
+- a_symbolic_link_destination_is_replaced_as_a_link_and_its_target_is_unchanged
+- missing_input_path_metadata_prevents_overwrite
+- a_symbolic_link_to_the_input_is_refused_before_the_input_opens
+
+Not run: Linux/net48, full framework matrix, Docker, independent signature/structure/render validation, file Flush(true) failure injection, cleanup failure, power-loss/race qualification.
+No production qualification, independent reviewer, or shipped fix claimed.
+
+make agents-check: PASS (217 work items, 68 decisions).
+graphify update .: PASS after allowing read access to the global Git ignore file;
+8327 nodes, 23424 edges. AST update only, no new semantic/independent evidence.
+Existing SignatureTests.cs extraction warning and 30 symbol-free code/probe files
+limit graph completeness; these are not C# build failures.
+git diff --check and git diff --cached --check: PASS.
+Staged make task-check: PASS (whole W-205 completion transaction).
