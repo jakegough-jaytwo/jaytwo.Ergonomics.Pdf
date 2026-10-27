@@ -1,0 +1,188 @@
+[
+  {
+    "case": "navigation",
+    "sha256": "228d6a5ca8d96ffde16982184811c0594fdba23776329fde7a76562d641e2dcd",
+    "bytes": 959,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "missing-name",
+    "sha256": "407201f0b1152c11d2d751161f4ca9da978a4002bf8c92409d44c9773d40a331",
+    "bytes": 632,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "dangling-page",
+    "sha256": "54f0846da174a025a087fdf203cbdd3ea52c504466846bde993908781c546316",
+    "bytes": 640,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "nonpage-target",
+    "sha256": "30e266fb79cba02ee75df5680f0c4511db6d6cf5787757153f8122dec187fe32",
+    "bytes": 679,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "bad-mode",
+    "sha256": "b4a0e1d5562bca2a2a68d7521865021a829cd0978188fc4122e16caf8058955f",
+    "bytes": 640,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "bad-coordinate",
+    "sha256": "55185eb7cc53fe464369472d752c576cda33111f90a99af926381cb6a24d69af",
+    "bytes": 645,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "ambiguous-dest-action",
+    "sha256": "327f3bbcaef1370749efafd94a329d26854ea9aad4e7773c193476d9345b6b0e",
+    "bytes": 699,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "named-nextpage",
+    "sha256": "131eedcbb3017bab876108ab298c00ac61a991ef076e4a104a36088e38530151",
+    "bytes": 649,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "remote-goto",
+    "sha256": "45ea1dc8f50d663d304c8c62bb497fa653c189f1f968f5cb3d87524f244fa59c",
+    "bytes": 668,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-chain",
+    "sha256": "dcb1995c8dd14b39155040c6d3d042bf0b2566b3228db5f52a64f4548add7d9d",
+    "bytes": 741,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-next-null",
+    "sha256": "4e6aab557f69b506ad7659ac2c588878adc912f582d213f146e4c30023d64510",
+    "bytes": 689,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "link-aa",
+    "sha256": "9e9bdb37731461c38dc8254f46d3da2c3d7827075089132fbc326253733a710d",
+    "bytes": 749,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "page-aa",
+    "sha256": "8ab4380579d708c1bb6643f6b80dbcf312ef72480c589d5d5e3005873be9500c",
+    "bytes": 749,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "catalog-aa",
+    "sha256": "c55ceeec8b6d26be7137132006d5b19622d67bfde0c7d1dce84ae1e132a2f5ae",
+    "bytes": 750,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "open-goto",
+    "sha256": "fe884a64b6394c828a53691af748888c8d115204485326d60e94fa0d0439f37c",
+    "bytes": 705,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "open-uri",
+    "sha256": "071d75461e741c4b90a881c1daf1010bb2340b6dce5aa23e39cecdf6f3605dd5",
+    "bytes": 748,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "open-goto-action",
+    "sha256": "1223d0b2e2dfe449dbee2ea9ca58521d6fe5261f71381f7d042020407de8f3c9",
+    "bytes": 723,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "ismap-true",
+    "sha256": "7c9834a111226ba398572dc12f91cb4dda210cb29287ca178c51ffe5f7755258",
+    "bytes": 690,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "ismap-false",
+    "sha256": "a90aa77b510e96694dcedd3abc9c99973451b1a28ddc5b5af2466252aa576546",
+    "bytes": 691,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-userinfo",
+    "sha256": "93b015afa9c63e94a8255d83e1ca647519d8071365b975a9b2965fc840e65a80",
+    "bytes": 686,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-file",
+    "sha256": "1167760263f7d99c2be2a81ea95c38b149e69c52de188d67fe77aacbc4763aed",
+    "bytes": 670,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-custom",
+    "sha256": "c355104f5969a8589527b582923068843c77f81ed2c6a266de531956402ea12e",
+    "bytes": 667,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-mailto",
+    "sha256": "16e78ee9a99c3f90b73705f46b67faba4ec7789c0530eaba11abef64f37bbf99",
+    "bytes": 671,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-relative",
+    "sha256": "fb7f68f79fd8833300333c4e21866b1cd846a5eef8d86e4bd17c6ce1fffb7b6d",
+    "bytes": 731,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-no-base",
+    "sha256": "19d44ebd8d8cd5152d0668dfd339a5308c5b4ed46d5337cf4ff8c4cc0b8c6dac",
+    "bytes": 655,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-file-base",
+    "sha256": "e36436ba1005310c02eddc9c94a458ae413cc9643cca642d53dddc4647d6ce4e",
+    "bytes": 694,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-userinfo-base",
+    "sha256": "899abfde126beb6d42ca92561270897e78f46256d52076cb30b58297f5bbc664",
+    "bytes": 715,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-bad-escape",
+    "sha256": "e794fa96729633dee223737ca5e5f5a6d2e14cecf6e186cbb38e89c1c59afdcc",
+    "bytes": 683,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-space",
+    "sha256": "2e3f88c429169de14d298facfaa236c255cbc93fd7fbe8050f61b9717ba3130c",
+    "bytes": 680,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-query",
+    "sha256": "a6dd196021f4031f73bc65446e4e48df7f7837663d8d2d7f6e99d448e13b875d",
+    "bytes": 725,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  },
+  {
+    "case": "uri-network-path",
+    "sha256": "4de4d7fce0a4d279b00a135f0cfcfcbb0f4f2142ce8b3ab2f0d91f350c87f42e",
+    "bytes": 727,
+    "provenance": "W-192 generate.py; original MIT synthetic data"
+  }
+]

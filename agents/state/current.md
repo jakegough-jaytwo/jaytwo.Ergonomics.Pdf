@@ -32,17 +32,18 @@ First establish editable forms, tags and empty signature-field semantics, then r
 
 (W-207 is done: `agents/reference/simplification/W-207/`; the proposed copier-mode removal awaits Gate 2 approval.)
 
-1. W-192
-2. W-193
-3. W-195
-4. W-196
-5. W-198
-6. W-199
-7. W-200
-8. W-201
-9. W-204
-10. W-205
-11. W-206
+(W-192 is done: `agents/reference/simplification/W-192/`; proposed navigation/URI wording and action refusals await Gate 2 approval.)
+
+1. W-193
+2. W-195
+3. W-196
+4. W-198
+5. W-199
+6. W-200
+7. W-201
+8. W-204
+9. W-205
+10. W-206
 
 Prove unused copier modes first; then resolve navigation, annotation relationships, outlines/labels, coordinated XFA/rights preparation, metadata identity/editing and workflow semantics. Rollback and alias studies reuse W-186 and W-185 rather than duplicating those changes. Each item ends in evidence and a recommendation; preservation additions are not counted as deletion savings.
 

@@ -1,0 +1,1584 @@
+{
+  "versions": {
+    "python": "3.13.17",
+    "pypdf": "6.21.1",
+    "qpdf": "qpdf version 12.3.2"
+  },
+  "engine_outputs": [
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "78974637ef537a1db278d072dc392c40979ff520531aa638ab9a6887129e8c02",
+      "name": "ambiguous-dest-action",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "3f1f546ff425b791133b83f38f712bf04546ddf90421abf2c3079f50b75f1ee4",
+      "name": "bad-coordinate",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "afac9f64bb3007f89904672921eeff581ae84be7bae7200ce15694cd0bfe9b7b",
+      "name": "bad-mode",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "678b11e0666f94eab066e3b709ffa12b033e47571469b4f1cb464a38cb96a982",
+      "name": "catalog-aa",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "ce199494ada67cf44e5a37adf7fe2af7343a7a14f566881c8b4bc58d3f6bf0b6",
+      "name": "dangling-page",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "801c53da01b412a6ecca4afadc1bec4d0347b37174e4a05e5f7cb755c9e19e99",
+      "name": "ismap-false",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "be4467bdcb0284c4a5a3ef0e4c86d1cb7ef30ca282483b24240bb98a01c3a567",
+      "name": "ismap-true",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "8e2ed5e0fdc7c63e148609df65df7b6a1f10135a76388f9ab71166db7a6c3b46",
+      "name": "link-aa",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "732e175212b0a4272b5f34093607d21ee0cd5a95bc9e319b7dfb211741d2670f",
+      "name": "missing-name",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "409da5b530735b873bcccb2eedb24f856150e42c5a4ce8482a1298707bce6c73",
+      "name": "named-nextpage",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 2,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [],
+        []
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "ea543742d872bead7b6cc08321331ce9e7ccd8d2fa0569f8cb8e5305daa09c8a",
+      "name": "navigation",
+      "operation": "repeat",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 2,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "c6ff179d14ba9927a27df437e3ab5538c6042b946ca196300bdb62435e39add5",
+      "name": "navigation",
+      "operation": "exclude",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 2,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [],
+        [],
+        [
+          {
+            "target": 5,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 6,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 7,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [],
+        []
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "0df3303b26a25d2ac537c4cf6c18a608fa4a013e829480380a13785f80033d4f",
+      "name": "navigation",
+      "operation": "twice",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "a5c62b7ea5df20311b2710c8b0c8d075b9a09f2420464f86cb18fb31b58365ee",
+      "name": "nonpage-target",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "a56250d18882ea5f41d51d295390b52fc93f501fdd71b5fde9697078118dc9a9",
+      "name": "open-goto-action",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "9bc1abd48143d569ebbd1956d4990ca58babbe43ce4cc9d296be1306bbf3dabf",
+      "name": "open-goto",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "8ee070a460ce63ede20c300b1a2cd4470f98b2ba8ae15554cde658c631c62d1a",
+      "name": "open-uri",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "f917deb03e263ad47d82bff1b2a6e08bc27f5135de74c28f67010725282c2a31",
+      "name": "page-aa",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "c2870bbe9a59b4935e2835d933fc8f5ca010fa6518ed314578e2154cf1fa6373",
+      "name": "remote-goto",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "f76829c86fb199fb7f8ada3d3f3f880d80e6b5798036bf7549ef2765be9dc7d9",
+      "name": "uri-bad-escape",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "6aae8f2cabe485adc59e24d1a630dbf648dfd620ea4f6ac0c6891c88722bf280",
+      "name": "uri-chain",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "2af4f2ce18bc504b275b8f4125f6afa9f8aa402751ea48ecb8845c4353becad0",
+      "name": "uri-custom",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "99a94a55f5693c269567962dc52b90585d3515b8d119eaf03c6946df40f45cca",
+      "name": "uri-file-base",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "05a3e9cd7e7407eb50d5250c5237b0efb494cebb25fd42a3aebecd910e605f77",
+      "name": "uri-file",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "mailto:a@example.org",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "4da757993f362dec59252a70b6a275bd15561dd5942a9b0128f991ca73f99af8",
+      "name": "uri-mailto",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://other.org/x",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "a103ba0a3829f5ebf8041732e3977620f69f9f92bb67123f6ddeff2bae87df17",
+      "name": "uri-network-path",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "8a2c1f334a0e482b66657e6c6fc16618d96d5559aa99adfff25f07c5ffd81f15",
+      "name": "uri-next-null",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "17becd5fb526c27207328e5153fdc81a1e900ba3487040a989a60649bc2f951a",
+      "name": "uri-no-base",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a/b?q=1",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "88539f0e1e111f086006c6677e97b9ebaf36b81d84d6a28d84879fcb318fffeb",
+      "name": "uri-query",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/c?x=1#f",
+            "keys": [
+              "/A",
+              "/P",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "1d241049fc6a3582880de4e2eab0e6df09bf2a22dddc9cdd7be79e154f73772d",
+      "name": "uri-relative",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "ae61bcd17f8060f59b13b1348e93b2785212f6ef366d6d1a40b33965e6357bfd",
+      "name": "uri-space",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "26435b5459a8e91c8bf96b8f1e13bdcc46010fdae78d1e39dde687d33bb5de94",
+      "name": "uri-userinfo-base",
+      "operation": "single",
+      "qpdf_check": 0
+    },
+    {
+      "pages": [
+        []
+      ],
+      "page_keys": [
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "2c2e7586c5d29f13fc1d38e5daab882de47b87257ef9751f1d57ea0e46f512f7",
+      "name": "uri-userinfo",
+      "operation": "single",
+      "qpdf_check": 0
+    }
+  ],
+  "qpdf_comparisons": [
+    {
+      "pages": [
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": "/old",
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/A",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [],
+        []
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Dests",
+        "/Names",
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "011ce17a034990a5c6eea7e5bae377783665357a5021ae2112bc9dfa93a8b69d",
+      "name": "navigation",
+      "mode": "primary"
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": "/old",
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/A",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [
+          {
+            "target": 1,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": 3,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": "/old",
+            "uri": "",
+            "keys": [
+              "/Dest",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          },
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "",
+            "keys": [
+              "/A",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ],
+        [],
+        []
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ],
+        [
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "e822ee1a5593997138bf3bdab4bb47e9a15370e757f42caf1661057782493797",
+      "name": "navigation",
+      "mode": "empty"
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/OpenAction",
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "4ff37f870c25b6e3def543b032cab73042d8bd446f6c80eb792d37bef624fc70",
+      "name": "open-goto",
+      "mode": "primary"
+    },
+    {
+      "pages": [
+        [
+          {
+            "target": null,
+            "named_destination": null,
+            "uri": "https://example.org/a",
+            "keys": [
+              "/A",
+              "/Rect",
+              "/Subtype",
+              "/Type"
+            ]
+          }
+        ]
+      ],
+      "page_keys": [
+        [
+          "/Annots",
+          "/MediaBox",
+          "/Parent",
+          "/Resources",
+          "/Type"
+        ]
+      ],
+      "catalog_keys": [
+        "/Pages",
+        "/Type"
+      ],
+      "sha256": "03ea41d080357e6163dc4d4f52d23c70fe01955482f0f3ebf5aab5bd5f58270a",
+      "name": "open-goto",
+      "mode": "empty"
+    }
+  ]
+}

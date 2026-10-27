@@ -1,0 +1,381 @@
+[
+  {
+    "name": "ambiguous-dest-action",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "bad-coordinate",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "MissingDestination": 1
+    }
+  },
+  {
+    "name": "bad-mode",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "MissingDestination": 1
+    }
+  },
+  {
+    "name": "catalog-aa",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "dangling-page",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "MissingDestination": 1
+    }
+  },
+  {
+    "name": "ismap-false",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "ismap-true",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "link-aa",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "missing-name",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "MissingDestination": 1
+    }
+  },
+  {
+    "name": "named-nextpage",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "navigation",
+    "operation": "repeat",
+    "pages": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "error": null,
+    "bytes": 1855,
+    "omissions": {}
+  },
+  {
+    "name": "navigation",
+    "operation": "exclude",
+    "pages": [
+      1,
+      1
+    ],
+    "error": null,
+    "bytes": 882,
+    "omissions": {
+      "MissingDestination": 6
+    }
+  },
+  {
+    "name": "navigation",
+    "operation": "twice",
+    "pages": [
+      1,
+      1,
+      2,
+      2
+    ],
+    "error": null,
+    "bytes": 3343,
+    "omissions": {}
+  },
+  {
+    "name": "nonpage-target",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "MissingDestination": 1
+    }
+  },
+  {
+    "name": "open-goto-action",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "open-goto",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "open-uri",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "page-aa",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 664,
+    "omissions": {}
+  },
+  {
+    "name": "remote-goto",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-bad-escape",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-chain",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-custom",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-file-base",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-file",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-mailto",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 663,
+    "omissions": {}
+  },
+  {
+    "name": "uri-network-path",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 662,
+    "omissions": {}
+  },
+  {
+    "name": "uri-next-null",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-no-base",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-query",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 670,
+    "omissions": {}
+  },
+  {
+    "name": "uri-relative",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 670,
+    "omissions": {}
+  },
+  {
+    "name": "uri-space",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-userinfo-base",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  },
+  {
+    "name": "uri-userinfo",
+    "operation": "single",
+    "pages": [
+      1
+    ],
+    "error": null,
+    "bytes": 506,
+    "omissions": {
+      "UnsupportedLink": 1
+    }
+  }
+]

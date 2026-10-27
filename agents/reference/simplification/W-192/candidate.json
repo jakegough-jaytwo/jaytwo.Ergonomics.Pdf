@@ -1,0 +1,299 @@
+[
+  {
+    "name": "ambiguous-dest-action",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "bad-coordinate",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "bad-mode",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "catalog-aa",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "dangling-page",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "ismap-false",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "ismap-true",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "link-aa",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "missing-name",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "named-nextpage",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "navigation",
+    "operation": "repeat",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "navigation",
+    "operation": "exclude",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "navigation",
+    "operation": "twice",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "nonpage-target",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "open-goto-action",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": true,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "open-goto",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": true,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "open-uri",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "page-aa",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "remote-goto",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-bad-escape",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-chain",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-custom",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": true,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-file-base",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": true,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-file",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": true,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-mailto",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-network-path",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-next-null",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-no-base",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-query",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-relative",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-space",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "refused",
+    "newly_preserved_uri": false,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-userinfo-base",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": true,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  },
+  {
+    "name": "uri-userinfo",
+    "operation": "single",
+    "baseline": "accepted",
+    "proposed": "accepted",
+    "newly_preserved_uri": true,
+    "initial_view_count_added": false,
+    "evidence_kind": "counterfactual structural inference; candidate not implemented"
+  }
+]
