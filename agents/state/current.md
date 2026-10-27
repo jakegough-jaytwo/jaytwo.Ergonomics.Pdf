@@ -80,7 +80,7 @@ Async-source measurements feed W-138; required-stream decoder measurements prese
 
 ## Simplification reconciliation and implementation approval gate
 
-1. W-211
+(W-211 is done: `agents/reference/simplification/W-211/`; the reconciled contract, 28 draft tickets, exact queue insertion and approval packets await Gate 2. Nothing is adopted or queued.)
 
 Reconcile all findings into exact wording, small implementation tickets, migration/refusal costs and proposed implementation queue insertion. Bring independently complete slices to the owner as they become reviewable; W-211's final reconciliation waits for all its research dependencies. Research scheduling is approved now; product contract adoption and implementation insertion still require Gate 2 approval.
 
