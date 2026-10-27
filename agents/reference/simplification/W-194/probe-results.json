@@ -1,0 +1,218 @@
+[
+  {
+    "id": "all",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "all",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "all",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34936,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "exclude",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "exclude",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "exclude",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34960,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "include",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "include",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "include",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34960,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "null-value",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "null-value",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "null-value",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34842,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "plain",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "plain",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "plain",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34834,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "readonly",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "readonly",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "readonly",
+    "op": "sign-original",
+    "status": "PdfFieldReadOnlyException",
+    "bytes": 0,
+    "hostCalls": 0,
+    "laterFill": "not attempted"
+  },
+  {
+    "id": "seed-bad",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "seed-bad",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "seed-bad",
+    "op": "sign-original",
+    "status": "PdfSignException",
+    "bytes": 0,
+    "hostCalls": 0,
+    "laterFill": "not attempted"
+  },
+  {
+    "id": "seed-encoding",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "seed-encoding",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "seed-encoding",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 35018,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  },
+  {
+    "id": "seed-ok",
+    "op": "extract",
+    "bytes": 506,
+    "omissions": {
+      "SignatureWidget": 1
+    }
+  },
+  {
+    "id": "seed-ok",
+    "op": "repeat",
+    "bytes": 1384,
+    "omissions": {
+      "SignatureWidget": 4
+    }
+  },
+  {
+    "id": "seed-ok",
+    "op": "sign-original",
+    "status": "signed",
+    "bytes": 34932,
+    "hostCalls": 1,
+    "laterFill": "Generated"
+  }
+]

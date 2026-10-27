@@ -1,0 +1,56 @@
+[
+  {
+    "id": "plain",
+    "sha256": "250006130d782340536c74331004020e2b1bf40e008e00bb1d73aa61461d212e",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "null-value",
+    "sha256": "3a9eaba81d89433f2f62360f56877fd499f56ec4a22805382ea2f9e910116b33",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "seed-ok",
+    "sha256": "b5a5242b8cf8d6566c34c5fbaa5135077d733133d80c775573526dadc717dc58",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "seed-encoding",
+    "sha256": "1c5d61427997d57e3d3505137eef8cb6727d7ac996f52c24a4f0448a0a639862",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "seed-bad",
+    "sha256": "f05d91df8a14fce62d43da9ced772af1dc657181a2b052d1d3842421c3c2409d",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "include",
+    "sha256": "0c0b56ca29a729089d0a9db8d726f77d053f14577fbe2c46ad3e42edc71ccb60",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "all",
+    "sha256": "f6890edca7493d0447ac2dd95c89f20bdcab2c318791bc2e3156f8917cf4194b",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "exclude",
+    "sha256": "9d7340a4f693976908e908afaa5718da552c1f0d4006bac480f98977d7d76b24",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "readonly",
+    "sha256": "ded200d7497725ee63b04141617f21991a02c75a5082bd7fd97f0f14df6efb2a",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  }
+]

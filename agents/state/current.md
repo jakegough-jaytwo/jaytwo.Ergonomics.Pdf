@@ -22,8 +22,9 @@ Encryption remains supported under every current simplification proposal. Settle
 
 (W-190 is done: `agents/reference/simplification/W-190/`.)
 
-1. W-194
-2. W-197
+(W-194 is done: `agents/reference/simplification/W-194/`; candidate preservation and Include-lock enforcement remain proposed implementation, not shipped behavior.)
+
+1. W-197
 
 First establish editable forms, tags and empty signature-field semantics, then reconcile whole-input versus selected-page refusal and explicit derivatives. These P0 choices determine whether ordinary business PDFs remain usable. W-197 must compare its assembly-specific scope with W-156; it does not silently replace a general admission inspection API.
 

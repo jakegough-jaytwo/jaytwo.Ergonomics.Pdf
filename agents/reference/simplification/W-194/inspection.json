@@ -1,0 +1,530 @@
+{
+  "versions": {
+    "pypdf": "6.21.1",
+    "pyhanko": "0.38.0",
+    "python": "3.13.17",
+    "qpdf": "qpdf version 12.3.2\nRun qpdf --copyright to see copyright and license information."
+  },
+  "results": [
+    {
+      "file": "all.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "exclude.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "include.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "null-value.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "plain.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "readonly.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "seed-bad.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "seed-encoding.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "seed-ok.pdf",
+      "source": true,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass"
+    },
+    {
+      "file": "all-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "all-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "all-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": true,
+      "lock_fields": [],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "exclude-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "exclude-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "exclude-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": true,
+      "lock_fields": [
+        "Other"
+      ],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "include-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "include-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "include-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": true,
+      "lock_fields": [
+        "Other"
+      ],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "null-value-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "null-value-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "null-value-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": false,
+      "lock_fields": [],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "plain-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "plain-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "plain-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": false,
+      "lock_fields": [],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "readonly-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "readonly-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "seed-bad-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "seed-bad-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "seed-encoding-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "seed-encoding-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "seed-encoding-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": false,
+      "lock_fields": [],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": true,
+      "seed_value_error": null
+    },
+    {
+      "file": "seed-ok-extract.pdf",
+      "source": false,
+      "pages": 1,
+      "fields": [],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        0
+      ]
+    },
+    {
+      "file": "seed-ok-repeat.pdf",
+      "source": false,
+      "pages": 4,
+      "fields": [
+        "Input1",
+        "Input1.Other"
+      ],
+      "signatures": [],
+      "qpdf": "pass",
+      "widgets": [
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "seed-ok-signed.pdf",
+      "source": false,
+      "pages": 2,
+      "fields": [
+        "SignHere",
+        "Other"
+      ],
+      "signatures": [
+        "SignHere"
+      ],
+      "qpdf": "pass",
+      "signature_reference": false,
+      "field_lock": false,
+      "lock_fields": [],
+      "prefix": true,
+      "cms_intact": true,
+      "cms_valid": true,
+      "seed_value_ok": false,
+      "seed_value_error": "The selected message digest sha256 is not allowed by the seed value dictionary."
+    }
+  ]
+}
