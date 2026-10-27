@@ -20,7 +20,7 @@ The workflow library uses the engine's public API and contains no PDF parsing, s
 
 Core capabilities are document inspection; interactive forms; metadata and embedded attachments; page operations and document assembly; password-protected PDFs; and digital signing with host-controlled keys and optional trusted timestamps.
 
-Rendering, text extraction, document authoring and layout, redaction, cryptographic signature validation, and general-purpose PDF repair are outside the product scope unless explicitly adopted by the project owner. Internal functionality necessary to support approved workflows is permitted.
+Rendering, text extraction, document authoring and layout, redaction, cryptographic signature validation, and general-purpose PDF repair are outside the product scope unless explicitly adopted by the project owner. Limited blank-page creation and image placement for image-to-PDF conversion, stamping, and image watermarking are explicit exceptions. Internal functionality necessary to support approved workflows is permitted.
 
 Existing implementations do not automatically establish product commitments. Capabilities outside the approved scope may be retained internally without becoming supported public features.
 

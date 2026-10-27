@@ -1,12 +1,12 @@
 # Behavior reference
 
-This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](CHARTER.md) defines product intent and architectural principles; [supported capabilities](SUPPORTED.md) defines intended scope and delivery priorities. [`ACCEPTANCE.md`](../ACCEPTANCE.md) lists the checks the tests enforce. A documented capability is not by itself a production-qualification claim.
+This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](CHARTER.md) defines product intent and architectural principles; [supported capabilities](SUPPORTED.md) defines intended capabilities and boundaries. [`ACCEPTANCE.md`](../ACCEPTANCE.md) lists the checks the tests enforce. A documented capability is not by itself a production-qualification claim.
 
 The engine owns parsing, writing, encryption, forms, appearances, PDF signature construction, and document invariants. Its public API exposes supported operations rather than raw PDF objects. The workflow library composes operations through that public API and owns convenience, ordering, and file handling. Private signing keys remain under host control.
 
 ## Planned additions
 
-The owner's documentation reset adds the following targets. They are not current APIs or verified behavior, and the current guarantees elsewhere in this document remain in force. Detailed specification adoption and reconciliation with the older exclusions in `AGENTS.md` are still required before implementation.
+The owner's documentation reset adds the following targets. They are not current APIs or verified behavior, and the current guarantees elsewhere in this document remain in force. Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](CHARTER.md).
 
 | Target | Intended behavior | Contract still to define |
 | --- | --- | --- |
@@ -18,7 +18,7 @@ Unsupported image formats and variants are intended to be rejected; general imag
 
 The charter favors incremental preservation and permits justified rewrites under its governance. That principle does not change the existing incremental-save contract or assembly writer described here, or add a general rewrite operation. Both libraries remain managed .NET, with no native runtime dependencies or third-party runtime packages; necessary Microsoft framework compatibility packages and the workflow's engine reference are permitted.
 
-Lower delivery priority for flattening, encryption, and signing does not withdraw their current support or weaken their guarantees. Existing capabilities outside the MVP, including XMP, form export, signature inspection, and revision listing, keep the contracts below.
+Intended scope is independent of delivery priorities. Existing capabilities keep the current contracts below until an approved change explicitly updates them.
 
 ## Capabilities
 

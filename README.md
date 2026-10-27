@@ -2,7 +2,7 @@
 
 Managed, MIT-licensed .NET libraries for the common business operations on existing PDFs: fill and flatten forms, edit metadata and attachments, rotate pages, sign with a host-held key, and assemble pages into a new file. They stay sparse on gigabyte files and on documents with thousands of pages.
 
-This README is the project's anchor. Use it to decide whether a change moves the project toward its purpose or away from it. Exact behavior is in [`docs/behavior.md`](docs/behavior.md).
+The [Project Charter](docs/CHARTER.md) defines purpose, principles, and governance. [Supported capabilities](docs/SUPPORTED.md) defines intended scope, whether implemented or not. Use them to assess whether work serves the project. Current behavior is in [`docs/behavior.md`](docs/behavior.md).
 
 ## Two libraries
 
@@ -21,9 +21,11 @@ The dependency runs one way: `jaytwo.Ergonomics.Pdf -> jaytwo.Pdf`. The engine i
 - **Assemble** page selections from one or more files into a new, unencrypted file.
 - **Workflows:** describe the operations once and run them against a stream or a file, with safe ordering and file publication handled for you.
 
-## What it will never do
+## Product boundaries
 
-Rendering, text extraction, stamping and watermarks, layout or creating a PDF from scratch, rewriting a file in place, redaction, signature validation (trust, revocation, or cryptographic verification), PDF/A conversion or conformance claims, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file.
+Rendering, text extraction, general document authoring and layout, rewriting a file in place, redaction, signature validation (trust, revocation, or cryptographic verification), PDF/A conversion or conformance claims, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file.
+
+Limited image placement and image-to-PDF are explicit scope exceptions under [SUPPORTED.md](docs/SUPPORTED.md). These and security-permission setters are intended additions, not current APIs; implementation requires an adopted operation contract under the [charter](docs/CHARTER.md).
 
 Neither library is a general PDF toolkit or competes with qpdf, iText, PDFsharp, or Aspose. There is no layout engine, renderer, or document model. A workflow that records operations on an existing document is not a document model.
 
@@ -32,7 +34,7 @@ Neither library is a general PDF toolkit or competes with qpdf, iText, PDFsharp,
 New work keeps these. A change that needs to break one is a change to the project's purpose and is the owner's decision.
 
 1. **Memory follows the operation, not the file.** Opening reads the header and the cross-reference tail. Later reads load only the objects an operation touches. No API takes or returns the whole file as a `byte[]`, and offsets are `long`.
-2. **Append, don't rewrite.** Changes to an existing file are incremental updates. The original bytes stay a prefix, so existing signatures keep their signed bytes. The only other write path creates a new file and copies streams without decoding them.
+2. **Current editing and assembly writes.** Changes to an existing file are incremental updates. The original bytes stay a prefix, so existing signatures keep their signed bytes. The only other write path creates a new file and copies streams without decoding them.
 3. **Read strictly.** Reading follows ISO 32000. Tolerated writer bugs are a short, closed list, each backed by a real file. Nothing scans a whole file to repair it. Page content streams are never decoded.
 4. **Refuse rather than guess.** Unsupported input, or a write that certification, field locks, or permissions forbid, is refused before anything is written. Nothing silently emits a malformed file, invalidates a signature, or overstates what was checked.
 5. **Keys stay with the host.** The host signs a digest and returns the signature value; the library builds the CMS. Neither library loads a PKCS#11 module.
@@ -55,11 +57,11 @@ When goals conflict, earlier tenets win:
 
 A feature belongs when all of these hold:
 
-- It is a common business operation on a PDF the caller already has.
-- It can be done as an incremental update, or as a new file assembled from existing pages.
+- It serves a capability in the intended product scope.
+- Its output strategy follows an adopted operation contract; new full-document rewrite strategies require owner approval under the charter.
 - Its memory follows the objects it touches, not the size of the file or its page count.
-- It needs nothing from **What it will never do**.
-- It fits the commitments without an exception.
+- It respects the product boundaries, including the explicit image exceptions.
+- It follows the charter and the applicable operation contract.
 
 Fewer, well-tested operations beat broad, unreliable ones.
 
@@ -87,6 +89,6 @@ Pre-release. No package is published, and the 1.0 release track is suspended whi
 
 - [`docs/behavior.md`](docs/behavior.md): shipped behavior, the support matrix, limits, and failure semantics.
 - [`ACCEPTANCE.md`](ACCEPTANCE.md): the checks the tests enforce.
-- [`docs/spec/`](docs/spec/): target scope.
+- [`docs/spec/`](docs/spec/): adopted operation contracts and draft requirements.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): building and testing.
-- [`AGENTS.md`](AGENTS.md): the binding charter and contributor rules.
+- [`AGENTS.md`](AGENTS.md): binding contributor rules and adopted implementation constraints.

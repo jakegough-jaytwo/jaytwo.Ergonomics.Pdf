@@ -41,7 +41,9 @@ Capability families do not promise comprehensive support for every PDF feature o
 
 Extraction and concatenation do not imply lossless preservation of every document feature. Their detailed contracts must define supported structures and preservation, omission, and refusal rules.
 
-Password and permission operations require explicit contracts for supported security schemes, authentication, authorization, encryption handling, and output strategy. Permission inspection alone does not satisfy the intended permission-changing capability.
+Password and permission operations require explicit contracts for supported security schemes, authentication, authorization, encryption handling, and output strategy. Permission inspection alone does not satisfy the intended permission-changing capability. Get/set permissions does not itself adopt adding encryption or password changes/removal.
+
+Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](CHARTER.md).
 
 Foreground/background image placement controls painting order; it does not guarantee visibility over every existing page element.
 

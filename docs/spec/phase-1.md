@@ -247,11 +247,13 @@ Evidence names the commit, tool versions, and fixtures it ran against. Evidence 
 
 ## 11. Not in Phase 1
 
+Image placement, image-to-PDF, and security-permission setters are intended scope in [SUPPORTED.md](../SUPPORTED.md), outside the requirements adopted here. Implementation requires an adopted operation contract; governance follows the [charter](../CHARTER.md). No delivery stage is assigned by this scope reconciliation (D-68).
+
 **Phase 2** (`phase-2.md`): page extraction, concatenation, compaction, removing revisions, removing passwords.
 
 **Planned for 1.x:** caller-supplied fonts for non-WinAnsi appearances; long-term validation data (PAdES B-LT and B-LTA).
 
-**Never:** rendering, text extraction, stamping and watermarks, layout or creating PDFs from scratch, redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption.
+**Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../SUPPORTED.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption.
 
 ## 12. Open questions
 
