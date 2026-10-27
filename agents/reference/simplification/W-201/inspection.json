@@ -1,0 +1,1755 @@
+[
+  {
+    "name": "a-a-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "9acaead1890c5b4d95916a93b89a2a72",
+        "9acaead1890c5b4d95916a93b89a2a72"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "b7022c41b328b951f18004a776e6959a325f86de5b44708f4369ce21fc73f0bf",
+        "b7022c41b328b951f18004a776e6959a325f86de5b44708f4369ce21fc73f0bf"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "a-a-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "b9b50d212335bca4474d22cc273e1be302069f86b107c6cae5df10025bc02923",
+        "b9b50d212335bca4474d22cc273e1be302069f86b107c6cae5df10025bc02923"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ]
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "a-a-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-a-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "01010101010101010101010101010101"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-a-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "45412716b38b1e897153f54222492fd7",
+        "45412716b38b1e897153f54222492fd7"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-a-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "identity-a",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "f6a2a0fad3e1520335508f4ac677a030"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-b-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "025d0100fba38d4aa1b59551c0d06112",
+        "025d0100fba38d4aa1b59551c0d06112"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-b-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "ca0da751629071c2866b77002a98b75c8cdba6a8255ca6bc51fa1da96bb6bc74",
+        "ca0da751629071c2866b77002a98b75c8cdba6a8255ca6bc51fa1da96bb6bc74"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "a-b-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "8b585f97f3080ecca06eb46858217c47ed6584f948cd930b6f0cd89ecaa114a5",
+        "8b585f97f3080ecca06eb46858217c47ed6584f948cd930b6f0cd89ecaa114a5"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ]
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "a-b-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-b-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "01010101010101010101010101010101"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-b-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "8b5db9dad533fbdbd8941c733080c688",
+        "8b5db9dad533fbdbd8941c733080c688"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "a-b-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "identity-a",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "b2464a13d19f2e6061f941beb099aee3"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "b-a-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "eecd54cc9a5f7a40bb8c55979190cd68",
+        "eecd54cc9a5f7a40bb8c55979190cd68"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "b-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "25da1bcc3c8366ff687a8018e32738dde427447720922427f5241e0f6b43e802",
+        "25da1bcc3c8366ff687a8018e32738dde427447720922427f5241e0f6b43e802"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "b-a-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-b",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "f48c6f73c1e4be6af741b49ec20170e1ff82727a74f478ff51725b9ba1dd5fdd",
+        "f48c6f73c1e4be6af741b49ec20170e1ff82727a74f478ff51725b9ba1dd5fdd"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        }
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "b-a-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "b-a-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Title": "identity-b",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "02020202020202020202020202020202",
+        "02020202020202020202020202020202"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/FullScreen",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "b-a-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {},
+      "id": [
+        "3e8ae44e4f6ec522b399110cfc36719e",
+        "3e8ae44e4f6ec522b399110cfc36719e"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "b-a-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "identity-b",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "02020202020202020202020202020202",
+        "dfd4932d8add24003b0b4d563e6f4025"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/FullScreen",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "custom-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "3009b0781c0bce43bfb5fd283fde84d5",
+        "3009b0781c0bce43bfb5fd283fde84d5"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "custom-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "f68cf8f6e00019aaedfaff4d2582d38db0cf892e7306d2923866cca59d0141c4",
+        "f68cf8f6e00019aaedfaff4d2582d38db0cf892e7306d2923866cca59d0141c4"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "custom-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "custom",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "144e6cad25c923b345dfa571c725612147c9596634e77228d81489103508f0b2",
+        "144e6cad25c923b345dfa571c725612147c9596634e77228d81489103508f0b2"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "942552239bcb77fed596cc9635eeb216ae182915a9c31aa0374c81c0053e49c0",
+      "catalog": {
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ]
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "custom-pdfbox-split.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "custom",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "de2d602e152f0c6dfc35d9772ff518ca2db85a2eebd358ad1a21574d2949b614",
+        "de2d602e152f0c6dfc35d9772ff518ca2db85a2eebd358ad1a21574d2949b614"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "942552239bcb77fed596cc9635eeb216ae182915a9c31aa0374c81c0053e49c0",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "custom-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "custom-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "custom",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "05050505050505050505050505050505",
+        "05050505050505050505050505050505"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "942552239bcb77fed596cc9635eeb216ae182915a9c31aa0374c81c0053e49c0",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.3"
+    }
+  },
+  {
+    "name": "custom-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "cd144f41a63322a3c0bd1ce5344c2d0d",
+        "cd144f41a63322a3c0bd1ce5344c2d0d"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "custom-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "custom",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "05050505050505050505050505050505",
+        "d7050158fcafbd38c0d7c52cd3ba3761"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "942552239bcb77fed596cc9635eeb216ae182915a9c31aa0374c81c0053e49c0",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-a-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "9aa0d33b9526824ba0cd5c3ecdc5a615",
+        "9aa0d33b9526824ba0cd5c3ecdc5a615"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "4a11a023c2b517f09fcc45765a51bb993028bc1b95af01cf26729aa6acdb3dbe",
+        "4a11a023c2b517f09fcc45765a51bb993028bc1b95af01cf26729aa6acdb3dbe"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "identity-a-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "66562bb15cba69580ab4d874f0a8b67d8b11f940d14d46f52a3637d78d50a673",
+        "66562bb15cba69580ab4d874f0a8b67d8b11f940d14d46f52a3637d78d50a673"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ]
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "identity-a-pdfbox-split.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "13b03a68b1ee42949c7d99dc9689c0d1d81c2324385ceb03613fc5b7172e2167",
+        "13b03a68b1ee42949c7d99dc9689c0d1d81c2324385ceb03613fc5b7172e2167"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-a-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-a-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-a",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "01010101010101010101010101010101"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.3"
+    }
+  },
+  {
+    "name": "identity-a-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "7af85172648c9ebda9c6ee9a3714553a",
+        "7af85172648c9ebda9c6ee9a3714553a"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-a-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "identity-a",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "01010101010101010101010101010101",
+        "f33d6daad866e818d8db6216ba590f84"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-b-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "34455bb94c14534ba7d153c7629e5803",
+        "34455bb94c14534ba7d153c7629e5803"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-b-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "2e1af284d976456e30a3253d522f8b4e8e269413750df4caf6f8d2bd10f33a6d",
+        "2e1af284d976456e30a3253d522f8b4e8e269413750df4caf6f8d2bd10f33a6d"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "identity-b-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-b",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "2a0487aa8c6b80a2bbd5a8560e42d7ea7ee0226cf6dcdf9481b86ac5d816b6c2",
+        "2a0487aa8c6b80a2bbd5a8560e42d7ea7ee0226cf6dcdf9481b86ac5d816b6c2"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        }
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "identity-b-pdfbox-split.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-b",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "183d122255a00b7baaed8941d44d35588a9d1d019573842892ae67eed44f3b33",
+        "183d122255a00b7baaed8941d44d35588a9d1d019573842892ae67eed44f3b33"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-b-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-b-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "identity-b",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "02020202020202020202020202020202",
+        "02020202020202020202020202020202"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/FullScreen",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.3"
+    }
+  },
+  {
+    "name": "identity-b-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "e2f975ded06ee7c2b13275d69fc7da52",
+        "e2f975ded06ee7c2b13275d69fc7da52"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "identity-b-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "identity-b",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "02020202020202020202020202020202",
+        "4714252d2b5156ef2a969f5de01a735d"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/FullScreen",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": {
+          "/S": "/URI",
+          "/URI": "https://example.invalid/identity"
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "malformed-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "d730512d24eba8468d2a2a123936bb57",
+        "d730512d24eba8468d2a2a123936bb57"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "malformed-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "d89f17e7cf614c1911ad9faad43b44e037bfd27f0b8ad501b3df93bdcf77052a",
+        "d89f17e7cf614c1911ad9faad43b44e037bfd27f0b8ad501b3df93bdcf77052a"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "malformed-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "malformed",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "7afbbdaab0b2f4fac0e2fb88b08f4f0c34adfa36e8c39daad4265345d20c17d0",
+        "7afbbdaab0b2f4fac0e2fb88b08f4f0c34adfa36e8c39daad4265345d20c17d0"
+      ],
+      "xmp": "<broken-xmp",
+      "xmpSha256": "45f98e667ee5ce882bee1d3bec7fa75aa7d5e2b010c7c4ff85044cc7a2a10560",
+      "catalog": {
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ]
+      },
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "malformed-pdfbox-split.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "malformed",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "ebbfedb824eb774c59c6bd49e951fa202979551fa85534f1c044c4c754ff4459",
+        "ebbfedb824eb774c59c6bd49e951fa202979551fa85534f1c044c4c754ff4459"
+      ],
+      "xmp": "<broken-xmp",
+      "xmpSha256": "45f98e667ee5ce882bee1d3bec7fa75aa7d5e2b010c7c4ff85044cc7a2a10560",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "malformed-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "malformed-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Title": "malformed",
+        "/Author": "Source Author",
+        "/Subject": "Input only",
+        "/Keywords": "original",
+        "/Creator": "Source App",
+        "/Producer": "Source Producer",
+        "/CreationDate": "D:20200102030405Z",
+        "/ModDate": "D:20200203040506Z",
+        "/Department": "Accounts",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "04040404040404040404040404040404",
+        "04040404040404040404040404040404"
+      ],
+      "xmp": "<broken-xmp",
+      "xmpSha256": "45f98e667ee5ce882bee1d3bec7fa75aa7d5e2b010c7c4ff85044cc7a2a10560",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/HideToolbar": true,
+          "/DisplayDocTitle": true,
+          "/Direction": "/R2L",
+          "/PrintScaling": "/None",
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/NumCopies": 3
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.3"
+    }
+  },
+  {
+    "name": "malformed-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "9a28f3c736f4816b0ffd18df6ba6000c",
+        "9a28f3c736f4816b0ffd18df6ba6000c"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "malformed-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Author": "Source Author",
+        "/CreationDate": "D:20200102030405Z",
+        "/Creator": "Source App",
+        "/Department": "Accounts",
+        "/Keywords": "original",
+        "/ModDate": "D:20200203040506Z",
+        "/Producer": "Source Producer",
+        "/Subject": "Input only",
+        "/Title": "malformed",
+        "/Trapped": "/False"
+      },
+      "id": [
+        "04040404040404040404040404040404",
+        "8002d6c2852c5ca1c095db5a45e3ba77"
+      ],
+      "xmp": "<broken-xmp",
+      "xmpSha256": "45f98e667ee5ce882bee1d3bec7fa75aa7d5e2b010c7c4ff85044cc7a2a10560",
+      "catalog": {
+        "/ViewerPreferences": {
+          "/Direction": "/R2L",
+          "/DisplayDocTitle": true,
+          "/Duplex": "/DuplexFlipLongEdge",
+          "/HideToolbar": true,
+          "/NumCopies": 3,
+          "/PickTrayByPDFSize": true,
+          "/PrintPageRange": [
+            0,
+            0
+          ],
+          "/PrintScaling": "/None"
+        },
+        "/PageMode": "/UseOutlines",
+        "/PageLayout": "/TwoColumnRight",
+        "/OpenAction": [
+          "PAGE",
+          "/Fit"
+        ],
+        "/Lang": "en-US"
+      },
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "minimal-engine.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "jaytwo.Pdf"
+      },
+      "id": [
+        "4d24dc7139ca71499cebdbcaad5ef2d8",
+        "4d24dc7139ca71499cebdbcaad5ef2d8"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "minimal-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "0c65395e5aba6e369b996f80ed5066da85fc78db77f86fff26e7c68c8ba2b4f6",
+        "0c65395e5aba6e369b996f80ed5066da85fc78db77f86fff26e7c68c8ba2b4f6"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "minimal-pdfbox-PDFBOX_LEGACY_MODE.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "a8d8bfdf9f93fac199391f753a880595bbb8e1c9f24b42f4d939bfcacfbc0625",
+        "a8d8bfdf9f93fac199391f753a880595bbb8e1c9f24b42f4d939bfcacfbc0625"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.4"
+    }
+  },
+  {
+    "name": "minimal-pdfbox-split.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "165236232f7c4426748aa6d3bb66e79b8a672e1031fa59d48c0d984a55c7659b",
+        "165236232f7c4426748aa6d3bb66e79b8a672e1031fa59d48c0d984a55c7659b"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "minimal-pypdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {
+        "/Producer": "pypdf"
+      },
+      "id": [],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "minimal-pypdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "03030303030303030303030303030303",
+        "03030303030303030303030303030303"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.3"
+    }
+  },
+  {
+    "name": "minimal-qpdf-empty.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "4d10c2bf000943f2f68b7e44212e93b8",
+        "4d10c2bf000943f2f68b7e44212e93b8"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "minimal-qpdf-primary.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 1,
+      "info": {},
+      "id": [
+        "03030303030303030303030303030303",
+        "88896899fc932b9e0ab974483bc197d7"
+      ],
+      "xmp": null,
+      "xmpSha256": null,
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "recovery-custom.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "jaytwo.Pdf",
+        "/Title": "Combined dossier",
+        "/ModDate": "D:20261027044446Z",
+        "/Author": "Accounts Team"
+      },
+      "id": [
+        "025d0100fba38d4aa1b59551c0d06112",
+        "025d0100fba38d4aa1b59551c0d06112"
+      ],
+      "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:biz=\"urn:w201:business\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">Combined dossier</rdf:li></rdf:Alt></dc:title><dc:creator><rdf:Seq><rdf:li>Accounts Team</rdf:li></rdf:Seq></dc:creator><biz:Record biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+      "xmpSha256": "02525ea95f19a2cdd13a98810d37ad73d0f8343d16a9c092ad11dcb3a23242ab",
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  },
+  {
+    "name": "recovery-info.pdf",
+    "qpdfExit": 0,
+    "diagnostic": "",
+    "state": {
+      "pages": 2,
+      "info": {
+        "/Producer": "jaytwo.Pdf",
+        "/Title": "Combined dossier",
+        "/ModDate": "D:20261027044446Z",
+        "/Author": "Accounts Team"
+      },
+      "id": [
+        "025d0100fba38d4aa1b59551c0d06112",
+        "025d0100fba38d4aa1b59551c0d06112"
+      ],
+      "xmp": "<?xpacket begin=\"﻿\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?><x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">Combined dossier</rdf:li></rdf:Alt></dc:title><xmp:ModifyDate>2026-10-27T04:44:46Z</xmp:ModifyDate><dc:creator><rdf:Seq><rdf:li>Accounts Team</rdf:li></rdf:Seq></dc:creator></rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end=\"w\"?>",
+      "xmpSha256": "90d9c2d723c8879a8ddb96049a12281f775121e8436e0f0fd2cd3eb01f8c716d",
+      "catalog": {},
+      "header": "%PDF-1.7"
+    }
+  }
+]

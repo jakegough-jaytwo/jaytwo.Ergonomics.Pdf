@@ -1,0 +1,37 @@
+22:44:48.953 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-a-pdfbox-split.pdf, this will produce a corrupted file if you're also reading from it
+22:44:48.997 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-b-pdfbox-split.pdf, this will produce a corrupted file if you're also reading from it
+22:44:49.003 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file minimal-pdfbox-split.pdf, this will produce a corrupted file if you're also reading from it
+22:44:49.007 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file malformed-pdfbox-split.pdf, this will produce a corrupted file if you're also reading from it
+22:44:49.012 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file custom-pdfbox-split.pdf, this will produce a corrupted file if you're also reading from it
+22:44:49.019 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+identity-a OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.029 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-a-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+identity-a PDFBOX_LEGACY_MODE accepted
+22:44:49.032 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-b-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+identity-b OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.040 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file identity-b-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+identity-b PDFBOX_LEGACY_MODE accepted
+22:44:49.043 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file minimal-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+minimal OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.045 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file minimal-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+minimal PDFBOX_LEGACY_MODE accepted
+22:44:49.047 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file malformed-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+malformed OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.051 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file malformed-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+malformed PDFBOX_LEGACY_MODE accepted
+22:44:49.054 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file custom-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+custom OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.057 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file custom-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+custom PDFBOX_LEGACY_MODE accepted
+22:44:49.061 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file a-b-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+a-b OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.066 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file a-b-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+a-b PDFBOX_LEGACY_MODE accepted
+22:44:49.069 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file b-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+b-a OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.074 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file b-a-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+b-a PDFBOX_LEGACY_MODE accepted
+22:44:49.079 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file a-a-pdfbox-OPTIMIZE_RESOURCES_MODE.pdf, this will produce a corrupted file if you're also reading from it
+a-a OPTIMIZE_RESOURCES_MODE accepted
+22:44:49.083 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file a-a-pdfbox-PDFBOX_LEGACY_MODE.pdf, this will produce a corrupted file if you're also reading from it
+a-a PDFBOX_LEGACY_MODE accepted

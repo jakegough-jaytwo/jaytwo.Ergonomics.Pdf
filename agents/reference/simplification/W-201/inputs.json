@@ -1,0 +1,219 @@
+{
+  "pypdf": "6.21.1",
+  "qpdf": "qpdf version 12.3.2\nRun qpdf --copyright to see copyright and license information.",
+  "fixtures": [
+    {
+      "name": "custom.pdf",
+      "sha256": "53093c8ac3693bebf799c4414eec0d6340bbd78df11539a7b44626169adfc64e",
+      "bytes": 1406,
+      "state": {
+        "pages": 1,
+        "info": {
+          "/Title": "custom",
+          "/Author": "Source Author",
+          "/Subject": "Input only",
+          "/Keywords": "original",
+          "/Creator": "Source App",
+          "/Producer": "Source Producer",
+          "/CreationDate": "D:20200102030405Z",
+          "/ModDate": "D:20200203040506Z",
+          "/Department": "Accounts",
+          "/Trapped": "/False"
+        },
+        "id": [
+          "05050505050505050505050505050505",
+          "05050505050505050505050505050505"
+        ],
+        "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record></rdf:Description></rdf:RDF></x:xmpmeta>",
+        "xmpSha256": "942552239bcb77fed596cc9635eeb216ae182915a9c31aa0374c81c0053e49c0",
+        "catalog": {
+          "/ViewerPreferences": {
+            "/HideToolbar": true,
+            "/DisplayDocTitle": true,
+            "/Direction": "/R2L",
+            "/PrintScaling": "/None",
+            "/Duplex": "/DuplexFlipLongEdge",
+            "/PickTrayByPDFSize": true,
+            "/PrintPageRange": [
+              0,
+              0
+            ],
+            "/NumCopies": 3
+          },
+          "/PageMode": "/UseOutlines",
+          "/PageLayout": "/TwoColumnRight",
+          "/OpenAction": [
+            "PAGE",
+            "/Fit"
+          ],
+          "/Lang": "en-US"
+        },
+        "header": "%PDF-1.7"
+      }
+    },
+    {
+      "name": "identity-a.pdf",
+      "sha256": "ab6b1af7da7665d5a995e26e08a9220fd9054a4fbbe38950f2849fc0ec36dcf8",
+      "bytes": 1682,
+      "state": {
+        "pages": 1,
+        "info": {
+          "/Title": "identity-a",
+          "/Author": "Source Author",
+          "/Subject": "Input only",
+          "/Keywords": "original",
+          "/Creator": "Source App",
+          "/Producer": "Source Producer",
+          "/CreationDate": "D:20200102030405Z",
+          "/ModDate": "D:20200203040506Z",
+          "/Department": "Accounts",
+          "/Trapped": "/False"
+        },
+        "id": [
+          "01010101010101010101010101010101",
+          "01010101010101010101010101010101"
+        ],
+        "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-a</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+        "xmpSha256": "6841c8dd17bb26d74147fd6c5909f43a9dd815bde03f3f232ee96c15de8b3124",
+        "catalog": {
+          "/ViewerPreferences": {
+            "/HideToolbar": true,
+            "/DisplayDocTitle": true,
+            "/Direction": "/R2L",
+            "/PrintScaling": "/None",
+            "/Duplex": "/DuplexFlipLongEdge",
+            "/PickTrayByPDFSize": true,
+            "/PrintPageRange": [
+              0,
+              0
+            ],
+            "/NumCopies": 3
+          },
+          "/PageMode": "/UseOutlines",
+          "/PageLayout": "/TwoColumnRight",
+          "/OpenAction": [
+            "PAGE",
+            "/Fit"
+          ],
+          "/Lang": "en-US"
+        },
+        "header": "%PDF-1.7"
+      }
+    },
+    {
+      "name": "identity-b.pdf",
+      "sha256": "ffd3302b04aef9fa25576d4e859c96fe3cd25f57b651caaaef9f624555befbb4",
+      "bytes": 1735,
+      "state": {
+        "pages": 1,
+        "info": {
+          "/Title": "identity-b",
+          "/Author": "Source Author",
+          "/Subject": "Input only",
+          "/Keywords": "original",
+          "/Creator": "Source App",
+          "/Producer": "Source Producer",
+          "/CreationDate": "D:20200102030405Z",
+          "/ModDate": "D:20200203040506Z",
+          "/Department": "Accounts",
+          "/Trapped": "/False"
+        },
+        "id": [
+          "02020202020202020202020202020202",
+          "02020202020202020202020202020202"
+        ],
+        "xmp": "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:Description rdf:about=\"\"><biz:Record xmlns:biz=\"urn:w201:business\" biz:code=\"42\">source-only</biz:Record><pdfaid:part xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">2</pdfaid:part><pdfaid:conformance xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">B</pdfaid:conformance><xmpMM:DocumentID xmlns:xmpMM=\"http://ns.adobe.com/xap/1.0/mm/\">uuid:source-identity-b</xmpMM:DocumentID></rdf:Description></rdf:RDF></x:xmpmeta>",
+        "xmpSha256": "0355ea0646aea0bfc3abd6a2cf72dfdedf83388bcc689454608d149e41f8bc78",
+        "catalog": {
+          "/ViewerPreferences": {
+            "/HideToolbar": true,
+            "/DisplayDocTitle": true,
+            "/Direction": "/R2L",
+            "/PrintScaling": "/None",
+            "/Duplex": "/DuplexFlipLongEdge",
+            "/PickTrayByPDFSize": true,
+            "/PrintPageRange": [
+              0,
+              0
+            ],
+            "/NumCopies": 3
+          },
+          "/PageMode": "/FullScreen",
+          "/PageLayout": "/TwoColumnRight",
+          "/OpenAction": {
+            "/S": "/URI",
+            "/URI": "https://example.invalid/identity"
+          },
+          "/Lang": "en-US"
+        },
+        "header": "%PDF-1.7"
+      }
+    },
+    {
+      "name": "malformed.pdf",
+      "sha256": "94ac050946c77c60b82508d887a95b14b8b21a874b66209f1795a2b57c50a468",
+      "bytes": 1167,
+      "state": {
+        "pages": 1,
+        "info": {
+          "/Title": "malformed",
+          "/Author": "Source Author",
+          "/Subject": "Input only",
+          "/Keywords": "original",
+          "/Creator": "Source App",
+          "/Producer": "Source Producer",
+          "/CreationDate": "D:20200102030405Z",
+          "/ModDate": "D:20200203040506Z",
+          "/Department": "Accounts",
+          "/Trapped": "/False"
+        },
+        "id": [
+          "04040404040404040404040404040404",
+          "04040404040404040404040404040404"
+        ],
+        "xmp": "<broken-xmp",
+        "xmpSha256": "45f98e667ee5ce882bee1d3bec7fa75aa7d5e2b010c7c4ff85044cc7a2a10560",
+        "catalog": {
+          "/ViewerPreferences": {
+            "/HideToolbar": true,
+            "/DisplayDocTitle": true,
+            "/Direction": "/R2L",
+            "/PrintScaling": "/None",
+            "/Duplex": "/DuplexFlipLongEdge",
+            "/PickTrayByPDFSize": true,
+            "/PrintPageRange": [
+              0,
+              0
+            ],
+            "/NumCopies": 3
+          },
+          "/PageMode": "/UseOutlines",
+          "/PageLayout": "/TwoColumnRight",
+          "/OpenAction": [
+            "PAGE",
+            "/Fit"
+          ],
+          "/Lang": "en-US"
+        },
+        "header": "%PDF-1.7"
+      }
+    },
+    {
+      "name": "minimal.pdf",
+      "sha256": "df567ca2df2c844d11da54db5ed0464895d1b1bd5e21f34f396e838625fc1276",
+      "bytes": 458,
+      "state": {
+        "pages": 1,
+        "info": {},
+        "id": [
+          "03030303030303030303030303030303",
+          "03030303030303030303030303030303"
+        ],
+        "xmp": null,
+        "xmpSha256": null,
+        "catalog": {},
+        "header": "%PDF-1.7"
+      }
+    }
+  ]
+}

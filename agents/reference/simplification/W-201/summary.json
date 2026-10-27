@@ -1,0 +1,121 @@
+{
+  "outputs": 63,
+  "cleanQpdfChecks": 63,
+  "engineAccepted": 8,
+  "engineDistinctFreshIds": 8,
+  "losses": [
+    {
+      "fixture": "identity-a",
+      "removedInfoKeys": [
+        "/Author",
+        "/CreationDate",
+        "/Creator",
+        "/Department",
+        "/Keywords",
+        "/ModDate",
+        "/Subject",
+        "/Title",
+        "/Trapped"
+      ],
+      "producerReplaced": true,
+      "removedCatalogKeys": [
+        "/Lang",
+        "/OpenAction",
+        "/PageLayout",
+        "/PageMode",
+        "/ViewerPreferences"
+      ],
+      "xmpOmitted": true
+    },
+    {
+      "fixture": "identity-b",
+      "removedInfoKeys": [
+        "/Author",
+        "/CreationDate",
+        "/Creator",
+        "/Department",
+        "/Keywords",
+        "/ModDate",
+        "/Subject",
+        "/Title",
+        "/Trapped"
+      ],
+      "producerReplaced": true,
+      "removedCatalogKeys": [
+        "/Lang",
+        "/OpenAction",
+        "/PageLayout",
+        "/PageMode",
+        "/ViewerPreferences"
+      ],
+      "xmpOmitted": true
+    },
+    {
+      "fixture": "minimal",
+      "removedInfoKeys": [],
+      "producerReplaced": false,
+      "removedCatalogKeys": [],
+      "xmpOmitted": false
+    },
+    {
+      "fixture": "malformed",
+      "removedInfoKeys": [
+        "/Author",
+        "/CreationDate",
+        "/Creator",
+        "/Department",
+        "/Keywords",
+        "/ModDate",
+        "/Subject",
+        "/Title",
+        "/Trapped"
+      ],
+      "producerReplaced": true,
+      "removedCatalogKeys": [
+        "/Lang",
+        "/OpenAction",
+        "/PageLayout",
+        "/PageMode",
+        "/ViewerPreferences"
+      ],
+      "xmpOmitted": true
+    },
+    {
+      "fixture": "custom",
+      "removedInfoKeys": [
+        "/Author",
+        "/CreationDate",
+        "/Creator",
+        "/Department",
+        "/Keywords",
+        "/ModDate",
+        "/Subject",
+        "/Title",
+        "/Trapped"
+      ],
+      "producerReplaced": true,
+      "removedCatalogKeys": [
+        "/Lang",
+        "/OpenAction",
+        "/PageLayout",
+        "/PageMode",
+        "/ViewerPreferences"
+      ],
+      "xmpOmitted": true
+    }
+  ],
+  "recovery": [
+    {
+      "kind": "info",
+      "setterCalls": 2,
+      "beforeSaveBytes": 0,
+      "prefix": true
+    },
+    {
+      "kind": "custom",
+      "setterCalls": 3,
+      "beforeSaveBytes": 0,
+      "prefix": true
+    }
+  ]
+}

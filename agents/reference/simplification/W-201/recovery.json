@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "info",
+    "setterCalls": 2,
+    "beforeSaveBytes": 0,
+    "prefix": true
+  },
+  {
+    "kind": "custom",
+    "setterCalls": 3,
+    "beforeSaveBytes": 0,
+    "prefix": true
+  }
+]

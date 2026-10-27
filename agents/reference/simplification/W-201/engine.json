@@ -1,0 +1,85 @@
+[
+  {
+    "name": "identity-a",
+    "inputs": [
+      "identity-a"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 506,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "identity-b",
+    "inputs": [
+      "identity-b"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 506,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "minimal",
+    "inputs": [
+      "minimal"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 506,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "malformed",
+    "inputs": [
+      "malformed"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 506,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "custom",
+    "inputs": [
+      "custom"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 506,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "a-b",
+    "inputs": [
+      "identity-a",
+      "identity-b"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 620,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "b-a",
+    "inputs": [
+      "identity-b",
+      "identity-a"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 620,
+    "sourceUnchanged": true
+  },
+  {
+    "name": "a-a",
+    "inputs": [
+      "identity-a",
+      "identity-a"
+    ],
+    "result": "accepted",
+    "error": "",
+    "destinationBytes": 620,
+    "sourceUnchanged": true
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "identity-a": [
+    "identity-a"
+  ],
+  "identity-b": [
+    "identity-b"
+  ],
+  "minimal": [
+    "minimal"
+  ],
+  "malformed": [
+    "malformed"
+  ],
+  "custom": [
+    "custom"
+  ],
+  "a-b": [
+    "identity-a",
+    "identity-b"
+  ],
+  "b-a": [
+    "identity-b",
+    "identity-a"
+  ],
+  "a-a": [
+    "identity-a",
+    "identity-a"
+  ]
+}
