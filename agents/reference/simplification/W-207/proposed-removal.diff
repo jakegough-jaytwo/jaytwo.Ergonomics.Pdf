@@ -1,0 +1,135 @@
+diff --git a/src/jaytwo.Pdf/Internal/PdfTypedObjectCopier.cs b/src/jaytwo.Pdf/Internal/PdfTypedObjectCopier.cs
+index 62a4ea0..e22fe43 100644
+--- a/src/jaytwo.Pdf/Internal/PdfTypedObjectCopier.cs
++++ b/src/jaytwo.Pdf/Internal/PdfTypedObjectCopier.cs
+@@ -24,8 +24,6 @@ internal sealed class PdfTypedObjectCopier
+     {
+         Copy,
+         Omit,
+-        Remap,
+-        Reject,
+     }
+ 
+     internal PdfObject.Ref Copy(PdfObjectStore source, PdfObject.Ref reference, string structure)
+@@ -136,21 +134,13 @@ internal sealed class PdfTypedObjectCopier
+                     continue;
+                 }
+ 
+-                CopyDecision decision = _policy(new CopyContext(structure, key, sourceDictionary, value));
++                CopyDecision decision = _policy(new CopyContext(structure, key, sourceDictionary));
+                 if (decision.Kind == CopyKind.Omit)
+                 {
+                     continue;
+                 }
+ 
+-                if (decision.Kind == CopyKind.Reject)
+-                {
+-                    throw new PdfException(decision.Message ?? ("The " + structure + " /" + key + " entry is unsupported."));
+-                }
+-
+-                PdfObject copied = decision.Kind == CopyKind.Remap
+-                    ? decision.Value ?? throw new InvalidOperationException("A remap decision requires a value.")
+-                    : CopyValue(source, value, decision.ChildStructure ?? structure, depth + 1);
+-                destinationDictionary.Append(key, copied);
++                destinationDictionary.Append(key, CopyValue(source, value, decision.ChildStructure ?? structure, depth + 1));
+             }
+ 
+             if (sourceDictionary.Body != null)
+@@ -233,12 +223,11 @@ internal sealed class PdfTypedObjectCopier
+ 
+     internal sealed class CopyContext
+     {
+-        internal CopyContext(string structure, string key, PdfObject.Dict dictionary, PdfObject value)
++        internal CopyContext(string structure, string key, PdfObject.Dict dictionary)
+         {
+             Structure = structure;
+             Key = key;
+             Dictionary = dictionary;
+-            Value = value;
+         }
+ 
+         internal string Structure { get; }
+@@ -246,46 +235,28 @@ internal sealed class PdfTypedObjectCopier
+         internal string Key { get; }
+ 
+         internal PdfObject.Dict Dictionary { get; }
+-
+-        internal PdfObject Value { get; }
+     }
+ 
+     internal sealed class CopyDecision
+     {
+-        private CopyDecision(CopyKind kind, PdfObject? value, string? childStructure, string? message)
++        private CopyDecision(CopyKind kind, string? childStructure)
+         {
+             Kind = kind;
+-            Value = value;
+             ChildStructure = childStructure;
+-            Message = message;
+         }
+ 
+         internal CopyKind Kind { get; }
+ 
+-        internal PdfObject? Value { get; }
+-
+         internal string? ChildStructure { get; }
+ 
+-        internal string? Message { get; }
+-
+         internal static CopyDecision Copy(string? childStructure = null)
+         {
+-            return new CopyDecision(CopyKind.Copy, null, childStructure, null);
++            return new CopyDecision(CopyKind.Copy, childStructure);
+         }
+ 
+         internal static CopyDecision Omit()
+         {
+-            return new CopyDecision(CopyKind.Omit, null, null, null);
+-        }
+-
+-        internal static CopyDecision Remap(PdfObject value)
+-        {
+-            return new CopyDecision(CopyKind.Remap, value, null, null);
+-        }
+-
+-        internal static CopyDecision Reject(string message)
+-        {
+-            return new CopyDecision(CopyKind.Reject, null, null, message);
++            return new CopyDecision(CopyKind.Omit, null);
+         }
+     }
+ }
+diff --git a/test/jaytwo.Pdf.Tests/NewFileWriterTests.cs b/test/jaytwo.Pdf.Tests/NewFileWriterTests.cs
+index 3b1486a..dc08577 100644
+--- a/test/jaytwo.Pdf.Tests/NewFileWriterTests.cs
++++ b/test/jaytwo.Pdf.Tests/NewFileWriterTests.cs
+@@ -61,20 +61,18 @@ public sealed class NewFileWriterTests
+     }
+ 
+     [Fact]
+-    public void copier_applies_typed_omit_and_remap_rules()
++    public void copier_applies_typed_omit_rules()
+     {
+         using var source = new PdfObjectStore(new TestPdfSource(Array.Empty<byte>()), ownsSource: true, cursorWindows: 1);
+         var dictionary = new PdfObject.Dict();
+         dictionary.Set("Keep", PdfObject.Num.FromLong(1));
+         dictionary.Set("Drop", PdfObject.Num.FromLong(2));
+-        dictionary.Set("Change", PdfObject.Num.FromLong(3));
+         Add(source, 1, dictionary);
+         var budget = new PdfNewFileBudget(new PdfNewFileLimits());
+         var writer = new PdfNewFileWriter(budget);
+         var copier = new PdfTypedObjectCopier(writer, budget, context => context.Key switch
+         {
+             "Drop" => PdfTypedObjectCopier.CopyDecision.Omit(),
+-            "Change" => PdfTypedObjectCopier.CopyDecision.Remap(PdfObject.Num.FromLong(4)),
+             _ => PdfTypedObjectCopier.CopyDecision.Copy(),
+         });
+ 
+@@ -89,7 +87,6 @@ public sealed class NewFileWriterTests
+ 
+         Assert.Contains("/Keep 1", text);
+         Assert.DoesNotContain("/Drop", text);
+-        Assert.Contains("/Change 4", text);
+     }
+ 
+     [Fact]
