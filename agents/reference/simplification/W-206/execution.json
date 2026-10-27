@@ -1,0 +1,21 @@
+{
+    "baseline":  "6a2b8003fbdc2b745e5d5a16418f443288e42a82",
+    "date":  "2026-10-26",
+    "sdk":  "10.0.402",
+    "windowsFilesystem":  "NTFS",
+    "linuxFilesystem":  "tmpfs",
+    "sources":  [
+                    {
+                        "path":  "src/jaytwo.Ergonomics.Pdf/Internal/WorkflowFiles.cs",
+                        "sha256":  "398590B2EF979D957B78F68C4B48F0EA2BCEAD41CF2AF44D863994D51E88D232"
+                    },
+                    {
+                        "path":  "test/jaytwo.Ergonomics.Pdf.Tests/FileLinks.cs",
+                        "sha256":  "0E74166A6DC1A1D87DC32577866583592C8F30DA9D54574236A47056FF9418B5"
+                    },
+                    {
+                        "path":  "agents/reference/simplification/W-206/probe/Program.cs",
+                        "sha256":  "5DAB423E073C2985285D11C4BAD639769D768FB48F812A1D578AAA1D77D970C9"
+                    }
+                ]
+}

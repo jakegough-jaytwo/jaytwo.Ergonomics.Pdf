@@ -1,0 +1,166 @@
+{
+  "platform": "Microsoft Windows 10.0.26100",
+  "runtime": ".NET 10.0.13",
+  "filesystemRoot": "C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-206\\run-36eea823982e4f75beeca0c85bb1738f\\files",
+  "assertions": 48,
+  "observations": [
+    {
+      "name": "normalized-paths",
+      "status": "observed",
+      "detail": {
+        "caseEqual": true
+      }
+    },
+    {
+      "name": "intermediate-directory-link",
+      "status": "observed",
+      "detail": "junction on Windows; symlink on Linux resolves to input"
+    },
+    {
+      "name": "final-symlink",
+      "status": "observed",
+      "detail": {
+        "unavailable": "IOException",
+        "reason": "symlink privilege unavailable",
+        "HResult": -2147023582
+      }
+    },
+    {
+      "name": "dangling-symlink",
+      "status": "observed",
+      "detail": {
+        "unavailable": "IOException",
+        "reason": "symlink privilege unavailable",
+        "HResult": -2147023582
+      }
+    },
+    {
+      "name": "cycle-symlink",
+      "status": "observed",
+      "detail": {
+        "unavailable": "IOException",
+        "reason": "symlink privilege unavailable",
+        "HResult": -2147023582
+      }
+    },
+    {
+      "name": "hard-link-closed",
+      "status": "observed",
+      "detail": {
+        "failure": "IOException",
+        "message": "The destination \u0027C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-206\\run-36eea823982e4f75beeca0c85bb1738f\\files\\hard-link-closed\\out\u0027 may be the input file: it has the input\u0027s length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input.",
+        "inputHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1",
+        "destinationHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1"
+      }
+    },
+    {
+      "name": "hard-link-open",
+      "status": "observed",
+      "detail": {
+        "failure": "IOException",
+        "message": "The destination \u0027C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-206\\run-36eea823982e4f75beeca0c85bb1738f\\files\\hard-link-open\\out\u0027 may be the input file: it has the input\u0027s length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input.",
+        "inputHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1",
+        "destinationHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1"
+      }
+    },
+    {
+      "name": "equal-metadata-copy",
+      "status": "observed",
+      "detail": {
+        "failure": "IOException",
+        "message": "The destination \u0027C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-206\\run-36eea823982e4f75beeca0c85bb1738f\\files\\equal-metadata-copy\\out\u0027 may be the input file: it has the input\u0027s length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input.",
+        "inputHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1",
+        "destinationHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1"
+      }
+    },
+    {
+      "name": "different-time-copy",
+      "status": "observed",
+      "detail": {
+        "failure": null,
+        "message": null,
+        "inputHash": "F8FD1168A69398D64B6108ECA26054BBF7E721235FADF996524A980FA947BBF1",
+        "destinationHash": "BB1B5E863B340CC4F7A56D93D9303B4BE4081B8F90158454E1171EDDF287D491"
+      }
+    },
+    {
+      "name": "missing-input-metadata",
+      "status": "observed",
+      "detail": "FileNotFoundException"
+    },
+    {
+      "name": "hard-link-introduced-during-write",
+      "status": "observed",
+      "detail": {
+        "failure": "IOException",
+        "Message": "The destination \u0027C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-206\\run-36eea823982e4f75beeca0c85bb1738f\\files\\hard-link-introduced-during-write\\out\u0027 may be the input file: it has the input\u0027s length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input."
+      }
+    },
+    {
+      "name": "open-input-rename",
+      "status": "observed",
+      "detail": {
+        "blocked": true,
+        "heldLength": 14,
+        "originalPathExists": true
+      }
+    },
+    {
+      "name": "open-input-delete",
+      "status": "observed",
+      "detail": {
+        "blocked": true,
+        "heldLength": 14,
+        "originalPathExists": true
+      }
+    },
+    {
+      "name": "success-new",
+      "status": "observed",
+      "detail": {
+        "failure": null
+      }
+    },
+    {
+      "name": "success-replace",
+      "status": "observed",
+      "detail": {
+        "failure": null
+      }
+    },
+    {
+      "name": "write-failure",
+      "status": "observed",
+      "detail": {
+        "failure": "InvalidOperationException"
+      }
+    },
+    {
+      "name": "cancel",
+      "status": "observed",
+      "detail": {
+        "failure": "OperationCanceledException"
+      }
+    },
+    {
+      "name": "publication-failure",
+      "status": "observed",
+      "detail": {
+        "failure": "IOException"
+      }
+    },
+    {
+      "name": "replace-preserves-other-hard-link",
+      "status": "observed",
+      "detail": "replacement changes directory entry; other hard link keeps old bytes"
+    },
+    {
+      "name": "cleanup-locked-temporary",
+      "status": "observed",
+      "detail": {
+        "retained": true,
+        "policy": "TryDelete is best effort; this probe removes retained file after unlocking"
+      }
+    }
+  ]
+}

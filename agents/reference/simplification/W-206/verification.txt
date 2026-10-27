@@ -1,0 +1,50 @@
+Baseline: 6a2b8003fbdc2b745e5d5a16418f443288e42a82 (W-205 committed; initial tree clean).
+Date: 2026-10-26, owner timezone. SDK: 10.0.402; runtime: .NET 10.0.13.
+Production helper / test link helper / disposable source hashes: execution.json.
+
+Windows probe:
+powershell -NoProfile -ExecutionPolicy Bypass -File agents/reference/simplification/W-206/run.ps1
+PASS: build 0 warnings/errors; windows.json, 20 named cases, 17 exercised,
+3 unavailable Windows file-symlink cases (privilege 1314), 48 assertions.
+No unexpected failures. Windows NTFS, OS version 10.0.26100.
+The initial probe classified symlink setup IOExceptions as unexpected;
+after observing Win32 1314, the runner specifically records that privilege
+failure as unavailable. It does not claim these checks passed.
+
+Linux probe (cached image, network disabled, repository read-only, scratch tmpfs):
+docker run --rm --network none --mount type=bind,source=C:/jake/git/jaytwo.Ergonomics.Pdf,target=/repo,readonly --tmpfs /work -w /work jaytwo_ergonomics_pdf_w182_4cae92b__builder:latest sh /repo/agents/reference/simplification/W-206/run-linux.sh > agents/reference/simplification/W-206/linux.json
+PASS: build 0 warnings/errors; 20 exercised cases, 49 assertions; Ubuntu 26.04.1.
+Default sandbox Docker/WSL inspection was denied; authorized escalation allowed Docker.
+An initial inline Docker shell command failed on Windows quote handling before
+the build; the checked-in script corrected that invocation. No runtime code changed.
+
+Existing tests, quiet runner, no restore (existing local packages/assets):
+python tools/agents/quiet_run.py --name w206-net10 --tests -- dotnet test test/jaytwo.Ergonomics.Pdf.Tests --no-restore --nologo -p:CollectCoverage=false -f net10.0 --filter "FullyQualifiedName~WorkflowFileSaveTests|FullyQualifiedName~WorkflowSigningTests.file_outputs_keep_the_alias_and_overwrite_rules|FullyQualifiedName~WorkflowCombineTests.file_safety_applies_to_every_input_and_requires_explicit_overwrite|FullyQualifiedName~WorkflowCombineTests.file_failure_preserves_destination_and_closes_inputs"
+PASS: 27 passed, 0 failed, 3 skipped. out/logs/w206-net10.log.
+Same command with --name w206-net48 and -f net48:
+PASS: 27 passed, 0 failed, 1 skipped. out/logs/w206-net48.log.
+Skipped net10 cases: a_symbolic_link_destination_is_replaced_as_a_link_and_its_target_is_unchanged;
+missing_input_path_metadata_prevents_overwrite; a_symbolic_link_to_the_input_is_refused_before_the_input_opens.
+The net48 skip is missing_input_path_metadata_prevents_overwrite; symlink cases
+are not compiled on that target. Existing directory-link tests exercise older-target refusal.
+
+The last filter suffix above matched no test. Corrected focused run:
+python tools/agents/quiet_run.py --name w206-combine-failure --tests -- dotnet test test/jaytwo.Ergonomics.Pdf.Tests --no-restore --nologo -p:CollectCoverage=false -f net10.0 --filter "FullyQualifiedName~WorkflowCombineTests.file_failure_preserves_existing_destination_and_closes_all_owned_inputs"
+PASS: 1 passed, 0 failed/skipped. out/logs/w206-combine-failure.log.
+
+No runtime/test-suite/build configuration or shipped behavior changes.
+Not run: Linux public workflow tests, macOS, other modern framework targets,
+privileged Windows file symlinks, arbitrary reparse providers, network filesystems,
+post-check hostile-directory race injection, full matrix/Docker integration gate,
+power-loss qualification, PDF independent-tool validation or independent review.
+Container helper probes do not substitute for Linux whole-terminal coverage.
+
+make agents-check: PASS (217 work items, 68 decisions).
+graphify update .: initial global Git ignore read denied; rerun with authorized read.
+Existing SignatureTests.cs extraction warning and symbol-free probe files limit
+graph completeness; these are not C# build failures. Local graph output is ignored.
+Staged make task-check and whitespace checks accompany this transaction.
+
+Graph update completed: 8341 nodes, 23450 edges; ignored local graph artifacts.
+Staged make task-check: PASS; git diff --cached --check: PASS.
+Linux stdout was transcoded from PowerShell UTF-16 redirection to UTF-8 JSON without changing its values.

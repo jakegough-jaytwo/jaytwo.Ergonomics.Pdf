@@ -51,7 +51,7 @@ First establish editable forms, tags and empty signature-field semantics, then r
 (W-204 is done: `agents/reference/simplification/W-204/`; recommends retaining shipped workflow staging and last-value-wins. Exact explanatory wording remains a proposal; no product implementation is approved.)
 
 (W-205 is done: `agents/reference/simplification/W-205/`; the narrow final-copy failure-preservation proposal awaits Gate 2 approval.)
-7. W-206
+(W-206 is done: `agents/reference/simplification/W-206/`; retain the conservative file-alias safeguards and D-65 limitations; no product removal is proposed.)
 
 Prove unused copier modes first; then resolve navigation, annotation relationships, outlines/labels, coordinated XFA/rights preparation, metadata identity/editing and workflow semantics. Rollback and alias studies reuse W-186 and W-185 rather than duplicating those changes. Each item ends in evidence and a recommendation; preservation additions are not counted as deletion savings.
 
