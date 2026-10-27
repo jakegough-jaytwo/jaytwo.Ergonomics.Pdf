@@ -44,7 +44,7 @@ First establish editable forms, tags and empty signature-field semantics, then r
 
 (W-199 is done: `agents/reference/simplification/W-199/`; explicit rights removal, unsigned-write refusal and credential costs await Gate 2 approval.)
 
-3. W-200
+(W-200 is done: `agents/reference/simplification/W-200/`; the atomic metadata proposal and implementation draft await Gate 2 approval.)
 4. W-201
 5. W-204
 6. W-205

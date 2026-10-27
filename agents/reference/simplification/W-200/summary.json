@@ -1,0 +1,12 @@
+{
+  "engineRuns": 112,
+  "engineAcceptedSaves": 108,
+  "operationRefusals": 45,
+  "outerRefusals": 4,
+  "independentlyInspectedOutputs": 141,
+  "qpdfClean": 130,
+  "qpdfWarnings": 11,
+  "pdfboxFixtures": 11,
+  "pypdfFixtures": 11,
+  "qpdfRewrites": 11
+}

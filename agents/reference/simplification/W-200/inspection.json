@@ -1,0 +1,4062 @@
+[
+  {
+    "name": "conflict-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Info wins?",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f7c37f52794f833098949a4821f398ac56081ff4b59ece5725aa26c0d28f5904",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "78e9903b0e0919f88cf521ba19ba536a1026dd5dc94b88d9ee96a835521ad94a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "01eade32d9b77f931e0960aa9dbb067d3ccf1044c2668a44e4f3215d07f79b3a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Info wins?",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "6511e20bb65f287a7c0c97366d1c5e2aca336057cd92734fddbe92fb7fc0c8f8",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Info wins?",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "conflict-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "65a6bec3de87506478d3f03b28b0f219c32f2e6ce16b4df95fe79c95bc614882",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "0b9c5c8552e35131f409fed2c55ac4c3635aae8062e93c104ca7126edfb1c742",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\conflict-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "01eade32d9b77f931e0960aa9dbb067d3ccf1044c2668a44e4f3215d07f79b3a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "01eade32d9b77f931e0960aa9dbb067d3ccf1044c2668a44e4f3215d07f79b3a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "conflict-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Info wins?"
+      },
+      "hasXmp": true,
+      "xmpSha256": "01eade32d9b77f931e0960aa9dbb067d3ccf1044c2668a44e4f3215d07f79b3a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "XMP wins?"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "d78757d8d9b15c566d19af4bec35e126a5e4dee2490bef15d606fb172470fec9",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "7ea215b5808aaeb3ecac2a67cd450600689facad2604b3afb3dd177fe0d4c269",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "6c6cedda61f7799ed86a4760e515f069af43fd9ca8c6ffc7740b1ddf172fb08c",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "consistent-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "313ba3f97941a57287e129057b6b30346336d98696cd8d682a0fbf38b519f4be",
+      "titles": [],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "d9521afd63140365043bed31d7144c85ef32c27cac591f99493fa5ca2c83af69",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\consistent-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "consistent-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "aaeaa0e68718a9dc2a510c565bfa744e9aa9c96bb9cc1b548a11b3e407fd00e2",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "4c945c1ab72b23c7e2cf7f591583d9237e270fd0090369b3509de5982f6d7ee4",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "deca8eceaf364083561b5ff70b20d92ca8d75dbf71a741d254e5274d710fb8d0",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "29edccfee3b8d7a5883dc3f590818f3af58b7da71e9905e9a5a0f39544eefc90",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "custom-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "5d2a17a3841eb01a8924b8296e830208035e6c3ead2129c6200abb5ec9d6b7e2",
+      "titles": [],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "92b018579ca9dad52a8ec69ba2769f8e36458f1f45d7f73a21ef7a492468ca75",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\custom-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "deca8eceaf364083561b5ff70b20d92ca8d75dbf71a741d254e5274d710fb8d0",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "deca8eceaf364083561b5ff70b20d92ca8d75dbf71a741d254e5274d710fb8d0",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "custom-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "deca8eceaf364083561b5ff70b20d92ca8d75dbf71a741d254e5274d710fb8d0",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "dtd-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\dtd-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "dtd-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "89e0b07ef1241fca1d817a26310564f069448e5106e0ece22ee7cdbab8487fa5",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "DTD not inspected",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "duplicate-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "9ee0da09e507c0f7661f46ddf01ac50f139685e8e89200aa9774b760d9898a5e",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "04e9c7fe6100fc7897ffef4494099529652943e24e71797e1fb21419dbd69237",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "88883ea1deba3e2348466f09b613dbb61a29b8b8311afdb1ee752871133041b2",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "90f151f8207ced0b60249a3898314d81c1cc2350369a157c5c375930abc7fab9",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "duplicate-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "1dad905c056b1d5d5d32be6d6645f39c886bf32b9b20975e2948d9ba24cda48a",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "425839db9456f86524d9cfec1e789436a60b61ae1ceb2aacfd31aa552b0add68",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\duplicate-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "88883ea1deba3e2348466f09b613dbb61a29b8b8311afdb1ee752871133041b2",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "88883ea1deba3e2348466f09b613dbb61a29b8b8311afdb1ee752871133041b2",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "duplicate-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "88883ea1deba3e2348466f09b613dbb61a29b8b8311afdb1ee752871133041b2",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "x-default",
+          "value": "Other"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P1-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P2-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "gate-P3-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "eeee2bbe9de8657722daf3c51bcf55aebeeb8afacfb082cf772848f31cd8870b",
+      "titles": [],
+      "authors": [
+        "Ada, Bob; Company"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "9d9a72aeb6df2d9e58d331eadf1ebb65133cf429f1cceec838bc6601b9ff6644",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "info-only-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "3eeecbdd9da02afadcbee9997956bbe9af158dbdfcaeb41783f1058516948be4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "info-only-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "3eeecbdd9da02afadcbee9997956bbe9af158dbdfcaeb41783f1058516948be4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f508b71f0218cdc8651ac6c5ebe4ee8cf1ce2e7d72b3f171b38cc721d66044b5",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "info-only-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\info-only-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "info-only-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "info-only-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\malformed-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "malformed-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b76cd21f24358c3778f41dd68d27a0a9307241769074000c90fa8686ad5616d6",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": "unclosed token: line 1, column 0",
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "multilingual-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "ef7e33e3612e9b14911927258888d1bd76a7d16ef49843b2f369e7fee694dda1",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "6534af644a83588239b72103cf85119987ce527848837fa8146ed323b971c8a0",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "dated"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f146bd088e24988318643ea025c38510b38d108a22407b41f989a24ad1ae2bdc",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "7e100e2310d13d3bc3d89766a0a3cc5ab1021a277b456ed43216dea20ba60545",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "multilingual-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "c9d77091da6686bb9c06971d2f9c9153cdbdc69ce9a3e5b371d56233f222b041",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "3f8ff76ac5d1ad6a444a223589085d7bd643f3b249fb5ef3eb7489feca62df29",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "W200 日本語"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\multilingual-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f146bd088e24988318643ea025c38510b38d108a22407b41f989a24ad1ae2bdc",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f146bd088e24988318643ea025c38510b38d108a22407b41f989a24ad1ae2bdc",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "multilingual-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f146bd088e24988318643ea025c38510b38d108a22407b41f989a24ad1ae2bdc",
+      "titles": [
+        {
+          "lang": "fr",
+          "value": "Bonjour"
+        },
+        {
+          "lang": "x-default",
+          "value": "Old"
+        },
+        {
+          "lang": "de",
+          "value": "Hallo"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [
+        "<ns0:Record xmlns:ns0=\"urn:w200:custom\" ns0:flag=\"keep\"><ns0:Child>opaque &amp; retained</ns0:Child></ns0:Record>"
+      ],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada, Bob; Company",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "eeee2bbe9de8657722daf3c51bcf55aebeeb8afacfb082cf772848f31cd8870b",
+      "titles": [],
+      "authors": [
+        "Ada, Bob; Company"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/ModDate": "D:20240203040506+05'30'",
+        "/Title": "dated"
+      },
+      "hasXmp": true,
+      "xmpSha256": "9d9a72aeb6df2d9e58d331eadf1ebb65133cf429f1cceec838bc6601b9ff6644",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "neither-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "3eeecbdd9da02afadcbee9997956bbe9af158dbdfcaeb41783f1058516948be4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {},
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "neither-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "3eeecbdd9da02afadcbee9997956bbe9af158dbdfcaeb41783f1058516948be4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "f508b71f0218cdc8651ac6c5ebe4ee8cf1ce2e7d72b3f171b38cc721d66044b5",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "neither-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\neither-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "neither-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語"
+      },
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "neither-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {},
+      "hasXmp": false,
+      "xmpSha256": null,
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "dated",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "Old",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\no-rdf-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "no-rdf-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "dba8e273ba1083793717c62809c3d28be22196bd11ffc1dfbf0f35a1dbecb817",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "restricted-engine-owner-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada, Bob; Company",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "d78757d8d9b15c566d19af4bec35e126a5e4dee2490bef15d606fb172470fec9",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-owner-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20240203040506+05'30'",
+        "/Title": "dated"
+      },
+      "hasXmp": true,
+      "xmpSha256": "7ea215b5808aaeb3ecac2a67cd450600689facad2604b3afb3dd177fe0d4c269",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-owner-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "bad\u0001title"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-owner-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "pending",
+        "/ModDate": "D:20261027043453Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "163ef9f91656370bb960aab18a063b2b2895705a634fab71044f46ee2ede38d1",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:53Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-owner-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "restricted-engine-owner-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "313ba3f97941a57287e129057b6b30346336d98696cd8d682a0fbf38b519f4be",
+      "titles": [],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-owner-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20261027043452Z",
+        "/Title": "W200 日本語"
+      },
+      "hasXmp": true,
+      "xmpSha256": "d9521afd63140365043bed31d7144c85ef32c27cac591f99493fa5ca2c83af69",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:52Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "restricted-engine-user-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada; Bob",
+        "/Department": "keep",
+        "/ModDate": "D:20200101000000Z",
+        "/Title": "Old"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.7",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-author.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Author": "Ada, Bob; Company",
+        "/ModDate": "D:20261027043453Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "5bc32f00ad543c45c167485145063932d5387856f399c0be97585eaa39295e77",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada, Bob; Company",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:53Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-date.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/ModDate": "D:20240203040506+05'30'",
+        "/Title": "dated"
+      },
+      "hasXmp": true,
+      "xmpSha256": "7ea215b5808aaeb3ecac2a67cd450600689facad2604b3afb3dd177fe0d4c269",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "dated"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2024-02-02T22:35:06Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-invalid-char.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "bad\u0001title"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-raw-invalid.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Department": "pending",
+        "/ModDate": "D:20261027043453Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "163ef9f91656370bb960aab18a063b2b2895705a634fab71044f46ee2ede38d1",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:53Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-raw.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {},
+      "hasXmp": true,
+      "xmpSha256": "baead9276f5637cc310f87b89248ef7d74042cdf227301dbfc3290ea0b85a8c4",
+      "titles": [],
+      "authors": [],
+      "modifyDates": [],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": false
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-remove-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/ModDate": "D:20261027043453Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "88bc2ff9157a9ecbe4d2063fb1c018faaa1bb08260298adacd7a1cb0436b6af7",
+      "titles": [],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:53Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-engine-none-title.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語",
+        "/ModDate": "D:20261027043453Z"
+      },
+      "hasXmp": true,
+      "xmpSha256": "c7a3a0f3bc7ba4878fc9365723e00ddf031fbc1697e3cc6b669f17443b98ded0",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "W200 日本語"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2026-10-27T04:34:53Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "/1.4",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-pdfbox.pdf",
+    "qpdfExit": 3,
+    "qpdfError": "WARNING: C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-200\\outputs\\xmp-only-pdfbox.pdf: xref entry for the xref stream itself is missing - a common error handled correctly by qpdf and most other applications\nqpdf: operation succeeded with warnings",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.6",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-pypdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {
+        "/Title": "W200 日本語"
+      },
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  },
+  {
+    "name": "xmp-only-qpdf.pdf",
+    "qpdfExit": 0,
+    "qpdfError": "",
+    "state": {
+      "info": {},
+      "hasXmp": true,
+      "xmpSha256": "b53dfdb68fa707420928e6636cd603bf0aa37079fff38970984b3394a6dd4527",
+      "titles": [
+        {
+          "lang": "x-default",
+          "value": "Old"
+        }
+      ],
+      "authors": [
+        "Ada",
+        "Bob"
+      ],
+      "modifyDates": [
+        "2020-01-01T00:00:00Z"
+      ],
+      "custom": [],
+      "xmlError": null,
+      "header": "%PDF-1.3",
+      "catalogVersion": "",
+      "hasRdf": true
+    }
+  }
+]

@@ -1,0 +1,10 @@
+>   public void setTitle(java.lang.String);
+      Code:
+         0: aload_0
+         1: getfield      #4                  // Field info:Lorg/apache/pdfbox/cos/COSDictionary;
+         4: getstatic     #6                  // Field
+org/apache/pdfbox/cos/COSName.TITLE:Lorg/apache/pdfbox/cos/COSName;
+         7: aload_1
+         8: invokevirtual #8                  // Method
+org/apache/pdfbox/cos/COSDictionary.setString:(Lorg/apache/pdfbox/cos/COSName;Ljava/lang/String;)V
+        11: return

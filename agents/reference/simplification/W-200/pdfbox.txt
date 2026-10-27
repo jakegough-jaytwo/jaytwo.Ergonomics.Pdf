@@ -1,0 +1,22 @@
+22:34:55.221 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file conflict-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+conflict.pdf accepted
+22:34:55.274 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file consistent-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+consistent.pdf accepted
+22:34:55.277 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file custom-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+custom.pdf accepted
+22:34:55.280 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file dtd-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+dtd.pdf accepted
+22:34:55.282 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file duplicate-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+duplicate.pdf accepted
+22:34:55.285 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file info-only-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+info-only.pdf accepted
+22:34:55.287 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file malformed-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+malformed.pdf accepted
+22:34:55.287 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file multilingual-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+multilingual.pdf accepted
+22:34:55.293 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file neither-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+neither.pdf accepted
+22:34:55.294 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file no-rdf-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+no-rdf.pdf accepted
+22:34:55.298 [main] WARN org.apache.pdfbox.pdmodel.PDDocument -- You are overwriting the existing file xmp-only-pdfbox.pdf, this will produce a corrupted file if you're also reading from it
+xmp-only.pdf accepted
