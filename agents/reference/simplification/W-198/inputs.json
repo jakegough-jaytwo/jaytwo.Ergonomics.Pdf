@@ -1,0 +1,169 @@
+{
+  "pypdf": "6.21.1",
+  "fixtures": [
+    {
+      "name": "hybrid",
+      "sha256": "facde970042225f14134c3c4dba86011ea95f0e7964d053aaa3195fad1791d7c",
+      "inspection": {
+        "xfa": true,
+        "rights": false,
+        "fields": {
+          "Name": "old"
+        },
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "hybrid-rights",
+      "sha256": "64b204df43f04fa3340e716ba7bdd6b56fae22222ed6a3dd684b4dc45f5cbe6c",
+      "inspection": {
+        "xfa": true,
+        "rights": true,
+        "fields": {
+          "Name": "old"
+        },
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "dynamic",
+      "sha256": "f8e3306386711448670b18e8437584cc57a92ee2696edd77649e1fb678bcb310",
+      "inspection": {
+        "xfa": true,
+        "rights": false,
+        "fields": {
+          "Name": "old"
+        },
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "xfa-only",
+      "sha256": "aefeac23a06e1cccc7e1b155f554d7954c50c3f03a9c472466835f9b439dad69",
+      "inspection": {
+        "xfa": true,
+        "rights": false,
+        "fields": {},
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "plain",
+      "sha256": "d9e4cc14b15025c9942890ac146de855a9f5a206d1f6e7636f35815c523a3cbc",
+      "inspection": {
+        "xfa": false,
+        "rights": false,
+        "fields": {
+          "Name": "old"
+        },
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "corpus-grants-sf424-v4",
+      "source": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+      "sha256": "5cad14f3d86f8cb0c4b9ed6e1b4f5fcefd0d492f164e56573864bafd6cdcf2a5",
+      "inspection": {
+        "xfa": true,
+        "rights": true,
+        "fields": {},
+        "rotation": 0,
+        "pages": 1
+      }
+    },
+    {
+      "name": "corpus-irs-fw9-2024-03",
+      "source": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+      "sha256": "2d420cbb4123dcf1fb82595b2359cfbb5d81f00b9df9d359fcc7af361d093f53",
+      "inspection": {
+        "xfa": true,
+        "rights": true,
+        "fields": {
+          "topmostSubform[0]": "",
+          "topmostSubform[0].Page1[0]": "",
+          "topmostSubform[0].Page1[0].f1_01[0]": "",
+          "topmostSubform[0].Page1[0].f1_02[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+          "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+          "topmostSubform[0].Page1[0].f1_05[0]": "",
+          "topmostSubform[0].Page1[0].f1_06[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+          "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+          "topmostSubform[0].Page1[0].f1_09[0]": "",
+          "topmostSubform[0].Page1[0].f1_10[0]": "",
+          "topmostSubform[0].Page1[0].f1_11[0]": "",
+          "topmostSubform[0].Page1[0].f1_12[0]": "",
+          "topmostSubform[0].Page1[0].f1_13[0]": "",
+          "topmostSubform[0].Page1[0].f1_14[0]": "",
+          "topmostSubform[0].Page1[0].f1_15[0]": ""
+        },
+        "rotation": 0,
+        "pages": 6
+      }
+    },
+    {
+      "name": "corpus-va-21-4138",
+      "source": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+      "sha256": "f534b7c43aa774ed8a9005d7e564cbf18d4ce54d04e0e0559282d95ba2c6c6be",
+      "inspection": {
+        "xfa": true,
+        "rights": true,
+        "fields": {
+          "form1[0]": "",
+          "form1[0].#subform[0]": "",
+          "form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+          "form1[0].#subform[0].Middle_Initial1[0]": "",
+          "form1[0].#subform[0].Last_Name[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+          "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+          "form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+          "form1[0].#subform[0].Month[0]": "",
+          "form1[0].#subform[0].Day[0]": "",
+          "form1[0].#subform[0].Year[0]": "",
+          "form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+          "form1[0].#subform[0].AreaCode[0]": "",
+          "form1[0].#subform[0].FirstThreeNumbers[0]": "",
+          "form1[0].#subform[0].LastFourNumbers[0]": "",
+          "form1[0].#subform[0].International_Phone_Number[0]": "",
+          "form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+          "form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+          "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+          "form1[0].#subform[0].REMARKS[0]": "",
+          "form1[0].#subform[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[1]": "",
+          "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[1]": "",
+          "form1[0].#subform[1].REMARKS[1]": "",
+          "form1[0].#subform[1].Digital_Signature[0]": "",
+          "form1[0].#subform[1].Month[1]": "",
+          "form1[0].#subform[1].Day[1]": "",
+          "form1[0].#subform[1].Year[1]": ""
+        },
+        "rotation": 0,
+        "pages": 2
+      }
+    }
+  ]
+}

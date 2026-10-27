@@ -1,0 +1,805 @@
+{
+  "pypdf": "6.21.1",
+  "qpdf": "qpdf version 12.3.2",
+  "outputs": [
+    {
+      "file": "corpus-grants-sf424-v4-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {},
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\corpus-grants-sf424-v4-refused-fill-save.pdf\nPDF Version: 1.7 extension level 8\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "corpus-irs-fw9-2024-03-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.topmostSubform[0]": "",
+        "Input1.topmostSubform[0].Page1[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_01[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_02[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].f1_05[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_06[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_09[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_10[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_11[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_12[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_13[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_14[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_15[0]": ""
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\corpus-irs-fw9-2024-03-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "corpus-irs-fw9-2024-03-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "topmostSubform[0]": "",
+        "topmostSubform[0].Page1[0]": "",
+        "topmostSubform[0].Page1[0].f1_01[0]": "",
+        "topmostSubform[0].Page1[0].f1_02[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+        "topmostSubform[0].Page1[0].f1_05[0]": "",
+        "topmostSubform[0].Page1[0].f1_06[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+        "topmostSubform[0].Page1[0].f1_09[0]": "",
+        "topmostSubform[0].Page1[0].f1_10[0]": "",
+        "topmostSubform[0].Page1[0].f1_11[0]": "",
+        "topmostSubform[0].Page1[0].f1_12[0]": "",
+        "topmostSubform[0].Page1[0].f1_13[0]": "",
+        "topmostSubform[0].Page1[0].f1_14[0]": "",
+        "topmostSubform[0].Page1[0].f1_15[0]": ""
+      },
+      "rotation": 90,
+      "pages": 6,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\corpus-irs-fw9-2024-03-refused-fill-save.pdf\nPDF Version: 1.7 extension level 11\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "corpus-va-21-4138-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.form1[0]": "",
+        "Input1.form1[0].#subform[0]": "",
+        "Input1.form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+        "Input1.form1[0].#subform[0].Middle_Initial1[0]": "",
+        "Input1.form1[0].#subform[0].Last_Name[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+        "Input1.form1[0].#subform[0].Month[0]": "",
+        "Input1.form1[0].#subform[0].Day[0]": "",
+        "Input1.form1[0].#subform[0].Year[0]": "",
+        "Input1.form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+        "Input1.form1[0].#subform[0].AreaCode[0]": "",
+        "Input1.form1[0].#subform[0].FirstThreeNumbers[0]": "",
+        "Input1.form1[0].#subform[0].LastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].International_Phone_Number[0]": "",
+        "Input1.form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+        "Input1.form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].REMARKS[0]": ""
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\corpus-va-21-4138-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "corpus-va-21-4138-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "form1[0]": "",
+        "form1[0].#subform[0]": "",
+        "form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+        "form1[0].#subform[0].Middle_Initial1[0]": "",
+        "form1[0].#subform[0].Last_Name[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+        "form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+        "form1[0].#subform[0].Month[0]": "",
+        "form1[0].#subform[0].Day[0]": "",
+        "form1[0].#subform[0].Year[0]": "",
+        "form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+        "form1[0].#subform[0].AreaCode[0]": "",
+        "form1[0].#subform[0].FirstThreeNumbers[0]": "",
+        "form1[0].#subform[0].LastFourNumbers[0]": "",
+        "form1[0].#subform[0].International_Phone_Number[0]": "",
+        "form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+        "form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+        "form1[0].#subform[0].REMARKS[0]": "",
+        "form1[0].#subform[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[1]": "",
+        "form1[0].#subform[1].REMARKS[1]": "",
+        "form1[0].#subform[1].Digital_Signature[0]": "",
+        "form1[0].#subform[1].Month[1]": "",
+        "form1[0].#subform[1].Day[1]": "",
+        "form1[0].#subform[1].Year[1]": ""
+      },
+      "rotation": 90,
+      "pages": 2,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\corpus-va-21-4138-refused-fill-save.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "dynamic-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\dynamic-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-owner-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-owner-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-owner-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-owner-pending-concat.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-owner-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-owner-pending-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-owner-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-owner-pending-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -44\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-owner-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-owner-refused-fill-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -44\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-user-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-user-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-user-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-user-pending-concat.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-user-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-user-pending-extract.pdf\nPDF Version: 1.7\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-user-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-user-pending-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -44\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "encrypted-fill-only-user-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\encrypted-fill-only-user-refused-fill-save.pdf\nPDF Version: 1.7 extension level 8\nR = 6\nP = -44\nUser password = user\nSupplied password is user password\nextract for accessibility: allowed\nextract for any purpose: allowed\nprint low resolution: allowed\nprint high resolution: allowed\nmodify document assembly: allowed\nmodify forms: allowed\nmodify annotations: not allowed\nmodify other: not allowed\nmodify anything: not allowed\nstream encryption method: AESv3\nstring encryption method: AESv3\nfile encryption method: AESv3\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-pending-concat.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-pending-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-pending-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-rights-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-rights-pending-concat.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-rights-pending-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-rights-pending-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "hybrid-rights-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\hybrid-rights-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-corpus-irs-fw9-2024-03-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.topmostSubform[0]": "",
+        "Input1.topmostSubform[0].Page1[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_01[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_02[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+        "Input1.topmostSubform[0].Page1[0].f1_05[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_06[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+        "Input1.topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_09[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_10[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_11[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_12[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_13[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_14[0]": "",
+        "Input1.topmostSubform[0].Page1[0].f1_15[0]": ""
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-corpus-irs-fw9-2024-03-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-corpus-irs-fw9-2024-03-refused-fill-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "topmostSubform[0]": "",
+        "topmostSubform[0].Page1[0]": "",
+        "topmostSubform[0].Page1[0].f1_01[0]": "",
+        "topmostSubform[0].Page1[0].f1_02[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[0]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[1]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[2]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[3]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[4]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[5]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_03[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_1[6]": "/Off",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].f1_04[0]": "",
+        "topmostSubform[0].Page1[0].Boxes3a-b_ReadOrder[0].c1_2[0]": "/Off",
+        "topmostSubform[0].Page1[0].f1_05[0]": "",
+        "topmostSubform[0].Page1[0].f1_06[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_07[0]": "",
+        "topmostSubform[0].Page1[0].Address_ReadOrder[0].f1_08[0]": "",
+        "topmostSubform[0].Page1[0].f1_09[0]": "",
+        "topmostSubform[0].Page1[0].f1_10[0]": "",
+        "topmostSubform[0].Page1[0].f1_11[0]": "",
+        "topmostSubform[0].Page1[0].f1_12[0]": "",
+        "topmostSubform[0].Page1[0].f1_13[0]": "",
+        "topmostSubform[0].Page1[0].f1_14[0]": "",
+        "topmostSubform[0].Page1[0].f1_15[0]": ""
+      },
+      "rotation": 90,
+      "pages": 6,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-corpus-irs-fw9-2024-03-refused-fill-save.pdf\nPDF Version: 1.3 extension level 11\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-corpus-va-21-4138-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.form1[0]": "",
+        "Input1.form1[0].#subform[0]": "",
+        "Input1.form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+        "Input1.form1[0].#subform[0].Middle_Initial1[0]": "",
+        "Input1.form1[0].#subform[0].Last_Name[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+        "Input1.form1[0].#subform[0].Month[0]": "",
+        "Input1.form1[0].#subform[0].Day[0]": "",
+        "Input1.form1[0].#subform[0].Year[0]": "",
+        "Input1.form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+        "Input1.form1[0].#subform[0].AreaCode[0]": "",
+        "Input1.form1[0].#subform[0].FirstThreeNumbers[0]": "",
+        "Input1.form1[0].#subform[0].LastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].International_Phone_Number[0]": "",
+        "Input1.form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+        "Input1.form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+        "Input1.form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+        "Input1.form1[0].#subform[0].REMARKS[0]": ""
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-corpus-va-21-4138-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-corpus-va-21-4138-refused-fill-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "form1[0]": "",
+        "form1[0].#subform[0]": "",
+        "form1[0].#subform[0].Veterans_Beneficiary_First_Name[0]": "",
+        "form1[0].#subform[0].Middle_Initial1[0]": "",
+        "form1[0].#subform[0].Last_Name[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[0]": "",
+        "form1[0].#subform[0].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[0]": "",
+        "form1[0].#subform[0].VA_File_Number_If_Applicable[0]": "",
+        "form1[0].#subform[0].Month[0]": "",
+        "form1[0].#subform[0].Day[0]": "",
+        "form1[0].#subform[0].Year[0]": "",
+        "form1[0].#subform[0].Veterans_Service_Number_If_Applicable[0]": "",
+        "form1[0].#subform[0].AreaCode[0]": "",
+        "form1[0].#subform[0].FirstThreeNumbers[0]": "",
+        "form1[0].#subform[0].LastFourNumbers[0]": "",
+        "form1[0].#subform[0].International_Phone_Number[0]": "",
+        "form1[0].#subform[0].EMAIL_ADDRESS[0]": "",
+        "form1[0].#subform[0].EMAIL_ADDRESS[1]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_NumberAndStreet[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ApartmentOrUnitNumber[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_City[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_StateOrProvince[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_Country[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_FirstFiveNumbers[0]": "",
+        "form1[0].#subform[0].CurrentMailingAddress_ZIPOrPostalCode_LastFourNumbers[0]": "",
+        "form1[0].#subform[0].REMARKS[0]": "",
+        "form1[0].#subform[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERFirstThreeNumbers[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERSecondTwoNumbers[1]": "",
+        "form1[0].#subform[1].VETERANSSOCIALSECURITYNUMBERLastFourNumbers[1]": "",
+        "form1[0].#subform[1].REMARKS[1]": "",
+        "form1[0].#subform[1].Digital_Signature[0]": "",
+        "form1[0].#subform[1].Month[1]": "",
+        "form1[0].#subform[1].Day[1]": "",
+        "form1[0].#subform[1].Year[1]": ""
+      },
+      "rotation": 90,
+      "pages": 2,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-corpus-va-21-4138-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-pending-concat.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-pending-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-pending-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-refused-fill-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-rights-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-rights-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-rights-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-rights-pending-concat.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-rights-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-rights-pending-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-rights-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-rights-pending-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "modeled-hybrid-rights-refused-fill-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\modeled-hybrid-rights-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "plain-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "old"
+      },
+      "rotation": 0,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\plain-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "plain-pending-concat.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\plain-pending-concat.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "plain-pending-extract.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Input1": "",
+        "Input1.Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\plain-pending-extract.pdf\nPDF Version: 1.5\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "plain-pending-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "pending"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\plain-pending-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "plain-refused-fill-save.pdf",
+      "xfa": false,
+      "rights": false,
+      "fields": {
+        "Name": "old"
+      },
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\plain-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    },
+    {
+      "file": "xfa-only-refused-fill-save.pdf",
+      "xfa": true,
+      "rights": false,
+      "fields": {},
+      "rotation": 90,
+      "pages": 1,
+      "qpdfExit": 0,
+      "qpdfOutput": "checking C:\\jake\\git\\jaytwo.Ergonomics.Pdf\\out\\W-198\\outputs\\xfa-only-refused-fill-save.pdf\nPDF Version: 1.3\nFile is not encrypted\nFile is not linearized\nNo syntax or stream encoding errors found; the file may still contain\nerrors that qpdf cannot detect\n"
+    }
+  ]
+}

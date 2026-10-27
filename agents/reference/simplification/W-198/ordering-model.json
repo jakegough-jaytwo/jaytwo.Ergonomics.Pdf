@@ -1,0 +1,17 @@
+{
+  "kind": "counterfactual pure-state model, not engine API evidence",
+  "wrongOrderUnchanged": {
+    "xfa": true,
+    "rights": true,
+    "value": "old",
+    "rotation": 90
+  },
+  "rightsThenXfa": {
+    "xfa": false,
+    "rights": false,
+    "value": "old",
+    "rotation": 90
+  },
+  "firstChanged": true,
+  "repeatedChanged": false
+}
