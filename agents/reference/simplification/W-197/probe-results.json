@@ -1,0 +1,1136 @@
+[
+  {
+    "id": "annot-aa-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 911,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "annot-aa-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "annot-aa-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1615,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "annot-js-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 896,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "annot-js-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "annot-js-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1600,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "approval-invisible",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "approval-invisible",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "approval-invisible",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "approval-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "approval-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "approval-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "approval-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "approval-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "approval-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "budget-deep-fields",
+    "op": "extract1",
+    "status": "refused",
+    "exception": "PdfResourceLimitException",
+    "message": "The PDF assembly field traversal depth limit was exceeded.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "budget-deep-fields",
+    "op": "extract2",
+    "status": "refused",
+    "exception": "PdfResourceLimitException",
+    "message": "The PDF assembly field traversal depth limit was exceeded.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "budget-deep-fields",
+    "op": "concat",
+    "status": "refused",
+    "exception": "PdfResourceLimitException",
+    "message": "The PDF assembly field traversal depth limit was exceeded.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-aa",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-aa",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-aa",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-af",
+    "op": "extract1",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /AF.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-af",
+    "op": "extract2",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /AF.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "catalog-af",
+    "op": "concat",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /AF.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-dangling",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-dangling",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "certified-dangling",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "certified-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "certified-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p3",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "certified-p3",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "certified-p3",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "doc-js",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "doc-js",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "doc-js",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files-removed",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files-removed",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files-removed",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "embedded-files",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "engine-signed-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "engine-signed-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "engine-signed-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "fieldmdp-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1230,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "fieldmdp-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "fieldmdp-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1936,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "fileattach-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "fileattach-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "fileattach-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "fileattach-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "fileattach-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "UnsupportedAnnotation": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "fileattach-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "hybrid-xfa",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1223,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "hybrid-xfa",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "hybrid-xfa",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1929,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "link-js-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "UnsupportedLink": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "link-js-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "link-js-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "UnsupportedLink": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "link-launch-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "UnsupportedLink": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "link-launch-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "link-launch-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "UnsupportedLink": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "oc-annot-no-catalog",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 896,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "oc-annot-no-catalog",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "oc-annot-no-catalog",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1600,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ocprops",
+    "op": "extract1",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /OCProperties.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ocprops",
+    "op": "extract2",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /OCProperties.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ocprops",
+    "op": "concat",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /OCProperties.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "openaction-js",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "openaction-js",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "openaction-js",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p1",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p1",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p1",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "page-aa-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "painted-mark",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 811,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "painted-mark",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "painted-mark",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1510,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "sig-dangling-v",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "sig-dangling-v",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "sig-dangling-v",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "sig-no-byterange",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "sig-no-byterange",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "sig-no-byterange",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "timestamp-p2",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "timestamp-p2",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {
+      "SignatureWidget": 1
+    },
+    "extra": null
+  },
+  {
+    "id": "timestamp-p2",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1479,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ur3",
+    "op": "extract1",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1223,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ur3",
+    "op": "extract2",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "ur3",
+    "op": "concat",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 1929,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "widget-aa-p1",
+    "op": "extract1",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve field actions or scripts.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "widget-aa-p1",
+    "op": "extract2",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve field actions or scripts.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "widget-aa-p1",
+    "op": "concat",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly cannot preserve field actions or scripts.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "preflight-refusal",
+    "op": "workflow-file",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "destinationExists": false,
+    "leftovers": 0,
+    "extra": null
+  },
+  {
+    "id": "ocprops",
+    "op": "preflight-refusal-workflow-stream",
+    "status": "refused",
+    "exception": "PdfAssemblyNotSupportedException",
+    "message": "Assembly refuses a nonempty or unresolved /OCProperties.",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "late-destination-engine",
+    "status": "refused",
+    "exception": "IOException",
+    "message": "W197 simulated destination failure",
+    "bytes": 64,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "late-destination-workflow-stream",
+    "status": "refused",
+    "exception": "IOException",
+    "message": "W197 simulated destination failure",
+    "bytes": 0,
+    "omissions": {},
+    "extra": null
+  },
+  {
+    "id": "control",
+    "op": "late-source-read-engine",
+    "status": "refused",
+    "exception": "IOException",
+    "message": "W197 simulated late source read failure",
+    "bytes": 120,
+    "omissions": {},
+    "extra": 1
+  },
+  {
+    "id": "late-source-read",
+    "op": "workflow-file",
+    "status": "refused",
+    "exception": "IOException",
+    "destinationExists": false,
+    "leftovers": 0,
+    "extra": 1
+  },
+  {
+    "id": "control",
+    "op": "source-mutation-after-open",
+    "status": "accepted",
+    "exception": "",
+    "message": "",
+    "bytes": 780,
+    "omissions": {},
+    "extra": 1
+  }
+]

@@ -1,0 +1,1158 @@
+{
+  "versions": {
+    "pypdf": "6.21.1",
+    "python": "3.13.17",
+    "qpdf": "qpdf version 12.3.2"
+  },
+  "sourcesFailingQpdf": [
+    "budget-deep-fields.pdf"
+  ],
+  "ocAnnotationOutput": {
+    "file": "oc-annot-no-catalog-extract1.pdf",
+    "source": false,
+    "qpdf": 0,
+    "pages": 1,
+    "features": [],
+    "fields": []
+  },
+  "results": [
+    {
+      "file": "annot-aa-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AA",
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "annot-js-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "approval-invisible.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "SigField"
+      ],
+      "fields": [
+        "Approval"
+      ]
+    },
+    {
+      "file": "approval-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "SigField"
+      ],
+      "fields": [
+        "Approval"
+      ]
+    },
+    {
+      "file": "approval-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "SigField"
+      ],
+      "fields": [
+        "Approval"
+      ]
+    },
+    {
+      "file": "budget-deep-fields.pdf",
+      "source": true,
+      "qpdf": 3,
+      "pages": 2,
+      "features": [],
+      "fields": "pypdf get_fields failed: LimitReachedError"
+    },
+    {
+      "file": "catalog-aa.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AA",
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "catalog-af.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AF"
+      ],
+      "fields": []
+    },
+    {
+      "file": "certified-dangling.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Perms",
+        "SigField"
+      ],
+      "fields": [
+        "Approval"
+      ]
+    },
+    {
+      "file": "certified-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Perms",
+        "/Reference",
+        "SigField"
+      ],
+      "fields": [
+        "Certification"
+      ]
+    },
+    {
+      "file": "certified-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Perms",
+        "/Reference",
+        "SigField"
+      ],
+      "fields": [
+        "Certification"
+      ]
+    },
+    {
+      "file": "certified-p3.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Perms",
+        "/Reference",
+        "SigField"
+      ],
+      "fields": [
+        "Certification"
+      ]
+    },
+    {
+      "file": "control.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "doc-js.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-removed.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AF",
+        "/EmbeddedFiles"
+      ],
+      "fields": []
+    },
+    {
+      "file": "embedded-files.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/EmbeddedFiles"
+      ],
+      "fields": []
+    },
+    {
+      "file": "engine-signed-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "SigField"
+      ],
+      "fields": [
+        "EngineApproval"
+      ]
+    },
+    {
+      "file": "fieldmdp-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Lock",
+        "/Reference",
+        "SigField"
+      ],
+      "fields": [
+        "Approval",
+        "Name"
+      ]
+    },
+    {
+      "file": "fileattach-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "FileAttachment"
+      ],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "FileAttachment"
+      ],
+      "fields": []
+    },
+    {
+      "file": "hybrid-xfa.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/XFA"
+      ],
+      "fields": [
+        "Name"
+      ]
+    },
+    {
+      "file": "link-js-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "link-launch-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/Launch"
+      ],
+      "fields": []
+    },
+    {
+      "file": "oc-annot-no-catalog.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/OC"
+      ],
+      "fields": []
+    },
+    {
+      "file": "ocprops.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/OCProperties"
+      ],
+      "fields": []
+    },
+    {
+      "file": "openaction-js.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/JS",
+        "/JavaScript",
+        "/OpenAction"
+      ],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AA",
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AA",
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": []
+    },
+    {
+      "file": "painted-mark.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-dangling-v.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "SigField"
+      ],
+      "fields": "pypdf get_fields failed: ValueError"
+    },
+    {
+      "file": "sig-no-byterange.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "SigField"
+      ],
+      "fields": [
+        "Approval"
+      ]
+    },
+    {
+      "file": "timestamp-p2.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "SigField"
+      ],
+      "fields": [
+        "Timestamp"
+      ]
+    },
+    {
+      "file": "ur3.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/ByteRange",
+        "/Perms",
+        "/Reference"
+      ],
+      "fields": [
+        "Name"
+      ]
+    },
+    {
+      "file": "widget-aa-p1.pdf",
+      "source": true,
+      "qpdf": 0,
+      "pages": 2,
+      "features": [
+        "/AA",
+        "/JS",
+        "/JavaScript"
+      ],
+      "fields": [
+        "Name"
+      ]
+    },
+    {
+      "file": "annot-aa-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "annot-aa-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "annot-aa-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "annot-js-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "annot-js-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "annot-js-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-invisible-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-invisible-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-invisible-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "approval-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "catalog-aa-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "catalog-aa-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "catalog-aa-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-dangling-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-dangling-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-dangling-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p3-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p3-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "certified-p3-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "control-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "control-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "control-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "doc-js-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "doc-js-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "doc-js-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-removed-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-removed-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "embedded-files-removed-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "engine-signed-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "engine-signed-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "engine-signed-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fieldmdp-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": [
+        "Input2",
+        "Input2.Name"
+      ]
+    },
+    {
+      "file": "fieldmdp-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": [
+        "Input1",
+        "Input1.Name"
+      ]
+    },
+    {
+      "file": "fieldmdp-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "fileattach-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "hybrid-xfa-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": [
+        "Input2",
+        "Input2.Name"
+      ]
+    },
+    {
+      "file": "hybrid-xfa-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": [
+        "Input1",
+        "Input1.Name"
+      ]
+    },
+    {
+      "file": "hybrid-xfa-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-js-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-js-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-js-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-launch-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-launch-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "link-launch-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "oc-annot-no-catalog-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "oc-annot-no-catalog-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "oc-annot-no-catalog-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "openaction-js-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "openaction-js-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "openaction-js-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p1-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p1-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p1-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "page-aa-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "painted-mark-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "painted-mark-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "painted-mark-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-dangling-v-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-dangling-v-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-dangling-v-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-no-byterange-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-no-byterange-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "sig-no-byterange-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "timestamp-p2-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "timestamp-p2-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "timestamp-p2-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    },
+    {
+      "file": "ur3-concat.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 3,
+      "features": [],
+      "fields": [
+        "Input2",
+        "Input2.Name"
+      ]
+    },
+    {
+      "file": "ur3-extract1.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": [
+        "Input1",
+        "Input1.Name"
+      ]
+    },
+    {
+      "file": "ur3-extract2.pdf",
+      "source": false,
+      "qpdf": 0,
+      "pages": 1,
+      "features": [],
+      "fields": []
+    }
+  ]
+}

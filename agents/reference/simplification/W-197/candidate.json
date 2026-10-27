@@ -1,0 +1,2020 @@
+{
+  "rules": {
+    "certification": [
+      "input",
+      "refuse"
+    ],
+    "certification-unresolved": [
+      "input",
+      "refuse"
+    ],
+    "field-lock-signature": [
+      "input",
+      "refuse"
+    ],
+    "signature-malformed": [
+      "input",
+      "refuse"
+    ],
+    "approval-signature": [
+      "input",
+      "derivative"
+    ],
+    "document-timestamp": [
+      "input",
+      "derivative"
+    ],
+    "usage-rights": [
+      "input",
+      "derivative"
+    ],
+    "document-javascript": [
+      "input",
+      "refuse"
+    ],
+    "open-action": [
+      "input",
+      "refuse"
+    ],
+    "catalog-additional-actions": [
+      "input",
+      "refuse"
+    ],
+    "embedded-files": [
+      "input",
+      "refuse"
+    ],
+    "associated-files": [
+      "input",
+      "refuse"
+    ],
+    "optional-content": [
+      "input",
+      "refuse"
+    ],
+    "xfa-dynamic": [
+      "input",
+      "refuse"
+    ],
+    "xfa-hybrid": [
+      "input",
+      "owner-item:W-198"
+    ],
+    "tagged": [
+      "input",
+      "owner-item:W-191"
+    ],
+    "inspection-incomplete": [
+      "input",
+      "refuse"
+    ],
+    "field-action": [
+      "input",
+      "refuse"
+    ],
+    "page-additional-actions": [
+      "page",
+      "refuse"
+    ],
+    "annotation-action": [
+      "page",
+      "refuse"
+    ],
+    "file-attachment-annotation": [
+      "page",
+      "refuse"
+    ],
+    "media-annotation": [
+      "page",
+      "refuse"
+    ],
+    "optional-content-reference": [
+      "page",
+      "refuse"
+    ],
+    "link-action": [
+      "page",
+      "owner-item:W-192"
+    ]
+  },
+  "budgets": {
+    "fieldDepth": 256,
+    "fieldNodes": 100000
+  },
+  "fixtureSummary": {
+    "extract1": {
+      "denominator": 34,
+      "classified": 34,
+      "unclassified": 0,
+      "currentlyAccepted": 30,
+      "verdictsAmongCurrentlyAccepted": {
+        "refuse": 15,
+        "refuse-unless-unsigned-derivative": 7,
+        "admit": 5,
+        "admit-pending-W-198": 1,
+        "admit-pending-W-192": 2
+      },
+      "newlyRefusedCategoryHits": {
+        "annotation-action": 2,
+        "approval-signature": 10,
+        "catalog-additional-actions": 1,
+        "certification-unresolved": 1,
+        "certification": 3,
+        "document-javascript": 1,
+        "embedded-files": 1,
+        "field-lock-signature": 1,
+        "file-attachment-annotation": 1,
+        "optional-content-reference": 1,
+        "open-action": 1,
+        "page-additional-actions": 1,
+        "signature-malformed": 1,
+        "document-timestamp": 1,
+        "usage-rights": 1
+      },
+      "newlyRefusedFiles": [
+        "annot-aa-p1",
+        "annot-js-p1",
+        "approval-invisible",
+        "approval-p1",
+        "approval-p2",
+        "catalog-aa",
+        "certified-dangling",
+        "certified-p1",
+        "certified-p2",
+        "certified-p3",
+        "doc-js",
+        "embedded-files",
+        "engine-signed-p2",
+        "fieldmdp-p2",
+        "fileattach-p1",
+        "oc-annot-no-catalog",
+        "openaction-js",
+        "page-aa-p1",
+        "sig-dangling-v",
+        "sig-no-byterange",
+        "timestamp-p2",
+        "ur3"
+      ],
+      "recoverableByDerivative": [
+        "approval-invisible",
+        "approval-p1",
+        "approval-p2",
+        "engine-signed-p2",
+        "sig-no-byterange",
+        "timestamp-p2",
+        "ur3"
+      ]
+    },
+    "extract2": {
+      "denominator": 34,
+      "classified": 34,
+      "unclassified": 0,
+      "currentlyAccepted": 30,
+      "verdictsAmongCurrentlyAccepted": {
+        "admit": 10,
+        "refuse-unless-unsigned-derivative": 7,
+        "refuse": 12,
+        "admit-pending-W-198": 1
+      },
+      "newlyRefusedCategoryHits": {
+        "approval-signature": 10,
+        "catalog-additional-actions": 1,
+        "certification-unresolved": 1,
+        "certification": 3,
+        "document-javascript": 1,
+        "embedded-files": 1,
+        "field-lock-signature": 1,
+        "file-attachment-annotation": 1,
+        "open-action": 1,
+        "page-additional-actions": 1,
+        "signature-malformed": 1,
+        "document-timestamp": 1,
+        "usage-rights": 1
+      },
+      "newlyRefusedFiles": [
+        "approval-invisible",
+        "approval-p1",
+        "approval-p2",
+        "catalog-aa",
+        "certified-dangling",
+        "certified-p1",
+        "certified-p2",
+        "certified-p3",
+        "doc-js",
+        "embedded-files",
+        "engine-signed-p2",
+        "fieldmdp-p2",
+        "fileattach-p2",
+        "openaction-js",
+        "page-aa-p2",
+        "sig-dangling-v",
+        "sig-no-byterange",
+        "timestamp-p2",
+        "ur3"
+      ],
+      "recoverableByDerivative": [
+        "approval-invisible",
+        "approval-p1",
+        "approval-p2",
+        "engine-signed-p2",
+        "sig-no-byterange",
+        "timestamp-p2",
+        "ur3"
+      ]
+    }
+  },
+  "corpusSummary": {
+    "combine-all": {
+      "denominator": 51,
+      "classified": 50,
+      "unclassified": 1,
+      "currentlyAccepted": 30,
+      "verdictsAmongCurrentlyAccepted": {
+        "admit-pending-W-191": 6,
+        "admit": 19,
+        "refuse": 4,
+        "refuse-unless-unsigned-derivative": 1
+      },
+      "newlyRefusedCategoryHits": {
+        "approval-signature": 2,
+        "certification": 1,
+        "field-lock-signature": 1,
+        "document-javascript": 2,
+        "usage-rights": 2,
+        "embedded-files": 1
+      },
+      "newlyRefusedFiles": [
+        "gpo-bills-118hr815enr",
+        "irs-fw9-2024-03",
+        "pyhanko-signed",
+        "qpdf-attachment",
+        "va-21-4138"
+      ],
+      "recoverableByDerivative": [
+        "pyhanko-signed"
+      ]
+    },
+    "combine-page1": {
+      "denominator": 51,
+      "classified": 50,
+      "unclassified": 1,
+      "currentlyAccepted": 30,
+      "verdictsAmongCurrentlyAccepted": {
+        "admit-pending-W-191": 6,
+        "admit": 19,
+        "refuse": 4,
+        "refuse-unless-unsigned-derivative": 1
+      },
+      "newlyRefusedCategoryHits": {
+        "approval-signature": 2,
+        "certification": 1,
+        "field-lock-signature": 1,
+        "document-javascript": 2,
+        "usage-rights": 2,
+        "embedded-files": 1
+      },
+      "newlyRefusedFiles": [
+        "gpo-bills-118hr815enr",
+        "irs-fw9-2024-03",
+        "pyhanko-signed",
+        "qpdf-attachment",
+        "va-21-4138"
+      ],
+      "recoverableByDerivative": [
+        "pyhanko-signed"
+      ]
+    }
+  },
+  "fixtures": [
+    {
+      "id": "annot-aa-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "annotation-action"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "annot-aa-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "annot-js-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "annotation-action"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "annot-js-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "approval-invisible",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "approval-invisible",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "approval-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "approval-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "approval-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "approval-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "budget-deep-fields",
+      "op": "extract1",
+      "current": "refused",
+      "currentException": "PdfResourceLimitException",
+      "omissions": {},
+      "categories": [
+        "inspection-incomplete"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "budget-deep-fields",
+      "op": "extract2",
+      "current": "refused",
+      "currentException": "PdfResourceLimitException",
+      "omissions": {},
+      "categories": [
+        "inspection-incomplete"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "catalog-aa",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "catalog-additional-actions"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "catalog-aa",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "catalog-additional-actions"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "catalog-af",
+      "op": "extract1",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "associated-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "catalog-af",
+      "op": "extract2",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "associated-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-dangling",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature",
+        "certification-unresolved"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-dangling",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature",
+        "certification-unresolved"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p3",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "certified-p3",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature",
+        "certification"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "control",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "control",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "doc-js",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "document-javascript"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "doc-js",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "document-javascript"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "embedded-files-removed",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "embedded-files-removed",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "embedded-files",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "embedded-files",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "engine-signed-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "engine-signed-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "fieldmdp-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature",
+        "field-lock-signature"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "fieldmdp-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature",
+        "field-lock-signature"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "fileattach-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "UnsupportedAnnotation": 1
+      },
+      "categories": [
+        "file-attachment-annotation"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "fileattach-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "fileattach-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "fileattach-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "UnsupportedAnnotation": 1
+      },
+      "categories": [
+        "file-attachment-annotation"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "hybrid-xfa",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "xfa-hybrid"
+      ],
+      "verdict": "admit-pending-W-198"
+    },
+    {
+      "id": "hybrid-xfa",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "xfa-hybrid"
+      ],
+      "verdict": "admit-pending-W-198"
+    },
+    {
+      "id": "link-js-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "UnsupportedLink": 1
+      },
+      "categories": [
+        "link-action"
+      ],
+      "verdict": "admit-pending-W-192"
+    },
+    {
+      "id": "link-js-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "link-launch-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "UnsupportedLink": 1
+      },
+      "categories": [
+        "link-action"
+      ],
+      "verdict": "admit-pending-W-192"
+    },
+    {
+      "id": "link-launch-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "oc-annot-no-catalog",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "optional-content-reference"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "oc-annot-no-catalog",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "ocprops",
+      "op": "extract1",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "optional-content"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "ocprops",
+      "op": "extract2",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "optional-content"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "openaction-js",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "open-action"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "openaction-js",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "open-action"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "page-aa-p1",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "page-additional-actions"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "page-aa-p1",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "page-aa-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "page-aa-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "page-additional-actions"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "painted-mark",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "painted-mark",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "id": "sig-dangling-v",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "signature-malformed"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "sig-dangling-v",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "signature-malformed"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "sig-no-byterange",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "sig-no-byterange",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "timestamp-p2",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "document-timestamp"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "timestamp-p2",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {
+        "SignatureWidget": 1
+      },
+      "categories": [
+        "document-timestamp"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "ur3",
+      "op": "extract1",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "usage-rights"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "ur3",
+      "op": "extract2",
+      "current": "accepted",
+      "currentException": "",
+      "omissions": {},
+      "categories": [
+        "usage-rights"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "id": "widget-aa-p1",
+      "op": "extract1",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "field-action"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "id": "widget-aa-p1",
+      "op": "extract2",
+      "current": "refused",
+      "currentException": "PdfAssemblyNotSupportedException",
+      "omissions": {},
+      "categories": [
+        "field-action"
+      ],
+      "verdict": "refuse"
+    }
+  ],
+  "corpus": [
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "This encryption is not supported.",
+      "error": "NotImplementedError: only Standard PDF encryption handler is available"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice-pyhanko-pubkey.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "This encryption is not supported.",
+      "error": "NotImplementedError: only Standard PDF encryption handler is available"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-invoice.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/chrome-ledger-2000p.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "approval-signature",
+        "field-action",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b-pyhanko-approved.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "approval-signature",
+        "field-action",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/cms-40b.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/edge-handbook.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/excel-invoice.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "embedded-files",
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/faa-8710-1.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "embedded-files",
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/frb-beige-book-2024-01.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "approval-signature",
+        "certification",
+        "field-lock-signature"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/gpo-bills-118hr815enr.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "approval-signature",
+        "certification",
+        "field-lock-signature"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Dynamic or XFA-only forms cannot be extracted.",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-dynamic"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/grants-sf424-v4.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Dynamic or XFA-only forms cannot be extracted.",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-dynamic"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/imagemagick-scan.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/inkscape-network.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /OCProperties.",
+      "categories": [
+        "document-javascript",
+        "embedded-files",
+        "optional-content",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f1040es-2026.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /OCProperties.",
+      "categories": [
+        "document-javascript",
+        "embedded-files",
+        "optional-content",
+        "tagged",
+        "usage-rights"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-f5500-2005.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-hybrid"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/irs-fw9-2024-03.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-hybrid"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-calc-ledger.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form-pypdf-inherited.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-form.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /AF.",
+      "categories": [
+        "associated-files",
+        "embedded-files",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-hybrid-pdfa3.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /AF.",
+      "categories": [
+        "associated-files",
+        "embedded-files",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/libreoffice-memo-rc4.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/matplotlib-report.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/ms-print-to-pdf.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-rm-19930086000.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/naca-tn2350.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nbs-circular-1.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /OCProperties.",
+      "categories": [
+        "optional-content",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/nist-sp1271.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /OCProperties.",
+      "categories": [
+        "optional-content",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "approval-signature",
+        "certification",
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306-pyhanko-certified.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "approval-signature",
+        "certification",
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/opm-of306.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/powerpoint-photos.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/uscis-i9-2025.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve field actions or scripts.",
+      "categories": [
+        "field-action",
+        "tagged"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-hybrid"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/va-21-4138.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "document-javascript",
+        "tagged",
+        "usage-rights",
+        "xfa-hybrid"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/corpus/word-report.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "tagged"
+      ],
+      "verdict": "admit-pending-W-191"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r2.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r3.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r4.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r5.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/defects/pypdf-unsigned-p-r6.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /AF.",
+      "categories": [
+        "associated-files",
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-invoice/factur-x.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly refuses a nonempty or unresolved /AF.",
+      "categories": [
+        "associated-files",
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/LinkAnnot-appearances.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions-with-base.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/list-of-uri-actions.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/focused-assembly-links/uri-ismap-test.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-sigfield.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+      "op": "combine-page1",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pyhanko-signed.pdf",
+      "op": "combine-all",
+      "current": "accepted-with-reported-omissions",
+      "currentReason": "",
+      "categories": [
+        "approval-signature"
+      ],
+      "verdict": "refuse-unless-unsigned-derivative"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve a default appearance or its font resources.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-acroform.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Assembly cannot preserve a default appearance or its font resources.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-base.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "An inspected assembly dictionary cannot be resolved.",
+      "categories": [
+        "inspection-incomplete"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/pypdf-dangling.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "An inspected assembly dictionary cannot be resolved.",
+      "categories": [
+        "inspection-incomplete"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-attachment.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [
+        "embedded-files"
+      ],
+      "verdict": "refuse"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+      "op": "combine-page1",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-encrypted.pdf",
+      "op": "combine-all",
+      "current": "refused",
+      "currentReason": "Encrypted input requires AllowUnencryptedOutput.",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+      "op": "combine-page1",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    },
+    {
+      "path": "test/jaytwo.Pdf.Tests/Fixtures/qpdf-object-streams.pdf",
+      "op": "combine-all",
+      "current": "accepted",
+      "currentReason": "",
+      "categories": [],
+      "verdict": "admit"
+    }
+  ]
+}

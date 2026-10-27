@@ -1,0 +1,194 @@
+[
+  {
+    "id": "control",
+    "sha256": "b8e3d28d513eeaeaea9a89dfb758ecc4df7d67cdab9998b6c9fb1fe85c2b62b0",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "painted-mark",
+    "sha256": "adaae29b475faf453607d7b116bc01abc96d9770af91ebf2d8f2d67e01698a89",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "approval-p1",
+    "sha256": "16580968c073bc64df8cab305959d3ca368901e06dba7d28af9641d75442d486",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "approval-p2",
+    "sha256": "854a2b47ea53f68b3b546e65d992a7a190fbdff543575d4a8652e60d19dbbb97",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "approval-invisible",
+    "sha256": "139f2530c6904aac754f2f0f604b0509c2f85cc58bb2a74e60224ec991f66969",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "certified-p1",
+    "sha256": "9428f38ed5d8d01b1ff60c70f62a9ab1b9207eb9c415bb7706ee946c6ff0f17e",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "certified-p2",
+    "sha256": "2068b336c5f91ab9ea28e9ab32d3181a72e8a9408ccab617359d3cd62d30cd55",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "certified-p3",
+    "sha256": "8b1e4f95f741402f0e2e29eb452fc2653c0d118fe4c335cb66a1fdf4797a5e10",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "certified-dangling",
+    "sha256": "be3ae976339fb4a1ebc14af51cf8350f72e557b714c3fc818bd123fc76e3db10",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "timestamp-p2",
+    "sha256": "d2371a73bd2a54981159fbb9261a66665db91f8cb7c1dfb92303f2028a1ae1d8",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "fieldmdp-p2",
+    "sha256": "90963f6b082304543ccb44519aeb86c93babb180bd8d146b1c7f12fc58fffbe6",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "ur3",
+    "sha256": "136a6fb53ff31e6acb4fa707822fc2f55667b9790fd11dcd720f1b397be59be4",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "sig-dangling-v",
+    "sha256": "d4b5cd68b1bc56bf2e79f253d6417e71cb60e63545c60ae6335971dd8beb0989",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "sig-no-byterange",
+    "sha256": "ac6dea2b76394cd0024101649daf8a30f2f53c1375c6493ea4aa6c08e4db837f",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "doc-js",
+    "sha256": "30a3989fc375f5f4f75fcd54a29cf4de4193dd68a769270bf20312d76aa866dc",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "openaction-js",
+    "sha256": "2820dd7b44f75f3bf9d3b6094481d4697c58bd11a641e5456b1030b7c1b16a25",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "catalog-aa",
+    "sha256": "0fe5e6423ec24f083cebb439cc25c48ad3d32020ab29ae17908232f3b510891b",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "page-aa-p1",
+    "sha256": "ea4a749021cffc31777158330c4d5a7a90e2c687d50a1534ff4ca6204d404aa1",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "page-aa-p2",
+    "sha256": "aef7774794690b56fe6beb756b2968aa4ab4e68574d9348ee53c8b48f1925d58",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "annot-aa-p1",
+    "sha256": "501ea0eb63b1488d2bfb49976c4bbe3040e1cfa274a2aca6e9c93d039eb449d2",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "annot-js-p1",
+    "sha256": "d1d1a31e020ed7a57dec8c30bb662eacf5f697731e33a2c29828eff8b7024e3a",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "link-js-p1",
+    "sha256": "eb1411df681eb3545401ca77183c0b4fdee03b6863ab0586c0c2a897667d38e2",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "link-launch-p1",
+    "sha256": "f0bfbd50d47709770dd464cedd98e117345545141209cabb9f4b3ac8e03dc735",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "widget-aa-p1",
+    "sha256": "2b48078a1b2b625e065700512c7f54f4be8d6f438d135f918e68a0e557c8717e",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "embedded-files",
+    "sha256": "7cd57c97981729d882c0d350a26535b99a0cb3c75e7201344cfd8b8972902ae0",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "fileattach-p1",
+    "sha256": "c4a39566cbf86928d7ef160711ee9876aa55c96a58c4fd08e0c54ff6ff676af7",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "fileattach-p2",
+    "sha256": "b20f6aab4bcb88fb930036a990952225db63b20cce0e3ed064b116799c675858",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "catalog-af",
+    "sha256": "bcbf4797a3ea374448d6f374319ee2bcc1efae91876029a6284ec96494f52e69",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "ocprops",
+    "sha256": "dfddc7dc0f6ac7505d5deafcbdf5fac1f52a5eda76bf00ce7a6c2ebf0d0b7212",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "oc-annot-no-catalog",
+    "sha256": "18fd455053c90e7530a788becd47874c24e3fbe844d6a3f69643a7ac47e8640a",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "hybrid-xfa",
+    "sha256": "dc5032012657f06e590726a59100fdeb7d6d0e41f01b10ffdeb559286e2f34a7",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  },
+  {
+    "id": "budget-deep-fields",
+    "sha256": "ae1857637953f3653c2909c7a0ccad24b3d5070091bbc75fb62bfc0013deecd9",
+    "rights": "MIT (repository)",
+    "producer": "pypdf original generate.py"
+  }
+]
