@@ -14,7 +14,8 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | AcroForm inspection | Read field names, types, values, and widget geometries. |
 | AcroForm population and export | Populate supported text, checkbox, radio, and choice fields, individually or in bulk; export form values. |
 | AcroForm flattening | Flatten eligible editable fields into page content, subject to appearance, permission, and signature restrictions. |
-| XFA-bearing forms | Classify hybrid and XFA-only forms and handle them under explicit operation-specific refusal or XFA-removal rules. XFA packet editing is excluded. |
+| XFA-bearing forms | Classify hybrid and XFA-only forms and apply operation-specific acceptance, refusal, and removal rules, including supported use of hybrid forms' AcroForm representation. XFA packet editing is excluded; removal must be an explicitly documented consequence. |
+| PDF/A inputs | Accept PDF/A inputs under normal operation contracts and preserve relevant structures where practical. Conversion, validation, and guarantees of creating or preserving conformance are excluded, including PDF/A-3. |
 | Page rotation | Change page rotation in multiples of 90 degrees. |
 | Page extraction | Create a new PDF from selected pages of documents the operation contract supports, preserving the requested order and allowing repeated and reordered pages. Which document structures survive, are dropped, or cause refusal is set by that contract. |
 | Concatenation | Combine selected pages from supported existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. Preservation and refusal rules are set by the operation contract. |
@@ -59,16 +60,16 @@ These are product boundaries, independent of implementation status. Changing the
 - Redaction, cryptographic signature validation, and general PDF repair.
 - XFA packet editing.
 - JavaScript authoring, editing, or execution.
-- PDF/A conversion and PDF/A conformance claims, including PDF/A-3.
+- PDF/A conversion, validation, and guarantees of creating or preserving conformance, including PDF/A-3.
 - Public-key encryption and adding encryption to a file.
 - General annotation editing and page-level file attachment annotations.
 - Rewriting an input file in place. Incrementally appending to a source is a separate supported operation.
 
 Limited blank-page creation and image placement for image-to-PDF conversion, image stamping, and image watermarking are the explicit image exception adopted in [D-68](../agents/decisions/D-68.md). General stamping or watermarking beyond that image capability is not included.
 
-XFA classification, refusal, or removal in support of an approved AcroForm operation does not make XFA editing a product capability. The operation contract determines when XFA must be refused or removed; current rules remain in the behavior reference.
+XFA classification and operation-specific acceptance, refusal, and removal include supported use of hybrid forms' AcroForm representation. XFA packet editing remains excluded. The operation contract must explicitly document removal as a consequence wherever it occurs; current rules remain in the behavior reference.
 
-Document-level attachments and associated-file keys do not establish PDF/A-3 conformance. No PDF/A conversion, conformance verification, or guarantee that edits preserve PDF/A conformance is offered. Necessary internal functionality for supported workflows does not create additional public capabilities.
+PDF/A inputs are accepted under normal operation contracts, with relevant structures preserved where practical. This does not guarantee that every PDF/A input supports every operation or that output creates or preserves conformance. Attachment support and associated-file keys do not imply PDF/A-3 compliance. Necessary internal functionality for supported workflows does not create additional public capabilities.
 
 ## Resource and failure contracts
 
