@@ -1,0 +1,340 @@
+{
+  "revision": "0b042d785e070ae8791afe6d822daec24b8e6c6e",
+  "public_async_members_jaytwo.Pdf": {
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+      "OpenAsync",
+      "OpenAsync",
+      "OpenAsync",
+      "OpenAsync"
+    ],
+    "src/jaytwo.Pdf/PdfDocumentEditor.cs": [
+      "SaveIncrementalAsync",
+      "SaveIncrementalAsync",
+      "SignAsync",
+      "SignAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfCursor.cs": [
+      "PeekByteAsync",
+      "ReadByteAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfDecodedByteLimitStream.cs": [
+      "ReadAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfLexer.cs": [
+      "PeekAsync",
+      "NextAsync",
+      "PeekKeywordAsync",
+      "SkipWhitespaceAsync",
+      "ReadByteAsync",
+      "PeekByteAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfParser.cs": [
+      "ParseValueAsync",
+      "ParseIndirectAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfSliceStream.cs": [
+      "ReadAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfStreamSource.cs": [
+      "ReadAsync"
+    ],
+    "src/jaytwo.Pdf/Internal/PdfXrefReader.cs": [
+      "ParseClassicAsync"
+    ],
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": [
+      "CreateContentsAsync"
+    ],
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": [
+      "CreateContentsAsync"
+    ],
+    "src/jaytwo.Pdf/Signatures/HttpTimestampAuthority.cs": [
+      "GetTimeStampTokenAsync"
+    ]
+  },
+  "public_async_member_count_jaytwo.Pdf": 25,
+  "public_async_members_jaytwo.Ergonomics.Pdf": {
+    "src/jaytwo.Ergonomics.Pdf/PdfCombineWorkflow.cs": [
+      "SaveAsync",
+      "SaveAsync"
+    ],
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflow.cs": [
+      "ExportFormValuesAsync"
+    ],
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.cs": [
+      "SaveAsync",
+      "SaveAsync",
+      "AppendToSourceAsync"
+    ],
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": [
+      "SignAsync",
+      "SignAsync",
+      "SignAsync",
+      "SignAsync",
+      "TimestampAsync",
+      "TimestampAsync"
+    ],
+    "src/jaytwo.Ergonomics.Pdf/Internal/WorkflowFiles.cs": [
+      "CopyAsync"
+    ],
+    "src/jaytwo.Ergonomics.Pdf/Internal/WorkflowInput.cs": [
+      "OpenAsync"
+    ]
+  },
+  "public_async_member_count_jaytwo.Ergonomics.Pdf": 14,
+  "valuetask_mentions": {
+    "src/jaytwo.Pdf/IPdfSource.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfCursor.cs": 7,
+    "src/jaytwo.Pdf/Internal/PdfDocumentLoader.cs": 8,
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": 2,
+    "src/jaytwo.Pdf/Internal/PdfLexer.cs": 14,
+    "src/jaytwo.Pdf/Internal/PdfObjectStore.cs": 10,
+    "src/jaytwo.Pdf/Internal/PdfParser.cs": 6,
+    "src/jaytwo.Pdf/Internal/PdfResolver.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfStreamSource.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfSync.cs": 2,
+    "src/jaytwo.Pdf/Internal/PdfXrefReader.cs": 2,
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": 2,
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": 1,
+    "src/jaytwo.Pdf/Signatures/HttpTimestampAuthority.cs": 1,
+    "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs": 1,
+    "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs": 1,
+    "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs": 1,
+    "src/jaytwo.Pdf/Signatures/TimestampAuthorityCall.cs": 1
+  },
+  "useAsync_mentions": {
+    "src/jaytwo.Pdf/Internal/PdfCursor.cs": 10,
+    "src/jaytwo.Pdf/Internal/PdfDocumentLoader.cs": 32,
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": 2,
+    "src/jaytwo.Pdf/Internal/PdfIncrementalWriter.cs": 7,
+    "src/jaytwo.Pdf/Internal/PdfLexer.cs": 3,
+    "src/jaytwo.Pdf/Internal/PdfObjectStore.cs": 17,
+    "src/jaytwo.Pdf/Internal/PdfParser.cs": 6,
+    "src/jaytwo.Pdf/Internal/PdfResolver.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": 4,
+    "src/jaytwo.Pdf/Internal/PdfSync.cs": 1
+  },
+  "await_mentions": {
+    "src/jaytwo.Pdf/PdfDocument.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfCursor.cs": 3,
+    "src/jaytwo.Pdf/Internal/PdfDecodedByteLimitStream.cs": 2,
+    "src/jaytwo.Pdf/Internal/PdfDocumentLoader.cs": 25,
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfIncrementalWriter.cs": 5,
+    "src/jaytwo.Pdf/Internal/PdfLexer.cs": 37,
+    "src/jaytwo.Pdf/Internal/PdfObjectStore.cs": 18,
+    "src/jaytwo.Pdf/Internal/PdfParser.cs": 31,
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": 3,
+    "src/jaytwo.Pdf/Internal/PdfSliceStream.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfStreamSource.cs": 3,
+    "src/jaytwo.Pdf/Internal/PdfSync.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfXrefReader.cs": 12,
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": 3,
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": 1,
+    "src/jaytwo.Pdf/Signatures/HttpTimestampAuthority.cs": 6,
+    "src/jaytwo.Pdf/Signatures/TimestampAuthorityCall.cs": 2
+  },
+  "pdfsync_result_mentions": {
+    "src/jaytwo.Pdf/Internal/PdfAssemblyForms.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfCursor.cs": 2,
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfObjectStore.cs": 4,
+    "src/jaytwo.Pdf/Internal/PdfParser.cs": 3,
+    "src/jaytwo.Pdf/Internal/PdfSignatureInspector.cs": 10
+  },
+  "totals": {
+    "valuetask_mentions": 63,
+    "useAsync_mentions": 83,
+    "await_mentions": 155,
+    "pdfsync_result_mentions": 21
+  },
+  "signer_timestamp_interface_mentions": {
+    "src/jaytwo.Pdf/PdfDocumentEditor.cs": 10,
+    "src/jaytwo.Pdf/Internal/PdfEngine.cs": 4,
+    "src/jaytwo.Pdf/Internal/PdfSignatureSeedValues.cs": 1,
+    "src/jaytwo.Pdf/Internal/PdfSigner.cs": 1,
+    "src/jaytwo.Pdf/Signatures/CmsDetachedSignatureProvider.cs": 8,
+    "src/jaytwo.Pdf/Signatures/DocTimeStampSignatureProvider.cs": 3,
+    "src/jaytwo.Pdf/Signatures/HttpTimestampAuthority.cs": 1,
+    "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs": 3,
+    "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs": 1,
+    "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs": 1,
+    "src/jaytwo.Pdf/Signatures/TimestampAuthorityCall.cs": 2,
+    "src/jaytwo.Ergonomics.Pdf/PdfWorkflowBuilder.Signing.cs": 25
+  },
+  "signer_async_signatures": {
+    "src/jaytwo.Pdf/Signatures/IPdfExternalSigner.cs": [
+      "SignHashAsync"
+    ],
+    "src/jaytwo.Pdf/Signatures/IPdfSignatureProvider.cs": [
+      "CreateContentsAsync"
+    ],
+    "src/jaytwo.Pdf/Signatures/ITimestampAuthority.cs": [
+      "GetTimeStampTokenAsync"
+    ]
+  },
+  "tests_with_async_mentions": {
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowAttachmentTests.cs": {
+      "asyncMentions": 1,
+      "lines": 246
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowCombineTests.cs": {
+      "asyncMentions": 5,
+      "lines": 268
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowDescriptionTests.cs": {
+      "asyncMentions": 4,
+      "lines": 179
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowFileSaveTests.cs": {
+      "asyncMentions": 10,
+      "lines": 470
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowOutputTests.cs": {
+      "asyncMentions": 13,
+      "lines": 193
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowOwnershipTests.cs": {
+      "asyncMentions": 5,
+      "lines": 117
+    },
+    "test/jaytwo.Ergonomics.Pdf.Tests/WorkflowSigningTests.cs": {
+      "asyncMentions": 12,
+      "lines": 499
+    },
+    "test/jaytwo.Pdf.Tests/AsyncTests.cs": {
+      "asyncMentions": 9,
+      "lines": 783
+    },
+    "test/jaytwo.Pdf.Tests/EditorTests.cs": {
+      "asyncMentions": 1,
+      "lines": 71
+    },
+    "test/jaytwo.Pdf.Tests/HttpTimestampTimeoutTests.cs": {
+      "asyncMentions": 4,
+      "lines": 264
+    },
+    "test/jaytwo.Pdf.Tests/NewFileWriterTests.cs": {
+      "asyncMentions": 1,
+      "lines": 417
+    },
+    "test/jaytwo.Pdf.Tests/PadesSignatureTests.cs": {
+      "asyncMentions": 1,
+      "lines": 228
+    },
+    "test/jaytwo.Pdf.Tests/SignatureSeedValueTests.cs": {
+      "asyncMentions": 2,
+      "lines": 329
+    },
+    "test/jaytwo.Pdf.Tests/SignatureTests.cs": {
+      "asyncMentions": 1,
+      "lines": 2352
+    },
+    "test/jaytwo.Pdf.Tests/SigningInteropTests.cs": {
+      "asyncMentions": 5,
+      "lines": 1264
+    },
+    "test/jaytwo.Pdf.Tests/SigningRollbackTests.cs": {
+      "asyncMentions": 1,
+      "lines": 323
+    },
+    "test/jaytwo.Pdf.Tests/SourceTests.cs": {
+      "asyncMentions": 9,
+      "lines": 347
+    },
+    "test/jaytwo.Pdf.Tests/TestPdfSource.cs": {
+      "asyncMentions": 1,
+      "lines": 113
+    }
+  },
+  "AsyncTests": {
+    "lines": 783,
+    "facts_and_theories": 14
+  },
+  "public_members_by_file_not_verified_by_probe": {
+    "src/jaytwo.Pdf/PdfDocument.cs": [
+      "AcroForm",
+      "Attachments",
+      "AuthenticationRole",
+      "Edit",
+      "IDisposable",
+      "Metadata",
+      "Open",
+      "OpenAsync",
+      "PageCount",
+      "Pages",
+      "Permissions",
+      "Revisions",
+      "Signatures"
+    ],
+    "src/jaytwo.Pdf/PdfDocumentEditor.cs": [
+      "AcroForm",
+      "AllowBreakingSignatures",
+      "Attachments",
+      "Concatenate",
+      "ExtractPages",
+      "IDisposable",
+      "Metadata",
+      "Pages",
+      "SaveIncremental",
+      "SaveIncrementalAsync",
+      "Sign",
+      "SignAsync"
+    ],
+    "src/jaytwo.Pdf/AcroForm/PdfAcroForm.cs": [
+      "Export",
+      "Fields",
+      "GetFields",
+      "HasFields",
+      "IsHybridXfa",
+      "IsXfaOnly",
+      "NeedAppearances",
+      "PdfAcroForm"
+    ],
+    "src/jaytwo.Pdf/AcroForm/PdfAcroFormEditor.cs": [
+      "Fill",
+      "Flatten",
+      "PdfAcroFormEditor"
+    ],
+    "src/jaytwo.Pdf/Metadata/PdfMetadata.cs": [
+      "Author",
+      "CreationDate",
+      "Creator",
+      "HasXmp",
+      "Keys",
+      "Keywords",
+      "ModificationDate",
+      "OpenXmp",
+      "PdfMetadata",
+      "Producer",
+      "Subject",
+      "Title"
+    ],
+    "src/jaytwo.Pdf/Metadata/PdfMetadataEditor.cs": [
+      "Author",
+      "CreationDate",
+      "Creator",
+      "Keywords",
+      "ModificationDate",
+      "PdfMetadataEditor",
+      "Producer",
+      "SetXmp",
+      "Subject",
+      "Title"
+    ],
+    "src/jaytwo.Pdf/Attachments/PdfAttachmentCollection.cs": [
+      "Count",
+      "GetEnumerator",
+      "TryGetValue"
+    ],
+    "src/jaytwo.Pdf/Attachments/PdfAttachmentCollectionEditor.cs": [
+      "Add",
+      "PdfAttachmentCollectionEditor",
+      "Remove"
+    ],
+    "src/jaytwo.Pdf/PdfPageEditor.cs": [
+      "PdfPageEditor",
+      "Rotation"
+    ]
+  }
+}

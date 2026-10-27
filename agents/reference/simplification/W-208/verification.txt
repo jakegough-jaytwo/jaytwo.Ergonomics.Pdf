@@ -1,0 +1,21 @@
+W-208 verification (research item; no runtime, test, build or protected-file change)
+Baseline revision: 0b042d785e070ae8791afe6d822daec24b8e6c6e (W-210 completion commit), clean source tree; only W-208 records and reference material changed.
+
+Ran and passed:
+- make agents-check (before activation and before completion): OK, 217 work items, 68 decisions.
+- gen_fixture.py -> 51,960,955-byte fixture, SHA-256 88327ec9f56e167d19bf51ee396ec3c44b2c686b501aac4f9e6e02d7dffd537d;
+  qpdf 12.3.2 --check: no syntax or stream encoding errors.
+- & .\agents\reference\simplification\W-208\run.ps1 (PowerShell tool, default execution policy):
+  dotnet build of jaytwo.Pdf and jaytwo.Ergonomics.Pdf (net10.0 Release, --no-restore): 0 warnings, 0 errors;
+  disposable probe build and run (public API only) -> observations.jsonl; execution.json pins SDK 10.0.402, OS, assembly and probe SHA-256.
+- inventory.py -> inventory.json (lexical counts over tracked .cs files).
+- graphify update .
+
+Measured: read counts, bytes, allocation, cancellation, blocked-thread peaks and wall time in observations.jsonl (findings §3).
+Inferred, not measured: effort ranges; remote-service behavior; the truly asynchronous Stream case; a capability-flag refusal;
+cause of the extraction read amplification; members listed as sharing a measured path; the retention conflict with D-49 item 4.
+Concurrency rows were noisy: three runs were observed, only the last is retained in observations.jsonl; earlier values are quoted as ranges.
+
+Not run and not claimed: full test suite, framework matrix, fuzz campaign, Docker gate, a real remote or SMB source, gigabyte files,
+net48/netstandard2.0/Linux, peak-memory measurement, signing or encrypted fixtures, independent review.
+A bypass of the execution policy was not used; the run script was invoked as is. W-188's missing review attachments remain a gap.
