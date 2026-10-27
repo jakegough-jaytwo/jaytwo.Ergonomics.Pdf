@@ -10,6 +10,7 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 
 | Area | Intended coverage |
 | --- | --- |
+| Document opening | Open synchronously or asynchronously from streams and stable random-access sources, with explicit ownership and authentication outcomes. |
 | Document inspection | Read page count, page geometries, and rotation. |
 | AcroForm inspection | Read field names, types, values, and widget geometries. |
 | AcroForm population and export | Populate supported text, checkbox, radio, and choice fields, individually or in bulk; export form values. |
@@ -20,14 +21,15 @@ The [Project Charter](CHARTER.md) defines why the project exists and its governi
 | Page extraction | Create a new PDF from selected pages of documents the operation contract supports, preserving the requested order and allowing repeated and reordered pages. Which document structures survive, are dropped, or cause refusal is set by that contract. |
 | Concatenation | Combine selected pages from supported existing PDFs into a new PDF, preserving the requested input and page order and allowing repeated inputs and pages. Preservation and refusal rules are set by the operation contract. |
 | Incremental saves | Save supported edits as incremental updates, preserving the original document bytes as a prefix. |
-| Binary attachments | Read, add, replace, and remove document-level embedded files. |
+| Binary attachments | Add, replace, and remove document-level embedded files; provide streaming reads and extraction, with caller-controlled limits and filename safety helpers. |
 | User metadata | Read and update document information, including authorship information and custom key/value properties, and XMP metadata. |
 | Image placement | Place supported images on existing pages with position, size, rotation, opacity, and foreground/background placement, for image stamping and image watermarking. |
 | Image to PDF | Create a new PDF with specified page dimensions and place a supported image on the page. |
 | Password-protected PDFs | Open and modify supported password-protected PDFs under documented authentication and permission rules. |
 | Security permissions | Read and change supported document security permissions with appropriate authorization. |
-| Digital signing | Sign PDFs using host-controlled keys, with optional trusted timestamps; append document timestamps. |
+| Digital signing | Sign PDFs using host-controlled keys in detached CMS and PAdES B-B/B-T formats, with optional RFC 3161 signature timestamps; append document timestamps. |
 | Signature and revision inspection | Inspect signatures and the claims they embed, and list document revisions, without cryptographic validation or trust assessment. The depth of CMS content and revision or coverage detail reported is set by the operation contract. |
+| Workflow ergonomics | Compose supported operations with sensible defaults and operation ordering; provide form-export shortcuts and file publication. |
 
 ### Image inputs and shortcuts
 
@@ -40,6 +42,8 @@ Detailed contracts must define JPEG restrictions, PNG transparency and color-pro
 ## Support boundaries
 
 Capability families do not promise comprehensive support for every PDF feature or variation. Support is operation-specific. Opening or inspecting a document does not establish that it can be populated, flattened, assembled, stamped, or signed. Permissions, certification, field locks, appearances, document structures, and resource limits can restrict individual operations.
+
+Supported writes enforce applicable password-security permissions, certification restrictions (DocMDP), and field locks (FieldMDP), and apply documented Reader usage-rights preservation and removal rules. Enforcement does not establish signature validity or trust.
 
 Extraction and concatenation do not imply lossless preservation of every document feature. Their detailed contracts must define supported structures and preservation, omission, and refusal rules.
 
