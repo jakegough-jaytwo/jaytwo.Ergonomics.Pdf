@@ -91,6 +91,15 @@ internal sealed class PdfIncrementalWriter
 
     internal AppendixLayout WriteAppendix(Stream output, long origin)
     {
+        // ISO 32000-1 Table 15: the trailer's /Info is an indirect reference. A direct Info dictionary in the source
+        // trailer moves to a new indirect object in this revision, so it is written, and encrypted, as an ordinary object.
+        if (_store.InfoId == null && _store.InlineInfo != null)
+        {
+            _store.InfoId = _store.Allocate((PdfObject.Dict)_store.InlineInfo.DeepClone());
+            _store.InfoGen = 0;
+            _store.InlineInfo = null;
+        }
+
         var layout = new AppendixLayout();
         var serializer = new PdfSerializer(output, CopyFileBody, _store.Security);
         foreach (int id in _store.Dirty.OrderBy(static value => value))
@@ -211,12 +220,6 @@ internal sealed class PdfIncrementalWriter
         if (_store.InfoId != null)
         {
             WriteAscii(output, "/Info " + _store.InfoId.Value.ToString(CultureInfo.InvariantCulture) + " " + _store.InfoGen.ToString(CultureInfo.InvariantCulture) + " R\n");
-        }
-        else if (_store.InlineInfo != null)
-        {
-            WriteAscii(output, "/Info ");
-            serializer.WriteTrailerValue(_store.InlineInfo);
-            WriteAscii(output, "\n");
         }
 
         if (_store.EncryptId != 0)
