@@ -2,6 +2,8 @@
 
 > **Superseded 2026-10-31:** the owner decided there is **no font-specific size limit**. Any 32 MiB or 33,554,432-byte threshold, "L", A4 numeric selection or font-limit trigger below is history; [FORM-FONT-05](../forms.md#supplied-and-retained-font-byte-budgets-form-font-05) is current. Proportional processing and structural refusal stand.
 
+> **Status update 2026-10-31 (W-219):** [forms](../forms.md) was adopted by the owner as `W-219-FORMS-2026-10-31-R2`. Its top sections hold the A1 exit mapping, the gap resolutions and the decisions at adoption. Paragraphs below that call forms frozen, unadopted or A1 unmet describe the W-218 closeout state and are provenance, not instructions.
+
 2026-10-31. **Review proposal only; no contract adoption or implementation authorization.** Read with [forms](../forms.md) and the [live reconciliation](reconciliation.md). This narrows the residual review; it does not replace selected clauses or create another question queue. Current continuation: [next-session.md](next-session.md). Forms remains frozen; this file retains genuine gaps and the unmet A1 exit, not authorization to resume forms work. The [old limit/subject packet](w218-limit-and-subject-review.md) and earlier dated status paragraphs preserve provenance only.
 
 ## Fixed baseline
