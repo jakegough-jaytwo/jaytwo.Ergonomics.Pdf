@@ -212,6 +212,12 @@ internal sealed class PdfIncrementalWriter
         {
             WriteAscii(output, "/Info " + _store.InfoId.Value.ToString(CultureInfo.InvariantCulture) + " " + _store.InfoGen.ToString(CultureInfo.InvariantCulture) + " R\n");
         }
+        else if (_store.InlineInfo != null)
+        {
+            WriteAscii(output, "/Info ");
+            serializer.WriteTrailerValue(_store.InlineInfo);
+            WriteAscii(output, "\n");
+        }
 
         if (_store.EncryptId != 0)
         {

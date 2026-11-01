@@ -64,6 +64,12 @@ internal sealed class PdfSerializer
         WriteValue(value, 0, 0, false);
     }
 
+    // A direct dictionary in a trailer. The loader decrypts its strings as object 0, generation 0, so this encrypts them the same way.
+    public void WriteTrailerValue(PdfObject value)
+    {
+        WriteValue(value, 0, 0, _security != null && _security.EncryptsStringsOf(value));
+    }
+
     private void WriteValue(PdfObject value, int objectNumber, int generation, bool encryptStrings)
     {
         if (value is PdfObject.Dict dict)
