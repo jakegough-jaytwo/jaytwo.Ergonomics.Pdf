@@ -69,7 +69,7 @@ internal static class WorkflowFiles
     // D-60 best-effort checks, repeated for every input immediately before atomic publication.
     public static void Publish(string temporary, string target, bool overwrite, params string?[] inputPaths)
     {
-        CheckDestination(target, overwrite, inputPaths);
+        CheckDestination(target, overwrite, true, inputPaths);
         if (!File.Exists(target))
         {
             File.Move(temporary, target);
@@ -87,8 +87,10 @@ internal static class WorkflowFiles
         return new FileStream(target, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, 4096, asyncStream);
     }
 
-    // The alias and existence checks, before anything is created, truncated or replaced.
-    public static void CheckDestination(string target, bool overwrite, params string?[] inputPaths)
+    // The alias and existence checks, before anything is created, truncated or replaced. The staged terminals also refuse
+    // a destination with the input's length and last-write time (F17); a direct save does not (WORKFLOW-ALIAS-01), since
+    // matching metadata does not establish that two files are the same.
+    public static void CheckDestination(string target, bool overwrite, bool refuseMatchingMetadata, params string?[] inputPaths)
     {
         foreach (string? inputPath in inputPaths)
         {
@@ -107,6 +109,11 @@ internal static class WorkflowFiles
         if (!overwrite)
         {
             throw Exists(target);
+        }
+
+        if (!refuseMatchingMetadata)
+        {
+            return;
         }
 
         foreach (string? inputPath in inputPaths)

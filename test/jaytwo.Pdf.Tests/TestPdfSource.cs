@@ -29,6 +29,9 @@ internal sealed class TestPdfSource : IPdfSource
     // Called with the number of reads so far before each asynchronous read.
     public Action<int>? BeforeAsyncRead { get; set; }
 
+    // Called with the number of reads so far before each synchronous read.
+    public Action<int>? BeforeSyncRead { get; set; }
+
     public int SyncReads { get; private set; }
 
     public int AsyncReads { get; private set; }
@@ -45,6 +48,7 @@ internal sealed class TestPdfSource : IPdfSource
         Enter();
         try
         {
+            BeforeSyncRead?.Invoke(SyncReads);
             SyncReads++;
             return Copy(position, buffer);
         }

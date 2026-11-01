@@ -380,23 +380,6 @@ public class WorkflowFileSaveTests
     }
 
     [Fact]
-    public void a_copy_with_the_input_length_and_last_write_time_is_refused_as_a_possible_alias()
-    {
-        byte[] input = WorkflowPdf.WithInfo();
-        using var directory = new TempDirectory();
-        string path = directory.Write("in.pdf", input);
-        string destination = directory.Write("copy.pdf", input);
-        File.SetLastWriteTimeUtc(destination, File.GetLastWriteTimeUtc(path));
-
-        IOException refused = Assert.Throws<IOException>(() => PdfWorkflow.FromFile(path).WithTitle("New").Save(destination, new PdfFileSaveOptions { Overwrite = true }));
-
-        Assert.Contains("may be the input", refused.Message, StringComparison.Ordinal);
-        Assert.Equal(input, File.ReadAllBytes(destination));
-        Assert.Equal(input, File.ReadAllBytes(path));
-        Assert.Empty(directory.Temporaries());
-    }
-
-    [Fact]
     public void a_same_length_copy_with_a_different_last_write_time_is_replaced()
     {
         byte[] input = WorkflowPdf.WithInfo();
@@ -411,9 +394,9 @@ public class WorkflowFileSaveTests
         Assert.Equal(input, File.ReadAllBytes(path));
     }
 
-    // Windows may refuse by the alias check or, if the timestamp read through the link is stale, by the sharing
-    // violation on the open input. Unix refuses by the alias check: both names share one inode.
-    [Fact]
+    // Windows refuses by the sharing violation on the open input, before the direct write truncates it. No identity check
+    // covers a hard link (WORKFLOW-ALIAS-01), so other platforms are not promised the same refusal.
+    [PlatformFact("WINDOWS")]
     public void replacing_a_hard_link_to_the_open_input_fails_and_leaves_the_input_unchanged()
     {
         byte[] input = WorkflowPdf.WithInfo();

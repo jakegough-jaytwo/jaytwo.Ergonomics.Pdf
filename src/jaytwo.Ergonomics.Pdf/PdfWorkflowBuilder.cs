@@ -679,20 +679,22 @@ public sealed partial class PdfWorkflowBuilder
 
         // WORKFLOW-FILE-02: every pending edit and the destination checks come before the destination is created or truncated.
         IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(session, editor);
-        WorkflowFiles.CheckDestination(target, options.Overwrite, inputPath);
+        WorkflowFiles.CheckDestination(target, options.Overwrite, false, inputPath);
         cancellationToken.ThrowIfCancellationRequested();
 
-        // WORKFLOW-FILE-01 and 03: written in place, and left as it is if the save fails after this point.
+        // WORKFLOW-FILE-01 and 03, WORKFLOW-RESTORE-01: written in place, and the bytes are left as written if the save fails after this point.
         long outputLength;
         using (FileStream output = WorkflowFiles.OpenDirect(target, options.Overwrite, useAsync))
         {
+            // The engine truncates a failed separate destination through SetLength; the wrapper declines that.
+            var retained = new FailedOutputRetainingStream(output);
             if (useAsync)
             {
-                await editor.SaveIncrementalAsync(output, leaveOpen: true, cancellationToken).ConfigureAwait(false);
+                await editor.SaveIncrementalAsync(retained, leaveOpen: true, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                editor.SaveIncremental(output, leaveOpen: true);
+                editor.SaveIncremental(retained, leaveOpen: true);
             }
 
             if (options.FlushToDisk)
