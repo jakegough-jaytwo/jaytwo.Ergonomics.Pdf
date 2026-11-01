@@ -66,8 +66,29 @@ internal static class WorkflowFiles
         }
     }
 
-    // D-60's best-effort checks, repeated for every input immediately before atomic publication.
+    // D-60 best-effort checks, repeated for every input immediately before atomic publication.
     public static void Publish(string temporary, string target, bool overwrite, params string?[] inputPaths)
+    {
+        CheckDestination(target, overwrite, inputPaths);
+        if (!File.Exists(target))
+        {
+            File.Move(temporary, target);
+            return;
+        }
+
+        File.Replace(temporary, target, null);
+    }
+
+    // WORKFLOW-FILE-01 to 04: a direct file save opens its destination only after the edits are applied and
+    // CheckDestination passes, so a refusal creates or truncates nothing. CreateNew keeps fail-if-exists true even if the
+    // file appears after the check.
+    public static FileStream OpenDirect(string target, bool overwrite, bool asyncStream)
+    {
+        return new FileStream(target, overwrite ? FileMode.Create : FileMode.CreateNew, FileAccess.ReadWrite, FileShare.None, 4096, asyncStream);
+    }
+
+    // The alias and existence checks, before anything is created, truncated or replaced.
+    public static void CheckDestination(string target, bool overwrite, params string?[] inputPaths)
     {
         foreach (string? inputPath in inputPaths)
         {
@@ -80,7 +101,6 @@ internal static class WorkflowFiles
         var existing = new FileInfo(target);
         if (!existing.Exists)
         {
-            File.Move(temporary, target);
             return;
         }
 
@@ -103,8 +123,6 @@ internal static class WorkflowFiles
                 throw new IOException("The destination '" + target + "' may be the input file: it has the input's length and last-write time. Save to a different path, or use AppendToSource to add a revision to the input.");
             }
         }
-
-        File.Replace(temporary, target, null);
     }
 
     // Spec F20: copies a finished staging file from its start to an empty destination in 1 MiB blocks. A failure or
@@ -156,7 +174,7 @@ internal static class WorkflowFiles
 
     public static IOException Exists(string target)
     {
-        return new IOException("The destination '" + target + "' already exists. Set PdfFileSaveOptions.Overwrite to replace it.");
+        return new IOException("The destination '" + target + "' already exists and PdfFileSaveOptions.Overwrite is false.");
     }
 
     public static void TryDelete(string path)

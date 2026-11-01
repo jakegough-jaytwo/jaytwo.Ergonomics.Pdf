@@ -146,7 +146,7 @@ public class WorkflowBeginTests
         string existing = directory.Write("out.pdf", new byte[] { 1 });
         PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo())).WithTitle("New");
 
-        Assert.Throws<IOException>(() => workflow.Save(existing));
+        Assert.Throws<IOException>(() => workflow.Save(existing, new PdfFileSaveOptions { Overwrite = false }));
 
         await AssertConsumed(workflow);
         Assert.Equal(new byte[] { 1 }, File.ReadAllBytes(existing));

@@ -336,7 +336,7 @@ public sealed partial class PdfWorkflowBuilder
             throw new DirectoryNotFoundException("The destination directory '" + directory + "' does not exist.");
         }
 
-        if (!saveOptions.Overwrite && File.Exists(target))
+        if (!saveOptions.OverwriteOr(false) && File.Exists(target))
         {
             throw WorkflowFiles.Exists(target);
         }
@@ -345,7 +345,7 @@ public sealed partial class PdfWorkflowBuilder
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         PdfWorkflowResult result = await WorkflowFiles.WriteAndPublishAsync(
             target,
-            saveOptions.Overwrite,
+            saveOptions.OverwriteOr(false),
             saveOptions.FlushToDisk,
             useAsync,
             cancellationToken,

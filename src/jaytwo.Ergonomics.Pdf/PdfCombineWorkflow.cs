@@ -114,7 +114,7 @@ public sealed class PdfCombineWorkflow
             throw new InvalidOperationException("The workflow has already run.");
         }
 
-        bool overwrite = options?.Overwrite ?? false;
+        bool overwrite = options?.OverwriteOr(false) ?? false;
         bool flushToDisk = options?.FlushToDisk ?? true;
         if (target != null)
         {

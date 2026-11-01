@@ -10,7 +10,8 @@ using Xunit;
 
 namespace jaytwo.Ergonomics.Pdf.Tests;
 
-// Spec F11, F12, F14, and F17 for saves to a path: the temporary sibling, publication, overwrite, and alias safety.
+// Spec F11, F12, F14, and F17 for saves to a path. The ordinary Save(path) writes directly (WORKFLOW-FILE-01 to 04, see
+// WorkflowDirectFileTests); the Combine, signing and timestamp cases here keep the temporary sibling and publication.
 public class WorkflowFileSaveTests
 {
     private const int Mebibyte = 1024 * 1024;
@@ -68,7 +69,7 @@ public class WorkflowFileSaveTests
             source.BeforeAsyncRead = null;
         };
 
-        await Assert.ThrowsAsync<IOException>(() => PdfWorkflow.From(source).SaveAsync(destination));
+        await Assert.ThrowsAsync<IOException>(() => PdfWorkflow.From(source).SaveAsync(destination, new PdfFileSaveOptions { Overwrite = false }));
 
         Assert.Equal(Previous, File.ReadAllBytes(destination));
         Assert.Empty(directory.Temporaries());
@@ -213,7 +214,7 @@ public class WorkflowFileSaveTests
         string destination = directory.Write("out.pdf", Previous);
         var input = new ProbeStream(new MemoryStream(WorkflowPdf.WithInfo()));
 
-        Assert.Throws<IOException>(() => PdfWorkflow.From(input).WithTitle("New").Save(destination));
+        Assert.Throws<IOException>(() => PdfWorkflow.From(input).WithTitle("New").Save(destination, new PdfFileSaveOptions { Overwrite = false }));
         await Assert.ThrowsAsync<IOException>(() => PdfWorkflow.From(input).WithTitle("New").SaveAsync(destination, new PdfFileSaveOptions { Overwrite = false }));
 
         Assert.False(input.ReadCalled);
@@ -259,7 +260,7 @@ public class WorkflowFileSaveTests
         PdfWorkflow.From(new MemoryStream(input)).WithTitle("New").Save(destination, new PdfFileSaveOptions { FlushToDisk = false });
 
         Assert.True(new PdfFileSaveOptions().FlushToDisk);
-        Assert.False(new PdfFileSaveOptions().Overwrite);
+        Assert.True(new PdfFileSaveOptions().Overwrite);
         WorkflowPdf.AssertTitled(input, File.ReadAllBytes(destination), "New");
     }
 
@@ -294,7 +295,7 @@ public class WorkflowFileSaveTests
     [Theory]
     [InlineData(false)]
     [InlineData(true)]
-    public async Task cancellation_during_an_async_path_save_leaves_no_file(bool existing)
+    public async Task cancellation_during_an_async_path_save_leaves_the_failed_file_in_place(bool existing)
     {
         using var directory = new TempDirectory();
         string destination = directory.File("out.pdf");
@@ -306,13 +307,12 @@ public class WorkflowFileSaveTests
         // The engine checks cancellation between 1 MiB copy blocks, so the input spans several.
         var source = new TestPdfSource(WorkflowPdf.Large(3 * Mebibyte));
         using var cancel = new CancellationTokenSource();
-        string? temporary = null;
+        bool opened = false;
         source.BeforeAsyncRead = _ =>
         {
-            string[] temporaries = directory.Temporaries();
-            if (temporaries.Length > 0)
+            if (File.Exists(destination) && new FileInfo(destination).Length != Previous.Length)
             {
-                temporary ??= temporaries[0];
+                opened = true;
                 cancel.Cancel();
             }
         };
@@ -320,16 +320,12 @@ public class WorkflowFileSaveTests
         await Assert.ThrowsAnyAsync<OperationCanceledException>(
             () => PdfWorkflow.From(source).WithTitle("New").SaveAsync(destination, new PdfFileSaveOptions { Overwrite = true }, cancel.Token));
 
-        Assert.NotNull(temporary);
-        Assert.Matches(new Regex("^\\.out\\.pdf\\.[0-9a-f]{8}\\.tmp$"), temporary);
+        Assert.True(opened);
         Assert.Empty(directory.Temporaries());
+        Assert.True(File.Exists(destination));
         if (existing)
         {
-            Assert.Equal(Previous, File.ReadAllBytes(destination));
-        }
-        else
-        {
-            Assert.False(File.Exists(destination));
+            Assert.NotEqual(Previous, File.ReadAllBytes(destination));
         }
     }
 

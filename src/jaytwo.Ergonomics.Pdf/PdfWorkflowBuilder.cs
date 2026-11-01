@@ -409,13 +409,13 @@ public sealed partial class PdfWorkflowBuilder
     /// Runs the workflow and writes the input and its new revision to a file (spec F17).
     /// </summary>
     /// <remarks>
-    /// The output is written to a temporary sibling, <c>.&lt;name&gt;.&lt;random&gt;.tmp</c>, and moved to the path only after
-    /// it is complete; after a failure the temporary file is removed and the path is left as it was. An existing file is
-    /// replaced only with <see cref="PdfFileSaveOptions.Overwrite"/>. A destination that may be the input is refused: the
-    /// input's own path, and, before replacing an existing file, any file with the input's length and last-write time,
-    /// which also refuses a copy whose timestamps were copied. These checks are best-effort safeguards, not proof of file
-    /// identity. On Unix, a destination that is a symbolic link is replaced as a link, and its target is not changed; other
-    /// hard links to a replaced file keep its old content. No power-loss durability is claimed.
+    /// The input's edits and the destination checks are applied before the path is created or truncated. The output is then
+    /// written directly to the path, which is created, or overwritten unless <see cref="PdfFileSaveOptions.Overwrite"/> is
+    /// false (fail-if-exists). If the save fails after writing starts, the partial or empty file stays in place for the
+    /// caller to discard or replace, and an overwritten file's earlier contents are lost. A destination that may be the
+    /// input is refused before it is opened: the input's own path, and, for an existing file, any file with the input's
+    /// length and last-write time, which also refuses a copy whose timestamps were copied. These checks are best-effort
+    /// safeguards, not proof of file identity. No power-loss durability is claimed.
     /// </remarks>
     /// <param name="path">The destination path. Its directory must exist.</param>
     /// <param name="options">Overwrite and flush options.</param>
@@ -433,14 +433,13 @@ public sealed partial class PdfWorkflowBuilder
     /// Runs the workflow and writes the input and its new revision to a file (spec F17).
     /// </summary>
     /// <remarks>
-    /// The output is written to a temporary sibling, <c>.&lt;name&gt;.&lt;random&gt;.tmp</c>, and moved to the path only after
-    /// it is complete; after a failure or cancellation the temporary file is removed and the path is left as it was.
-    /// Cancellation is observed until the output is published. An existing file is replaced only with
-    /// <see cref="PdfFileSaveOptions.Overwrite"/>. A destination that may be the input is refused: the input's own path, and,
-    /// before replacing an existing file, any file with the input's length and last-write time, which also refuses a copy
-    /// whose timestamps were copied. These checks are best-effort safeguards, not proof of file identity. On Unix, a
-    /// destination that is a symbolic link is replaced as a link, and its target is not changed; other hard links to a
-    /// replaced file keep its old content. No power-loss durability is claimed.
+    /// The input's edits and the destination checks are applied before the path is created or truncated. The output is then
+    /// written directly to the path, which is created, or overwritten unless <see cref="PdfFileSaveOptions.Overwrite"/> is
+    /// false (fail-if-exists). If the save fails or is canceled after writing starts, the partial or empty file stays in
+    /// place for the caller to discard or replace, and an overwritten file's earlier contents are lost. A destination that
+    /// may be the input is refused before it is opened: the input's own path, and, for an existing file, any file with the
+    /// input's length and last-write time, which also refuses a copy whose timestamps were copied. These checks are
+    /// best-effort safeguards, not proof of file identity. No power-loss durability is claimed.
     /// </remarks>
     /// <param name="path">The destination path. Its directory must exist.</param>
     /// <param name="options">Overwrite and flush options.</param>
@@ -677,27 +676,33 @@ public sealed partial class PdfWorkflowBuilder
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         using PdfDocumentEditor editor = session.Document.Edit();
-        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(session, editor);
-        long outputLength = await WorkflowFiles.WriteAndPublishAsync(
-            target,
-            options.Overwrite,
-            options.FlushToDisk,
-            useAsync,
-            cancellationToken,
-            async output =>
-            {
-                if (useAsync)
-                {
-                    await editor.SaveIncrementalAsync(output, leaveOpen: true, cancellationToken).ConfigureAwait(false);
-                }
-                else
-                {
-                    editor.SaveIncremental(output, leaveOpen: true);
-                }
 
-                return output.Length;
-            },
-            inputPath).ConfigureAwait(false);
+        // WORKFLOW-FILE-02: every pending edit and the destination checks come before the destination is created or truncated.
+        IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances = Apply(session, editor);
+        WorkflowFiles.CheckDestination(target, options.Overwrite, inputPath);
+        cancellationToken.ThrowIfCancellationRequested();
+
+        // WORKFLOW-FILE-01 and 03: written in place, and left as it is if the save fails after this point.
+        long outputLength;
+        using (FileStream output = WorkflowFiles.OpenDirect(target, options.Overwrite, useAsync))
+        {
+            if (useAsync)
+            {
+                await editor.SaveIncrementalAsync(output, leaveOpen: true, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                editor.SaveIncremental(output, leaveOpen: true);
+            }
+
+            if (options.FlushToDisk)
+            {
+                output.Flush(flushToDisk: true);
+            }
+
+            outputLength = output.Length;
+        }
+
         return new PdfWorkflowResult(outputLength > session.InputLength, outputLength, appearances);
     }
 
