@@ -102,7 +102,7 @@ All targets are unexecuted. Compare independently of the writer (for example an 
 
 ## Remaining gaps (engineering, none need an owner answer)
 
-Public spelling of any additive overloads; exact error types beyond `PdfXmpException`; the implementation changes the target requires (for example the current editor targets the first description and does not yet reject duplicate touched definitions); independent-reader checks of edited packets. None changes a selected decision.
+Public spelling of any additive overloads; exact error types beyond `PdfXmpException`; the implementation changes the target requires (the editor's duplicate-touched-definition refusal was implemented in W-221); independent-reader checks of edited packets. None changes a selected decision.
 
 ## Adoption record
 

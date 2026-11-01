@@ -143,8 +143,10 @@ public class MetadataTests
         Assert.Equal("Updated", updated.Metadata.Title);
     }
 
+    // Opening and reading keep their own contract: malformed XMP opens and reports as an error on read, and the refused
+    // ordinary edit leaves the packet byte for byte (METADATA-READ-01, METADATA-VALIDATE-01).
     [Fact]
-    public void malformed_xmp_stays_byte_for_byte_while_info_updates()
+    public void malformed_xmp_opens_and_reads_as_an_error_and_refuses_an_edit_with_no_change()
     {
         var builder = new PdfBuilder();
         builder.Indirect(1, "<< /Type /Catalog /Pages 2 0 R /Metadata 5 0 R >>");
@@ -160,14 +162,13 @@ public class MetadataTests
             using var editor = document.Edit();
             Assert.True(document.Metadata.HasXmp);
             Assert.Throws<PdfXmpException>(() => document.Metadata.OpenXmp());
-            editor.Metadata.Title = "New";
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = "New");
             editor.SaveIncremental(stream);
         }
 
-        byte[] saved = stream.ToArray();
-        Assert.Equal(1, Count(saved, Encoding.ASCII.GetBytes("not xml")));
-        using var again = PdfDocument.Open(new MemoryStream(saved), leaveOpen: true);
-        Assert.Equal("New", again.Metadata.Title);
+        Assert.Equal(pdf, stream.ToArray());
+        using var again = PdfDocument.Open(new MemoryStream(pdf), leaveOpen: true);
+        Assert.Equal("Old", again.Metadata.Title);
         Assert.Throws<PdfXmpException>(() => again.Metadata.OpenXmp());
     }
 
@@ -394,6 +395,80 @@ public class MetadataTests
         Assert.Contains(">New<", text, StringComparison.Ordinal);
         Assert.DoesNotContain(">Old<", text, StringComparison.Ordinal);
         Assert.Contains(">kept<", text, StringComparison.Ordinal);
+    }
+
+    // METADATA-VALIDATE-01: an ordinary edit that must touch an existing packet it cannot edit safely is refused with no
+    // change and no Info-only fallback. Malformed XML and well-formed but unsupported shapes are distinct causes.
+    [Theory]
+    [InlineData("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF")]
+    [InlineData("not xml at all")]
+    [InlineData("<?xpacket begin=\"\"?><a><b></a>")]
+    public void malformed_packet_refuses_every_touching_edit_with_no_change(string packetText)
+    {
+        AssertEditsRefusedWithNoChange(Encoding.UTF8.GetBytes(packetText));
+    }
+
+    [Theory]
+    [InlineData("<foo/>")]
+    [InlineData("<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><x:other/></x:xmpmeta>")]
+    [InlineData("<foo xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"><rdf:RDF/></foo>")]
+    public void well_formed_packet_with_another_root_or_no_rdf_refuses_every_touching_edit_with_no_change(string packetText)
+    {
+        AssertEditsRefusedWithNoChange(Encoding.UTF8.GetBytes(packetText));
+    }
+
+    // A raw replacement is its own contract: it installs the unsupported packet, a later ordinary edit refuses, and the
+    // earlier pending replacement stays.
+    [Fact]
+    public void refused_edit_keeps_an_earlier_pending_raw_replacement()
+    {
+        byte[] raw = Encoding.UTF8.GetBytes("<foo/>");
+        using var stream = DuplicateXmpDocument(DuplicateXmpPacket(string.Empty));
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.SetXmp(raw);
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = "New");
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("Old", again.Metadata.Title);
+        using var xmp = again.Metadata.OpenXmp();
+        Assert.Equal(raw, ReadAll(xmp));
+    }
+
+    // Opening and reading stay separate: a document with such a packet opens and its Info reads normally.
+    [Fact]
+    public void unsupported_packet_still_opens_and_reads_info()
+    {
+        using var stream = DuplicateXmpDocument(Encoding.UTF8.GetBytes("<foo/>"));
+        using var document = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("Old", document.Metadata.Title);
+        Assert.True(document.Metadata.HasXmp);
+    }
+
+    private static void AssertEditsRefusedWithNoChange(byte[] packet)
+    {
+        using var stream = DuplicateXmpDocument(packet);
+        byte[] original = stream.ToArray();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = "New");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = null);
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Keywords = "alpha");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.CreationDate = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero));
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.ModificationDate = new DateTimeOffset(2021, 1, 1, 0, 0, 0, TimeSpan.Zero));
+            Assert.Throws<PdfXmpException>(() => editor.Metadata["Custom"] = "value");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata["Trapped"] = "True");
+            Assert.Equal("Old", editor.Metadata.Title);
+            Assert.Equal("D:20200101120000Z", editor.Metadata["ModDate"]);
+            Assert.Null(editor.Metadata["Custom"]);
+            editor.SaveIncremental(stream);
+        }
+
+        Assert.Equal(original, stream.ToArray());
     }
 
     private static byte[] DuplicateXmpPacket(string descriptions)

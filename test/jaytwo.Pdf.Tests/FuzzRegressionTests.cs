@@ -63,9 +63,10 @@ public class FuzzRegressionTests
     }
 
     // FZ-3: XML that parses but has no rdf:RDF made an info edit throw PdfXmpException after the info dictionary had
-    // already changed. It is malformed XMP, so the edit succeeds and the packet stays byte for byte.
+    // already changed. METADATA-VALIDATE-01 refuses such an edit before any store changes: the exception is controlled,
+    // and Info and the packet stay as supplied.
     [Fact]
-    public void xmp_without_rdf_stays_byte_for_byte_while_info_updates()
+    public void xmp_without_rdf_refuses_an_info_edit_with_no_change()
     {
         const string Packet = "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><x:other/></x:xmpmeta>";
         PdfBuilder builder = PdfBuilder.Basic(" /Metadata 5 0 R");
@@ -77,14 +78,13 @@ public class FuzzRegressionTests
         using (var document = PdfDocument.Open(stream, leaveOpen: true))
         {
             using var editor = document.Edit();
-            editor.Metadata.Title = "New";
+            Assert.Throws<jaytwo.Pdf.Metadata.PdfXmpException>(() => editor.Metadata.Title = "New");
             editor.SaveIncremental(stream);
         }
 
-        byte[] saved = stream.ToArray();
-        Assert.Equal(1, Count(saved, Encoding.ASCII.GetBytes(Packet)));
-        using var again = PdfDocument.Open(new MemoryStream(saved));
-        Assert.Equal("New", again.Metadata.Title);
+        Assert.Equal(pdf, stream.ToArray());
+        using var again = PdfDocument.Open(new MemoryStream(stream.ToArray()));
+        Assert.Equal("Old", again.Metadata.Title);
     }
 
     // FZ-4: a CreationDate field outside its range (here hour 11, minute 99, second 99) made ParseDate throw

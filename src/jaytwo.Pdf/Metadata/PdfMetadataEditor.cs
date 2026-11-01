@@ -4,7 +4,7 @@ namespace jaytwo.Pdf.Metadata;
 
 /// <summary>
 /// Changes document information and XMP metadata. The changes are written by the next save or signature.
-/// An edit that must update an XMP property defined more than once in the packet throws <see cref="PdfXmpException"/> and changes nothing.
+/// An edit that must update an existing XMP packet it cannot edit safely (malformed, not an rdf:RDF packet, or defining the property more than once) throws <see cref="PdfXmpException"/> and changes nothing. <see cref="SetXmp"/> replaces such a packet.
 /// </summary>
 public sealed class PdfMetadataEditor
 {

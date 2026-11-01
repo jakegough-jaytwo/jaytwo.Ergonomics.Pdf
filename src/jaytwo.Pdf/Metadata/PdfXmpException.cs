@@ -1,7 +1,7 @@
 namespace jaytwo.Pdf.Metadata;
 
 /// <summary>
-/// Raised when the document metadata stream is not well-formed XMP.
+/// Raised when the document metadata stream is not well-formed XMP, or when an edit needs a property that the existing packet cannot supply safely.
 /// </summary>
 public sealed class PdfXmpException : PdfException
 {

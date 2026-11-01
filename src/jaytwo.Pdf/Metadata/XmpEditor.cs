@@ -93,6 +93,25 @@ internal static class XmpEditor
     }
 
     /// <summary>
+    /// Refuses a packet an ordinary edit cannot reach: one whose root is neither rdf:RDF nor an x:xmpmeta wrapper around it.
+    /// </summary>
+    public static void RequireEditable(XDocument document)
+    {
+        XElement? root = document.Root;
+        bool editable = root != null
+            && (root.Name == Rdf + "RDF" || (root.Name == X + "xmpmeta" && root.Element(Rdf + "RDF") != null));
+        if (!editable)
+        {
+            throw new PdfXmpException("The XMP is not an rdf:RDF packet, so it cannot be edited.");
+        }
+    }
+
+    public static bool IsMapped(string key)
+    {
+        return TryMap(key, out _, out _);
+    }
+
+    /// <summary>
     /// Refuses a touched property that is defined more than once, in competing forms, or with duplicate languages.
     /// Properties the edit does not touch, and packets without descriptions, are not examined.
     /// </summary>

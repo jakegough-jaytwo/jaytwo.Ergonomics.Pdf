@@ -268,22 +268,34 @@ internal sealed class PdfInfoMetadata
         }
     }
 
-    // Refuses an edit whose touched XMP properties cannot be located safely, before any store changes. A modification-date
-    // refresh counts as touching ModDate unless an explicit override is in force. Unreadable packets are left to SyncXmp.
+    // Refuses an edit that must touch an XMP packet it cannot edit safely, before any store changes (METADATA-VALIDATE-01).
+    // A mapped key touches the packet, and so does a modification-date refresh unless an explicit override is in force.
     private void CheckXmpEdit(string? key, bool refreshesModDate)
     {
-        byte[]? existing = TryReadXmpBytes();
-        if (existing == null || !XmpEditor.TryParse(existing, out XDocument? document, out _))
+        bool touchesDate = refreshesModDate && !_modDateExplicit;
+        if (!touchesDate && (key == null || !XmpEditor.IsMapped(key)))
         {
             return;
         }
 
+        byte[]? existing = TryReadXmpBytes();
+        if (existing == null)
+        {
+            return;
+        }
+
+        if (!XmpEditor.TryParse(existing, out XDocument? document, out Exception? error))
+        {
+            throw new PdfXmpException("XMP is not well-formed XML, so it cannot be edited.", error);
+        }
+
+        XmpEditor.RequireEditable(document!);
         if (key != null)
         {
             XmpEditor.CheckTouched(document!, key);
         }
 
-        if (refreshesModDate && !_modDateExplicit)
+        if (touchesDate)
         {
             XmpEditor.CheckTouched(document!, "ModDate");
         }
@@ -302,24 +314,16 @@ internal sealed class PdfInfoMetadata
         {
             document = XmpEditor.CreateMinimal();
         }
-        else if (!XmpEditor.TryParse(existing, out XDocument? parsed, out _))
+        else if (!XmpEditor.TryParse(existing, out XDocument? parsed, out Exception? error))
         {
-            return;
+            throw new PdfXmpException("XMP is not well-formed XML, so it cannot be edited.", error);
         }
         else
         {
             document = parsed!;
         }
 
-        // A packet that parses but is not XMP, such as one without rdf:RDF, is malformed XMP too: leave its bytes unchanged.
-        try
-        {
-            XmpEditor.ApplyInfo(document, key, value);
-        }
-        catch (PdfXmpException)
-        {
-            return;
-        }
+        XmpEditor.ApplyInfo(document, key, value);
 
         WriteXmp(XmpEditor.ToBytes(document));
     }
