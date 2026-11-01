@@ -37,7 +37,7 @@ Every row requires authentication where encrypted. The password column applies t
 
 The assembly row does not adopt its still-draft preservation profile. New blank-page/image creation has no input-document security gate; image/output contracts apply.
 
-Read rationale: existing structured field inspection/export is not page-text extraction or an FDF/XFDF export action. Add no bit-5 denial or Reader-rights export gate. Flatten rationale: [PdfFlattener](../../src/jaytwo.Pdf/Internal/PdfFlattener.cs) currently requires Modify and Annotate. The additive bit-4 proposal follows [forms' source interpretation](forms.md#cross-contract-authorization-and-output-mapping) without changing that legacy gate. Security adoption does not adopt frozen form mutations or narrow legacy Fill/FillForm. Form ReadOnly/password/rich/flag eligibility remains separate from document credentials.
+Read rationale: existing structured field inspection/export is not page-text extraction or an FDF/XFDF export action. Add no bit-5 denial or Reader-rights export gate. Flatten rationale: [PdfFlattener](../../src/jaytwo.Pdf/Internal/PdfFlattener.cs) currently requires Modify and Annotate. The additive bit-4 proposal follows [forms' source interpretation](forms.md#cross-contract-authorization-and-output-mapping) without changing that legacy gate. Security adoption does not itself adopt form mutations (forms is adopted separately as W-219-FORMS-2026-10-31-R2) or narrow legacy Fill/FillForm. Form ReadOnly/password/rich/flag eligibility remains separate from document credentials.
 
 ## Certification and field locks: SECURITY-LOCK-01
 
