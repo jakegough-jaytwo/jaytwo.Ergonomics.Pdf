@@ -84,19 +84,22 @@ internal sealed class PdfInfoMetadata
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
         CheckXmpEdit(key, true);
-        PdfObject.Dict info = EditInfo();
-        if (value == null)
+        Atomic(() =>
         {
-            info.Remove(key);
-        }
-        else
-        {
-            info.Set(key, PdfTextCodec.Encode(value));
-            _store.RaiseVersion(InfoKeyVersion(key));
-        }
+            PdfObject.Dict info = EditInfo();
+            if (value == null)
+            {
+                info.Remove(key);
+            }
+            else
+            {
+                info.Set(key, PdfTextCodec.Encode(value));
+                _store.RaiseVersion(InfoKeyVersion(key));
+            }
 
-        SyncXmp(key, value);
-        TouchModDate();
+            SyncXmp(key, value);
+            TouchModDate();
+        });
     }
 
     private void SetTrapped(string? value)
@@ -111,18 +114,21 @@ internal sealed class PdfInfoMetadata
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
         CheckXmpEdit(null, true);
-        PdfObject.Dict info = EditInfo();
-        if (value == null)
+        Atomic(() =>
         {
-            info.Remove("Trapped");
-        }
-        else
-        {
-            info.Set("Trapped", new PdfObject.Name(value));
-            _store.RaiseVersion(InfoKeyVersion("Trapped"));
-        }
+            PdfObject.Dict info = EditInfo();
+            if (value == null)
+            {
+                info.Remove("Trapped");
+            }
+            else
+            {
+                info.Set("Trapped", new PdfObject.Name(value));
+                _store.RaiseVersion(InfoKeyVersion("Trapped"));
+            }
 
-        TouchModDate();
+            TouchModDate();
+        });
     }
 
     internal DateTimeOffset? GetInfoDate(string key)
@@ -141,29 +147,32 @@ internal sealed class PdfInfoMetadata
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
         CheckXmpEdit(key, !explicitModification);
-        if (explicitModification)
+        Atomic(() =>
         {
-            _modDateExplicit = true;
-        }
+            if (explicitModification)
+            {
+                _modDateExplicit = true;
+            }
 
-        PdfObject.Dict info = EditInfo();
-        string? xmp = null;
-        if (value == null)
-        {
-            info.Remove(key);
-        }
-        else
-        {
-            info.Set(key, PdfTextCodec.Encode(PdfTextCodec.FormatDate(value.Value)));
-            _store.RaiseVersion(InfoKeyVersion(key));
-            xmp = PdfTextCodec.FormatXmpDate(value.Value);
-        }
+            PdfObject.Dict info = EditInfo();
+            string? xmp = null;
+            if (value == null)
+            {
+                info.Remove(key);
+            }
+            else
+            {
+                info.Set(key, PdfTextCodec.Encode(PdfTextCodec.FormatDate(value.Value)));
+                _store.RaiseVersion(InfoKeyVersion(key));
+                xmp = PdfTextCodec.FormatXmpDate(value.Value);
+            }
 
-        SyncXmp(key, xmp);
-        if (!explicitModification)
-        {
-            TouchModDate();
-        }
+            SyncXmp(key, xmp);
+            if (!explicitModification)
+            {
+                TouchModDate();
+            }
+        });
     }
 
     internal Stream OpenXmp()
@@ -266,6 +275,28 @@ internal sealed class PdfInfoMetadata
         {
             _touchingModDate = false;
         }
+    }
+
+    // METADATA-SYNC-01 and METADATA-FAIL-01: a failure after the first provisional change (for example reading the packet
+    // from the source) restores Info, the XMP stream, the version and the date-override state and keeps earlier edits.
+    private void Atomic(Action change)
+    {
+        bool explicitModDate = _modDateExplicit;
+        PdfObject.Dict? inlineInfo = _store.InlineInfo;
+        _store.BeginBackup();
+        try
+        {
+            change();
+        }
+        catch
+        {
+            _store.Restore();
+            _store.InlineInfo = inlineInfo;
+            _modDateExplicit = explicitModDate;
+            throw;
+        }
+
+        _store.EndBackup();
     }
 
     // Refuses an edit that must touch an XMP packet it cannot edit safely, before any store changes (METADATA-VALIDATE-01).
