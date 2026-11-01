@@ -607,7 +607,6 @@ public sealed partial class PdfWorkflowBuilder
 
     private async Task<PdfWorkflowResult> SaveStreamAsync(Stream destination, bool useAsync, CancellationToken cancellationToken)
     {
-        Begin();
         if (destination == null)
         {
             throw new ArgumentNullException(nameof(destination));
@@ -618,11 +617,12 @@ public sealed partial class PdfWorkflowBuilder
             throw new ArgumentException("The destination is the input stream. Use AppendToSource to add a revision to the input.", nameof(destination));
         }
 
-        if (!destination.CanWrite || !destination.CanSeek || destination.Length != 0)
+        if (!destination.CanWrite || !destination.CanSeek || destination.Length != 0 || destination.Position != 0)
         {
-            throw new ArgumentException("The destination must be an empty writable seekable stream.", nameof(destination));
+            throw new ArgumentException("The destination must be an empty writable seekable stream at position zero.", nameof(destination));
         }
 
+        Begin();
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         IReadOnlyDictionary<string, PdfAppearanceDisposition> appearances;
@@ -644,7 +644,6 @@ public sealed partial class PdfWorkflowBuilder
 
     private async Task<PdfWorkflowResult> SaveFileAsync(string path, PdfFileSaveOptions? options, bool useAsync, CancellationToken cancellationToken)
     {
-        Begin();
         if (path == null)
         {
             throw new ArgumentNullException(nameof(path));
@@ -658,15 +657,16 @@ public sealed partial class PdfWorkflowBuilder
         options ??= new PdfFileSaveOptions();
         string target = Path.GetFullPath(path);
         string directory = Path.GetDirectoryName(target) ?? throw new ArgumentException("The destination path names no file.", nameof(path));
+        string? inputPath = _input.FilePath;
+        if (inputPath != null && Directory.Exists(directory) && WorkflowFiles.SamePath(inputPath, target))
+        {
+            throw new ArgumentException("The destination is the input file. Use AppendToSource to add a revision to the input.", nameof(path));
+        }
+
+        Begin();
         if (!Directory.Exists(directory))
         {
             throw new DirectoryNotFoundException("The destination directory '" + directory + "' does not exist.");
-        }
-
-        string? inputPath = _input.FilePath;
-        if (inputPath != null && WorkflowFiles.SamePath(inputPath, target))
-        {
-            throw new ArgumentException("The destination is the input file. Use AppendToSource to add a revision to the input.", nameof(path));
         }
 
         if (!options.Overwrite && File.Exists(target))

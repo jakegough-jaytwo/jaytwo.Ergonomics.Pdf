@@ -81,11 +81,6 @@ public sealed class PdfCombineWorkflow
 
     private async Task<PdfAssemblyResult> RunAsync(Stream? destination, string? path, PdfFileSaveOptions? options, bool fileOutput, bool useAsync, CancellationToken cancellationToken)
     {
-        if (Interlocked.Exchange(ref _started, 1) != 0)
-        {
-            throw new InvalidOperationException("The workflow has already run.");
-        }
-
         if (fileOutput && path == null)
         {
             throw new ArgumentNullException(nameof(path));
@@ -107,6 +102,16 @@ public sealed class PdfCombineWorkflow
             }
         }
 
+        if (target == null && (destination == null || !destination.CanWrite || !destination.CanSeek || destination.Length != 0 || destination.Position != 0))
+        {
+            throw new ArgumentException("The destination must be an empty writable seekable stream at position zero.", nameof(destination));
+        }
+
+        if (Interlocked.Exchange(ref _started, 1) != 0)
+        {
+            throw new InvalidOperationException("The workflow has already run.");
+        }
+
         bool overwrite = options?.Overwrite ?? false;
         bool flushToDisk = options?.FlushToDisk ?? true;
         if (target != null)
@@ -120,10 +125,6 @@ public sealed class PdfCombineWorkflow
             {
                 throw WorkflowFiles.Exists(target);
             }
-        }
-        else if (destination == null || !destination.CanWrite || !destination.CanSeek || destination.Length != 0 || destination.Position != 0)
-        {
-            throw new ArgumentException("The destination must be an empty writable seekable stream at position zero.", nameof(destination));
         }
 
         var sessions = new List<WorkflowSession>();

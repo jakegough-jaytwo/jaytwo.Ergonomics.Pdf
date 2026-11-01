@@ -378,6 +378,83 @@ public class WorkflowSigningTests
         Assert.Equal(0, destination.Length);
     }
 
+    // WORKFLOW-BEGIN-01: rejected arguments leave the description usable for a corrected signing call.
+    [Theory]
+    [InlineData("null-stream")]
+    [InlineData("read-only")]
+    [InlineData("non-seekable")]
+    [InlineData("non-empty")]
+    [InlineData("position-not-zero")]
+    [InlineData("null-path")]
+    [InlineData("empty-path")]
+    [InlineData("illegal-path")]
+    [InlineData("null-options")]
+    [InlineData("null-signer")]
+    [InlineData("wrong-kind-options")]
+    public async Task rejected_signing_arguments_do_not_consume_the_description(string rejected)
+    {
+        using var directory = new TempDirectory();
+        using var signer = new TestSigner();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo()));
+        string good = directory.File("signed.pdf");
+
+        Action sync;
+        Func<Task> async;
+        switch (rejected)
+        {
+            case "null-options":
+                sync = () => workflow.Sign(new MemoryStream(), signer, null!);
+                async = () => workflow.SignAsync(new MemoryStream(), signer, null!);
+                break;
+            case "null-signer":
+                sync = () => workflow.Sign(new MemoryStream(), (IPdfExternalSigner)null!, Options());
+                async = () => workflow.SignAsync(good, (IPdfExternalSigner)null!, Options());
+                break;
+            case "wrong-kind-options":
+                sync = () => workflow.Sign(new MemoryStream(), signer, new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp });
+                async = () => workflow.SignAsync(good, signer, new PdfSignatureOptions { Kind = PdfSignatureKind.DocTimeStamp });
+                break;
+            case "null-path":
+            case "empty-path":
+            case "illegal-path":
+                string? bad = WorkflowTerminalArguments.BadPath(rejected == "null-path" ? "null" : rejected == "empty-path" ? "empty" : "illegal-character");
+                sync = () => workflow.Sign(bad!, signer, Options());
+                async = () => workflow.SignAsync(bad!, signer, Options());
+                break;
+            default:
+                string kind = rejected == "null-stream" ? "null" : rejected;
+                sync = () => workflow.Sign(WorkflowTerminalArguments.Ineligible(kind)!, signer, Options());
+                async = () => workflow.SignAsync(WorkflowTerminalArguments.Ineligible(kind)!, signer, Options());
+                break;
+        }
+
+        WorkflowTerminalArguments.AssertRejected(sync);
+        await WorkflowTerminalArguments.AssertRejectedAsync(async);
+
+        Assert.Equal(0, signer.Calls);
+        PdfWorkflowResult result = await workflow.SignAsync(good, signer, Options());
+        Assert.True(result.Modified);
+        AssertSigned(File.ReadAllBytes(good), "adbe.pkcs7.detached");
+        Assert.Equal(1, signer.Calls);
+        Assert.Throws<InvalidOperationException>(() => workflow.Sign(new MemoryStream(), signer, Options()));
+    }
+
+    [Fact]
+    public async Task a_pre_cancelled_signing_call_with_accepted_arguments_consumes_the_description_once()
+    {
+        using var signer = new TestSigner();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo()));
+        using var canceled = new CancellationTokenSource();
+        canceled.Cancel();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => workflow.SignAsync(new MemoryStream(), signer, Options(), cancellationToken: canceled.Token));
+
+        var output = new MemoryStream();
+        Assert.Throws<InvalidOperationException>(() => workflow.Sign(output, signer, Options()));
+        Assert.Equal(0, output.Length);
+        Assert.Equal(0, signer.Calls);
+    }
+
     private static PdfSignatureOptions Options()
     {
         return new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = SigningTime };

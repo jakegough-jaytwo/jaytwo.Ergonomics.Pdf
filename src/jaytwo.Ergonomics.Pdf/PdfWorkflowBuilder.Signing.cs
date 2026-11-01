@@ -281,7 +281,6 @@ public sealed partial class PdfWorkflowBuilder
 
     private async Task<PdfWorkflowResult> SignStreamAsync(Stream destination, PdfSignatureOptions options, IPdfSignatureProvider provider, PdfSignatureKind kind, bool useAsync, CancellationToken cancellationToken)
     {
-        Begin();
         if (destination == null)
         {
             throw new ArgumentNullException(nameof(destination));
@@ -293,11 +292,12 @@ public sealed partial class PdfWorkflowBuilder
             throw new ArgumentException("The destination is the input stream. Signing needs a separate output.", nameof(destination));
         }
 
-        if (!destination.CanWrite || !destination.CanSeek || destination.Length != 0)
+        if (!destination.CanWrite || !destination.CanSeek || destination.Length != 0 || destination.Position != 0)
         {
-            throw new ArgumentException("The destination must be an empty writable seekable stream.", nameof(destination));
+            throw new ArgumentException("The destination must be an empty writable seekable stream at position zero.", nameof(destination));
         }
 
+        Begin();
         cancellationToken.ThrowIfCancellationRequested();
         using WorkflowSession session = await _input.OpenAsync(false, useAsync, cancellationToken).ConfigureAwait(false);
         string stagingPath = Path.Combine(Path.GetTempPath(), "jaytwo-pdf-" + Guid.NewGuid().ToString("N") + ".tmp");
@@ -310,7 +310,6 @@ public sealed partial class PdfWorkflowBuilder
 
     private async Task<PdfWorkflowResult> SignFileAsync(string path, PdfSignatureOptions options, IPdfSignatureProvider provider, PdfSignatureKind kind, PdfFileSaveOptions? saveOptions, bool useAsync, CancellationToken cancellationToken)
     {
-        Begin();
         if (path == null)
         {
             throw new ArgumentNullException(nameof(path));
@@ -325,15 +324,16 @@ public sealed partial class PdfWorkflowBuilder
         saveOptions ??= new PdfFileSaveOptions();
         string target = Path.GetFullPath(path);
         string directory = Path.GetDirectoryName(target) ?? throw new ArgumentException("The destination path names no file.", nameof(path));
+        string? inputPath = _input.FilePath;
+        if (inputPath != null && Directory.Exists(directory) && WorkflowFiles.SamePath(inputPath, target))
+        {
+            throw new ArgumentException("The destination is the input file. Signing needs a separate output.", nameof(path));
+        }
+
+        Begin();
         if (!Directory.Exists(directory))
         {
             throw new DirectoryNotFoundException("The destination directory '" + directory + "' does not exist.");
-        }
-
-        string? inputPath = _input.FilePath;
-        if (inputPath != null && WorkflowFiles.SamePath(inputPath, target))
-        {
-            throw new ArgumentException("The destination is the input file. Signing needs a separate output.", nameof(path));
         }
 
         if (!saveOptions.Overwrite && File.Exists(target))

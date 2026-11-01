@@ -101,16 +101,6 @@ public class WorkflowDescriptionTests
     }
 
     [Fact]
-    public async Task a_rejected_terminal_call_also_consumes_the_workflow()
-    {
-        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo())).WithTitle("New");
-
-        Assert.Throws<ArgumentNullException>(() => workflow.Save((Stream)null!));
-
-        await AssertConsumed(workflow);
-    }
-
-    [Fact]
     public async Task an_operation_described_while_the_run_is_underway_is_refused()
     {
         var source = new TestPdfSource(WorkflowPdf.WithInfo());
