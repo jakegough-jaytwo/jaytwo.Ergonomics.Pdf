@@ -312,6 +312,12 @@ internal sealed class PdfInfoMetadata
         XDocument document;
         if (existing == null)
         {
+            // A clear has nothing to write into a missing packet; only an assignment (or the automatic date) creates one.
+            if (value == null)
+            {
+                return;
+            }
+
             document = XmpEditor.CreateMinimal();
         }
         else if (!XmpEditor.TryParse(existing, out XDocument? parsed, out Exception? error))

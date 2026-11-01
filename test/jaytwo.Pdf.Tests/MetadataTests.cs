@@ -448,6 +448,91 @@ public class MetadataTests
         Assert.True(document.Metadata.HasXmp);
     }
 
+    // METADATA-CREATE-01 and DATE-01: with no packet, a clear creates one only to carry an automatic ModDate refresh, and
+    // that packet holds just the date, never the cleared property or unrelated Info values.
+    [Fact]
+    public void clear_with_no_packet_and_automatic_moddate_creates_a_packet_holding_only_the_date()
+    {
+        using var stream = NoXmpDocument();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.Title = null;
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Null(again.Metadata.Title);
+        Assert.NotEqual("D:20200101120000Z", again.Metadata["ModDate"]);
+        Assert.Equal("Ada", again.Metadata.Author);
+        Assert.True(again.Metadata.HasXmp);
+        using var xmp = again.Metadata.OpenXmp();
+        string text = new StreamReader(xmp).ReadToEnd();
+        Assert.Contains("ModifyDate", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("title", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("Ada", text, StringComparison.Ordinal);
+        Assert.DoesNotContain("creator", text, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void explicit_moddate_clear_with_no_packet_creates_no_packet()
+    {
+        using var stream = NoXmpDocument();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.ModificationDate = null;
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Null(again.Metadata["ModDate"]);
+        Assert.Equal("Old", again.Metadata.Title);
+        Assert.False(again.Metadata.HasXmp);
+    }
+
+    [Fact]
+    public void clear_after_an_explicit_moddate_override_with_no_packet_creates_no_packet()
+    {
+        using var stream = NoXmpDocument();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.ModificationDate = null;
+            editor.Metadata.Title = null;
+            editor.Metadata.Author = null;
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Null(again.Metadata.Title);
+        Assert.Null(again.Metadata.Author);
+        Assert.Null(again.Metadata["ModDate"]);
+        Assert.False(again.Metadata.HasXmp);
+    }
+
+    // A refused clear leaves earlier pending edits in place.
+    [Fact]
+    public void refused_clear_keeps_earlier_pending_edits()
+    {
+        byte[] raw = Encoding.UTF8.GetBytes("<foo/>");
+        using var stream = NoXmpDocument();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.Subject = "Kept";
+            editor.Metadata.SetXmp(raw);
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = null);
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("Old", again.Metadata.Title);
+        Assert.Equal("Kept", again.Metadata.Subject);
+        using var xmp = again.Metadata.OpenXmp();
+        Assert.Equal(raw, ReadAll(xmp));
+    }
+
     private static void AssertEditsRefusedWithNoChange(byte[] packet)
     {
         using var stream = DuplicateXmpDocument(packet);
@@ -469,6 +554,16 @@ public class MetadataTests
         }
 
         Assert.Equal(original, stream.ToArray());
+    }
+
+    private static MemoryStream NoXmpDocument()
+    {
+        PdfBuilder builder = PdfBuilder.Basic();
+        builder.Indirect(4, "<< /Title (Old) /Author (Ada) /ModDate (D:20200101120000Z) >>");
+        byte[] pdf = builder.Finish("/Info 4 0 R");
+        var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        return stream;
     }
 
     private static byte[] DuplicateXmpPacket(string descriptions)
