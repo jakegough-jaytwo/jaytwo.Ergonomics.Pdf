@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text;
+using jaytwo.Pdf.Metadata;
 using Xunit;
 
 namespace jaytwo.Pdf.Tests;
@@ -300,6 +301,120 @@ public class MetadataTests
         string text = again.Metadata["ModDate"] ?? string.Empty;
         Assert.StartsWith("D:", text, StringComparison.Ordinal);
         Assert.EndsWith("Z", text, StringComparison.Ordinal);
+    }
+
+    // METADATA-VALIDATE-01: a touched property must be defined in exactly one place; anything else refuses with no change.
+    [Theory]
+    [InlineData("<rdf:Description rdf:about=\"\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">A</rdf:li></rdf:Alt></dc:title></rdf:Description><rdf:Description rdf:about=\"x\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">B</rdf:li></rdf:Alt></dc:title></rdf:Description>")]
+    [InlineData("<rdf:Description rdf:about=\"\" dc:title=\"A\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">B</rdf:li></rdf:Alt></dc:title></rdf:Description>")]
+    [InlineData("<rdf:Description rdf:about=\"\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">A</rdf:li><rdf:li xml:lang=\"X-DEFAULT\">B</rdf:li></rdf:Alt></dc:title></rdf:Description>")]
+    public void duplicate_touched_definition_refuses_with_no_change(string descriptions)
+    {
+        byte[] packet = DuplicateXmpPacket(descriptions);
+        using var stream = DuplicateXmpDocument(packet);
+        byte[] original = stream.ToArray();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = "New");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Title = null);
+            Assert.Equal("Old", editor.Metadata.Title);
+            Assert.Equal("D:20200101120000Z", editor.Metadata["ModDate"]);
+            editor.SaveIncremental(stream);
+        }
+
+        Assert.Equal(original, stream.ToArray());
+    }
+
+    // A refresh of ModDate touches xmp:ModifyDate, so a duplicate ModifyDate refuses an edit of an unrelated property.
+    [Fact]
+    public void duplicate_modify_date_refuses_an_edit_that_refreshes_moddate()
+    {
+        byte[] packet = DuplicateXmpPacket(
+            "<rdf:Description rdf:about=\"\" xmp:ModifyDate=\"2020-01-01T12:00:00Z\"><xmp:ModifyDate>2020-01-01T12:00:00Z</xmp:ModifyDate></rdf:Description>");
+        using var stream = DuplicateXmpDocument(packet);
+        byte[] original = stream.ToArray();
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            Assert.Throws<PdfXmpException>(() => editor.Metadata.Keywords = "alpha");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata["Custom"] = "value");
+            Assert.Throws<PdfXmpException>(() => editor.Metadata["Trapped"] = "True");
+            Assert.Null(editor.Metadata.Keywords);
+            Assert.Null(editor.Metadata["Custom"]);
+            editor.SaveIncremental(stream);
+        }
+
+        Assert.Equal(original, stream.ToArray());
+    }
+
+    // The same duplicate in a property the edit does not touch never refuses, and the duplicate survives.
+    [Fact]
+    public void unrelated_duplicate_does_not_refuse_and_survives()
+    {
+        byte[] packet = DuplicateXmpPacket(
+            "<rdf:Description rdf:about=\"\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">Old</rdf:li></rdf:Alt></dc:title><pdf:Keywords>one</pdf:Keywords></rdf:Description>"
+            + "<rdf:Description rdf:about=\"x\"><pdf:Keywords>two</pdf:Keywords></rdf:Description>");
+        using var stream = DuplicateXmpDocument(packet);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        Assert.Equal("New", again.Metadata.Title);
+        using var xmp = again.Metadata.OpenXmp();
+        string text = new StreamReader(xmp).ReadToEnd();
+        Assert.Contains(">New<", text, StringComparison.Ordinal);
+        Assert.Contains(">one<", text, StringComparison.Ordinal);
+        Assert.Contains(">two<", text, StringComparison.Ordinal);
+    }
+
+    // A property defined once, in a description other than the first, is edited there; no second definition is added.
+    [Fact]
+    public void property_defined_in_a_later_description_is_edited_in_place()
+    {
+        byte[] packet = DuplicateXmpPacket(
+            "<rdf:Description rdf:about=\"\"><pdf:Keywords>kept</pdf:Keywords></rdf:Description>"
+            + "<rdf:Description rdf:about=\"x\"><dc:title><rdf:Alt><rdf:li xml:lang=\"x-default\">Old</rdf:li></rdf:Alt></dc:title></rdf:Description>");
+        using var stream = DuplicateXmpDocument(packet);
+        using (var document = PdfDocument.Open(stream, leaveOpen: true))
+        {
+            using var editor = document.Edit();
+            editor.Metadata.Title = "New";
+            editor.SaveIncremental(stream);
+        }
+
+        using var again = PdfDocument.Open(stream, leaveOpen: true);
+        using var xmp = again.Metadata.OpenXmp();
+        string text = new StreamReader(xmp).ReadToEnd();
+        Assert.Equal(1, text.Split(new[] { "dc:title>" }, StringSplitOptions.None).Length / 2);
+        Assert.Contains(">New<", text, StringComparison.Ordinal);
+        Assert.DoesNotContain(">Old<", text, StringComparison.Ordinal);
+        Assert.Contains(">kept<", text, StringComparison.Ordinal);
+    }
+
+    private static byte[] DuplicateXmpPacket(string descriptions)
+    {
+        return Encoding.UTF8.GetBytes(
+            "<?xpacket begin=\"\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"
+            + "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\"><rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\" "
+            + "xmlns:dc=\"http://purl.org/dc/elements/1.1/\" xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\" xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\">"
+            + descriptions
+            + "</rdf:RDF></x:xmpmeta><?xpacket end=\"w\"?>");
+    }
+
+    private static MemoryStream DuplicateXmpDocument(byte[] packet)
+    {
+        PdfBuilder builder = PdfBuilder.Basic(" /Metadata 5 0 R");
+        builder.Indirect(4, "<< /Title (Old) /ModDate (D:20200101120000Z) >>");
+        builder.StreamObject(5, "/Type /Metadata /Subtype /XML", packet);
+        byte[] pdf = builder.Finish("/Info 4 0 R");
+        var stream = new MemoryStream();
+        stream.Write(pdf, 0, pdf.Length);
+        return stream;
     }
 
     private static byte[] Titled(string title)

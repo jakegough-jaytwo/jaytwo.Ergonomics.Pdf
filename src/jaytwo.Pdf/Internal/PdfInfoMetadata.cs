@@ -83,6 +83,7 @@ internal sealed class PdfInfoMetadata
         _gate.EnsureDocumentChange();
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
+        CheckXmpEdit(key, true);
         PdfObject.Dict info = EditInfo();
         if (value == null)
         {
@@ -109,6 +110,7 @@ internal sealed class PdfInfoMetadata
         _gate.EnsureDocumentChange();
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
+        CheckXmpEdit(null, true);
         PdfObject.Dict info = EditInfo();
         if (value == null)
         {
@@ -138,6 +140,7 @@ internal sealed class PdfInfoMetadata
         _gate.EnsureDocumentChange();
         _gate.RequireModify();
         _gate.ApplyUsageRights(null, null);
+        CheckXmpEdit(key, !explicitModification);
         if (explicitModification)
         {
             _modDateExplicit = true;
@@ -262,6 +265,27 @@ internal sealed class PdfInfoMetadata
         finally
         {
             _touchingModDate = false;
+        }
+    }
+
+    // Refuses an edit whose touched XMP properties cannot be located safely, before any store changes. A modification-date
+    // refresh counts as touching ModDate unless an explicit override is in force. Unreadable packets are left to SyncXmp.
+    private void CheckXmpEdit(string? key, bool refreshesModDate)
+    {
+        byte[]? existing = TryReadXmpBytes();
+        if (existing == null || !XmpEditor.TryParse(existing, out XDocument? document, out _))
+        {
+            return;
+        }
+
+        if (key != null)
+        {
+            XmpEditor.CheckTouched(document!, key);
+        }
+
+        if (refreshesModDate && !_modDateExplicit)
+        {
+            XmpEditor.CheckTouched(document!, "ModDate");
         }
     }
 

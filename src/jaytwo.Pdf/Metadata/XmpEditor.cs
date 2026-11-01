@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,13 @@ internal static class XmpEditor
     private static readonly XNamespace Xmp = "http://ns.adobe.com/xap/1.0/";
     private static readonly XNamespace Rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
     private static readonly XNamespace X = "adobe:ns:meta/";
+
+    private enum Shape
+    {
+        Simple,
+        Alt,
+        Seq,
+    }
 
     public static bool TryParse(byte[] utf8, out XDocument? document, out Exception? error)
     {
@@ -84,42 +92,119 @@ internal static class XmpEditor
             new XProcessingInstruction("xpacket", "end=\"w\""));
     }
 
+    /// <summary>
+    /// Refuses a touched property that is defined more than once, in competing forms, or with duplicate languages.
+    /// Properties the edit does not touch, and packets without descriptions, are not examined.
+    /// </summary>
+    public static void CheckTouched(XDocument document, string key)
+    {
+        if (TryMap(key, out XName name, out Shape shape))
+        {
+            Locate(document, name, shape);
+        }
+    }
+
     public static void ApplyInfo(XDocument document, string key, string? value)
     {
-        switch (key)
+        if (!TryMap(key, out XName name, out Shape shape))
         {
-            case "Title":
-                SetAlt(document, Dc + "title", value);
+            return;
+        }
+
+        XElement? holder = Locate(document, name, shape);
+        switch (shape)
+        {
+            case Shape.Alt:
+                SetAlt(document, holder, name, value);
                 break;
-            case "Subject":
-                SetAlt(document, Dc + "description", value);
-                break;
-            case "Author":
-                SetSeq(document, Dc + "creator", value);
-                break;
-            case "Keywords":
-                SetSimple(document, Pdf + "Keywords", value);
-                break;
-            case "Producer":
-                SetSimple(document, Pdf + "Producer", value);
-                break;
-            case "Creator":
-                SetSimple(document, Xmp + "CreatorTool", value);
-                break;
-            case "CreationDate":
-                SetSimple(document, Xmp + "CreateDate", value);
-                break;
-            case "ModDate":
-                SetSimple(document, Xmp + "ModifyDate", value);
+            case Shape.Seq:
+                SetSeq(document, holder, name, value);
                 break;
             default:
+                SetSimple(document, holder, name, value);
                 break;
         }
     }
 
-    private static void SetSimple(XDocument document, XName name, string? value)
+    private static bool TryMap(string key, out XName name, out Shape shape)
     {
-        XElement description = EnsureDescription(document);
+        shape = Shape.Simple;
+        switch (key)
+        {
+            case "Title":
+                name = Dc + "title";
+                shape = Shape.Alt;
+                return true;
+            case "Subject":
+                name = Dc + "description";
+                shape = Shape.Alt;
+                return true;
+            case "Author":
+                name = Dc + "creator";
+                shape = Shape.Seq;
+                return true;
+            case "Keywords":
+                name = Pdf + "Keywords";
+                return true;
+            case "Producer":
+                name = Pdf + "Producer";
+                return true;
+            case "Creator":
+                name = Xmp + "CreatorTool";
+                return true;
+            case "CreationDate":
+                name = Xmp + "CreateDate";
+                return true;
+            case "ModDate":
+                name = Xmp + "ModifyDate";
+                return true;
+            default:
+                name = XName.Get("none");
+                return false;
+        }
+    }
+
+    // A touched property must be defined in exactly one place across the top-level descriptions, or not at all.
+    // Returns the description that defines it, or null when no description does.
+    private static XElement? Locate(XDocument document, XName name, Shape shape)
+    {
+        XElement? holder = null;
+        int definitions = 0;
+        foreach (XElement description in document.Descendants(Rdf + "RDF").SelectMany(rdf => rdf.Elements(Rdf + "Description")))
+        {
+            int here = description.Attributes(name).Count() + description.Elements(name).Count();
+            if (here > 0)
+            {
+                holder = description;
+                definitions += here;
+            }
+        }
+
+        if (definitions > 1)
+        {
+            throw new PdfXmpException("The XMP defines " + name.LocalName + " more than once, so it cannot be edited.");
+        }
+
+        if (shape == Shape.Alt && holder != null)
+        {
+            XElement? element = holder.Element(name);
+            var languages = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (XElement li in element?.Descendants(Rdf + "li") ?? Enumerable.Empty<XElement>())
+            {
+                string? language = (string?)li.Attribute(XNamespace.Xml + "lang");
+                if (language != null && !languages.Add(language))
+                {
+                    throw new PdfXmpException("The XMP " + name.LocalName + " repeats the language " + language + ", so it cannot be edited.");
+                }
+            }
+        }
+
+        return holder;
+    }
+
+    private static void SetSimple(XDocument document, XElement? holder, XName name, string? value)
+    {
+        XElement description = EnsureDescription(document, holder);
         XAttribute? attribute = description.Attribute(name);
         XElement? element = description.Element(name);
         if (value == null)
@@ -144,9 +229,9 @@ internal static class XmpEditor
         element.Value = value;
     }
 
-    private static void SetAlt(XDocument document, XName name, string? value)
+    private static void SetAlt(XDocument document, XElement? holder, XName name, string? value)
     {
-        XElement description = EnsureDescription(document);
+        XElement description = EnsureDescription(document, holder);
         XAttribute? attribute = description.Attribute(name);
         if (attribute != null && value != null)
         {
@@ -188,9 +273,9 @@ internal static class XmpEditor
         li.Value = value;
     }
 
-    private static void SetSeq(XDocument document, XName name, string? value)
+    private static void SetSeq(XDocument document, XElement? holder, XName name, string? value)
     {
-        XElement description = EnsureDescription(document);
+        XElement description = EnsureDescription(document, holder);
         XElement? element = description.Element(name);
         if (value == null)
         {
@@ -215,9 +300,9 @@ internal static class XmpEditor
         li.Value = value;
     }
 
-    private static XElement EnsureDescription(XDocument document)
+    private static XElement EnsureDescription(XDocument document, XElement? holder)
     {
-        XElement? description = document.Descendants(Rdf + "Description").FirstOrDefault();
+        XElement? description = holder ?? document.Descendants(Rdf + "Description").FirstOrDefault();
         if (description != null)
         {
             description.SetAttributeValue(XNamespace.Xmlns + "dc", Dc.NamespaceName);

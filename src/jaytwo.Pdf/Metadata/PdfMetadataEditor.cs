@@ -4,6 +4,7 @@ namespace jaytwo.Pdf.Metadata;
 
 /// <summary>
 /// Changes document information and XMP metadata. The changes are written by the next save or signature.
+/// An edit that must update an XMP property defined more than once in the packet throws <see cref="PdfXmpException"/> and changes nothing.
 /// </summary>
 public sealed class PdfMetadataEditor
 {
