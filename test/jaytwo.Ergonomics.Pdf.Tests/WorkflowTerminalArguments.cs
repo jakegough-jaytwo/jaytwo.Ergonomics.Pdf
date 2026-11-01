@@ -47,6 +47,43 @@ internal static class WorkflowTerminalArguments
         Assert.True(thrown is ArgumentException, "Expected an argument error, got " + thrown);
     }
 
+    // A writable stream that cannot seek and cannot report a length or position, like a response body or a pipe.
+    public sealed class ForwardOnlyStream : Stream
+    {
+        private readonly MemoryStream _written = new MemoryStream();
+
+        public override bool CanRead => false;
+
+        public override bool CanSeek => false;
+
+        public override bool CanWrite => true;
+
+        public override long Length => throw new NotSupportedException();
+
+        public override long Position
+        {
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
+        }
+
+        public byte[] Written => _written.ToArray();
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotSupportedException();
+
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotSupportedException();
+
+        public override void SetLength(long value) => throw new NotSupportedException();
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            _written.Write(buffer, offset, count);
+        }
+    }
+
     private sealed class NonSeekableStream : MemoryStream
     {
         public override bool CanSeek => false;

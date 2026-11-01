@@ -102,9 +102,11 @@ public sealed class PdfCombineWorkflow
             }
         }
 
-        if (target == null && (destination == null || !destination.CanWrite || !destination.CanSeek || destination.Length != 0 || destination.Position != 0))
+        // The assembly engine does not seek its output (WORKFLOW-STREAM-01), so a stream that cannot seek is eligible; one that
+        // can must be empty at position zero. A stream that cannot seek reports no length or position to check.
+        if (target == null && (destination == null || !destination.CanWrite || (destination.CanSeek && (destination.Length != 0 || destination.Position != 0))))
         {
-            throw new ArgumentException("The destination must be an empty writable seekable stream at position zero.", nameof(destination));
+            throw new ArgumentException("The destination must be an empty writable stream at position zero.", nameof(destination));
         }
 
         if (Interlocked.Exchange(ref _started, 1) != 0)

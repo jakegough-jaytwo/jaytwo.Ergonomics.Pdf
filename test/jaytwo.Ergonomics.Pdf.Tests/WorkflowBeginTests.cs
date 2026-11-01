@@ -23,6 +23,15 @@ public class WorkflowBeginTests
         yield return new object[] { "position-not-zero" };
     }
 
+    // Combine output need not seek (WORKFLOW-STREAM-01), so a non-seekable stream is eligible there.
+    public static IEnumerable<object[]> CombineIneligibleStreams()
+    {
+        yield return new object[] { "null" };
+        yield return new object[] { "read-only" };
+        yield return new object[] { "non-empty" };
+        yield return new object[] { "position-not-zero" };
+    }
+
     public static IEnumerable<object[]> InvalidPaths()
     {
         yield return new object[] { "null" };
@@ -153,7 +162,7 @@ public class WorkflowBeginTests
     }
 
     [Theory]
-    [MemberData(nameof(IneligibleStreams))]
+    [MemberData(nameof(CombineIneligibleStreams))]
     public void an_ineligible_combine_stream_does_not_consume_the_description(string kind)
     {
         PdfCombineWorkflow workflow = PdfWorkflow.Combine(new[] { PdfCombineInput.From(new MemoryStream(WorkflowPdf.WithInfo())) });
@@ -164,6 +173,46 @@ public class WorkflowBeginTests
         workflow.Save(output);
         Assert.True(output.Length > 0);
         Assert.Throws<InvalidOperationException>(() => workflow.Save(new MemoryStream()));
+    }
+
+    [Fact]
+    public async Task a_non_seekable_combine_stream_is_accepted_and_the_description_runs_once()
+    {
+        byte[] pdf = WorkflowPdf.WithInfo();
+        PdfCombineWorkflow sync = PdfWorkflow.Combine(new[] { PdfCombineInput.From(new MemoryStream(pdf)) });
+        var syncOutput = new WorkflowTerminalArguments.ForwardOnlyStream();
+
+        PdfAssemblyResult syncResult = sync.Save(syncOutput);
+
+        Assert.NotNull(syncResult);
+        using (PdfDocument saved = WorkflowPdf.Open(syncOutput.Written))
+        {
+            Assert.Equal(1, saved.Pages.Count);
+        }
+
+        Assert.Throws<InvalidOperationException>(() => sync.Save(new MemoryStream()));
+
+        PdfCombineWorkflow async = PdfWorkflow.Combine(new[] { PdfCombineInput.From(new MemoryStream(pdf)) });
+        var asyncOutput = new WorkflowTerminalArguments.ForwardOnlyStream();
+
+        await async.SaveAsync(asyncOutput);
+
+        using (PdfDocument saved = WorkflowPdf.Open(asyncOutput.Written))
+        {
+            Assert.Equal(1, saved.Pages.Count);
+        }
+
+        await Assert.ThrowsAsync<InvalidOperationException>(() => async.SaveAsync(new MemoryStream()));
+    }
+
+    [Fact]
+    public void a_non_seekable_stream_does_not_relax_the_builder_save_rule()
+    {
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo())).WithTitle("New");
+
+        WorkflowTerminalArguments.AssertRejected(() => workflow.Save(new WorkflowTerminalArguments.ForwardOnlyStream()));
+
+        workflow.Save(new MemoryStream());
     }
 
     [Theory]
