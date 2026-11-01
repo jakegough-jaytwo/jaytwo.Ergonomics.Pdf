@@ -90,5 +90,6 @@ Pre-release. No package is published, and the 1.0 release track is suspended whi
 - [`docs/behavior.md`](docs/behavior.md): shipped behavior, the support matrix, limits, and failure semantics.
 - [`docs/acceptance.md`](docs/acceptance.md): the checks the tests enforce.
 - [`docs/spec/`](docs/spec/): adopted operation contracts and draft requirements.
+- [`../pdfdocs`](../pdfdocs): authoritative local reference for ISO 32000-1/-2, ISO/TS 32001 to 32005, and the PDF 2.0 application notes (a sibling checkout; read its [README](../pdfdocs/README.md) for build and search instructions). It does not include ETSI EN 319 142-1 (PAdES).
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): building and testing.
 - [`AGENTS.md`](AGENTS.md): binding contributor rules and adopted implementation constraints.
