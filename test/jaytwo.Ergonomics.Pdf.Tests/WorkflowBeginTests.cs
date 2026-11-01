@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using jaytwo.Pdf;
@@ -253,6 +254,89 @@ public class WorkflowBeginTests
         var output = new MemoryStream();
         Assert.Throws<InvalidOperationException>(() => workflow.Save(output));
         Assert.Equal(0, output.Length);
+    }
+
+    [Theory]
+    [InlineData("stream", false)]
+    [InlineData("stream", true)]
+    [InlineData("file", false)]
+    [InlineData("file", true)]
+    public async Task a_successful_append_on_a_writable_source_consumes_the_description_once(string input, bool useAsync)
+    {
+        using var directory = new TempDirectory();
+        byte[] original = WorkflowPdf.WithInfo();
+        string path = directory.Write("in.pdf", original);
+        var stream = new MemoryStream();
+        stream.Write(original, 0, original.Length);
+        PdfWorkflowBuilder workflow = (input == "stream" ? PdfWorkflow.From(stream) : PdfWorkflow.FromFile(path)).WithTitle("New");
+
+        PdfWorkflowResult result = useAsync ? await workflow.AppendToSourceAsync() : workflow.AppendToSource();
+
+        Assert.True(result.Modified);
+        byte[] appended = input == "stream" ? stream.ToArray() : File.ReadAllBytes(path);
+        Assert.True(appended.Length > original.Length);
+        using (PdfDocument saved = WorkflowPdf.Open(appended))
+        {
+            Assert.Equal("New", saved.Metadata.Title);
+        }
+
+        Assert.Throws<InvalidOperationException>(() => workflow.AppendToSource());
+        await Assert.ThrowsAsync<InvalidOperationException>(() => workflow.AppendToSourceAsync());
+        Assert.Throws<InvalidOperationException>(() => workflow.Save(new MemoryStream()));
+        Assert.Equal(appended.Length, input == "stream" ? stream.Length : new FileInfo(path).Length);
+    }
+
+    // Path terminals take the claim after the argument checks, so of several valid calls exactly one writes a file.
+    [Fact]
+    public async Task of_concurrent_path_saves_exactly_one_runs_and_an_invalid_path_does_not_take_the_claim()
+    {
+        byte[] pdf = WorkflowPdf.WithInfo();
+        for (int attempt = 0; attempt < 6; attempt++)
+        {
+            using var directory = new TempDirectory();
+            PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(pdf)).WithTitle("New");
+            using var barrier = new Barrier(3);
+            Task<Exception?> Run(string path) => Task.Run<Exception?>(() =>
+            {
+                barrier.SignalAndWait();
+                return Record.Exception(() => workflow.Save(path));
+            });
+
+            Exception?[] outcomes = await Task.WhenAll(Run(directory.File("a.pdf")), Run(string.Empty), Run(directory.File("b.pdf")));
+
+            Assert.IsType<ArgumentException>(outcomes[1]);
+            Assert.Single(new[] { outcomes[0], outcomes[2] }, outcome => outcome == null);
+            Assert.Single(new[] { outcomes[0], outcomes[2] }, outcome => outcome is InvalidOperationException);
+            Assert.Single(Directory.GetFiles(directory.Path, "*.pdf"));
+        }
+    }
+
+    [Fact]
+    public async Task of_concurrent_combine_calls_exactly_one_runs_and_an_invalid_call_does_not_take_the_claim()
+    {
+        byte[] pdf = WorkflowPdf.WithInfo();
+        for (int attempt = 0; attempt < 6; attempt++)
+        {
+            using var directory = new TempDirectory();
+            PdfCombineWorkflow workflow = PdfWorkflow.Combine(new[] { PdfCombineInput.From(new MemoryStream(pdf)) });
+            using var barrier = new Barrier(4);
+            Task<Exception?> Run(Action terminal) => Task.Run<Exception?>(() =>
+            {
+                barrier.SignalAndWait();
+                return Record.Exception(terminal);
+            });
+
+            Exception?[] outcomes = await Task.WhenAll(
+                Run(() => workflow.Save(new MemoryStream())),
+                Run(() => workflow.Save(new MemoryStream(new byte[] { 1 }))),
+                Run(() => workflow.Save(directory.File("a.pdf"))),
+                Run(() => workflow.Save(new WorkflowTerminalArguments.ForwardOnlyStream())));
+
+            Assert.IsType<ArgumentException>(outcomes[1]);
+            Exception?[] valid = { outcomes[0], outcomes[2], outcomes[3] };
+            Assert.Single(valid, outcome => outcome == null);
+            Assert.Equal(2, valid.Count(outcome => outcome is InvalidOperationException));
+        }
     }
 
     // Ineligible arguments racing valid calls never take the claim; exactly one valid call runs.

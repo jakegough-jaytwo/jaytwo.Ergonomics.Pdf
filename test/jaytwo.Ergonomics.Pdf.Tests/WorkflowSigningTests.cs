@@ -455,6 +455,121 @@ public class WorkflowSigningTests
         Assert.Equal(0, signer.Calls);
     }
 
+    // WORKFLOW-BEGIN-01 for the timestamp terminals: rejected arguments leave the description usable, which a corrected call
+    // proves by reaching the authority (the failing authority makes the run fail, and that failure consumes it).
+    [Theory]
+    [InlineData("null-stream", false)]
+    [InlineData("null-stream", true)]
+    [InlineData("read-only", true)]
+    [InlineData("non-seekable", false)]
+    [InlineData("non-empty", true)]
+    [InlineData("position-not-zero", false)]
+    [InlineData("null-path", true)]
+    [InlineData("null-path", false)]
+    [InlineData("empty-path", false)]
+    [InlineData("illegal-path", true)]
+    [InlineData("null-authority", false)]
+    [InlineData("null-authority", true)]
+    public async Task rejected_timestamp_arguments_do_not_consume_the_description(string rejected, bool useAsync)
+    {
+        var authority = new FailingAuthority();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo()));
+        Func<Task> terminal;
+        if (rejected == "null-authority")
+        {
+            terminal = () => useAsync ? workflow.TimestampAsync(new MemoryStream(), null!) : Task.FromResult(workflow.Timestamp(new MemoryStream(), null!));
+        }
+        else if (rejected.EndsWith("path", StringComparison.Ordinal))
+        {
+            string? path = WorkflowTerminalArguments.BadPath(rejected == "null-path" ? "null" : rejected == "empty-path" ? "empty" : "illegal-character");
+            terminal = () => useAsync ? workflow.TimestampAsync(path!, authority) : Task.FromResult(workflow.Timestamp(path!, authority));
+        }
+        else
+        {
+            string kind = rejected == "null-stream" ? "null" : rejected;
+            terminal = () => useAsync
+                ? workflow.TimestampAsync(WorkflowTerminalArguments.Ineligible(kind)!, authority)
+                : Task.FromResult(workflow.Timestamp(WorkflowTerminalArguments.Ineligible(kind)!, authority));
+        }
+
+        Exception? thrown = await Record.ExceptionAsync(terminal);
+        Assert.True(thrown is ArgumentException, "Expected an argument error, got " + thrown);
+        Assert.Equal(0, authority.Calls);
+
+        await Assert.ThrowsAsync<PdfTimestampException>(() => workflow.TimestampAsync(new MemoryStream(), authority));
+        Assert.Equal(1, authority.Calls);
+        Assert.Throws<InvalidOperationException>(() => workflow.Timestamp(new MemoryStream(), authority));
+        Assert.Equal(1, authority.Calls);
+    }
+
+    [Fact]
+    public async Task a_timestamp_refusal_after_accepted_arguments_consumes_the_description_once()
+    {
+        var authority = new FailingAuthority();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.Restricted())).WithTitle("New");
+
+        Assert.Throws<PdfEncryptionRestrictedException>(() => workflow.Timestamp(new MemoryStream(), authority));
+
+        var output = new MemoryStream();
+        Assert.Throws<InvalidOperationException>(() => workflow.Timestamp(output, authority));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => workflow.TimestampAsync(output, authority));
+        Assert.Equal(0, output.Length);
+        Assert.Equal(0, authority.Calls);
+    }
+
+    [Fact]
+    public async Task a_pre_cancelled_timestamp_with_accepted_arguments_consumes_the_description_once()
+    {
+        var authority = new FailingAuthority();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo()));
+        using var canceled = new CancellationTokenSource();
+        canceled.Cancel();
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => workflow.TimestampAsync(new MemoryStream(), authority, cancellationToken: canceled.Token));
+
+        var output = new MemoryStream();
+        Assert.Throws<InvalidOperationException>(() => workflow.Timestamp(output, authority));
+        Assert.Equal(0, output.Length);
+        Assert.Equal(0, authority.Calls);
+    }
+
+    [Fact]
+    public async Task a_pre_cancelled_timestamp_with_a_rejected_argument_leaves_the_description_usable()
+    {
+        var authority = new FailingAuthority();
+        PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(WorkflowPdf.WithInfo()));
+        using var canceled = new CancellationTokenSource();
+        canceled.Cancel();
+
+        await Assert.ThrowsAsync<ArgumentException>(() => workflow.TimestampAsync(new MemoryStream(new byte[] { 1 }), authority, cancellationToken: canceled.Token));
+
+        await Assert.ThrowsAsync<PdfTimestampException>(() => workflow.TimestampAsync(new MemoryStream(), authority));
+    }
+
+    [Fact]
+    public async Task of_concurrent_timestamp_calls_exactly_one_reaches_the_authority()
+    {
+        byte[] pdf = WorkflowPdf.WithInfo();
+        for (int attempt = 0; attempt < 6; attempt++)
+        {
+            var authority = new FailingAuthority();
+            PdfWorkflowBuilder workflow = PdfWorkflow.From(new MemoryStream(pdf));
+            using var barrier = new Barrier(3);
+            Task<Exception?> Run(Stream destination) => Task.Run<Exception?>(() =>
+            {
+                barrier.SignalAndWait();
+                return Record.Exception(() => workflow.Timestamp(destination, authority));
+            });
+
+            Exception?[] outcomes = await Task.WhenAll(Run(new MemoryStream()), Run(new MemoryStream(new byte[] { 1 })), Run(new MemoryStream()));
+
+            Assert.IsType<ArgumentException>(outcomes[1]);
+            Assert.Single(new[] { outcomes[0], outcomes[2] }, outcome => outcome is PdfTimestampException);
+            Assert.Single(new[] { outcomes[0], outcomes[2] }, outcome => outcome is InvalidOperationException);
+            Assert.Equal(1, authority.Calls);
+        }
+    }
+
     private static PdfSignatureOptions Options()
     {
         return new PdfSignatureOptions { ReservedContentsBytes = 8192, SigningTime = SigningTime };
