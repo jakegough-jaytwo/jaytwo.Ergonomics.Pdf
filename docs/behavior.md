@@ -1,12 +1,12 @@
 # Behavior reference
 
-This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](CHARTER.md) defines product intent and architectural principles; [supported capabilities](SUPPORTED.md) defines intended capabilities and boundaries. [`ACCEPTANCE.md`](../ACCEPTANCE.md) defines required outcomes and verification requirements. A documented capability is not by itself a production-qualification claim.
+This is the public contract for the current behavior of `jaytwo.Pdf` and `jaytwo.Ergonomics.Pdf`, except for the explicitly planned additions below. The [Project Charter](charter.md) defines product intent and architectural principles; [supported capabilities](supported.md) defines intended capabilities and boundaries. [`acceptance.md`](acceptance.md) defines required outcomes and verification requirements. A documented capability is not by itself a production-qualification claim.
 
 The engine owns parsing, writing, encryption, forms, appearances, PDF signature construction, and document invariants. Its public API exposes supported operations rather than raw PDF objects. The workflow library composes operations through that public API and owns convenience, ordering, and file handling. Private signing keys remain under host control.
 
 ## Planned additions
 
-The owner's documentation reset adds the following targets. They are not current APIs or verified behavior, and the current guarantees elsewhere in this document remain in force. Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](CHARTER.md).
+The owner's documentation reset adds the following targets. They are not current APIs or verified behavior, and the current guarantees elsewhere in this document remain in force. Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](charter.md).
 
 | Target | Intended behavior | Contract still to define |
 | --- | --- | --- |
@@ -59,7 +59,7 @@ The library reads and updates PDF 1.0 through PDF 1.7 / ISO 32000-1 (with the PD
 
 ## Out of scope
 
-The [enduring non-goals](SUPPORTED.md#enduring-non-goals) are product boundaries, not merely missing APIs: rendering, page-content text extraction, reflow, general document authoring and layout, redaction, cryptographic signature validation, general PDF repair, XFA packet editing, JavaScript authoring/editing/execution, PDF/A conversion or validation and guarantees of creating or preserving conformance, public-key encryption, adding encryption, general annotation editing, page-level file attachment annotations, and rewriting an input file in place. Limited image operations are the explicit intended-scope exception; they are not current APIs. Necessary internal functionality for supported workflows does not create general public APIs for excluded capabilities.
+The [enduring non-goals](supported.md#enduring-non-goals) are product boundaries, not merely missing APIs: rendering, page-content text extraction, reflow, general document authoring and layout, redaction, cryptographic signature validation, general PDF repair, XFA packet editing, JavaScript authoring/editing/execution, PDF/A conversion or validation and guarantees of creating or preserving conformance, public-key encryption, adding encryption, general annotation editing, page-level file attachment annotations, and rewriting an input file in place. Limited image operations are the explicit intended-scope exception; they are not current APIs. Necessary internal functionality for supported workflows does not create general public APIs for excluded capabilities.
 
 Current APIs also do not offer image stamping or watermarking, image-to-PDF or standalone blank-page creation, security-permission changes, compaction, or general revision removal. Image operations and permission changes are intended scope as described above; compaction and general revision removal remain separately evaluated capabilities. XFA classification and operation-specific acceptance, refusal, or removal follow the contracts below, including supported use of hybrid forms' AcroForm representation, without XFA packet editing. Removal is an explicitly documented consequence of the applicable operations. Assembly can preserve the documented annotation subset and create a new file from existing pages. Existing page-content streams are not decoded by the current operations.
 

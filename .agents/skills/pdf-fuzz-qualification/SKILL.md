@@ -1,11 +1,11 @@
 ---
 name: pdf-fuzz-qualification
-description: Build, run, minimize, and record bounded fuzz campaigns for QUALIFICATION.md gate G8. Use for the fuzz harness, the fixed-seed CI smoke run, a qualification campaign, or triage of a fuzz finding. Not for an ordinary regression test or the read-only security review.
+description: Build, run, minimize, and record bounded fuzz campaigns for docs/qualification.md gate G8. Use for the fuzz harness, the fixed-seed CI smoke run, a qualification campaign, or triage of a fuzz finding. Not for an ordinary regression test or the read-only security review.
 ---
 
 # PDF fuzz qualification
 
-Fuzzing produces G8 evidence. It does not prove security, and elapsed CPU time is not a pass. Coverage quality, findings, and their dispositions matter more than hours. Read `QUALIFICATION.md` section 10, the B-18 backlog item, and decision D-23 before a campaign. D-23 caps a campaign at 24 aggregate CPU-hours on existing machines, with no paid compute.
+Fuzzing produces G8 evidence. It does not prove security, and elapsed CPU time is not a pass. Coverage quality, findings, and their dispositions matter more than hours. Read `docs/qualification.md` section 10, the B-18 backlog item, and decision D-23 before a campaign. D-23 caps a campaign at 24 aggregate CPU-hours on existing machines, with no paid compute.
 
 ## Layout
 

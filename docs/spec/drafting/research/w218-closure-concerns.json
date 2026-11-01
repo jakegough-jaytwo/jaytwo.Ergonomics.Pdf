@@ -1,0 +1,6015 @@
+{
+ "merged_by": "w218-closure-merge.py",
+ "merged_utc": "2026-10-31T21:10:06Z",
+ "python": "3.13.1",
+ "script_sha256": {
+  "w218-closure-font-survey.py": "7a56cb490ba64b4a438f17fd0ffa31fe3f9fc905270d899949751f3f2b74a8ea",
+  "w218-closure-measure.py": "1d2003997c313cd5f60cf22d6f557d6adc0797b9496d48ab6e48f109bdbfc8c1",
+  "w218-closure-appendix-probe.cs.txt": "3f25526b2421b855737cd63bf3b4443b7ef810c8c19ec308d9b7de9626a1f96f",
+  "w218-closure-appendix-probe.csproj.txt": "c8e1390579346c9613782ae4f1edc49d0291c1c0cb75c7e93d161ed852a05655",
+  "w218-closure-merge.py": "17c0c24a879787a21232fc0f42e40dbd5704af93b9f83c75c998bd0cb7cf3249"
+ },
+ "inputs_sha256": {
+  "concern1_probe": "968996cb4adb8fe646e84b631307677029b39d0f1559c6d0648729d03ada8729",
+  "concern2_survey": "0c4580ca57be4bf98838f31e7956f8513c0472f418f9432151c4b18a2d80c4e4",
+  "concern3_measure": "a404c899e0921e82a14dabbc49a752ff63989ec11d13ccd163d411ddf87f4fe2",
+  "concern2_embedder_run": "d206f47a2d9f285c0c2deadb8744a3252a0d5f61f0b1700a1b8203f49ed5c00f",
+  "concern2_itext_run": "49810ae0448185b7f0c39622f3cc660954eebc010d23ad5ffbc754769bf08ba0",
+  "listing:google-fonts-tree": "46b8e5ece90f22b29a7ac832dcbb3367cc0ced396005e4a6f873c90c73744019",
+  "listing:notofonts-tree": "a723bf2b5f7bcda2619309fc01b09e8add71b3bb2af1cde55ace90d465441fc7",
+  "listing:noto-cjk-tree": "5ab15d807aba4e2b62954051414b975e5e0069bf32a075c78d839e5cb92b52af",
+  "listing:sarasa-releases": "4be4bcf21b9cd40a421a80a7b663ca87e2e243240629f180d1e71d49863a736f",
+  "listing:source-han-sans-ttf-releases": "44b5ab666d13b3ce785c985059a29c40031fdb9734c702f67f1bbd3a46cbe8b5",
+  "listing:lxgw-wenkai-releases": "e0e93aae642c3c38176de386312bd9727873b88ea99bf3cce7e1dcfd94d3866b",
+  "listing:lxgw-bright-releases": "7f11a818aa3fdd32d719283cc79cc7eeb3b35e15d851171b410f4b086f3c1768",
+  "listing:fanwunming-releases": "8540a5ebef07dc3ca998bf6b474b032a0912dbea7f9ca8812171b74eae58798e"
+ },
+ "concern1_probe": [
+  {
+   "case": "NotoSans-Regular.ttf raw",
+   "storedStreamBytes": 825628,
+   "sourcePdfBytes": 826871,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 827329,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 826594,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 827325
+  },
+  {
+   "case": "NotoSans-Regular.ttf flate",
+   "storedStreamBytes": 400729,
+   "sourcePdfBytes": 401993,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 402451,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 401695,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 402426
+  },
+  {
+   "case": "DroidSansFallbackFull.ttf raw",
+   "storedStreamBytes": 4529044,
+   "sourcePdfBytes": 4530290,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 4530748,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 4530013,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 4530744
+  },
+  {
+   "case": "DroidSansFallbackFull.ttf flate",
+   "storedStreamBytes": 2336520,
+   "sourcePdfBytes": 2337787,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 2338245,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 2337489,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 2338220
+  },
+  {
+   "case": "malgun.ttf raw",
+   "storedStreamBytes": 13459196,
+   "sourcePdfBytes": 13460445,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 13460168,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  },
+  {
+   "case": "malgun.ttf flate",
+   "storedStreamBytes": 7472912,
+   "sourcePdfBytes": 7474179,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 7474637,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 7473881,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 7474612
+  },
+  {
+   "case": "simsunb.ttf raw",
+   "storedStreamBytes": 21894056,
+   "sourcePdfBytes": 21895305,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 21895028,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  },
+  {
+   "case": "simsunb.ttf flate",
+   "storedStreamBytes": 11546482,
+   "sourcePdfBytes": 11547752,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 11547454,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  },
+  {
+   "case": "LXGWWenKai-Regular.ttf raw",
+   "storedStreamBytes": 25486932,
+   "sourcePdfBytes": 25488181,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 25487904,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  },
+  {
+   "case": "LXGWWenKai-Regular.ttf flate",
+   "storedStreamBytes": 12798102,
+   "sourcePdfBytes": 12799372,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 12799074,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  },
+  {
+   "case": "synthetic-random 8384512 stored bytes",
+   "storedStreamBytes": 8384512,
+   "sourcePdfBytes": 8385758,
+   "extract_unsupportedAppearanceOmissions": 0,
+   "extract_outputBytes": 8386216,
+   "extract_outputContainsFontFile2": true,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 8385481,
+   "Sign_outcome": "succeeded",
+   "Sign_outputBytes": 8386212
+  },
+  {
+   "case": "synthetic-random 8388609 stored bytes",
+   "storedStreamBytes": 8388609,
+   "sourcePdfBytes": 8389855,
+   "extract_unsupportedAppearanceOmissions": 1,
+   "extract_outputBytes": 489,
+   "extract_outputContainsFontFile2": false,
+   "extract_outcome": "returned",
+   "SaveIncremental_outcome": "succeeded",
+   "SaveIncremental_outputBytes": 8389578,
+   "Sign_outcome": "PdfSignException: The signature appendix would exceed 8 MiB. Call SaveIncremental before Sign."
+  }
+ ],
+ "concern2_survey": {
+  "script": "w218-closure-font-survey.py",
+  "script_sha256": "9b2fad8fa1dcbbc259b7b7c431a564af585c3e7f137c38017a7f0967d5078b4c",
+  "evidence_script_sha256": "2791c423711e7f1d73cbbbee58105fe80b3b1f4e381ebba61e24fff33f31b713",
+  "fontTools": "4.68.0",
+  "python": "3.13.1",
+  "limit_bytes": 33554432,
+  "started_utc": "2026-10-31T21:00:30Z",
+  "fonts": [
+   {
+    "file": "BpmfZihiKaiStd-Regular.ttf",
+    "bytes": 17497872,
+    "sha256": "043aaa657f2b28d46ef9d4970064a10ed6fd162f4afb28b9253f25d4f8de341b",
+    "class": "static-glyf",
+    "glyf_bytes": 16335510,
+    "tables_total": 17497610,
+    "family": "Bpmf Zihi Kai Std",
+    "full_name": "Bpmf Zihi Kai Std Regular",
+    "version_string": "Version 1.610",
+    "copyright": "Copyright 2025 The Bpmf Project Authors (https://github.com/ButTaiwan/bpmfvs)",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org",
+    "name_license_url": "https://openfontlicense.org",
+    "num_glyphs": 32996,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 15613,
+    "script_coverage": {
+     "latin": 130,
+     "greek": 48,
+     "cyrillic": 0,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 0,
+     "kana": 82,
+     "han": 161
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 18506,
+    "max_composite_depth": 1,
+    "facts_seconds": 7.215,
+    "mib": 16.687,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -16056560,
+    "provenance": {
+     "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/bpmfzihikaistd/BpmfZihiKaiStd-Regular.ttf",
+     "source": "google/fonts main; METADATA.pb licence OFL"
+    }
+   },
+   {
+    "file": "CactusClassicalSerif-Regular.ttf",
+    "bytes": 28502932,
+    "sha256": "ecbd58961db922392d7fecfafa3681fefaeec0c399b860ab6940ba700f7da055",
+    "class": "static-glyf",
+    "glyf_bytes": 27230050,
+    "tables_total": 28502597,
+    "family": "Cactus Classical Serif",
+    "full_name": "Cactus Classical Serif Regular",
+    "version_string": "Version 1.005",
+    "copyright": null,
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org",
+    "name_license_url": "https://openfontlicense.org",
+    "num_glyphs": 58570,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 58064,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 0,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 12.904,
+    "mib": 27.183,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -5051500,
+    "provenance": {
+     "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/cactusclassicalserif/CactusClassicalSerif-Regular.ttf",
+     "source": "google/fonts main (unversioned branch tip); METADATA.pb licence OFL"
+    }
+   },
+   {
+    "file": "LXGWWenKaiTC-Regular.ttf",
+    "bytes": 13110528,
+    "sha256": "4fcc5aec11cbbf737b0cfab7b63796f7f280087a7a656b2f13342cd5e5318d95",
+    "class": "static-glyf",
+    "glyf_bytes": 12504199,
+    "tables_total": 13110206,
+    "family": "LXGW WenKai TC",
+    "full_name": "LXGW WenKai TC Regular",
+    "version_string": "Version 1.330",
+    "copyright": "Copyright 2024 The LXGW WenKai Project Authors (https://github.com/lxgw/LxgwWenkaiTC)",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org",
+    "name_license_url": "https://openfontlicense.org",
+    "num_glyphs": 22467,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 22401,
+    "script_coverage": {
+     "latin": 190,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 0,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 8,
+    "max_composite_depth": 1,
+    "facts_seconds": 5.655,
+    "mib": 12.503,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -20443904,
+    "provenance": {
+     "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/lxgwwenkaitc/LXGWWenKaiTC-Regular.ttf",
+     "source": "google/fonts main; ofl directory"
+    }
+   },
+   {
+    "file": "ShipporiMinchoB1-Regular.ttf",
+    "bytes": 15230032,
+    "sha256": "89403e4b2a9ca0db9f832b893cfbfd90506c7c674cd640ba8a0ee128c34de7a4",
+    "class": "static-glyf",
+    "glyf_bytes": 14733334,
+    "tables_total": 15229738,
+    "family": "Shippori Mincho B1",
+    "full_name": "Shippori Mincho B1 Regular",
+    "version_string": "Version 3.110; ttfautohint (v1.8.3)",
+    "copyright": "Copyright 2021 The Shippori Mincho Project Authors (https://github.com/fontdasu/ShipporiMincho)",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://scripts.sil.org/OFL",
+    "name_license_url": "https://scripts.sil.org/OFL",
+    "num_glyphs": 16359,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 15363,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 0,
+     "cyrillic": 0,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 0,
+     "kana": 82,
+     "han": 178
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 7.062,
+    "mib": 14.524,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -18324400,
+    "provenance": {
+     "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/shipporiminchob1/ShipporiMinchoB1-Regular.ttf",
+     "source": "google/fonts main; ofl directory"
+    }
+   },
+   {
+    "file": "LXGWWenKai-Light.ttf",
+    "bytes": 28625516,
+    "sha256": "9a50e3f0f51fad60d68152d5191bce1a495bfc4b9ceb1cee24833835511d1dca",
+    "class": "static-glyf",
+    "glyf_bytes": 27486411,
+    "tables_total": 28625238,
+    "family": "LXGW WenKai Light",
+    "full_name": "LXGW WenKai Light",
+    "version_string": "Version 1.530; October 18, 2026",
+    "copyright": "Copyright 2021-2026 LXGW (https://github.com/lxgw/LxgwWenKai), with Reserved Font Name '霞鹜', '霞鶩', '落霞孤鹜', '落霞孤鶩' and 'LXGW'.\nCopyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org",
+    "name_license_url": "https://openfontlicense.org",
+    "num_glyphs": 47334,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 46926,
+    "script_coverage": {
+     "latin": 190,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 286,
+    "max_composite_depth": 1,
+    "facts_seconds": 12.57,
+    "mib": 27.299,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -4928916,
+    "provenance": {
+     "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.530/LXGWWenKai-Light.ttf",
+     "source": "lxgw/LxgwWenKai release v1.530"
+    }
+   },
+   {
+    "file": "LXGWWenKaiMono-Light.ttf",
+    "bytes": 28645564,
+    "sha256": "b3144f534329d6b17188967d3843fb479cef1aa59949e976186d2d6015e3bc01",
+    "class": "static-glyf",
+    "glyf_bytes": 27489528,
+    "tables_total": 28645268,
+    "family": "LXGW WenKai Mono Light",
+    "full_name": "LXGW WenKai Mono Light",
+    "version_string": "Version 1.530; October 18, 2026",
+    "copyright": "Copyright 2021-2026 LXGW (https://github.com/lxgw/LxgwWenKai), with Reserved Font Name '霞鹜', '霞鶩', '落霞孤鹜', '落霞孤鶩' and 'LXGW'.\nCopyright 2020 The Klee Project Authors (https://github.com/fontworks-fonts/Klee)",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: https://openfontlicense.org",
+    "name_license_url": "https://openfontlicense.org",
+    "num_glyphs": 47355,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 46946,
+    "script_coverage": {
+     "latin": 190,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 289,
+    "max_composite_depth": 1,
+    "facts_seconds": 12.681,
+    "mib": 27.319,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -4908868,
+    "provenance": {
+     "url": "https://github.com/lxgw/LxgwWenKai/releases/download/v1.530/LXGWWenKaiMono-Light.ttf",
+     "source": "lxgw/LxgwWenKai release v1.530"
+    }
+   },
+   {
+    "file": "SarasaGothicSC-LightItalic.ttf",
+    "bytes": 24950308,
+    "sha256": "80b6046d87bc79a18b4e19e6d14b29727ebb30483b179dad05beac2b0b54e539",
+    "class": "static-glyf",
+    "glyf_bytes": 24271444,
+    "tables_total": 24949965,
+    "family": "Sarasa Gothic SC Light",
+    "full_name": "Sarasa Gothic SC Light Italic",
+    "version_string": "Version 1.0.43; ttfautohint (v1.8.4)",
+    "copyright": "Copyright (c) 2015-2025, Renzhi Li (aka. Belleve Invis, belleve@typeof.net). Portions Copyright (c) 2016 The Inter Project Authors. Portions Copyright (c) 2014-2021 Adobe Systems Incorporated (http://www.adobe.com/). Portions Copyright (c) 2012 Google Inc.",
+    "name_license": "",
+    "name_license_url": null,
+    "num_glyphs": 48702,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 46272,
+    "script_coverage": {
+     "latin": 190,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 1618,
+    "max_composite_depth": 1,
+    "facts_seconds": 5.737,
+    "mib": 23.794,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -8604124,
+    "provenance": {
+     "url": "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.43/SarasaGothicSC-TTF-1.0.43.7z",
+     "source": "extracted from hinted SarasaGothicSC-TTF-1.0.43.7z (sha256 787596fa5483da82...)"
+    }
+   },
+   {
+    "file": "SarasaGothicSC-Regular.ttf",
+    "bytes": 24047784,
+    "sha256": "de65a1791c1dc9971f021545c15653ea46a86a94ba6284bd70f12e7242b39687",
+    "class": "static-glyf",
+    "glyf_bytes": 23367576,
+    "tables_total": 24047435,
+    "family": "Sarasa Gothic SC",
+    "full_name": "Sarasa Gothic SC",
+    "version_string": "Version 1.0.43; ttfautohint (v1.8.4)",
+    "copyright": "Copyright (c) 2015-2025, Renzhi Li (aka. Belleve Invis, belleve@typeof.net). Portions Copyright (c) 2016 The Inter Project Authors. Portions Copyright (c) 2014-2021 Adobe Systems Incorporated (http://www.adobe.com/). Portions Copyright (c) 2012 Google Inc.",
+    "name_license": "",
+    "name_license_url": null,
+    "num_glyphs": 48741,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 46272,
+    "script_coverage": {
+     "latin": 190,
+     "greek": 56,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 1655,
+    "max_composite_depth": 1,
+    "facts_seconds": 6.049,
+    "mib": 22.934,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -9506648,
+    "provenance": {
+     "url": "https://github.com/be5invis/Sarasa-Gothic/releases/download/v1.0.43/SarasaGothicSC-TTF-1.0.43.7z",
+     "source": "extracted from hinted SarasaGothicSC-TTF-1.0.43.7z (sha256 787596fa5483da82...)"
+    }
+   },
+   {
+    "file": "SourceHanSans-Regular.ttf",
+    "bytes": 33673672,
+    "sha256": "16d712e241dcc7089dc2a006940bae28cdb1c39bea502fcb58c63e22ffec8cd0",
+    "class": "static-glyf",
+    "glyf_bytes": 32430028,
+    "tables_total": 33673304,
+    "family": "Source Han Sans",
+    "full_name": "Source Han Sans",
+    "version_string": "Version 2.002;hotconv 1.0.116;makeotfexe 2.5.65601; ttfautohint (v1.8.3)",
+    "copyright": "© 2014-2020 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl",
+    "name_license_url": "http://scripts.sil.org/OFL",
+    "num_glyphs": 65535,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 44812,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 49,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 8.648,
+    "mib": 32.114,
+    "at_or_above_limit": true,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": true,
+    "bytes_over_limit": 119240,
+    "provenance": {
+     "url": "https://github.com/be5invis/source-han-sans-ttf/releases/download/v2.002.1/source-han-sans-ttf-2.002.1.7z",
+     "source": "extracted from source-han-sans-ttf-2.002.1.7z (sha256 b3057c0d4df53bbd...); TrueType-outline conversion of Adobe Source Han Sans"
+    }
+   },
+   {
+    "file": "SourceHanSansSC-Bold.ttf",
+    "bytes": 33867188,
+    "sha256": "25c2d2600f4b36ae8994c77b8507e811b261bb4646249c7119e430cf48b10e94",
+    "class": "static-glyf",
+    "glyf_bytes": 32653440,
+    "tables_total": 33866816,
+    "family": "Source Han Sans SC",
+    "full_name": "Source Han Sans SC Bold",
+    "version_string": "Version 2.002;hotconv 1.0.116;makeotfexe 2.5.65601; ttfautohint (v1.8.3)",
+    "copyright": "© 2014-2020 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl",
+    "name_license_url": "http://scripts.sil.org/OFL",
+    "num_glyphs": 65535,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 44812,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 49,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 8.556,
+    "mib": 32.298,
+    "at_or_above_limit": true,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": true,
+    "bytes_over_limit": 312756,
+    "provenance": {
+     "url": "https://github.com/be5invis/source-han-sans-ttf/releases/download/v2.002.1/source-han-sans-ttf-2.002.1.7z",
+     "source": "extracted from source-han-sans-ttf-2.002.1.7z (sha256 b3057c0d4df53bbd...)"
+    }
+   },
+   {
+    "file": "SourceHanSansSC-ExtraLight.ttf",
+    "bytes": 33333528,
+    "sha256": "876de1e6bd1e42c34c49bf440e58d503db7eab0802e83933fec6ad16251f1b0f",
+    "class": "static-glyf",
+    "glyf_bytes": 32124328,
+    "tables_total": 33333158,
+    "family": "Source Han Sans SC ExtraLight",
+    "full_name": "Source Han Sans SC ExtraLight",
+    "version_string": "Version 2.002;hotconv 1.0.116;makeotfexe 2.5.65601; ttfautohint (v1.8.3)",
+    "copyright": "© 2014-2020 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl",
+    "name_license_url": "http://scripts.sil.org/OFL",
+    "num_glyphs": 65535,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 44812,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 49,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 8.517,
+    "mib": 31.789,
+    "at_or_above_limit": false,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": false,
+    "bytes_over_limit": -220904,
+    "provenance": {
+     "url": "https://github.com/be5invis/source-han-sans-ttf/releases/download/v2.002.1/source-han-sans-ttf-2.002.1.7z",
+     "source": "extracted from source-han-sans-ttf-2.002.1.7z (sha256 b3057c0d4df53bbd...)"
+    }
+   },
+   {
+    "file": "SourceHanSansSC-Regular.ttf",
+    "bytes": 33723904,
+    "sha256": "53edb68d5f77f45956925e69fb19d83f544fc7ccf541b6d19270f6a3e0a0ed67",
+    "class": "static-glyf",
+    "glyf_bytes": 32510176,
+    "tables_total": 33723536,
+    "family": "Source Han Sans SC",
+    "full_name": "Source Han Sans SC",
+    "version_string": "Version 2.002;hotconv 1.0.116;makeotfexe 2.5.65601; ttfautohint (v1.8.3)",
+    "copyright": "© 2014-2020 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.",
+    "name_license": "This Font Software is licensed under the SIL Open Font License, Version 1.1. This Font Software is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or impl",
+    "name_license_url": "http://scripts.sil.org/OFL",
+    "num_glyphs": 65535,
+    "os2_version": 3,
+    "fsType": 0,
+    "cmap_entries": 44812,
+    "script_coverage": {
+     "latin": 191,
+     "greek": 49,
+     "cyrillic": 64,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 8.555,
+    "mib": 32.162,
+    "at_or_above_limit": true,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": true,
+    "bytes_over_limit": 169472,
+    "provenance": {
+     "url": "https://github.com/be5invis/source-han-sans-ttf/releases/download/v2.002.1/source-han-sans-ttf-2.002.1.7z",
+     "source": "extracted from source-han-sans-ttf-2.002.1.7z (sha256 b3057c0d4df53bbd...)"
+    }
+   },
+   {
+    "file": "BabelStoneHan.ttf",
+    "bytes": 51971284,
+    "sha256": "d8bb747b3fdccd84a60bd0aa56bb90937270d0bd15f1101cd8f2a5a3709dd0a3",
+    "class": "static-glyf",
+    "glyf_bytes": 50596526,
+    "tables_total": 51970975,
+    "family": "BabelStone Han",
+    "full_name": "BabelStone Han",
+    "version_string": "Version 16.0.3",
+    "copyright": "(c) Copyright 1994-1999, Arphic Technology Co., Ltd.; (c) Copyright 2009-2025, Andrew West.",
+    "name_license": "ARPHIC PUBLIC LICENSE\n\nCopyright (C) 1999 Arphic Technology Co., Ltd.\n11Fl. No.168, Yung Chi Rd., Taipei, 110 Taiwan\nAll rights reserved except as specified below.\n\nEveryone is permitted to copy and d",
+    "name_license_url": "http://ftp.gnu.org/non-gnu/chinese-fonts-truetype/LICENSE",
+    "num_glyphs": 65534,
+    "os2_version": 4,
+    "fsType": 0,
+    "cmap_entries": 64789,
+    "script_coverage": {
+     "latin": 186,
+     "greek": 0,
+     "cyrillic": 0,
+     "hebrew": 0,
+     "arabic": 0,
+     "devanagari": 0,
+     "tamil": 0,
+     "thai": 0,
+     "hangul": 0,
+     "kana": 82,
+     "han": 207
+    },
+    "script_coverage_total": {
+     "latin": 191,
+     "greek": 57,
+     "cyrillic": 64,
+     "hebrew": 27,
+     "arabic": 36,
+     "devanagari": 37,
+     "tamil": 37,
+     "thai": 46,
+     "hangul": 60,
+     "kana": 82,
+     "han": 207
+    },
+    "composite_glyphs": 0,
+    "max_composite_depth": 0,
+    "facts_seconds": 21.374,
+    "mib": 49.564,
+    "at_or_above_limit": true,
+    "eligible_for_form_font_03": true,
+    "would_refuse_at_limit": true,
+    "bytes_over_limit": 18416852,
+    "provenance": {
+     "url": "https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip",
+     "source": "babelstone.co.uk download, unversioned URL; identity is the zip SHA-256 6a928e43..."
+    }
+   }
+  ],
+  "finished_utc": "2026-10-31T21:02:36Z"
+ },
+ "concern3_measure": {
+  "script": "w218-closure-measure.py",
+  "script_sha256": "d008d66bbf82d5db7a3c3288d00c536cb7c9546229c65286f6836d043ca1a0a0",
+  "python": "3.13.1",
+  "git_head": "509af167b4257646b330c61d95a381cfff2cf014",
+  "git_branch": "wip",
+  "subjects": [
+   {
+    "file": "attachments.md",
+    "bytes": 6199,
+    "lines": 51,
+    "sha256": "97ea59352c869d72752507d3bad7cfd9448069e2852e61530c09f6bee76ed9cd",
+    "git_status": "??",
+    "headings": 10,
+    "unexecuted": 2,
+    "owner_marks": 3,
+    "requirement_ids": 2
+   },
+   {
+    "file": "forms.md",
+    "bytes": 285504,
+    "lines": 1216,
+    "sha256": "d6a7f70f55b87008d2329057b8099b6d9698983f24f7aa88efb5c957872afdb1",
+    "git_status": "??",
+    "headings": 131,
+    "unexecuted": 117,
+    "owner_marks": 99,
+    "requirement_ids": 142
+   },
+   {
+    "file": "images.md",
+    "bytes": 5815,
+    "lines": 51,
+    "sha256": "ce11439b1381a06c4c79bcbe4acda9515121ee42b0a41eb116d7cfced44fab62",
+    "git_status": "??",
+    "headings": 10,
+    "unexecuted": 1,
+    "owner_marks": 2,
+    "requirement_ids": 1
+   },
+   {
+    "file": "inspection.md",
+    "bytes": 24282,
+    "lines": 111,
+    "sha256": "8dd67591d17de9bd8517ce826b52a1c4e097bc12ea78b57b51d035256bc1734a",
+    "git_status": "??",
+    "headings": 20,
+    "unexecuted": 8,
+    "owner_marks": 8,
+    "requirement_ids": 41
+   },
+   {
+    "file": "metadata.md",
+    "bytes": 34649,
+    "lines": 257,
+    "sha256": "f9e5b1243c8bbd36c980b90df4f49be091058ddc28b21ba3512a506400257cdc",
+    "git_status": "??",
+    "headings": 41,
+    "unexecuted": 6,
+    "owner_marks": 20,
+    "requirement_ids": 23
+   },
+   {
+    "file": "opening-and-saving.md",
+    "bytes": 43278,
+    "lines": 252,
+    "sha256": "e05166a6419c4255f06b57ad31d8ef6a04eca20c7adec25386b8d4e7b8875f4a",
+    "git_status": "??",
+    "headings": 33,
+    "unexecuted": 18,
+    "owner_marks": 53,
+    "requirement_ids": 43
+   },
+   {
+    "file": "pages.md",
+    "bytes": 40002,
+    "lines": 232,
+    "sha256": "3a022c8cc4c8b62a895e543f71271be77b0aa9c7f722d7cb7492d7b0c8de3965",
+    "git_status": "??",
+    "headings": 37,
+    "unexecuted": 12,
+    "owner_marks": 20,
+    "requirement_ids": 33
+   },
+   {
+    "file": "README.md",
+    "bytes": 8394,
+    "lines": 52,
+    "sha256": "99449fd20c7443f860e17e0799bbd8210aa1e7047bbb27a6fe899f4cf4f3e3a3",
+    "git_status": "clean-or-tracked",
+    "headings": 4,
+    "unexecuted": 0,
+    "owner_marks": 14,
+    "requirement_ids": 0
+   },
+   {
+    "file": "security.md",
+    "bytes": 15503,
+    "lines": 105,
+    "sha256": "1f61361fb75083f90fecce3cfaf59872180d83af1eba0319a14fd0983719f2a2",
+    "git_status": "??",
+    "headings": 18,
+    "unexecuted": 4,
+    "owner_marks": 11,
+    "requirement_ids": 7
+   },
+   {
+    "file": "shared.md",
+    "bytes": 24933,
+    "lines": 109,
+    "sha256": "2e9bd9d9f320e6e517e2925af117724993af400f25cac82216a82f137600e607",
+    "git_status": "??",
+    "headings": 12,
+    "unexecuted": 3,
+    "owner_marks": 17,
+    "requirement_ids": 51
+   },
+   {
+    "file": "signing.md",
+    "bytes": 5959,
+    "lines": 51,
+    "sha256": "956d7c220bf48b280030999474472ca95bb72575ae9fa43b5f7205900ecc232c",
+    "git_status": "??",
+    "headings": 10,
+    "unexecuted": 1,
+    "owner_marks": 4,
+    "requirement_ids": 1
+   },
+   {
+    "file": "workflows.md",
+    "bytes": 59848,
+    "lines": 322,
+    "sha256": "64eb01615be31e312e7940ccba280ef5cf34d387d61e7030909c82dd7ef79962",
+    "git_status": "??",
+    "headings": 50,
+    "unexecuted": 21,
+    "owner_marks": 62,
+    "requirement_ids": 66
+   }
+  ],
+  "drafting": [
+   {
+    "file": "competitor-expectations.md",
+    "bytes": 6852,
+    "lines": 34
+   },
+   {
+    "file": "engine-lifetime.md",
+    "bytes": 10123,
+    "lines": 51
+   },
+   {
+    "file": "form-adoption-review.md",
+    "bytes": 55595,
+    "lines": 199
+   },
+   {
+    "file": "form-owner-decisions-handoff.md",
+    "bytes": 16829,
+    "lines": 76
+   },
+   {
+    "file": "guide.md",
+    "bytes": 10758,
+    "lines": 121
+   },
+   {
+    "file": "handoff.md",
+    "bytes": 15180,
+    "lines": 87
+   },
+   {
+    "file": "history.md",
+    "bytes": 130279,
+    "lines": 708
+   },
+   {
+    "file": "inventory.md",
+    "bytes": 15712,
+    "lines": 66
+   },
+   {
+    "file": "next-session.md",
+    "bytes": 8299,
+    "lines": 54
+   },
+   {
+    "file": "reconciliation.md",
+    "bytes": 74553,
+    "lines": 220
+   },
+   {
+    "file": "w218-limit-and-subject-review.md",
+    "bytes": 29586,
+    "lines": 119
+   },
+   {
+    "file": "workflow-ownership.md",
+    "bytes": 11331,
+    "lines": 77
+   }
+  ],
+  "research": [
+   {
+    "file": "w218-button-survey.json",
+    "bytes": 239692
+   },
+   {
+    "file": "w218-button-survey.py",
+    "bytes": 5225
+   },
+   {
+    "file": "w218-choice-language-experiments.json",
+    "bytes": 62241
+   },
+   {
+    "file": "w218-choice-language-experiments.py",
+    "bytes": 13949
+   },
+   {
+    "file": "w218-closure-font-survey.py",
+    "bytes": 2751
+   },
+   {
+    "file": "w218-closure-measure.py",
+    "bytes": 5064
+   },
+   {
+    "file": "w218-esc-corpus-survey.json",
+    "bytes": 3705
+   },
+   {
+    "file": "w218-esc-corpus-survey.py",
+    "bytes": 2163
+   },
+   {
+    "file": "w218-finite-proof-arithmetic.json",
+    "bytes": 6466
+   },
+   {
+    "file": "w218-finite-proof-arithmetic.py",
+    "bytes": 5358
+   },
+   {
+    "file": "w218-font-inventory.json",
+    "bytes": 11527
+   },
+   {
+    "file": "w218-font-inventory.md",
+    "bytes": 3862
+   },
+   {
+    "file": "w218-font-inventory.py",
+    "bytes": 2582
+   },
+   {
+    "file": "w218-font-limit-evidence.json",
+    "bytes": 412490
+   },
+   {
+    "file": "w218-font-limit-evidence.md",
+    "bytes": 24114
+   },
+   {
+    "file": "w218-font-limit-evidence.py",
+    "bytes": 18468
+   },
+   {
+    "file": "w218-font-limit-itext.cs.txt",
+    "bytes": 1587
+   },
+   {
+    "file": "w218-font-limit-itext.py",
+    "bytes": 3584
+   },
+   {
+    "file": "w218-font-limit-merge.py",
+    "bytes": 3896
+   },
+   {
+    "file": "w218-font-limit-padding.py",
+    "bytes": 4483
+   },
+   {
+    "file": "w218-font-processing.json",
+    "bytes": 7107
+   },
+   {
+    "file": "w218-font-processing.md",
+    "bytes": 6031
+   },
+   {
+    "file": "w218-font-processing.py",
+    "bytes": 2715
+   },
+   {
+    "file": "w218-form-input-survey.json",
+    "bytes": 328093
+   },
+   {
+    "file": "w218-form-input-survey.py",
+    "bytes": 3821
+   },
+   {
+    "file": "w218-form-semantics.md",
+    "bytes": 36062
+   },
+   {
+    "file": "w218-inherited-v-survey.json",
+    "bytes": 497
+   },
+   {
+    "file": "w218-inherited-v-survey.py",
+    "bytes": 2544
+   },
+   {
+    "file": "w218-legacy-client.md",
+    "bytes": 9763
+   },
+   {
+    "file": "w218-radio-curve-arithmetic.json",
+    "bytes": 2071
+   },
+   {
+    "file": "w218-radio-curve-arithmetic.py",
+    "bytes": 3368
+   }
+  ],
+  "totals": {
+   "spec_bytes": 554366,
+   "drafting_bytes": 385097,
+   "research_bytes": 1235279
+  },
+  "forms_share_of_spec_bytes": 0.515,
+  "forms_share_excluding_readme": 0.5229,
+  "completeness_review_rows": [
+   {
+    "subject": "[Shared], I-19/20",
+    "gap_phrases": 4,
+    "gap_text": "No universal cap, cancellation latency, retry or rollback policy selected; proposed individual-fill restoration does not generalize to other operations or resources."
+   },
+   {
+    "subject": "[Open/save], I-01/07",
+    "gap_phrases": 6,
+    "gap_text": "Owner adoption of Q-58 to Q-64; diagnostic design/post-disposal lifecycle, source access/stability, repeated saves, revisions, encryption/output and disposal details. Conditional proof and retry remain deferred."
+   },
+   {
+    "subject": "[Inspection], I-02/03/15",
+    "gap_phrases": 5,
+    "gap_text": "Indexing/coordinates, INSPECT-FORM-05's malformed-version/language-escape/error edges, exact public identity type/malformed/incomplete reporting, CMS depth, source lifetime/limits/cancellation."
+   },
+   {
+    "subject": "[Forms], I-04/05/06",
+    "gap_phrases": 6,
+    "gap_text": "Format review of recognizer/rich blank, A4 impact evidence for list/flag eligibility, storage/export/security mappings and font/resource measurements remain. A4 selects refusal at/above 33,554,432 bytes using independent research; boundary/internal-limit disposition and target measurements remain open."
+   },
+   {
+    "subject": "[Metadata], I-08",
+    "gap_phrases": 3,
+    "gap_text": "Exact XML/RDF/encoding shapes, custom reserved keys, public representations and measured limit values remain open. Proposed borrowed-stream and cancellation boundaries await review."
+   },
+   {
+    "subject": "[Attachments], I-09",
+    "gap_phrases": 5,
+    "gap_text": "Direct-operation names/collisions/associated-file identity, decoded-limit defaults/enforcement, input/output lifetime, safe paths, atomicity/cancellation."
+   },
+   {
+    "subject": "[Pages], I-10/11",
+    "gap_phrases": 7,
+    "gap_text": "Rotation interpretation, empty/default selections, feature subsets/inspection scope, encrypted/signed outputs, referenced-file/unaffected relationship classification, measured numeric limits, streamed partial failures and diagnostics."
+   },
+   {
+    "subject": "[Security], I-12/18",
+    "gap_phrases": 5,
+    "gap_text": "Schemes/roles, exact operation checks, malformed grants/locks, permission-setting output, credential/cancellation/failure handling."
+   },
+   {
+    "subject": "[Signing], I-13/14",
+    "gap_phrases": 4,
+    "gap_text": "Provider/algorithm/field/seed/token subset, revision/staging, reservations/limits, side effects/cancellation/retry/output failure."
+   },
+   {
+    "subject": "[Images], I-17",
+    "gap_phrases": 5,
+    "gap_text": "Format/transparency/profile subset, shared geometry, fit/clipping, decode/buffer limits, lifetime and failure/cancellation."
+   },
+   {
+    "subject": "[Workflows], I-16",
+    "gap_phrases": 9,
+    "gap_text": "Owner adoption/runtime verification of proposals, engine form rules, exact API/repetition, special terminals, source stability/positions, identity, unmeasured resource defaults/checkpoint thresholds/latency, caller-resource effects and owned cleanup, workflow cleanup-only/finalization/diagnostics."
+   }
+  ],
+  "git_w218_commits": [
+   [
+    "509af16",
+    "2026-10-27",
+    "W-218 Record details to transfer into the new specification"
+   ],
+   [
+    "c75019b",
+    "2026-10-27",
+    "W-218 Resolve appearance fonts and retire long-term PAdES scope"
+   ],
+   [
+    "2b5c8d4",
+    "2026-10-27",
+    "W-218 Clarify capability families without implementation detail"
+   ],
+   [
+    "a14a760",
+    "2026-10-27",
+    "W-218 Adopt owner-defined XFA and PDF-A boundaries"
+   ],
+   [
+    "8295ed8",
+    "2026-10-27",
+    "W-218 Restore enduring non-goals and XFA PDF-A boundaries"
+   ],
+   [
+    "990c1b2",
+    "2026-10-27",
+    "W-218 Adopt revised image and permission scope reconciliation"
+   ],
+   [
+    "b1f4c59",
+    "2026-10-27",
+    "W-218 Propose reconciliation of image and permission scope"
+   ],
+   [
+    "a4672d7",
+    "2026-10-27",
+    "W-218 Clarify save assembly and failure scope commitments"
+   ],
+   [
+    "4a00ec9",
+    "2026-10-27",
+    "W-218 Make supported capabilities a durable scope commitment"
+   ],
+   [
+    "458c321",
+    "2026-10-27",
+    "W-218 Align support and behavior documents with charter reset"
+   ],
+   [
+    "2025cdd",
+    "2026-10-27",
+    "W-218 Draft supported capabilities companion to charter"
+   ]
+  ],
+  "git_total_commits": 268,
+  "git_status_docs": {
+   "docs/CHARTER.md": " M",
+   "docs/SUPPORTED.md": " M",
+   "docs/behavior.md": " M",
+   "docs/spec/phase-1.md": " D",
+   "docs/spec/phase-2.md": " D",
+   "docs/spec/readme.md": " M",
+   "docs/README.md": "??",
+   "docs/_retired_/": "??",
+   "docs/acceptance.md": "??",
+   "docs/qualification.md": "??",
+   "docs/spec/attachments.md": "??",
+   "docs/spec/drafting/": "??",
+   "docs/spec/forms.md": "??",
+   "docs/spec/images.md": "??",
+   "docs/spec/inspection.md": "??",
+   "docs/spec/metadata.md": "??",
+   "docs/spec/opening-and-saving.md": "??",
+   "docs/spec/pages.md": "??",
+   "docs/spec/security.md": "??",
+   "docs/spec/shared.md": "??",
+   "docs/spec/signing.md": "??",
+   "docs/spec/workflows.md": "??"
+  }
+ },
+ "concern2_embedder_run": {
+  "script": "w218-font-limit-evidence.py",
+  "script_sha256": "2791c423711e7f1d73cbbbee58105fe80b3b1f4e381ebba61e24fff33f31b713",
+  "started_utc": "2026-10-31T21:02:52Z",
+  "environment": {
+   "platform": "Windows-11-10.0.26100-SP0",
+   "machine": "AMD64",
+   "python": "3.13.1",
+   "cpu_count": 8,
+   "ram_bytes": 68008845312,
+   "fontTools": "4.68.0",
+   "PyMuPDF": "2.0",
+   "MuPDF": "1.28.5",
+   "qpdf": "qpdf version 12.3.2",
+   "pdffonts": "pdffonts version 26.08.0",
+   "mutool": "mutool version 1.28.5"
+  },
+  "runs_per_pair": 2,
+  "embedder_comparison": [
+   {
+    "tool": "fonttools_subset",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 22.068,
+    "cpu_seconds": 21.453,
+    "baseline_peak_wset_bytes": 22949888,
+    "peak_wset_bytes": 568705024,
+    "peak_wset_delta_bytes": 545755136,
+    "subset_font_bytes": 53312,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 21.497,
+    "cpu_seconds": 21.0,
+    "baseline_peak_wset_bytes": 22695936,
+    "peak_wset_bytes": 568512512,
+    "peak_wset_delta_bytes": 545816576,
+    "subset_font_bytes": 53312,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "reportlab",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.27,
+    "cpu_seconds": 0.203,
+    "baseline_peak_wset_bytes": 22745088,
+    "peak_wset_bytes": 163102720,
+    "peak_wset_delta_bytes": 140357632,
+    "pdf_bytes": 38201,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+BabelStoneHan",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 33543,
+      "decoded_bytes": 68740
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+BabelStoneHan                 TrueType          WinAnsi          yes yes yes      7  0",
+      "Syntax Error: No display font for 'Symbol'",
+      "Syntax Error: No display font for 'ArialUnicode'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.242,
+    "cpu_seconds": 0.219,
+    "baseline_peak_wset_bytes": 22683648,
+    "peak_wset_bytes": 164032512,
+    "peak_wset_delta_bytes": 141348864,
+    "pdf_bytes": 38201,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "fpdf2",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.602,
+    "cpu_seconds": 0.984,
+    "baseline_peak_wset_bytes": 22687744,
+    "peak_wset_bytes": 184594432,
+    "peak_wset_delta_bytes": 161906688,
+    "pdf_bytes": 35639,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+BabelStoneHan",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 29540,
+      "decoded_bytes": 54484
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+BabelStoneHan                 CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.108,
+    "cpu_seconds": 0.953,
+    "baseline_peak_wset_bytes": 22732800,
+    "peak_wset_bytes": 184467456,
+    "peak_wset_delta_bytes": 161734656,
+    "pdf_bytes": 35639,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "pymupdf",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.669,
+    "cpu_seconds": 3.688,
+    "baseline_peak_wset_bytes": 22724608,
+    "peak_wset_bytes": 240615424,
+    "peak_wset_delta_bytes": 217890816,
+    "whole_pdf_bytes": 52258513,
+    "pdf_bytes": 138739,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/NBWWSA+BabelStone Han Regular",
+      "subset_tag": "NBWWSA+",
+      "stream_length": 35261,
+      "decoded_bytes": 591008
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "NBWWSA+BabelStone Han Regular        CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.776,
+    "cpu_seconds": 3.734,
+    "baseline_peak_wset_bytes": 22683648,
+    "peak_wset_bytes": 241840128,
+    "peak_wset_delta_bytes": 219156480,
+    "whole_pdf_bytes": 52258512,
+    "pdf_bytes": 138739,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.472,
+    "cpu_seconds": 1.328,
+    "baseline_peak_wset_bytes": 22900736,
+    "peak_wset_bytes": 309628928,
+    "peak_wset_delta_bytes": 286728192,
+    "pdf_bytes": 20822266,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/BabelStoneHan",
+      "subset_tag": null,
+      "stream_length": 20370537,
+      "decoded_bytes": 51971284
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "BabelStoneHan                        CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "BabelStoneHan.ttf",
+    "text_scalars": 215,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.391,
+    "cpu_seconds": 1.312,
+    "baseline_peak_wset_bytes": 22695936,
+    "peak_wset_bytes": 309415936,
+    "peak_wset_delta_bytes": 286720000,
+    "pdf_bytes": 20822266,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 12.677,
+    "cpu_seconds": 12.531,
+    "baseline_peak_wset_bytes": 22986752,
+    "peak_wset_bytes": 378765312,
+    "peak_wset_delta_bytes": 355778560,
+    "subset_font_bytes": 71372,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 12.626,
+    "cpu_seconds": 12.391,
+    "baseline_peak_wset_bytes": 22683648,
+    "peak_wset_bytes": 378212352,
+    "peak_wset_delta_bytes": 355528704,
+    "subset_font_bytes": 71372,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "reportlab",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.205,
+    "cpu_seconds": 0.188,
+    "baseline_peak_wset_bytes": 22798336,
+    "peak_wset_bytes": 113127424,
+    "peak_wset_delta_bytes": 90329088,
+    "pdf_bytes": 44892,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+CactusClassicalSerif-Regular",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 22944,
+      "decoded_bytes": 43240
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+CactusClassicalSerif-Regular",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 15316,
+      "decoded_bytes": 24820
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+CactusClassicalSerif-Regular  TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+CactusClassicalSerif-Regular  TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.206,
+    "cpu_seconds": 0.188,
+    "baseline_peak_wset_bytes": 22786048,
+    "peak_wset_bytes": 112570368,
+    "peak_wset_delta_bytes": 89784320,
+    "pdf_bytes": 44892,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "fpdf2",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.168,
+    "cpu_seconds": 0.969,
+    "baseline_peak_wset_bytes": 22708224,
+    "peak_wset_bytes": 140795904,
+    "peak_wset_delta_bytes": 118087680,
+    "pdf_bytes": 46231,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+CactusClassicalSerif",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 36926,
+      "decoded_bytes": 65980
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+CactusClassicalSerif          CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.169,
+    "cpu_seconds": 1.078,
+    "baseline_peak_wset_bytes": 23064576,
+    "peak_wset_bytes": 139268096,
+    "peak_wset_delta_bytes": 116203520,
+    "pdf_bytes": 46231,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "pymupdf",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.535,
+    "cpu_seconds": 3.312,
+    "baseline_peak_wset_bytes": 22749184,
+    "peak_wset_bytes": 193445888,
+    "peak_wset_delta_bytes": 170696704,
+    "whole_pdf_bytes": 28663428,
+    "pdf_bytes": 103016,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/QGWMVM+Cactus Classical Serif Regular",
+      "subset_tag": "QGWMVM+",
+      "stream_length": 38229,
+      "decoded_bytes": 531431
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "QGWMVM+Cactus Classical Serif Regular CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.479,
+    "cpu_seconds": 3.594,
+    "baseline_peak_wset_bytes": 22765568,
+    "peak_wset_bytes": 193150976,
+    "peak_wset_delta_bytes": 170385408,
+    "whole_pdf_bytes": 28663421,
+    "pdf_bytes": 103016,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.959,
+    "cpu_seconds": 0.875,
+    "baseline_peak_wset_bytes": 22974464,
+    "peak_wset_bytes": 190877696,
+    "peak_wset_delta_bytes": 167903232,
+    "pdf_bytes": 16614660,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/CactusClassicalSerif-Regular",
+      "subset_tag": null,
+      "stream_length": 16248366,
+      "decoded_bytes": 28502932
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "CactusClassicalSerif-Regular         CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "text_scalars": 331,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.983,
+    "cpu_seconds": 0.938,
+    "baseline_peak_wset_bytes": 23044096,
+    "peak_wset_bytes": 190562304,
+    "peak_wset_delta_bytes": 167518208,
+    "pdf_bytes": 16614660,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 12.686,
+    "cpu_seconds": 12.344,
+    "baseline_peak_wset_bytes": 22773760,
+    "peak_wset_bytes": 356392960,
+    "peak_wset_delta_bytes": 333619200,
+    "subset_font_bytes": 115136,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 12.605,
+    "cpu_seconds": 12.375,
+    "baseline_peak_wset_bytes": 22732800,
+    "peak_wset_bytes": 355909632,
+    "peak_wset_delta_bytes": 333176832,
+    "subset_font_bytes": 115136,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "reportlab",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.203,
+    "cpu_seconds": 0.172,
+    "baseline_peak_wset_bytes": 22708224,
+    "peak_wset_bytes": 109580288,
+    "peak_wset_delta_bytes": 86872064,
+    "pdf_bytes": 61595,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+LXGWWenKai-Light",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 26264,
+      "decoded_bytes": 51292
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+LXGWWenKai-Light",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 28126,
+      "decoded_bytes": 47056
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+LXGWWenKai-Light              TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+LXGWWenKai-Light              TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.205,
+    "cpu_seconds": 0.156,
+    "baseline_peak_wset_bytes": 22671360,
+    "peak_wset_bytes": 109641728,
+    "peak_wset_delta_bytes": 86970368,
+    "pdf_bytes": 61595,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "fpdf2",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.105,
+    "cpu_seconds": 0.969,
+    "baseline_peak_wset_bytes": 23068672,
+    "peak_wset_bytes": 135163904,
+    "peak_wset_delta_bytes": 112095232,
+    "pdf_bytes": 60854,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+LXGWWenKaiLight",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 50828,
+      "decoded_bytes": 94784
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+LXGWWenKaiLight               CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.127,
+    "cpu_seconds": 0.984,
+    "baseline_peak_wset_bytes": 22835200,
+    "peak_wset_bytes": 135831552,
+    "peak_wset_delta_bytes": 112996352,
+    "pdf_bytes": 60854,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "pymupdf",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.434,
+    "cpu_seconds": 3.172,
+    "baseline_peak_wset_bytes": 23060480,
+    "peak_wset_bytes": 194801664,
+    "peak_wset_delta_bytes": 171741184,
+    "whole_pdf_bytes": 28854357,
+    "pdf_bytes": 142222,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/XDIPWT+LXGW WenKai Light",
+      "subset_tag": "XDIPWT+",
+      "stream_length": 52254,
+      "decoded_bytes": 470493
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "XDIPWT+LXGW WenKai Light             CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.558,
+    "cpu_seconds": 3.406,
+    "baseline_peak_wset_bytes": 22990848,
+    "peak_wset_bytes": 194973696,
+    "peak_wset_delta_bytes": 171982848,
+    "whole_pdf_bytes": 28854357,
+    "pdf_bytes": 142222,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.92,
+    "cpu_seconds": 0.875,
+    "baseline_peak_wset_bytes": 22982656,
+    "peak_wset_bytes": 186970112,
+    "peak_wset_delta_bytes": 163987456,
+    "pdf_bytes": 14721773,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/LXGWWenKai-Light",
+      "subset_tag": null,
+      "stream_length": 14506735,
+      "decoded_bytes": 28625516
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "LXGWWenKai-Light                     CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "LXGWWenKai-Light.ttf",
+    "text_scalars": 391,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.877,
+    "cpu_seconds": 0.828,
+    "baseline_peak_wset_bytes": 22773760,
+    "peak_wset_bytes": 186593280,
+    "peak_wset_delta_bytes": 163819520,
+    "pdf_bytes": 14721773,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 6.571,
+    "cpu_seconds": 6.469,
+    "baseline_peak_wset_bytes": 23019520,
+    "peak_wset_bytes": 277196800,
+    "peak_wset_delta_bytes": 254177280,
+    "subset_font_bytes": 182708,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 6.52,
+    "cpu_seconds": 6.328,
+    "baseline_peak_wset_bytes": 22777856,
+    "peak_wset_bytes": 277491712,
+    "peak_wset_delta_bytes": 254713856,
+    "subset_font_bytes": 182708,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "reportlab",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.203,
+    "cpu_seconds": 0.156,
+    "baseline_peak_wset_bytes": 22704128,
+    "peak_wset_bytes": 102453248,
+    "peak_wset_delta_bytes": 79749120,
+    "pdf_bytes": 79314,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+Sarasa-Gothic-SC-Light-Italic",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 33752,
+      "decoded_bytes": 76176
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+Sarasa-Gothic-SC-Light-Italic",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 38270,
+      "decoded_bytes": 83672
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+Sarasa-Gothic-SC-Light-Italic TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+Sarasa-Gothic-SC-Light-Italic TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.182,
+    "cpu_seconds": 0.156,
+    "baseline_peak_wset_bytes": 22790144,
+    "peak_wset_bytes": 102367232,
+    "peak_wset_delta_bytes": 79577088,
+    "pdf_bytes": 79314,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.34,
+    "cpu_seconds": 1.016,
+    "baseline_peak_wset_bytes": 22691840,
+    "peak_wset_bytes": 131489792,
+    "peak_wset_delta_bytes": 108797952,
+    "pdf_bytes": 71672,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+SarasaGothicSCLightItalic",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 61583,
+      "decoded_bytes": 125388
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+SarasaGothicSCLightItalic     CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.161,
+    "cpu_seconds": 0.969,
+    "baseline_peak_wset_bytes": 22982656,
+    "peak_wset_bytes": 130670592,
+    "peak_wset_delta_bytes": 107687936,
+    "pdf_bytes": 71672,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.603,
+    "cpu_seconds": 3.734,
+    "baseline_peak_wset_bytes": 23011328,
+    "peak_wset_bytes": 187740160,
+    "peak_wset_delta_bytes": 164728832,
+    "whole_pdf_bytes": 25037879,
+    "pdf_bytes": 101274,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/ACRLRZ+Sarasa Gothic SC Light Italic",
+      "subset_tag": "ACRLRZ+",
+      "stream_length": 62368,
+      "decoded_bytes": 450589
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "ACRLRZ+Sarasa Gothic SC Light Italic CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.444,
+    "cpu_seconds": 3.125,
+    "baseline_peak_wset_bytes": 22781952,
+    "peak_wset_bytes": 186814464,
+    "peak_wset_delta_bytes": 164032512,
+    "whole_pdf_bytes": 25037879,
+    "pdf_bytes": 101274,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.926,
+    "cpu_seconds": 0.859,
+    "baseline_peak_wset_bytes": 23007232,
+    "peak_wset_bytes": 165937152,
+    "peak_wset_delta_bytes": 142929920,
+    "pdf_bytes": 13076380,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/Sarasa-Gothic-SC-Light-Italic",
+      "subset_tag": null,
+      "stream_length": 13014033,
+      "decoded_bytes": 24950308
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Sarasa-Gothic-SC-Light-Italic        CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "text_scalars": 391,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.802,
+    "cpu_seconds": 0.781,
+    "baseline_peak_wset_bytes": 23072768,
+    "peak_wset_bytes": 165879808,
+    "peak_wset_delta_bytes": 142807040,
+    "pdf_bytes": 13076380,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 9.25,
+    "cpu_seconds": 8.828,
+    "baseline_peak_wset_bytes": 22712320,
+    "peak_wset_bytes": 337543168,
+    "peak_wset_delta_bytes": 314830848,
+    "subset_font_bytes": 198420,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 8.969,
+    "cpu_seconds": 8.734,
+    "baseline_peak_wset_bytes": 22716416,
+    "peak_wset_bytes": 337276928,
+    "peak_wset_delta_bytes": 314560512,
+    "subset_font_bytes": 198420,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.227,
+    "cpu_seconds": 0.188,
+    "baseline_peak_wset_bytes": 23007232,
+    "peak_wset_bytes": 122114048,
+    "peak_wset_delta_bytes": 99106816,
+    "pdf_bytes": 79746,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+SourceHanSans-Regular",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 35622,
+      "decoded_bytes": 95884
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+SourceHanSans-Regular",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 37000,
+      "decoded_bytes": 93344
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+SourceHanSans-Regular         TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+SourceHanSans-Regular         TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.252,
+    "cpu_seconds": 0.203,
+    "baseline_peak_wset_bytes": 22650880,
+    "peak_wset_bytes": 122023936,
+    "peak_wset_delta_bytes": 99373056,
+    "pdf_bytes": 79746,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.363,
+    "cpu_seconds": 1.156,
+    "baseline_peak_wset_bytes": 23072768,
+    "peak_wset_bytes": 154071040,
+    "peak_wset_delta_bytes": 130998272,
+    "pdf_bytes": 69808,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+SourceHanSans",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 59925,
+      "decoded_bytes": 138728
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+SourceHanSans                 CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.229,
+    "cpu_seconds": 1.078,
+    "baseline_peak_wset_bytes": 22700032,
+    "peak_wset_bytes": 154574848,
+    "peak_wset_delta_bytes": 131874816,
+    "pdf_bytes": 69808,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.644,
+    "cpu_seconds": 3.672,
+    "baseline_peak_wset_bytes": 22802432,
+    "peak_wset_bytes": 205537280,
+    "peak_wset_delta_bytes": 182734848,
+    "whole_pdf_bytes": 33928406,
+    "pdf_bytes": 156785,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/BBYOHL+Source Han Sans Regular",
+      "subset_tag": "BBYOHL+",
+      "stream_length": 62412,
+      "decoded_bytes": 660950
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "BBYOHL+Source Han Sans Regular       CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.593,
+    "cpu_seconds": 3.219,
+    "baseline_peak_wset_bytes": 22695936,
+    "peak_wset_bytes": 204337152,
+    "peak_wset_delta_bytes": 181641216,
+    "whole_pdf_bytes": 33928406,
+    "pdf_bytes": 156785,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.02,
+    "cpu_seconds": 0.953,
+    "baseline_peak_wset_bytes": 22790144,
+    "peak_wset_bytes": 212688896,
+    "peak_wset_delta_bytes": 189898752,
+    "pdf_bytes": 17482454,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSans-Regular",
+      "subset_tag": null,
+      "stream_length": 17196559,
+      "decoded_bytes": 33673672
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "SourceHanSans-Regular                CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSans-Regular.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 0.996,
+    "cpu_seconds": 0.922,
+    "baseline_peak_wset_bytes": 22863872,
+    "peak_wset_bytes": 212606976,
+    "peak_wset_delta_bytes": 189743104,
+    "pdf_bytes": 17482454,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 9.021,
+    "cpu_seconds": 8.766,
+    "baseline_peak_wset_bytes": 22745088,
+    "peak_wset_bytes": 336732160,
+    "peak_wset_delta_bytes": 313987072,
+    "subset_font_bytes": 194676,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 8.972,
+    "cpu_seconds": 8.781,
+    "baseline_peak_wset_bytes": 22708224,
+    "peak_wset_bytes": 337002496,
+    "peak_wset_delta_bytes": 314294272,
+    "subset_font_bytes": 194676,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.224,
+    "cpu_seconds": 0.219,
+    "baseline_peak_wset_bytes": 22970368,
+    "peak_wset_bytes": 122527744,
+    "peak_wset_delta_bytes": 99557376,
+    "pdf_bytes": 79079,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+SourceHanSansSC-Bold",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 35321,
+      "decoded_bytes": 94760
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+SourceHanSansSC-Bold",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 36625,
+      "decoded_bytes": 91328
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+SourceHanSansSC-Bold          TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+SourceHanSansSC-Bold          TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.223,
+    "cpu_seconds": 0.203,
+    "baseline_peak_wset_bytes": 22970368,
+    "peak_wset_bytes": 122736640,
+    "peak_wset_delta_bytes": 99766272,
+    "pdf_bytes": 79079,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.298,
+    "cpu_seconds": 1.141,
+    "baseline_peak_wset_bytes": 22687744,
+    "peak_wset_bytes": 153554944,
+    "peak_wset_delta_bytes": 130867200,
+    "pdf_bytes": 69134,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+SourceHanSansSCBold",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 59224,
+      "decoded_bytes": 135532
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+SourceHanSansSCBold           CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.271,
+    "cpu_seconds": 1.125,
+    "baseline_peak_wset_bytes": 22990848,
+    "peak_wset_bytes": 153735168,
+    "peak_wset_delta_bytes": 130744320,
+    "pdf_bytes": 69134,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.473,
+    "cpu_seconds": 3.203,
+    "baseline_peak_wset_bytes": 22659072,
+    "peak_wset_bytes": 206028800,
+    "peak_wset_delta_bytes": 183369728,
+    "whole_pdf_bytes": 34129265,
+    "pdf_bytes": 158583,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/JDQCON+Source Han Sans SC Bold",
+      "subset_tag": "JDQCON+",
+      "stream_length": 61715,
+      "decoded_bytes": 657716
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "JDQCON+Source Han Sans SC Bold       CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.619,
+    "cpu_seconds": 3.641,
+    "baseline_peak_wset_bytes": 23019520,
+    "peak_wset_bytes": 205737984,
+    "peak_wset_delta_bytes": 182718464,
+    "whole_pdf_bytes": 34129265,
+    "pdf_bytes": 158583,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.114,
+    "cpu_seconds": 1.031,
+    "baseline_peak_wset_bytes": 22695936,
+    "peak_wset_bytes": 213905408,
+    "peak_wset_delta_bytes": 191209472,
+    "pdf_bytes": 17830262,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSansSC-Bold",
+      "subset_tag": null,
+      "stream_length": 17541839,
+      "decoded_bytes": 33867188
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "SourceHanSansSC-Bold                 CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.017,
+    "cpu_seconds": 1.0,
+    "baseline_peak_wset_bytes": 22724608,
+    "peak_wset_bytes": 213848064,
+    "peak_wset_delta_bytes": 191123456,
+    "pdf_bytes": 17830262,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 9.284,
+    "cpu_seconds": 8.906,
+    "baseline_peak_wset_bytes": 22966272,
+    "peak_wset_bytes": 335306752,
+    "peak_wset_delta_bytes": 312340480,
+    "subset_font_bytes": 191624,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   },
+   {
+    "tool": "fonttools_subset",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "fontTools 4.68.0",
+    "wall_seconds": 8.87,
+    "cpu_seconds": 8.656,
+    "baseline_peak_wset_bytes": 22728704,
+    "peak_wset_bytes": 335220736,
+    "peak_wset_delta_bytes": 312492032,
+    "subset_font_bytes": 191624,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.222,
+    "cpu_seconds": 0.188,
+    "baseline_peak_wset_bytes": 23105536,
+    "peak_wset_bytes": 121585664,
+    "peak_wset_delta_bytes": 98480128,
+    "pdf_bytes": 77071,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAA+SourceHanSansSC-ExtraLight",
+      "subset_tag": "AAAAAA+",
+      "stream_length": 34509,
+      "decoded_bytes": 93720
+     },
+     {
+      "key": "FontFile2",
+      "font_name": "/AAAAAB+SourceHanSansSC-ExtraLight",
+      "subset_tag": "AAAAAB+",
+      "stream_length": 35411,
+      "decoded_bytes": 92920
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "Helvetica                            Type 1            WinAnsi          no  no  no       2  0",
+      "AAAAAA+SourceHanSansSC-ExtraLight    TrueType          WinAnsi          yes yes yes      7  0",
+      "AAAAAB+SourceHanSansSC-ExtraLight    TrueType          WinAnsi          yes yes yes     11  0",
+      "Syntax Error: No display font for 'Symbol'"
+     ]
+    }
+   },
+   {
+    "tool": "reportlab",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "reportlab 5.1.0",
+    "wall_seconds": 0.225,
+    "cpu_seconds": 0.219,
+    "baseline_peak_wset_bytes": 22736896,
+    "peak_wset_bytes": 121380864,
+    "peak_wset_delta_bytes": 98643968,
+    "pdf_bytes": 77071,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.301,
+    "cpu_seconds": 1.078,
+    "baseline_peak_wset_bytes": 22937600,
+    "peak_wset_bytes": 151707648,
+    "peak_wset_delta_bytes": 128770048,
+    "pdf_bytes": 67034,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MPDFAA+SourceHanSansSCExtraLight",
+      "subset_tag": "MPDFAA+",
+      "stream_length": 57117,
+      "decoded_bytes": 135820
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "MPDFAA+SourceHanSansSCExtraLight     CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "fpdf2",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "fpdf2 2.9.0",
+    "wall_seconds": 1.324,
+    "cpu_seconds": 1.172,
+    "baseline_peak_wset_bytes": 23011328,
+    "peak_wset_bytes": 152313856,
+    "peak_wset_delta_bytes": 129302528,
+    "pdf_bytes": 67034,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.59,
+    "cpu_seconds": 3.297,
+    "baseline_peak_wset_bytes": 22691840,
+    "peak_wset_bytes": 205856768,
+    "peak_wset_delta_bytes": 183164928,
+    "whole_pdf_bytes": 33595612,
+    "pdf_bytes": 156503,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/DLVWVX+Source Han Sans SC ExtraLight",
+      "subset_tag": "DLVWVX+",
+      "stream_length": 59628,
+      "decoded_bytes": 658126
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "DLVWVX+Source Han Sans SC ExtraLight CID TrueType      Identity-H       yes yes yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pymupdf",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "PyMuPDF 2.0 (MuPDF 1.28.5)",
+    "wall_seconds": 1.56,
+    "cpu_seconds": 3.672,
+    "baseline_peak_wset_bytes": 23015424,
+    "peak_wset_bytes": 204759040,
+    "peak_wset_delta_bytes": 181743616,
+    "whole_pdf_bytes": 33595612,
+    "pdf_bytes": 156503,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.025,
+    "cpu_seconds": 0.953,
+    "baseline_peak_wset_bytes": 23007232,
+    "peak_wset_bytes": 211353600,
+    "peak_wset_delta_bytes": 188346368,
+    "pdf_bytes": 16645675,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSansSC-ExtraLight",
+      "subset_tag": null,
+      "stream_length": 16357247,
+      "decoded_bytes": 33333528
+     }
+    ],
+    "verify": {
+     "qpdf_check_exit": 0,
+     "pdffonts_exit": 0,
+     "pdffonts_rows": [
+      "SourceHanSansSC-ExtraLight           CID TrueType      Identity-H       yes no  yes      5  0"
+     ]
+    }
+   },
+   {
+    "tool": "pypdfium2",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "text_scalars": 384,
+    "tool_version": "pypdfium2 5.14.0 (pdfium 156.0.8076.0)",
+    "wall_seconds": 1.003,
+    "cpu_seconds": 0.969,
+    "baseline_peak_wset_bytes": 22970368,
+    "peak_wset_bytes": 211505152,
+    "peak_wset_delta_bytes": 188534784,
+    "pdf_bytes": 16645675,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528
+   }
+  ],
+  "finished_utc": "2026-10-31T21:06:51Z"
+ },
+ "concern2_itext_run": {
+  "script": "w218-font-limit-itext.py",
+  "script_sha256": "12f95e86fe66282b4a52f5c4bf83e33ecb1b5327cc938d34500307f88e2e5429",
+  "harness_sha256": "5b47c0e85bffad1901f8b49b0b3c3c7964cdc8bf29ddfe4afbc46e8082f7d7cf",
+  "started_utc": "2026-10-31T21:07:05Z",
+  "runs": [
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "BabelStoneHan.ttf",
+    "wall_seconds": 2.237,
+    "baseline_peak_wset_bytes": 27045888,
+    "peak_wset_bytes": 97439744,
+    "peak_wset_delta_bytes": 70393856,
+    "managed_allocated_bytes": 49437392,
+    "pdf_bytes": 177664,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "text_scalars": 215,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SLNWEK+BabelStoneHan",
+      "subset_tag": "SLNWEK+",
+      "stream_length": 173358,
+      "decoded_bytes": 457488
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "BabelStoneHan.ttf",
+    "wall_seconds": 0.673,
+    "baseline_peak_wset_bytes": 26947584,
+    "peak_wset_bytes": 96149504,
+    "peak_wset_delta_bytes": 69201920,
+    "managed_allocated_bytes": 49437344,
+    "pdf_bytes": 177664,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "text_scalars": 215
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "BabelStoneHan.ttf",
+    "wall_seconds": 3.241,
+    "baseline_peak_wset_bytes": 26656768,
+    "peak_wset_bytes": 279871488,
+    "peak_wset_delta_bytes": 253214720,
+    "managed_allocated_bytes": 267746056,
+    "pdf_bytes": 21120220,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "text_scalars": 215,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/BabelStoneHan",
+      "subset_tag": null,
+      "stream_length": 20684473,
+      "decoded_bytes": 51971284
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "BabelStoneHan.ttf",
+    "wall_seconds": 3.385,
+    "baseline_peak_wset_bytes": 26951680,
+    "peak_wset_bytes": 280027136,
+    "peak_wset_delta_bytes": 253075456,
+    "managed_allocated_bytes": 267741152,
+    "pdf_bytes": 21120220,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 51971284,
+    "text_scalars": 215
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "wall_seconds": 0.61,
+    "baseline_peak_wset_bytes": 26980352,
+    "peak_wset_bytes": 90943488,
+    "peak_wset_delta_bytes": 63963136,
+    "managed_allocated_bytes": 42540936,
+    "pdf_bytes": 124679,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "text_scalars": 331,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/OJAAXO+CactusClassicalSerif-Regular",
+      "subset_tag": "OJAAXO+",
+      "stream_length": 118486,
+      "decoded_bytes": 371772
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "wall_seconds": 0.59,
+    "baseline_peak_wset_bytes": 26976256,
+    "peak_wset_bytes": 90853376,
+    "peak_wset_delta_bytes": 63877120,
+    "managed_allocated_bytes": 42540912,
+    "pdf_bytes": 124679,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "text_scalars": 331
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "wall_seconds": 2.283,
+    "baseline_peak_wset_bytes": 26947584,
+    "peak_wset_bytes": 202768384,
+    "peak_wset_delta_bytes": 175820800,
+    "managed_allocated_bytes": 175893176,
+    "pdf_bytes": 16622217,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "text_scalars": 331,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/CactusClassicalSerif-Regular",
+      "subset_tag": null,
+      "stream_length": 16247336,
+      "decoded_bytes": 28502932
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "CactusClassicalSerif-Regular.ttf",
+    "wall_seconds": 2.298,
+    "baseline_peak_wset_bytes": 26791936,
+    "peak_wset_bytes": 202805248,
+    "peak_wset_delta_bytes": 176013312,
+    "managed_allocated_bytes": 175892576,
+    "pdf_bytes": 16622217,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28502932,
+    "text_scalars": 331
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "LXGWWenKai-Light.ttf",
+    "wall_seconds": 0.633,
+    "baseline_peak_wset_bytes": 26935296,
+    "peak_wset_bytes": 90832896,
+    "peak_wset_delta_bytes": 63897600,
+    "managed_allocated_bytes": 44747584,
+    "pdf_bytes": 214683,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "text_scalars": 391,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SMMWUL+LXGWWenKai-Light",
+      "subset_tag": "SMMWUL+",
+      "stream_length": 208499,
+      "decoded_bytes": 541380
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "LXGWWenKai-Light.ttf",
+    "wall_seconds": 0.622,
+    "baseline_peak_wset_bytes": 26939392,
+    "peak_wset_bytes": 90857472,
+    "peak_wset_delta_bytes": 63918080,
+    "managed_allocated_bytes": 44747584,
+    "pdf_bytes": 214683,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "text_scalars": 391
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "LXGWWenKai-Light.ttf",
+    "wall_seconds": 2.577,
+    "baseline_peak_wset_bytes": 26726400,
+    "peak_wset_bytes": 199933952,
+    "peak_wset_delta_bytes": 173207552,
+    "managed_allocated_bytes": 166607448,
+    "pdf_bytes": 15001311,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "text_scalars": 391,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/LXGWWenKai-Light",
+      "subset_tag": null,
+      "stream_length": 14706909,
+      "decoded_bytes": 28625516
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "LXGWWenKai-Light.ttf",
+    "wall_seconds": 2.334,
+    "baseline_peak_wset_bytes": 27082752,
+    "peak_wset_bytes": 201777152,
+    "peak_wset_delta_bytes": 174694400,
+    "managed_allocated_bytes": 166596616,
+    "pdf_bytes": 15001311,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 28625516,
+    "text_scalars": 391
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "wall_seconds": 0.683,
+    "baseline_peak_wset_bytes": 26996736,
+    "peak_wset_bytes": 137060352,
+    "peak_wset_delta_bytes": 110063616,
+    "managed_allocated_bytes": 99366944,
+    "pdf_bytes": 125026,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "text_scalars": 391,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/XIJVFL+Sarasa-Gothic-SC-Light-Italic",
+      "subset_tag": "XIJVFL+",
+      "stream_length": 118025,
+      "decoded_bytes": 474740
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "wall_seconds": 0.669,
+    "baseline_peak_wset_bytes": 27066368,
+    "peak_wset_bytes": 137256960,
+    "peak_wset_delta_bytes": 110190592,
+    "managed_allocated_bytes": 99366952,
+    "pdf_bytes": 125026,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "text_scalars": 391
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "wall_seconds": 2.158,
+    "baseline_peak_wset_bytes": 26980352,
+    "peak_wset_bytes": 232534016,
+    "peak_wset_delta_bytes": 205553664,
+    "managed_allocated_bytes": 213058896,
+    "pdf_bytes": 13313751,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "text_scalars": 391,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/Sarasa-Gothic-SC-Light-Italic",
+      "subset_tag": null,
+      "stream_length": 13026653,
+      "decoded_bytes": 24950308
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SarasaGothicSC-LightItalic.ttf",
+    "wall_seconds": 2.134,
+    "baseline_peak_wset_bytes": 26697728,
+    "peak_wset_bytes": 232456192,
+    "peak_wset_delta_bytes": 205758464,
+    "managed_allocated_bytes": 213058984,
+    "pdf_bytes": 13313751,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 24950308,
+    "text_scalars": 391
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSans-Regular.ttf",
+    "wall_seconds": 0.67,
+    "baseline_peak_wset_bytes": 26677248,
+    "peak_wset_bytes": 98099200,
+    "peak_wset_delta_bytes": 71421952,
+    "managed_allocated_bytes": 53829608,
+    "pdf_bytes": 265269,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/QJSCKU+SourceHanSans-Regular",
+      "subset_tag": "QJSCKU+",
+      "stream_length": 258855,
+      "decoded_bytes": 772484
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSans-Regular.ttf",
+    "wall_seconds": 0.68,
+    "baseline_peak_wset_bytes": 26669056,
+    "peak_wset_bytes": 98164736,
+    "peak_wset_delta_bytes": 71495680,
+    "managed_allocated_bytes": 53829608,
+    "pdf_bytes": 265269,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "text_scalars": 384
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSans-Regular.ttf",
+    "wall_seconds": 2.544,
+    "baseline_peak_wset_bytes": 26714112,
+    "peak_wset_bytes": 235655168,
+    "peak_wset_delta_bytes": 208941056,
+    "managed_allocated_bytes": 220153904,
+    "pdf_bytes": 17517322,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSans-Regular",
+      "subset_tag": null,
+      "stream_length": 17189102,
+      "decoded_bytes": 33673672
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSans-Regular.ttf",
+    "wall_seconds": 2.723,
+    "baseline_peak_wset_bytes": 26955776,
+    "peak_wset_bytes": 236191744,
+    "peak_wset_delta_bytes": 209235968,
+    "managed_allocated_bytes": 220155800,
+    "pdf_bytes": 17517322,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33673672,
+    "text_scalars": 384
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "wall_seconds": 0.635,
+    "baseline_peak_wset_bytes": 26673152,
+    "peak_wset_bytes": 98091008,
+    "peak_wset_delta_bytes": 71417856,
+    "managed_allocated_bytes": 53859944,
+    "pdf_bytes": 246682,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/VGLAYS+SourceHanSansSC-Bold",
+      "subset_tag": "VGLAYS+",
+      "stream_length": 240255,
+      "decoded_bytes": 748856
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "wall_seconds": 0.675,
+    "baseline_peak_wset_bytes": 26988544,
+    "peak_wset_bytes": 98058240,
+    "peak_wset_delta_bytes": 71069696,
+    "managed_allocated_bytes": 53856512,
+    "pdf_bytes": 246682,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "text_scalars": 384
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "wall_seconds": 2.533,
+    "baseline_peak_wset_bytes": 26746880,
+    "peak_wset_bytes": 236855296,
+    "peak_wset_delta_bytes": 210108416,
+    "managed_allocated_bytes": 220682808,
+    "pdf_bytes": 17870563,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSansSC-Bold",
+      "subset_tag": null,
+      "stream_length": 17540963,
+      "decoded_bytes": 33867188
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSansSC-Bold.ttf",
+    "wall_seconds": 2.576,
+    "baseline_peak_wset_bytes": 27021312,
+    "peak_wset_bytes": 237133824,
+    "peak_wset_delta_bytes": 210112512,
+    "managed_allocated_bytes": 220680256,
+    "pdf_bytes": 17870563,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33867188,
+    "text_scalars": 384
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "wall_seconds": 0.602,
+    "baseline_peak_wset_bytes": 26693632,
+    "peak_wset_bytes": 97923072,
+    "peak_wset_delta_bytes": 71229440,
+    "managed_allocated_bytes": 53765728,
+    "pdf_bytes": 244387,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/MJMLKJ+SourceHanSansSC-ExtraLight",
+      "subset_tag": "MJMLKJ+",
+      "stream_length": 237965,
+      "decoded_bytes": 749168
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "subset",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "wall_seconds": 0.737,
+    "baseline_peak_wset_bytes": 26976256,
+    "peak_wset_bytes": 98197504,
+    "peak_wset_delta_bytes": 71221248,
+    "managed_allocated_bytes": 53765784,
+    "pdf_bytes": 244387,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "text_scalars": 384
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "wall_seconds": 2.667,
+    "baseline_peak_wset_bytes": 26689536,
+    "peak_wset_bytes": 217231360,
+    "peak_wset_delta_bytes": 190541824,
+    "managed_allocated_bytes": 185176064,
+    "pdf_bytes": 16685073,
+    "error": null,
+    "run": 0,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "text_scalars": 384,
+    "embedded_in_output": [
+     {
+      "key": "FontFile2",
+      "font_name": "/SourceHanSansSC-ExtraLight",
+      "subset_tag": null,
+      "stream_length": 16355481,
+      "decoded_bytes": 33333528
+     }
+    ]
+   },
+   {
+    "tool": "iText 9.8.0.0 (.NET 10.0.13)",
+    "mode": "full",
+    "font": "SourceHanSansSC-ExtraLight.ttf",
+    "wall_seconds": 2.505,
+    "baseline_peak_wset_bytes": 26800128,
+    "peak_wset_bytes": 215220224,
+    "peak_wset_delta_bytes": 188420096,
+    "managed_allocated_bytes": 185181512,
+    "pdf_bytes": 16685073,
+    "error": null,
+    "run": 1,
+    "font_class": "static-glyf",
+    "font_bytes": 33333528,
+    "text_scalars": 384
+   }
+  ],
+  "finished_utc": "2026-10-31T21:08:00Z"
+ },
+ "concern2_listings": {
+  "google-fonts-tree": {
+   "tree_truncated": false,
+   "font_files": 3923,
+   "largest_40": [
+    {
+     "path": "ofl/notocoloremojicompattest/NotoColorEmojiCompatTest-Regular.ttf",
+     "bytes": 58722780
+    },
+    {
+     "path": "ofl/chironsunghk/ChironSungHK-Italic[wght].ttf",
+     "bytes": 51926120
+    },
+    {
+     "path": "ofl/chirongoroundtc/ChironGoRoundTC[wght].ttf",
+     "bytes": 51170304
+    },
+    {
+     "path": "ofl/chironsunghk/ChironSungHK[wght].ttf",
+     "bytes": 50652520
+    },
+    {
+     "path": "ofl/chironheihk/ChironHeiHK-Italic[wght].ttf",
+     "bytes": 33329960
+    },
+    {
+     "path": "ofl/chironheihk/ChironHeiHK[wght].ttf",
+     "bytes": 31144580
+    },
+    {
+     "path": "ofl/cactusclassicalserif/CactusClassicalSerif-Regular.ttf",
+     "bytes": 28502932
+    },
+    {
+     "path": "ofl/notocoloremoji/NotoColorEmoji-Regular.ttf",
+     "bytes": 25332736
+    },
+    {
+     "path": "ofl/notoserifsc/NotoSerifSC[wght].ttf",
+     "bytes": 25125512
+    },
+    {
+     "path": "ofl/notoserifkr/NotoSerifKR[wght].ttf",
+     "bytes": 23795420
+    },
+    {
+     "path": "ofl/notosanssc/NotoSansSC[wght].ttf",
+     "bytes": 17772300
+    },
+    {
+     "path": "ofl/bpmfzihikaistd/BpmfZihiKaiStd-Regular.ttf",
+     "bytes": 17497872
+    },
+    {
+     "path": "ofl/notoseriftc/NotoSerifTC[wght].ttf",
+     "bytes": 16851596
+    },
+    {
+     "path": "ofl/notoserifhk/NotoSerifHK[wght].ttf",
+     "bytes": 16828640
+    },
+    {
+     "path": "ofl/shipporiminchob1/ShipporiMinchoB1-Regular.ttf",
+     "bytes": 15230032
+    },
+    {
+     "path": "ofl/shipporiminchob1/ShipporiMinchoB1-Medium.ttf",
+     "bytes": 15185140
+    },
+    {
+     "path": "ofl/shipporiminchob1/ShipporiMinchoB1-SemiBold.ttf",
+     "bytes": 15160536
+    },
+    {
+     "path": "ofl/shipporiminchob1/ShipporiMinchoB1-Bold.ttf",
+     "bytes": 15088960
+    },
+    {
+     "path": "ofl/shipporiminchob1/ShipporiMinchoB1-ExtraBold.ttf",
+     "bytes": 15088060
+    },
+    {
+     "path": "ofl/lxgwwenkaitc/LXGWWenKaiTC-Light.ttf",
+     "bytes": 13771744
+    },
+    {
+     "path": "ofl/lxgwwenkaimonotc/LXGWWenKaiMonoTC-Light.ttf",
+     "bytes": 13769976
+    },
+    {
+     "path": "ofl/notoserifjp/NotoSerifJP[wght].ttf",
+     "bytes": 13574352
+    },
+    {
+     "path": "ofl/lxgwwenkaimonotc/LXGWWenKaiMonoTC-Regular.ttf",
+     "bytes": 13122932
+    },
+    {
+     "path": "ofl/lxgwwenkaitc/LXGWWenKaiTC-Regular.ttf",
+     "bytes": 13110528
+    },
+    {
+     "path": "ofl/shipporiantiqueb1/ShipporiAntiqueB1-Regular.ttf",
+     "bytes": 13095332
+    },
+    {
+     "path": "ofl/lxgwwenkaimonotc/LXGWWenKaiMonoTC-Bold.ttf",
+     "bytes": 12885112
+    },
+    {
+     "path": "ofl/lxgwwenkaitc/LXGWWenKaiTC-Bold.ttf",
+     "bytes": 12881104
+    },
+    {
+     "path": "ofl/himelody/HiMelody-Regular.ttf",
+     "bytes": 12623412
+    },
+    {
+     "path": "ofl/gamjaflower/GamjaFlower-Regular.ttf",
+     "bytes": 12615444
+    },
+    {
+     "path": "ofl/chocolateclassicalsans/ChocolateClassicalSans-Regular.ttf",
+     "bytes": 12183000
+    },
+    {
+     "path": "ofl/notosanstc/NotoSansTC[wght].ttf",
+     "bytes": 11941968
+    },
+    {
+     "path": "ofl/notosanshk/NotoSansHK[wght].ttf",
+     "bytes": 11905808
+    },
+    {
+     "path": "ofl/stylish/Stylish-Regular.ttf",
+     "bytes": 10854004
+    },
+    {
+     "path": "ofl/notosanskr/NotoSansKR[wght].ttf",
+     "bytes": 10414588
+    },
+    {
+     "path": "ofl/wdxllubrifonttc/WDXLLubrifontTC-Regular.ttf",
+     "bytes": 10345168
+    },
+    {
+     "path": "ofl/wdxllubrifontsc/WDXLLubrifontSC-Regular.ttf",
+     "bytes": 10344488
+    },
+    {
+     "path": "ofl/wdxllubrifontjpn/WDXLLubrifontJPN-Regular.ttf",
+     "bytes": 10344400
+    },
+    {
+     "path": "ofl/jejumyeongjo/JejuMyeongjo-Regular.ttf",
+     "bytes": 9606356
+    },
+    {
+     "path": "ofl/blackandwhitepicture/BlackAndWhitePicture-Regular.ttf",
+     "bytes": 9606352
+    },
+    {
+     "path": "ofl/notosansjp/NotoSansJP[wght].ttf",
+     "bytes": 9589900
+    }
+   ]
+  },
+  "notofonts-tree": {
+   "tree_truncated": false,
+   "font_files": 12134,
+   "largest_40": [
+    {
+     "path": "fonts/NotoSansSignWriting/full/ttf/NotoSansSignWriting-Regular.ttf",
+     "bytes": 7881488
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/googlefonts/ttf/NotoSansSignWriting-Regular.ttf",
+     "bytes": 7881488
+    },
+    {
+     "path": "megamerge/NotoSansLiving-Regular.ttf",
+     "bytes": 6026792
+    },
+    {
+     "path": "fonts/NotoSerifTangut/full/ttf/NotoSerifTangut-Regular.ttf",
+     "bytes": 5687188
+    },
+    {
+     "path": "fonts/NotoSerifTangut/googlefonts/ttf/NotoSerifTangut-Regular.ttf",
+     "bytes": 5687188
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/hinted/ttf/NotoSansSignWriting-Regular.ttf",
+     "bytes": 5214924
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/unhinted/ttf/NotoSansSignWriting-Regular.ttf",
+     "bytes": 5214876
+    },
+    {
+     "path": "megamerge/NotoSerifHistorical-Regular.ttf",
+     "bytes": 5106512
+    },
+    {
+     "path": "megamerge/NotoSansHistorical-Regular.ttf",
+     "bytes": 4330956
+    },
+    {
+     "path": "megamerge/NotoSerifLiving-Regular.ttf",
+     "bytes": 3464808
+    },
+    {
+     "path": "fonts/NotoSerifTangut/hinted/ttf/NotoSerifTangut-Regular.ttf",
+     "bytes": 3065476
+    },
+    {
+     "path": "fonts/NotoSerifTangut/unhinted/ttf/NotoSerifTangut-Regular.ttf",
+     "bytes": 3065476
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/full/otf/NotoSansSignWriting-Regular.otf",
+     "bytes": 2887684
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/unhinted/otf/NotoSansSignWriting-Regular.otf",
+     "bytes": 2780224
+    },
+    {
+     "path": "fonts/NotoSansSignWriting/unhinted/slim-otf/NotoSansSignWriting-Regular.otf",
+     "bytes": 2779916
+    },
+    {
+     "path": "fonts/NotoSans/full/variable/NotoSans-Italic[wdth,wght].ttf",
+     "bytes": 2678460
+    },
+    {
+     "path": "fonts/NotoSans/googlefonts/variable/NotoSans-Italic[wdth,wght].ttf",
+     "bytes": 2675320
+    },
+    {
+     "path": "fonts/NotoSans/full/variable/NotoSans[wdth,wght].ttf",
+     "bytes": 2496116
+    },
+    {
+     "path": "fonts/NotoSans/googlefonts/variable/NotoSans[wdth,wght].ttf",
+     "bytes": 2493792
+    },
+    {
+     "path": "fonts/NotoSerif/unhinted/variable/NotoSerif-Italic[wdth,wght].ttf",
+     "bytes": 2451572
+    },
+    {
+     "path": "fonts/NotoSerif/googlefonts/variable/NotoSerif-Italic[wdth,wght].ttf",
+     "bytes": 2448496
+    },
+    {
+     "path": "fonts/NotoSerif/unhinted/variable/NotoSerif[wdth,wght].ttf",
+     "bytes": 2422980
+    },
+    {
+     "path": "fonts/NotoSerif/googlefonts/variable/NotoSerif[wdth,wght].ttf",
+     "bytes": 2420628
+    },
+    {
+     "path": "fonts/NotoSans/full/variable-ttf/NotoSans-Italic[wdth,wght].ttf",
+     "bytes": 2323744
+    },
+    {
+     "path": "fonts/NotoSans/googlefonts/variable-ttf/NotoSans-Italic[wdth,wght].ttf",
+     "bytes": 2322640
+    },
+    {
+     "path": "fonts/NotoSerifDisplay/googlefonts/variable-ttf/NotoSerifDisplay-Italic[wdth,wght].ttf",
+     "bytes": 2281824
+    },
+    {
+     "path": "fonts/NotoSerifDisplay/unhinted/variable-ttf/NotoSerifDisplay-Italic[wdth,wght].ttf",
+     "bytes": 2281824
+    },
+    {
+     "path": "fonts/NotoSerifDisplay/googlefonts/variable-ttf/NotoSerifDisplay[wdth,wght].ttf",
+     "bytes": 2219376
+    },
+    {
+     "path": "fonts/NotoSerifDisplay/unhinted/variable-ttf/NotoSerifDisplay[wdth,wght].ttf",
+     "bytes": 2219376
+    },
+    {
+     "path": "fonts/NotoSerifTibetan/full/variable-ttf/NotoSerifTibetan[wght].ttf",
+     "bytes": 2063504
+    },
+    {
+     "path": "fonts/NotoSerifTibetan/googlefonts/variable-ttf/NotoSerifTibetan[wght].ttf",
+     "bytes": 2063504
+    },
+    {
+     "path": "fonts/NotoSans/unhinted/variable/NotoSans-Italic[wdth,wght].ttf",
+     "bytes": 2058900
+    },
+    {
+     "path": "fonts/NotoSans/full/variable-ttf/NotoSans[wdth,wght].ttf",
+     "bytes": 2049764
+    },
+    {
+     "path": "fonts/NotoSans/googlefonts/variable-ttf/NotoSans[wdth,wght].ttf",
+     "bytes": 2049096
+    },
+    {
+     "path": "fonts/NotoSansDuployan/unhinted/ttf/NotoSansDuployan-Regular.ttf",
+     "bytes": 1977212
+    },
+    {
+     "path": "fonts/NotoSansDuployan/unhinted/ttf/NotoSansDuployan-Bold.ttf",
+     "bytes": 1969184
+    },
+    {
+     "path": "fonts/NotoSerifTibetan/unhinted/variable-ttf/NotoSerifTibetan[wght].ttf",
+     "bytes": 1968044
+    },
+    {
+     "path": "fonts/NotoSerifTangut/full/otf/NotoSerifTangut-Regular.otf",
+     "bytes": 1943988
+    },
+    {
+     "path": "fonts/NotoSerif/googlefonts/variable-ttf/NotoSerif-Italic[wdth,wght].ttf",
+     "bytes": 1925272
+    },
+    {
+     "path": "fonts/NotoSerif/unhinted/variable-ttf/NotoSerif-Italic[wdth,wght].ttf",
+     "bytes": 1925272
+    }
+   ]
+  },
+  "noto-cjk-tree": {
+   "tree_truncated": false,
+   "font_files": 232,
+   "largest_40": [
+    {
+     "path": "Serif/Variable/OTC/NotoSerifCJK-VF.ttf.ttc",
+     "bytes": 62008512
+    },
+    {
+     "path": "android/NotoSerifCJK-wght-400-900.ttf.ttc",
+     "bytes": 61982484
+    },
+    {
+     "path": "Serif/Variable/TTF/NotoSerifCJKjp-VF.ttf",
+     "bytes": 59929612
+    },
+    {
+     "path": "Serif/Variable/TTF/NotoSerifCJKsc-VF.ttf",
+     "bytes": 59899696
+    },
+    {
+     "path": "Serif/Variable/TTF/NotoSerifCJKtc-VF.ttf",
+     "bytes": 59898532
+    },
+    {
+     "path": "Serif/Variable/TTF/NotoSerifCJKkr-VF.ttf",
+     "bytes": 59896256
+    },
+    {
+     "path": "Serif/Variable/TTF/NotoSerifCJKhk-VF.ttf",
+     "bytes": 59890336
+    },
+    {
+     "path": "Serif/Variable/OTC/NotoSerifCJK-VF.otf.ttc",
+     "bytes": 57488648
+    },
+    {
+     "path": "Serif/Variable/OTF/NotoSerifCJKjp-VF.otf",
+     "bytes": 55409748
+    },
+    {
+     "path": "Serif/Variable/OTF/NotoSerifCJKsc-VF.otf",
+     "bytes": 55379832
+    },
+    {
+     "path": "Serif/Variable/OTF/NotoSerifCJKtc-VF.otf",
+     "bytes": 55378668
+    },
+    {
+     "path": "Serif/Variable/OTF/NotoSerifCJKkr-VF.otf",
+     "bytes": 55376392
+    },
+    {
+     "path": "Serif/Variable/OTF/NotoSerifCJKhk-VF.otf",
+     "bytes": 55370472
+    },
+    {
+     "path": "Sans/Variable/OTC/NotoSansCJK-VF.ttf.ttc",
+     "bytes": 38089916
+    },
+    {
+     "path": "android/NotoSansCJK-wght-400-900.ttf.ttc",
+     "bytes": 38019224
+    },
+    {
+     "path": "Sans/Variable/OTC/NotoSansMonoCJK-VF.ttf.ttc",
+     "bytes": 37014640
+    },
+    {
+     "path": "Sans/Variable/TTF/NotoSansCJKjp-VF.ttf",
+     "bytes": 36174296
+    },
+    {
+     "path": "Sans/Variable/TTF/NotoSansCJKsc-VF.ttf",
+     "bytes": 36144788
+    },
+    {
+     "path": "Sans/Variable/TTF/NotoSansCJKtc-VF.ttf",
+     "bytes": 36143328
+    },
+    {
+     "path": "Sans/Variable/TTF/NotoSansCJKkr-VF.ttf",
+     "bytes": 36140528
+    },
+    {
+     "path": "Sans/Variable/TTF/NotoSansCJKhk-VF.ttf",
+     "bytes": 36135040
+    },
+    {
+     "path": "Sans/Variable/TTF/Mono/NotoSansMonoCJKjp-VF.ttf",
+     "bytes": 35404604
+    },
+    {
+     "path": "Sans/Variable/TTF/Mono/NotoSansMonoCJKsc-VF.ttf",
+     "bytes": 35375144
+    },
+    {
+     "path": "Sans/Variable/TTF/Mono/NotoSansMonoCJKtc-VF.ttf",
+     "bytes": 35373636
+    },
+    {
+     "path": "Sans/Variable/TTF/Mono/NotoSansMonoCJKkr-VF.ttf",
+     "bytes": 35370836
+    },
+    {
+     "path": "Sans/Variable/TTF/Mono/NotoSansMonoCJKhk-VF.ttf",
+     "bytes": 35365348
+    },
+    {
+     "path": "Sans/Variable/OTC/NotoSansCJK-VF.otf.ttc",
+     "bytes": 32682580
+    },
+    {
+     "path": "Sans/Variable/OTC/NotoSansMonoCJK-VF.otf.ttc",
+     "bytes": 31908332
+    },
+    {
+     "path": "Sans/Variable/OTF/NotoSansCJKjp-VF.otf",
+     "bytes": 30766960
+    },
+    {
+     "path": "Sans/Variable/OTF/NotoSansCJKsc-VF.otf",
+     "bytes": 30737452
+    },
+    {
+     "path": "Sans/Variable/OTF/NotoSansCJKtc-VF.otf",
+     "bytes": 30735992
+    },
+    {
+     "path": "Sans/Variable/OTF/NotoSansCJKkr-VF.otf",
+     "bytes": 30733192
+    },
+    {
+     "path": "Sans/Variable/OTF/NotoSansCJKhk-VF.otf",
+     "bytes": 30727704
+    },
+    {
+     "path": "Sans/Variable/OTF/Mono/NotoSansMonoCJKjp-VF.otf",
+     "bytes": 30298296
+    },
+    {
+     "path": "Sans/Variable/OTF/Mono/NotoSansMonoCJKsc-VF.otf",
+     "bytes": 30268836
+    },
+    {
+     "path": "Sans/Variable/OTF/Mono/NotoSansMonoCJKtc-VF.otf",
+     "bytes": 30267328
+    },
+    {
+     "path": "Sans/Variable/OTF/Mono/NotoSansMonoCJKkr-VF.otf",
+     "bytes": 30264528
+    },
+    {
+     "path": "Sans/Variable/OTF/Mono/NotoSansMonoCJKhk-VF.otf",
+     "bytes": 30259040
+    },
+    {
+     "path": "Serif/OTC/NotoSerifCJK-Bold.ttc",
+     "bytes": 27397052
+    },
+    {
+     "path": "Serif/OTC/NotoSerifCJK-Medium.ttc",
+     "bytes": 26674468
+    }
+   ]
+  },
+  "sarasa-releases": [
+   {
+    "tag": "v1.0.43",
+    "assets": [
+     {
+      "name": "Sarasa-SuperTTC-1.0.43.7z",
+      "bytes": 142673027
+     },
+     {
+      "name": "Sarasa-SuperTTC-1.0.43.zip",
+      "bytes": 407362432
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.43.7z",
+      "bytes": 101408687
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.43.zip",
+      "bytes": 305041299
+     },
+     {
+      "name": "Sarasa-TTC-1.0.43.7z",
+      "bytes": 155462172
+     },
+     {
+      "name": "Sarasa-TTC-1.0.43.zip",
+      "bytes": 414226673
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.43.7z",
+      "bytes": 101384707
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.43.zip",
+      "bytes": 316451984
+     },
+     {
+      "name": "Sarasa-TTF-1.0.43.7z",
+      "bytes": 853776166
+     },
+     {
+      "name": "Sarasa-TTF-Unhinted-1.0.43.7z",
+      "bytes": 345378811
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.43.7z",
+      "bytes": 165178805
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.43.zip",
+      "bytes": 769276115
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.43.7z",
+      "bytes": 104947476
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.43.zip",
+      "bytes": 476836088
+     },
+     {
+      "name": "SarasaFixedCL-TTF-1.0.43.7z",
+      "bytes": 66683763
+     },
+     {
+      "name": "SarasaFixedCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50574501
+     },
+     {
+      "name": "SarasaFixedHC-TTF-1.0.43.7z",
+      "bytes": 66205437
+     },
+     {
+      "name": "SarasaFixedHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50256399
+     },
+     {
+      "name": "SarasaFixedJ-TTF-1.0.43.7z",
+      "bytes": 67348260
+     },
+     {
+      "name": "SarasaFixedJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50958724
+     },
+     {
+      "name": "SarasaFixedK-TTF-1.0.43.7z",
+      "bytes": 65521489
+     },
+     {
+      "name": "SarasaFixedK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49634415
+     },
+     {
+      "name": "SarasaFixedSC-TTF-1.0.43.7z",
+      "bytes": 64909123
+     },
+     {
+      "name": "SarasaFixedSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49212014
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.43.7z",
+      "bytes": 165651770
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.43.zip",
+      "bytes": 772533381
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.43.7z",
+      "bytes": 105190543
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.43.zip",
+      "bytes": 478340719
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-1.0.43.7z",
+      "bytes": 67001526
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50749289
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-1.0.43.7z",
+      "bytes": 66514637
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50463895
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-1.0.43.7z",
+      "bytes": 67684248
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51157160
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-1.0.43.7z",
+      "bytes": 65847726
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49817776
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-1.0.43.7z",
+      "bytes": 65241635
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49419302
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-1.0.43.7z",
+      "bytes": 66439252
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50350893
+     },
+     {
+      "name": "SarasaFixedTC-TTF-1.0.43.7z",
+      "bytes": 66130635
+     },
+     {
+      "name": "SarasaFixedTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50171232
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.43.7z",
+      "bytes": 162751425
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.43.zip",
+      "bytes": 747659073
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.43.7z",
+      "bytes": 103498868
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.43.zip",
+      "bytes": 462080494
+     },
+     {
+      "name": "SarasaGothicCL-TTF-1.0.43.7z",
+      "bytes": 64619964
+     },
+     {
+      "name": "SarasaGothicCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49007084
+     },
+     {
+      "name": "SarasaGothicHC-TTF-1.0.43.7z",
+      "bytes": 64176649
+     },
+     {
+      "name": "SarasaGothicHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48702554
+     },
+     {
+      "name": "SarasaGothicJ-TTF-1.0.43.7z",
+      "bytes": 65305013
+     },
+     {
+      "name": "SarasaGothicJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49411336
+     },
+     {
+      "name": "SarasaGothicK-TTF-1.0.43.7z",
+      "bytes": 63466660
+     },
+     {
+      "name": "SarasaGothicK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48069173
+     },
+     {
+      "name": "SarasaGothicSC-TTF-1.0.43.7z",
+      "bytes": 62863304
+     },
+     {
+      "name": "SarasaGothicSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 47652217
+     },
+     {
+      "name": "SarasaGothicTC-TTF-1.0.43.7z",
+      "bytes": 64065719
+     },
+     {
+      "name": "SarasaGothicTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48590798
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.43.7z",
+      "bytes": 166701132
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.43.zip",
+      "bytes": 781680585
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.43.7z",
+      "bytes": 105831252
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.43.zip",
+      "bytes": 483740401
+     },
+     {
+      "name": "SarasaMonoCL-TTF-1.0.43.7z",
+      "bytes": 67631768
+     },
+     {
+      "name": "SarasaMonoCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51216469
+     },
+     {
+      "name": "SarasaMonoHC-TTF-1.0.43.7z",
+      "bytes": 67139900
+     },
+     {
+      "name": "SarasaMonoHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50927527
+     },
+     {
+      "name": "SarasaMonoJ-TTF-1.0.43.7z",
+      "bytes": 68303406
+     },
+     {
+      "name": "SarasaMonoJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51617031
+     },
+     {
+      "name": "SarasaMonoK-TTF-1.0.43.7z",
+      "bytes": 66490261
+     },
+     {
+      "name": "SarasaMonoK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50283998
+     },
+     {
+      "name": "SarasaMonoSC-TTF-1.0.43.7z",
+      "bytes": 65871604
+     },
+     {
+      "name": "SarasaMonoSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49862338
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.43.7z",
+      "bytes": 167217933
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.43.zip",
+      "bytes": 785657852
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.43.7z",
+      "bytes": 106109791
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.43.zip",
+      "bytes": 485364019
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-1.0.43.7z",
+      "bytes": 68031181
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51423867
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-1.0.43.7z",
+      "bytes": 67555814
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51115425
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-1.0.43.7z",
+      "bytes": 68694139
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51824195
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-1.0.43.7z",
+      "bytes": 66862793
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50500063
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-1.0.43.7z",
+      "bytes": 66283896
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50083490
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-1.0.43.7z",
+      "bytes": 67459277
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51014343
+     },
+     {
+      "name": "SarasaMonoTC-TTF-1.0.43.7z",
+      "bytes": 67080322
+     },
+     {
+      "name": "SarasaMonoTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50811984
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.43.7z",
+      "bytes": 166665905
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.43.zip",
+      "bytes": 781623411
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.43.7z",
+      "bytes": 105835945
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.43.zip",
+      "bytes": 483691762
+     },
+     {
+      "name": "SarasaTermCL-TTF-1.0.43.7z",
+      "bytes": 67629591
+     },
+     {
+      "name": "SarasaTermCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51211994
+     },
+     {
+      "name": "SarasaTermHC-TTF-1.0.43.7z",
+      "bytes": 67149551
+     },
+     {
+      "name": "SarasaTermHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50915930
+     },
+     {
+      "name": "SarasaTermJ-TTF-1.0.43.7z",
+      "bytes": 68286162
+     },
+     {
+      "name": "SarasaTermJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51608051
+     },
+     {
+      "name": "SarasaTermK-TTF-1.0.43.7z",
+      "bytes": 66480482
+     },
+     {
+      "name": "SarasaTermK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50288507
+     },
+     {
+      "name": "SarasaTermSC-TTF-1.0.43.7z",
+      "bytes": 65866390
+     },
+     {
+      "name": "SarasaTermSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49873028
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.43.7z",
+      "bytes": 167226485
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.43.zip",
+      "bytes": 785604950
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.43.7z",
+      "bytes": 106091666
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.43.zip",
+      "bytes": 485308592
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-1.0.43.7z",
+      "bytes": 68014846
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51427230
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-1.0.43.7z",
+      "bytes": 67551667
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51131276
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-1.0.43.7z",
+      "bytes": 68703927
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51817473
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-1.0.43.7z",
+      "bytes": 66866729
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50494107
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-1.0.43.7z",
+      "bytes": 66286577
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50085146
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-1.0.43.7z",
+      "bytes": 67465066
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 51025028
+     },
+     {
+      "name": "SarasaTermTC-TTF-1.0.43.7z",
+      "bytes": 67060989
+     },
+     {
+      "name": "SarasaTermTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 50800627
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.43.7z",
+      "bytes": 162676868
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.43.zip",
+      "bytes": 747715227
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.43.7z",
+      "bytes": 103372010
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.43.zip",
+      "bytes": 462127821
+     },
+     {
+      "name": "SarasaUiCL-TTF-1.0.43.7z",
+      "bytes": 64621247
+     },
+     {
+      "name": "SarasaUiCL-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49001817
+     },
+     {
+      "name": "SarasaUiHC-TTF-1.0.43.7z",
+      "bytes": 64143569
+     },
+     {
+      "name": "SarasaUiHC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48703896
+     },
+     {
+      "name": "SarasaUiJ-TTF-1.0.43.7z",
+      "bytes": 65322628
+     },
+     {
+      "name": "SarasaUiJ-TTF-Unhinted-1.0.43.7z",
+      "bytes": 49410919
+     },
+     {
+      "name": "SarasaUiK-TTF-1.0.43.7z",
+      "bytes": 63470286
+     },
+     {
+      "name": "SarasaUiK-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48070877
+     },
+     {
+      "name": "SarasaUiSC-TTF-1.0.43.7z",
+      "bytes": 62869428
+     },
+     {
+      "name": "SarasaUiSC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 47645417
+     },
+     {
+      "name": "SarasaUiTC-TTF-1.0.43.7z",
+      "bytes": 64061942
+     },
+     {
+      "name": "SarasaUiTC-TTF-Unhinted-1.0.43.7z",
+      "bytes": 48590370
+     },
+     {
+      "name": "SHA-256.txt",
+      "bytes": 13425
+     }
+    ]
+   },
+   {
+    "tag": "v1.0.42",
+    "assets": [
+     {
+      "name": "Sarasa-SuperTTC-1.0.42.7z",
+      "bytes": 142670685
+     },
+     {
+      "name": "Sarasa-SuperTTC-1.0.42.zip",
+      "bytes": 407333266
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.42.7z",
+      "bytes": 101412982
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.42.zip",
+      "bytes": 305016574
+     },
+     {
+      "name": "Sarasa-TTC-1.0.42.7z",
+      "bytes": 155459223
+     },
+     {
+      "name": "Sarasa-TTC-1.0.42.zip",
+      "bytes": 414186575
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.42.7z",
+      "bytes": 101411288
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.42.zip",
+      "bytes": 316421402
+     },
+     {
+      "name": "Sarasa-TTF-1.0.42.7z",
+      "bytes": 853826443
+     },
+     {
+      "name": "Sarasa-TTF-Unhinted-1.0.42.7z",
+      "bytes": 345353873
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.42.7z",
+      "bytes": 165173565
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.42.zip",
+      "bytes": 769257639
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.42.7z",
+      "bytes": 104955273
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.42.zip",
+      "bytes": 476816805
+     },
+     {
+      "name": "SarasaFixedCL-TTF-1.0.42.7z",
+      "bytes": 66667164
+     },
+     {
+      "name": "SarasaFixedCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50555271
+     },
+     {
+      "name": "SarasaFixedHC-TTF-1.0.42.7z",
+      "bytes": 66194077
+     },
+     {
+      "name": "SarasaFixedHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50249176
+     },
+     {
+      "name": "SarasaFixedJ-TTF-1.0.42.7z",
+      "bytes": 67333124
+     },
+     {
+      "name": "SarasaFixedJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50966073
+     },
+     {
+      "name": "SarasaFixedK-TTF-1.0.42.7z",
+      "bytes": 65511681
+     },
+     {
+      "name": "SarasaFixedK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49630920
+     },
+     {
+      "name": "SarasaFixedSC-TTF-1.0.42.7z",
+      "bytes": 64917140
+     },
+     {
+      "name": "SarasaFixedSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49214380
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.42.7z",
+      "bytes": 165652320
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.42.zip",
+      "bytes": 772559476
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.42.7z",
+      "bytes": 105197083
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.42.zip",
+      "bytes": 478352259
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-1.0.42.7z",
+      "bytes": 66995126
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50772276
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-1.0.42.7z",
+      "bytes": 66538249
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50478813
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-1.0.42.7z",
+      "bytes": 67688846
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51173462
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-1.0.42.7z",
+      "bytes": 65867032
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49840433
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-1.0.42.7z",
+      "bytes": 65240123
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49417380
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-1.0.42.7z",
+      "bytes": 66433515
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50362195
+     },
+     {
+      "name": "SarasaFixedTC-TTF-1.0.42.7z",
+      "bytes": 66111674
+     },
+     {
+      "name": "SarasaFixedTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50153186
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.42.7z",
+      "bytes": 162763850
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.42.zip",
+      "bytes": 747659242
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.42.7z",
+      "bytes": 103495648
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.42.zip",
+      "bytes": 462080830
+     },
+     {
+      "name": "SarasaGothicCL-TTF-1.0.42.7z",
+      "bytes": 64639163
+     },
+     {
+      "name": "SarasaGothicCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49008919
+     },
+     {
+      "name": "SarasaGothicHC-TTF-1.0.42.7z",
+      "bytes": 64160236
+     },
+     {
+      "name": "SarasaGothicHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48691715
+     },
+     {
+      "name": "SarasaGothicJ-TTF-1.0.42.7z",
+      "bytes": 65292365
+     },
+     {
+      "name": "SarasaGothicJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49416093
+     },
+     {
+      "name": "SarasaGothicK-TTF-1.0.42.7z",
+      "bytes": 63469318
+     },
+     {
+      "name": "SarasaGothicK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48071725
+     },
+     {
+      "name": "SarasaGothicSC-TTF-1.0.42.7z",
+      "bytes": 62867113
+     },
+     {
+      "name": "SarasaGothicSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 47647898
+     },
+     {
+      "name": "SarasaGothicTC-TTF-1.0.42.7z",
+      "bytes": 64059595
+     },
+     {
+      "name": "SarasaGothicTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48594016
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.42.7z",
+      "bytes": 166653883
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.42.zip",
+      "bytes": 781659291
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.42.7z",
+      "bytes": 105852065
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.42.zip",
+      "bytes": 483724282
+     },
+     {
+      "name": "SarasaMonoCL-TTF-1.0.42.7z",
+      "bytes": 67637976
+     },
+     {
+      "name": "SarasaMonoCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51221663
+     },
+     {
+      "name": "SarasaMonoHC-TTF-1.0.42.7z",
+      "bytes": 67147623
+     },
+     {
+      "name": "SarasaMonoHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50910872
+     },
+     {
+      "name": "SarasaMonoJ-TTF-1.0.42.7z",
+      "bytes": 68296676
+     },
+     {
+      "name": "SarasaMonoJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51609098
+     },
+     {
+      "name": "SarasaMonoK-TTF-1.0.42.7z",
+      "bytes": 66479762
+     },
+     {
+      "name": "SarasaMonoK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50284902
+     },
+     {
+      "name": "SarasaMonoSC-TTF-1.0.42.7z",
+      "bytes": 65885338
+     },
+     {
+      "name": "SarasaMonoSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49871333
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.42.7z",
+      "bytes": 167185443
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.42.zip",
+      "bytes": 785680629
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.42.7z",
+      "bytes": 106125332
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.42.zip",
+      "bytes": 485374747
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-1.0.42.7z",
+      "bytes": 68014146
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51448998
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-1.0.42.7z",
+      "bytes": 67539445
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51124555
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-1.0.42.7z",
+      "bytes": 68692190
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51825153
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-1.0.42.7z",
+      "bytes": 66853126
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50512030
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-1.0.42.7z",
+      "bytes": 66247650
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50067362
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-1.0.42.7z",
+      "bytes": 67455730
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51012090
+     },
+     {
+      "name": "SarasaMonoTC-TTF-1.0.42.7z",
+      "bytes": 67057074
+     },
+     {
+      "name": "SarasaMonoTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50816053
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.42.7z",
+      "bytes": 166671919
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.42.zip",
+      "bytes": 781602192
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.42.7z",
+      "bytes": 105817863
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.42.zip",
+      "bytes": 483674031
+     },
+     {
+      "name": "SarasaTermCL-TTF-1.0.42.7z",
+      "bytes": 67618247
+     },
+     {
+      "name": "SarasaTermCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51215228
+     },
+     {
+      "name": "SarasaTermHC-TTF-1.0.42.7z",
+      "bytes": 67179393
+     },
+     {
+      "name": "SarasaTermHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50904131
+     },
+     {
+      "name": "SarasaTermJ-TTF-1.0.42.7z",
+      "bytes": 68289162
+     },
+     {
+      "name": "SarasaTermJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51609013
+     },
+     {
+      "name": "SarasaTermK-TTF-1.0.42.7z",
+      "bytes": 66446724
+     },
+     {
+      "name": "SarasaTermK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50283626
+     },
+     {
+      "name": "SarasaTermSC-TTF-1.0.42.7z",
+      "bytes": 65880964
+     },
+     {
+      "name": "SarasaTermSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49856658
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.42.7z",
+      "bytes": 167211257
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.42.zip",
+      "bytes": 785623339
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.42.7z",
+      "bytes": 106112750
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.42.zip",
+      "bytes": 485320430
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-1.0.42.7z",
+      "bytes": 67998870
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51427010
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-1.0.42.7z",
+      "bytes": 67543498
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51135655
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-1.0.42.7z",
+      "bytes": 68691479
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51819716
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-1.0.42.7z",
+      "bytes": 66866503
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50505217
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-1.0.42.7z",
+      "bytes": 66262725
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50079124
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-1.0.42.7z",
+      "bytes": 67437272
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 51022277
+     },
+     {
+      "name": "SarasaTermTC-TTF-1.0.42.7z",
+      "bytes": 67053708
+     },
+     {
+      "name": "SarasaTermTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 50799867
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.42.7z",
+      "bytes": 162669743
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.42.zip",
+      "bytes": 747715463
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.42.7z",
+      "bytes": 103376796
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.42.zip",
+      "bytes": 462127773
+     },
+     {
+      "name": "SarasaUiCL-TTF-1.0.42.7z",
+      "bytes": 64629861
+     },
+     {
+      "name": "SarasaUiCL-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48999994
+     },
+     {
+      "name": "SarasaUiHC-TTF-1.0.42.7z",
+      "bytes": 64161908
+     },
+     {
+      "name": "SarasaUiHC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48702711
+     },
+     {
+      "name": "SarasaUiJ-TTF-1.0.42.7z",
+      "bytes": 65332679
+     },
+     {
+      "name": "SarasaUiJ-TTF-Unhinted-1.0.42.7z",
+      "bytes": 49397728
+     },
+     {
+      "name": "SarasaUiK-TTF-1.0.42.7z",
+      "bytes": 63480604
+     },
+     {
+      "name": "SarasaUiK-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48064650
+     },
+     {
+      "name": "SarasaUiSC-TTF-1.0.42.7z",
+      "bytes": 62871663
+     },
+     {
+      "name": "SarasaUiSC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 47651773
+     },
+     {
+      "name": "SarasaUiTC-TTF-1.0.42.7z",
+      "bytes": 64046770
+     },
+     {
+      "name": "SarasaUiTC-TTF-Unhinted-1.0.42.7z",
+      "bytes": 48602597
+     },
+     {
+      "name": "SHA-256.txt",
+      "bytes": 13425
+     }
+    ]
+   },
+   {
+    "tag": "v1.0.41",
+    "assets": [
+     {
+      "name": "Sarasa-SuperTTC-1.0.41.7z",
+      "bytes": 142372240
+     },
+     {
+      "name": "Sarasa-SuperTTC-1.0.41.zip",
+      "bytes": 404431719
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.41.7z",
+      "bytes": 101973587
+     },
+     {
+      "name": "Sarasa-SuperTTC-Unhinted-1.0.41.zip",
+      "bytes": 302340643
+     },
+     {
+      "name": "Sarasa-TTC-1.0.41.7z",
+      "bytes": 149864424
+     },
+     {
+      "name": "Sarasa-TTC-1.0.41.zip",
+      "bytes": 411238814
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.41.7z",
+      "bytes": 102636768
+     },
+     {
+      "name": "Sarasa-TTC-Unhinted-1.0.41.zip",
+      "bytes": 313636928
+     },
+     {
+      "name": "Sarasa-TTF-1.0.41.7z",
+      "bytes": 851810347
+     },
+     {
+      "name": "Sarasa-TTF-Unhinted-1.0.41.7z",
+      "bytes": 344519425
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.41.7z",
+      "bytes": 164972203
+     },
+     {
+      "name": "SarasaFixed-TTF-1.0.41.zip",
+      "bytes": 767623730
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.41.7z",
+      "bytes": 104813286
+     },
+     {
+      "name": "SarasaFixed-TTF-Unhinted-1.0.41.zip",
+      "bytes": 475623262
+     },
+     {
+      "name": "SarasaFixedCL-TTF-1.0.41.7z",
+      "bytes": 66537506
+     },
+     {
+      "name": "SarasaFixedCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50446304
+     },
+     {
+      "name": "SarasaFixedHC-TTF-1.0.41.7z",
+      "bytes": 66052600
+     },
+     {
+      "name": "SarasaFixedHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50142305
+     },
+     {
+      "name": "SarasaFixedJ-TTF-1.0.41.7z",
+      "bytes": 67198273
+     },
+     {
+      "name": "SarasaFixedJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50833646
+     },
+     {
+      "name": "SarasaFixedK-TTF-1.0.41.7z",
+      "bytes": 65375753
+     },
+     {
+      "name": "SarasaFixedK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49517386
+     },
+     {
+      "name": "SarasaFixedSC-TTF-1.0.41.7z",
+      "bytes": 64767269
+     },
+     {
+      "name": "SarasaFixedSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49101177
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.41.7z",
+      "bytes": 165438917
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-1.0.41.zip",
+      "bytes": 770831171
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.41.7z",
+      "bytes": 105049572
+     },
+     {
+      "name": "SarasaFixedSlab-TTF-Unhinted-1.0.41.zip",
+      "bytes": 477118856
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-1.0.41.7z",
+      "bytes": 66854803
+     },
+     {
+      "name": "SarasaFixedSlabCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50672754
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-1.0.41.7z",
+      "bytes": 66366519
+     },
+     {
+      "name": "SarasaFixedSlabHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50353067
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-1.0.41.7z",
+      "bytes": 67534286
+     },
+     {
+      "name": "SarasaFixedSlabJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51039138
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-1.0.41.7z",
+      "bytes": 65687304
+     },
+     {
+      "name": "SarasaFixedSlabK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49719361
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-1.0.41.7z",
+      "bytes": 65077767
+     },
+     {
+      "name": "SarasaFixedSlabSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49305486
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-1.0.41.7z",
+      "bytes": 66266636
+     },
+     {
+      "name": "SarasaFixedSlabTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50246657
+     },
+     {
+      "name": "SarasaFixedTC-TTF-1.0.41.7z",
+      "bytes": 65976853
+     },
+     {
+      "name": "SarasaFixedTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50041761
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.41.7z",
+      "bytes": 162724398
+     },
+     {
+      "name": "SarasaGothic-TTF-1.0.41.zip",
+      "bytes": 747659218
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.41.7z",
+      "bytes": 103505419
+     },
+     {
+      "name": "SarasaGothic-TTF-Unhinted-1.0.41.zip",
+      "bytes": 462080677
+     },
+     {
+      "name": "SarasaGothicCL-TTF-1.0.41.7z",
+      "bytes": 64623905
+     },
+     {
+      "name": "SarasaGothicCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49003644
+     },
+     {
+      "name": "SarasaGothicHC-TTF-1.0.41.7z",
+      "bytes": 64155160
+     },
+     {
+      "name": "SarasaGothicHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48692264
+     },
+     {
+      "name": "SarasaGothicJ-TTF-1.0.41.7z",
+      "bytes": 65308776
+     },
+     {
+      "name": "SarasaGothicJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49411018
+     },
+     {
+      "name": "SarasaGothicK-TTF-1.0.41.7z",
+      "bytes": 63483345
+     },
+     {
+      "name": "SarasaGothicK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48075673
+     },
+     {
+      "name": "SarasaGothicSC-TTF-1.0.41.7z",
+      "bytes": 62859796
+     },
+     {
+      "name": "SarasaGothicSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 47645688
+     },
+     {
+      "name": "SarasaGothicTC-TTF-1.0.41.7z",
+      "bytes": 64073960
+     },
+     {
+      "name": "SarasaGothicTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48595531
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.41.7z",
+      "bytes": 166467450
+     },
+     {
+      "name": "SarasaMono-TTF-1.0.41.zip",
+      "bytes": 779976052
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.41.7z",
+      "bytes": 105660964
+     },
+     {
+      "name": "SarasaMono-TTF-Unhinted-1.0.41.zip",
+      "bytes": 482489144
+     },
+     {
+      "name": "SarasaMonoCL-TTF-1.0.41.7z",
+      "bytes": 67493063
+     },
+     {
+      "name": "SarasaMonoCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51099379
+     },
+     {
+      "name": "SarasaMonoHC-TTF-1.0.41.7z",
+      "bytes": 67026036
+     },
+     {
+      "name": "SarasaMonoHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50799505
+     },
+     {
+      "name": "SarasaMonoJ-TTF-1.0.41.7z",
+      "bytes": 68170590
+     },
+     {
+      "name": "SarasaMonoJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51495711
+     },
+     {
+      "name": "SarasaMonoK-TTF-1.0.41.7z",
+      "bytes": 66351086
+     },
+     {
+      "name": "SarasaMonoK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50168958
+     },
+     {
+      "name": "SarasaMonoSC-TTF-1.0.41.7z",
+      "bytes": 65735692
+     },
+     {
+      "name": "SarasaMonoSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49736292
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.41.7z",
+      "bytes": 166984142
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-1.0.41.zip",
+      "bytes": 783907266
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.41.7z",
+      "bytes": 105946069
+     },
+     {
+      "name": "SarasaMonoSlab-TTF-Unhinted-1.0.41.zip",
+      "bytes": 484112269
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-1.0.41.7z",
+      "bytes": 67855004
+     },
+     {
+      "name": "SarasaMonoSlabCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51315905
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-1.0.41.7z",
+      "bytes": 67407832
+     },
+     {
+      "name": "SarasaMonoSlabHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51009133
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-1.0.41.7z",
+      "bytes": 68540353
+     },
+     {
+      "name": "SarasaMonoSlabJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51710979
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-1.0.41.7z",
+      "bytes": 66698984
+     },
+     {
+      "name": "SarasaMonoSlabK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50378045
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-1.0.41.7z",
+      "bytes": 66124000
+     },
+     {
+      "name": "SarasaMonoSlabSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49967711
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-1.0.41.7z",
+      "bytes": 67286194
+     },
+     {
+      "name": "SarasaMonoSlabTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50914417
+     },
+     {
+      "name": "SarasaMonoTC-TTF-1.0.41.7z",
+      "bytes": 66926865
+     },
+     {
+      "name": "SarasaMonoTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50690186
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.41.7z",
+      "bytes": 166449263
+     },
+     {
+      "name": "SarasaTerm-TTF-1.0.41.zip",
+      "bytes": 779921195
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.41.7z",
+      "bytes": 105642525
+     },
+     {
+      "name": "SarasaTerm-TTF-Unhinted-1.0.41.zip",
+      "bytes": 482439146
+     },
+     {
+      "name": "SarasaTermCL-TTF-1.0.41.7z",
+      "bytes": 67481336
+     },
+     {
+      "name": "SarasaTermCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51107766
+     },
+     {
+      "name": "SarasaTermHC-TTF-1.0.41.7z",
+      "bytes": 67016791
+     },
+     {
+      "name": "SarasaTermHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50785797
+     },
+     {
+      "name": "SarasaTermJ-TTF-1.0.41.7z",
+      "bytes": 68150273
+     },
+     {
+      "name": "SarasaTermJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51497936
+     },
+     {
+      "name": "SarasaTermK-TTF-1.0.41.7z",
+      "bytes": 66343092
+     },
+     {
+      "name": "SarasaTermK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50171740
+     },
+     {
+      "name": "SarasaTermSC-TTF-1.0.41.7z",
+      "bytes": 65744142
+     },
+     {
+      "name": "SarasaTermSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49746363
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.41.7z",
+      "bytes": 167007835
+     },
+     {
+      "name": "SarasaTermSlab-TTF-1.0.41.zip",
+      "bytes": 783851042
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.41.7z",
+      "bytes": 105941897
+     },
+     {
+      "name": "SarasaTermSlab-TTF-Unhinted-1.0.41.zip",
+      "bytes": 484057681
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-1.0.41.7z",
+      "bytes": 67865014
+     },
+     {
+      "name": "SarasaTermSlabCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51324272
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-1.0.41.7z",
+      "bytes": 67390344
+     },
+     {
+      "name": "SarasaTermSlabHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51012935
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-1.0.41.7z",
+      "bytes": 68515356
+     },
+     {
+      "name": "SarasaTermSlabJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 51709517
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-1.0.41.7z",
+      "bytes": 66723689
+     },
+     {
+      "name": "SarasaTermSlabK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50387371
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-1.0.41.7z",
+      "bytes": 66119192
+     },
+     {
+      "name": "SarasaTermSlabSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49963716
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-1.0.41.7z",
+      "bytes": 67290780
+     },
+     {
+      "name": "SarasaTermSlabTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50898500
+     },
+     {
+      "name": "SarasaTermTC-TTF-1.0.41.7z",
+      "bytes": 66919705
+     },
+     {
+      "name": "SarasaTermTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 50689783
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.41.7z",
+      "bytes": 162670211
+     },
+     {
+      "name": "SarasaUi-TTF-1.0.41.zip",
+      "bytes": 747715543
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.41.7z",
+      "bytes": 103374171
+     },
+     {
+      "name": "SarasaUi-TTF-Unhinted-1.0.41.zip",
+      "bytes": 462127624
+     },
+     {
+      "name": "SarasaUiCL-TTF-1.0.41.7z",
+      "bytes": 64642360
+     },
+     {
+      "name": "SarasaUiCL-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49007471
+     },
+     {
+      "name": "SarasaUiHC-TTF-1.0.41.7z",
+      "bytes": 64143999
+     },
+     {
+      "name": "SarasaUiHC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48705175
+     },
+     {
+      "name": "SarasaUiJ-TTF-1.0.41.7z",
+      "bytes": 65326614
+     },
+     {
+      "name": "SarasaUiJ-TTF-Unhinted-1.0.41.7z",
+      "bytes": 49398982
+     },
+     {
+      "name": "SarasaUiK-TTF-1.0.41.7z",
+      "bytes": 63472158
+     },
+     {
+      "name": "SarasaUiK-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48066505
+     },
+     {
+      "name": "SarasaUiSC-TTF-1.0.41.7z",
+      "bytes": 62862812
+     },
+     {
+      "name": "SarasaUiSC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 47645390
+     },
+     {
+      "name": "SarasaUiTC-TTF-1.0.41.7z",
+      "bytes": 64055227
+     },
+     {
+      "name": "SarasaUiTC-TTF-Unhinted-1.0.41.7z",
+      "bytes": 48596962
+     },
+     {
+      "name": "SHA-256.txt",
+      "bytes": 13425
+     }
+    ]
+   }
+  ],
+  "source-han-sans-ttf-releases": [
+   {
+    "tag": "v2.002.1",
+    "assets": [
+     {
+      "name": "source-han-sans-ttc-2.002.1.7z",
+      "bytes": 99477123
+     },
+     {
+      "name": "source-han-sans-ttf-2.002.1.7z",
+      "bytes": 104589673
+     }
+    ]
+   },
+   {
+    "tag": "v2.001.1",
+    "assets": [
+     {
+      "name": "source-han-sans-ttc-2.001.1.7z",
+      "bytes": 100088104
+     },
+     {
+      "name": "source-han-sans-ttf-2.001.1.7z",
+      "bytes": 106260386
+     }
+    ]
+   },
+   {
+    "tag": "v2.001",
+    "assets": [
+     {
+      "name": "SourceHanSansTtf-2.001",
+      "bytes": 450992324
+     }
+    ]
+   }
+  ],
+  "lxgw-wenkai-releases": [
+   {
+    "tag": "v1.530",
+    "assets": [
+     {
+      "name": "lxgw-wenkai-v1.530.tar.gz",
+      "bytes": 81916519
+     },
+     {
+      "name": "lxgw-wenkai-v1.530.zip",
+      "bytes": 81919348
+     },
+     {
+      "name": "LXGWWenKai-Light.ttf",
+      "bytes": 28625516
+     },
+     {
+      "name": "LXGWWenKai-Medium.ttf",
+      "bytes": 25800076
+     },
+     {
+      "name": "LXGWWenKai-Regular.ttf",
+      "bytes": 25928940
+     },
+     {
+      "name": "LXGWWenKaiMono-Light.ttf",
+      "bytes": 28645564
+     },
+     {
+      "name": "LXGWWenKaiMono-Medium.ttf",
+      "bytes": 25864536
+     },
+     {
+      "name": "LXGWWenKaiMono-Regular.ttf",
+      "bytes": 25957300
+     }
+    ]
+   },
+   {
+    "tag": "v1.530-rc",
+    "assets": [
+     {
+      "name": "lxgw-wenkai-v1.530-rc.tar.gz",
+      "bytes": 81916446
+     },
+     {
+      "name": "lxgw-wenkai-v1.530-rc.zip",
+      "bytes": 81919397
+     },
+     {
+      "name": "LXGWWenKai-Light.ttf",
+      "bytes": 28625516
+     },
+     {
+      "name": "LXGWWenKai-Medium.ttf",
+      "bytes": 25800076
+     },
+     {
+      "name": "LXGWWenKai-Regular.ttf",
+      "bytes": 25928940
+     },
+     {
+      "name": "LXGWWenKaiMono-Light.ttf",
+      "bytes": 28645564
+     },
+     {
+      "name": "LXGWWenKaiMono-Medium.ttf",
+      "bytes": 25864536
+     },
+     {
+      "name": "LXGWWenKaiMono-Regular.ttf",
+      "bytes": 25957300
+     }
+    ]
+   },
+   {
+    "tag": "v1.522",
+    "assets": [
+     {
+      "name": "lxgw-wenkai-v1.522.tar.gz",
+      "bytes": 80664294
+     },
+     {
+      "name": "lxgw-wenkai-v1.522.zip",
+      "bytes": 80658818
+     },
+     {
+      "name": "LXGWWenKai-Light.ttf",
+      "bytes": 28267156
+     },
+     {
+      "name": "LXGWWenKai-Medium.ttf",
+      "bytes": 25379848
+     },
+     {
+      "name": "LXGWWenKai-Regular.ttf",
+      "bytes": 25575676
+     },
+     {
+      "name": "LXGWWenKaiMono-Light.ttf",
+      "bytes": 28287272
+     },
+     {
+      "name": "LXGWWenKaiMono-Medium.ttf",
+      "bytes": 25445000
+     },
+     {
+      "name": "LXGWWenKaiMono-Regular.ttf",
+      "bytes": 25603912
+     }
+    ]
+   }
+  ],
+  "lxgw-bright-releases": [
+   {
+    "tag": "26.10.22",
+    "assets": [
+     {
+      "name": "LXGWBright.7z",
+      "bytes": 32575384
+     },
+     {
+      "name": "LXGWBrightGB.7z",
+      "bytes": 32267005
+     },
+     {
+      "name": "LXGWBrightTC.7z",
+      "bytes": 33791880
+     }
+    ]
+   },
+   {
+    "tag": "v5.528",
+    "assets": [
+     {
+      "name": "LXGWBright.7z",
+      "bytes": 32464752
+     },
+     {
+      "name": "LXGWBrightGB.7z",
+      "bytes": 32158733
+     },
+     {
+      "name": "LXGWBrightTC.7z",
+      "bytes": 33705858
+     }
+    ]
+   },
+   {
+    "tag": "v5.527",
+    "assets": [
+     {
+      "name": "LXGWBright.7z",
+      "bytes": 32479501
+     },
+     {
+      "name": "LXGWBrightGB.7z",
+      "bytes": 32188955
+     },
+     {
+      "name": "LXGWBrightTC.7z",
+      "bytes": 33678394
+     }
+    ]
+   }
+  ],
+  "fanwunming-releases": [
+   {
+    "tag": "v2.100",
+    "assets": [
+     {
+      "name": "FanWunMing-Both.zip",
+      "bytes": 57118267
+     },
+     {
+      "name": "FanWunMing-TW.zip",
+      "bytes": 28503223
+     },
+     {
+      "name": "FanWunMing.zip",
+      "bytes": 28617052
+     }
+    ]
+   },
+   {
+    "tag": "v1.007",
+    "assets": [
+     {
+      "name": "FanWunMing-Both.zip",
+      "bytes": 55149495
+     },
+     {
+      "name": "FanWunMing-TW.zip",
+      "bytes": 27277868
+     },
+     {
+      "name": "FanWunMing.zip",
+      "bytes": 27284854
+     }
+    ]
+   },
+   {
+    "tag": "v1.006",
+    "assets": [
+     {
+      "name": "FanWunMing-Both.zip",
+      "bytes": 55037363
+     },
+     {
+      "name": "FanWunMing-TW.zip",
+      "bytes": 27215734
+     },
+     {
+      "name": "FanWunMing.zip",
+      "bytes": 27225327
+     }
+    ]
+   }
+  ]
+ }
+}

@@ -17,7 +17,7 @@ using Xunit.Abstractions;
 
 namespace jaytwo.Pdf.Tests;
 
-// QUALIFICATION.md G7 workloads under the D-20 working budget. Fixtures are written to real files in a
+// docs/qualification.md G7 workloads under the D-20 working budget. Fixtures are written to real files in a
 // temp directory at test time and deleted afterward. Each measured window covers only library calls on
 // file streams; fixture generation and verification run outside the windows. See WorkloadMeter. The
 // heap counter is process-wide, so `make g7-workloads` runs each test in its own Release process for the

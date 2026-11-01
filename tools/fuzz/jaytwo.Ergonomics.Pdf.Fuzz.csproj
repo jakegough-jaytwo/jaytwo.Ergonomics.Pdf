@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- Test-only fuzz harness for QUALIFICATION.md gate G8 (B-18). Not packed, not a runtime dependency. -->
+  <!-- Test-only fuzz harness for docs/qualification.md gate G8 (B-18). Not packed, not a runtime dependency. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>

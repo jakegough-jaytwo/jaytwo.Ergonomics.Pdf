@@ -408,3 +408,6 @@ graphify-out/
 
 # W-119 (D-51): test tools installed by tools/test-tools/install.ps1.
 .tools/
+
+# Scratch work (downloads, fonts, generated PDFs)
+tmp/*

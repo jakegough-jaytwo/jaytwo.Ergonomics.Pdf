@@ -1,0 +1,19 @@
+{
+ "pypdf": "6.21.4",
+ "python": "3.13.1",
+ "script_sha256": "d85f8e8097951523ae97fa2eb44b23da6f8e52edde981a515f67700db143b380",
+ "files_with_acroform": 13,
+ "skipped": [
+  "chrome-invoice-pyhanko-pubkey.pdf: only Standard PDF encryption handler is available",
+  "libreoffice-memo-rc4.pdf"
+ ],
+ "totals": {
+  "terminal": 813,
+  "local_V": 32,
+  "inherited_V": 0,
+  "inherited_V_choice": 0,
+  "terminal_choice": 7,
+  "nonterminal_with_V": 0
+ },
+ "per_file_nonzero_inherited": []
+}

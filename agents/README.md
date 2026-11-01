@@ -49,7 +49,7 @@ Responsibility labels such as “Core Engineer” in historical state are proven
 
 If a sentence would stop being true when a work item finishes, it belongs in that item or reusable evidence, not in `AGENTS.md` or a skill. Test counts, tool versions, known defects, open gaps, current priorities, and file sizes are records rather than policy.
 
-`AGENTS.md`, `QUALIFICATION.md`, and `.agents/skills/` change only with the owner's approval. The agent proposes edits to them. It does not make them unasked.
+`AGENTS.md`, `docs/qualification.md`, and `.agents/skills/` change only with the owner's approval. The agent proposes edits to them. It does not make them unasked.
 
 ## Why this structure
 

@@ -7,7 +7,7 @@ using Xunit;
 
 namespace jaytwo.Pdf.Tests;
 
-// The G2 corpus manifest validator (QUALIFICATION.md section 5). The thresholds are the gate's, not the manifest's,
+// The G2 corpus manifest validator (docs/qualification.md section 5). The thresholds are the gate's, not the manifest's,
 // so editing the manifest cannot weaken them. Run it whenever a corpus fixture is added or changed.
 public class CorpusManifestTests
 {
@@ -15,14 +15,14 @@ public class CorpusManifestTests
 
     private static readonly string[] TestGenerators = { "pypdf", "qpdf", "pyHanko" };
 
-    // QUALIFICATION.md section 5: coverage the supported corpus must include, as corpus_probe.py names it.
+    // docs/qualification.md section 5: coverage the supported corpus must include, as corpus_probe.py names it.
     private static readonly string[] RequiredFeatures =
     {
         "classic-xref", "xref-stream", "object-streams", "hybrid-xref", "multiple-revisions", "inherited-page-attributes",
         "encryption", "acroform", "signature-field", "xmp", "embedded-files",
     };
 
-    // The examples QUALIFICATION.md section 5 gives for each category.
+    // The examples docs/qualification.md section 5 gives for each category.
     private static readonly (string Category, string Feature)[] CategoryFeatures =
     {
         ("forms", "xfa"), ("forms", "usage-rights"), ("forms", "signed"), ("scans-linearized", "linearized"),

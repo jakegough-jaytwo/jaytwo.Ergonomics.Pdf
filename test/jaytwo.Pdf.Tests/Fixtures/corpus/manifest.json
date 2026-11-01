@@ -1,5 +1,5 @@
 {
-  "description": "G2 interoperability corpus (QUALIFICATION.md section 5). Paths are relative to the test Fixtures directory. 'probe' is what Fixtures/corpus/corpus_probe.py reports with qpdf, pypdf, and pyHanko; CorpusManifestTests re-runs it on every test run.",
+  "description": "G2 interoperability corpus (docs/qualification.md section 5). Paths are relative to the test Fixtures directory. 'probe' is what Fixtures/corpus/corpus_probe.py reports with qpdf, pypdf, and pyHanko; CorpusManifestTests re-runs it on every test run.",
   "entries": [
     {
       "id": "irs-fw9-2024-03",

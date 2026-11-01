@@ -1,0 +1,50 @@
+# Engine ownership precedents and unsaved-state clarification
+
+Drafting research for Q-55/Q-56 and the selected Q-57 policy, checked 2026-10-27. Primary documentation and identified source versions were reviewed; no competitor probes or new library tests were run. After this comparison and clarification, the owner accepted default borrowing with optional transfer and document-visible pending edits retained across editor disposal. ENGINE-OWN-01 / ENGINE-PENDING-01 in [opening/saving](../opening-and-saving.md) record the policies within a still-draft contract. The observations below remain research, not a universal caller-expectation claim or full-contract adoption.
+
+## Q-55: ownership is API-specific
+
+The owner requested .NET, Linux, PDF-library and workflow/pipeline comparisons before selecting engine source ownership. The earlier recommendation to require a borrow/own argument at every open was a design preference, not a documented industry requirement.
+
+| Context and primary source | Documented behavior or source observation | What it establishes and what it does not |
+| --- | --- | --- |
+| .NET [StreamReader constructors](https://learn.microsoft.com/en-us/dotnet/api/system.io.streamreader.-ctor?view=net-10.0) | Disposing the ordinary wrapper disposes its supplied stream. The configurable constructor defaults leaveOpen to false. | A developer familiar with owning stream wrappers may expect close-by-default with a leave-open option. This is not a rule that every .NET operation owns supplied resources. |
+| .NET [ZipArchive constructors](https://learn.microsoft.com/en-us/dotnet/api/system.io.compression.ziparchive.-ctor?view=net-10.0) | Stream constructors have a leaveOpen overload controlling whether disposal closes the underlying stream. | Explicit ownership controls are familiar .NET design; they need not be a mandatory argument on every call. Do not transfer archive-close/finalization semantics to PDF editor disposal. |
+| EF Core [UseSqlServer connection overloads](https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.sqlserverdbcontextoptionsextensions.usesqlserver?view=efcore-9.0) | With an existing DbConnection and no ownership argument, the caller owns disposal. A contextOwnsConnection overload explicitly transfers ownership. EF may open/close a supplied initially closed connection as needed; a supplied already-open connection is not opened/closed by EF in the documented ordinary case. | Strong precedent for caller-owned supplied resources with optional transfer. Connection open/close and object disposal are distinct; EF does not prove unchanged stream positions or PDF save semantics. |
+| Linux [fdopen(3)](https://man7.org/linux/man-pages/man3/fdopen.3.html) | Wraps an existing descriptor without duplicating it; closing the returned stream closes that descriptor. | Unix also has owning wrappers. Linux does not impose a blanket borrowing convention. |
+| Linux [fork(2)](https://man7.org/linux/man-pages/man2/fork.2.html) and [pipe(7)](https://man7.org/linux/man-pages/man7/pipe.7.html) | A child inherits descriptor copies referring to the same open file descriptions; unused pipe descriptors must be closed for correct EOF behavior. | Inference: a shell-pipeline user reasonably expects each program to clean up its own handles. Closing a child's descriptor is not disposal of a shared .NET object in the parent. Shared offsets/pipe effects still exist; process ownership is not an in-process API default. |
+| FFmpeg 8.0 [libavformat header](https://www.ffmpeg.org/doxygen/8.0/avformat_8h_source.html) and [custom-I/O example](https://ffmpeg.org/doxygen/8.0/avio_read_callback_8c-example.html) | Normal input opening/closing manages the input; AVFMT_FLAG_CUSTOM_IO identifies caller-supplied I/O that libavformat must not avio_close. The example closes the format context, then separately frees the caller's I/O context/buffer. | A useful library-created versus caller-provided distinction. This is a libavformat comparison, not a measured guarantee about every ffmpeg CLI protocol or third-party .NET wrapper. |
+| iText .NET 9.4 [PdfReader API](https://api.itextpdf.com/iText/dotnet/9.4.0/classi_text_1_1_kernel_1_1_pdf_1_1_pdf_reader.html) | Documents ordinary input streams as read to the end without closure, with a special RASInputStream path; also exposes SetCloseStream. | The documented input behavior is not universal stream ownership, every custom-source path, or a writer-output default. No probe confirmed the documented behavior for particular stream types. |
+| PDFBox 3.0.5 [PDDocument source](https://raw.githubusercontent.com/apache/pdfbox/3.0.5/pdfbox/src/main/java/org/apache/pdfbox/pdmodel/PDDocument.java) and [3.0 migration guide](https://pdfbox.apache.org/3.0/migration.html) | close() closes the document's RandomAccessRead source. The guide describes both file-backed reads and copying an InputStream into a memory buffer. | Source-based observation: the document manages its retained random-access reader. Closing that reader does not establish identical ownership of every original InputStream that may have been copied into a buffer. No failure/cancellation paths were executed. |
+| Aspose.PDF .NET [Document constructors](https://reference.aspose.com/pdf/net/aspose.pdf/document/document/) | A Stream/bool constructor documents isManagedStream as controlling closure. The single-argument Stream entry does not specify that default in the cited entry. | Ownership is configurable; the cited page alone does not establish a reliable universal default or closure timing on each failure path. |
+
+These sources do not supply a single answer for all .NET or Linux users. Supplied-resource borrowing and wrapper ownership are both established patterns. Caller expectations beyond the cited API contracts are an inference, not a survey result. Library convenience does not by itself imply that disposing an object saves pending application changes.
+
+## Revised recommendation for Q-55, subsequently selected
+
+The revised recommendation was **borrowing caller-supplied streams and stable random-access sources by default**, with an explicit optional ownership-transfer choice if the caller wants document disposal to close its input. Handles opened internally from paths remain internally owned. The owner accepted that engine policy on 2026-10-27; it was selected separately rather than inferred from the previously selected workflow borrowing policy.
+
+For example, a caller can open a stream, inspect/edit/save through a document, dispose the document, then rewind or reuse the stream and finally dispose it itself. If the caller explicitly transfers ownership, the document takes disposal responsibility. Exact transfer timing on failed/cancelled opens and API spelling still need to follow the eventual selected contract.
+
+The benefit is straightforward composition with application-owned storage and fewer mandatory arguments; the caller must remember to dispose resources it retains. The alternative close-by-default/leave-open option matches familiar .NET stream wrappers and the existing engine stream default. A mandatory ownership argument is the most explicit at each call, but is not required by the precedents and adds ceremony. Changing the current engine stream default needs deliberate compatibility review before implementation. No runtime change is authorized here.
+
+Borrowing does not mean that an input can be closed early, mutated during use, reused concurrently, or rewound automatically. Source stability/lifetime and stream positions remain separate contracts. Do not infer buffering or new source adapters from these comparisons.
+
+## Q-56: persistence versus visibility in memory
+
+The owner initially responded: "i dont think we should be writing anything before save, why is this coming up?" The no-write-before-save direction was recorded separately while the in-memory visibility/disposal choice was clarified. The owner subsequently selected document-visible pending edits that survive editor disposal.
+
+The question concerned this sequence:
+
+1. An ordinary editor changes Title from Old to New in the open session's pending state.
+2. Before Save, the original PDF bytes remain unchanged. Whether a getter on that same open document reports Old or New is an in-memory read-view decision.
+3. The editor is disposed without Save. Whether a later editor on the same still-open document retains New or starts from Old is an unsaved-state lifetime decision.
+4. An explicit Save persists the accepted pending edits under its output contract. Disposing the editor does not stand in for Save.
+
+Both candidate answers to steps 2/3 can defer all document-byte writes until Save. Keeping pending edits is not writing them to the input file; discarding pending edits is not restoring already-written PDF bytes. Ordinary source reads and stream-position changes are also separate from writing an edited PDF.
+
+The reason to settle this is that inspection, per-call atomicity, successive editors and the selected document-lifetime metadata date override need a clear account of pending state. It is not a request to introduce automatic persistence. The question should have made this distinction explicit.
+
+Historical W-131 records visible document-level pending edits that survive editor disposal. That model was recommended because the document is the editing session and the one active editor is its mutation interface. The alternative treats the editor as a transaction whose disposal discards its unsaved ordinary edits. The owner's initial no-write response and Q-57 alone did not settle this; the subsequent "yes to both" selects the recommended state model as ENGINE-PENDING-01. Its acceptance scenarios remain unexecuted.
+
+For comparison only, Microsoft's [EF Core unit-of-work explanation](https://learn.microsoft.com/en-us/ef/core/dbcontext-configuration/) describes changing tracked entities before SaveChanges writes them to the database. That illustrates unsaved application state without early persistence; it does not establish our document/editor split, disposal contract or error guarantees.

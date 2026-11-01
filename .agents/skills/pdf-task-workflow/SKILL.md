@@ -9,7 +9,7 @@ description: Plan and execute one repository work item from scope through handof
 
 ## Work items
 
-Read only the relevant `ACCEPTANCE.md` or spec section when the task changes public behavior. Existing shipped behavior makes the item a regression or maintenance change, not a new capability. Create a compact `agents/work-items/W-NN.md` from `agents/templates/work-item.md`: state the problem, scope, observable acceptance, and proportionate verification. Cite acceptance rows only when they change. Do not add items for excluded capabilities or pad a routine item with narrative. Never weaken a criterion to close an item; a wrong criterion is its own item.
+Read only the relevant `docs/acceptance.md` or spec section when the task changes public behavior. Existing shipped behavior makes the item a regression or maintenance change, not a new capability. Create a compact `agents/work-items/W-NN.md` from `agents/templates/work-item.md`: state the problem, scope, observable acceptance, and proportionate verification. Cite acceptance rows only when they change. Do not add items for excluded capabilities or pad a routine item with narrative. Never weaken a criterion to close an item; a wrong criterion is its own item.
 
 Statuses are `proposed`, `ready`, `active`, `waiting`, `done`, and `cancelled`. `waiting` needs a concrete blocker, a resumption test, committed tracked work, and a `Safe checkpoint:` note naming the verification that makes unrelated work safe. Done and cancelled records are frozen except for dated Notes appendages.
 
@@ -33,7 +33,7 @@ An item is done when:
 - when code or build files change, the affected targets build with StyleCop warnings as errors;
 - each confirmed defect has at least one permanent regression test and a disposition: fix, documented limitation, or release blocker;
 - changed failure behavior matches the documented guarantee;
-- `docs/behavior.md` and `ACCEPTANCE.md` describe changed public behavior, and no criterion was weakened;
+- `docs/behavior.md` and `docs/acceptance.md` describe changed public behavior, and no criterion was weakened;
 - relevant remaining limitations are written down.
 
 ## Escalation

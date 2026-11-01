@@ -5,7 +5,7 @@ description: Change the PDF parser, object model, stream decoding, encryption, i
 
 # PDF core change
 
-Follow `AGENTS.md` as the binding specification. Do not work from memory of the supported xref forms, filters, encryption revisions, or caps. Read only the applicable `ACCEPTANCE.md` and `docs/behavior.md` sections and the current task record.
+Follow `AGENTS.md` as the binding specification. Do not work from memory of the supported xref forms, filters, encryption revisions, or caps. Read only the applicable `docs/acceptance.md` and `docs/behavior.md` sections and the current task record.
 
 ## Scope
 

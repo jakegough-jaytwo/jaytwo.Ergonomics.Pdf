@@ -1,0 +1,176 @@
+// W-218 closure concern 1 probe. Scratch only; not part of the repo build. Usage: probe <out.json> <font files...>
+// Each font path is tested raw (uncompressed stream) and Flate-compressed. Synthetic random-byte streams bracket 8 MiB.
+using System.Globalization;
+using System.IO.Compression;
+using System.Text;
+using System.Text.Json;
+using jaytwo.Pdf;
+using jaytwo.Pdf.Signatures;
+
+var records = new List<Dictionary<string, object?>>();
+var inputs = new List<(string Name, byte[] Data, string Filter)>();
+foreach (string path in args.Skip(1))
+{
+    byte[] font = File.ReadAllBytes(path);
+    inputs.Add((Path.GetFileName(path) + " raw", font, ""));
+    inputs.Add((Path.GetFileName(path) + " flate", Zlib(font), "/Filter /FlateDecode "));
+}
+
+var rng = new Random(218);
+foreach (int stored in new[] { 8 * 1024 * 1024 - 4096, 8 * 1024 * 1024 + 1 })
+{
+    byte[] noise = new byte[stored];
+    rng.NextBytes(noise);
+    inputs.Add(("synthetic-random " + stored.ToString(CultureInfo.InvariantCulture) + " stored bytes", noise, string.Empty));
+}
+
+foreach (var input in inputs)
+{
+    var record = new Dictionary<string, object?> { ["case"] = input.Name, ["storedStreamBytes"] = input.Data.Length };
+    byte[] pdf = BuildFormPdf(input.Data, input.Filter);
+    record["sourcePdfBytes"] = pdf.Length;
+
+    // Path A: changed-assembly (ExtractPages), whose appearance inspector caps the retained appearance graph at 8 MiB.
+    try
+    {
+        using var source = new MemoryStream(pdf);
+        using PdfDocument document = PdfDocument.Open(source);
+        using PdfDocumentEditor editor = document.Edit();
+        using var output = new MemoryStream();
+        PdfAssemblyResult result = editor.ExtractPages(new[] { 1 }, output, PdfExternalLinkMode.PreserveSupported);
+        record["extract_unsupportedAppearanceOmissions"] = result.Omissions.TryGetValue(PdfOmissionReason.UnsupportedAppearance, out long count) ? count : 0L;
+        record["extract_outputBytes"] = output.Length;
+        record["extract_outputContainsFontFile2"] = Contains(output.ToArray(), "/FontFile2");
+        record["extract_outcome"] = "returned";
+    }
+    catch (Exception ex)
+    {
+        record["extract_outcome"] = ex.GetType().Name + ": " + ex.Message;
+    }
+
+    // Path B: SaveIncremental and Sign with the same bytes as a dirty stream body. An attachment stands in for a dirty
+    // font stream because no public API supplies a font yet; both are a dirty stream body in the same dirty set.
+    byte[] basic = BuildBasicPdf();
+    foreach (string mode in new[] { "SaveIncremental", "Sign" })
+    {
+        try
+        {
+            using var source = new MemoryStream(basic);
+            using PdfDocument document = PdfDocument.Open(source);
+            using PdfDocumentEditor editor = document.Edit();
+            using var content = new MemoryStream(input.Data);
+            editor.Attachments.Add("dirty.bin", content, leaveOpen: true);
+            using var destination = new MemoryStream();
+            if (mode == "Sign")
+            {
+                editor.Sign(destination, new PdfSignatureOptions { ReservedContentsBytes = 64 }, new FixedProvider(), leaveOpen: true);
+            }
+            else
+            {
+                editor.SaveIncremental(destination, leaveOpen: true);
+            }
+
+            record[mode + "_outcome"] = "succeeded";
+            record[mode + "_outputBytes"] = destination.Length;
+        }
+        catch (Exception ex)
+        {
+            record[mode + "_outcome"] = ex.GetType().Name + ": " + ex.Message;
+        }
+    }
+
+    records.Add(record);
+    Console.WriteLine(JsonSerializer.Serialize(record));
+}
+
+File.WriteAllText(args[0], JsonSerializer.Serialize(records, new JsonSerializerOptions { WriteIndented = true }));
+return 0;
+
+static bool Contains(byte[] data, string needle) => Encoding.ASCII.GetString(data).Contains(needle, StringComparison.Ordinal);
+
+static byte[] Zlib(byte[] data)
+{
+    using var buffer = new MemoryStream();
+    using (var z = new ZLibStream(buffer, CompressionLevel.Optimal, leaveOpen: true))
+    {
+        z.Write(data, 0, data.Length);
+    }
+
+    return buffer.ToArray();
+}
+
+static byte[] BuildBasicPdf()
+{
+    var o = new Builder();
+    o.Obj(1, "<< /Type /Catalog /Pages 2 0 R >>");
+    o.Obj(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+    o.Obj(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] >>");
+    return o.Finish();
+}
+
+static byte[] BuildFormPdf(byte[] fontStream, string filter)
+{
+    var o = new Builder();
+    o.Obj(1, "<< /Type /Catalog /Pages 2 0 R /AcroForm << /Fields [4 0 R] /DA (/F1 12 Tf 0 g) /DR << /Font << /F1 6 0 R >> >> >> >>");
+    o.Obj(2, "<< /Type /Pages /Count 1 /Kids [3 0 R] >>");
+    o.Obj(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Annots [4 0 R] >>");
+    o.Obj(4, "<< /Type /Annot /Subtype /Widget /FT /Tx /T (f) /V (a) /Rect [10 10 110 30] /P 3 0 R /DA (/F1 12 Tf 0 g) /AP << /N 5 0 R >> >>");
+    o.Stream(5, "/Type /XObject /Subtype /Form /BBox [0 0 100 20] /Resources << /Font << /F1 6 0 R >> >>", Encoding.ASCII.GetBytes("BT /F1 12 Tf 2 5 Td (a) Tj ET"));
+    o.Obj(6, "<< /Type /Font /Subtype /TrueType /BaseFont /AAAAAA+Probe /FirstChar 97 /LastChar 97 /Widths [500] /FontDescriptor 7 0 R >>");
+    o.Obj(7, "<< /Type /FontDescriptor /FontName /AAAAAA+Probe /Flags 32 /FontBBox [0 0 1000 1000] /ItalicAngle 0 /Ascent 800 /Descent -200 /CapHeight 700 /StemV 80 /FontFile2 8 0 R >>");
+    o.Stream(8, "/Length1 " + fontStream.Length.ToString(CultureInfo.InvariantCulture) + " " + filter, fontStream);
+    return o.Finish();
+}
+
+sealed class FixedProvider : IPdfSignatureProvider
+{
+    public PdfSignatureKind Kind => PdfSignatureKind.CmsDetached;
+
+    public ValueTask<byte[]> CreateContentsAsync(PdfSignatureContext context, CancellationToken cancellationToken) => new(new byte[] { 1, 2, 3, 4 });
+}
+
+sealed class Builder
+{
+    private readonly MemoryStream _body = new();
+    private readonly List<(int Id, long Offset)> _entries = new();
+
+    public Builder()
+    {
+        Write("%PDF-1.7\n%âãÏÓ\n");
+    }
+
+    public void Obj(int id, string body)
+    {
+        _entries.Add((id, _body.Length));
+        Write(id.ToString(CultureInfo.InvariantCulture) + " 0 obj\n" + body + "\nendobj\n");
+    }
+
+    public void Stream(int id, string dict, byte[] data)
+    {
+        _entries.Add((id, _body.Length));
+        Write(id.ToString(CultureInfo.InvariantCulture) + " 0 obj\n<< " + dict + " /Length " + data.Length.ToString(CultureInfo.InvariantCulture) + " >>\nstream\n");
+        _body.Write(data, 0, data.Length);
+        Write("\nendstream\nendobj\n");
+    }
+
+    public byte[] Finish()
+    {
+        long xref = _body.Length;
+        int size = _entries.Max(e => e.Id) + 1;
+        var sb = new StringBuilder("xref\n0 " + size.ToString(CultureInfo.InvariantCulture) + "\n0000000000 65535 f \n");
+        for (int id = 1; id < size; id++)
+        {
+            sb.Append(_entries.First(e => e.Id == id).Offset.ToString("D10", CultureInfo.InvariantCulture)).Append(" 00000 n \n");
+        }
+
+        sb.Append("trailer\n<< /Size " + size.ToString(CultureInfo.InvariantCulture) + " /Root 1 0 R >>\nstartxref\n" + xref.ToString(CultureInfo.InvariantCulture) + "\n%%EOF\n");
+        Write(sb.ToString());
+        return _body.ToArray();
+    }
+
+    private void Write(string text)
+    {
+        byte[] bytes = Encoding.Latin1.GetBytes(text);
+        _body.Write(bytes, 0, bytes.Length);
+    }
+}

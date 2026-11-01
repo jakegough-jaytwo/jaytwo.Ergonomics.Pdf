@@ -4,7 +4,9 @@ The intended product capabilities and boundaries of `jaytwo.Pdf` and `jaytwo.Erg
 
 This document is the durable scope commitment against which implementation, backlog items, and proposed changes are measured. An unfinished capability is a gap to close, not a reason to remove it from scope. Inclusion does not claim that a capability is available or production-qualified today.
 
-The [Project Charter](CHARTER.md) defines why the project exists and its governing principles. This document defines what belongs in the product. The [behavior reference](behavior.md) defines what the implementation currently does, including exact conditions, limitations, preservation rules, and failure guarantees. [Acceptance criteria](../ACCEPTANCE.md) define required outcomes and verification requirements. Delivery order, implementation status, and release milestones belong in planning records.
+> A useful durability test is: would changing this sentence change the product’s scope, or merely refine an operation’s contract? Scope belongs in supported.md; contract refinements belong in the spec.
+
+The [Project Charter](charter.md) defines purpose, governing principles, and architecture. This document defines capability commitments and durable product boundaries. Adopted [operation specifications](spec/README.md) define precise normative contracts: required inputs, outcomes, preservation, authorization, limits, refusal, and failures. The [behavior reference](behavior.md) records what the implementation currently does, including its present limitations and guarantees. [Acceptance records](acceptance.md) map required outcomes to verification and record enforced test outcomes; they do not independently adopt product requirements. Delivery order, implementation status, and release milestones belong in planning records. The spec index records which operation contracts are adopted; forms remains an unadopted draft.
 
 ## Intended capabilities
 
@@ -50,7 +52,7 @@ Extraction and concatenation do not imply lossless preservation of every documen
 
 Password and permission operations require explicit contracts for supported security schemes, authentication, authorization, encryption handling, and output strategy. Permission inspection alone does not satisfy the intended permission-changing capability. Get/set permissions does not itself adopt adding encryption or password changes/removal.
 
-Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](CHARTER.md).
+Implementation requires an adopted operation contract. Product-scope changes, architectural changes, and new full-document rewrite strategies require owner approval under the [charter](charter.md).
 
 Foreground/background image placement controls painting order; it does not guarantee visibility over every existing page element.
 
@@ -79,7 +81,7 @@ Necessary internal functionality for supported workflows does not create additio
 
 Supported operations require documented resource limits and explicit failure behavior. File size alone does not determine support; there is no guarantee that every document below a particular size can be processed.
 
-Output guarantees must distinguish the operation, destination type, and point of failure. Detailed contracts must state whether a failure leaves the destination unchanged, permits partial output, or provides restoration or publication guarantees. Rollback and retry safety must be stated explicitly rather than inferred from a failed operation. Exact limits and failure mechanics belong in the behavior reference and its acceptance criteria.
+Output guarantees must distinguish the operation, destination type, and point of failure. Detailed contracts must state whether a failure leaves the destination unchanged, permits partial output, or provides restoration or publication guarantees. Rollback and retry safety must be stated explicitly rather than inferred from a failed operation. Required limits and failure mechanics belong in adopted operation specifications. The behavior reference records current implementation guarantees and limitations; acceptance records link those requirements to verification and enforced outcomes. Drafting or adopting a contract must not silently weaken existing public compatibility commitments.
 
 ## Maintaining the scope commitment
 
@@ -87,4 +89,4 @@ Change this document deliberately when the project owner approves a change to in
 
 Use this document to assess whether proposed work serves the product, which intended capabilities remain unmet, and whether simplification would remove an intended capability. Changes to existing public compatibility commitments require deliberate consideration under the charter; this document does not silently withdraw the guarantees recorded in the behavior reference.
 
-Keep priorities and progress in planning records, current guarantees in the behavior reference, and exact acceptance scenarios in the acceptance criteria. Do not turn this document into a release checklist or implementation inventory.
+Keep priorities and progress in planning records, precise normative operation contracts in adopted specifications, current guarantees in the behavior reference, and verification scenarios and enforced outcomes in acceptance records. Do not turn this document into a release checklist or implementation inventory.

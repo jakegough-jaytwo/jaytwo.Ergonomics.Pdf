@@ -8,7 +8,7 @@ using Xunit;
 
 namespace jaytwo.Pdf.Tests;
 
-// The QUALIFICATION.md G7 fixtures. LargeWorkloadTests and the W-111 iText comparison write the same bytes from
+// The docs/qualification.md G7 fixtures. LargeWorkloadTests and the W-111 iText comparison write the same bytes from
 // these generators.
 internal static class G7Fixtures
 {

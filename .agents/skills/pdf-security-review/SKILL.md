@@ -1,6 +1,6 @@
 ---
 name: pdf-security-review
-description: Perform a read-only hostile-input and cryptographic security review. Use when explicitly requested or when collecting QUALIFICATION gate G8 review evidence, not for ordinary changes.
+description: Perform a read-only hostile-input and cryptographic security review. Use when explicitly requested or when collecting docs/qualification.md gate G8 review evidence, not for ordinary changes.
 ---
 
 # PDF security review

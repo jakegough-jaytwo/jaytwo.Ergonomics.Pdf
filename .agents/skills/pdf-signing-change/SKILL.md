@@ -5,7 +5,7 @@ description: Change PDF signatures, CMS encoding, external signing, RFC 3161 tim
 
 # PDF signing change
 
-Follow the signer contract, supported algorithms, certification rules, and exclusions in `AGENTS.md`. Work from that text, not from memory. Read only the applicable `ACCEPTANCE.md` and `docs/behavior.md` sections and the current task record.
+Follow the signer contract, supported algorithms, certification rules, and exclusions in `AGENTS.md`. Work from that text, not from memory. Read only the applicable `docs/acceptance.md` and `docs/behavior.md` sections and the current task record.
 
 Read `references/signing-matrix.md` before claiming signing evidence. It separates the properties a test or verifier can establish and names what establishes each.
 
@@ -19,7 +19,7 @@ Read `references/signing-matrix.md` before claiming signing evidence. It separat
 - Keep CMS signature timestamps and document timestamp revisions separate. They are not interchangeable.
 - Keep three kinds of checking apart. Input checks while signing, such as matching a timestamp response to its request by status, imprint, and digest algorithm, are in scope. Verification by external tools is evidence, not a library feature. Trust paths, revocation, signature validation, and long-term validation are excluded.
 - Enforce DocMDP and FieldMDP exactly as specified. Do not reinterpret settled behavior.
-- Preserve the documented destination-stream failure guarantee and the bounded signature appendix. The engine does not invent staging or temporary-file schemes; publishing is the host's or destination adapter's job. An Ergonomics file convenience may write a temporary sibling and replace the target after success (`reset-plan.md` section 4.4).
+- Preserve the documented destination-stream failure guarantee and the bounded signature appendix. The engine does not invent staging or temporary-file schemes; publishing is the host's or destination adapter's job. An Ergonomics file convenience may write a temporary sibling and replace the target after success (`docs/_retired_/reset-plan.md` section 4.4).
 - Never log keys, PINs, passwords, or token secrets. Do not hide a cryptographic failure behind a generic error.
 - Use framework cryptographic primitives. Implement only the PDF-, CMS-, and RFC 3161-specific structures required here. Do not build a general ASN.1 or PKI toolkit.
 

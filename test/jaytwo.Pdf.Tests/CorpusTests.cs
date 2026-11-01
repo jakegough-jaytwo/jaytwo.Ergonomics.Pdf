@@ -11,7 +11,7 @@ using Xunit;
 
 namespace jaytwo.Pdf.Tests;
 
-// G2 corpus checks (QUALIFICATION.md section 5): every manifest entry runs the existing operations it lists, and
+// G2 corpus checks (docs/qualification.md section 5): every manifest entry runs the existing operations it lists, and
 // qpdf, pypdf, and pyHanko confirm the library's reads and its output. Feature-specific API tests live with their features.
 public class CorpusTests
 {

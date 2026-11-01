@@ -1,0 +1,215 @@
+{
+ "pypdf": "6.21.4",
+ "script_sha256": "db4aac71599525de5e25071045542c94d50222701fdeea1143d5f3ef617f4cac",
+ "files": 31,
+ "skipped": [
+  "chrome-invoice-pyhanko-pubkey.pdf: only Standard PDF encryption handler is available",
+  "libreoffice-memo-rc4.pdf"
+ ],
+ "total_strings": 5740,
+ "total_with_ESC": 9,
+ "rows": [
+  {
+   "file": "chrome-invoice.pdf",
+   "strings": 178,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "chrome-ledger-2000p.pdf",
+   "strings": 9,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "cms-40b-pyhanko-approved.pdf",
+   "strings": 303,
+   "with_ESC": 2,
+   "by_key": {
+    "/Contents": 2
+   }
+  },
+  {
+   "file": "cms-40b.pdf",
+   "strings": 298,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "edge-handbook.pdf",
+   "strings": 87,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "excel-invoice.pdf",
+   "strings": 11,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "faa-8710-1.pdf",
+   "strings": 1292,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "frb-beige-book-2024-01.pdf",
+   "strings": 52,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "gpo-bills-118hr815enr.pdf",
+   "strings": 24,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "grants-sf424-v4.pdf",
+   "strings": 31,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "imagemagick-scan.pdf",
+   "strings": 6,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "inkscape-network.pdf",
+   "strings": 5,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "irs-f1040es-2026.pdf",
+   "strings": 710,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "irs-f5500-2005.pdf",
+   "strings": 18,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "irs-fw9-2024-03.pdf",
+   "strings": 553,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "libreoffice-calc-ledger.pdf",
+   "strings": 5,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "libreoffice-form-pypdf-inherited.pdf",
+   "strings": 41,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "libreoffice-form.pdf",
+   "strings": 41,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "libreoffice-hybrid-pdfa3.pdf",
+   "strings": 12,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "matplotlib-report.pdf",
+   "strings": 7,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "ms-print-to-pdf.pdf",
+   "strings": 5,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "naca-rm-19930086000.pdf",
+   "strings": 20,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "naca-tn2350.pdf",
+   "strings": 8,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "nbs-circular-1.pdf",
+   "strings": 8,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "nist-sp1271.pdf",
+   "strings": 33,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "opm-of306-pyhanko-certified.pdf",
+   "strings": 265,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "opm-of306.pdf",
+   "strings": 259,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "powerpoint-photos.pdf",
+   "strings": 12,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "uscis-i9-2025.pdf",
+   "strings": 1252,
+   "with_ESC": 0,
+   "by_key": {}
+  },
+  {
+   "file": "va-21-4138.pdf",
+   "strings": 176,
+   "with_ESC": 1,
+   "by_key": {
+    "/Contents": 1
+   }
+  },
+  {
+   "file": "word-report.pdf",
+   "strings": 19,
+   "with_ESC": 0,
+   "by_key": {}
+  }
+ ]
+}

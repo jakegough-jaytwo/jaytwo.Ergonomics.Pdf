@@ -2,7 +2,7 @@
 
 Status: **adopted for N1 and N2**, 2026-10-24 (D-38, D-61). Behavior for N1 and N2 is target behavior; its requirement rows (section 6) are New until the work item that ships each one sets it to Exists. N3 to N5 stay a draft outline, evaluated in reset stage R5 (D-54).
 
-Image-to-PDF is intended scope in [SUPPORTED.md](../SUPPORTED.md), beyond the adopted N1/N2 assembly contracts. Implementation requires an adopted operation contract; governance follows the [charter](../CHARTER.md). N1/N2 output rules and the separate N3-to-N5 R5 evaluations are unchanged (D-68).
+Image-to-PDF is intended scope in [SUPPORTED.md](../../supported.md), beyond the adopted N1/N2 assembly contracts. Implementation requires an adopted operation contract; governance follows the [charter](../../charter.md). N1/N2 output rules and the separate N3-to-N5 R5 evaluations are unchanged (D-68).
 
 Phase 2 adds new-file operations to the `jaytwo.Pdf` engine, with an assembly workflow in `jaytwo.Ergonomics.Pdf`. Release timing is set by the later packaging decision (D-54). It adds operations without breaking the Phase 1 API in force when it starts. The tenets in `phase-1.md` section 2 apply unchanged.
 
@@ -95,4 +95,4 @@ The ten questions are settled (D-61).
 | A14 | The external-link option has two states, `PreserveSupported` (the default) and `Drop`. | Exists |
 | A15 | A test fixture added for these requirements has documented provenance and redistribution rights, and follows the interoperability-corpus rules in `QUALIFICATION.md`. A fixture needed only for a focused regression is not a corpus member. The tests cover the PDF Association link files for URI chains, `/Base`, `/IsMap`, and link appearances, a Factur-X hybrid invoice, a page with inherited resources and rotation, a repeated page, a file concatenated twice, and an AES-256 input. | Exists |
 
-**Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../SUPPORTED.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what the copy requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file.
+**Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../../supported.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what the copy requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file.

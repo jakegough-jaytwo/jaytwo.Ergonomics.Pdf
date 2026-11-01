@@ -1,0 +1,6223 @@
+{
+ "platform": "Windows-11-10.0.26100-SP0",
+ "dpi": 576,
+ "pixels_per_point": 8.0,
+ "fixture_sha256": {
+  "exact-width-fit.pdf": "dde2293239a03337f9c8ae1f063bf03c4dcbef0a710b9fd55492ba92b6ac9244",
+  "exact-width-precision.pdf": "5460174262046145bb61bd1836c3a254838972ecd16b60831264ca85598c4ebf"
+ },
+ "renderers": {
+  "poppler": {
+   "version": "pdftoppm version 26.07.0",
+   "command": "pdftoppm -r 576 -png <pdf> <prefix>  (defaults: font and vector antialiasing on)"
+  },
+  "mupdf": {
+   "version": "PyMuPDF 2.0 / MuPDF 1.28.5",
+   "command": "page.get_pixmap(matrix=Matrix(8,8), alpha=False, annots=True)  (default AA level)"
+  },
+  "pdfium": {
+   "version": "PDFium 8076 via pypdfium2 5.14.0",
+   "command": "doc.init_forms(); page.render(scale=8, may_draw_forms=True, draw_annots=True)"
+  }
+ },
+ "cases": {
+  "w_solid1_38.999": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 77.5,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5995098039215634,
+     "right": 0.4989999999999952,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.4989999999999952,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 46.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.4749999999999943,
+     "right": 0.4989999999999952,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.4989999999999952,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.5,
+    "ink_right": 77.5,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.4989999999999952,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.4989999999999952,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "w_solid1_39": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 77.5,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5995098039215634,
+     "right": 0.5,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 46.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.4749999999999943,
+     "right": 0.5,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.5,
+    "ink_right": 77.5,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "w_solid1_39.001": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 77.5,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5995098039215634,
+     "right": 0.5010000000000048,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5010000000000048,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 46.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.4749999999999943,
+     "right": 0.5010000000000048,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5010000000000048,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.5,
+    "ink_right": 77.5,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5010000000000048,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5010000000000048,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "h_one_13.999": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 77.0,
+    "ink_top": 43.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.10050980392156461,
+     "right": 0.0,
+     "top": 0.10099999999999909
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 23.0,
+     "top": 0.8990000000000009
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 42.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.024000000000004462,
+     "right": 0.0,
+     "top": -0.02400000000000091
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 23.0,
+     "top": 1.024000000000001
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 77.0,
+    "ink_top": 43.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0010000000000012221,
+     "right": 0.0,
+     "top": 0.0009999999999976694
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 0.9990000000000023
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "h_one_14": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 77.0,
+    "ink_top": 43.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 23.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 42.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 23.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 77.0,
+    "ink_top": 43.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "h_one_14.001": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 77.0,
+    "ink_top": 43.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09850980392156217,
+     "right": 0.0,
+     "top": 0.09900000000000375
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 23.0,
+     "top": 0.9009999999999962
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 42.97303921568628,
+    "ink_area_ratio": 0.9998366013071895,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.026000000000006906,
+     "right": 0.0,
+     "top": -0.027960784313719955
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 23.0,
+     "top": 1.02796078431372
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 77.0,
+    "ink_top": 43.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.0010000000000012221,
+     "right": 0.0,
+     "top": -0.0009999999999976694
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 23.0,
+     "top": 1.0009999999999977
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 23.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.1269607843137237
+   }
+  },
+  "h_blank_40.399": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 53.0,
+    "ink_top": 69.475,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.10050980392156461,
+     "right": 0.0,
+     "top": 0.0759999999999934
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 17.0,
+     "top": 0.9240000000000066
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 53.0,
+    "ink_top": 69.35,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.024000000000004462,
+     "right": 0.0,
+     "top": -0.049000000000006594
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 17.0,
+     "top": 1.0490000000000066
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 53.0,
+    "ink_top": 69.5,
+    "ink_area_ratio": 1.0052083333333333,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0010000000000012221,
+     "right": 0.0,
+     "top": 0.10099999999999909
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 0.8990000000000009
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.9989999999999988,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.15000000000000568
+   }
+  },
+  "h_blank_40.4": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 53.0,
+    "ink_top": 69.475,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.07499999999998863
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 17.0,
+     "top": 0.9250000000000114
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 53.0,
+    "ink_top": 69.35,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.05000000000001137
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 17.0,
+     "top": 1.0500000000000114
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 53.0,
+    "ink_top": 69.375,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": -0.025000000000005684
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 1.0250000000000057
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "h_blank_40.401": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 53.0,
+    "ink_top": 69.475,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09850980392156217,
+     "right": 0.0,
+     "top": 0.07399999999999807
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 17.0,
+     "top": 0.9260000000000019
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 53.0,
+    "ink_top": 69.35,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.026000000000006906,
+     "right": 0.0,
+     "top": -0.05100000000000193
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 17.0,
+     "top": 1.051000000000002
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 53.0,
+    "ink_top": 69.375,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.0010000000000012221,
+     "right": 0.0,
+     "top": -0.02599999999999625
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 17.0,
+     "top": 1.0259999999999962
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0010000000000012,
+     "right": 17.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_left_49.999": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 6.998999999999995,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 6.998999999999995,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_left_50": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_left_50.001": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.001000000000005,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.001000000000005,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_center_49.999": {
+   "poppler": {
+    "ink_left": 46.875,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 82.875,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.12400000000000233,
+     "bottom": 0.0995098039215705,
+     "right": -0.125,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 6.875,
+     "bottom": 7.0995098039215705,
+     "right": 7.123999999999995,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0009999999999976694,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 6.998999999999995,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0009999999999976694,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.125,
+    "bottom": 0.12450980392156907,
+    "right": 0.125,
+    "top": 0.125
+   }
+  },
+  "sp_center_50": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_center_50.001": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": -0.0010000000000047748,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.001000000000005,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": -0.0010000000000047748,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.001000000000005,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": -0.0010000000000047748,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_right_49.999": {
+   "poppler": {
+    "ink_left": 46.875,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 82.875,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.12400000000000233,
+     "bottom": 0.0995098039215705,
+     "right": -0.12399999999999523,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 6.875,
+     "bottom": 7.0995098039215705,
+     "right": 7.123999999999995,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0009999999999976694,
+     "bottom": -0.02499999999999858,
+     "right": 0.0010000000000047748,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 6.998999999999995,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0009999999999976694,
+     "bottom": 0.0,
+     "right": 0.0010000000000047748,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 6.998999999999995,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 6.999000000000002,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.125,
+    "bottom": 0.12450980392156907,
+    "right": 0.125,
+    "top": 0.125
+   }
+  },
+  "sp_right_50": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "sp_right_50.001": {
+   "poppler": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 83.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.0009999999999976694,
+     "bottom": 0.0995098039215705,
+     "right": -0.0010000000000047748,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0995098039215705,
+     "right": 7.001000000000005,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.000999999999998,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 47.0,
+    "ink_bottom": 36.975,
+    "ink_right": 83.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.0009999999999976694,
+     "bottom": -0.02499999999999858,
+     "right": -0.0010000000000047748,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 6.975000000000001,
+     "right": 7.001000000000005,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 7.000999999999998,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 47.0,
+    "ink_bottom": 37.0,
+    "ink_right": 83.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.0009999999999976694,
+     "bottom": 0.0,
+     "right": -0.0010000000000047748,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 7.0,
+     "bottom": 7.0,
+     "right": 7.001000000000005,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 7.000999999999998,
+     "bottom": 7.0,
+     "right": 7.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "nbsp_31.999": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 71.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0995098039215705,
+     "right": 0.9989999999999952,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 36.975,
+    "ink_right": 71.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 6.975000000000001,
+     "right": 0.9989999999999952,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.0,
+    "ink_right": 71.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "nbsp_32": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 71.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0995098039215705,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 36.975,
+    "ink_right": 71.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 6.975000000000001,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.0,
+    "ink_right": 71.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "nbsp_32.001": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.09950980392157,
+    "ink_right": 71.0,
+    "ink_top": 49.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0995098039215705,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0995098039215705,
+     "right": 1.0010000000000048,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 36.975,
+    "ink_right": 71.0,
+    "ink_top": 48.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.02499999999999858,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 6.975000000000001,
+     "right": 1.0010000000000048,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 37.0,
+    "ink_right": 71.0,
+    "ink_top": 49.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 7.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "rot90_38.999": {
+   "poppler": {
+    "ink_left": 41.4,
+    "ink_bottom": 31.5,
+    "ink_right": 53.40049019607843,
+    "ink_top": 67.625,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.10000000000000142,
+     "bottom": 0.0,
+     "right": -0.0995098039215705,
+     "top": 0.125
+    },
+    "clearance_measured_pt": {
+     "left": 0.3999999999999986,
+     "bottom": 0.5,
+     "right": 3.5995098039215705,
+     "top": 0.3739999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.4989999999999952
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.525,
+    "ink_bottom": 31.5,
+    "ink_right": 53.525,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.02499999999999858,
+     "bottom": 0.0,
+     "right": 0.02499999999999858,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5249999999999986,
+     "bottom": 0.5,
+     "right": 3.4750000000000014,
+     "top": 0.4989999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.4989999999999952
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 53.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.4989999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.4989999999999952
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.125,
+    "bottom": 0.0,
+    "right": 0.12450980392156907,
+    "top": 0.125
+   }
+  },
+  "rot90_39": {
+   "poppler": {
+    "ink_left": 41.4,
+    "ink_bottom": 31.5,
+    "ink_right": 53.40049019607843,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.10000000000000142,
+     "bottom": 0.0,
+     "right": -0.0995098039215705,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.3999999999999986,
+     "bottom": 0.5,
+     "right": 3.5995098039215705,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.525,
+    "ink_bottom": 31.5,
+    "ink_right": 53.525,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.02499999999999858,
+     "bottom": 0.0,
+     "right": 0.02499999999999858,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5249999999999986,
+     "bottom": 0.5,
+     "right": 3.4750000000000014,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 53.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.125,
+    "bottom": 0.0,
+    "right": 0.12450980392156907,
+    "top": 0.0
+   }
+  },
+  "rot90_39.001": {
+   "poppler": {
+    "ink_left": 41.4,
+    "ink_bottom": 31.5,
+    "ink_right": 53.40049019607843,
+    "ink_top": 67.625,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.10000000000000142,
+     "bottom": 0.0,
+     "right": -0.0995098039215705,
+     "top": 0.125
+    },
+    "clearance_measured_pt": {
+     "left": 0.3999999999999986,
+     "bottom": 0.5,
+     "right": 3.5995098039215705,
+     "top": 0.3760000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5010000000000048
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.525,
+    "ink_bottom": 31.5,
+    "ink_right": 53.525,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.02499999999999858,
+     "bottom": 0.0,
+     "right": 0.02499999999999858,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5249999999999986,
+     "bottom": 0.5,
+     "right": 3.4750000000000014,
+     "top": 0.5010000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5010000000000048
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 53.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5010000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 3.5,
+     "top": 0.5010000000000048
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.125,
+    "bottom": 0.0,
+    "right": 0.12450980392156907,
+    "top": 0.125
+   }
+  },
+  "rot270_38.999": {
+   "poppler": {
+    "ink_left": 44.47450980392157,
+    "ink_bottom": 31.5,
+    "ink_right": 56.475,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.025490196078429506,
+     "bottom": 0.0010000000000012221,
+     "right": -0.02499999999999858,
+     "top": 0.0010000000000047748
+    },
+    "clearance_measured_pt": {
+     "left": 3.4745098039215705,
+     "bottom": 0.5,
+     "right": 0.5249999999999986,
+     "top": 0.4989999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.4989999999999988,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 44.475,
+    "ink_bottom": 31.5,
+    "ink_right": 56.475,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.02499999999999858,
+     "bottom": 0.0010000000000012221,
+     "right": -0.02499999999999858,
+     "top": 0.0010000000000047748
+    },
+    "clearance_measured_pt": {
+     "left": 3.4750000000000014,
+     "bottom": 0.5,
+     "right": 0.5249999999999986,
+     "top": 0.4989999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.4989999999999988,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 44.5,
+    "ink_bottom": 31.5,
+    "ink_right": 56.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0010000000000012221,
+     "right": 0.0,
+     "top": 0.0010000000000047748
+    },
+    "clearance_measured_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.4989999999999952
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.4989999999999988,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.025490196078429506,
+    "bottom": 0.0,
+    "right": 0.02499999999999858,
+    "top": 0.0
+   }
+  },
+  "rot270_39": {
+   "poppler": {
+    "ink_left": 44.47450980392157,
+    "ink_bottom": 31.5,
+    "ink_right": 56.475,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.025490196078429506,
+     "bottom": 0.0,
+     "right": -0.02499999999999858,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 3.4745098039215705,
+     "bottom": 0.5,
+     "right": 0.5249999999999986,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 44.475,
+    "ink_bottom": 31.5,
+    "ink_right": 56.475,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.02499999999999858,
+     "bottom": 0.0,
+     "right": -0.02499999999999858,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 3.4750000000000014,
+     "bottom": 0.5,
+     "right": 0.5249999999999986,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 44.5,
+    "ink_bottom": 31.5,
+    "ink_right": 56.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.025490196078429506,
+    "bottom": 0.0,
+    "right": 0.02499999999999858,
+    "top": 0.0
+   }
+  },
+  "rot270_39.001": {
+   "poppler": {
+    "ink_left": 44.47450980392157,
+    "ink_bottom": 31.625,
+    "ink_right": 56.475,
+    "ink_top": 67.625,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": -0.025490196078429506,
+     "bottom": 0.12399999999999878,
+     "right": -0.02499999999999858,
+     "top": 0.12399999999999523
+    },
+    "clearance_measured_pt": {
+     "left": 3.4745098039215705,
+     "bottom": 0.625,
+     "right": 0.5249999999999986,
+     "top": 0.3760000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5010000000000012,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 44.475,
+    "ink_bottom": 31.5,
+    "ink_right": 56.475,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.02499999999999858,
+     "bottom": -0.0010000000000012221,
+     "right": -0.02499999999999858,
+     "top": -0.0010000000000047748
+    },
+    "clearance_measured_pt": {
+     "left": 3.4750000000000014,
+     "bottom": 0.5,
+     "right": 0.5249999999999986,
+     "top": 0.5010000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5010000000000012,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 44.5,
+    "ink_bottom": 31.5,
+    "ink_right": 56.5,
+    "ink_top": 67.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.0010000000000012221,
+     "right": 0.0,
+     "top": -0.0010000000000047748
+    },
+    "clearance_measured_pt": {
+     "left": 3.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5010000000000048
+    },
+    "clearance_predicted_pt": {
+     "left": 3.5,
+     "bottom": 0.5010000000000012,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.025490196078429506,
+    "bottom": 0.125,
+    "right": 0.02499999999999858,
+    "top": 0.125
+   }
+  },
+  "rot180_39.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.525000000000006,
+    "ink_right": 77.5,
+    "ink_top": 43.52549019607843,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.025000000000005684,
+     "right": 0.0,
+     "top": 0.025490196078429506
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5250000000000057,
+     "right": 0.5,
+     "top": 3.4745098039215705
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 3.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.525000000000006,
+    "ink_right": 77.5,
+    "ink_top": 43.525,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.025000000000005684,
+     "right": 0.0,
+     "top": 0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5250000000000057,
+     "right": 0.5,
+     "top": 3.4750000000000014
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 3.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 77.5,
+    "ink_top": 43.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 3.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 3.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.025000000000005684,
+    "right": 0.0,
+    "top": 0.025490196078429506
+   }
+  },
+  "rot0_explicit_39.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 77.5,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5995098039215634,
+     "right": 0.5,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 46.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.4749999999999943,
+     "right": 0.5,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.5,
+    "ink_right": 77.5,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "rot_absent_39.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 77.5,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5995098039215634,
+     "right": 0.5,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 46.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.4749999999999943,
+     "right": 0.5,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 34.5,
+    "ink_right": 77.5,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 3.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_none_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.099509803921563,
+    "ink_right": 77.0,
+    "ink_top": 43.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 30.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 42.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.0,
+    "ink_right": 77.0,
+    "ink_top": 43.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_solid1_at": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.599509803921563,
+    "ink_right": 77.5,
+    "ink_top": 43.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5995098039215634,
+     "right": 0.5,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 43.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.4749999999999943,
+     "right": 0.5,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 77.5,
+    "ink_top": 43.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_solid2_at": {
+   "poppler": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 78.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": -0.10000000000000142
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 42.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 78.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": 0.02499999999999858
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.0,
+    "ink_right": 78.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_solid3_at": {
+   "poppler": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.59950980392156,
+    "ink_right": 78.5,
+    "ink_top": 44.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.4004901960784366,
+     "right": -0.5,
+     "top": -0.6000000000000014
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "mupdf": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.474999999999994,
+    "ink_right": 78.5,
+    "ink_top": 44.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.5250000000000057,
+     "right": -0.5,
+     "top": -0.4750000000000014
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "pdfium": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.5,
+    "ink_right": 78.5,
+    "ink_top": 44.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_dashed1_at": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.599509803921563,
+    "ink_right": 77.5,
+    "ink_top": 43.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5995098039215634,
+     "right": 0.5,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 43.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.4749999999999943,
+     "right": 0.5,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 77.5,
+    "ink_top": 43.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 0.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_dashed2_at": {
+   "poppler": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 78.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": -0.10000000000000142
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 42.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 78.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": 0.02499999999999858
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.0,
+    "ink_right": 78.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_predicted_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_dashed3_at": {
+   "poppler": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.59950980392156,
+    "ink_right": 78.5,
+    "ink_top": 44.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.4004901960784366,
+     "right": -0.5,
+     "top": -0.6000000000000014
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "mupdf": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.474999999999994,
+    "ink_right": 78.5,
+    "ink_top": 44.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.5250000000000057,
+     "right": -0.5,
+     "top": -0.4750000000000014
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "pdfium": {
+    "ink_left": 42.5,
+    "ink_bottom": 32.5,
+    "ink_right": 78.5,
+    "ink_top": 44.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "clearance_predicted_pt": {
+     "left": -0.5,
+     "bottom": -0.5,
+     "right": -0.5,
+     "top": -0.5
+    },
+    "left_stroke_width_pt": 2.5
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_underline1_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.599509803921563,
+    "ink_right": 77.0,
+    "ink_top": 43.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.5995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.474999999999994,
+    "ink_right": 77.0,
+    "ink_top": 43.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.4749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.5,
+    "ink_right": 77.0,
+    "ink_top": 43.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.5,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_underline2_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 77.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.09950980392156339,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": -0.025000000000005684,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.0,
+    "ink_right": 77.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 0.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_underline3_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.59950980392156,
+    "ink_right": 77.0,
+    "ink_top": 44.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": -0.4004901960784366,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": -0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.474999999999994,
+    "ink_right": 77.0,
+    "ink_top": 44.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": -0.5250000000000057,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": -0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.5,
+    "ink_right": 77.0,
+    "ink_top": 44.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": -0.5,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": -0.5,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_solid1_centered_at": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.599509803921563,
+    "ink_right": 77.5,
+    "ink_top": 43.6,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 0.5
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.474999999999994,
+    "ink_right": 77.5,
+    "ink_top": 43.475,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 0.5
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 31.5,
+    "ink_right": 77.5,
+    "ink_top": 43.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 0.5
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "b_solid2_centered_at": {
+   "poppler": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 78.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 42.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 78.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.0,
+    "ink_right": 78.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_solid1_at": {
+   "poppler": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 78.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 42.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 78.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.0,
+    "ink_right": 78.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_solid2_at": {
+   "poppler": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 79.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 43.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 79.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.0,
+    "ink_right": 79.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_solid3_at": {
+   "poppler": {
+    "ink_left": 44.0,
+    "ink_bottom": 34.09950980392156,
+    "ink_right": 80.0,
+    "ink_top": 46.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "mupdf": {
+    "ink_left": 44.0,
+    "ink_bottom": 33.974999999999994,
+    "ink_right": 80.0,
+    "ink_top": 45.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "pdfium": {
+    "ink_left": 44.0,
+    "ink_bottom": 34.0,
+    "ink_right": 80.0,
+    "ink_top": 46.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_dashed1_at": {
+   "poppler": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 78.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 42.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 78.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 42.0,
+    "ink_bottom": 32.0,
+    "ink_right": 78.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_dashed2_at": {
+   "poppler": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 79.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 43.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 79.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.0,
+    "ink_right": 79.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_dashed3_at": {
+   "poppler": {
+    "ink_left": 44.0,
+    "ink_bottom": 34.09950980392156,
+    "ink_right": 80.0,
+    "ink_top": 46.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "mupdf": {
+    "ink_left": 44.0,
+    "ink_bottom": 33.974999999999994,
+    "ink_right": 80.0,
+    "ink_top": 45.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "pdfium": {
+    "ink_left": 44.0,
+    "ink_bottom": 34.0,
+    "ink_right": 80.0,
+    "ink_top": 46.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 3.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_underline1_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.09950980392156,
+    "ink_right": 77.0,
+    "ink_top": 44.1,
+    "ink_area_ratio": 1.0000408496732025,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 31.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 43.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.0,
+    "ink_right": 77.0,
+    "ink_top": 44.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_underline2_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 77.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 33.0,
+    "ink_right": 77.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "bf_underline3_at": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 34.09950980392156,
+    "ink_right": 77.0,
+    "ink_top": 46.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 33.974999999999994,
+    "ink_right": 77.0,
+    "ink_top": 45.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 34.0,
+    "ink_right": 77.0,
+    "ink_top": 46.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "wf_solid2_41.999": {
+   "poppler": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 79.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 0.9989999999999952,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 43.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 79.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 0.9989999999999952,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.0,
+    "ink_right": 79.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "wf_solid2_42": {
+   "poppler": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 79.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 43.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 79.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.0,
+    "ink_right": 79.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "wf_solid2_42.001": {
+   "poppler": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.09950980392156,
+    "ink_right": 79.0,
+    "ink_top": 45.1,
+    "ink_area_ratio": 1.0000408496732027,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.09950980392156339,
+     "right": 0.0,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0995098039215634,
+     "right": 1.0010000000000048,
+     "top": 0.8999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "mupdf": {
+    "ink_left": 43.0,
+    "ink_bottom": 32.974999999999994,
+    "ink_right": 79.0,
+    "ink_top": 44.975,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.025000000000005684,
+     "right": 0.0,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 0.9749999999999943,
+     "right": 1.0010000000000048,
+     "top": 1.0249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "pdfium": {
+    "ink_left": 43.0,
+    "ink_bottom": 33.0,
+    "ink_right": 79.0,
+    "ink_top": 45.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 1.0,
+     "right": 1.0010000000000048,
+     "top": 1.0
+    },
+    "left_stroke_width_pt": 2.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156907,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "z_borderless_26.665": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.40882352941176,
+    "ink_right": 120.91421568627452,
+    "ink_top": 73.09117647058824,
+    "ink_area_ratio": 0.998981141718386,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.07382352941176151,
+     "right": -0.08078431372548778,
+     "top": 0.09117647058823763
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.408823529411762,
+     "right": 1.0857843137254832,
+     "top": 0.9088235294117624
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.335,
+     "right": 1.0049999999999955,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.28382352941176,
+    "ink_right": 121.03872549019607,
+    "ink_top": 72.96617647058824,
+    "ink_area_ratio": 0.9994581085064889,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.05117647058823849,
+     "right": 0.043725490196067085,
+     "top": -0.033823529411762365
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.283823529411762,
+     "right": 0.9612745098039284,
+     "top": 1.0338235294117624
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.335,
+     "right": 1.0049999999999955,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.25,
+    "ink_right": 121.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.0032504023813507,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.08500000000000085,
+     "right": 0.0049999999999954525,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.25,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.335,
+     "right": 1.0049999999999955,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.15882352941176237,
+    "right": 0.12450980392155486,
+    "top": 0.125
+   }
+  },
+  "z_borderless_26.666": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.40833333333333,
+    "ink_right": 120.91617647058824,
+    "ink_top": 73.09313725490196,
+    "ink_area_ratio": 0.9990042522077183,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.07433333333332826,
+     "right": -0.08182352941176418,
+     "top": 0.09313725490196134
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.40833333333333,
+     "right": 1.0838235294117595,
+     "top": 0.9068627450980387
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.334000000000003,
+     "right": 1.0019999999999953,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.28382352941176,
+    "ink_right": 121.03872549019607,
+    "ink_top": 72.96617647058824,
+    "ink_area_ratio": 0.9993831486798784,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.05017647058824082,
+     "right": 0.04072549019606697,
+     "top": -0.033823529411762365
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.283823529411762,
+     "right": 0.9612745098039284,
+     "top": 1.0338235294117624
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.334000000000003,
+     "right": 1.0019999999999953,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.25,
+    "ink_right": 121.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.003175158130922,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.08400000000000318,
+     "right": 0.001999999999995339,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.25,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.334000000000003,
+     "right": 1.0019999999999953,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.15833333333333144,
+    "right": 0.12254901960783116,
+    "top": 0.1269607843137237
+   }
+  },
+  "z_borderless_26.667": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.40833333333333,
+    "ink_right": 120.91617647058824,
+    "ink_top": 73.09313725490196,
+    "ink_area_ratio": 0.9989293292301719,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.07533333333333303,
+     "right": -0.0848235294117643,
+     "top": 0.09313725490196134
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.40833333333333,
+     "right": 1.0838235294117595,
+     "top": 0.9068627450980387
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.333,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.28186274509804,
+    "ink_right": 121.04068627450981,
+    "ink_top": 72.96666666666667,
+    "ink_area_ratio": 0.9994307528158273,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.05113725490195975,
+     "right": 0.039686274509804775,
+     "top": -0.03333333333333144
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.28186274509804,
+     "right": 0.9593137254901904,
+     "top": 1.0333333333333314
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.333,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 46.25,
+    "ink_right": 121.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.0030999223452068,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.08299999999999841,
+     "right": -0.0010000000000047748,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 16.25,
+     "right": 1.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 16.333,
+     "right": 0.9989999999999952,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.15833333333333144,
+    "right": 0.12450980392156907,
+    "top": 0.12647058823529278
+   }
+  },
+  "z_max20_20.000": {
+   "poppler": {
+    "ink_left": 41.0,
+    "ink_bottom": 53.0,
+    "ink_right": 101.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    }
+   },
+   "mupdf": {
+    "ink_left": 41.0,
+    "ink_bottom": 53.0,
+    "ink_right": 101.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    }
+   },
+   "pdfium": {
+    "ink_left": 41.0,
+    "ink_bottom": 53.0,
+    "ink_right": 101.0,
+    "ink_top": 73.0,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    },
+    "clearance_predicted_pt": {
+     "left": 1.0,
+     "bottom": 23.0,
+     "right": 21.0,
+     "top": 1.0
+    }
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.0,
+    "right": 0.0,
+    "top": 0.0
+   }
+  },
+  "z_floor_20.999_6.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.550980392156866,
+    "ink_area_ratio": 1.0000816993464052,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.05098039215686612
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.49900000000000233,
+     "top": 0.4490196078431339
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.49900000000000233,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.55049019607843,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.050490196078428085
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.49900000000000233,
+     "top": 0.4495098039215719
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.49900000000000233,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.53872549019608,
+    "ink_bottom": 40.54656862745098,
+    "ink_right": 59.46127450980392,
+    "ink_top": 46.55490196078431,
+    "ink_area_ratio": 0.9918096405228759,
+    "edge_error_pt": {
+     "left": 0.03872549019607874,
+     "bottom": 0.04656862745098067,
+     "right": -0.03872549019607874,
+     "top": 0.05490196078431353
+    },
+    "clearance_measured_pt": {
+     "left": 0.5387254901960787,
+     "bottom": 9.54656862745098,
+     "right": 0.5377254901960811,
+     "top": 0.44509803921568647
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.49900000000000233,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0406862745098038
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.03872549019607874,
+    "bottom": 0.003921568627447414,
+    "right": 0.03872549019607874,
+    "top": 0.004411764705885446
+   }
+  },
+  "z_floor_21.000_6.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.550980392156866,
+    "ink_area_ratio": 1.0000816993464052,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.05098039215686612
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.5,
+     "top": 0.4490196078431339
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.55049019607843,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.050490196078428085
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.5,
+     "top": 0.4495098039215719
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.53872549019608,
+    "ink_bottom": 40.54656862745098,
+    "ink_right": 59.46127450980392,
+    "ink_top": 46.55490196078431,
+    "ink_area_ratio": 0.9918096405228759,
+    "edge_error_pt": {
+     "left": 0.03872549019607874,
+     "bottom": 0.04656862745098067,
+     "right": -0.03872549019607874,
+     "top": 0.05490196078431353
+    },
+    "clearance_measured_pt": {
+     "left": 0.5387254901960787,
+     "bottom": 9.54656862745098,
+     "right": 0.5387254901960787,
+     "top": 0.44509803921568647
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0406862745098038
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.03872549019607874,
+    "bottom": 0.003921568627447414,
+    "right": 0.03872549019607874,
+    "top": 0.004411764705885446
+   }
+  },
+  "z_floor_21.001_6.000": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.550980392156866,
+    "ink_area_ratio": 1.0000816993464052,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.05098039215686612
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.5009999999999977,
+     "top": 0.4490196078431339
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5009999999999977,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.55049019607843,
+    "ink_right": 59.5,
+    "ink_top": 46.55049019607843,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.050490196078428085,
+     "right": 0.0,
+     "top": 0.050490196078428085
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.550490196078428,
+     "right": 0.5009999999999977,
+     "top": 0.4495098039215719
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5009999999999977,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.53872549019608,
+    "ink_bottom": 40.54656862745098,
+    "ink_right": 59.46127450980392,
+    "ink_top": 46.55490196078431,
+    "ink_area_ratio": 0.9918096405228759,
+    "edge_error_pt": {
+     "left": 0.03872549019607874,
+     "bottom": 0.04656862745098067,
+     "right": -0.03872549019607874,
+     "top": 0.05490196078431353
+    },
+    "clearance_measured_pt": {
+     "left": 0.5387254901960787,
+     "bottom": 9.54656862745098,
+     "right": 0.5397254901960764,
+     "top": 0.44509803921568647
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.5,
+     "right": 0.5009999999999977,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0406862745098038
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.03872549019607874,
+    "bottom": 0.003921568627447414,
+    "right": 0.03872549019607874,
+    "top": 0.004411764705885446
+   }
+  },
+  "z_floor_22.500_6.500": {
+   "poppler": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.074019607843134,
+    "ink_right": 61.0,
+    "ink_top": 46.57450980392157,
+    "ink_area_ratio": 1.0000754147812971,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.07401960784313388,
+     "right": 0.0,
+     "top": 0.07450980392157192
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.074019607843134,
+     "right": 0.5,
+     "top": 0.4254901960784281
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.0,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 41.5,
+    "ink_bottom": 39.94950980392157,
+    "ink_right": 61.0,
+    "ink_top": 46.44950980392157,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": -0.050490196078428085,
+     "right": 0.0,
+     "top": -0.050490196078428085
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 8.949509803921572,
+     "right": 0.5,
+     "top": 0.5504901960784281
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.0,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 41.5,
+    "ink_bottom": 40.0,
+    "ink_right": 61.0,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": 0.0,
+     "bottom": 0.0,
+     "right": 0.0,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 0.5,
+     "bottom": 9.0,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 0.5,
+     "bottom": 9.0,
+     "right": 0.5,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.0,
+    "bottom": 0.12450980392156197,
+    "right": 0.0,
+    "top": 0.125
+   }
+  },
+  "j_left_negative_bearing": {
+   "poppler": {
+    "ink_left": 40.30049019607843,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 52.300980392156866,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000804227941176,
+    "edge_error_pt": {
+     "left": 0.0004901960784309267,
+     "bottom": 0.09950980392156339,
+     "right": 0.0009803921568689589,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": -0.6995098039215719,
+     "bottom": 3.5995098039215634,
+     "right": 25.699019607843134,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": -0.7000000000000028,
+     "bottom": 3.5,
+     "right": 25.700000000000003,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 40.30049019607843,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 52.30049019607843,
+    "ink_top": 46.475,
+    "ink_area_ratio": 0.9999995744825709,
+    "edge_error_pt": {
+     "left": 0.0004901960784309267,
+     "bottom": -0.025000000000005684,
+     "right": 0.0004901960784309267,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": -0.6995098039215719,
+     "bottom": 3.4749999999999943,
+     "right": 25.699509803921572,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": -0.7000000000000028,
+     "bottom": 3.5,
+     "right": 25.700000000000003,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 40.25,
+    "ink_bottom": 34.5,
+    "ink_right": 52.25,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.04999999999999716,
+     "bottom": 0.0,
+     "right": -0.04999999999999716,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": -0.75,
+     "bottom": 3.5,
+     "right": 25.75,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": -0.7000000000000028,
+     "bottom": 3.5,
+     "right": 25.700000000000003,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.050490196078428085,
+    "bottom": 0.12450980392156907,
+    "right": 0.05098039215686612,
+    "top": 0.125
+   }
+  },
+  "j_right_control": {
+   "poppler": {
+    "ink_left": 64.30049019607843,
+    "ink_bottom": 34.59950980392156,
+    "ink_right": 76.30098039215686,
+    "ink_top": 46.6,
+    "ink_area_ratio": 1.0000804227941176,
+    "edge_error_pt": {
+     "left": 0.0004901960784309267,
+     "bottom": 0.09950980392156339,
+     "right": 0.0009803921568618534,
+     "top": 0.10000000000000142
+    },
+    "clearance_measured_pt": {
+     "left": 23.300490196078428,
+     "bottom": 3.5995098039215634,
+     "right": 1.699019607843141,
+     "top": 0.3999999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 23.299999999999997,
+     "bottom": 3.5,
+     "right": 1.7000000000000028,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "mupdf": {
+    "ink_left": 64.30049019607843,
+    "ink_bottom": 34.474999999999994,
+    "ink_right": 76.30049019607843,
+    "ink_top": 46.475,
+    "ink_area_ratio": 0.9999995744825709,
+    "edge_error_pt": {
+     "left": 0.0004901960784309267,
+     "bottom": -0.025000000000005684,
+     "right": 0.0004901960784309267,
+     "top": -0.02499999999999858
+    },
+    "clearance_measured_pt": {
+     "left": 23.300490196078428,
+     "bottom": 3.4749999999999943,
+     "right": 1.699509803921572,
+     "top": 0.5249999999999986
+    },
+    "clearance_predicted_pt": {
+     "left": 23.299999999999997,
+     "bottom": 3.5,
+     "right": 1.7000000000000028,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "pdfium": {
+    "ink_left": 64.25,
+    "ink_bottom": 34.5,
+    "ink_right": 76.25,
+    "ink_top": 46.5,
+    "ink_area_ratio": 1.0,
+    "edge_error_pt": {
+     "left": -0.04999999999999716,
+     "bottom": 0.0,
+     "right": -0.04999999999999716,
+     "top": 0.0
+    },
+    "clearance_measured_pt": {
+     "left": 23.25,
+     "bottom": 3.5,
+     "right": 1.75,
+     "top": 0.5
+    },
+    "clearance_predicted_pt": {
+     "left": 23.299999999999997,
+     "bottom": 3.5,
+     "right": 1.7000000000000028,
+     "top": 0.5
+    },
+    "left_stroke_width_pt": 1.0
+   },
+   "cross_renderer_edge_spread_pt": {
+    "left": 0.050490196078428085,
+    "bottom": 0.12450980392156907,
+    "right": 0.05098039215685901,
+    "top": 0.125
+   }
+  }
+ },
+ "pairs": {
+  "w_solid1": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 272,
+     "max_channel_difference": 15
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 272,
+     "max_channel_difference": 3
+    },
+    "at_vs_above": {
+     "differing_pixels": 272,
+     "max_channel_difference": 2
+    }
+   }
+  },
+  "h_one": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 288,
+     "max_channel_difference": 4
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "h_blank": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 96,
+     "max_channel_difference": 255
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "sp_left": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "sp_center": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 388,
+     "max_channel_difference": 255
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "sp_right": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 388,
+     "max_channel_difference": 255
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "nbsp": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  },
+  "rot90": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 194,
+     "max_channel_difference": 255
+    },
+    "at_vs_above": {
+     "differing_pixels": 194,
+     "max_channel_difference": 255
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 272,
+     "max_channel_difference": 17
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 272,
+     "max_channel_difference": 2
+    },
+    "at_vs_above": {
+     "differing_pixels": 272,
+     "max_channel_difference": 3
+    }
+   }
+  },
+  "rot270": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 194,
+     "max_channel_difference": 255
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 272,
+     "max_channel_difference": 17
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 272,
+     "max_channel_difference": 2
+    },
+    "at_vs_above": {
+     "differing_pixels": 272,
+     "max_channel_difference": 3
+    }
+   }
+  },
+  "wf_solid2": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 256,
+     "max_channel_difference": 15
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 256,
+     "max_channel_difference": 3
+    },
+    "at_vs_above": {
+     "differing_pixels": 256,
+     "max_channel_difference": 2
+    }
+   }
+  },
+  "z_borderless": {
+   "poppler": {
+    "below_vs_at": {
+     "differing_pixels": 855,
+     "max_channel_difference": 4
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   },
+   "mupdf": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 1068,
+     "max_channel_difference": 4
+    }
+   },
+   "pdfium": {
+    "below_vs_at": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    },
+    "at_vs_above": {
+     "differing_pixels": 0,
+     "max_channel_difference": 0
+    }
+   }
+  }
+ },
+ "pdfium_forms_off_vs_on": {
+  "w_solid1_38.999": {
+   "differing_pixels": 34816,
+   "max_channel_difference": 255
+  },
+  "w_solid1_39": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "w_solid1_39.001": {
+   "differing_pixels": 34832,
+   "max_channel_difference": 255
+  },
+  "h_one_13.999": {
+   "differing_pixels": 27648,
+   "max_channel_difference": 255
+  },
+  "h_one_14": {
+   "differing_pixels": 27648,
+   "max_channel_difference": 255
+  },
+  "h_one_14.001": {
+   "differing_pixels": 27648,
+   "max_channel_difference": 255
+  },
+  "h_blank_40.399": {
+   "differing_pixels": 18528,
+   "max_channel_difference": 255
+  },
+  "h_blank_40.4": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "h_blank_40.401": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_left_49.999": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_left_50": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_left_50.001": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_center_49.999": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_center_50": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_center_50.001": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_right_49.999": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_right_50": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "sp_right_50.001": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "nbsp_31.999": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "nbsp_32": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "nbsp_32.001": {
+   "differing_pixels": 18432,
+   "max_channel_difference": 255
+  },
+  "rot90_38.999": {
+   "differing_pixels": 34816,
+   "max_channel_difference": 255
+  },
+  "rot90_39": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "rot90_39.001": {
+   "differing_pixels": 34832,
+   "max_channel_difference": 255
+  },
+  "rot270_38.999": {
+   "differing_pixels": 34816,
+   "max_channel_difference": 255
+  },
+  "rot270_39": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "rot270_39.001": {
+   "differing_pixels": 34832,
+   "max_channel_difference": 255
+  },
+  "rot180_39.000": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "rot0_explicit_39.000": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "rot_absent_39.000": {
+   "differing_pixels": 34688,
+   "max_channel_difference": 255
+  },
+  "b_none_at": {
+   "differing_pixels": 27648,
+   "max_channel_difference": 255
+  },
+  "b_solid1_at": {
+   "differing_pixels": 34304,
+   "max_channel_difference": 255
+  },
+  "b_solid2_at": {
+   "differing_pixels": 40960,
+   "max_channel_difference": 255
+  },
+  "b_solid3_at": {
+   "differing_pixels": 44608,
+   "max_channel_difference": 255
+  },
+  "b_dashed1_at": {
+   "differing_pixels": 31024,
+   "max_channel_difference": 255
+  },
+  "b_dashed2_at": {
+   "differing_pixels": 34368,
+   "max_channel_difference": 255
+  },
+  "b_dashed3_at": {
+   "differing_pixels": 36202,
+   "max_channel_difference": 255
+  },
+  "b_underline1_at": {
+   "differing_pixels": 30080,
+   "max_channel_difference": 255
+  },
+  "b_underline2_at": {
+   "differing_pixels": 32512,
+   "max_channel_difference": 255
+  },
+  "b_underline3_at": {
+   "differing_pixels": 33792,
+   "max_channel_difference": 255
+  },
+  "b_solid1_centered_at": {
+   "differing_pixels": 31040,
+   "max_channel_difference": 255
+  },
+  "b_solid2_centered_at": {
+   "differing_pixels": 34560,
+   "max_channel_difference": 255
+  },
+  "bf_solid1_at": {
+   "differing_pixels": 34560,
+   "max_channel_difference": 255
+  },
+  "bf_solid2_at": {
+   "differing_pixels": 41984,
+   "max_channel_difference": 255
+  },
+  "bf_solid3_at": {
+   "differing_pixels": 49920,
+   "max_channel_difference": 255
+  },
+  "bf_dashed1_at": {
+   "differing_pixels": 31104,
+   "max_channel_difference": 255
+  },
+  "bf_dashed2_at": {
+   "differing_pixels": 34944,
+   "max_channel_difference": 255
+  },
+  "bf_dashed3_at": {
+   "differing_pixels": 38832,
+   "max_channel_difference": 255
+  },
+  "bf_underline1_at": {
+   "differing_pixels": 30080,
+   "max_channel_difference": 255
+  },
+  "bf_underline2_at": {
+   "differing_pixels": 32512,
+   "max_channel_difference": 255
+  },
+  "bf_underline3_at": {
+   "differing_pixels": 34944,
+   "max_channel_difference": 255
+  },
+  "wf_solid2_41.999": {
+   "differing_pixels": 42096,
+   "max_channel_difference": 255
+  },
+  "wf_solid2_42": {
+   "differing_pixels": 41984,
+   "max_channel_difference": 255
+  },
+  "wf_solid2_42.001": {
+   "differing_pixels": 42128,
+   "max_channel_difference": 255
+  },
+  "z_borderless_26.665": {
+   "differing_pixels": 136960,
+   "max_channel_difference": 255
+  },
+  "z_borderless_26.666": {
+   "differing_pixels": 136960,
+   "max_channel_difference": 255
+  },
+  "z_borderless_26.667": {
+   "differing_pixels": 136960,
+   "max_channel_difference": 255
+  },
+  "z_max20_20.000": {
+   "differing_pixels": 76800,
+   "max_channel_difference": 255
+  },
+  "z_floor_20.999_6.000": {
+   "differing_pixels": 12018,
+   "max_channel_difference": 255
+  },
+  "z_floor_21.000_6.000": {
+   "differing_pixels": 11890,
+   "max_channel_difference": 255
+  },
+  "z_floor_21.001_6.000": {
+   "differing_pixels": 12034,
+   "max_channel_difference": 255
+  },
+  "z_floor_22.500_6.500": {
+   "differing_pixels": 13040,
+   "max_channel_difference": 255
+  },
+  "j_left_negative_bearing": {
+   "differing_pixels": 15680,
+   "max_channel_difference": 255
+  },
+  "j_right_control": {
+   "differing_pixels": 16256,
+   "max_channel_difference": 255
+  }
+ },
+ "absent_vs_zero_rotation": {
+  "poppler": {
+   "differing_pixels": 0,
+   "max_channel_difference": 0
+  },
+  "mupdf": {
+   "differing_pixels": 0,
+   "max_channel_difference": 0
+  },
+  "pdfium": {
+   "differing_pixels": 0,
+   "max_channel_difference": 0
+  }
+ },
+ "precision": {
+  "poppler": [
+   {
+    "delta_microPoints": -2000,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 0.001000000000009436,
+    "measured_separation_pt": -0.000999999999990564
+   },
+   {
+    "delta_microPoints": -1000,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 0.0010000000000142109,
+    "measured_separation_pt": 1.4210854715202004e-14
+   },
+   {
+    "delta_microPoints": -500,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": 0.0005000000000023874,
+    "separation_error_pt": 0.0015000000000047749,
+    "measured_separation_pt": 0.0010000000000047748
+   },
+   {
+    "delta_microPoints": 0,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 0.0010000000000047748,
+    "measured_separation_pt": 0.0010000000000047748
+   },
+   {
+    "delta_microPoints": 500,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": -0.0005000000000023874,
+    "separation_error_pt": 0.0005000000000047748,
+    "measured_separation_pt": 0.0010000000000047748
+   },
+   {
+    "delta_microPoints": 1000,
+    "ink_edge_error_pt": -0.0010000000000047748,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 0.0010000000000095497,
+    "measured_separation_pt": 0.0020000000000095497
+   },
+   {
+    "delta_microPoints": 2000,
+    "ink_edge_error_pt": -0.0011843137255027614,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 0.001184313725512311,
+    "measured_separation_pt": 0.003184313725512311
+   }
+  ],
+  "mupdf": [
+   {
+    "delta_microPoints": -2000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 4.661201979949681e-15,
+    "measured_separation_pt": -0.001999999999995339
+   },
+   {
+    "delta_microPoints": -1000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 9.436028347575842e-15,
+    "measured_separation_pt": -0.000999999999990564
+   },
+   {
+    "delta_microPoints": -500,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": -3.333333332022903e-05,
+    "separation_error_pt": -3.3333333322616444e-05,
+    "measured_separation_pt": -0.0005333333333226165
+   },
+   {
+    "delta_microPoints": 0,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 0.0,
+    "measured_separation_pt": 0.0
+   },
+   {
+    "delta_microPoints": 500,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": -3.3333333334439885e-05,
+    "separation_error_pt": -3.333333333205247e-05,
+    "measured_separation_pt": 0.00046666666666794754
+   },
+   {
+    "delta_microPoints": 1000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 4.7748263676261615e-15,
+    "measured_separation_pt": 0.0010000000000047748
+   },
+   {
+    "delta_microPoints": 2000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 9.549652735252323e-15,
+    "measured_separation_pt": 0.0020000000000095497
+   }
+  ],
+  "pdfium": [
+   {
+    "delta_microPoints": -2000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 4.661201979949681e-15,
+    "measured_separation_pt": -0.001999999999995339
+   },
+   {
+    "delta_microPoints": -1000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 9.436028347575842e-15,
+    "measured_separation_pt": -0.000999999999990564
+   },
+   {
+    "delta_microPoints": -500,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": -0.0004999999999881766,
+    "separation_error_pt": -0.000499999999990564,
+    "measured_separation_pt": -0.000999999999990564
+   },
+   {
+    "delta_microPoints": 0,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 0.0,
+    "measured_separation_pt": 0.0
+   },
+   {
+    "delta_microPoints": 500,
+    "ink_edge_error_pt": 0.000999999999990564,
+    "bar_edge_error_pt": 0.0005000000000023874,
+    "separation_error_pt": -0.0004999999999857892,
+    "measured_separation_pt": 1.4210854715202004e-14
+   },
+   {
+    "delta_microPoints": 1000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 0.0,
+    "separation_error_pt": 4.7748263676261615e-15,
+    "measured_separation_pt": 0.0010000000000047748
+   },
+   {
+    "delta_microPoints": 2000,
+    "ink_edge_error_pt": 0.0,
+    "bar_edge_error_pt": 1.4210854715202004e-14,
+    "separation_error_pt": 9.549652735252323e-15,
+    "measured_separation_pt": 0.0020000000000095497
+   }
+  ]
+ }
+}

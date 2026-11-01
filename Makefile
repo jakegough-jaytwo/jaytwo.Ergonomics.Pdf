@@ -88,7 +88,7 @@ quiet-test:
 quiet-docker-test:
 	${QUIET_RUN} --name docker-test --tests -- $(MAKE) docker-builder docker-test
 
-# W-79: the QUALIFICATION.md G7 workloads, each in its own Release process with coverage off, so the process-wide heap
+# W-79: the docs/qualification.md G7 workloads, each in its own Release process with coverage off, so the process-wide heap
 # counter sees one workload. G7_FRAMEWORKS narrows the frameworks (net48 runs only on Windows). Each run's full output
 # is out/logs/g7-<framework>-<workload>.log; the console gets the measurement lines.
 G7_FRAMEWORKS?=net10.0 net8.0 net6.0 $(if $(filter Windows_NT,${OS}),net48)

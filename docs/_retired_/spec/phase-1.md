@@ -205,7 +205,7 @@ No PDF/A conformance is claimed. Appending to a PDF/A file is not guaranteed to 
 
 ### 7.6 Appearances
 
-Generated appearances cover WinAnsi text only (Western European languages), in Helvetica with Adobe advance widths. Other scripts return `NeedsViewer`, which blocks signing and flattening with a clear exception. Caller-supplied appearance fonts remain intended scope under [SUPPORTED.md](../SUPPORTED.md); their operation contract is not adopted here (D-70).
+Generated appearances cover WinAnsi text only (Western European languages), in Helvetica with Adobe advance widths. Other scripts return `NeedsViewer`, which blocks signing and flattening with a clear exception. Caller-supplied appearance fonts remain intended scope under [SUPPORTED.md](../../supported.md); their operation contract is not adopted here (D-70).
 
 ## 8. Real-world tolerance
 
@@ -247,7 +247,7 @@ Evidence names the commit, tool versions, and fixtures it ran against. Evidence 
 
 ## 11. Not in Phase 1
 
-Image placement, image-to-PDF, and security-permission setters are intended scope in [SUPPORTED.md](../SUPPORTED.md), outside the requirements adopted here. Implementation requires an adopted operation contract; governance follows the [charter](../CHARTER.md). No delivery stage is assigned by this scope reconciliation (D-68).
+Image placement, image-to-PDF, and security-permission setters are intended scope in [SUPPORTED.md](../../supported.md), outside the requirements adopted here. Implementation requires an adopted operation contract; governance follows the [charter](../../charter.md). No delivery stage is assigned by this scope reconciliation (D-68).
 
 **Phase 2** (`phase-2.md`): page extraction, concatenation, compaction, removing revisions, removing passwords.
 
@@ -255,7 +255,7 @@ Image placement, image-to-PDF, and security-permission setters are intended scop
 
 **Retired commitment (D-70):** PAdES B-LT/B-LTA construction is outside scope. This explicitly supersedes the earlier planned-for-1.x commitment. Constructing detached CMS and PAdES B-B/B-T signatures using host-controlled keys, and appending document timestamps, remain in scope. Separate document timestamps alone do not establish B-LTA conformance. Cryptographic signature validation remains excluded.
 
-**Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../SUPPORTED.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption.
+**Never:** rendering, text extraction, general document authoring and layout (apart from the limited image operations in [SUPPORTED.md](../../supported.md)), redaction, signature validation (trust, revocation, cryptographic verification), PDF/A conversion, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption.
 
 ## 12. Open questions
 

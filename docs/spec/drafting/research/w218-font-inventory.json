@@ -1,0 +1,439 @@
+{
+  "classification": "Measured static input inventory only; no target processing, resource, embedding, shaping or rendering result",
+  "python": "3.13.1 (tags/v3.13.1:0671451, Dec  3 2024, 19:06:28) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26100-SP0",
+  "fontTools": "4.67.0",
+  "samples": {
+    "Latin": "Aé",
+    "Greek": "Ω",
+    "Cyrillic": "Ж",
+    "Arabic": "ع",
+    "Hebrew": "א",
+    "Devanagari": "क",
+    "Thai": "ก",
+    "Han": "漢",
+    "Hangul": "한"
+  },
+  "rows": [
+    {
+      "file": "C:\\Windows\\Fonts\\arial.ttf",
+      "sha256": "b3658eadae55e682b5f69eb64c439c1ecc8f196c0bb8d4756d145d13bc86476a",
+      "container_bytes": 1045720,
+      "collection": false,
+      "face": 0,
+      "family": "Arial",
+      "subfamily": "Regular",
+      "glyphs": 4651,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1045304,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": true,
+        "Hebrew": true,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\timesi.ttf",
+      "sha256": "e7f7a88b65188328aea58670f955022e23c712f55679524729da1e4e03c49d88",
+      "container_bytes": 962864,
+      "collection": false,
+      "face": 0,
+      "family": "Times New Roman",
+      "subfamily": "Italic",
+      "glyphs": 3623,
+      "truetype_outlines": true,
+      "table_bytes_sum": 962467,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        0,
+        3,
+        4
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": false,
+        "Hebrew": true,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\tahoma.ttf",
+      "sha256": "9af03d4ad44a3b413d92f7de48b94aa7cc8a1471a75d498406eae837f62ee1d1",
+      "container_bytes": 919260,
+      "collection": false,
+      "face": 0,
+      "family": "Tahoma",
+      "subfamily": "Regular",
+      "glyphs": 4498,
+      "truetype_outlines": true,
+      "table_bytes_sum": 918881,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        0,
+        3,
+        4
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": true,
+        "Hebrew": true,
+        "Devanagari": false,
+        "Thai": true,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\sylfaen.ttf",
+      "sha256": "ac278d932d59558a76817e98051b1dae53867aa81ad83e5198b1b4c4b8066a08",
+      "container_bytes": 260108,
+      "collection": false,
+      "face": 0,
+      "family": "Sylfaen",
+      "subfamily": "Regular",
+      "glyphs": 824,
+      "truetype_outlines": true,
+      "table_bytes_sum": 259729,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        0,
+        3,
+        4
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\LeelawUI.ttf",
+      "sha256": "ca9a670f12d0e47c20441012a22f78ab17c1b126818e0e887ef7db6ecf5e76b4",
+      "container_bytes": 390004,
+      "collection": false,
+      "face": 0,
+      "family": "Leelawadee UI",
+      "subfamily": "Regular",
+      "glyphs": 1055,
+      "truetype_outlines": true,
+      "table_bytes_sum": 389630,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        0,
+        3,
+        4
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": false,
+        "Thai": true,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\malgun.ttf",
+      "sha256": "7a183cf1c6c56b9609fcc16eda8b5229fbc11758a21e669ec00343239b02192f",
+      "container_bytes": 13459196,
+      "collection": false,
+      "face": 0,
+      "family": "Malgun Gothic",
+      "subfamily": "Regular",
+      "glyphs": 28215,
+      "truetype_outlines": true,
+      "table_bytes_sum": 13458785,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        0,
+        3,
+        4
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": true,
+        "Hangul": true
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 0,
+      "family": "Nirmala UI",
+      "subfamily": "Regular",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1525557,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 1,
+      "family": "Nirmala UI",
+      "subfamily": "Bold",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1480182,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 2,
+      "family": "Nirmala UI Semilight",
+      "subfamily": "Regular",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1559090,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 3,
+      "family": "Nirmala Text",
+      "subfamily": "Regular",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1513085,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 4,
+      "family": "Nirmala Text",
+      "subfamily": "Bold",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1467732,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\Nirmala.ttc",
+      "sha256": "ad02cdfc06e144ac45f318e8e5a64cbe04c7479d4beb91d25f5a319a466b1767",
+      "container_bytes": 5304988,
+      "collection": true,
+      "face": 5,
+      "family": "Nirmala Text Semilight",
+      "subfamily": "Regular",
+      "glyphs": 5025,
+      "truetype_outlines": true,
+      "table_bytes_sum": 1545700,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": false,
+        "Cyrillic": false,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": true,
+        "Thai": false,
+        "Han": false,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\msyh.ttc",
+      "sha256": "d79c55e68b1131eea0cc1c47be4f572d964f28c682e143db2ad09c1e4cb07a3f",
+      "container_bytes": 19704352,
+      "collection": true,
+      "face": 0,
+      "family": "Microsoft YaHei",
+      "subfamily": "Regular",
+      "glyphs": 30209,
+      "truetype_outlines": true,
+      "table_bytes_sum": 19583175,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": true,
+        "Hangul": false
+      }
+    },
+    {
+      "file": "C:\\Windows\\Fonts\\msyh.ttc",
+      "sha256": "d79c55e68b1131eea0cc1c47be4f572d964f28c682e143db2ad09c1e4cb07a3f",
+      "container_bytes": 19704352,
+      "collection": true,
+      "face": 1,
+      "family": "Microsoft YaHei UI",
+      "subfamily": "Regular",
+      "glyphs": 30209,
+      "truetype_outlines": true,
+      "table_bytes_sum": 19583289,
+      "os2_fsType": 8,
+      "selected_cmap": [
+        3,
+        10,
+        12
+      ],
+      "selected_map_duplicates": 1,
+      "sample_coverage": {
+        "Latin": true,
+        "Greek": true,
+        "Cyrillic": true,
+        "Arabic": false,
+        "Hebrew": false,
+        "Devanagari": false,
+        "Thai": false,
+        "Han": true,
+        "Hangul": false
+      }
+    }
+  ]
+}

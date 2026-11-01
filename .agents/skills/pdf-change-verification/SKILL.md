@@ -14,7 +14,7 @@ Use these terms precisely:
 - **Implemented:** code exists.
 - **Internally tested:** repository tests verify it.
 - **Independently validated:** an implementation written elsewhere accepted or verified the named property; record the tool, its version, and the property.
-- **Production-qualified:** every applicable gate in `QUALIFICATION.md` passed.
+- **Production-qualified:** every applicable gate in `docs/qualification.md` passed.
 
 The same agent running qpdf, pyHanko, pypdf, Poppler, MuPDF, SoftHSM, or OpenSSL can gather independent-tool evidence. It is not an independent human or fresh-context review.
 
@@ -25,7 +25,7 @@ Claim a test passed only when you ran it and have the output. Counting test decl
 - Our parser agreeing with our writer proves little. They can share one misunderstanding. Interoperability evidence comes from implementations written elsewhere. One context now writes both the code and its tests, so derive tests from the criterion, the standard, and independent tools, not from the implementation.
 - Test both directions where the change allows: an independent tool produced the input, the library read it correctly, the operation ran, an independent tool accepted the output, the intended result was independently confirmed, and unrelated content survived. For incremental output, the original bytes are a prefix.
 - Name the property. A structural check does not show that a field renders. A trusted signature under a test root does not show public identity.
-- `AGENTS.md` names the required tools. A missing required tool fails its tests. Any other missing tool makes its check "not run," never a pass. A missing optional tool blocks release only when a `QUALIFICATION.md` gate depends on its evidence.
+- `AGENTS.md` names the required tools. A missing required tool fails its tests. Any other missing tool makes its check "not run," never a pass. A missing optional tool blocks release only when a `docs/qualification.md` gate depends on its evidence.
 - Test what the public API can do. A test that passes only if the library gains an excluded feature, such as trust validation, is a scope request.
 - Rejection is a result. For malformed or unsupported input, a controlled, documented exception is success. Look for uncontrolled allocation, infinite loops, stack overflow, partial output, silent corruption, and false success.
 - Failure guarantees are specific. Preserving the input, leaving the destination unchanged, and publishing a complete file are different guarantees. Test the one the API documents.
@@ -44,7 +44,7 @@ Go up these tiers and stop at the one the change needs. Run builds and tests thr
 4. Targets: when the change touches framework-specific code or the `netstandard2.0` build, run the fast lane on the other targets too: `make quiet-test LANE=fast` runs every framework and the `netstandard2.0` lane. net48 runs only on Windows, so run it locally.
 5. Checkpoint: run `make quiet-docker-test` only for a named integration or release checkpoint. It runs the Jenkins-equivalent `make docker-builder docker-test` with quiet output, every category included. Run it detached, from a separate git worktree at the commit, so the next item can proceed. A checkpoint failure in work already committed is its own item. Any new external tool is in the `Dockerfile` and `tools/test-tools/install.ps1`.
 6. A passing build is the evidence for StyleCop and XML documentation. A diff with no `PackageReference` change under `src/` is the evidence for the runtime dependency policy. Do not re-read files to check them. Check by hand, where the diff touches them, what no build or test covers: public API compatibility, resource bounds, stream disposal, prefix preservation, and error-path stream behavior.
-7. Confirm from `git diff --stat` that `docs/behavior.md` and `ACCEPTANCE.md` changed when public behavior changed. Confirm from their changed hunks that no criterion was weakened.
+7. Confirm from `git diff --stat` that `docs/behavior.md` and `docs/acceptance.md` changed when public behavior changed. Confirm from their changed hunks that no criterion was weakened.
 8. Report the commands and outcomes needed to understand the change. Include framework, tool-version, count, and unrun-check detail only when relevant to the claim. Do not paste passing output. When the run is green, do not re-read the diff or the changed files to confirm what the run already showed. Update the evidence inventory only for release qualification or when the work item explicitly produces reusable qualification evidence.
 
 Do not infer rendering from a structural check, trust from certificate embedding, bounded memory from one successful run, or production qualification from green unit tests. For resource claims, record the environment, workload, and metrics, and compare before and after. Do not suppress or reclassify a failure to unblock a task or a release.
@@ -53,7 +53,7 @@ Do not infer rendering from a structural check, trust from certificate embedding
 
 These live under `agents/evidence/` and change only from observed results during release qualification or an explicit qualification work item. Routine feature and defect work does not maintain them opportunistically:
 
-- The evidence inventory and gate status, with the freshness check of `QUALIFICATION.md` section 3. The release-gate summary is generated from the inventory, not kept as a second board.
+- The evidence inventory and gate status, with the freshness check of `docs/qualification.md` section 3. The release-gate summary is generated from the inventory, not kept as a second board.
 - The G2 corpus manifest. Run its validator whenever a corpus fixture is added or changed.
 - The G7 workloads, their approved budgets, and the timing baseline, measured with Release builds, coverage off, and process isolation where counters are process-wide.
 

@@ -1,0 +1,36 @@
+// W-218 font limit evidence: iText embedding harness. args: fontPath textFile outPdf subset|full
+using System.Diagnostics;
+using System.Text.Json;
+using iText.IO.Font;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+
+var font = args[0]; var text = File.ReadAllText(args[1]); var outPdf = args[2]; var mode = args[3];
+var proc = Process.GetCurrentProcess();
+long basePeak = proc.PeakWorkingSet64;
+long baseAlloc = GC.GetTotalAllocatedBytes(true);
+var sw = Stopwatch.StartNew();
+string? error = null;
+try
+{
+    using var writer = new PdfWriter(outPdf);
+    using var pdf = new PdfDocument(writer);
+    var f = PdfFontFactory.CreateFont(font, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.FORCE_EMBEDDED);
+    f.SetSubset(mode == "subset");
+    using var doc = new Document(pdf);
+    doc.Add(new Paragraph(text).SetFont(f));
+}
+catch (Exception e) { error = e.GetType().Name + ": " + e.Message; }
+sw.Stop();
+proc.Refresh();
+Console.WriteLine("RESULT " + JsonSerializer.Serialize(new
+{
+    tool = "iText " + typeof(PdfDocument).Assembly.GetName().Version + " (.NET " + Environment.Version + ")",
+    mode, font = Path.GetFileName(font), wall_seconds = Math.Round(sw.Elapsed.TotalSeconds, 3),
+    baseline_peak_wset_bytes = basePeak, peak_wset_bytes = proc.PeakWorkingSet64,
+    peak_wset_delta_bytes = proc.PeakWorkingSet64 - basePeak,
+    managed_allocated_bytes = GC.GetTotalAllocatedBytes(true) - baseAlloc,
+    pdf_bytes = File.Exists(outPdf) ? new FileInfo(outPdf).Length : -1, error
+}));

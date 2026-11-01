@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace jaytwo.Pdf.Tests;
 
-// One entry of Fixtures/corpus/manifest.json, the G2 corpus manifest (QUALIFICATION.md section 5).
+// One entry of Fixtures/corpus/manifest.json, the G2 corpus manifest (docs/qualification.md section 5).
 internal sealed class CorpusEntry
 {
     public CorpusEntry(JsonElement element)

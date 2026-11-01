@@ -2,7 +2,7 @@
 
 Managed, MIT-licensed .NET libraries for the common business operations on existing PDFs: fill and flatten forms, edit metadata and attachments, rotate pages, sign with a host-held key, and assemble pages into a new file. They stay sparse on gigabyte files and on documents with thousands of pages.
 
-The [Project Charter](docs/CHARTER.md) defines purpose, principles, and governance. [Supported capabilities](docs/SUPPORTED.md) defines intended scope, whether implemented or not. Use them to assess whether work serves the project. Current behavior is in [`docs/behavior.md`](docs/behavior.md).
+The [Project Charter](docs/charter.md) defines purpose, principles, and governance. [Supported capabilities](docs/supported.md) defines intended scope, whether implemented or not. Use them to assess whether work serves the project. Current behavior is in [`docs/behavior.md`](docs/behavior.md).
 
 ## Two libraries
 
@@ -25,7 +25,7 @@ The dependency runs one way: `jaytwo.Ergonomics.Pdf -> jaytwo.Pdf`. The engine i
 
 Rendering, text extraction, general document authoring and layout, rewriting a file in place, redaction, signature validation (trust, revocation, or cryptographic verification), PDF/A conversion or conformance claims, XFA editing, JavaScript, annotation editing beyond what flatten requires, page-level file attachment annotations, public-key encryption, and adding encryption to a file.
 
-Limited image placement and image-to-PDF are explicit scope exceptions under [SUPPORTED.md](docs/SUPPORTED.md). These and security-permission setters are intended additions, not current APIs; implementation requires an adopted operation contract under the [charter](docs/CHARTER.md).
+Limited image placement and image-to-PDF are explicit scope exceptions under [supported.md](docs/supported.md). These and security-permission setters are intended additions, not current APIs; implementation requires an adopted operation contract under the [charter](docs/charter.md).
 
 Neither library is a general PDF toolkit or competes with qpdf, iText, PDFsharp, or Aspose. There is no layout engine, renderer, or document model. A workflow that records operations on an existing document is not a document model.
 
@@ -83,12 +83,12 @@ await PdfWorkflow.FromFile("order.pdf")
 
 ## Status
 
-Pre-release. No package is published, and the 1.0 release track is suspended while the [architectural reset](reset-plan.md) moves through stages R0 to R5. Target operation contracts are in [`docs/spec/`](docs/spec/): Phase 1 reads and appends to existing files; Phase 2 writes new files. Caller-supplied TrueType appearance fonts remain intended scope under [supported capabilities](docs/SUPPORTED.md), with an operation contract still to define. PAdES B-LT/B-LTA construction is outside scope; [D-70](agents/decisions/D-70.md) explicitly retires the older commitment.
+Pre-release. No package is published, and the 1.0 release track is suspended while the [architectural reset](docs/_retired_/reset-plan.md) moves through stages R0 to R5. Operation contracts are being rewritten in [`docs/spec/`](docs/spec/); the previous specifications are in [`docs/_retired_/spec/`](docs/_retired_/spec/): Phase 1 reads and appends to existing files; Phase 2 writes new files. Caller-supplied TrueType appearance fonts remain intended scope under [supported capabilities](docs/supported.md), with an operation contract still to define. PAdES B-LT/B-LTA construction is outside scope; [D-70](agents/decisions/D-70.md) explicitly retires the older commitment.
 
 ## More
 
 - [`docs/behavior.md`](docs/behavior.md): shipped behavior, the support matrix, limits, and failure semantics.
-- [`ACCEPTANCE.md`](ACCEPTANCE.md): the checks the tests enforce.
+- [`docs/acceptance.md`](docs/acceptance.md): the checks the tests enforce.
 - [`docs/spec/`](docs/spec/): adopted operation contracts and draft requirements.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md): building and testing.
 - [`AGENTS.md`](AGENTS.md): binding contributor rules and adopted implementation constraints.

@@ -1,0 +1,200 @@
+# Page rotation, extraction and concatenation
+
+**Adopted subject contract, revision W-218-PAGES-2026-10-31-R2, approved by the owner on 2026-10-31 after review corrections.** It joins the owner-selected assembly clauses (ASSEMBLY-FORM-01 to 05, ASSEMBLY-BOOKMARK-01/02, ASSEMBLY-LABEL-01, ASSEMBLY-TAG-01, ASSEMBLY-ATTACH-01) with rules that settle the remaining matrix rows, using the existing assembly behavior as the compatibility baseline. Authority: [charter](../charter.md) > [supported capabilities](../supported.md) > adopted contracts. Apply [shared rules](shared.md), [security](security.md), [inspection](inspection.md) and [opening and saving](opening-and-saving.md). Current code and [behavior](../behavior.md#page-extraction-and-concatenation) are comparison evidence; every difference is an implementation gap. All acceptance targets are unexecuted.
+
+## Purpose and scope authority
+
+Relevant scope: Page rotation; Page extraction; Concatenation; Support boundaries. Rotation changes use multiples of 90 degrees. Extraction creates a new PDF from selected pages in requested order, including repeated and reordered pages. Concatenation combines selected pages from supported inputs in requested input and page order, allowing repetition. Assembly does not promise lossless preservation of every feature; this contract names what is retained, omitted and refused.
+
+## Clause map
+
+| Area | Clauses |
+| --- | --- |
+| Rotation | PAGES-ROT-01 |
+| Selection and identity | PAGES-SELECT-01 |
+| Output and security | PAGES-OUT-01, PAGES-SEC-01, PAGES-FAIL-01 |
+| Preservation | PAGES-PRESERVE-01 (matrix), ASSEMBLY-FORM-01 to 05, ASSEMBLY-BOOKMARK-01/02, ASSEMBLY-LABEL-01, ASSEMBLY-TAG-01 with PAGES-TAG-02 |
+| Attachments | ASSEMBLY-ATTACH-01 (default refusal); ASSEMBLY-ATTACH-02 to 11 are a deferred conditional specification for a mode this contract does not offer |
+
+## Rotation: PAGES-ROT-01
+
+An editor sets a page's rotation to a positive or negative multiple of 90 degrees, normalized to 0, 90, 180 or 270 and written directly on that page, overriding inheritance. The setting is **absolute**, not relative to the previous value. Any other value is an invalid argument, and a page number outside the document is an invalid argument; both fail before any change. Page numbers are 1-based. Only the rotation entry changes: page content, boxes, annotations and widget rectangles keep their stored user-space values, so rotation does not change inspected coordinates ([inspection](inspection.md)). Authorization follows [SECURITY-WRITE-01](security.md#operation-authorization-matrix-security-write-01): R=2 bit 4, R>=3 bit 11, every DocMDP P refuses, an approval signature or document timestamp needs the explicit signature-breaking opt-in, Reader-rights rules apply including Q-33, and field locks and widget relationships are preserved. Each assignment is atomic in pending state and retains earlier edits; it is saved through [opening and saving](opening-and-saving.md). Assigning the value already effective is allowed and need not change the output.
+
+## Selection and identity: PAGES-SELECT-01
+
+Page selections are positive 1-based page numbers in output order. Repeats and reordering are allowed. An omitted selection means all pages of that input in order. An **explicitly empty** selection, an empty input list, or a result that would have no pages is an invalid argument; assembly never produces a zero-page file. A page number outside its input is refused before any output. Inputs and selections are read once and captured before assembly begins.
+
+Identity is by **input entry and occurrence**. Each entry in the input list is a separate input, even when two entries name the same open document. Within one entry the *n*th selection of a source page is that page's copy *n*; counting restarts for each entry (ASSEMBLY-FORM-05). Inputs are borrowed open documents that must stay open until the call returns. Assembly reads each source through its document view, so accepted pending edits in an open document (a rotation, a form value) appear in the derivative; this is the same view that document reads show (ENGINE-PENDING-01).
+
+## New-file output: PAGES-OUT-01
+
+Assembly writes a **new** PDF; it is neither an incremental copy nor an in-place rewrite and carries no original-byte prefix. The input documents are unchanged. The new file has a fresh identifier, a minimal document information dictionary and no XMP, and declares a version sufficient for the structures it writes and not below the greatest effective version of the contributing inputs. Page content and image streams stay encoded and are copied with bounded buffers; inherited resources, boxes and rotation become explicit on each output page; explicit trim, bleed and art boxes, user units and transparency groups are retained; each output page and its retained annotations has its own identity, and fonts and images share source mappings. The output is unsigned and unencrypted; the library creates no encryption. The destination must be an empty writable stream and need not seek. It stays open; the engine never closes a caller destination.
+
+Whole-document structures not named as retained in PAGES-PRESERVE-01 are omitted by rule, not by accident, and are documented here: the source information dictionary and XMP (the new file's metadata is fresh; callers may set metadata afterwards through the metadata contract), the source file identifier, viewer preferences and page mode, catalog and document actions, document-level JavaScript, named destinations, article threads, thumbnails, output intents, usage-rights and permission entries, and the source's encryption. Omission of these is not reported per call because it does not depend on the selection.
+
+## Security and consent: PAGES-SEC-01
+
+Each contributing input is authenticated as [SECURITY-AUTH-01](security.md#authentication-and-permission-inspection-security-auth-01) requires. Authorization is per **input occurrence** under the extract and concatenate row of [SECURITY-WRITE-01](security.md#operation-authorization-matrix-security-write-01): a user-authenticated encrypted input needs bits 4 and 5 (R=2) or bits 5 and 11 (R>=3); owner authentication bypasses the password bits; insufficient access is an authorization refusal before output. Because the output is unencrypted, an input that required a password is assembled only when the call carries the explicit unencrypted-output consent (the existing `AllowUnencryptedOutput` option, retained); without it the call refuses before output. Supplying credentials is not consent. Decryption keeps compression filters and their parameters intact. Existing public consent spelling is retained.
+
+**Signed and certified inputs.** The source is a derivative base, not an update, so the certification and signature of a source cannot survive and DocMDP does not govern the new file. Signature fields and widgets on selected pages, and field locks that depended on them, are **omitted and counted in the omission result**; retained unsigned fields stay editable without locks. A signed or certified input is never refused for its signatures alone. The omission is reported under the signature reason in the result overload; it is a derivative, not a claim that the source signature is valid or invalid.
+
+**XFA.** XFA-only and dynamic-XFA inputs refuse. A hybrid-XFA input is accepted only with an explicit XFA-abandonment consent for the call (FORM-XFA-01); the output then carries the AcroForm representation only, and the call reports the consequence. A hybrid input without that consent refuses before output. Packet editing is not supported. (Exact option spelling is open; a compatibility check against today's hybrid handling is an implementation task.)
+
+**PDF/A.** PDF/A inputs are accepted under these rules. The output makes no PDF/A claim; the PDF/A identification metadata and output intents are omitted per PAGES-OUT-01.
+
+## Preservation, omission and refusal: PAGES-PRESERVE-01
+
+The scope of each row is the **selected pages and the relationships required to preserve their promised result**, or a named whole-document structure. Unselected pages are not inspected for unrelated structures, and selecting an excluded page is not a failure. An intentional omission is a documented, caller-visible loss; a refusal precedes any destination write.
+
+| Feature or structure | Result |
+| --- | --- |
+| Page content, resources, boxes, rotation, user units, transparency groups | Retained (PAGES-OUT-01). |
+| Ordinary editable forms and widgets | Retained and independent per input entry and form copy (ASSEMBLY-FORM-01 to 05). A required widget or appearance that cannot be preserved refuses; never silently dropped and never flattened as a fallback. Field actions, scripts, a nonempty calculation order, cyclic ownership and unpreservable default resources refuse. |
+| Other annotations (supported basic text, shape, ink and text-markup subtypes with supported appearances) | Retained with their own identity. An annotation of another subtype, or whose appearance graph is unsupported, unclassifiable or over its local limits, is **omitted and counted** in the omission result by reason. General annotation editing stays excluded. |
+| Links and destinations | An internal link to a retained page becomes a direct destination to that page's first output occurrence in the same input entry; a self-link targets its own copy. A link whose target is excluded, or whose action is unsupported, is omitted and counted. Absolute `http`, `https` and `mailto` URIs are retained (relative references resolve against a valid HTTP(S) catalog base); userinfo in HTTP(S) links, action chains, `/IsMap true`, annotation actions and other action types omit that link. Callers may choose to drop all external links. No network requests occur. |
+| Bookmarks | ASSEMBLY-BOOKMARK-01/02. |
+| Page labels | ASSEMBLY-LABEL-01. |
+| Accessibility tags and reading order | ASSEMBLY-TAG-01 with PAGES-TAG-02. A tagged input whose structure falls outside the supported subset refuses. |
+| Document information, XMP, file identifier, viewer preferences | Fresh or omitted by rule (PAGES-OUT-01). |
+| Document-level attachments and associated files | ASSEMBLY-ATTACH-01: refuse by default. |
+| Signatures, certifications, timestamps, field locks | Signature fields and widgets are omitted and counted; retained unsigned fields lose locks that depended on them (PAGES-SEC-01). |
+| Encryption and Reader rights | Output unencrypted under consent; usage-rights entries are omitted and the source is not modified (PAGES-SEC-01). |
+| XFA | PAGES-SEC-01. |
+| Optional-content (layer) structures and catalog optional-content properties | Refuse; layers are not preserved. |
+| Catalog actions, JavaScript, named destinations, output intents | Omitted by rule (PAGES-OUT-01). |
+
+### Remaining assembly losses (resolved in this revision)
+
+**Resolved in this revision.** The earlier proposal (preserve a narrow subset or refuse before reporting success; treat signed, encrypted and XFA derivatives as separate authorization decisions) is settled as follows. Material security changes — decryption, signature loss and XFA abandonment — each have an explicit rule above. Form widgets, tags and attachments **refuse** when they cannot be preserved, because losing them silently changes accessibility, data or payload. Ordinary annotations and links that cannot be preserved are **omitted and reported**, retaining the existing public behavior (an omission count by reason) rather than turning every unsupported annotation into a whole-call refusal; mainstream page-copy libraries drop links to excluded pages the same way. The earlier recommendation to refuse unsupported retained-page links is therefore not adopted by this draft; it is the one place this revision departs from that proposal, and the owner approved it at adoption.
+
+### Tag preservation subset: PAGES-TAG-02
+
+The supported subset is **structure trees whose logical structure can be copied with page references remapped per output occurrence**. For each output page copy, retain the structure elements that contain that page's marked content or retained descendants, with hierarchy and order, role mapping, class and attribute references, language, alternate text, actual text and form-widget and annotation ownership. A repeated page produces independent structure elements per occurrence, consistent with ASSEMBLY-FORM-05. An element that spans excluded pages is retained as the parent of its retained descendants and loses the excluded children; that pruning is the documented consequence of selecting pages, not a refusal. Refuse, before output, a tagged input whose structure is cyclic, malformed, references an object outside the retained graph that cannot be pruned, or uses a construct outside the above (for example PDF 2.0 namespace structure). Structural tag preservation is not accessibility validation or PDF/UA conformance. An untagged derivative of a tagged input requires a separate owner decision and is not offered.
+
+## Failure, timing, limits and cancellation: PAGES-FAIL-01
+
+Everything the library can determine without writing — page numbers, authentication and authorization, consent, XFA, layer, attachment, tag, form-widget and appearance classification, and the structural and size budgets it can check — is determined before the first destination write, and a refusal there leaves the destination untouched and creates no file. Failures discovered while copying (source integrity, destination I/O, a global assembly budget) can occur after writing begins and may leave an incomplete file for the caller to discard; assembly attempts no restoration, deletion or retry, because the destination is not required to seek. The primary failure stays primary and cleanup failures are reported separately (ENGINE-ERROR-01's pattern). Borrowed inputs and the destination stay open; stream positions are not restored. Cancellation is observed before planning, between pages and objects, and between copy blocks; observed cancellation returns no success and follows the same destination rule. Pending state in the source documents is not changed by assembly, successful or not. Unsupported and malformed inputs are distinct failure categories (SHARED-FAIL-01).
+
+Existing fixed limits remain as documented in [behavior](../behavior.md#page-extraction-and-concatenation): each annotation appearance graph is limited to 4,096 objects, depth 32 and 8 MiB of encoded stream bytes plus structure (an over-limit annotation is omitted and counted, as above), and the writer's mapping, depth, page-instance and structural-memory budgets fail the call. Actual consumed extent governs. This contract adds no universal cap; caller-controlled attachment limits belong to the deferred attachment mode.
+
+## Selected assembly clauses
+
+### Editable forms: ASSEMBLY-FORM-01
+
+Preserve supported ordinary forms as editable fields with independent values across separate input occurrences, even when source field names collide: two completed applications must not bind their answers together. Preserve supported retained widgets and appearances; refuse rather than report success with a required widget omitted; never flatten automatically. Supported field and appearance variants follow the frozen [forms](forms.md) eligibility; this clause adds no flattening, font or layout work. Until forms is adopted, the supported variants are those today's assembly preserves ([behavior](../behavior.md#page-extraction-and-concatenation)); see the forms boundary below.
+
+**Forms boundary.** Forms is frozen and unadopted, and adopting this contract adopts no forms eligibility, appearance, resource, font, layout or flattening rule and no new form behavior. Where a clause here defers to forms eligibility, the floor until forms is adopted is today's assembly behavior: preserving it is required, narrowing it is not authorized by this contract, and widening it needs the forms adoption. Field identity, copy independence and the refusals in PAGES-PRESERVE-01 are assembly rules that stand without forms. The hybrid-XFA consent stands on the adopted [shared XFA rule](shared.md); FORM-XFA-01 is cited only for the consent's intended spelling.
+
+### Field identity and repeated copies: ASSEMBLY-FORM-02 to 05
+
+* **ASSEMBLY-FORM-02:** every retained field name gains the uniform synthetic prefix `InputN.CopyM.`, where N is the input entry's position and M its form-copy group; the first copy is always `Copy1`, even without repetition and regardless of collisions. A non-repeated `Group.Name` in the first input becomes `Input1.Copy1.Group.Name`; its second copy `Input1.Copy2.Group.Name`.
+* **ASSEMBLY-FORM-03:** repeated copies of the same source page have independent editable fields even within one entry.
+* **ASSEMBLY-FORM-04:** source field sharing within a copy is preserved; widgets that shared a field on output pages 1 and 2 still share it, while pages 3 and 4 of a second copy share a different field. Distinct source fields are never merged because names or values match.
+* **ASSEMBLY-FORM-05:** the form-copy group of a selected page is its occurrence number within its input entry, restarting per entry; partial groups are allowed and no widgets are invented. Selection order is never changed.
+
+| Source pages within one input | Form-copy numbers in output order |
+| --- | --- |
+| [1, 2] | [1, 1] |
+| [1, 2, 1, 2] | [1, 1, 2, 2] |
+| [1, 1, 2] | [1, 2, 1] |
+| [2, 1, 1, 2] | [1, 1, 2, 2] |
+| [1, 1] | [1, 2] |
+
+A source field name that cannot be prefixed without making two distinct fields share an output name refuses before output. This grouping governs form identity only and does not by itself decide tag or annotation grouping, which follow PAGES-TAG-02 and the matrix.
+
+### Bookmarks: ASSEMBLY-BOOKMARK-01/02
+
+Preserve supported bookmarks and hierarchy for selected pages, remapping retained destinations. When an ancestor's destination is excluded but descendants survive, keep the ancestor as a non-clickable heading; remove branches with no retained destination or descendants; never invent a replacement destination or promote children. A bookmark targets the **first retained output copy** of its source page within the same input entry; repeating a page does not duplicate the tree, and separate entries keep their own mappings (selecting 3, 1, 3 sends a page-3 bookmark to output page 1). Bookmark trees of several inputs appear in input order. Supported destinations are explicit destinations and named destinations that resolve to a retained page (written as direct destinations); a bookmark with another action type loses that action but a surviving heading stays. Open or closed state is preserved when readable. A malformed outline refuses.
+
+### Page labels: ASSEMBLY-LABEL-01
+
+Preserve each selected page's source label in output order: a source label A-8 stays A-8 even when it becomes output page 2; repetition repeats the label; concatenated sources may repeat labels; no uniqueness reconciliation. A source without explicit labels keeps its source ordinals (selecting 3, 5, 3 yields 3, 5, 3). Labels are viewer numbering, distinct from physical order and from numbers painted on the page; printed folios are not rewritten. Output labels are expressed as ranges the library writes; an input whose page-label tree cannot be read into the supported subset (a well-formed tree) refuses. Nested-tree interoperability is verified with a second reader.
+
+### Accessibility tags: ASSEMBLY-TAG-01
+
+Preserve the tag structure promised by PAGES-TAG-02; if assembly cannot, refuse by default. No silent untagged result and no automatic visual-only fallback. A deliberately untagged derivative needs a separate owner decision.
+
+## Attachments: default refusal and deferred preservation mode
+
+Only ASSEMBLY-ATTACH-01 is in force: an input with document-level attachments refuses by default. ASSEMBLY-ATTACH-02 to 11 below are engineering-supported draft clauses for a future explicit preservation mode. They are retained so that mode need not be re-derived, they are not offered by this contract, and adopting this contract does not adopt a mode, its API, numeric limits or its failure behavior.
+
+### Default attachment-bearing input refusal: ASSEMBLY-ATTACH-01 (Q-122)
+
+**Engineering-supported draft clause, not whole-contract adoption or runtime verification.** Refuse assembly by default when an input has document-level attachments. An explicit attachment-preservation mode may be offered only after its supported copy scope, name collisions, associations, limits and failures are defined. Selecting one page does not silently drop a whole-document business payload. This clause does not adopt attachment mutation, a preservation implementation or PDF/A-3 compliance. The input's authentication, applicable permissions and other assembly restrictions still apply.
+
+Unexecuted ASSEMBLY-ATTACH-A: select one page from a document containing a document-level attachment and require default refusal before output publication, without automatic omission or copying. Include a no-attachment control and a multi-input case in which only one input bears an attachment. Test explicit preservation only after its scope, collision, association, budget and failure rules are selected. Existing form/bookmark/label/tag policies remain independent. No runtime or interoperability result was obtained.
+
+### Explicit attachment-preservation scope: ASSEMBLY-ATTACH-02 (Q-125)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** Within a future explicit preservation mode, copy the supported document-level attachment set once per selected input entry, irrespective of selected or repeated page occurrences. If the same source is listed again as a separate input entry, that entry creates a second copy, which can trigger ASSEMBLY-ATTACH-03's name-collision refusal. For example, selecting page 2 twice from one entry bearing `invoice.xml` creates one copy; listing that source as another selected input entry creates a second copy. The [Adobe PDF Reference, section 3.10.3](https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.7old.pdf) describes document-level embedded files through the document's `EmbeddedFiles` name tree, separate from page attachment annotations. The once-per-input-entry rule is this library's proposed policy, not a format mandate. ASSEMBLY-ATTACH-07 now proposes association preservation/refusal, but its supported locations and remapping remain open. Empty selections, supported variants, limits and output failures also remain open. No PDF/A-3 conformance follows.
+
+Unexecuted ASSEMBLY-ATTACH-B: compare one versus repeated pages and repeated input entries with known attachment bytes, checking one copy per selected entry and the separate-entry collision path without assuming unique output names. No assembly or interoperability probe ran; byte identity, associations and supported copy limits require later rules.
+
+### Attachment name collisions: ASSEMBLY-ATTACH-03 (Q-126)
+
+**Engineering-supported draft clause, not whole-contract adoption or runtime verification.** Refuse an explicit preservation request when two copied attachments would have the same exposed name. Do not silently replace or rename a payload. Thus repeating an attachment-bearing source as a separate input entry can refuse even when its pages assemble successfully. This is a whole-operation refusal, not a successful output with one payload omitted. ASSEMBLY-ATTACH-04/05 now propose exact decoded-name comparison and bounded preflight before library-caused destination changes for discoverable collisions. ASSEMBLY-ATTACH-06 proposes refusal of an unestablishable exposed name; its authoritative source, decoder, exact traversal bounds and later payload failures remain open. Authentication, authorization and output-failure rules still apply.
+
+Unexecuted ASSEMBLY-ATTACH-C: use byte-distinct same-name payloads across two input entries, including the same source listed twice, and a unique-name control. Require refusal without silent replacement or renaming, asserting no library-caused destination changes for discoverable supported-name collisions under ASSEMBLY-ATTACH-05. No runtime or external-tool probe ran.
+
+### Exact exposed attachment names: ASSEMBLY-ATTACH-04 (Q-130)
+
+**Engineering-supported draft clause, not whole-contract adoption or runtime verification.** Compare supported decoded exposed attachment names exactly and case-sensitively, without trimming or Unicode normalization. Equal decoded names collide even when their PDF encodings differ; `Invoice.xml` and `invoice.xml` remain distinct. This is the project's collision policy, not a requirement supplied by the [Adobe PDF Reference](https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/pdfreference1.7old.pdf). ASSEMBLY-ATTACH-08 now selects the decoded `EmbeddedFiles` key for tree-backed copied attachments; ASSEMBLY-ATTACH-06 covers an unestablishable key. Filename safety and extraction collisions remain separate. Unexecuted ASSEMBLY-ATTACH-D: compare exact, case-only, normalization-only and differently encoded equal decoded tree keys using eventually supported decoders, and keep extraction-name checks separate. No name-tree, runtime or interoperability probe ran.
+
+### Bounded collision preflight: ASSEMBLY-ATTACH-05 (Q-131)
+
+**Engineering-supported draft clause, not whole-contract adoption or runtime verification.** Complete bounded traversal, decoding and collision checks for attachments that would be copied before the library creates, truncates or writes an output file. For a caller-supplied output stream, perform the checks before the library writes or changes that stream; the caller may already have opened it. The guarantee covers collisions discoverable from supported names, not all payload validity, copy limits or later I/O failures. Those later failures follow the destination's ordinary failure contract. ASSEMBLY-ATTACH-06 adds unestablishable-name refusal at this boundary; ASSEMBLY-ATTACH-08 selects the tree-backed key. Exact decoder/traversal bounds and error priority remain open. Unexecuted ASSEMBLY-ATTACH-E: instrument file creation/truncation and borrowed-stream writes/length/position changes for a known duplicate name; require zero library-caused destination changes on that refusal. Separately fail payload reading after clean preflight and apply the normal failed-output rule. No failure injection ran.
+
+### Undecodable exposed attachment names: ASSEMBLY-ATTACH-06 (Q-135)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** In explicit preservation, if a would-be-copied attachment's exposed name cannot be established under the supported source and decoder rules, refuse the whole preservation operation during ASSEMBLY-ATTACH-05's preflight, before library-caused destination changes. Do not replace the name or silently omit the payload; Q-130's collision comparison must use that same exposed-name value. For a tree-backed copied attachment, ASSEMBLY-ATTACH-08 now selects the decoded `EmbeddedFiles` key; file-specification `UF`/`F` cannot rescue an undecodable key. AF-only specifications, decoder coverage, malformed-tree diagnosis and error priority remain open. Unexecuted ASSEMBLY-ATTACH-F: use an undecodable tree key with valid `UF`/`F` and instrument file creation/truncation and borrowed-stream changes; require whole-operation refusal before those changes, with no fallback name or dropped payload. No parser or failure-injection probe ran.
+
+### Preserved associated-file relationships: ASSEMBLY-ATTACH-07 (Q-136)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** Preserve supported associations to each copied file specification. Refuse an affected relationship that cannot be preserved; copying payload bytes while silently dropping its association is not success. ASSEMBLY-ATTACH-09 now selects catalog `/AF` as the initial supported location, maps each supported reference to that selected input entry's copied specification, and refuses an affected page or other object-level association until its occurrence mapping is defined. The [PDF Association application note](https://pdfa.org/wp-content/uploads/2018/10/PDF20_AN002-AF.pdf) describes catalog and object-level structures; this subset/refusal is project policy. Example: a catalog `/AF` entry points to `invoice.xml`, which is copied once for that selected entry and must still point to its copied file specification. This does not imply PDF/A-3 conformance. Malformed arrays, shared references, AF-only specifications, limits and exact error priority remain open. Unexecuted ASSEMBLY-ATTACH-G: compare copied bytes, file-specification identity and catalog association targets with an independent reader; exercise repeated entries and affected page/object associations with refusal and no silent loss. No association or interoperability probe ran.
+
+### Tree-backed exposed attachment name: ASSEMBLY-ATTACH-08 (Q-139)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** For a tree-backed attachment copied from `EmbeddedFiles`, use the supported decoded name-tree key as its exposed name for ASSEMBLY-ATTACH-04's exact collision comparison and ASSEMBLY-ATTACH-05/06's preflight/refusal. Keep file-specification `UF`/`F` as separate fields; neither substitutes for an undecodable key. For example, a key `Invoice.xml` and a file-specification `UF` of `invoice.xml` expose `Invoice.xml` for this comparison. The [PDF Association overview](https://pdfa.org/files-inside-pdf) describes the name-tree mapping; selecting this key is project policy. AF-only specifications without a supported tree entry, key/filename mismatch reporting, decoder limits and direct attachment API identity remain separate. Unexecuted ASSEMBLY-ATTACH-H: use differing-key/`UF`/`F`, equal-decoded-key and malformed-key fixtures; require consistent exposure, collision and preflight without a filename fallback. No reader/interoperability probe ran.
+
+### Initial catalog associations: ASSEMBLY-ATTACH-09 (Q-140)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** Initially preserve supported catalog `/AF` references to copied document-level file specifications, remapping each reference from a selected input entry to that entry's copied specification. Refuse an affected page or other object-level association until its occurrence mapping is defined; do not silently omit it. Repeating an attachment-bearing source as a separate entry remains subject to ASSEMBLY-ATTACH-03's name collision before output. Example: a catalog `/AF` and selected page `/AF` both reference one source file specification; the affected page relationship makes the proposed initial mode refuse rather than copy only the catalog relationship. The [PDF Association application note](https://pdfa.org/wp-content/uploads/2018/10/PDF20_AN002-AF.pdf) documents catalog and object-level locations, not this subset or assembly remapping. ASSEMBLY-ATTACH-10 now proposes refusal of an affected AF-only embedded specification without treating every `/AF` as a blanket refusal. Malformed arrays, shared references, limits and PDF/A-related structures remain open; no PDF/A-3 conformance follows. Unexecuted ASSEMBLY-ATTACH-I: independently inspect preserved catalog references and per-entry copied specifications; verify affected page/object refusal, including a repeated-input case subject to earlier collision refusal. No reader/interoperability probe ran.
+
+### Affected AF-only embedded specifications: ASSEMBLY-ATTACH-10 (Q-144)
+
+**Engineering-supported draft clause, not an offered mode or verified implementation.** In the initial explicit preservation mode, refuse an affected embedded file specification reached through `/AF` but absent from the supported `EmbeddedFiles` tree, before the library changes the destination. Do not silently omit it or invent a tree key from `UF`/`F`. The mere presence of `/AF` is not blanket refusal: classify whether its referenced file is embedded and whether that relationship is affected by the selected input entry and output. Referenced external files and unaffected relationships need separate classification and outcome rules. Example: a selected entry's catalog `/AF` points to an embedded `invoice.xml` specification absent from the tree and therefore refuses; an unrelated `/AF` entry is not automatically the same case. The [PDF Association application note](https://pdfa.org/wp-content/uploads/2018/10/PDF20_AN002-AF.pdf) permits associated files outside the name tree and external references; the initial refusal is project policy. Exact affectedness/classification, malformed references and error priority remain open. Unexecuted ASSEMBLY-ATTACH-J: use affected AF-only embedded, external-reference and unaffected-relationship fixtures; instrument destination changes and require preflight refusal only for the selected affected embedded case. No reader, parser or failure-injection probe ran.
+
+### Explicit preservation resource bounds: ASSEMBLY-ATTACH-11 (Q-147)
+
+**Engineering-supported draft clause, not an offered mode or measured runtime behavior.** Bound the number of copied attachments, each decoded payload's bytes, aggregate decoded copied-payload bytes, structure/name-tree traversal and decoded metadata with configurable finite limits. Count each selected input entry according to the copies it would produce under ASSEMBLY-ATTACH-02; repeated page occurrences within one entry do not multiply copies, while repeated selected entries do. Preflight names, structure and knowable counts/limits before library-caused destination changes. Enforce actual decoded payload bytes while streaming; a later limit hit follows the destination's ordinary failed-output contract rather than implying collision-style preflight or rollback. Set numerical defaults only after representative measurement. Example: 10,000 distinct tiny files with long names can exceed count/metadata limits despite each file passing its decoded-byte cap; a repeated source entry contributes another prospective copy and may also hit Q-126's collision refusal. Exact defaults, shared-stream accounting, decompression work/ratio, cancellation and diagnostic priority remain open. Unexecuted ASSEMBLY-ATTACH-K: cross count, per-payload decoded bytes, aggregate decoded bytes, traversal and metadata limits separately; instrument preflight versus streamed refusal and destination state. No workload or failure probe ran.
+
+
+## Acceptance map
+
+All targets are **unexecuted**. Use an independent reader for page order, forms, bookmarks, labels, links and tags, and an independent renderer where appearance matters; structural or pixel checks alone do not prove semantic preservation. Instrument destination writes for every refusal claimed to precede output.
+
+| ID | Scenario |
+| --- | --- |
+| PAGES-A1 | PAGES-ROT-01: rotate with positive, negative and out-of-range multiples; absolute (not cumulative) result, inherited rotation overridden, invalid value and page refused before change; DocMDP, signature opt-in, password bits and Q-33 gates. |
+| PAGES-A2 | PAGES-SELECT-01: select 3, 1, 3 and repeated input entries; omitted, empty and out-of-range selections; pending rotation in an open document appears in the derivative. |
+| PAGES-A3 | PAGES-OUT-01: fresh identifier, no source XMP or Info, unsigned and unencrypted result, retained boxes, user units and transparency groups; inputs unchanged. |
+| PAGES-A4 | PAGES-SEC-01: user and owner authentication per input occurrence, missing unencrypted-output consent, insufficient bits, signed and certified inputs (signature omitted and counted), hybrid-XFA with and without consent, XFA-only and PDF/A inputs. |
+| PAGES-A5 | PAGES-PRESERVE-01: supported and unsupported annotations, internal links to retained and excluded pages, external URI forms, layer structures, and the omitted-by-rule structures; compare omission counts by reason. |
+| PAGES-A6 | ASSEMBLY-FORM-01 to 05 and ASSEMBLY-BOOKMARK-01/02, ASSEMBLY-LABEL-01 (ASSEMBLY-REVIEW-A/B scenarios): colliding names, independent copies, the partial-group table, retained-widget failure, ancestor headings, first-retained-copy targets and label ordinals. |
+| PAGES-A7 | ASSEMBLY-TAG-01 with PAGES-TAG-02: repeated and reordered tagged pages verified with a semantic oracle; excluded-page pruning; refusal of unsupported or malformed structure; no untagged fallback. |
+| PAGES-A8 | PAGES-FAIL-01: instrument a destination for each refusal and require zero writes and no created file; fail destination I/O and source integrity during copying and require the primary failure, retained incomplete output, open borrowed streams and no restoration attempt; cancel at each checkpoint. |
+| PAGES-A9 | ASSEMBLY-ATTACH-A: single-page selection from an attachment-bearing input and a multi-input case refuse before output; a no-attachment control succeeds. (ASSEMBLY-ATTACH-B to K apply only to the deferred mode.) |
+
+No assembly, interoperability, accessibility or failure-injection result exists for this draft.
+
+## Implementation gaps and compatibility
+
+Relative to current behavior this contract changes or adds: tagged inputs refuse until PAGES-TAG-02 is implemented (today tags are discarded and the output is untagged); field names become `InputN.CopyM.` (today `InputN.`) and repeated page copies become independent fields (today they share a field within one input occurrence); bookmarks, page labels and tags are preserved (today omitted); hybrid-XFA assembly needs explicit consent (current handling to be confirmed); and the default attachment refusal exists today as a refusal of associated-file arrays and should be confirmed to cover every document-level attachment. Signature fields are already omitted today; the omission result should name that reason. Appearance-graph limits, link rules, encrypted-input consent and the omission result already exist and are retained. None of this is started here, and numeric attachment limits (ASSEMBLY-ATTACH-11) await measurement.
+
+## Adoption record
+
+Approved by the owner on 2026-10-31 as revision W-218-PAGES-2026-10-31-R2, after review corrections. Adoption covers ASSEMBLY-FORM-01 to 05, ASSEMBLY-BOOKMARK-01/02, ASSEMBLY-LABEL-01, ASSEMBLY-TAG-01 and ASSEMBLY-ATTACH-01 as selected, and PAGES-ROT-01, PAGES-SELECT-01, PAGES-OUT-01, PAGES-SEC-01, PAGES-PRESERVE-01, PAGES-TAG-02 and PAGES-FAIL-01 as new rules. ASSEMBLY-ATTACH-02 to 11 remain a deferred conditional specification: no attachment-preservation mode is offered. Approved consequences: unsupported ordinary annotations and links are omitted and counted rather than refused; signatures on selected pages are omitted and counted rather than refusing signed inputs; tagged inputs refuse until tag preservation exists, which is visible to current callers; hybrid XFA needs explicit consent; and whole-document metadata and identity are fresh with the source's omitted by rule. The forms boundary stands: adoption adopts no forms eligibility or behavior, and today's assembly behavior is the floor. This adopts a target contract only. All acceptance targets remain unexecuted, the implementation gaps above remain open, and no implementation, interoperability, accessibility or release-qualification claim is made. History: [pages and assembly](drafting/history.md#pages-and-assembly).
+
+## Historical evidence and owner decisions
+
+See the [assembly history](drafting/history.md#pages-and-assembly) and [competitor expectations](drafting/competitor-expectations.md). Earlier decisions retain their recorded context; implementation and completed research are not silently adopted.

@@ -1,0 +1,2922 @@
+{
+ "env": {
+  "python": "3.13.1",
+  "pypdf": "6.21.4",
+  "pypdfium2": "5.14.0",
+  "pdfium_build": "156.0.8076.0",
+  "pymupdf": "2.0",
+  "mupdf": "1.28.5"
+ },
+ "script_sha256": "e11dc4e6eb4a797cae84d0a35e300798eaeb51288797b15df87c65c44eafde86",
+ "value_c6": [
+  {
+   "id": "c6-01",
+   "desc": "combo paired P, V=export e2, no I",
+   "sha256": "5fde66c9dc0ed1919cd49ac28622cef5d7c425d34309ee5f5d8f699228b1cad7",
+   "pypdf": {
+    "f": {
+     "local_V": "'e2'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-02",
+   "desc": "combo paired P, V=display Beta, no I",
+   "sha256": "e011f38373a973a191bcf3fc9e637e741e88daf9c8d98316d781d5104e0317e2",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-03",
+   "desc": "combo paired P, V=export e2, I=[1]",
+   "sha256": "353037c95464b723bf7138122fe96f0a1167d1f3b30a5a738bb77d31cc8683b7",
+   "pypdf": {
+    "f": {
+     "local_V": "'e2'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-04",
+   "desc": "combo paired P, V=display Beta, I=[1]",
+   "sha256": "ebec95ac3e2f2c153d07c370df5b1f1c03cb22513a5ed5b1e0cea143b5dfc5bf",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-05",
+   "desc": "combo paired P, no V, I=[1]",
+   "sha256": "96a522efca33b30d5186a3de932ab188a87af0f154b1c265a68df0b897bd9dd3",
+   "pypdf": {
+    "f": {
+     "local_V": "'<absent>'",
+     "local_I": "[1]",
+     "inherited_effective_V": "None"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-06",
+   "desc": "combo paired P, V=display Beta, I=[0] (contradict)",
+   "sha256": "d19d16164291472e018cde96abea280a7df376c09d1561c8b2012ae69ccfc23a",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "[0]",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-07",
+   "desc": "combo paired P, V=export e2, I=[0] (contradict)",
+   "sha256": "7974e4d399bd53a6a95b6c6d009b96fe3dd50b7d7ed3cb43c9d9800fa7a4906e",
+   "pypdf": {
+    "f": {
+     "local_V": "'e2'",
+     "local_I": "[0]",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-08",
+   "desc": "combo shared-export Q, V=export x, I=[1]",
+   "sha256": "8b1502df3f885dad8c8de6b1eb79ae062217ded8c9ec966d8cde3975211e00a7",
+   "pypdf": {
+    "f": {
+     "local_V": "'x'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'x'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "x",
+     "export": "",
+     "selected_labels": [
+      "B"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "A",
+      "B"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'x'",
+     "choice_values": "[('x', 'A'), ('x', 'B')]"
+    }
+   }
+  },
+  {
+   "id": "c6-09",
+   "desc": "combo shared-export Q, V=display B, I=[1]",
+   "sha256": "02c8963ad65802e51949b60eae45eb85da2ab569755c95024d8695b947d01682",
+   "pypdf": {
+    "f": {
+     "local_V": "'B'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'B'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "B",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "A",
+      "B"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'B'",
+     "choice_values": "[('x', 'A'), ('x', 'B')]"
+    }
+   }
+  },
+  {
+   "id": "c6-10",
+   "desc": "combo shared-export Q, V=display B, no I",
+   "sha256": "d3f673285f6dbb708e9ba7ee7b7d8c991e2deadf353b4d27f3898409574ffb9f",
+   "pypdf": {
+    "f": {
+     "local_V": "'B'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'B'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "B",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "A",
+      "B"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'B'",
+     "choice_values": "[('x', 'A'), ('x', 'B')]"
+    }
+   }
+  },
+  {
+   "id": "c6-11",
+   "desc": "combo shared-export Q, V=export x, no I",
+   "sha256": "891063647124426ca9416743b82964a25e62efb587710649095c76807fdd0503",
+   "pypdf": {
+    "f": {
+     "local_V": "'x'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'x'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "x",
+     "export": "",
+     "selected_labels": [
+      "A",
+      "B"
+     ],
+     "selected_rows": [
+      0,
+      1
+     ],
+     "option_labels": [
+      "A",
+      "B"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'x'",
+     "choice_values": "[('x', 'A'), ('x', 'B')]"
+    }
+   }
+  },
+  {
+   "id": "c6-12",
+   "desc": "combo shared-label R, V=display A, I=[1]",
+   "sha256": "e18dd6f22c483994cc229331cddef2b19e835a8a84991bf725e2b4bbe5a5ff34",
+   "pypdf": {
+    "f": {
+     "local_V": "'A'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'A'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "A",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "A",
+      "A"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'A'",
+     "choice_values": "[('x', 'A'), ('y', 'A')]"
+    }
+   }
+  },
+  {
+   "id": "c6-13",
+   "desc": "combo shared-label R, V=export y, I=[1]",
+   "sha256": "5ab24979c293855e906ea438cd97334cc6e0c1a78bcbb7a0f9a6172d3e02fa27",
+   "pypdf": {
+    "f": {
+     "local_V": "'y'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'y'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "y",
+     "export": "",
+     "selected_labels": [
+      "A"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "A",
+      "A"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'y'",
+     "choice_values": "[('x', 'A'), ('y', 'A')]"
+    }
+   }
+  },
+  {
+   "id": "c6-14",
+   "desc": "combo shared-label R, V=display A, no I",
+   "sha256": "1ce27df75172ccc103e40380609e0bf32c00e6b113e6dbe441c8ac6856a131bd",
+   "pypdf": {
+    "f": {
+     "local_V": "'A'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'A'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "A",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "A",
+      "A"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'A'",
+     "choice_values": "[('x', 'A'), ('y', 'A')]"
+    }
+   }
+  },
+  {
+   "id": "c6-15",
+   "desc": "combo empty-export S, V=empty string, no I",
+   "sha256": "19fbdcea93341f89ca6fccbbc0a4a8b6f84879c5dcdbc2f0dd156c944d64f84e",
+   "pypdf": {
+    "f": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [
+      "None"
+     ],
+     "selected_rows": [
+      0
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c6-16",
+   "desc": "combo empty-export S, V=display None, I=[0]",
+   "sha256": "e2dc931f284c7c25140be90493683c3e80e087e8ead270660ba4fb33b4f535c5",
+   "pypdf": {
+    "f": {
+     "local_V": "'None'",
+     "local_I": "[0]",
+     "inherited_effective_V": "'None'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "None",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'None'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c6-17",
+   "desc": "combo empty-export S, V=empty string, I=[0]",
+   "sha256": "79ee751935d7a76c264c477c5cd17f3cc9cb93f29f23ebd35020a430106ab42a",
+   "pypdf": {
+    "f": {
+     "local_V": "''",
+     "local_I": "[0]",
+     "inherited_effective_V": "''"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [
+      "None"
+     ],
+     "selected_rows": [
+      0
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c6-18",
+   "desc": "combo empty-export S, no V, no I",
+   "sha256": "92ac8407055a38d894fd4b271ef2f3702fcd69224abb567a660c4b53edc84861",
+   "pypdf": {
+    "f": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "None"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c6-19",
+   "desc": "multi P, V=[exports e1 e3], I=[0 2]",
+   "sha256": "84acdeeed9bd67497c22102791eee4a938851f21ebfb6a5b933f4a09988054bf",
+   "pypdf": {
+    "f": {
+     "local_V": "['e1', 'e3']",
+     "local_I": "[0, 2]",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-20",
+   "desc": "multi P, V=[displays Alpha Gamma], I=[0 2]",
+   "sha256": "d6283cdd7432b3b11f02fd9f7ca69a0d92cc61bc001284a7fcac9f8e7da5bd77",
+   "pypdf": {
+    "f": {
+     "local_V": "['Alpha', 'Gamma']",
+     "local_I": "[0, 2]",
+     "inherited_effective_V": "['Alpha', 'Gamma']"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Alpha",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-21",
+   "desc": "multi P, V=[displays Alpha Gamma], no I",
+   "sha256": "dafe771946c5c35c14200799c5c73eebdd54f31511fcd6f54121461b78838617",
+   "pypdf": {
+    "f": {
+     "local_V": "['Alpha', 'Gamma']",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['Alpha', 'Gamma']"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Alpha",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-22",
+   "desc": "multi P, V=[exports e1 e3], no I",
+   "sha256": "912b50a30520fe2e602cc1b704881fd865109df75814f261e73368889d3da95b",
+   "pypdf": {
+    "f": {
+     "local_V": "['e1', 'e3']",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-23",
+   "desc": "multi P, V=scalar display Beta, no I",
+   "sha256": "6019d89088674e6a3a0d59842b5484a95dd54277cc844750f2e218c4ed59519f",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-24",
+   "desc": "multi P, V=[] I=[]",
+   "sha256": "74f6012b06535375bbdbe7ac70df2b4769743edf9329e9e5298d2df2ae38a1bc",
+   "pypdf": {
+    "f": {
+     "local_V": "[]",
+     "local_I": "[]",
+     "inherited_effective_V": "[]"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-25",
+   "desc": "editable combo P, V=custom, no I",
+   "sha256": "88ed6921be59ea5715e1cbdfd1063e26d97a9a50f9937db3195ab8beee503e3a",
+   "pypdf": {
+    "f": {
+     "local_V": "'custom'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'custom'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "custom",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'custom'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-26",
+   "desc": "editable combo P, V=display Beta",
+   "sha256": "b39653846e54c8706138f8c2c6b8b81a9e109d07cb28f1a90aec538ce0d69846",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-27",
+   "desc": "editable combo P, V=export e2",
+   "sha256": "0bdafba301b5c77e2e49d5b970804e9edd52ff89f66d8f999e8c63381cd97f8e",
+   "pypdf": {
+    "f": {
+     "local_V": "'e2'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c6-28",
+   "desc": "list plain T, V=Green, no I",
+   "sha256": "32db93a7d313a2d492c9f613a6f21a5d58e247331a95eb6681c23a834d913d7b",
+   "pypdf": {
+    "f": {
+     "local_V": "'Green'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Green'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Green",
+     "export": "",
+     "selected_labels": [
+      "Green"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Red",
+      "Green",
+      "Blue"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Green'",
+     "choice_values": "['Red', 'Green', 'Blue']"
+    }
+   }
+  },
+  {
+   "id": "c6-29",
+   "desc": "list plain T, V=Green, I=[1] (single-select I)",
+   "sha256": "674a35a14ddff6bc7fe0ccfc1db1587f04257179bf082bacd4acf6ccc5013dd6",
+   "pypdf": {
+    "f": {
+     "local_V": "'Green'",
+     "local_I": "[1]",
+     "inherited_effective_V": "'Green'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Green",
+     "export": "",
+     "selected_labels": [
+      "Green"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Red",
+      "Green",
+      "Blue"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Green'",
+     "choice_values": "['Red', 'Green', 'Blue']"
+    }
+   }
+  },
+  {
+   "id": "c6-30",
+   "desc": "list paired P single, V=display Beta, no I",
+   "sha256": "96a9e174b4c7de9c90e0feb2e0103e031354494bc729c173181b03f89210ff3f",
+   "pypdf": {
+    "f": {
+     "local_V": "'Beta'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Beta'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Beta",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Beta'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  }
+ ],
+ "value_c5": [
+  {
+   "id": "c5-single-combo-control-omit",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local control-omit; sibling B untouched",
+   "sha256": "422610eb77598ba1ed8b2f233accbe0f4bff19e40c7698cf78d7fd32ce17f013",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-null",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-null; sibling B untouched",
+   "sha256": "2ab79df059b0718299d1964af3730ff0872ab0d3af3bdc181a7c51732a787d60",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-empty-string",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-empty-string; sibling B untouched",
+   "sha256": "64f52d8e308910c2d3e9dea818e3e5e95787501c5a39ff531061ad702e64029c",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-empty-array",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-empty-array; sibling B untouched",
+   "sha256": "922053e5a7ef32f17284f2c1f27bdb78e9e5756602df97242f6ff356a5c51b5c",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-I-empty-only",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local I-empty-only; sibling B untouched",
+   "sha256": "5483aaf43b7e14f7dc3dc6f3a6cebcb0fdc002ec0eae8dfe5fbbdc074867eca3",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "[]",
+     "inherited_effective_V": "'e2'"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-empty-array+I-empty",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-empty-array+I-empty; sibling B untouched",
+   "sha256": "eaddb660b5a7602c1a284862a2abba53860ca4e5c199497cd409449a85601fb0",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "[]",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-null+I-empty",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-null+I-empty; sibling B untouched",
+   "sha256": "cc7090a3b6f922aa8a228c6ce316e9769881cd000f7823429388800cdc413f6e",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "[]",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-single-combo-V-empty-string+I-empty",
+   "desc": "single-combo: parent V=<FEFF00650032>; kid A local V-empty-string+I-empty; sibling B untouched",
+   "sha256": "b4f638753d3ae343dd832d9678938649b7d800566478db3633794c337a33d5df",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "[]",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'e2'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e2",
+     "export": "",
+     "selected_labels": [
+      "Beta"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "'e2'",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-control-omit",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local control-omit; sibling B untouched",
+   "sha256": "d70f5e1adf336cd20ff355d4c0817e4f464d45958b6f0b492cf424271902bfbc",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-null",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-null; sibling B untouched",
+   "sha256": "4662f1b958be34c9f601c71a07252bd6c4c30fa627f874d12f82e1894f31eae8",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-empty-string",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-empty-string; sibling B untouched",
+   "sha256": "7f97fd88ab1e77e3f93fcf837f6c0d0bb52930e70477468c724fba66c083685c",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-empty-array",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-empty-array; sibling B untouched",
+   "sha256": "7d0213b27e14b0725181e3e780bf4f14a9a43a3320bce942874289e6dcb72819",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-I-empty-only",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local I-empty-only; sibling B untouched",
+   "sha256": "5c36188e13b0948dc4927520c77aa10aa4bd9ac841085ab0307afc8c61270e0c",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "[]",
+     "inherited_effective_V": "['e1', 'e3']"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-empty-array+I-empty",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-empty-array+I-empty; sibling B untouched",
+   "sha256": "78e18111154736b19f5ef8d9445fc0aef4fef4c704bb269aafefc1fad57a9bd3",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "[]",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-null+I-empty",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-null+I-empty; sibling B untouched",
+   "sha256": "eb0e965005b136f1b8eddf90f126ff7787008bbdc7e13e35d566df1c938b9eaf",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "[]",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-multi-list-V-empty-string+I-empty",
+   "desc": "multi-list: parent V=[<FEFF00650031> <FEFF00650033>]; kid A local V-empty-string+I-empty; sibling B untouched",
+   "sha256": "f91112c7911bbcfd5727bf9db110dd38d50546ea106a38ea448cf326aa54a315",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "[]",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['e1', 'e3']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    },
+    "parent.B": {
+     "value": "e1",
+     "export": "",
+     "selected_labels": [
+      "Alpha",
+      "Gamma"
+     ],
+     "selected_rows": [
+      0,
+      2
+     ],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-single-combo-V-empty-string",
+   "desc": "single-combo with empty-export option: parent V=<FEFF0061>; kid A local V-empty-string",
+   "sha256": "436fe6f3d0454658378dbbf6fef8d8bd86f7ae6f4434b8ce0b63891e6f545215",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'a'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [
+      "None"
+     ],
+     "selected_rows": [
+      0
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-single-combo-V-empty-array",
+   "desc": "single-combo with empty-export option: parent V=<FEFF0061>; kid A local V-empty-array",
+   "sha256": "18f535ab3048ce375e82f37947617ac869d0e356b251b7eb0f458a57aa8a744c",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'a'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-single-combo-V-null",
+   "desc": "single-combo with empty-export option: parent V=<FEFF0061>; kid A local V-null",
+   "sha256": "5b367d306e13c25b51f881890abd1212bc58a823b7fe352ef51bb3c67b259f64",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'a'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-single-combo-I-empty-only",
+   "desc": "single-combo with empty-export option: parent V=<FEFF0061>; kid A local I-empty-only",
+   "sha256": "5069c935ef27f3ac9714c79625832f7af3eec44aaa55c876d60bdfc442f10076",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "[]",
+     "inherited_effective_V": "'a'"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'a'"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "'a'",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-multi-list-V-empty-string",
+   "desc": "multi-list with empty-export option: parent V=[<FEFF0061>]; kid A local V-empty-string",
+   "sha256": "f06bf0baf8880c6ad9c1589b264348a0e9feb32baf23a52ddd0218401d7ce96f",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['a']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [
+      "None"
+     ],
+     "selected_rows": [
+      0
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-multi-list-V-empty-array",
+   "desc": "multi-list with empty-export option: parent V=[<FEFF0061>]; kid A local V-empty-array",
+   "sha256": "6c40039e0ebfe9b72fc1b09fe625316578a8a8e873635285cc7a1c6b2b7e05f0",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "[]"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['a']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-multi-list-V-null",
+   "desc": "multi-list with empty-export option: parent V=[<FEFF0061>]; kid A local V-null",
+   "sha256": "20e5fb462e23c945ae71d8efd0d94bfd6136cf3d72d99dedc64d4818b8799f88",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "NullObject"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['a']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5s-multi-list-I-empty-only",
+   "desc": "multi-list with empty-export option: parent V=[<FEFF0061>]; kid A local I-empty-only",
+   "sha256": "c1817eb30e56c181185e139c6ea303b0c38f767ff045bc4420d54b5c72976772",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "[]",
+     "inherited_effective_V": "['a']"
+    },
+    "B": {
+     "local_V": "'<absent>'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "['a']"
+    }
+   },
+   "pdfium": {
+    "parent.A": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    },
+    "parent.B": {
+     "value": "a",
+     "export": "",
+     "selected_labels": [
+      "Alpha"
+     ],
+     "selected_rows": [
+      1
+     ],
+     "option_labels": [
+      "None",
+      "Alpha"
+     ]
+    }
+   },
+   "mupdf": {
+    "parent.A": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    },
+    "parent.B": {
+     "value": "''",
+     "choice_values": "[('', 'None'), ('a', 'Alpha')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-null",
+   "desc": "single combo, no ancestor V; local V-null",
+   "sha256": "187a931dc63ada38b5c1f6b4427203dc10c2f7c746ad402f7eb8836d8dbe3f70",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "NullObject"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-empty-string",
+   "desc": "single combo, no ancestor V; local V-empty-string",
+   "sha256": "418d95e5398f79db9971716d9c16739bbb451f8d76fa75b3a9850b09d89fd7e0",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "''"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-empty-array",
+   "desc": "single combo, no ancestor V; local V-empty-array",
+   "sha256": "e53f8e8b51e1bc5307ed704aebe40de86a741d4f9f22caec354bad13f06ddde0",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "[]"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-I-empty-only",
+   "desc": "single combo, no ancestor V; local I-empty-only",
+   "sha256": "6defbd36b7a557bb0b58569f2e518af681ef0c7e79f6618438a2da7ffa041b2c",
+   "pypdf": {
+    "A": {
+     "local_V": "'<absent>'",
+     "local_I": "[]",
+     "inherited_effective_V": "None"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-empty-array+I-empty",
+   "desc": "single combo, no ancestor V; local V-empty-array+I-empty",
+   "sha256": "9647bc5fcc19c1cc6debba51a4f5e3b0ff9c7dc8bc1c9cec80af6a597a6b4809",
+   "pypdf": {
+    "A": {
+     "local_V": "[]",
+     "local_I": "[]",
+     "inherited_effective_V": "[]"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-null+I-empty",
+   "desc": "single combo, no ancestor V; local V-null+I-empty",
+   "sha256": "c3a7b4699ccfc30cb9614df89bc6cb0ea917e50fb0e5484b679185a1a963b0c5",
+   "pypdf": {
+    "A": {
+     "local_V": "NullObject",
+     "local_I": "[]",
+     "inherited_effective_V": "NullObject"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  },
+  {
+   "id": "c5-baseline-single-V-empty-string+I-empty",
+   "desc": "single combo, no ancestor V; local V-empty-string+I-empty",
+   "sha256": "9dd65bbb585eee2f748d0618a2fb58ec8eece31e58b1ced61d42740396757c88",
+   "pypdf": {
+    "A": {
+     "local_V": "''",
+     "local_I": "[]",
+     "inherited_effective_V": "''"
+    }
+   },
+   "pdfium": {
+    "A": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": [
+      "Alpha",
+      "Beta",
+      "Gamma"
+     ]
+    }
+   },
+   "mupdf": {
+    "A": {
+     "value": "''",
+     "choice_values": "[('e1', 'Alpha'), ('e2', 'Beta'), ('e3', 'Gamma')]"
+    }
+   }
+  }
+ ],
+ "decode_c5": [
+  {
+   "id": "d5-00-plain-utf16",
+   "desc": "plain UTF-16BE 'Hi'",
+   "sha256": "af245c02a5d0650eace6162e9a540ab8fad3b489f92ab647b668f03dfd093a80",
+   "pypdf": {
+    "f": {
+     "local_V": "'Hi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Hi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-01-A-raw-ascii-en",
+   "desc": "ESC 'e''n' raw ASCII bytes ESC Hi (reading A)",
+   "sha256": "ace294cbd4d8b6e0499454c5e2616e2066b6c1f80935ee4583691ef60d01cd4f",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-02-B-utf16-en",
+   "desc": "ESC UTF-16BE chars e,n ESC Hi (reading B)",
+   "sha256": "9f55ea3b315392a67e3f27334f1fde0ba13cb3d0fe76bdd9edeb3e6306d4408c",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1ben\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1ben\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-03-A-raw-enUS",
+   "desc": "reading A with country",
+   "sha256": "8148f6ab9812b684cfd9a2b9ce310a00852f7a8e8e07a39f77bc5e997baf70e1",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮啓\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮啓\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-04-B-utf16-enUS",
+   "desc": "reading B with country",
+   "sha256": "d09946523d02b5d510c913c76989b120348b01c33214e49ff220bfa5e81ffd4d",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1benUS\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1benUS\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'\\x1benUS\\x1bHi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-05-utf8-enUS",
+   "desc": "PDF 2.0 UTF-8: ESC enUS ESC Hi",
+   "sha256": "772a43c716c1fe14e54ae294579b1fbc29a51d6840b46c66696255d41e5ca8a1",
+   "pypdf": {
+    "f": {
+     "local_V": "'ï»¿˙enUS˙Hi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'ï»¿˙enUS˙Hi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'US\\x1bHi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-06-literal-esc-unclosed",
+   "desc": "literal ESC, no code, no closing",
+   "sha256": "876c9af1182139837ebaf0784a85f1b32a7be75dce74c5f1cd4274e1dd290a36",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'\\x1bHi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-07-A-incomplete",
+   "desc": "ESC en then text, no closing ESC",
+   "sha256": "181fb3ea43eb9bc2d8c64e0ccf6c5bfe0b3d043875b5c2df1df5973745fd4910",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮Hi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮Hi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'\\x1b敮Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-08-A-adjacent",
+   "desc": "two adjacent annotated runs",
+   "sha256": "d49fb158bfb52f9c8aac36947a51f84137417e1ca8ff8bcfca9bbcd835d9fcd3",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮\\x1bH\\x1b晲\\x1bi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮\\x1bH\\x1b晲\\x1bi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-09-A-at-end",
+   "desc": "annotation at end of text",
+   "sha256": "e19c8aa95c6c3dd8a1a8b2e6489fc1cb8b989027e2f1c6898af739f80eca65df",
+   "pypdf": {
+    "f": {
+     "local_V": "'Hi\\x1b敮\\x1b'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'Hi\\x1b敮\\x1b'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'Hi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-10-A-supplementary-after",
+   "desc": "supplementary scalar after annotation",
+   "sha256": "4136deb30b1b22397091a40fda73e68dd3b12012bf628a3ba1a9dc40018be211",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮\\x1b😀'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮\\x1b😀'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "😀",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'😀'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-11-A-empty-code",
+   "desc": "ESC ESC (empty code)",
+   "sha256": "62b292c1bd6452a10f924486cd7c54c05de04777dc05ace6097063b53d2c0e28",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b\\x1bHi'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b\\x1bHi'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "Hi",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'\\x1b\\x1bHi'",
+     "choice_values": "None"
+    }
+   }
+  },
+  {
+   "id": "d5-12-A-3byte-code",
+   "desc": "3-byte code (odd total), invalid per 2-byte rule",
+   "sha256": "da3371d5c3ef86f1711fc7397985008a001fa4d69116fccd36a50304f6a3e94f",
+   "pypdf": {
+    "f": {
+     "local_V": "'\\x1b敮最ᬀ䠀椀'",
+     "local_I": "'<absent>'",
+     "inherited_effective_V": "'\\x1b敮最ᬀ䠀椀'"
+    }
+   },
+   "pdfium": {
+    "f": {
+     "value": "",
+     "export": "",
+     "selected_labels": [],
+     "selected_rows": [],
+     "option_labels": []
+    }
+   },
+   "mupdf": {
+    "f": {
+     "value": "'\\x1b敮最ᬀ䠀椀'",
+     "choice_values": "None"
+    }
+   }
+  }
+ ]
+}

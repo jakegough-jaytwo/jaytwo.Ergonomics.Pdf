@@ -1,6 +1,10 @@
 ﻿# Project Charter
 
-Build dependable .NET libraries that make common business operations on existing PDFs straightforward and production-ready. Support a deliberate scope well rather than become a general-purpose PDF toolkit.
+Build permissively licensed, managed .NET libraries that make common operations on real-world PDFs straightforward, dependable, and production-ready.
+
+**Depth over breadth.** This project does not aim to replicate the extensive feature sets of iText, Aspose, or other established PDF tools. It prioritizes supporting a deliberate set of operations exceptionally well.
+
+**Competitive quality.** For supported operations, the quality standard is reliability and performance at least equivalent to established PDF tools.
 
 This charter guides requirements, supported capabilities, and architectural decisions for both libraries. Detailed support, limitations, and acceptance criteria are defined separately; capability families do not promise comprehensive support for every PDF feature or variation.
 
@@ -42,6 +46,8 @@ Supported workflows must produce correct, interoperable results, use predictable
 
 Operations should preserve unrelated document content and semantics to the extent compatible with the requested change. Material limitations must be documented.
 
+Demonstrate reliability and performance through representative real-world business PDFs and comparable workloads.
+
 Correctness must be demonstrated through meaningful tests and, where appropriate, independent tools, including independent verification of generated digital signatures.
 
 ## Compatibility and complexity
@@ -58,4 +64,4 @@ Engineers and agents may make implementation decisions consistent with the chart
 
 The project owner approves changes to product scope or architectural direction. The charter governs the backlog; the backlog and implementation history do not independently authorize capabilities or commitments.
 
-Change this charter deliberately when the project owner approves a change to the project’s purpose, governing principles, or architectural direction. Implementation difficulties, delivery priorities, and existing code do not by themselves change those commitments. Keep capability details in SUPPORTED.md, current behavior in behavior.md, and delivery plans in planning records.
+Change this charter deliberately when the project owner approves a change to the project’s purpose, governing principles, or architectural direction. Implementation difficulties, delivery priorities, and existing code do not by themselves change those commitments. Keep capability details in supported.md, current behavior in behavior.md, and delivery plans in planning records.
