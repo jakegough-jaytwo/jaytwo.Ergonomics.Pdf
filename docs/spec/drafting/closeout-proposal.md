@@ -57,7 +57,7 @@ The three drafts join clauses you already selected or supported with rules that 
 Implementation gaps to carry as follow-up work, **not created as items here**, grouped so they can be scheduled by the owner:
 
 * **Engine opening and saving:** borrow-by-default stream ownership; separate restoration-failure reporting; unusable-after-failed-append and source-changed transitions; destination position check; asynchronous disposal; ownership acceptance ordering.
-* **Pages:** tag preservation; `InputN.CopyM.` naming with independent repeated copies; bookmark and page-label preservation; hybrid-XFA consent; attachment-refusal coverage; omission reasons.
+* **Pages:** tag preservation; `InputN.` naming, with `InputN.CopyM.` for entries that repeat a page and independent repeated copies; bookmark and page-label preservation; hybrid-XFA consent; attachment-refusal coverage; omission reasons.
 * **Workflows:** direct-file output with fail-if-exists, no-consumption argument checks, cleanup-only failure, preparation, flatten selection and mixed fill phase, and the W-205 final-copy diagnostic-masking finding.
 * **Adopted contracts:** metadata duplicate-touched-definition refusal; attachment read identity, ambiguity and restoration; planned image support; owner-only R=5/6 permission output with independent reopen checks; signing and inspection additive APIs.
 * **Evidence:** every subject's acceptance map is unexecuted, and thresholds, latency and numeric defaults are unmeasured. Executing them is verification work; it is not part of drafting and does not need to precede adoption.

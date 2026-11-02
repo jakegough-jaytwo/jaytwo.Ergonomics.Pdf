@@ -153,6 +153,10 @@ Q-11 proposes grouping by each source page's occurrence number: first copies of 
 
 Q-12 proposes uniform InputN.CopyM original-name prefixes, including Copy1 when no page repeats. This would explicitly refine the earlier simple InputN example; it is not inferred from that earlier choice. Alternative: retain short InputN names for non-repeated selections and introduce CopyM for inputs with repeated pages, or leave naming undecided. Accepted on 2026-10-27: always use InputN.CopyM names, including Copy1 for non-repeated inputs. ASSEMBLY-FORM-02 now records the uniform rule, explicitly refining the earlier shorter examples.
 
+### Field-name amendment, 2026-11-01
+
+The owner superseded the Q-12 selection: an input entry with no repeated page keeps `InputN.` names, and an entry that repeats a page uses `InputN.CopyM.`. ASSEMBLY-FORM-03 to 05 stand, and no change to ASSEMBLY-FORM-05's uneven-repeat grouping was decided. pages.md ASSEMBLY-FORM-02 records the rule.
+
 ### Metadata questions submitted after W-200 review
 
 | ID | Question | Status |
