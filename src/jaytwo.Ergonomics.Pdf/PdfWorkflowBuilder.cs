@@ -628,13 +628,16 @@ public sealed partial class PdfWorkflowBuilder
         using (PdfDocumentEditor editor = session.Document.Edit())
         {
             appearances = Apply(session, editor);
+
+            // WORKFLOW-STREAM-02 and WORKFLOW-RESTORE-01: a failed save leaves the bytes it wrote in the caller's stream.
+            var retained = new FailedOutputRetainingStream(destination);
             if (useAsync)
             {
-                await editor.SaveIncrementalAsync(destination, leaveOpen: true, cancellationToken).ConfigureAwait(false);
+                await editor.SaveIncrementalAsync(retained, leaveOpen: true, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                editor.SaveIncremental(destination, leaveOpen: true);
+                editor.SaveIncremental(retained, leaveOpen: true);
             }
         }
 
